@@ -16,37 +16,39 @@ func main() {
 		panic("unable to load SDK config, " + err.Error())
 	}
 
-	fmt.Println(describeInstances(cfg))
+	//	fmt.Println(describeInstancesPerState(cfg))
+	//	fmt.Println(describeInstancesPerRegion(cfg))
+	//  fmt.Println(describeInstancesPerFamily(cfg))
+	// fmt.Println(describeVolumesPerFamily(cfg))
+	fmt.Println(describeVolumesPerState(cfg))
 }
 
-func describeInstances(cfg aws.Config) InstanceLifecycle {
-	output := InstanceLifecycle{}
+func describeInstancesPerRegion(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		instances := getInstances(cfg, region.Name)
+		output[region.Name] = len(instances)
+	}
+	return output
+}
+
+func describeInstancesPerState(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
 	for _, region := range getRegions(cfg) {
 		instances := getInstances(cfg, region.Name)
 		for _, instance := range instances {
-			switch instance.State {
-			case "pending":
-				output.Pending++
-				break
-			case "rebooting":
-				output.Rebooting++
-				break
-			case "running":
-				output.Running++
-				break
-			case "shutting-down":
-				output.ShuttingDown++
-				break
-			case "terminated":
-				output.Terminated++
-				break
-			case "stopping":
-				output.Stopping++
-				break
-			case "stopped":
-				output.Stopped++
-				break
-			}
+			output[instance.State]++
+		}
+	}
+	return output
+}
+
+func describeInstancesPerFamily(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		instances := getInstances(cfg, region.Name)
+		for _, instance := range instances {
+			output[instance.InstanceType]++
 		}
 	}
 	return output
@@ -80,6 +82,52 @@ func getInstances(cfg aws.Config, region string) []EC2 {
 		}
 	}
 	return listOfInstances
+}
+
+func describeVolumesPerFamily(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		volumes := getVolumes(cfg, region.Name)
+		for _, volume := range volumes {
+			output[volume.VolumeType]++
+		}
+	}
+	return output
+}
+
+func describeVolumesPerState(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		volumes := getVolumes(cfg, region.Name)
+		for _, volume := range volumes {
+			output[volume.State]++
+		}
+	}
+	return output
+}
+
+func getVolumes(cfg aws.Config, region string) []Volume {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeVolumesRequest(&ec2.DescribeVolumesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfVolumes := make([]Volume, 0)
+	for _, volume := range result.Volumes {
+		volumeType, _ := volume.VolumeType.MarshalValue()
+		volumeState, _ := volume.State.MarshalValue()
+		listOfVolumes = append(listOfVolumes, Volume{
+			ID:         *volume.VolumeId,
+			AZ:         *volume.AvailabilityZone,
+			LaunchTime: *volume.CreateTime,
+			Size:       *volume.Size,
+			State:      volumeState,
+			VolumeType: volumeType,
+		})
+	}
+	return listOfVolumes
 }
 
 func getRegions(cfg aws.Config) []Region {
