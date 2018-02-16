@@ -20,7 +20,10 @@ func main() {
 	//	fmt.Println(describeInstancesPerRegion(cfg))
 	//  fmt.Println(describeInstancesPerFamily(cfg))
 	// fmt.Println(describeVolumesPerFamily(cfg))
-	fmt.Println(describeVolumesPerState(cfg))
+	// fmt.Println(describeVolumesPerState(cfg))
+	// fmt.Println(describeVolumesTotalSize(cfg))
+	// fmt.Println(describeACLsTotal(cfg))
+	fmt.Println(describeNatGatewaysTotal(cfg))
 }
 
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {
@@ -84,6 +87,17 @@ func getInstances(cfg aws.Config, region string) []EC2 {
 	return listOfInstances
 }
 
+func describeVolumesTotalSize(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		volumes := getVolumes(cfg, region.Name)
+		for _, volume := range volumes {
+			sum += volume.Size
+		}
+	}
+	return sum
+}
+
 func describeVolumesPerFamily(cfg aws.Config) map[string]int {
 	output := make(map[string]int, 0)
 	for _, region := range getRegions(cfg) {
@@ -128,6 +142,165 @@ func getVolumes(cfg aws.Config, region string) []Volume {
 		})
 	}
 	return listOfVolumes
+}
+
+func describeVPCsTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		vpcs := getVPCs(cfg, region.Name)
+		sum += int64(len(vpcs))
+	}
+	return sum
+}
+
+func getVPCs(cfg aws.Config, region string) []VPC {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeVpcsRequest(&ec2.DescribeVpcsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfVPCs := make([]VPC, 0)
+	for _, vpc := range result.Vpcs {
+		vpcState, _ := vpc.State.MarshalValue()
+		vpcTags := make([]string, 0)
+		for _, tag := range vpc.Tags {
+			vpcTags = append(vpcTags, *tag.Value)
+		}
+		listOfVPCs = append(listOfVPCs, VPC{
+			ID:        *vpc.VpcId,
+			State:     vpcState,
+			CidrBlock: *vpc.CidrBlock,
+			Tags:      vpcTags,
+		})
+	}
+	return listOfVPCs
+}
+
+func describeACLsTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		acls := getNetworkACLs(cfg, region.Name)
+		sum += int64(len(acls))
+	}
+	return sum
+}
+
+func getNetworkACLs(cfg aws.Config, region string) []NetworkACL {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeNetworkAclsRequest(&ec2.DescribeNetworkAclsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfNetworkACLs := make([]NetworkACL, 0)
+	for _, networkACL := range result.NetworkAcls {
+		aclTags := make([]string, 0)
+		for _, tag := range networkACL.Tags {
+			aclTags = append(aclTags, *tag.Value)
+		}
+		listOfNetworkACLs = append(listOfNetworkACLs, NetworkACL{
+			ID:   *networkACL.NetworkAclId,
+			Tags: aclTags,
+		})
+	}
+	return listOfNetworkACLs
+}
+
+func describeSecurityGroupsTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		sgs := getSecurityGroups(cfg, region.Name)
+		sum += int64(len(sgs))
+	}
+	return sum
+}
+
+func getSecurityGroups(cfg aws.Config, region string) []SecurityGroup {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeSecurityGroupsRequest(&ec2.DescribeSecurityGroupsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfSecurityGroups := make([]SecurityGroup, 0)
+	for _, securityGroup := range result.SecurityGroups {
+		sgTags := make([]string, 0)
+		for _, tag := range securityGroup.Tags {
+			sgTags = append(sgTags, *tag.Value)
+		}
+		listOfSecurityGroups = append(listOfSecurityGroups, SecurityGroup{
+			Tags: sgTags,
+		})
+	}
+	return listOfSecurityGroups
+}
+
+func describeNatGatewaysTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		ngws := getNatGateways(cfg, region.Name)
+		sum += int64(len(ngws))
+	}
+	return sum
+}
+
+func getNatGateways(cfg aws.Config, region string) []NatGateway {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeNatGatewaysRequest(&ec2.DescribeNatGatewaysInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfNatGateways := make([]NatGateway, 0)
+	for _, ngw := range result.NatGateways {
+		ngwState, _ := ngw.State.MarshalValue()
+		ngwTags := make([]string, 0)
+		for _, tag := range ngw.Tags {
+			ngwTags = append(ngwTags, *tag.Value)
+		}
+		listOfNatGateways = append(listOfNatGateways, NatGateway{
+			ID:    *ngw.NatGatewayId,
+			State: ngwState,
+			Tags:  ngwTags,
+		})
+	}
+	return listOfNatGateways
+}
+
+func describeElasticIPsTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		ips := getElasticIPs(cfg, region.Name)
+		sum += int64(len(ips))
+	}
+	return sum
+}
+
+func getElasticIPs(cfg aws.Config, region string) []EIP {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeAddressesRequest(&ec2.DescribeAddressesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfElasticIPs := make([]EIP, 0)
+	for _, address := range result.Addresses {
+		addressTags := make([]string, 0)
+		for _, tag := range address.Tags {
+			addressTags = append(addressTags, *tag.Value)
+		}
+		listOfElasticIPs = append(listOfElasticIPs, EIP{
+			PublicIP: *address.PublicIp,
+			Tags:     addressTags,
+		})
+	}
+	return listOfElasticIPs
 }
 
 func getRegions(cfg aws.Config) []Region {
