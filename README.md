@@ -1,1 +1,3 @@
 # inspect-aws
+
+* EC2
