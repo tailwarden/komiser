@@ -7,10 +7,14 @@ import (
 	. "./models"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
+<<<<<<< HEAD
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+=======
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+>>>>>>> 0797f94ed2c103100b39cbe6f145d896027a527b
 )
 
 func main() {
@@ -306,6 +310,7 @@ func getElasticIPs(cfg aws.Config, region string) []EIP {
 	return listOfElasticIPs
 }
 
+<<<<<<< HEAD
 func describeInternetGatewaysTotal(cfg aws.Config) int64 {
 	var sum int64
 	for _, region := range getRegions(cfg) {
@@ -483,6 +488,8 @@ func getS3Buckets(cfg aws.Config, region string) []Bucket {
 	return listOfBuckets
 }
 
+=======
+>>>>>>> 0797f94ed2c103100b39cbe6f145d896027a527b
 func getRegions(cfg aws.Config) []Region {
 	svc := ec2.New(cfg)
 	req := svc.DescribeRegionsRequest(&ec2.DescribeRegionsInput{})
