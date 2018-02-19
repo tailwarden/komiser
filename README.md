@@ -33,3 +33,5 @@ RDS
 * Billing
 * cloudwatch events
 * cloudwatch alarms
+=======
+* EC2
