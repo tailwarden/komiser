@@ -3,13 +3,18 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
+	"time"
 
 	. "./models"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
+	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
@@ -26,7 +31,9 @@ func main() {
 	// fmt.Println(describeVolumesPerState(cfg))
 	// fmt.Println(describeVolumesTotalSize(cfg))
 	// fmt.Println(describeACLsTotal(cfg))
-	fmt.Println(describeNatGatewaysTotal(cfg))
+	// fmt.Println(describeNatGatewaysTotal(cfg))
+	// fmt.Println(describeCostAndUsage(cfg))
+	fmt.Println(describeRDSInstancesPerEngine(cfg))
 }
 
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {
@@ -466,6 +473,17 @@ func describeS3BucketsTotal(cfg aws.Config) int64 {
 	return sum
 }
 
+/*
+func describeS3BucketsSize(cfg aws.Config) {
+	svc := s3.New(cfg)
+	req := svc.ListObjectsRequest(&s3.ListObjectsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	result.Name
+}*/
+
 func getS3Buckets(cfg aws.Config, region string) []Bucket {
 	cfg.Region = region
 	svc := s3.New(cfg)
@@ -481,6 +499,105 @@ func getS3Buckets(cfg aws.Config, region string) []Bucket {
 		})
 	}
 	return listOfBuckets
+}
+
+func describeCostAndUsage(cfg aws.Config) []Cost {
+	currentTime := time.Now().Local()
+	start := currentTime.AddDate(0, -6, 0).Format("2006-01-02")
+	end := currentTime.Format("2006-01-02")
+	svc := costexplorer.New(cfg)
+	req := svc.GetCostAndUsageRequest(&costexplorer.GetCostAndUsageInput{
+		Metrics:     []string{"BlendedCost"},
+		Granularity: costexplorer.GranularityMonthly,
+		TimePeriod: &costexplorer.DateInterval{
+			Start: &start,
+			End:   &end,
+		},
+	})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	costs := make([]Cost, 0)
+	for _, res := range result.ResultsByTime {
+		start, _ := time.Parse("2006-01-02", *res.TimePeriod.Start)
+		end, _ := time.Parse("2006-01-02", *res.TimePeriod.End)
+		amount, _ := strconv.ParseFloat(*res.Total["BlendedCost"].Amount, 64)
+		costs = append(costs, Cost{
+			Start:  start,
+			End:    end,
+			Amount: amount,
+			Unit:   *res.Total["BlendedCost"].Unit,
+		})
+	}
+	return costs
+}
+
+func describeLambdaFunctionsPerRuntime(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		functions := getLambdaFunctions(cfg, region.Name)
+		for _, lambda := range functions {
+			output[lambda.Runtime]++
+		}
+	}
+	return output
+}
+
+func getLambdaFunctions(cfg aws.Config, region string) []Lambda {
+	cfg.Region = region
+	svc := lambda.New(cfg)
+	req := svc.ListFunctionsRequest(&lambda.ListFunctionsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfFunctions := make([]Lambda, 0)
+	for _, lambda := range result.Functions {
+		runtime, _ := lambda.Runtime.MarshalValue()
+		listOfFunctions = append(listOfFunctions, Lambda{
+			Name:    *lambda.FunctionName,
+			Memory:  *lambda.MemorySize,
+			Runtime: runtime,
+		})
+	}
+	return listOfFunctions
+}
+
+func describeRDSInstancesPerEngine(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		instances := getRDSInstances(cfg, region.Name)
+		for _, instance := range instances {
+			output[instance.Engine]++
+		}
+	}
+	return output
+}
+
+func getRDSInstances(cfg aws.Config, region string) []DBInstance {
+	cfg.Region = region
+	svc := rds.New(cfg)
+	req := svc.DescribeDBInstancesRequest(&rds.DescribeDBInstancesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfInstances := make([]DBInstance, 0)
+	for _, instance := range result.DBInstances {
+		listOfInstances = append(listOfInstances, DBInstance{
+			Status:           *instance.DBInstanceStatus,
+			StorageType:      *instance.StorageType,
+			AllocatedStorage: *instance.AllocatedStorage,
+			InstanceClass:    *instance.DBInstanceClass,
+			Engine:           *instance.Engine,
+		})
+	}
+	return listOfInstances
+}
+
+func getDynamoDBTables(cfg aws.Config, region string) {
+	cfg.Region = region
 }
 
 func getRegions(cfg aws.Config) []Region {

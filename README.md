@@ -1,14 +1,23 @@
 # inspect-aws
 
 EC2 instances
-Volumes
+EBS Volumes
 Security Groups
 Snapshots
 Autoscalling groups
 ELB
-Route53
-Buckets
+VPC
+Key Pairs
+Nat Gateway
+Internet Gateway
+Elastic IP
+Route Table
+Billing
+Lambda Functions
 RDS
+DynamoDB
+CloudWatch
+S3
 
 * EC2 Piechart per type(t2.small, medium ...) OK
 * EC2 number per region map   OK 
@@ -16,7 +25,6 @@ RDS
 * EBS volume size total OK
 * EBS status (in use....) OK
 * EBS piechart per type (cold, ssd) OK
-* snapshot size & number
 * VPC current/limit OK
 * ACL .. OK
 * SG OK
@@ -28,10 +36,15 @@ RDS
 * ACG number OK
 * ELB number (type ELB, ALB, NLB) OK
 * bucket total number OK
-* bucket size total
-* bucket piechart(public/private)
-* Billing
+* Billing OK
+* lambda functions per runtime env OK
+* rds instances per engine OK
+* dynamodb tables total
+* dynamodb table write capacity
+* dynamodb table read capacity
+
 * cloudwatch events
 * cloudwatch alarms
-=======
-* EC2
+* bucket size total
+* bucket piechart(public/private)
+* snapshot size & number
