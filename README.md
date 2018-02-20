@@ -1,23 +1,36 @@
-# inspect-aws
+# Komiser
 
-EC2 instances
-EBS Volumes
-Security Groups
-Snapshots
-Autoscalling groups
-ELB
-VPC
-Key Pairs
-Nat Gateway
-Internet Gateway
-Elastic IP
-Route Table
-Billing
-Lambda Functions
-RDS
-DynamoDB
-CloudWatch
-S3
+## Supported
+
+* EC2
+* EBS
+* Snapshots
+* Security Groups
+* Access Control Lists
+* Autoscalling groups
+* ELB
+* VPC
+* Key Pairs
+* Nat Gateway
+* Internet Gateway
+* Elastic IP
+* Route Table
+* Billing
+* Lambda Functions
+* RDS
+* DynamoDB
+* CloudWatch
+* S3
+
+## TO DO
+
+* Route53
+* EMR
+* ECS
+* Kinesis
+* SQS
+* SNS
+* CloudFront
 
 * EC2 Piechart per type(t2.small, medium ...) OK
 * EC2 number per region map   OK 
@@ -39,10 +52,9 @@ S3
 * Billing OK
 * lambda functions per runtime env OK
 * rds instances per engine OK
-* dynamodb tables total
-* dynamodb table write capacity
-* dynamodb table read capacity
-
+* dynamodb tables total OK
+* dynamodb table write capacity OK
+* dynamodb table read capacity OK
 * cloudwatch events
 * cloudwatch alarms
 * bucket size total

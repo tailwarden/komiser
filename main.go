@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
@@ -33,7 +34,7 @@ func main() {
 	// fmt.Println(describeACLsTotal(cfg))
 	// fmt.Println(describeNatGatewaysTotal(cfg))
 	// fmt.Println(describeCostAndUsage(cfg))
-	fmt.Println(describeRDSInstancesPerEngine(cfg))
+	fmt.Println(describeDynamoDBTablesProvisionedThroughput(cfg))
 }
 
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {
@@ -596,8 +597,50 @@ func getRDSInstances(cfg aws.Config, region string) []DBInstance {
 	return listOfInstances
 }
 
-func getDynamoDBTables(cfg aws.Config, region string) {
+func describeDynamoDBTablesTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		tables := getDynamoDBTables(cfg, region.Name)
+		sum += int64(len(tables))
+	}
+	return sum
+}
+
+func describeDynamoDBTablesProvisionedThroughput(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		for _, table := range getDynamoDBTables(cfg, region.Name) {
+			cfg.Region = region.Name
+			svc := dynamodb.New(cfg)
+			req := svc.DescribeTableRequest(&dynamodb.DescribeTableInput{
+				TableName: &table.Name,
+			})
+			result, err := req.Send()
+			if err != nil {
+				log.Fatal(err)
+			}
+			output["readCapacity"] += int(*result.Table.ProvisionedThroughput.ReadCapacityUnits)
+			output["writeCapacity"] += int(*result.Table.ProvisionedThroughput.WriteCapacityUnits)
+		}
+	}
+	return output
+}
+
+func getDynamoDBTables(cfg aws.Config, region string) []Table {
 	cfg.Region = region
+	svc := dynamodb.New(cfg)
+	req := svc.ListTablesRequest(&dynamodb.ListTablesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfTables := make([]Table, 0)
+	for _, table := range result.TableNames {
+		listOfTables = append(listOfTables, Table{
+			Name: table,
+		})
+	}
+	return listOfTables
 }
 
 func getRegions(cfg aws.Config) []Region {
