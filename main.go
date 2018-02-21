@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -34,7 +35,7 @@ func main() {
 	// fmt.Println(describeACLsTotal(cfg))
 	// fmt.Println(describeNatGatewaysTotal(cfg))
 	// fmt.Println(describeCostAndUsage(cfg))
-	fmt.Println(describeDynamoDBTablesProvisionedThroughput(cfg))
+	fmt.Println(describeCloudWatchAlarmsPerState(cfg))
 }
 
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {
@@ -641,6 +642,75 @@ func getDynamoDBTables(cfg aws.Config, region string) []Table {
 		})
 	}
 	return listOfTables
+}
+
+func describeCloudWatchAlarmsPerState(cfg aws.Config) map[string]int {
+	output := make(map[string]int, 0)
+	for _, region := range getRegions(cfg) {
+		alarms := getCloudWatchAlarms(cfg, region.Name)
+		for _, alarm := range alarms {
+			output[alarm.State]++
+		}
+	}
+	return output
+}
+
+func getCloudWatchAlarms(cfg aws.Config, region string) []Alarm {
+	cfg.Region = region
+	svc := cloudwatch.New(cfg)
+	req := svc.DescribeAlarmsRequest(&cloudwatch.DescribeAlarmsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfAlarms := make([]Alarm, 0)
+	for _, alarm := range result.MetricAlarms {
+		alarmState, _ := alarm.StateValue.MarshalValue()
+		listOfAlarms = append(listOfAlarms, Alarm{
+			Name:  *alarm.AlarmName,
+			State: alarmState,
+		})
+	}
+	return listOfAlarms
+}
+
+func describeSnapshotsTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		snapshots := getSnapshots(cfg, region.Name)
+		sum += int64(len(snapshots))
+	}
+	return sum
+}
+
+func describeSnapshotsSize(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range getRegions(cfg) {
+		snapshots := getSnapshots(cfg, region.Name)
+		for _, snapshot := range snapshots {
+			sum += snapshot.VolumeSize
+		}
+	}
+	return sum
+}
+
+func getSnapshots(cfg aws.Config, region string) []Snapshot {
+	cfg.Region = region
+	svc := ec2.New(cfg)
+	req := svc.DescribeSnapshotsRequest(&ec2.DescribeSnapshotsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfSnapshots := make([]Snapshot, 0)
+	for _, snapshot := range result.Snapshots {
+		snapshotState, _ := snapshot.State.MarshalValue()
+		listOfSnapshots = append(listOfSnapshots, Snapshot{
+			State:      snapshotState,
+			VolumeSize: *snapshot.VolumeSize,
+		})
+	}
+	return listOfSnapshots
 }
 
 func getRegions(cfg aws.Config) []Region {
