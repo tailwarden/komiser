@@ -24,6 +24,24 @@ export class CostExplorerService {
       "end" : "2018-01-30",
       "amount" : 2.52,
       "unit" : "USD"
+    },
+    {
+      "start" : "2017-11-01",
+      "end" : "2017-11-30",
+      "amount" : 1.52,
+      "unit" : "USD"
+    },
+    {
+      "start" : "2017-12-01",
+      "end" : "2017-12-30",
+      "amount" : 2.52,
+      "unit" : "USD"
+    },
+    {
+      "start" : "2018-01-01",
+      "end" : "2018-01-30",
+      "amount" : 2.52,
+      "unit" : "USD"
     }
   ]
 

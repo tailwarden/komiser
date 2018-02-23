@@ -14,18 +14,8 @@ export class AppComponent implements AfterViewInit {
   public billingChartOptions:any = {
     responsive: true
   };
-  public billingChartColors:Array<any> = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
   public billingChartLegend:boolean = true;
-  public billingChartType:string = 'line';
+  public billingChartType:string = 'bar';
   public ec2familliesChartLabels:string[] = ['t2.micro', 't2.micro', 'c4.large'];
   public ec2familliesChartData:number[] = [20, 5, 2];
   public ec2familliesChartType:string = 'pie';
