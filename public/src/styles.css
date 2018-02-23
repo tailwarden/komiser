@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+.card .icon{
+    width: 56px;
+    margin: 0 auto;
+}
+.card .number{
+    color: #555;
+    font-size: 2.5em;
+}
+
+.card strong {
+    font-size: 1em;
+    color: #33b35a !important;
+}

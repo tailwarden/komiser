@@ -1,0 +1,204 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Billing & Usage</h4>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart height="50"
+                        [datasets]="billingChartData"
+                        [labels]="billingChartLabels"
+                        [options]="billingChartOptions"
+                        [colors]="billingChartColors"
+                        [legend]="billingChartLegend"
+                        [chartType]="billingChartType"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>EC2 per region</h4>
+                </div>
+                <div class="card-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>EC2 Family Type</h4>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart
+                        height="300"
+                        [data]="ec2familliesChartData"
+                        [labels]="ec2familliesChartLabels"
+                        [options]="billingChartOptions"
+                        [legend]="ec2familliesChartLegend"
+                        [chartType]="ec2familliesChartType"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>EC2 Lifecycle</h4>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">5</div>
+                  <strong class="text-primary">VPC</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">7</div>
+                  <strong class="text-primary">ACL</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">1</div>
+                  <strong class="text-primary">Security Group</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">1</div>
+                  <strong class="text-primary">NAT Gateway</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">1</div>
+                  <strong class="text-primary">Elastic IP</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">1</div>
+                  <strong class="text-primary">Internet Gateway</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">1</div>
+                  <strong class="text-primary">Key Pairs</strong>
+               </div>
+         </div>
+         <div class="col-lg-2">
+           <div class="card text-center">
+               <div class="icon">
+                  <img src="assets/images/vpc.svg"/>
+               </div>
+               <div class="number">1</div>
+                  <strong class="text-primary">Autoscaling Group</strong>
+               </div>
+         </div>
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Elastic Load Balancer</h4>
+                </div>
+                <div class="card-body">
+                    ELB number (type ELB, ALB, NLB)
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>EBS Volumes</h4>
+                </div>
+                <div class="card-body">
+                    * EBS piechart per type (cold, ssd) OK
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Lambda Runtime</h4>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>RDS Engines</h4>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    * bucket total number OK
+                     * bucket size total
+                    * EBS volume size total OK
+                    EBS total
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body">
+                    * dynamodb tables total OK
+                    * dynamodb table write capacity OK
+                    * dynamodb table read capacity OK
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    * cloudwatch alarms per state  OK
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
