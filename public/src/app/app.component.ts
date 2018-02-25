@@ -12,14 +12,190 @@ export class AppComponent implements AfterViewInit {
   public billingChartData:Array<any> = []
   public billingChartLabels:Array<any> = []
   public billingChartOptions:any = {
-    responsive: true
+    responsive: true,
+    cutoutPercentage: 70
+
   };
   public billingChartLegend:boolean = true;
   public billingChartType:string = 'bar';
   public ec2familliesChartLabels:string[] = ['t2.micro', 't2.micro', 'c4.large'];
   public ec2familliesChartData:number[] = [20, 5, 2];
-  public ec2familliesChartType:string = 'pie';
+  public ec2familliesChartType:string = 'doughnut';
   public ec2familliesChartLegend:boolean = false;
+
+   public polarAreaChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales', 'Telesales', 'Corporate Sales'];
+  public polarAreaChartData:number[] = [300, 500, 100, 40, 120];
+  public polarAreaLegend:boolean = true;
+  public polarAreaOptions: any = {
+    responsive: true
+  }
+ 
+  public polarAreaChartType:string = 'polarArea';
+
+   public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
+  public pieChartData:number[] = [300, 500, 100];
+  public pieChartType:string = 'pie';
+
+  public lineChartData:Array<any> = [
+    {
+      label: "Total Overdue",
+                    fill: !0,
+                    lineTension: 0,
+                    backgroundColor: "transparent",
+                    borderColor: "#6ccef0",
+                    pointBorderColor: "#59c2e6",
+                    pointHoverBackgroundColor: "#59c2e6",
+                    borderCapStyle: "butt",
+                    borderDash: [],
+                    borderDashOffset: 0,
+                    borderJoinStyle: "miter",
+                    borderWidth: 3,
+                    pointBackgroundColor: "#59c2e6",
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 4,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 0,
+                    pointRadius: 4,
+                    pointHitRadius: 0,
+                    data: [20, 28, 30, 22, 24, 10, 7],
+                    spanGaps: !1
+    }
+  ];
+  public lineChartLabels:Array<any> = ["A", "B", "C", "D", "E", "F", "G"];
+  public lineChartOptions:any = {
+    responsive: true,
+    scales: {
+                    xAxes: [{
+                        display: !0,
+                        gridLines: {
+                            display: !1
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            max: 40,
+                            min: 0,
+                            stepSize: .5
+                        },
+                        display: !1,
+                        gridLines: {
+                            display: !1
+                        }
+                    }]
+                },
+                legend: {
+                    display: !1
+                }
+  };
+  public lineChartType:string = 'line';
+
+  public barChartOptions:any = {
+    responsive: true,
+    scales: {
+                xAxes: [{
+                    display: !1
+                }],
+                yAxes: [{
+                    display: !1
+                }]
+            },
+            legend: {
+                display: !1
+            }
+  };
+  public barChartLabels:string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
+  public barChartType:string = 'bar';
+ 
+  public barChartData:any[] = [
+    {
+      label: "Data Set 1",
+                backgroundColor: ["rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)"],
+                borderColor: ["rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)"],
+                borderWidth: 1,
+                data: [35, 49, 55, 68, 81, 95, 85, 40, 30, 27, 22, 15]
+    }
+  ];
+
+  public barChartOptions2:any = {
+    responsive: true,
+    scales: {
+                    xAxes: [{
+                        display: !0,
+                        gridLines: {
+                            display: !1
+                        }
+                    }],
+                    yAxes: [{
+                        display: !0,
+                        gridLines: {
+                            display: !1
+                        }
+                    }]
+                },
+                legend: {
+                    display: !0
+                }
+  };
+  public barChartLabels2:string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"];
+  public barChartType2:string = 'line';
+ 
+  public barChartData2:any[] = [
+    {
+                    label: "Page Visitors",
+                    fill: !0,
+                    lineTension: 0,
+                    backgroundColor: "transparent",
+                    borderColor: "#f15765",
+                    pointBorderColor: "#da4c59",
+                    pointHoverBackgroundColor: "#da4c59",
+                    borderCapStyle: "butt",
+                    borderDash: [],
+                    borderDashOffset: 0,
+                    borderJoinStyle: "miter",
+                    borderWidth: 1,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 0,
+                    data: [50, 20, 60, 31, 52, 22, 40, 25, 30, 68, 56, 40, 60, 43, 55, 39, 47],
+                    spanGaps: !1
+                }, {
+                    label: "Page Views",
+                    fill: !0,
+                    lineTension: 0,
+                    backgroundColor: "transparent",
+                    borderColor: "#54e69d",
+                    pointHoverBackgroundColor: "#44c384",
+                    borderCapStyle: "butt",
+                    borderDash: [],
+                    borderDashOffset: 0,
+                    borderJoinStyle: "miter",
+                    borderWidth: 1,
+                    pointBorderColor: "#44c384",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: [20, 7, 35, 17, 26, 8, 18, 10, 14, 46, 30, 30, 14, 28, 17, 25, 17, 40],
+                    spanGaps: !1
+                }
+  ];
+
+  public doughnutChartLabels2:string[] = ["First", "Second", "Third", "Fourth"];
+  public doughnutChartData2:number[] = [300, 50, 100, 60];
+  public doughnutChartType2:string = 'doughnut';
+  public doughnutChartOptions2: any = {
+    cutoutPercentage: 80,
+                legend: {
+                    display: !1
+                }
+  }
 
   constructor(private costExplorerService: CostExplorerService){
     let res = this.costExplorerService.getBilling()

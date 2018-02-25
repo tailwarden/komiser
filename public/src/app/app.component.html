@@ -13,17 +13,16 @@
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <!-- Navbar Header-->
               <div class="navbar-header">
-                <!-- Navbar Brand --><a href="index.html" class="navbar-brand">
-                  <div class="brand-text brand-big"><strong>K</strong><span>omiser</span></div>
-                  <div class="brand-text brand-small"><strong>KM</strong></div></a>
-                <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+                <!-- Navbar Brand -->
+                    <a href="index.html" class="navbar-brand">
+                        <div class="brand-text brand-big"><strong>K</strong><span>omiser</span></div>
+                    </a>
+                    <img src="assets/images/logo.svg" class="logo-komiser"/>
               </div>
               <!-- Navbar Menu -->
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-                <!-- Search-->
-                <li class="nav-item d-flex align-items-center"><a id="search" href="#"><i class="icon-search"></i></a></li>
                 <!-- Fork    -->
-                <li class="nav-item"><a href="https://github.com/mlabouardy/komiser" class="nav-link logout">Fork<i class="fas fa-code-branch"></i></a></li>
+                <li class="nav-item"><a href="https://github.com/mlabouardy/komiser" target="_blank" class="nav-link logout">Fork<i class="fas fa-code-branch"></i></a></li>
               </ul>
             </div>
           </div>
@@ -114,14 +113,22 @@
                 <!-- Line Chart            -->
                 <div class="chart col-lg-6 col-12">
                   <div class="line-chart bg-white d-flex align-items-center justify-content-center has-shadow">
-                    <canvas id="lineCahrt"></canvas>
+                    <canvas baseChart
+                        [datasets]="barChartData2"
+                        [labels]="barChartLabels2"
+                        [options]="barChartOptions2"
+                        [chartType]="barChartType2"></canvas>
                   </div>
                 </div>
                 <div class="chart col-lg-3 col-12">
                   <!-- Bar Chart   -->
                   <div class="bar-chart has-shadow bg-white">
                     <div class="title"><strong class="text-violet">95%</strong><br><small>Current Server Uptime</small></div>
-                    <canvas id="barChartHome"></canvas>
+                    <canvas baseChart
+                        [datasets]="barChartData"
+                        [labels]="barChartLabels"
+                        [options]="barChartOptions"
+                        [chartType]="barChartType"></canvas>
                   </div>
                   <!-- Numbers-->
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
@@ -424,7 +431,11 @@
                       <h3>S3 Buckets</h3><small>Lorem ipsum dolor sit amet.</small>
                       <div class="chart text-center">
                         <div class="text"><strong>90</strong><br><span>TB</span></div>
-                        <canvas id="pieChart"></canvas>
+                        <canvas baseChart
+                            [data]="doughnutChartData2"
+                            [labels]="doughnutChartLabels2"
+                            [options]="doughnutChartOptions2"
+                            [chartType]="doughnutChartType2"></canvas>
                       </div>
                     </div>
                   </div>
@@ -442,7 +453,10 @@
                       <h3 class="h4">ELB Family</h3>
                     </div>
                     <div class="card-body">
-                      <canvas id="pieChartExample"></canvas>
+                      <canvas baseChart
+                        [data]="pieChartData"
+                        [labels]="pieChartLabels"
+                        [chartType]="pieChartType"></canvas>
                     </div>
                   </div>
                 </div>
@@ -459,7 +473,11 @@
                       <h3>Total Bill</h3><small>Lorem ipsum dolor sit amet.</small>
                       <div class="number text-center">$20,000</div>
                       <div class="chart">
-                        <canvas id="lineChart1">                               </canvas>
+                        <canvas baseChart
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [options]="lineChartOptions"
+                            [chartType]="lineChartType"></canvas>
                       </div>
                     </div>
                   </div>
@@ -476,7 +494,11 @@
                       <h3>EBS Volumes</h3><small>Lorem ipsum dolor sit amet.</small>
                       <div class="chart text-center">
                         <div class="text"><strong>90</strong><br><span>TB</span></div>
-                        <canvas id="pieChart"></canvas>
+                        <canvas baseChart
+                            [data]="ec2familliesChartData"
+                            [labels]="ec2familliesChartLabels"
+                            [options]="billingChartOptions"
+                            [chartType]="ec2familliesChartType"></canvas>
                       </div>
                     </div>
                   </div>
@@ -494,7 +516,12 @@
                       <h3 class="h4">EBS Family</h3>
                     </div>
                     <div class="card-body">
-                      <canvas id="polarChartExample"></canvas>
+                      <canvas baseChart height="250"
+                        [data]="polarAreaChartData"
+                        [labels]="polarAreaChartLabels"
+                        [legend]="polarAreaLegend"
+                        [options]="polarAreaOptions"
+                        [chartType]="polarAreaChartType"></canvas>
                     </div>
                   </div>
                 </div>
