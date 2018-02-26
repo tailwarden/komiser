@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -18,24 +19,237 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/gorilla/mux"
+	cache "github.com/patrickmn/go-cache"
 )
 
-func main() {
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		panic("unable to load SDK config, " + err.Error())
-	}
+var (
+	cfg         aws.Config
+	memoryCache *cache.Cache
+)
 
-	//	fmt.Println(describeInstancesPerState(cfg))
-	//	fmt.Println(describeInstancesPerRegion(cfg))
-	//  fmt.Println(describeInstancesPerFamily(cfg))
-	// fmt.Println(describeVolumesPerFamily(cfg))
-	// fmt.Println(describeVolumesPerState(cfg))
-	// fmt.Println(describeVolumesTotalSize(cfg))
-	// fmt.Println(describeACLsTotal(cfg))
-	// fmt.Println(describeNatGatewaysTotal(cfg))
-	// fmt.Println(describeCostAndUsage(cfg))
-	fmt.Println(describeCloudWatchAlarmsPerState(cfg))
+func respondWithError(w http.ResponseWriter, code int, msg string) {
+	respondWithJSON(w, code, map[string]string{"error": msg})
+}
+
+func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+	response, _ := json.Marshal(payload)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(response)
+}
+
+func EC2RegionHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("ec2_region")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeInstancesPerRegion(cfg)
+		memoryCache.Set("ec2_region", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func EC2FamilyHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("ec2_family")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeInstancesPerFamily(cfg)
+		memoryCache.Set("ec2_family", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func EC2StateHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("ec2_state")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeInstancesPerState(cfg)
+		memoryCache.Set("ec2_state", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func EBSSizeHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("ebs_size")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeVolumesTotalSize(cfg)
+		memoryCache.Set("ebs_size", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func EBSFamilyHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("ebs_family")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeVolumesPerFamily(cfg)
+		memoryCache.Set("ebs_family", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func EBSStateHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("ebs_state")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeVolumesPerState(cfg)
+		memoryCache.Set("ebs_state", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func VPCTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("vpc_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeVPCsTotal(cfg)
+		memoryCache.Set("vpc_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func ACLTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("acl_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeACLsTotal(cfg)
+		memoryCache.Set("acl_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func SecurityGroupTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("sg_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeSecurityGroupsTotal(cfg)
+		memoryCache.Set("sg_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func NatGatewayTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("nat_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeNatGatewaysTotal(cfg)
+		memoryCache.Set("nat_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func ElasticIPTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("eip_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeElasticIPsTotal(cfg)
+		memoryCache.Set("eip_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func InternetGatewayTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("igw_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeInternetGatewaysTotal(cfg)
+		memoryCache.Set("igw_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func RouteTableTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("rt_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeRouteTablesTotal(cfg)
+		memoryCache.Set("rt_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func KeyPairTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("kp_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeKeyPairsTotal(cfg)
+		memoryCache.Set("kp_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func AutoScalingGroupTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("asg_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeAutoScalingGroupsTotal(cfg)
+		memoryCache.Set("asg_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func ElasticLoadBalancerFamilyHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("elb_family")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeElasticLoadBalancerPerFamily(cfg)
+		memoryCache.Set("elb_family", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+/*
+describeS3BucketsTotal
+describeCostAndUsage
+describeLambdaFunctionsPerRuntime
+describeRDSInstancesPerEngine
+describeDynamoDBTablesTotal
+describeDynamoDBTablesProvisionedThroughput (read, write)
+describeSnapshotsTotal
+describeSnapshotsSize
+*/
+
+func init() {
+	memoryCache = cache.New(5*time.Minute, 5*time.Minute)
+	cfg, _ = external.LoadDefaultAWSConfig()
+}
+
+func main() {
+	r := mux.NewRouter()
+	r.HandleFunc("/ec2/region", EC2RegionHandler)
+	r.HandleFunc("/ec2/family", EC2FamilyHandler)
+	r.HandleFunc("/ec2/state", EC2StateHandler)
+	r.HandleFunc("/ebs/size", EBSSizeHandler)
+	r.HandleFunc("/ebs/family", EBSFamilyHandler)
+	r.HandleFunc("/ebs/state", EBSStateHandler)
+	r.HandleFunc("/vpc/total", VPCTotalHandler)
+	r.HandleFunc("/acl/total", ACLTotalHandler)
+	r.HandleFunc("/security_group/total", SecurityGroupTotalHandler)
+	r.HandleFunc("/nat/total", NatGatewayTotalHandler)
+	r.HandleFunc("/eip/total", ElasticIPTotalHandler)
+	r.HandleFunc("/key_pair/total", KeyPairTotalHandler)
+	r.HandleFunc("/route_table/total", RouteTableTotalHandler)
+	r.HandleFunc("/internet_gateway/total", InternetGatewayTotalHandler)
+	r.HandleFunc("/autoscaling_group/total", AutoScalingGroupTotalHandler)
+	r.HandleFunc("/elb/family", ElasticLoadBalancerFamilyHandler)
+	http.ListenAndServe(":3000", r)
 }
 
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {
