@@ -115,6 +115,17 @@
                       </div>
                     </div>
                   </div>
+                  <div class="polar-chart-example card">
+                    <div class="card-body">
+                      <h3>EC2 Family</h3><small>Lorem ipsum dolor sit amet.</small>
+                      <canvas baseChart height="276" *ngIf="ec2FamilliesChartData.length > 0"
+                        [data]="ec2FamilliesChartData"
+                        [labels]="ec2FamilliesChartLabels"
+                        [legend]="ec2FamilliesChartLegend"
+                        [options]="ec2FamilliesOptions"
+                        [chartType]="ec2FamilliesChartType"></canvas>
+                    </div>
+                  </div>
                 </div>
                 <!-- Line Chart            -->
                 <div class="chart col-lg-6 col-12">
@@ -130,6 +141,116 @@
                       <div id="map"></div>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="statistics col-lg-4 col-12">
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
+                        <div class="text"><strong>{{currentVPC}}</strong><br><small>VPC</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
+                        <div class="text"><strong>{{currentACL}}</strong><br><small>ACL</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
+                        <div class="text"><strong>{{currentSecurityGroup}}</strong><br><small>Security Group</small></div>
+                      </div>
+                    </div>
+                    <div class="statistics col-lg-4 col-12">
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
+                        <div class="text"><strong>{{currentNatGateway}}</strong><br><small>NAT Gateway</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
+                        <div class="text"><strong>{{currentInternetGateway}}</strong><br><small>Internet Gateway</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
+                        <div class="text"><strong>{{currentElasticIP}}</strong><br><small>Elastic IP</small></div>
+                      </div>
+                    </div>
+                    <div class="statistics col-lg-4 col-12">
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
+                        <div class="text"><strong>{{currentKeyPair}}</strong><br><small>Key Pairs</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
+                        <div class="text"><strong>{{currentAutoscalingGroup}}</strong><br><small>Autoscaling Groups</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
+                        <div class="text"><strong>{{currentRouteTable}}</strong><br><small>Route Table</small></div>
+                      </div>
+                    </div>
+                  </div>
+                  <section class="dashboard-counts">
+                <div class="container-fluid">
+                  <div class="row bg-white has-shadow">
+                    <!-- Item -->
+                    <div class="col-xl-4">
+                      <div class="item d-flex align-items-center">
+                        <div class="icon bg-violet"><i class="icon-user"></i></div>
+                        <div class="title"><span>Golang</span>
+                          <div class="progress">
+                            <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                          </div>
+                        </div>
+                        <div class="number"><strong>{{currentGolangLambdaFunctions}}</strong></div>
+                      </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="col-xl-4">
+                      <div class="item d-flex align-items-center">
+                        <div class="icon bg-red"><i class="icon-padnote"></i></div>
+                        <div class="title"><span>Node.JS</span>
+                          <div class="progress">
+                            <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
+                          </div>
+                        </div>
+                        <div class="number"><strong>{{currentNodeJSLambdaFunctions}}</strong></div>
+                      </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="col-xl-4">
+                      <div class="item d-flex align-items-center">
+                        <div class="icon bg-green"><i class="icon-bill"></i></div>
+                        <div class="title"><span>Python</span>
+                          <div class="progress">
+                            <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
+                          </div>
+                        </div>
+                        <div class="number"><strong>{{currentPythonLambdaFunctions}}</strong></div>
+                      </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="col-xl-5 offset-md-2">
+                      <div class="item d-flex align-items-center">
+                        <div class="icon bg-orange"><i class="icon-check"></i></div>
+                        <div class="title"><span>Java</span>
+                          <div class="progress">
+                            <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
+                          </div>
+                        </div>
+                        <div class="number"><strong>{{currentJavaLambdaFunctions}}</strong></div>
+                      </div>
+                    </div>
+                    <!-- Item -->
+                    <div class="col-xl-5">
+                      <div class="item d-flex align-items-center">
+                        <div class="icon bg-violet"><i class="icon-user"></i></div>
+                        <div class="title"><span>C#</span>
+                          <div class="progress">
+                            <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                          </div>
+                        </div>
+                        <div class="number"><strong>{{currentCSharpLambdaFunctions}}</strong></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
                 </div>
                 <div class="chart col-lg-3 col-12">
                   <!-- Bar Chart   -->
@@ -148,178 +269,9 @@
                   </div>
                   <!-- Numbers-->
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-green"><i class="fa fa-line-chart"></i></div>
-                    <div class="text"><strong>99.9%</strong><br><small>Success Rate</small></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- Dashboard Counts Section-->
-          <section class="dashboard-counts">
-            <div class="container-fluid">
-              <div class="row bg-white has-shadow">
-                <!-- Item -->
-                <div class="col-xl-2 offset-md-1">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-violet"><i class="icon-user"></i></div>
-                    <div class="title"><span>Golang</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>{{currentGolangLambdaFunctions}}</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-2">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-red"><i class="icon-padnote"></i></div>
-                    <div class="title"><span>Node.JS</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>{{currentNodeJSLambdaFunctions}}</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-2">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-green"><i class="icon-bill"></i></div>
-                    <div class="title"><span>Python</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>{{currentPythonLambdaFunctions}}</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-2">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-orange"><i class="icon-check"></i></div>
-                    <div class="title"><span>Java</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>{{currentJavaLambdaFunctions}}</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-2">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-violet"><i class="icon-user"></i></div>
-                    <div class="title"><span>C#</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>{{currentCSharpLambdaFunctions}}</strong></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-white has-shadow">
-                <!-- Item -->
-                <div class="col-xl-3 col-sm-6">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-violet"><i class="icon-user"></i></div>
-                    <div class="title"><span>MySQL</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>25</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-3 col-sm-6">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-red"><i class="icon-padnote"></i></div>
-                    <div class="title"><span>PostgreSQL</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>70</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-3 col-sm-6">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-green"><i class="icon-bill"></i></div>
-                    <div class="title"><span>Aurora</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>40</strong></div>
-                  </div>
-                </div>
-                <!-- Item -->
-                <div class="col-xl-3 col-sm-6">
-                  <div class="item d-flex align-items-center">
-                    <div class="icon bg-orange"><i class="icon-check"></i></div>
-                    <div class="title"><span>Oracle</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
-                      </div>
-                    </div>
-                    <div class="number"><strong>50</strong></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- Dashboard Header Section    -->
-          <section class="dashboard-header">
-            <div class="container-fluid">
-              <div class="row">
-                <!-- Statistics -->
-                <div class="statistics col-lg-3 col-12">
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>{{currentVPC}}</strong><br><small>VPC</small></div>
+                    <div class="text"><strong>0</strong><br><small>RDS Instances</small></div>
                   </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>{{currentACL}}</strong><br><small>ACL</small></div>
-                  </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>{{currentSecurityGroup}}</strong><br><small>Security Group</small></div>
-                  </div>
-                </div>
-                 <div class="statistics col-lg-3 col-12">
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>{{currentNatGateway}}</strong><br><small>NAT Gateway</small></div>
-                  </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>{{currentInternetGateway}}</strong><br><small>Internet Gateway</small></div>
-                  </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>{{currentElasticIP}}</strong><br><small>Elastic IP</small></div>
-                  </div>
-                </div>
-                 <div class="statistics col-lg-3 col-12">
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>{{currentKeyPair}}</strong><br><small>Key Pairs</small></div>
-                  </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>{{currentAutoscalingGroup}}</strong><br><small>Autoscaling Groups</small></div>
-                  </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>{{currentRouteTable}}</strong><br><small>Route Table</small></div>
-                  </div>
-                </div>
-                <div class="statistics col-lg-3 col-12">
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
                     <div class="text"><strong>{{currentDynamoDBTable}}</strong><br><small>DynamoDB Tables</small></div>
@@ -332,49 +284,14 @@
                     <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
                     <div class="text"><strong>{{currentDynamoDBReadCapacity}}</strong><br><small>Read Capacity</small></div>
                   </div>
-                </div>
-              </div>
-            </div>
-         </section>
-          <!-- Client Section-->
-          <section class="client no-padding-top">
-            <div class="container-fluid">
-              <div class="row">
-                <!-- Client Profile -->
-                <div class="col-lg-4">
+
                   <div class="pie-chart-example card">
-                    <div class="card-close">
-                      <div class="dropdown">
-                        <button type="button" id="closeCard8" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard8" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
-                      </div>
-                    </div>
                     <div class="card-body">
                       <h3>ELB Family</h3><small>Lorem ipsum dolor sit amet.</small>
                       <canvas baseChart
                         [data]="pieChartData"
                         [labels]="pieChartLabels"
                         [chartType]="pieChartType"></canvas>
-                    </div>
-                  </div>
-                </div>
-                <!-- Polar Chart-->
-                <div class="col-lg-4">
-                  <div class="polar-chart-example card">
-                    <div class="card-close">
-                      <div class="dropdown">
-                        <button type="button" id="closeCard9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard9" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <h3>EC2 Family</h3><small>Lorem ipsum dolor sit amet.</small>
-                      <canvas baseChart height="276" *ngIf="ec2FamilliesChartData.length > 0"
-                        [data]="ec2FamilliesChartData"
-                        [labels]="ec2FamilliesChartLabels"
-                        [legend]="ec2FamilliesChartLegend"
-                        [options]="ec2FamilliesOptions"
-                        [chartType]="ec2FamilliesChartType"></canvas>
                     </div>
                   </div>
                 </div>

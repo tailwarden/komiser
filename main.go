@@ -328,8 +328,8 @@ func main() {
 	r.HandleFunc("/autoscaling_group/total", AutoScalingGroupTotalHandler) //OK
 	r.HandleFunc("/elb/family", ElasticLoadBalancerFamilyHandler)
 	r.HandleFunc("/s3/total", S3TotalHandler)
-	r.HandleFunc("/cost", CostAndUsageHandler) //OK
-	r.HandleFunc("/lambda/runtime", LambdaPerRuntimeHandler)
+	r.HandleFunc("/cost", CostAndUsageHandler)               //OK
+	r.HandleFunc("/lambda/runtime", LambdaPerRuntimeHandler) //OK
 	r.HandleFunc("/rds/engine", RDSInstancePerEngineHandler)
 	r.HandleFunc("/dynamodb/total", DynamoDBTableTotalHandler)                 //OK
 	r.HandleFunc("/dynamodb/throughput", DynamoDBProvisionedThroughputHandler) //OK

@@ -426,7 +426,7 @@ export class AppComponent implements AfterViewInit {
         if(runtime.startsWith('python')){
           this.currentPythonLambdaFunctions+=res[runtime]
         }
-        if(runtime.startsWith('csharp')){
+        if(runtime.startsWith('dotnet')){
           this.currentCSharpLambdaFunctions+=res[runtime]
         }
       }
