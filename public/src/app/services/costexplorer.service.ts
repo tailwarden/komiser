@@ -114,9 +114,57 @@ export class CostExplorerService {
      })
   }
 
+  public getCurrentEBSSize(){
+    return this.http
+     .get(`${this.apiURL}/ebs/size`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
   public getCurrentEC2Family(){
     return this.http
      .get(`${this.apiURL}/ec2/family`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentEC2State(){
+    return this.http
+     .get(`${this.apiURL}/ec2/state`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentEC2Region(){
+    return this.http
+     .get(`${this.apiURL}/ec2/region`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentSnapshot(){
+    return this.http
+     .get(`${this.apiURL}/snapshot/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentSnapshotSize(){
+    return this.http
+     .get(`${this.apiURL}/snapshot/size`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentLambdaRuntime(){
+    return this.http
+     .get(`${this.apiURL}/lambda/runtime`)
      .map(res => {
        return res.json()
      })
