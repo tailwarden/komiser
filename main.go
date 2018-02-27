@@ -19,6 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	cache "github.com/patrickmn/go-cache"
 )
@@ -215,16 +216,93 @@ func ElasticLoadBalancerFamilyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/*
-describeS3BucketsTotal
-describeCostAndUsage
-describeLambdaFunctionsPerRuntime
-describeRDSInstancesPerEngine
-describeDynamoDBTablesTotal
-describeDynamoDBTablesProvisionedThroughput (read, write)
-describeSnapshotsTotal
-describeSnapshotsSize
-*/
+func S3TotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("s3_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeS3BucketsTotal(cfg)
+		memoryCache.Set("s3_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func CostAndUsageHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("cost_usage")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeCostAndUsage(cfg)
+		memoryCache.Set("cost_usage", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func LambdaPerRuntimeHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("lambda_runtime")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeLambdaFunctionsPerRuntime(cfg)
+		memoryCache.Set("lambda_runtime", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func RDSInstancePerEngineHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("rds_engine")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeRDSInstancesPerEngine(cfg)
+		memoryCache.Set("rds_engine", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func DynamoDBTableTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("dynamodb_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeDynamoDBTablesTotal(cfg)
+		memoryCache.Set("dynamodb_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func DynamoDBProvisionedThroughputHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("dynamodb_throughput")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeDynamoDBTablesProvisionedThroughput(cfg)
+		memoryCache.Set("dynamodb_throughput", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func SnapshotTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("snapshot_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeSnapshotsTotal(cfg)
+		memoryCache.Set("snapshot_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func SnapshotSizeHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := memoryCache.Get("snapshot_size")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := describeSnapshotsSize(cfg)
+		memoryCache.Set("snapshot_size", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
 
 func init() {
 	memoryCache = cache.New(5*time.Minute, 5*time.Minute)
@@ -249,7 +327,15 @@ func main() {
 	r.HandleFunc("/internet_gateway/total", InternetGatewayTotalHandler)
 	r.HandleFunc("/autoscaling_group/total", AutoScalingGroupTotalHandler)
 	r.HandleFunc("/elb/family", ElasticLoadBalancerFamilyHandler)
-	http.ListenAndServe(":3000", r)
+	r.HandleFunc("/s3/total", S3TotalHandler)
+	r.HandleFunc("/cost", CostAndUsageHandler)
+	r.HandleFunc("/lambda/runtime", LambdaPerRuntimeHandler)
+	r.HandleFunc("/rds/engine", RDSInstancePerEngineHandler)
+	r.HandleFunc("/dynamodb/total", DynamoDBTableTotalHandler)
+	r.HandleFunc("/dynamodb/throughput", DynamoDBProvisionedThroughputHandler)
+	r.HandleFunc("/snapshot/total", SnapshotTotalHandler)
+	r.HandleFunc("/snapshot/size", SnapshotSizeHandler)
+	http.ListenAndServe(":3000", handlers.CORS()(r))
 }
 
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {

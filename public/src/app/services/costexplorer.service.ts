@@ -50,11 +50,10 @@ export class CostExplorerService {
   constructor(private http: Http) { }
 
   public getBilling(){
-    return this.mockData
-    /*return this.http
-     .get(`${this.apiURL}`)
+    return this.http
+     .get(`${this.apiURL}/cost`)
      .map(res => {
        return res.json()
-     })*/
+     })
   }
 }

@@ -470,14 +470,14 @@
                       </div>
                     </div>
                     <div class="card-body">
-                      <h3>Total Bill</h3><small>Lorem ipsum dolor sit amet.</small>
-                      <div class="number text-center">$20,000</div>
+                      <h3>Total Bill</h3><small>Current month-to-date balance for {{currentDate}}.</small>
+                      <div class="number text-center">{{currentBill}} {{billUnit}}</div>
                       <div class="chart">
-                        <canvas baseChart
-                            [datasets]="lineChartData"
-                            [labels]="lineChartLabels"
-                            [options]="lineChartOptions"
-                            [chartType]="lineChartType"></canvas>
+                        <canvas baseChart *ngIf="costAndUsageChartData.length > 0"
+                            [datasets]="costAndUsageChartData"
+                            [labels]="costAndUsageChartLabels"
+                            [options]="costAndUsageChartOptions"
+                            [chartType]="costAndUsageChartType"></canvas>
                       </div>
                     </div>
                   </div>

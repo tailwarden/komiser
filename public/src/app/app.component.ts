@@ -36,33 +36,9 @@ export class AppComponent implements AfterViewInit {
   public pieChartData:number[] = [300, 500, 100];
   public pieChartType:string = 'pie';
 
-  public lineChartData:Array<any> = [
-    {
-      label: "Total Overdue",
-                    fill: !0,
-                    lineTension: 0,
-                    backgroundColor: "transparent",
-                    borderColor: "#6ccef0",
-                    pointBorderColor: "#59c2e6",
-                    pointHoverBackgroundColor: "#59c2e6",
-                    borderCapStyle: "butt",
-                    borderDash: [],
-                    borderDashOffset: 0,
-                    borderJoinStyle: "miter",
-                    borderWidth: 3,
-                    pointBackgroundColor: "#59c2e6",
-                    pointBorderWidth: 0,
-                    pointHoverRadius: 4,
-                    pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 0,
-                    pointRadius: 4,
-                    pointHitRadius: 0,
-                    data: [20, 28, 30, 22, 24, 10, 7],
-                    spanGaps: !1
-    }
-  ];
-  public lineChartLabels:Array<any> = ["A", "B", "C", "D", "E", "F", "G"];
-  public lineChartOptions:any = {
+  public costAndUsageChartData:Array<any> = [];
+  public costAndUsageChartLabels:Array<any> = [];
+  public costAndUsageChartOptions:any = {
     responsive: true,
     scales: {
                     xAxes: [{
@@ -87,7 +63,7 @@ export class AppComponent implements AfterViewInit {
                     display: !1
                 }
   };
-  public lineChartType:string = 'line';
+  public costAndUsageChartType:string = 'line';
 
   public barChartOptions:any = {
     responsive: true,
@@ -197,22 +173,52 @@ export class AppComponent implements AfterViewInit {
                 }
   }
 
+  public currentBill: number;
+  public billUnit : string;
+  public currentDate: string;
+
   constructor(private costExplorerService: CostExplorerService){
-    let res = this.costExplorerService.getBilling()
-    let values = []
-    let labels = []
-    res.forEach(item => {
-      values.push(item.amount)
-      labels.push(item.end)
-    })
-    this.billingChartData = [
-      {
-        data: values,
-        label: 'USD'
-      }
-    ]
-    this.billingChartLabels = labels
-    
+    this.getCostAndUsage()
+  }
+
+  private getCostAndUsage(): void {
+    var values = []
+    var labels = []
+    this.costExplorerService.getBilling().subscribe(res => {
+      this.currentBill = res[res.length - 1].Amount.toFixed(2)
+      this.billUnit = res[res.length - 1].Unit;
+      this.currentDate = `${(new Date().toLocaleString("en-us", { month: "long" }))} ${(new Date()).getFullYear()}`
+      res.forEach(item => {
+        values.push(item.Amount.toFixed(3))
+        labels.push(new Date(item.End).toLocaleString("en-us", { month: "long" }))
+      })
+      this.costAndUsageChartData = [
+        {
+          label: "Bill",
+          fill: 0,
+          lineTension: 0,
+          backgroundColor: "transparent",
+          borderColor: "#6ccef0",
+          pointBorderColor: "#59c2e6",
+          pointHoverBackgroundColor: "#59c2e6",
+          borderCapStyle: "butt",
+          borderDash: [],
+          borderDashOffset: 0,
+          borderJoinStyle: "miter",
+          borderWidth: 3,
+          pointBackgroundColor: "#59c2e6",
+          pointBorderWidth: 0,
+          pointHoverRadius: 4,
+          pointHoverBorderColor: "#fff",
+          pointHoverBorderWidth: 0,
+          pointRadius: 4,
+          pointHitRadius: 0,
+          data: values,
+          spanGaps: 1
+        }
+      ]
+      this.costAndUsageChartLabels = labels
+    }) 
   }
 
   ngAfterViewInit(){
