@@ -9,20 +9,7 @@ import * as Datamap from 'datamaps';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  public billingChartData:Array<any> = []
-  public billingChartLabels:Array<any> = []
-  public billingChartOptions:any = {
-    responsive: true,
-    cutoutPercentage: 70
-
-  };
-  public billingChartLegend:boolean = true;
-  public billingChartType:string = 'bar';
-  
-
-   
-
-   public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
+  public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
   public pieChartData:number[] = [300, 500, 100];
   public pieChartType:string = 'pie';
 
@@ -54,104 +41,6 @@ export class AppComponent implements AfterViewInit {
                 }
   };
   public costAndUsageChartType:string = 'line';
-
-  public barChartOptions:any = {
-    responsive: true,
-    scales: {
-                xAxes: [{
-                    display: !1
-                }],
-                yAxes: [{
-                    display: !1
-                }]
-            },
-            legend: {
-                display: !1
-            }
-  };
-  public barChartLabels:string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
-  public barChartType:string = 'bar';
- 
-  public barChartData:any[] = [
-    {
-      label: "Data Set 1",
-                backgroundColor: ["rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)"],
-                borderColor: ["rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)", "rgb(121, 106, 238)"],
-                borderWidth: 1,
-                data: [35, 49, 55, 68, 81, 95, 85, 40, 30, 27, 22, 15]
-    }
-  ];
-
-  public barChartOptions2:any = {
-    responsive: true,
-    scales: {
-                    xAxes: [{
-                        display: !0,
-                        gridLines: {
-                            display: !1
-                        }
-                    }],
-                    yAxes: [{
-                        display: !0,
-                        gridLines: {
-                            display: !1
-                        }
-                    }]
-                },
-                legend: {
-                    display: !0
-                }
-  };
-  public barChartLabels2:string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"];
-  public barChartType2:string = 'line';
- 
-  public barChartData2:any[] = [
-    {
-                    label: "Page Visitors",
-                    fill: !0,
-                    lineTension: 0,
-                    backgroundColor: "transparent",
-                    borderColor: "#f15765",
-                    pointBorderColor: "#da4c59",
-                    pointHoverBackgroundColor: "#da4c59",
-                    borderCapStyle: "butt",
-                    borderDash: [],
-                    borderDashOffset: 0,
-                    borderJoinStyle: "miter",
-                    borderWidth: 1,
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 0,
-                    data: [50, 20, 60, 31, 52, 22, 40, 25, 30, 68, 56, 40, 60, 43, 55, 39, 47],
-                    spanGaps: !1
-                }, {
-                    label: "Page Views",
-                    fill: !0,
-                    lineTension: 0,
-                    backgroundColor: "transparent",
-                    borderColor: "#54e69d",
-                    pointHoverBackgroundColor: "#44c384",
-                    borderCapStyle: "butt",
-                    borderDash: [],
-                    borderDashOffset: 0,
-                    borderJoinStyle: "miter",
-                    borderWidth: 1,
-                    pointBorderColor: "#44c384",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: [20, 7, 35, 17, 26, 8, 18, 10, 14, 46, 30, 30, 14, 28, 17, 25, 17, 40],
-                    spanGaps: !1
-                }
-  ];
 
   public doughnutChartLabels2:string[] = ["First", "Second", "Third", "Fourth"];
   public doughnutChartData2:number[] = [300, 50, 100, 60];
@@ -204,6 +93,25 @@ export class AppComponent implements AfterViewInit {
   public doughnutChartOptions: any = {
     cutoutPercentage: 80
   }
+
+  public barChartOptions:any = {
+    responsive: true,
+    scales: {
+                xAxes: [{
+                    display: !1
+                }],
+                yAxes: [{
+                    display: !1
+                }]
+            },
+            legend: {
+                display: !1
+            }
+  };
+  public elbFamiliesChartLabels:string[] = [];
+  public elbFamiliesChartType:string = 'bar';
+ 
+  public elbFamiliesChartData:any[] = [];
 
   private regions = {
     us_east_1 : {
@@ -293,6 +201,7 @@ export class AppComponent implements AfterViewInit {
     this.getCurrentSnapshotSize()*/
     this.getCostAndUsage()
     this.getCurrentLambdaRuntime()
+    this.getCurrentELBFamily()
   }
 
   private getCurrentVPC(): void {
@@ -430,6 +339,25 @@ export class AppComponent implements AfterViewInit {
           this.currentCSharpLambdaFunctions+=res[runtime]
         }
       }
+    })
+  }
+
+  private getCurrentELBFamily(): void {
+    let data = []
+    let labels = []
+    this.costExplorerService.getCurrentELBFamily().subscribe(res => {
+      for(var i in res){
+        data.push(res[i])
+        labels.push(i)
+      }
+      this.elbFamiliesChartData = [
+          {
+            label: "Total",
+            borderWidth: 1,
+            data: data
+          }
+      ]
+      this.elbFamiliesChartLabels = labels
     })
   }
 

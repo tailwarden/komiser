@@ -170,4 +170,12 @@ export class CostExplorerService {
      })
   }
 
+  public getCurrentELBFamily(){
+     return this.http
+     .get(`${this.apiURL}/elb/family`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
 }
