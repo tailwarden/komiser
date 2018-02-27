@@ -311,11 +311,11 @@ func init() {
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/ec2/region", EC2RegionHandler)
-	r.HandleFunc("/ec2/family", EC2FamilyHandler)
-	r.HandleFunc("/ec2/state", EC2StateHandler)
-	r.HandleFunc("/ebs/size", EBSSizeHandler)
-	r.HandleFunc("/ebs/family", EBSFamilyHandler)
+	r.HandleFunc("/ec2/region", EC2RegionHandler) //OK
+	r.HandleFunc("/ec2/family", EC2FamilyHandler) //Ok
+	r.HandleFunc("/ec2/state", EC2StateHandler)   //OK
+	r.HandleFunc("/ebs/size", EBSSizeHandler)     //OK
+	r.HandleFunc("/ebs/family", EBSFamilyHandler) //OK
 	r.HandleFunc("/ebs/state", EBSStateHandler)
 	r.HandleFunc("/vpc/total", VPCTotalHandler)                            //OK
 	r.HandleFunc("/acl/total", ACLTotalHandler)                            //OK
@@ -333,8 +333,8 @@ func main() {
 	r.HandleFunc("/rds/engine", RDSInstancePerEngineHandler)
 	r.HandleFunc("/dynamodb/total", DynamoDBTableTotalHandler)                 //OK
 	r.HandleFunc("/dynamodb/throughput", DynamoDBProvisionedThroughputHandler) //OK
-	r.HandleFunc("/snapshot/total", SnapshotTotalHandler)
-	r.HandleFunc("/snapshot/size", SnapshotSizeHandler)
+	r.HandleFunc("/snapshot/total", SnapshotTotalHandler)                      //OK
+	r.HandleFunc("/snapshot/size", SnapshotSizeHandler)                        //OK
 	http.ListenAndServe(":3000", handlers.CORS()(r))
 }
 

@@ -167,23 +167,30 @@ export class AppComponent implements AfterViewInit {
   public billUnit : string;
   public currentDate: string;
   
-  public currentVPC: number;
-  public currentACL: number;
-  public currentSecurityGroup: number;
-  public currentNatGateway: number;
-  public currentInternetGateway: number;
-  public currentElasticIP: number;
-  public currentKeyPair: number;
-  public currentAutoscalingGroup: number;
-  public currentRouteTable: number;
-  public currentDynamoDBReadCapacity: number;
-  public currentDynamoDBWriteCapacity: number;
-  public currentDynamoDBTable: number;
-
-  public ebsFamilliesChartLabels:string[] = [];
-  public ebsFamilliesChartData:number[] = [];
-  public ebsFamilliesChartType:string = 'doughnut';
-  public ebsFamilliesChartLegend:boolean = false;
+  public currentVPC: number = 0;
+  public currentACL: number = 0;
+  public currentSecurityGroup: number = 0;
+  public currentNatGateway: number = 0;
+  public currentInternetGateway: number = 0;
+  public currentElasticIP: number = 0;
+  public currentKeyPair: number = 0;
+  public currentAutoscalingGroup: number = 0;
+  public currentRouteTable: number = 0;
+  public currentDynamoDBReadCapacity: number = 0;
+  public currentDynamoDBWriteCapacity: number = 0;
+  public currentDynamoDBTable: number = 0;
+  public currentEBSVolumes: number = 0;
+  public currentEBSSize: number = 0;
+  public currentSnapshot: number = 0;
+  public currentSnapshotSize: number = 0;
+  public currentStoppedInstances: number = 0;
+  public currentRunningInstances: number = 0;
+  public currentTerminatedInstances: number = 0;
+  public currentCSharpLambdaFunctions: number = 0;
+  public currentJavaLambdaFunctions: number = 0;
+  public currentGolangLambdaFunctions: number = 0;
+  public currentPythonLambdaFunctions: number = 0;
+  public currentNodeJSLambdaFunctions: number = 0;
 
   public ec2FamilliesChartLabels:string[] = [];
   public ec2FamilliesChartData:number[] = [];
@@ -198,8 +205,75 @@ export class AppComponent implements AfterViewInit {
     cutoutPercentage: 80
   }
 
+  private regions = {
+    us_east_1 : {
+      latitude : 39.3095135,
+      longitude : -119.6499793 
+    },
+    us_east_2 : {
+      latitude : 40.4172871,
+      longitude : -82.907123
+    },
+    us_west_1 : {
+      latitude : 36.778261,
+      longitude : -119.4179324
+    },
+    us_west_2 : {
+      latitude : 43.8041334,
+      longitude : -120.5542012
+    },
+    ca_central_1 : {
+      latitude : 51.253775,
+      longitude : -85.323214
+    },
+    eu_central_1 : {
+      latitude : 50.1109221,
+      longitude : 8.6821267
+    },
+    eu_west_1 : {
+      latitude : 53.4058314,
+      longitude : -6.0624418
+    },
+    eu_west_2 : {
+      latitude : 51.5073509,
+      longitude : -0.1277583
+    },
+    eu_west_3 : {
+      latitude : 48.856614,
+      longitude : 2.3522219
+    },
+    ap_northeast_1 : {
+      latitude : 35.6894875,
+      longitude : 139.6917064
+    },
+    ap_northeast_2 : {
+      latitude : 37.566535,
+      longitude : 126.9779692
+    },
+    ap_northeast_3 : {
+      latitude : 34.6937378,
+      longitude : 135.5021651
+    },
+    ap_southeast_1 : {
+      latitude : 1.3553794,
+      longitude : 103.8677444
+    },
+    ap_southeast_2 : {
+      latitude : -33.8688197,
+      longitude : 151.2092955
+    },
+    ap_south_1 : {
+      latitude : 19.0759837,
+      longitude : 72.8776559
+    },
+    sa_east_1 : {
+      latitude : -23.5505199,
+      longitude : -46.6333094
+    }
+  }
+
   constructor(private costExplorerService: CostExplorerService){
-    /*this.getCostAndUsage()
+    /*
     this.getCurrentVPC()
     this.getCurrentACL()
     this.getCurrentSecurityGroup()
@@ -210,83 +284,89 @@ export class AppComponent implements AfterViewInit {
     this.getCurrentAutoscalingGroup()
     this.getCurrentRouteTable()
     this.getCurrentDynamoDBTable()
-    this.getCurrentDynamoDBThroughput()*/
+    this.getCurrentDynamoDBThroughput()
     this.getCurrentEBSFamily()
     this.getCurrentEC2Family()
+    this.getCurrentEBSSize()
+    this.getCurrentEC2State()
+    this.getCurrentSnapshot()
+    this.getCurrentSnapshotSize()*/
+    this.getCostAndUsage()
+    this.getCurrentLambdaRuntime()
   }
 
   private getCurrentVPC(): void {
-    this.costExplorerService.getCurrentVPC().subscribe(res => {
-      this.currentVPC = res;
+    this.costExplorerService.getCurrentVPC().subscribe(current => {
+      this.currentVPC = (current ? current : 0)
     })
   }
 
   private getCurrentACL(): void {
-    this.costExplorerService.getCurrentACL().subscribe(res => {
-      this.currentACL = res;
+    this.costExplorerService.getCurrentACL().subscribe(current => {
+      this.currentACL = (current ? current : 0)
     })
   }
 
   private getCurrentSecurityGroup(): void {
-    this.costExplorerService.getCurrentSecurityGroup().subscribe(res => {
-      this.currentSecurityGroup = res;
+    this.costExplorerService.getCurrentSecurityGroup().subscribe(current => {
+      this.currentSecurityGroup = (current ? current : 0)
     })
   }
 
   private getCurrentNatGateway(): void {
-    this.costExplorerService.getCurrentNatGateway().subscribe(res => {
-      this.currentNatGateway = res;
+    this.costExplorerService.getCurrentNatGateway().subscribe(current => {
+      this.currentNatGateway = (current ? current : 0)
     })
   }
 
   private getCurrentInternetGateway(): void {
-    this.costExplorerService.getCurrentInternetGateway().subscribe(res => {
-      this.currentInternetGateway = res;
+    this.costExplorerService.getCurrentInternetGateway().subscribe(current => {
+      this.currentInternetGateway = (current ? current : 0)
     })
   }
 
   private getCurrentElasticIP(): void {
-    this.costExplorerService.getCurrentElasticIP().subscribe(res => {
-      this.currentElasticIP = res;
+    this.costExplorerService.getCurrentElasticIP().subscribe(current => {
+      this.currentElasticIP = (current ? current : 0)
     })
   }
 
   private getCurrentKeyPair(): void {
-    this.costExplorerService.getCurrentKeyPair().subscribe(res => {
-      this.currentKeyPair = res;
+    this.costExplorerService.getCurrentKeyPair().subscribe(current => {
+      this.currentKeyPair = (current ? current : 0)
     })
   }
 
   private getCurrentAutoscalingGroup(): void {
-    this.costExplorerService.getCurrentAutoscalingGroup().subscribe(res => {
-      this.currentAutoscalingGroup = res;
+    this.costExplorerService.getCurrentAutoscalingGroup().subscribe(current => {
+      this.currentAutoscalingGroup = (current ? current : 0)
     })
   }
 
   private getCurrentRouteTable(): void {
-    this.costExplorerService.getCurrentRouteTable().subscribe(res => {
-      this.currentRouteTable = res;
+    this.costExplorerService.getCurrentRouteTable().subscribe(current => {
+      this.currentRouteTable = (current ? current : 0)
     })
   }
 
   private getCurrentDynamoDBTable(): void {
-    this.costExplorerService.getCurrentDynamoDBTable().subscribe(res => {
-      this.currentDynamoDBTable = res;
+    this.costExplorerService.getCurrentDynamoDBTable().subscribe(current => {
+      this.currentDynamoDBTable = (current ? current : 0)
     })
   }
 
   private getCurrentDynamoDBThroughput(): void {
-    this.costExplorerService.getCurrentDynamoDBThroughput().subscribe(res => {
-      this.currentDynamoDBReadCapacity = res.readCapacity;
-      this.currentDynamoDBWriteCapacity = res.writeCapacity;
+    this.costExplorerService.getCurrentDynamoDBThroughput().subscribe(current => {
+      this.currentDynamoDBReadCapacity = (current.readCapacity ? current.readCapacity : 0)
+      this.currentDynamoDBWriteCapacity = (current.writeCapacity ? current.writeCapacity : 0)
     })
   }
 
   private getCurrentEBSFamily(): void {
+    this.currentEBSVolumes = 0;
     this.costExplorerService.getCurrentEBSFamily().subscribe(res => {
       for(var i in res){
-        this.ebsFamilliesChartLabels.push(i)
-        this.ebsFamilliesChartData.push(res[i])
+        this.currentEBSVolumes += res[i]
       }
     })
   }
@@ -297,6 +377,94 @@ export class AppComponent implements AfterViewInit {
         this.ec2FamilliesChartLabels.push(i)
         this.ec2FamilliesChartData.push(res[i])
       }
+    })
+  }
+
+  private getCurrentEBSSize(): void {
+    this.costExplorerService.getCurrentEBSSize().subscribe(current => {
+      this.currentEBSSize = (current ? current : 0);
+    })
+  }
+
+  public getCurrentEC2State(): void {
+    this.costExplorerService.getCurrentEC2State().subscribe(res => {
+      this.currentStoppedInstances = (res.stopped ? res.stopped : 0)
+      this.currentTerminatedInstances = (res.terminated ? res.terminated : 0)
+      this.currentRunningInstances = (res.running ? res.running : 0)
+    })
+  }
+
+  private getCurrentSnapshot(): void {
+    this.costExplorerService.getCurrentSnapshot().subscribe(current => {
+      this.currentSnapshot = (current ? current : 0);
+    })
+  }
+
+  private getCurrentSnapshotSize(): void {
+    this.costExplorerService.getCurrentSnapshotSize().subscribe(current => {
+      this.currentSnapshotSize = (current ? current : 0);
+    })
+  }
+
+  private getCurrentLambdaRuntime(): void {
+    this.currentGolangLambdaFunctions = 0
+    this.currentNodeJSLambdaFunctions = 0
+    this.currentJavaLambdaFunctions = 0
+    this.currentPythonLambdaFunctions = 0
+    this.currentCSharpLambdaFunctions = 0
+    this.costExplorerService.getCurrentLambdaRuntime().subscribe(res => {
+      for(var runtime in res){
+        if(runtime.startsWith('go')){
+          this.currentGolangLambdaFunctions+=res[runtime]
+        }
+        if(runtime.startsWith('nodejs')){
+          this.currentNodeJSLambdaFunctions+=res[runtime]
+        }
+        if(runtime.startsWith('java')){
+          this.currentJavaLambdaFunctions+=res[runtime]
+        }
+        if(runtime.startsWith('python')){
+          this.currentPythonLambdaFunctions+=res[runtime]
+        }
+        if(runtime.startsWith('csharp')){
+          this.currentCSharpLambdaFunctions+=res[runtime]
+        }
+      }
+    })
+  }
+
+  private getCurrentEC2Region(): void {
+    var map = new Datamap({
+      scope: 'world',
+      responsive: true,
+      element: document.getElementById('map'),
+      geographyConfig: {
+        popupOnHover: false,
+        highlightOnHover: false
+      },
+      fills: {
+        defaultFill: '#ABDDA4',
+        instance: 'red'
+      }
+    });
+    let data = []
+    this.costExplorerService.getCurrentEC2Region().subscribe(res => {
+      for(var region in res){
+        var params = this.regions[region.split("-").join("_")]
+        data.push({
+          radius: res[region] * 3,
+          latitude: params.latitude,
+          longitude: params.longitude,
+          region: region,
+          fillKey: 'instance',
+          instances: res[region]
+        })
+      }
+      map.bubbles(data, {
+        popupTemplate: function(geo, data){
+          return `<div class="hoverinfo">${data.region}: ${data.instances} EC2`
+        }
+      })
     })
   }
 
@@ -342,41 +510,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(){
-    var map = new Datamap({
-      scope: 'world',
-      responsive: true,
-      element: document.getElementById('map'),
-      geographyConfig: {
-        popupOnHover: false,
-        highlightOnHover: false
-      },
-      fills: {
-        defaultFill: '#ABDDA4',
-        USA: '#A3ACBB',
-        RUS: 'red'
-      }
-    });
-    map.bubbles([
-      {
-        radius: 5,
-        centered: 'BRA',
-        country: 'USA',
-        yeild: 0,
-        fillKey: 'USA',
-        instances: 5
-      },
-      {
-        radius: 2,
-        yeild: 0,
-        country: 'USA',
-        centered: 'USA',
-        fillKey: 'USA',
-        instances: 2
-      }
-    ], {
-      popupTemplate: function(geo, data){
-        return `<div class="hoverinfo">${data.country}: ${data.instances} EC2`
-      }
-    })
+    this.getCurrentEC2Region();
   }
 }
