@@ -43,7 +43,7 @@
                 <!-- Item -->
                 <div class="col-xl-4 col-sm-6">
                   <div class="item d-flex align-items-center">
-                    <div class="icon bg-red"><i class="icon-padnote"></i></div>
+                    <div class="icon bg-red"><i class="fas fa-stop"></i></div>
                     <div class="title"><span>EC2<br>Stopped</span>
                       <div class="progress">
                         <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
@@ -55,7 +55,7 @@
                 <!-- Item -->
                 <div class="col-xl-4 col-sm-6">
                   <div class="item d-flex align-items-center">
-                    <div class="icon bg-green"><i class="icon-bill"></i></div>
+                    <div class="icon bg-green"><i class="fas fa-play"></i></div>
                     <div class="title"><span>EC2<br>Running</span>
                       <div class="progress">
                         <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
@@ -67,7 +67,7 @@
                 <!-- Item -->
                 <div class="col-xl-4 col-sm-6">
                   <div class="item d-flex align-items-center">
-                    <div class="icon bg-orange"><i class="icon-check"></i></div>
+                    <div class="icon bg-orange"><i class="far fa-trash-alt"></i></div>
                     <div class="title"><span>EC2<br>Terminated</span>
                       <div class="progress">
                         <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
@@ -172,7 +172,7 @@
                     </div>
                     <div class="statistics col-lg-4 col-12">
                       <div class="statistic d-flex align-items-center bg-white has-shadow">
-                        <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
+                        <div class="icon bg-red"><i class="fas fa-key"></i></div>
                         <div class="text"><strong>{{currentKeyPair}}</strong><br><small>Key Pairs</small></div>
                       </div>
                       <div class="statistic d-flex align-items-center bg-white has-shadow">
@@ -285,14 +285,13 @@
                     <div class="text"><strong>{{currentDynamoDBReadCapacity}}</strong><br><small>Read Capacity</small></div>
                   </div>
 
-                  <div class="pie-chart-example card">
-                    <div class="card-body">
-                      <h3>ELB Family</h3><small>Lorem ipsum dolor sit amet.</small>
-                      <canvas baseChart
-                        [data]="pieChartData"
-                        [labels]="pieChartLabels"
-                        [chartType]="pieChartType"></canvas>
-                    </div>
+                  <div class="bar-chart has-shadow bg-white">
+                    <div class="title"><strong class="text-violet">95%</strong><br><small>Elastic Load Balancer</small></div>
+                    <canvas baseChart *ngIf="elbFamiliesChartData.length > 0"
+                        [datasets]="elbFamiliesChartData"
+                        [labels]="elbFamiliesChartLabels"
+                        [options]="barChartOptions"
+                        [chartType]="elbFamiliesChartType"></canvas>
                   </div>
                 </div>
               </div>

@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/elb"
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
@@ -738,15 +739,37 @@ func getAutoScalingGroups(cfg aws.Config, region string) []AutoScaling {
 func describeElasticLoadBalancerPerFamily(cfg aws.Config) map[string]int {
 	output := make(map[string]int, 0)
 	for _, region := range getRegions(cfg) {
-		elbs := getElasticLoadBalancers(cfg, region.Name)
-		for _, elb := range elbs {
+		elbsv1 := getClassicElasticLoadBalancers(cfg, region.Name)
+		elbsv2 := getElasticLoadBalancersV2(cfg, region.Name)
+		for _, elb := range elbsv1 {
+			output[elb.Type]++
+		}
+		for _, elb := range elbsv2 {
 			output[elb.Type]++
 		}
 	}
 	return output
 }
 
-func getElasticLoadBalancers(cfg aws.Config, region string) []LoadBalancer {
+func getClassicElasticLoadBalancers(cfg aws.Config, region string) []LoadBalancer {
+	cfg.Region = region
+	svc := elb.New(cfg)
+	req := svc.DescribeLoadBalancersRequest(&elb.DescribeLoadBalancersInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfElasticLoadBalancers := make([]LoadBalancer, 0)
+	for _, lb := range result.LoadBalancerDescriptions {
+		listOfElasticLoadBalancers = append(listOfElasticLoadBalancers, LoadBalancer{
+			DNSName: *lb.DNSName,
+			Type:    "classic",
+		})
+	}
+	return listOfElasticLoadBalancers
+}
+
+func getElasticLoadBalancersV2(cfg aws.Config, region string) []LoadBalancer {
 	cfg.Region = region
 	svc := elbv2.New(cfg)
 	req := svc.DescribeLoadBalancersRequest(&elbv2.DescribeLoadBalancersInput{})
