@@ -305,7 +305,7 @@ func SnapshotSizeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	memoryCache = cache.New(5*time.Minute, 5*time.Minute)
+	memoryCache = cache.New(10*time.Minute, 10*time.Minute)
 	cfg, _ = external.LoadDefaultAWSConfig()
 }
 
@@ -317,22 +317,22 @@ func main() {
 	r.HandleFunc("/ebs/size", EBSSizeHandler)
 	r.HandleFunc("/ebs/family", EBSFamilyHandler)
 	r.HandleFunc("/ebs/state", EBSStateHandler)
-	r.HandleFunc("/vpc/total", VPCTotalHandler)
-	r.HandleFunc("/acl/total", ACLTotalHandler)
-	r.HandleFunc("/security_group/total", SecurityGroupTotalHandler)
-	r.HandleFunc("/nat/total", NatGatewayTotalHandler)
-	r.HandleFunc("/eip/total", ElasticIPTotalHandler)
-	r.HandleFunc("/key_pair/total", KeyPairTotalHandler)
-	r.HandleFunc("/route_table/total", RouteTableTotalHandler)
-	r.HandleFunc("/internet_gateway/total", InternetGatewayTotalHandler)
-	r.HandleFunc("/autoscaling_group/total", AutoScalingGroupTotalHandler)
+	r.HandleFunc("/vpc/total", VPCTotalHandler)                            //OK
+	r.HandleFunc("/acl/total", ACLTotalHandler)                            //OK
+	r.HandleFunc("/security_group/total", SecurityGroupTotalHandler)       //OK
+	r.HandleFunc("/nat/total", NatGatewayTotalHandler)                     //OK
+	r.HandleFunc("/eip/total", ElasticIPTotalHandler)                      //OK
+	r.HandleFunc("/key_pair/total", KeyPairTotalHandler)                   //OK
+	r.HandleFunc("/route_table/total", RouteTableTotalHandler)             //OK
+	r.HandleFunc("/internet_gateway/total", InternetGatewayTotalHandler)   //OK
+	r.HandleFunc("/autoscaling_group/total", AutoScalingGroupTotalHandler) //OK
 	r.HandleFunc("/elb/family", ElasticLoadBalancerFamilyHandler)
 	r.HandleFunc("/s3/total", S3TotalHandler)
-	r.HandleFunc("/cost", CostAndUsageHandler)
+	r.HandleFunc("/cost", CostAndUsageHandler) //OK
 	r.HandleFunc("/lambda/runtime", LambdaPerRuntimeHandler)
 	r.HandleFunc("/rds/engine", RDSInstancePerEngineHandler)
-	r.HandleFunc("/dynamodb/total", DynamoDBTableTotalHandler)
-	r.HandleFunc("/dynamodb/throughput", DynamoDBProvisionedThroughputHandler)
+	r.HandleFunc("/dynamodb/total", DynamoDBTableTotalHandler)                 //OK
+	r.HandleFunc("/dynamodb/throughput", DynamoDBProvisionedThroughputHandler) //OK
 	r.HandleFunc("/snapshot/total", SnapshotTotalHandler)
 	r.HandleFunc("/snapshot/size", SnapshotSizeHandler)
 	http.ListenAndServe(":3000", handlers.CORS()(r))

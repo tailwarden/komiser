@@ -358,57 +358,57 @@
                 <div class="statistics col-lg-3 col-12">
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>234</strong><br><small>VPC</small></div>
+                    <div class="text"><strong>{{currentVPC}}</strong><br><small>VPC</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>152</strong><br><small>ACL</small></div>
+                    <div class="text"><strong>{{currentACL}}</strong><br><small>ACL</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>147</strong><br><small>Security Group</small></div>
+                    <div class="text"><strong>{{currentSecurityGroup}}</strong><br><small>Security Group</small></div>
                   </div>
                 </div>
                  <div class="statistics col-lg-3 col-12">
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>234</strong><br><small>NAT Gateway</small></div>
+                    <div class="text"><strong>{{currentNatGateway}}</strong><br><small>NAT Gateway</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>152</strong><br><small>Internet Gateway</small></div>
+                    <div class="text"><strong>{{currentInternetGateway}}</strong><br><small>Internet Gateway</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>147</strong><br><small>Elastic IP</small></div>
+                    <div class="text"><strong>{{currentElasticIP}}</strong><br><small>Elastic IP</small></div>
                   </div>
                 </div>
                  <div class="statistics col-lg-3 col-12">
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>234</strong><br><small>Key Pairs</small></div>
+                    <div class="text"><strong>{{currentKeyPair}}</strong><br><small>Key Pairs</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>152</strong><br><small>Autoscaling Groups</small></div>
+                    <div class="text"><strong>{{currentAutoscalingGroup}}</strong><br><small>Autoscaling Groups</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>147</strong><br><small>Security Group</small></div>
+                    <div class="text"><strong>{{currentRouteTable}}</strong><br><small>Route Table</small></div>
                   </div>
                 </div>
                 <div class="statistics col-lg-3 col-12">
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                    <div class="text"><strong>234</strong><br><small>DynamoDB Tables</small></div>
+                    <div class="text"><strong>{{currentDynamoDBTable}}</strong><br><small>DynamoDB Tables</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>152</strong><br><small>Write Capacity</small></div>
+                    <div class="text"><strong>{{currentDynamoDBWriteCapacity}}</strong><br><small>Write Capacity</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>147</strong><br><small>Read Capacity</small></div>
+                    <div class="text"><strong>{{currentDynamoDBReadCapacity}}</strong><br><small>Read Capacity</small></div>
                   </div>
                 </div>
               </div>
@@ -494,11 +494,11 @@
                       <h3>EBS Volumes</h3><small>Lorem ipsum dolor sit amet.</small>
                       <div class="chart text-center">
                         <div class="text"><strong>90</strong><br><span>TB</span></div>
-                        <canvas baseChart
-                            [data]="ec2familliesChartData"
-                            [labels]="ec2familliesChartLabels"
-                            [options]="billingChartOptions"
-                            [chartType]="ec2familliesChartType"></canvas>
+                        <canvas baseChart *ngIf="ebsFamilliesChartData.length > 0"
+                            [data]="ebsFamilliesChartData"
+                            [labels]="ebsFamilliesChartLabels"
+                            [options]="doughnutChartOptions"
+                            [chartType]="ebsFamilliesChartType"></canvas>
                       </div>
                     </div>
                   </div>
@@ -512,16 +512,14 @@
                         <div aria-labelledby="closeCard9" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
                       </div>
                     </div>
-                    <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">EBS Family</h3>
-                    </div>
                     <div class="card-body">
-                      <canvas baseChart height="250"
-                        [data]="polarAreaChartData"
-                        [labels]="polarAreaChartLabels"
-                        [legend]="polarAreaLegend"
-                        [options]="polarAreaOptions"
-                        [chartType]="polarAreaChartType"></canvas>
+                      <h3>EC2 Family</h3><small>Lorem ipsum dolor sit amet.</small>
+                      <canvas baseChart height="276" *ngIf="ec2FamilliesChartData.length > 0"
+                        [data]="ec2FamilliesChartData"
+                        [labels]="ec2FamilliesChartLabels"
+                        [legend]="ec2FamilliesChartLegend"
+                        [options]="ec2FamilliesOptions"
+                        [chartType]="ec2FamilliesChartType"></canvas>
                     </div>
                   </div>
                 </div>

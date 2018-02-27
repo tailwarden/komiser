@@ -6,45 +6,6 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class CostExplorerService {
 
-  private mockData = [
-    {
-      "start" : "2017-11-01",
-      "end" : "2017-11-30",
-      "amount" : 1.52,
-      "unit" : "USD"
-    },
-    {
-      "start" : "2017-12-01",
-      "end" : "2017-12-30",
-      "amount" : 2.52,
-      "unit" : "USD"
-    },
-    {
-      "start" : "2018-01-01",
-      "end" : "2018-01-30",
-      "amount" : 2.52,
-      "unit" : "USD"
-    },
-    {
-      "start" : "2017-11-01",
-      "end" : "2017-11-30",
-      "amount" : 1.52,
-      "unit" : "USD"
-    },
-    {
-      "start" : "2017-12-01",
-      "end" : "2017-12-30",
-      "amount" : 2.52,
-      "unit" : "USD"
-    },
-    {
-      "start" : "2018-01-01",
-      "end" : "2018-01-30",
-      "amount" : 2.52,
-      "unit" : "USD"
-    }
-  ]
-
   private apiURL : string = environment.API_URL;
   
   constructor(private http: Http) { }
@@ -56,4 +17,109 @@ export class CostExplorerService {
        return res.json()
      })
   }
+
+  public getCurrentVPC(){
+    return this.http
+     .get(`${this.apiURL}/vpc/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentACL(){
+    return this.http
+     .get(`${this.apiURL}/acl/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentSecurityGroup(){
+    return this.http
+     .get(`${this.apiURL}/security_group/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentNatGateway(){
+    return this.http
+     .get(`${this.apiURL}/nat/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentInternetGateway(){
+    return this.http
+     .get(`${this.apiURL}/internet_gateway/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentElasticIP(){
+    return this.http
+     .get(`${this.apiURL}/eip/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentKeyPair(){
+    return this.http
+     .get(`${this.apiURL}/key_pair/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentAutoscalingGroup(){
+    return this.http
+     .get(`${this.apiURL}/autoscaling_group/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentRouteTable(){
+    return this.http
+     .get(`${this.apiURL}/route_table/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentDynamoDBTable(){
+    return this.http
+     .get(`${this.apiURL}/dynamodb/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentDynamoDBThroughput(){
+    return this.http
+     .get(`${this.apiURL}/dynamodb/throughput`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentEBSFamily(){
+    return this.http
+     .get(`${this.apiURL}/ebs/family`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentEC2Family(){
+    return this.http
+     .get(`${this.apiURL}/ec2/family`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
 }

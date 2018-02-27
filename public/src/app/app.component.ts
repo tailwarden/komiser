@@ -18,19 +18,9 @@ export class AppComponent implements AfterViewInit {
   };
   public billingChartLegend:boolean = true;
   public billingChartType:string = 'bar';
-  public ec2familliesChartLabels:string[] = ['t2.micro', 't2.micro', 'c4.large'];
-  public ec2familliesChartData:number[] = [20, 5, 2];
-  public ec2familliesChartType:string = 'doughnut';
-  public ec2familliesChartLegend:boolean = false;
+  
 
-   public polarAreaChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales', 'Telesales', 'Corporate Sales'];
-  public polarAreaChartData:number[] = [300, 500, 100, 40, 120];
-  public polarAreaLegend:boolean = true;
-  public polarAreaOptions: any = {
-    responsive: true
-  }
- 
-  public polarAreaChartType:string = 'polarArea';
+   
 
    public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
   public pieChartData:number[] = [300, 500, 100];
@@ -176,10 +166,140 @@ export class AppComponent implements AfterViewInit {
   public currentBill: number;
   public billUnit : string;
   public currentDate: string;
+  
+  public currentVPC: number;
+  public currentACL: number;
+  public currentSecurityGroup: number;
+  public currentNatGateway: number;
+  public currentInternetGateway: number;
+  public currentElasticIP: number;
+  public currentKeyPair: number;
+  public currentAutoscalingGroup: number;
+  public currentRouteTable: number;
+  public currentDynamoDBReadCapacity: number;
+  public currentDynamoDBWriteCapacity: number;
+  public currentDynamoDBTable: number;
+
+  public ebsFamilliesChartLabels:string[] = [];
+  public ebsFamilliesChartData:number[] = [];
+  public ebsFamilliesChartType:string = 'doughnut';
+  public ebsFamilliesChartLegend:boolean = false;
+
+  public ec2FamilliesChartLabels:string[] = [];
+  public ec2FamilliesChartData:number[] = [];
+  public ec2FamilliesChartLegend:boolean = true;
+  public ec2FamilliesOptions: any = {
+    responsive: true
+  }
+ 
+  public ec2FamilliesChartType:string = 'polarArea';
+
+  public doughnutChartOptions: any = {
+    cutoutPercentage: 80
+  }
 
   constructor(private costExplorerService: CostExplorerService){
-    this.getCostAndUsage()
+    /*this.getCostAndUsage()
+    this.getCurrentVPC()
+    this.getCurrentACL()
+    this.getCurrentSecurityGroup()
+    this.getCurrentNatGateway()
+    this.getCurrentInternetGateway()
+    this.getCurrentElasticIP()
+    this.getCurrentKeyPair()
+    this.getCurrentAutoscalingGroup()
+    this.getCurrentRouteTable()
+    this.getCurrentDynamoDBTable()
+    this.getCurrentDynamoDBThroughput()*/
+    this.getCurrentEBSFamily()
+    this.getCurrentEC2Family()
   }
+
+  private getCurrentVPC(): void {
+    this.costExplorerService.getCurrentVPC().subscribe(res => {
+      this.currentVPC = res;
+    })
+  }
+
+  private getCurrentACL(): void {
+    this.costExplorerService.getCurrentACL().subscribe(res => {
+      this.currentACL = res;
+    })
+  }
+
+  private getCurrentSecurityGroup(): void {
+    this.costExplorerService.getCurrentSecurityGroup().subscribe(res => {
+      this.currentSecurityGroup = res;
+    })
+  }
+
+  private getCurrentNatGateway(): void {
+    this.costExplorerService.getCurrentNatGateway().subscribe(res => {
+      this.currentNatGateway = res;
+    })
+  }
+
+  private getCurrentInternetGateway(): void {
+    this.costExplorerService.getCurrentInternetGateway().subscribe(res => {
+      this.currentInternetGateway = res;
+    })
+  }
+
+  private getCurrentElasticIP(): void {
+    this.costExplorerService.getCurrentElasticIP().subscribe(res => {
+      this.currentElasticIP = res;
+    })
+  }
+
+  private getCurrentKeyPair(): void {
+    this.costExplorerService.getCurrentKeyPair().subscribe(res => {
+      this.currentKeyPair = res;
+    })
+  }
+
+  private getCurrentAutoscalingGroup(): void {
+    this.costExplorerService.getCurrentAutoscalingGroup().subscribe(res => {
+      this.currentAutoscalingGroup = res;
+    })
+  }
+
+  private getCurrentRouteTable(): void {
+    this.costExplorerService.getCurrentRouteTable().subscribe(res => {
+      this.currentRouteTable = res;
+    })
+  }
+
+  private getCurrentDynamoDBTable(): void {
+    this.costExplorerService.getCurrentDynamoDBTable().subscribe(res => {
+      this.currentDynamoDBTable = res;
+    })
+  }
+
+  private getCurrentDynamoDBThroughput(): void {
+    this.costExplorerService.getCurrentDynamoDBThroughput().subscribe(res => {
+      this.currentDynamoDBReadCapacity = res.readCapacity;
+      this.currentDynamoDBWriteCapacity = res.writeCapacity;
+    })
+  }
+
+  private getCurrentEBSFamily(): void {
+    this.costExplorerService.getCurrentEBSFamily().subscribe(res => {
+      for(var i in res){
+        this.ebsFamilliesChartLabels.push(i)
+        this.ebsFamilliesChartData.push(res[i])
+      }
+    })
+  }
+
+  private getCurrentEC2Family(): void {
+    this.costExplorerService.getCurrentEC2Family().subscribe(res => {
+      for(var i in res){
+        this.ec2FamilliesChartLabels.push(i)
+        this.ec2FamilliesChartData.push(res[i])
+      }
+    })
+  }
+
 
   private getCostAndUsage(): void {
     var values = []
