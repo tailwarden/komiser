@@ -80,6 +80,7 @@ export class AppComponent implements AfterViewInit {
   public currentGolangLambdaFunctions: number = 0;
   public currentPythonLambdaFunctions: number = 0;
   public currentNodeJSLambdaFunctions: number = 0;
+  public currentS3Buckets: number = 0;
 
   public ec2FamilliesChartLabels:string[] = [];
   public ec2FamilliesChartData:number[] = [];
@@ -312,6 +313,12 @@ export class AppComponent implements AfterViewInit {
   private getCurrentSnapshotSize(): void {
     this.costExplorerService.getCurrentSnapshotSize().subscribe(current => {
       this.currentSnapshotSize = (current ? current : 0);
+    })
+  }
+
+  private getCurrentS3Buckets(): void {
+    this.costExplorerService.getCurrentS3Buckets().subscribe(current => {
+      this.currentS3Buckets = (current ? current : 0);
     })
   }
 

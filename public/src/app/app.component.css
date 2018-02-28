@@ -1,3 +1,20 @@
 .logo-komiser{
     width: 45px !important;
 }
+
+h2{
+    font-size: 0.8em;
+}
+
+h3 {
+    font-size: 1em;
+}
+
+.lang-icon{
+    font-size: 50px;
+    margin-right: 10px;
+}
+
+.golang-icon{
+    color: #6AD7E5;
+}
