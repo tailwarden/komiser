@@ -178,4 +178,12 @@ export class CostExplorerService {
      })
   }
 
+  public getCurrentS3Buckets(){
+     return this.http
+     .get(`${this.apiURL}/s3/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
 }

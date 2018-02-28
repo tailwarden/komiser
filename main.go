@@ -339,6 +339,9 @@ func main() {
 	http.ListenAndServe(":3000", handlers.CORS()(r))
 }
 
+//s3 public & private
+//s3 size
+
 func describeInstancesPerRegion(cfg aws.Config) map[string]int {
 	output := make(map[string]int, 0)
 	for _, region := range getRegions(cfg) {
