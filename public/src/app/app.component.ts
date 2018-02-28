@@ -9,10 +9,6 @@ import * as Datamap from 'datamaps';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
-  public pieChartData:number[] = [300, 500, 100];
-  public pieChartType:string = 'pie';
-
   public costAndUsageChartData:Array<any> = [];
   public costAndUsageChartLabels:Array<any> = [];
   public costAndUsageChartOptions:any = {
@@ -41,16 +37,6 @@ export class AppComponent implements AfterViewInit {
                 }
   };
   public costAndUsageChartType:string = 'line';
-
-  public doughnutChartLabels2:string[] = ["First", "Second", "Third", "Fourth"];
-  public doughnutChartData2:number[] = [300, 50, 100, 60];
-  public doughnutChartType2:string = 'doughnut';
-  public doughnutChartOptions2: any = {
-    cutoutPercentage: 80,
-                legend: {
-                    display: !1
-                }
-  }
 
   public currentBill: number;
   public billUnit : string;
@@ -111,8 +97,17 @@ export class AppComponent implements AfterViewInit {
   };
   public elbFamiliesChartLabels:string[] = [];
   public elbFamiliesChartType:string = 'bar';
- 
   public elbFamiliesChartData:any[] = [];
+
+  public ebsFamiliesChartLabels:string[] = [];
+  public ebsFamiliesChartData:number[] = [];
+  public ebsFamiliesChartType:string = 'doughnut';
+  public ebsFamiliesChartOptions: any = {
+    cutoutPercentage: 80,
+    legend: {
+       display: 0
+    }
+  }
 
   private regions = {
     us_east_1 : {
@@ -182,7 +177,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   constructor(private costExplorerService: CostExplorerService){
-    /*
     this.getCurrentVPC()
     this.getCurrentACL()
     this.getCurrentSecurityGroup()
@@ -199,7 +193,7 @@ export class AppComponent implements AfterViewInit {
     this.getCurrentEBSSize()
     this.getCurrentEC2State()
     this.getCurrentSnapshot()
-    this.getCurrentSnapshotSize()*/
+    this.getCurrentSnapshotSize()
     this.getCostAndUsage()
     this.getCurrentLambdaRuntime()
     this.getCurrentELBFamily()
@@ -275,8 +269,10 @@ export class AppComponent implements AfterViewInit {
   private getCurrentEBSFamily(): void {
     this.currentEBSVolumes = 0;
     this.costExplorerService.getCurrentEBSFamily().subscribe(res => {
-      for(var i in res){
-        this.currentEBSVolumes += res[i]
+      for(var ebs in res){
+        this.currentEBSVolumes += res[ebs]
+        this.ebsFamiliesChartData.push(res[ebs])
+        this.ebsFamiliesChartLabels.push(ebs)
       }
     })
   }

@@ -80,12 +80,8 @@
                 <!-- Statistics -->
                 <div class="statistics col-lg-3 col-12">
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-red"><i class="far fa-hdd"></i></div>
-                    <div class="text"><strong>{{currentEBSVolumes}}</strong><br><small>EBS Volumes</small></div>
-                  </div>
-                  <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                    <div class="text"><strong>{{currentEBSSize}} GB</strong><br><small>EBS Size</small></div>
+                    <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
+                    <div class="text"><strong>{{currentS3Buckets}}</strong><br><small>S3 Buckets</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
@@ -96,19 +92,19 @@
                     <div class="text"><strong>{{currentSnapshotSize}} GB</strong><br><small>Snapshots Size</small></div>
                   </div>
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
-                    <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
-                    <div class="text"><strong>{{currentS3Buckets}}</strong><br><small>S3 Buckets</small></div>
+                    <div class="icon bg-red"><i class="far fa-hdd"></i></div>
+                    <div class="text"><strong>{{currentEBSVolumes}}</strong><br><small>EBS Volumes</small></div>
                   </div>
                   <div class="work-amount card">
                     <div class="card-body">
-                      <h3>S3 Buckets</h3><small>Lorem ipsum dolor sit amet.</small>
+                      <h3>Elastic Block Store</h3><small>Lorem ipsum dolor sit amet.</small>
                       <div class="chart text-center">
-                        <div class="text"><strong>90</strong><br><span>TB</span></div>
-                        <canvas baseChart
-                            [data]="doughnutChartData2"
-                            [labels]="doughnutChartLabels2"
-                            [options]="doughnutChartOptions2"
-                            [chartType]="doughnutChartType2"></canvas>
+                        <div class="text"><strong>{{currentEBSSize}}</strong><br><span>GB</span></div>
+                        <canvas baseChart *ngIf="ebsFamiliesChartData.length > 0"
+                            [data]="ebsFamiliesChartData"
+                            [labels]="ebsFamiliesChartLabels"
+                            [options]="ebsFamiliesChartOptions"
+                            [chartType]="ebsFamiliesChartType"></canvas>
                       </div>
                     </div>
                   </div>
@@ -136,11 +132,11 @@
                     <div class="statistics col-lg-4 col-12">
                       <div class="statistic d-flex align-items-center bg-white has-shadow">
                         <div class="icon bg-red"><i class="fa fa-tasks"></i></div>
-                        <div class="text"><strong>{{currentVPC}}</strong><br><small>VPC</small></div>
+                        <div class="text"><strong>{{currentVPC}}</strong><br><small>Virtual Private Cloud</small></div>
                       </div>
                       <div class="statistic d-flex align-items-center bg-white has-shadow">
                         <div class="icon bg-green"><i class="fa fa-calendar-o"></i></div>
-                        <div class="text"><strong>{{currentACL}}</strong><br><small>ACL</small></div>
+                        <div class="text"><strong>{{currentACL}}</strong><br><small>Access Control List</small></div>
                       </div>
                       <div class="statistic d-flex align-items-center bg-white has-shadow">
                         <div class="icon bg-orange"><i class="fa fa-paper-plane-o"></i></div>
