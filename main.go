@@ -306,18 +306,17 @@ func SnapshotSizeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	memoryCache = cache.New(10*time.Minute, 10*time.Minute)
+	memoryCache = cache.New(30*time.Minute, 30*time.Minute)
 	cfg, _ = external.LoadDefaultAWSConfig()
 }
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/ec2/region", EC2RegionHandler) //OK
-	r.HandleFunc("/ec2/family", EC2FamilyHandler) //Ok
-	r.HandleFunc("/ec2/state", EC2StateHandler)   //OK
-	r.HandleFunc("/ebs/size", EBSSizeHandler)     //OK
-	r.HandleFunc("/ebs/family", EBSFamilyHandler) //OK
-	r.HandleFunc("/ebs/state", EBSStateHandler)
+	r.HandleFunc("/ec2/region", EC2RegionHandler)                          //OK
+	r.HandleFunc("/ec2/family", EC2FamilyHandler)                          //Ok
+	r.HandleFunc("/ec2/state", EC2StateHandler)                            //OK
+	r.HandleFunc("/ebs/size", EBSSizeHandler)                              //OK
+	r.HandleFunc("/ebs/family", EBSFamilyHandler)                          //OK
 	r.HandleFunc("/vpc/total", VPCTotalHandler)                            //OK
 	r.HandleFunc("/acl/total", ACLTotalHandler)                            //OK
 	r.HandleFunc("/security_group/total", SecurityGroupTotalHandler)       //OK
@@ -800,17 +799,6 @@ func describeS3BucketsTotal(cfg aws.Config) int64 {
 	}
 	return sum
 }
-
-/*
-func describeS3BucketsSize(cfg aws.Config) {
-	svc := s3.New(cfg)
-	req := svc.ListObjectsRequest(&s3.ListObjectsInput{})
-	result, err := req.Send()
-	if err != nil {
-		log.Fatal(err)
-	}
-	result.Name
-}*/
 
 func getS3Buckets(cfg aws.Config, region string) []Bucket {
 	cfg.Region = region
