@@ -16,7 +16,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
+	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/sns"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 )
 
@@ -733,6 +735,58 @@ func (aws AWS) getSQS(cfg aws.Config, region string) []Queue {
 		})
 	}
 	return listOfQueues
+}
+
+func (aws AWS) DescribeSNSTopicsTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range aws.getRegions(cfg) {
+		topics := aws.getSNSTopics(cfg, region.Name)
+		sum += int64(len(topics))
+	}
+	return sum
+}
+
+func (aws AWS) getSNSTopics(cfg aws.Config, region string) []Topic {
+	cfg.Region = region
+	svc := sns.New(cfg)
+	req := svc.ListTopicsRequest(&sns.ListTopicsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfTopics := make([]Topic, 0, len(result.Topics))
+	for _, topic := range result.Topics {
+		listOfTopics = append(listOfTopics, Topic{
+			ARN: *topic.TopicArn,
+		})
+	}
+	return listOfTopics
+}
+
+func (aws AWS) DescribeHostedZonesTotal(cfg aws.Config) int64 {
+	var sum int64
+	for _, region := range aws.getRegions(cfg) {
+		hostedZones := aws.getRoute53HostedZone(cfg, region.Name)
+		sum += int64(len(hostedZones))
+	}
+	return sum
+}
+
+func (aws AWS) getRoute53HostedZone(cfg aws.Config, region string) []HostedZone {
+	cfg.Region = region
+	svc := route53.New(cfg)
+	req := svc.ListHostedZonesRequest(&route53.ListHostedZonesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	listOfHostedZones := make([]HostedZone, 0, len(result.HostedZones))
+	for _, hostedZone := range result.HostedZones {
+		listOfHostedZones = append(listOfHostedZones, HostedZone{
+			Name: *hostedZone.Name,
+		})
+	}
+	return listOfHostedZones
 }
 
 func (aws AWS) getRegions(cfg aws.Config) []Region {
