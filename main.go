@@ -47,5 +47,7 @@ func main() {
 	r.HandleFunc("/snapshot/total", awsHandler.SnapshotTotalHandler)
 	r.HandleFunc("/snapshot/size", awsHandler.SnapshotSizeHandler)
 	r.HandleFunc("/sqs/total", awsHandler.SQSTotalHandler)
+	r.HandleFunc("/sns/total", awsHandler.TopicsTotalHandler)
+	r.HandleFunc("/hosted_zone/total", awsHandler.TopicsTotalHandler)
 	http.ListenAndServe(":3000", handlers.CORS()(r))
 }

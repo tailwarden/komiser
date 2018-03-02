@@ -309,3 +309,25 @@ func (handler *AWSHandler) SQSTotalHandler(w http.ResponseWriter, r *http.Reques
 		respondWithJSON(w, 200, response)
 	}
 }
+
+func (handler *AWSHandler) TopicsTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("sns_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeSNSTopicsTotal(handler.cfg)
+		handler.cache.Set("sns_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func (handler *AWSHandler) HostedZoneTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("hosted_zone_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeHostedZonesTotal(handler.cfg)
+		handler.cache.Set("hosted_zone_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
