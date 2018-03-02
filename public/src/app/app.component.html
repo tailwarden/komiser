@@ -98,9 +98,9 @@
                   <div class="work-amount card">
                     <div class="card-body">
                       <h3>Elastic Block Store</h3><small>Lorem ipsum dolor sit amet.</small>
-                      <div class="chart text-center">
+                      <div class="chart text-center" *ngIf="ebsFamiliesChartData.length > 0">
                         <div class="text"><strong>{{currentEBSSize}}</strong><br><span>GB</span></div>
-                        <canvas baseChart *ngIf="ebsFamiliesChartData.length > 0"
+                        <canvas baseChart
                             [data]="ebsFamiliesChartData"
                             [labels]="ebsFamiliesChartLabels"
                             [options]="ebsFamiliesChartOptions"
