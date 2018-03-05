@@ -204,7 +204,39 @@ export class CostExplorerService {
 
   public getCurrentHostedZones(){
      return this.http
-     .get(`${this.apiURL}/hosted_zones/total`)
+     .get(`${this.apiURL}/hosted_zone/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentIAMRoles(){
+     return this.http
+     .get(`${this.apiURL}/role/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentIAMPolicies(){
+     return this.http
+     .get(`${this.apiURL}/policy/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentIAMGroups(){
+     return this.http
+     .get(`${this.apiURL}/group/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentIAMUsers(){
+     return this.http
+     .get(`${this.apiURL}/user/total`)
      .map(res => {
        return res.json()
      })

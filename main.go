@@ -48,6 +48,10 @@ func main() {
 	r.HandleFunc("/snapshot/size", awsHandler.SnapshotSizeHandler)
 	r.HandleFunc("/sqs/total", awsHandler.SQSTotalHandler)
 	r.HandleFunc("/sns/total", awsHandler.TopicsTotalHandler)
-	r.HandleFunc("/hosted_zone/total", awsHandler.TopicsTotalHandler)
+	r.HandleFunc("/hosted_zone/total", awsHandler.HostedZoneTotalHandler)
+	r.HandleFunc("/role/total", awsHandler.IAMRolesTotalHandler)
+	r.HandleFunc("/group/total", awsHandler.IAMGroupsTotalHandler)
+	r.HandleFunc("/user/total", awsHandler.IAMUsersTotalHandler)
+	r.HandleFunc("/policy/total", awsHandler.IAMPoliciesTotalHandler)
 	http.ListenAndServe(":3000", handlers.CORS()(r))
 }

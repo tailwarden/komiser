@@ -331,3 +331,47 @@ func (handler *AWSHandler) HostedZoneTotalHandler(w http.ResponseWriter, r *http
 		respondWithJSON(w, 200, response)
 	}
 }
+
+func (handler *AWSHandler) IAMRolesTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("role_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeIAMRolesTotal(handler.cfg)
+		handler.cache.Set("role_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func (handler *AWSHandler) IAMGroupsTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("group_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeIAMGroupsTotal(handler.cfg)
+		handler.cache.Set("group_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func (handler *AWSHandler) IAMPoliciesTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("policy_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeIAMPoliciesTotal(handler.cfg)
+		handler.cache.Set("policy_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func (handler *AWSHandler) IAMUsersTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("user_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeIAMUsersTotal(handler.cfg)
+		handler.cache.Set("user_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
