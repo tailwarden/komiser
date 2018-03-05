@@ -119,7 +119,30 @@
                         [chartType]="ec2FamilliesChartType"></canvas>
                     </div>
                   </div>
-                </div>
+
+                  <div class="row">
+                    <div class="statistics col-lg-6 col-12">
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon"><img src="assets/images/vpc.png" class="aws-service"/></div>
+                        <div class="text"><strong>{{currentIAMUsers}}</strong><br><small>IAM Users</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon"><img src="assets/images/vpc.png" class="aws-service"/></div>
+                        <div class="text"><strong>{{currentIAMRoles}}</strong><br><small>IAM Roles</small></div>
+                      </div>
+                    </div>
+                    <div class="statistics col-lg-6 col-12">
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon"><img src="assets/images/vpc.png" class="aws-service"/></div>
+                        <div class="text"><strong>{{currentIAMGroups}}</strong><br><small>IAM Groups</small></div>
+                      </div>
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon"><img src="assets/images/vpc.png" class="aws-service"/></div>
+                        <div class="text"><strong>{{currentIAMPolicies}}</strong><br><small>IAM Policies</small></div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
                 <!-- Line Chart            -->
                 <div class="chart col-lg-6 col-12">
                   <div class="pie-chart-example card">
@@ -232,6 +255,8 @@
                     </div>
                   </section>
                 </div>
+
+                
                 <div class="chart col-lg-3 col-12">
                   <!-- Bar Chart   -->
                   <div class="overdue card">

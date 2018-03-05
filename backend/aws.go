@@ -14,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/elb"
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/route53"
@@ -763,30 +764,54 @@ func (aws AWS) getSNSTopics(cfg aws.Config, region string) []Topic {
 	return listOfTopics
 }
 
-func (aws AWS) DescribeHostedZonesTotal(cfg aws.Config) int64 {
-	var sum int64
-	for _, region := range aws.getRegions(cfg) {
-		hostedZones := aws.getRoute53HostedZone(cfg, region.Name)
-		sum += int64(len(hostedZones))
-	}
-	return sum
-}
-
-func (aws AWS) getRoute53HostedZone(cfg aws.Config, region string) []HostedZone {
-	cfg.Region = region
+func (aws AWS) DescribeHostedZonesTotal(cfg aws.Config) int {
 	svc := route53.New(cfg)
 	req := svc.ListHostedZonesRequest(&route53.ListHostedZonesInput{})
 	result, err := req.Send()
 	if err != nil {
 		log.Fatal(err)
 	}
-	listOfHostedZones := make([]HostedZone, 0, len(result.HostedZones))
-	for _, hostedZone := range result.HostedZones {
-		listOfHostedZones = append(listOfHostedZones, HostedZone{
-			Name: *hostedZone.Name,
-		})
+	return len(result.HostedZones)
+}
+
+func (aws AWS) DescribeIAMRolesTotal(cfg aws.Config) int {
+	svc := iam.New(cfg)
+	req := svc.ListRolesRequest(&iam.ListRolesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
 	}
-	return listOfHostedZones
+	return len(result.Roles)
+}
+
+func (aws AWS) DescribeIAMUsersTotal(cfg aws.Config) int {
+	svc := iam.New(cfg)
+	req := svc.ListUsersRequest(&iam.ListUsersInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return len(result.Users)
+}
+
+func (aws AWS) DescribeIAMGroupsTotal(cfg aws.Config) int {
+	svc := iam.New(cfg)
+	req := svc.ListGroupsRequest(&iam.ListGroupsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return len(result.Groups)
+}
+
+func (aws AWS) DescribeIAMPoliciesTotal(cfg aws.Config) int {
+	svc := iam.New(cfg)
+	req := svc.ListPoliciesRequest(&iam.ListPoliciesInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return len(result.Policies)
 }
 
 func (aws AWS) getRegions(cfg aws.Config) []Region {

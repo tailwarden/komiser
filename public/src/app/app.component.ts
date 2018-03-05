@@ -70,6 +70,10 @@ export class AppComponent implements AfterViewInit {
   public currentSQSQueues: number = 0;
   public currentSNSTopics: number = 0;
   public currentHostedZones: number = 0;
+  public currentIAMRoles: number = 0;
+  public currentIAMPolicies: number = 0;
+  public currentIAMGroups: number = 0;
+  public currentIAMUsers: number = 0;
 
   public ec2FamilliesChartLabels:string[] = [];
   public ec2FamilliesChartData:number[] = [];
@@ -339,6 +343,30 @@ export class AppComponent implements AfterViewInit {
   private getCurrentHostedZones(): void {
     this.costExplorerService.getCurrentHostedZones().subscribe(current => {
       this.currentHostedZones = (current ? current : 0);
+    })
+  }
+
+  private getCurrentIAMRoles(): void {
+    this.costExplorerService.getCurrentIAMRoles().subscribe(current => {
+      this.currentIAMRoles = (current ? current : 0);
+    })
+  }
+
+  private getCurrentIAMPolicies(): void {
+    this.costExplorerService.getCurrentIAMPolicies().subscribe(current => {
+      this.currentIAMPolicies = (current ? current : 0);
+    })
+  }
+
+  private getCurrentIAMGroups(): void {
+    this.costExplorerService.getCurrentIAMGroups().subscribe(current => {
+      this.currentIAMGroups = (current ? current : 0);
+    })
+  }
+
+  private getCurrentIAMUsers(): void {
+    this.costExplorerService.getCurrentIAMUsers().subscribe(current => {
+      this.currentIAMUsers = (current ? current : 0);
     })
   }
 
