@@ -67,6 +67,9 @@ export class AppComponent implements AfterViewInit {
   public currentPythonLambdaFunctions: number = 0;
   public currentNodeJSLambdaFunctions: number = 0;
   public currentS3Buckets: number = 0;
+  public currentSQSQueues: number = 0;
+  public currentSNSTopics: number = 0;
+  public currentHostedZones: number = 0;
 
   public ec2FamilliesChartLabels:string[] = [];
   public ec2FamilliesChartData:number[] = [];
@@ -197,6 +200,9 @@ export class AppComponent implements AfterViewInit {
     this.getCostAndUsage()
     this.getCurrentLambdaRuntime()
     this.getCurrentELBFamily()
+    this.getCurrentSQSQueues()
+    this.getCurrentSNSTopics()
+    this.getCurrentHostedZones()
   }
 
   private getCurrentVPC(): void {
@@ -315,6 +321,24 @@ export class AppComponent implements AfterViewInit {
   private getCurrentS3Buckets(): void {
     this.costExplorerService.getCurrentS3Buckets().subscribe(current => {
       this.currentS3Buckets = (current ? current : 0);
+    })
+  }
+
+  private getCurrentSQSQueues(): void {
+    this.costExplorerService.getCurrentSQSQueues().subscribe(current => {
+      this.currentSQSQueues = (current ? current : 0);
+    })
+  }
+
+  private getCurrentSNSTopics(): void {
+    this.costExplorerService.getCurrentSNSTopics().subscribe(current => {
+      this.currentSNSTopics = (current ? current : 0);
+    })
+  }
+
+  private getCurrentHostedZones(): void {
+    this.costExplorerService.getCurrentHostedZones().subscribe(current => {
+      this.currentHostedZones = (current ? current : 0);
     })
   }
 

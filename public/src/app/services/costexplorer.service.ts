@@ -186,4 +186,27 @@ export class CostExplorerService {
      })
   }
 
+  public getCurrentSQSQueues(){
+     return this.http
+     .get(`${this.apiURL}/sqs/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentSNSTopics(){
+     return this.http
+     .get(`${this.apiURL}/sns/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentHostedZones(){
+     return this.http
+     .get(`${this.apiURL}/hosted_zones/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
 }
