@@ -19,15 +19,17 @@
 * Lambda Functions
 * RDS
 * DynamoDB
-* CloudWatch
 * S3
+* Route53
+* SQS
+* SNS
+* IAM
 
 ## TO DO
 
-* Route53
 * EMR
 * ECS
 * Kinesis
-* SQS
-* SNS
 * CloudFront
+* Elastic Beanstalk
+* CloudWatch
