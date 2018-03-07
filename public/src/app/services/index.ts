@@ -1,1 +1,1 @@
-export * from './costexplorer.service';
+export * from './aws.service';

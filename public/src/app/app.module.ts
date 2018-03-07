@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
-import { CostExplorerService } from '@app/services';
+import { AWSService } from '@app/services';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { ChartsModule } from 'ng2-charts';
     ChartsModule
   ],
   providers: [
-    CostExplorerService
+    AWSService
   ],
   bootstrap: [AppComponent]
 })

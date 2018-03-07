@@ -4,7 +4,7 @@ import { environment } from '@env/environment';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class CostExplorerService {
+export class AWSService {
 
   private apiURL : string = environment.API_URL;
   
@@ -237,6 +237,22 @@ export class CostExplorerService {
   public getCurrentIAMUsers(){
      return this.http
      .get(`${this.apiURL}/user/total`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentCloudwatchAlarmsState(){
+     return this.http
+     .get(`${this.apiURL}/cloudwatch/state`)
+     .map(res => {
+       return res.json()
+     })
+  }
+
+  public getCurrentCloudFrontDistributions(){
+     return this.http
+     .get(`${this.apiURL}/cloudfront/total`)
      .map(res => {
        return res.json()
      })

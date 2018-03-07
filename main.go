@@ -53,5 +53,7 @@ func main() {
 	r.HandleFunc("/group/total", awsHandler.IAMGroupsTotalHandler)
 	r.HandleFunc("/user/total", awsHandler.IAMUsersTotalHandler)
 	r.HandleFunc("/policy/total", awsHandler.IAMPoliciesTotalHandler)
+	r.HandleFunc("/cloudwatch/state", awsHandler.CloudWatchAlarmsStateHandler)
+	r.HandleFunc("/cloudfront/total", awsHandler.CloudFrontDistributionsTotalHandler)
 	http.ListenAndServe(":3000", handlers.CORS()(r))
 }

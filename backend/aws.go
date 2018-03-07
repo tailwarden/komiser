@@ -8,6 +8,7 @@ import (
 	. "../models"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	"github.com/aws/aws-sdk-go-v2/service/cloudfront"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -812,6 +813,16 @@ func (aws AWS) DescribeIAMPoliciesTotal(cfg aws.Config) int {
 		log.Fatal(err)
 	}
 	return len(result.Policies)
+}
+
+func (aws AWS) DescribeCloudFrontDistributionsTotal(cfg aws.Config) int {
+	svc := cloudfront.New(cfg)
+	req := svc.ListDistributionsRequest(&cloudfront.ListDistributionsInput{})
+	result, err := req.Send()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return len(result.DistributionList.Items)
 }
 
 func (aws AWS) getRegions(cfg aws.Config) []Region {

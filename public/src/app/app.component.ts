@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { CostExplorerService } from '@app/services';
+import { AWSService } from '@app/services';
 
 import * as Datamap from 'datamaps';
 
@@ -74,6 +74,10 @@ export class AppComponent implements AfterViewInit {
   public currentIAMPolicies: number = 0;
   public currentIAMGroups: number = 0;
   public currentIAMUsers: number = 0;
+  public currentOKStateAlarms: number = 0;
+  public currentAlarmStateAlarms: number = 0;
+  public currentInsufficientDataStateAlarms: number = 0;
+  public currentCloudFrontDistributions: number = 0;
 
   public ec2FamilliesChartLabels:string[] = [];
   public ec2FamilliesChartData:number[] = [];
@@ -183,7 +187,7 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  constructor(private costExplorerService: CostExplorerService){
+  constructor(private awsService: AWSService){
     this.getCurrentVPC()
     this.getCurrentACL()
     this.getCurrentSecurityGroup()
@@ -207,70 +211,76 @@ export class AppComponent implements AfterViewInit {
     this.getCurrentSQSQueues()
     this.getCurrentSNSTopics()
     this.getCurrentHostedZones()
+    this.getCurrentCloudwatchAlarmsState()
+    this.getCurrentIAMRoles()
+    this.getCurrentIAMGroups()
+    this.getCurrentIAMPolicies()
+    this.getCurrentIAMUsers()
+    this.getCurrentCloudFrontDistributions()
   }
 
   private getCurrentVPC(): void {
-    this.costExplorerService.getCurrentVPC().subscribe(current => {
+    this.awsService.getCurrentVPC().subscribe(current => {
       this.currentVPC = (current ? current : 0)
     })
   }
 
   private getCurrentACL(): void {
-    this.costExplorerService.getCurrentACL().subscribe(current => {
+    this.awsService.getCurrentACL().subscribe(current => {
       this.currentACL = (current ? current : 0)
     })
   }
 
   private getCurrentSecurityGroup(): void {
-    this.costExplorerService.getCurrentSecurityGroup().subscribe(current => {
+    this.awsService.getCurrentSecurityGroup().subscribe(current => {
       this.currentSecurityGroup = (current ? current : 0)
     })
   }
 
   private getCurrentNatGateway(): void {
-    this.costExplorerService.getCurrentNatGateway().subscribe(current => {
+    this.awsService.getCurrentNatGateway().subscribe(current => {
       this.currentNatGateway = (current ? current : 0)
     })
   }
 
   private getCurrentInternetGateway(): void {
-    this.costExplorerService.getCurrentInternetGateway().subscribe(current => {
+    this.awsService.getCurrentInternetGateway().subscribe(current => {
       this.currentInternetGateway = (current ? current : 0)
     })
   }
 
   private getCurrentElasticIP(): void {
-    this.costExplorerService.getCurrentElasticIP().subscribe(current => {
+    this.awsService.getCurrentElasticIP().subscribe(current => {
       this.currentElasticIP = (current ? current : 0)
     })
   }
 
   private getCurrentKeyPair(): void {
-    this.costExplorerService.getCurrentKeyPair().subscribe(current => {
+    this.awsService.getCurrentKeyPair().subscribe(current => {
       this.currentKeyPair = (current ? current : 0)
     })
   }
 
   private getCurrentAutoscalingGroup(): void {
-    this.costExplorerService.getCurrentAutoscalingGroup().subscribe(current => {
+    this.awsService.getCurrentAutoscalingGroup().subscribe(current => {
       this.currentAutoscalingGroup = (current ? current : 0)
     })
   }
 
   private getCurrentRouteTable(): void {
-    this.costExplorerService.getCurrentRouteTable().subscribe(current => {
+    this.awsService.getCurrentRouteTable().subscribe(current => {
       this.currentRouteTable = (current ? current : 0)
     })
   }
 
   private getCurrentDynamoDBTable(): void {
-    this.costExplorerService.getCurrentDynamoDBTable().subscribe(current => {
+    this.awsService.getCurrentDynamoDBTable().subscribe(current => {
       this.currentDynamoDBTable = (current ? current : 0)
     })
   }
 
   private getCurrentDynamoDBThroughput(): void {
-    this.costExplorerService.getCurrentDynamoDBThroughput().subscribe(current => {
+    this.awsService.getCurrentDynamoDBThroughput().subscribe(current => {
       this.currentDynamoDBReadCapacity = (current.readCapacity ? current.readCapacity : 0)
       this.currentDynamoDBWriteCapacity = (current.writeCapacity ? current.writeCapacity : 0)
     })
@@ -278,7 +288,7 @@ export class AppComponent implements AfterViewInit {
 
   private getCurrentEBSFamily(): void {
     this.currentEBSVolumes = 0;
-    this.costExplorerService.getCurrentEBSFamily().subscribe(res => {
+    this.awsService.getCurrentEBSFamily().subscribe(res => {
       for(var ebs in res){
         this.currentEBSVolumes += res[ebs]
         this.ebsFamiliesChartData.push(res[ebs])
@@ -288,7 +298,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   private getCurrentEC2Family(): void {
-    this.costExplorerService.getCurrentEC2Family().subscribe(res => {
+    this.awsService.getCurrentEC2Family().subscribe(res => {
       for(var i in res){
         this.ec2FamilliesChartLabels.push(i)
         this.ec2FamilliesChartData.push(res[i])
@@ -297,13 +307,13 @@ export class AppComponent implements AfterViewInit {
   }
 
   private getCurrentEBSSize(): void {
-    this.costExplorerService.getCurrentEBSSize().subscribe(current => {
-      this.currentEBSSize = (current ? current : 0);
+    this.awsService.getCurrentEBSSize().subscribe(current => {
+      this.currentEBSSize = (current ? current : 0)
     })
   }
 
   public getCurrentEC2State(): void {
-    this.costExplorerService.getCurrentEC2State().subscribe(res => {
+    this.awsService.getCurrentEC2State().subscribe(res => {
       this.currentStoppedInstances = (res.stopped ? res.stopped : 0)
       this.currentTerminatedInstances = (res.terminated ? res.terminated : 0)
       this.currentRunningInstances = (res.running ? res.running : 0)
@@ -311,62 +321,76 @@ export class AppComponent implements AfterViewInit {
   }
 
   private getCurrentSnapshot(): void {
-    this.costExplorerService.getCurrentSnapshot().subscribe(current => {
-      this.currentSnapshot = (current ? current : 0);
+    this.awsService.getCurrentSnapshot().subscribe(current => {
+      this.currentSnapshot = (current ? current : 0)
     })
   }
 
   private getCurrentSnapshotSize(): void {
-    this.costExplorerService.getCurrentSnapshotSize().subscribe(current => {
-      this.currentSnapshotSize = (current ? current : 0);
+    this.awsService.getCurrentSnapshotSize().subscribe(current => {
+      this.currentSnapshotSize = (current ? current : 0)
     })
   }
 
   private getCurrentS3Buckets(): void {
-    this.costExplorerService.getCurrentS3Buckets().subscribe(current => {
-      this.currentS3Buckets = (current ? current : 0);
+    this.awsService.getCurrentS3Buckets().subscribe(current => {
+      this.currentS3Buckets = (current ? current : 0)
     })
   }
 
   private getCurrentSQSQueues(): void {
-    this.costExplorerService.getCurrentSQSQueues().subscribe(current => {
-      this.currentSQSQueues = (current ? current : 0);
+    this.awsService.getCurrentSQSQueues().subscribe(current => {
+      this.currentSQSQueues = (current ? current : 0)
     })
   }
 
   private getCurrentSNSTopics(): void {
-    this.costExplorerService.getCurrentSNSTopics().subscribe(current => {
-      this.currentSNSTopics = (current ? current : 0);
+    this.awsService.getCurrentSNSTopics().subscribe(current => {
+      this.currentSNSTopics = (current ? current : 0)
     })
   }
 
   private getCurrentHostedZones(): void {
-    this.costExplorerService.getCurrentHostedZones().subscribe(current => {
-      this.currentHostedZones = (current ? current : 0);
+    this.awsService.getCurrentHostedZones().subscribe(current => {
+      this.currentHostedZones = (current ? current : 0)
     })
   }
 
   private getCurrentIAMRoles(): void {
-    this.costExplorerService.getCurrentIAMRoles().subscribe(current => {
-      this.currentIAMRoles = (current ? current : 0);
+    this.awsService.getCurrentIAMRoles().subscribe(current => {
+      this.currentIAMRoles = (current ? current : 0)
     })
   }
 
   private getCurrentIAMPolicies(): void {
-    this.costExplorerService.getCurrentIAMPolicies().subscribe(current => {
-      this.currentIAMPolicies = (current ? current : 0);
+    this.awsService.getCurrentIAMPolicies().subscribe(current => {
+      this.currentIAMPolicies = (current ? current : 0)
     })
   }
 
   private getCurrentIAMGroups(): void {
-    this.costExplorerService.getCurrentIAMGroups().subscribe(current => {
-      this.currentIAMGroups = (current ? current : 0);
+    this.awsService.getCurrentIAMGroups().subscribe(current => {
+      this.currentIAMGroups = (current ? current : 0)
     })
   }
 
   private getCurrentIAMUsers(): void {
-    this.costExplorerService.getCurrentIAMUsers().subscribe(current => {
-      this.currentIAMUsers = (current ? current : 0);
+    this.awsService.getCurrentIAMUsers().subscribe(current => {
+      this.currentIAMUsers = (current ? current : 0)
+    })
+  }
+
+  private getCurrentCloudwatchAlarmsState(): void {
+    this.awsService.getCurrentCloudwatchAlarmsState().subscribe(current => {
+      this.currentOKStateAlarms = (current.OK ? current.OK : 0)
+      this.currentAlarmStateAlarms = (current.ALARM ? current.ALARM : 0)
+      this.currentInsufficientDataStateAlarms = (current.INSUFFICIENT_DATA ? current.INSUFFICIENT_DATA : 0)
+    })
+  }
+
+  private getCurrentCloudFrontDistributions(): void {
+    this.awsService.getCurrentCloudFrontDistributions().subscribe(current => {
+      this.currentCloudFrontDistributions = (current ? current : 0)
     })
   }
 
@@ -376,7 +400,7 @@ export class AppComponent implements AfterViewInit {
     this.currentJavaLambdaFunctions = 0
     this.currentPythonLambdaFunctions = 0
     this.currentCSharpLambdaFunctions = 0
-    this.costExplorerService.getCurrentLambdaRuntime().subscribe(res => {
+    this.awsService.getCurrentLambdaRuntime().subscribe(res => {
       for(var runtime in res){
         if(runtime.startsWith('go')){
           this.currentGolangLambdaFunctions+=res[runtime]
@@ -400,7 +424,7 @@ export class AppComponent implements AfterViewInit {
   private getCurrentELBFamily(): void {
     let data = []
     let labels = []
-    this.costExplorerService.getCurrentELBFamily().subscribe(res => {
+    this.awsService.getCurrentELBFamily().subscribe(res => {
       for(var i in res){
         data.push(res[i])
         labels.push(i)
@@ -431,7 +455,7 @@ export class AppComponent implements AfterViewInit {
       }
     });
     let data = []
-    this.costExplorerService.getCurrentEC2Region().subscribe(res => {
+    this.awsService.getCurrentEC2Region().subscribe(res => {
       for(var region in res){
         var params = this.regions[region.split("-").join("_")]
         data.push({
@@ -455,7 +479,7 @@ export class AppComponent implements AfterViewInit {
   private getCostAndUsage(): void {
     var values = []
     var labels = []
-    this.costExplorerService.getBilling().subscribe(res => {
+    this.awsService.getBilling().subscribe(res => {
       this.currentBill = res[res.length - 1].Amount.toFixed(2)
       this.billUnit = res[res.length - 1].Unit;
       this.currentDate = `${(new Date().toLocaleString("en-us", { month: "long" }))} ${(new Date()).getFullYear()}`
