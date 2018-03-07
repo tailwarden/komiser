@@ -97,7 +97,7 @@
                   </div>
                   <div class="work-amount card">
                     <div class="card-body">
-                      <h3>Elastic Block Store</h3><small>Lorem ipsum dolor sit amet.</small>
+                      <h3>Elastic Block Store</h3><small>Number of EBS volumes per type.</small>
                       <div class="chart text-center" *ngIf="ebsFamiliesChartData.length > 0">
                         <div class="text"><strong>{{currentEBSSize}}</strong><br><span>GB</span></div>
                         <canvas baseChart
@@ -110,7 +110,7 @@
                   </div>
                   <div class="polar-chart-example card">
                     <div class="card-body">
-                      <h3>EC2 Family</h3><small>Lorem ipsum dolor sit amet.</small>
+                      <h3>Instance Family</h3><small>Number of instances per instance type.</small>
                       <canvas baseChart height="276" *ngIf="ec2FamilliesChartData.length > 0"
                         [data]="ec2FamilliesChartData"
                         [labels]="ec2FamilliesChartLabels"
@@ -141,13 +141,27 @@
                         <div class="text"><strong>{{currentIAMPolicies}}</strong><br><small>IAM Policies</small></div>
                       </div>
                     </div>
+
+                    
                   </div>
+                  
+
+                  <div class="row" style="margin-top: 15px">
+                    <div class="statistics col-lg-12 col-12">
+                      <div class="statistic d-flex align-items-center bg-white has-shadow">
+                        <div class="icon"><img src="assets/images/distribution.png" class="aws-service"/></div>
+                        <div class="text"><strong>{{currentCloudFrontDistributions}}</strong><br><small>CloudFront Distributions</small></div>
+                      </div>
+                    </div>
                   </div>
+
+                  </div>
+
                 <!-- Line Chart            -->
                 <div class="chart col-lg-6 col-12">
                   <div class="pie-chart-example card">
                     <div class="card-body">
-                      <h3>EC2 Region</h3><small>Lorem ipsum dolor sit amet.</small>
+                      <h3>Elastic Compute Cloud</h3><small>Number of instances per AWS region.</small>
                       <div id="map"></div>
                     </div>
                   </div>
@@ -202,7 +216,7 @@
                           <div class="project-title d-flex align-items-center">
                             <i class="devicon-java-plain colored lang-icon"></i>
                             <div class="text">
-                              <h3 class="h4">Java</h3><small>Lorem Ipsum Dolor</small>
+                              <h3 class="h4">Java</h3><small>Java 8</small>
                             </div>
                           </div>
                           <div class="project-date"><span class="hidden-sm-down">{{currentJavaLambdaFunctions}} Functions</span></div>
@@ -211,7 +225,7 @@
                           <div class="project-title d-flex align-items-center">
                             <i class="devicon-csharp-plain colored lang-icon"></i>
                             <div class="text">
-                              <h3 class="h4">C#</h3><small>Lorem Ipsum Dolor</small>
+                              <h3 class="h4">C#</h3><small>.NET Core 1.0.1 and .NET Core 2.0</small>
                             </div>
                           </div>
                           <div class="project-date"><span class="hidden-sm-down">{{currentCSharpLambdaFunctions}} Functions</span></div>
@@ -224,7 +238,7 @@
                           <div class="project-title d-flex align-items-center">
                             <i class="devicon-go-plain colored lang-icon golang-icon"></i>
                             <div class="text">
-                              <h3 class="h4">Golang</h3><small>Lorem Ipsum Dolor</small>
+                              <h3 class="h4">Golang</h3><small>Go 1.x</small>
                             </div>
                           </div>
                           <div class="project-date"><span class="hidden-sm-down">{{currentGolangLambdaFunctions}} Functions</span></div>
@@ -233,7 +247,7 @@
                           <div class="project-title d-flex align-items-center">
                             <i class="devicon-python-plain colored lang-icon"></i>
                             <div class="text">
-                              <h3 class="h4">Python</h3><small>Lorem Ipsum Dolor</small>
+                              <h3 class="h4">Python</h3><small>Python 3.6 and 2.7</small>
                             </div>
                           </div>
                           <div class="project-date"><span class="hidden-sm-down">{{currentPythonLambdaFunctions}} Functions</span></div>
@@ -246,7 +260,7 @@
                           <div class="project-title d-flex align-items-center">
                             <i class="devicon-nodejs-plain colored lang-icon"></i>
                             <div class="text">
-                              <h3 class="h4">Node.JS</h3><small>Lorem Ipsum Dolor</small>
+                              <h3 class="h4">Node.JS</h3><small>v4.3.2 and 6.10.3</small>
                             </div>
                           </div>
                           <div class="project-date"><span class="hidden-sm-down">{{currentNodeJSLambdaFunctions}} Functions</span></div>
@@ -272,6 +286,33 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="statistic d-flex align-items-center bg-white has-shadow">
+                    <div class="icon bg-green"><i class="fas fa-check"></i></div>
+                    <div class="text"><strong>{{currentOKStateAlarms}}</strong><br><small>OK</small></div>
+                  </div>
+                  <div class="statistic d-flex align-items-center bg-white has-shadow">
+                    <div class="icon bg-orange"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="text"><strong>{{currentInsufficientDataStateAlarms}}</strong><br><small>INSUFFICIENT_DATA</small></div>
+                  </div>
+                  <div class="statistic d-flex align-items-center bg-white has-shadow">
+                    <div class="icon bg-red"><i class="far fa-clock"></i></div>
+                    <div class="text"><strong>{{currentAlarmStateAlarms}}</strong><br><small>ALARM</small></div>
+                  </div>
+
+                  <div class="overdue card">
+                    <div class="card-body">
+                      <h3>Elastic Load Balancer</h3><small>Total number of ELB, ALB & NLB.</small>
+                      <div class="chart">
+                        <canvas baseChart *ngIf="elbFamiliesChartData.length > 0"
+                        [datasets]="elbFamiliesChartData"
+                        [labels]="elbFamiliesChartLabels"
+                        [options]="barChartOptions"
+                        [chartType]="elbFamiliesChartType"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <!-- Numbers-->
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon"><img src="assets/images/rds.png" class="aws-service"/></div>
@@ -290,18 +331,7 @@
                     <div class="text"><strong>{{currentDynamoDBReadCapacity}}</strong><br><small>Read Capacity</small></div>
                   </div>
 
-                  <div class="overdue card">
-                    <div class="card-body">
-                      <h3>Elastic Load Balancer</h3><small>Current month-to-date balance for {{currentDate}}.</small>
-                      <div class="chart">
-                        <canvas baseChart *ngIf="elbFamiliesChartData.length > 0"
-                        [datasets]="elbFamiliesChartData"
-                        [labels]="elbFamiliesChartLabels"
-                        [options]="barChartOptions"
-                        [chartType]="elbFamiliesChartType"></canvas>
-                      </div>
-                    </div>
-                  </div>
+                  
 
                   <div class="statistic d-flex align-items-center bg-white has-shadow">
                     <div class="icon"><img src="assets/images/sqs.png" class="aws-service"/></div>

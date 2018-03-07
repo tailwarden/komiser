@@ -375,3 +375,25 @@ func (handler *AWSHandler) IAMUsersTotalHandler(w http.ResponseWriter, r *http.R
 		respondWithJSON(w, 200, response)
 	}
 }
+
+func (handler *AWSHandler) CloudWatchAlarmsStateHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("cloudwatch_alarm")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeCloudWatchAlarmsPerState(handler.cfg)
+		handler.cache.Set("cloudwatch_alarm", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}
+
+func (handler *AWSHandler) CloudFrontDistributionsTotalHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("cloudfront_total")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response := handler.aws.DescribeCloudFrontDistributionsTotal(handler.cfg)
+		handler.cache.Set("cloudfront_total", response, cache.DefaultExpiration)
+		respondWithJSON(w, 200, response)
+	}
+}

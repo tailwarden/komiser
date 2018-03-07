@@ -24,12 +24,12 @@
 * SQS
 * SNS
 * IAM
+* CloudWatch Alarms
+* CloudFront Distributions
 
 ## TO DO
 
 * EMR
 * ECS
 * Kinesis
-* CloudFront
 * Elastic Beanstalk
-* CloudWatch
