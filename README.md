@@ -33,3 +33,11 @@
 * ECS
 * Kinesis
 * Elastic Beanstalk
+
+## Maintainers
+
+* Mohamed Labouardy
+
+## License
+
+MIT
