@@ -33,6 +33,7 @@
 * ECS
 * Kinesis
 * Elastic Beanstalk
+* Glacier
 
 ## Maintainers
 
