@@ -7,10 +7,10 @@ import (
 	"os"
 	"time"
 
-	. "./handlers"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	. "github.com/mlabouardy/komiser/handlers"
 	cache "github.com/patrickmn/go-cache"
 	"github.com/urfave/cli"
 )

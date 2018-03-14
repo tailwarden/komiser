@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	. "../backend"
 	"github.com/aws/aws-sdk-go-v2/aws"
+	. "github.com/mlabouardy/komiser/backend"
 	cache "github.com/patrickmn/go-cache"
 )
 
