@@ -3,21 +3,21 @@ jobs:
   build:
     docker:
       - image: circleci/node:6.10-browsers
-    working_directory: ~/komiser/public
+    working_directory: ~/komiser
     steps:
       - checkout
       - restore_cache:
-          key: node-modules-{{checksum "package.json"}}
+          key: node-modules-{{checksum "public/package.json"}}
       - run:
           name: Install dependencies
-          command: npm install
+          command: cd public && npm install
       - save_cache:
-          key: node-modules-{{checksum "package.json"}}
+          key: node-modules-{{checksum "public/package.json"}}
           paths:
-            - node_modules
+            - public/node_modules
       - run:
           name: Build artifact
-          command: npm run build-prod
+          command: cd public && npm run build-prod
       - save_cache:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
           paths:
