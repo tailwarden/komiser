@@ -40,7 +40,7 @@ jobs:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
       - run:
          name: Fix path
-         command: ls -la
+         command: ls -la public
       - run:
          name: Create assets
          command: go-bindata-assetfs -prefix public -o template.go public/dist/ public/dist/assets/images/
