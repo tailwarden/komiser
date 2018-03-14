@@ -31,6 +31,8 @@ jobs:
     working_directory: /go/src/github.com/mlabouardy/komiser
     steps:
       - checkout
+      - attach_workspace:
+          at: /tmp/public
       - run:
           name: Install dependencies
           command: go get -v
@@ -43,7 +45,7 @@ jobs:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
       - run:
          name: Fix path
-         command: ls -la public
+         command: ls -la /tmp/public
       - run:
          name: Create assets
          command: go-bindata-assetfs -prefix public -o template.go public/dist/ public/dist/assets/images/
