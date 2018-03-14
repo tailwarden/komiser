@@ -49,12 +49,23 @@ jobs:
          command: go get github.com/mitchellh/gox
       - run:
          name: Build binary
-         command: gox -osarch="linux/amd64"
+         command: gox -osarch="linux/amd64 windows/amd64 darwin/amd64"
       - run:
          name: Install AWS CLI
          command: |
           apt-get update
           apt-get install -y awscli
+          chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
+      - run:
+          name: Push Linux binary
+          command: aws s3 cp komiser_linux_amd64 s3://komiser/1.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      - run:
+          name: Push Windows binary
+          command: aws s3 cp komiser_windows_amd64.exe s3://komiser/1.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      - run:
+          name: Push Mac OS X binary
+          command: aws s3 cp komiser_darwin_amd64 s3://komiser/1.0.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      
 
 workflows:
     version: 2
