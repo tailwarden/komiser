@@ -1,1 +1,57 @@
 version: 2
+jobs:
+  build:
+    docker:
+      - image: node:9.8.0
+    working_directory: ~/komiser/public
+    steps:
+      - checkout
+      - restore_cache:
+          key: node-modules-{{checksum "package.json"}}
+      - run:
+          name: Install Angular CLI
+          command: npm install -g @angular/cli
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          key: node-modules-{{checksum "package.json"}}
+          paths:
+            - node_modules
+      - run:
+          name: Build artifact
+          command: ng build
+      - save_cache:
+          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - dist
+  deploy:
+    docker:
+      - image: golang:1.10
+    working_directory: ~/komiser
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: go get -v
+      - run:
+          name: Install go-bin-data
+          command: |
+           go get github.com/jteeuwen/go-bindata/...
+           go get github.com/elazarl/go-bindata-assetfs/... 
+      - restore_cache:
+          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+         name: Create assets
+         command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
+      - run:
+         name: Install gox
+         command: go get github.com/mitchellh/gox
+      - run:
+         name: Build binary
+         command: gox
+      - run:
+         name: Install AWS CLI
+         command: |
+          apt-get update
+          apt-get install -y awscli
