@@ -2,15 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:9.8.0
+      - image: circleci/node:6.10-browsers
     working_directory: ~/komiser/public
     steps:
       - checkout
+      - nrun:
       - restore_cache:
           key: node-modules-{{checksum "package.json"}}
-      - run:
-          name: Install Angular CLI
-          command: npm install -g @angular/cli
       - run:
           name: Install dependencies
           command: npm install
@@ -20,7 +18,7 @@ jobs:
             - node_modules
       - run:
           name: Build artifact
-          command: ng build
+          command: npm run build-prod
       - save_cache:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -55,3 +53,10 @@ jobs:
          command: |
           apt-get update
           apt-get install -y awscli
+
+workflows:
+    version: 2
+    build_and_deploy:
+        jobs:
+            - build
+            - deploy
