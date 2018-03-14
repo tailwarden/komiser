@@ -43,7 +43,7 @@ jobs:
          command: ls -la
       - run:
          name: Create assets
-         command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
+         command: go-bindata-assetfs -prefix public -o template.go public/dist/ public/dist/assets/images/
       - run:
          name: Install gox
          command: go get github.com/mitchellh/gox
