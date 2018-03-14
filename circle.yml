@@ -17,11 +17,11 @@ jobs:
             - public/node_modules
       - run:
           name: Build artifact
-          command: cd public && npm run build-prod
+          command: cd public && npm run build
       - save_cache:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - dist
+            - public/dist
   deploy:
     docker:
       - image: golang:1.10
