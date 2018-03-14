@@ -25,8 +25,10 @@ func startServer(port int, duration int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	cache := cache.New(time.Duration(duration)*time.Minute, time.Duration(duration)*time.Minute)
 	awsHandler := NewAWSHandler(cfg, cache)
+
 	r := mux.NewRouter()
 	r.HandleFunc("/ec2/region", awsHandler.EC2RegionHandler)
 	r.HandleFunc("/ec2/family", awsHandler.EC2FamilyHandler)
@@ -60,7 +62,7 @@ func startServer(port int, duration int) {
 	r.HandleFunc("/policy/total", awsHandler.IAMPoliciesTotalHandler)
 	r.HandleFunc("/cloudwatch/state", awsHandler.CloudWatchAlarmsStateHandler)
 	r.HandleFunc("/cloudfront/total", awsHandler.CloudFrontDistributionsTotalHandler)
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("dist/")))
+	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS()(r))
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
 	if err != nil {
