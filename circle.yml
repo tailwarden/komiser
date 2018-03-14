@@ -21,7 +21,7 @@ jobs:
       - save_cache:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - public/dist
+            - dist
   deploy:
     docker:
       - image: golang:1.10
@@ -40,7 +40,7 @@ jobs:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
       - run:
          name: Fix path
-         command: mv public/dist .
+         command: ls -la
       - run:
          name: Create assets
          command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
