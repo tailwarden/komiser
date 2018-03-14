@@ -24,7 +24,7 @@ jobs:
             - dist
   build_cli:
     docker:
-      - image: golang:1.108
+      - image: golang:1.8
     working_directory: /go/src/github.com/mlabouardy/komiser
     steps:
       - checkout
