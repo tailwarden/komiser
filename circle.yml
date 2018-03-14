@@ -18,8 +18,11 @@ jobs:
       - run:
           name: Build artifact
           command: cd public && npm run build
-      - save_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: Test
+          command: ls -la public
+      - persist_to_workspace:
+          root: public
           paths:
             - dist
   deploy:
