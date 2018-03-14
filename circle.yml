@@ -49,7 +49,7 @@ jobs:
          command: go get github.com/mitchellh/gox
       - run:
          name: Build binary
-         command: gox -osarch="windows/amd64,darwin/amd64,linux/amd64"
+         command: gox -osarch="linux/amd64"
       - run:
          name: Install AWS CLI
          command: |
