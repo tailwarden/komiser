@@ -39,6 +39,9 @@ jobs:
       - restore_cache:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
       - run:
+         name: Fix path
+         command: mv public/dist .
+      - run:
          name: Create assets
          command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
       - run:
