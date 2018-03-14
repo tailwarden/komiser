@@ -1,34 +1,35 @@
 version: 2
 jobs:
-  build:
+  build_frontend:
     docker:
-      - image: circleci/node:6.10-browsers
-    working_directory: ~/komiser/public
+      - image: circleci/node:8.10-stretch-browsers
+    working_directory: ~/komiser
     steps:
       - checkout
-      - nrun:
       - restore_cache:
-          key: node-modules-{{checksum "package.json"}}
+          key: node-modules-{{checksum "public/package.json"}}
       - run:
           name: Install dependencies
-          command: npm install
+          command: cd public && npm install
       - save_cache:
-          key: node-modules-{{checksum "package.json"}}
+          key: node-modules-{{checksum "public/package.json"}}
           paths:
-            - node_modules
+            - public/node_modules
       - run:
           name: Build artifact
-          command: npm run build-prod
-      - save_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+          command: cd public && npm run build
+      - persist_to_workspace:
+          root: public
           paths:
             - dist
-  deploy:
+  build_cli:
     docker:
-      - image: golang:1.10
+      - image: golang:1.8
     working_directory: /go/src/github.com/mlabouardy/komiser
     steps:
       - checkout
+      - attach_workspace:
+          at: /tmp/public
       - run:
           name: Install dependencies
           command: go get -v
@@ -36,9 +37,10 @@ jobs:
           name: Install go-bin-data
           command: |
            go get github.com/jteeuwen/go-bindata/...
-           go get github.com/elazarl/go-bindata-assetfs/... 
-      - restore_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+           go get github.com/elazarl/go-bindata-assetfs/...
+      - run:
+         name: Fix path
+         command: mv /tmp/public/dist .
       - run:
          name: Create assets
          command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
@@ -47,16 +49,29 @@ jobs:
          command: go get github.com/mitchellh/gox
       - run:
          name: Build binary
-         command: gox
+         command: gox -osarch="linux/amd64 windows/amd64 darwin/amd64"
       - run:
          name: Install AWS CLI
          command: |
           apt-get update
           apt-get install -y awscli
+          chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
+      - run:
+          name: Push Linux binary
+          command: aws s3 cp komiser_linux_amd64 s3://komiser/1.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      - run:
+          name: Push Windows binary
+          command: aws s3 cp komiser_windows_amd64.exe s3://komiser/1.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      - run:
+          name: Push Mac OS X binary
+          command: aws s3 cp komiser_darwin_amd64 s3://komiser/1.0.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      
 
 workflows:
     version: 2
     build_and_deploy:
         jobs:
-            - build
-            - deploy
+            - build_frontend
+            - build_cli:
+                requires:
+                    - build_frontend

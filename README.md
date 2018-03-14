@@ -1,6 +1,28 @@
 # Komiser
 
-## Supported
+## Download
+
+Below are the available downloads for the latest version of Komiser (1.0.0). Please download the proper package for your operating system and architecture.
+
+### Linux:
+
+```
+wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/linux/komiser
+```
+
+### Windows:
+
+```
+wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/windows/komiser
+```
+
+### Mac OS X:
+
+```
+wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
+```
+
+## Supported AWS Services
 
 * EC2
 * EBS
