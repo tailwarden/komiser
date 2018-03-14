@@ -18,9 +18,6 @@ jobs:
       - run:
           name: Build artifact
           command: cd public && npm run build
-      - run:
-          name: Test
-          command: ls -la public
       - persist_to_workspace:
           root: public
           paths:
@@ -40,15 +37,13 @@ jobs:
           name: Install go-bin-data
           command: |
            go get github.com/jteeuwen/go-bindata/...
-           go get github.com/elazarl/go-bindata-assetfs/... 
-      - restore_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+           go get github.com/elazarl/go-bindata-assetfs/...
       - run:
          name: Fix path
-         command: ls -la /tmp/public
+         command: mv /tmp/public/dist .
       - run:
          name: Create assets
-         command: go-bindata-assetfs -prefix public -o template.go public/dist/ public/dist/assets/images/
+         command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
       - run:
          name: Install gox
          command: go get github.com/mitchellh/gox
