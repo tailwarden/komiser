@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { environment } from '@env/environment'; 
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AWSService {
-
-  private apiURL : string = environment.API_URL;
   
   constructor(private http: Http) { }
 
   public getBilling(){
     return this.http
-     .get(`${this.apiURL}/cost`)
+     .get(`/cost`)
      .map(res => {
        return res.json()
      })
@@ -20,7 +17,7 @@ export class AWSService {
 
   public getCurrentVPC(){
     return this.http
-     .get(`${this.apiURL}/vpc/total`)
+     .get(`/vpc/total`)
      .map(res => {
        return res.json()
      })
@@ -28,7 +25,7 @@ export class AWSService {
 
   public getCurrentACL(){
     return this.http
-     .get(`${this.apiURL}/acl/total`)
+     .get(`/acl/total`)
      .map(res => {
        return res.json()
      })
@@ -36,7 +33,7 @@ export class AWSService {
 
   public getCurrentSecurityGroup(){
     return this.http
-     .get(`${this.apiURL}/security_group/total`)
+     .get(`/security_group/total`)
      .map(res => {
        return res.json()
      })
@@ -44,7 +41,7 @@ export class AWSService {
 
   public getCurrentNatGateway(){
     return this.http
-     .get(`${this.apiURL}/nat/total`)
+     .get(`/nat/total`)
      .map(res => {
        return res.json()
      })
@@ -52,7 +49,7 @@ export class AWSService {
 
   public getCurrentInternetGateway(){
     return this.http
-     .get(`${this.apiURL}/internet_gateway/total`)
+     .get(`/internet_gateway/total`)
      .map(res => {
        return res.json()
      })
@@ -60,7 +57,7 @@ export class AWSService {
 
   public getCurrentElasticIP(){
     return this.http
-     .get(`${this.apiURL}/eip/total`)
+     .get(`/eip/total`)
      .map(res => {
        return res.json()
      })
@@ -68,7 +65,7 @@ export class AWSService {
 
   public getCurrentKeyPair(){
     return this.http
-     .get(`${this.apiURL}/key_pair/total`)
+     .get(`/key_pair/total`)
      .map(res => {
        return res.json()
      })
@@ -76,7 +73,7 @@ export class AWSService {
 
   public getCurrentAutoscalingGroup(){
     return this.http
-     .get(`${this.apiURL}/autoscaling_group/total`)
+     .get(`/autoscaling_group/total`)
      .map(res => {
        return res.json()
      })
@@ -84,7 +81,7 @@ export class AWSService {
 
   public getCurrentRouteTable(){
     return this.http
-     .get(`${this.apiURL}/route_table/total`)
+     .get(`/route_table/total`)
      .map(res => {
        return res.json()
      })
@@ -92,7 +89,7 @@ export class AWSService {
 
   public getCurrentDynamoDBTable(){
     return this.http
-     .get(`${this.apiURL}/dynamodb/total`)
+     .get(`/dynamodb/total`)
      .map(res => {
        return res.json()
      })
@@ -100,7 +97,7 @@ export class AWSService {
 
   public getCurrentDynamoDBThroughput(){
     return this.http
-     .get(`${this.apiURL}/dynamodb/throughput`)
+     .get(`/dynamodb/throughput`)
      .map(res => {
        return res.json()
      })
@@ -108,7 +105,7 @@ export class AWSService {
 
   public getCurrentEBSFamily(){
     return this.http
-     .get(`${this.apiURL}/ebs/family`)
+     .get(`/ebs/family`)
      .map(res => {
        return res.json()
      })
@@ -116,7 +113,7 @@ export class AWSService {
 
   public getCurrentEBSSize(){
     return this.http
-     .get(`${this.apiURL}/ebs/size`)
+     .get(`/ebs/size`)
      .map(res => {
        return res.json()
      })
@@ -124,7 +121,7 @@ export class AWSService {
 
   public getCurrentEC2Family(){
     return this.http
-     .get(`${this.apiURL}/ec2/family`)
+     .get(`/ec2/family`)
      .map(res => {
        return res.json()
      })
@@ -132,7 +129,7 @@ export class AWSService {
 
   public getCurrentEC2State(){
     return this.http
-     .get(`${this.apiURL}/ec2/state`)
+     .get(`/ec2/state`)
      .map(res => {
        return res.json()
      })
@@ -140,7 +137,7 @@ export class AWSService {
 
   public getCurrentEC2Region(){
     return this.http
-     .get(`${this.apiURL}/ec2/region`)
+     .get(`/ec2/region`)
      .map(res => {
        return res.json()
      })
@@ -148,7 +145,7 @@ export class AWSService {
 
   public getCurrentSnapshot(){
     return this.http
-     .get(`${this.apiURL}/snapshot/total`)
+     .get(`/snapshot/total`)
      .map(res => {
        return res.json()
      })
@@ -156,7 +153,7 @@ export class AWSService {
 
   public getCurrentSnapshotSize(){
     return this.http
-     .get(`${this.apiURL}/snapshot/size`)
+     .get(`/snapshot/size`)
      .map(res => {
        return res.json()
      })
@@ -164,7 +161,7 @@ export class AWSService {
 
   public getCurrentLambdaRuntime(){
     return this.http
-     .get(`${this.apiURL}/lambda/runtime`)
+     .get(`/lambda/runtime`)
      .map(res => {
        return res.json()
      })
@@ -172,7 +169,7 @@ export class AWSService {
 
   public getCurrentELBFamily(){
      return this.http
-     .get(`${this.apiURL}/elb/family`)
+     .get(`/elb/family`)
      .map(res => {
        return res.json()
      })
@@ -180,7 +177,7 @@ export class AWSService {
 
   public getCurrentS3Buckets(){
      return this.http
-     .get(`${this.apiURL}/s3/total`)
+     .get(`/s3/total`)
      .map(res => {
        return res.json()
      })
@@ -188,7 +185,7 @@ export class AWSService {
 
   public getCurrentSQSQueues(){
      return this.http
-     .get(`${this.apiURL}/sqs/total`)
+     .get(`/sqs/total`)
      .map(res => {
        return res.json()
      })
@@ -196,7 +193,7 @@ export class AWSService {
 
   public getCurrentSNSTopics(){
      return this.http
-     .get(`${this.apiURL}/sns/total`)
+     .get(`/sns/total`)
      .map(res => {
        return res.json()
      })
@@ -204,7 +201,7 @@ export class AWSService {
 
   public getCurrentHostedZones(){
      return this.http
-     .get(`${this.apiURL}/hosted_zone/total`)
+     .get(`/hosted_zone/total`)
      .map(res => {
        return res.json()
      })
@@ -212,7 +209,7 @@ export class AWSService {
 
   public getCurrentIAMRoles(){
      return this.http
-     .get(`${this.apiURL}/role/total`)
+     .get(`/role/total`)
      .map(res => {
        return res.json()
      })
@@ -220,7 +217,7 @@ export class AWSService {
 
   public getCurrentIAMPolicies(){
      return this.http
-     .get(`${this.apiURL}/policy/total`)
+     .get(`/policy/total`)
      .map(res => {
        return res.json()
      })
@@ -228,7 +225,7 @@ export class AWSService {
 
   public getCurrentIAMGroups(){
      return this.http
-     .get(`${this.apiURL}/group/total`)
+     .get(`/group/total`)
      .map(res => {
        return res.json()
      })
@@ -236,7 +233,7 @@ export class AWSService {
 
   public getCurrentIAMUsers(){
      return this.http
-     .get(`${this.apiURL}/user/total`)
+     .get(`/user/total`)
      .map(res => {
        return res.json()
      })
@@ -244,7 +241,7 @@ export class AWSService {
 
   public getCurrentCloudwatchAlarmsState(){
      return this.http
-     .get(`${this.apiURL}/cloudwatch/state`)
+     .get(`/cloudwatch/state`)
      .map(res => {
        return res.json()
      })
@@ -252,7 +249,7 @@ export class AWSService {
 
   public getCurrentCloudFrontDistributions(){
      return this.http
-     .get(`${this.apiURL}/cloudfront/total`)
+     .get(`/cloudfront/total`)
      .map(res => {
        return res.json()
      })

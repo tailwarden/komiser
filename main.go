@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	. "./handlers"
@@ -9,19 +12,21 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	cache "github.com/patrickmn/go-cache"
+	"github.com/urfave/cli"
 )
 
-var (
-	awsHandler *AWSHandler
+const (
+	DEFAULT_PORT     = 3000
+	DEFAULT_DURATION = 30
 )
 
-func init() {
-	cache := cache.New(30*time.Minute, 30*time.Minute)
-	cfg, _ := external.LoadDefaultAWSConfig()
-	awsHandler = NewAWSHandler(cfg, cache)
-}
-
-func main() {
+func startServer(port int, duration int) {
+	cfg, err := external.LoadDefaultAWSConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	cache := cache.New(time.Duration(duration)*time.Minute, time.Duration(duration)*time.Minute)
+	awsHandler := NewAWSHandler(cfg, cache)
 	r := mux.NewRouter()
 	r.HandleFunc("/ec2/region", awsHandler.EC2RegionHandler)
 	r.HandleFunc("/ec2/family", awsHandler.EC2FamilyHandler)
@@ -55,5 +60,58 @@ func main() {
 	r.HandleFunc("/policy/total", awsHandler.IAMPoliciesTotalHandler)
 	r.HandleFunc("/cloudwatch/state", awsHandler.CloudWatchAlarmsStateHandler)
 	r.HandleFunc("/cloudfront/total", awsHandler.CloudFrontDistributionsTotalHandler)
-	http.ListenAndServe(":3000", handlers.CORS()(r))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("dist/")))
+	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS()(r))
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Printf("Server started on port %d", port)
+	}
+}
+
+func main() {
+	app := cli.NewApp()
+	app.Name = "Komiser"
+	app.Version = "1.0.0"
+	app.Usage = "AWS Environment Inspector"
+	app.Compiled = time.Now()
+	app.Authors = []cli.Author{
+		cli.Author{
+			Name:  "Mohamed Labouardy",
+			Email: "mohamed@labouardy.com",
+		},
+	}
+	app.Commands = []cli.Command{
+		{
+			Name:  "start",
+			Usage: "Start server",
+			Flags: []cli.Flag{
+				cli.IntFlag{
+					Name:  "port, p",
+					Usage: "Server port",
+				},
+				cli.IntFlag{
+					Name:  "duration, d",
+					Usage: "Cache expiration time",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				port := c.Int("port")
+				duration := c.Int("duration")
+				if port == 0 {
+					port = DEFAULT_PORT
+				}
+				if duration == 0 {
+					duration = DEFAULT_DURATION
+				}
+				startServer(port, duration)
+				return nil
+			},
+		},
+	}
+	app.CommandNotFound = func(c *cli.Context, command string) {
+		fmt.Fprintf(c.App.Writer, "Command not found %q !", command)
+	}
+	app.Run(os.Args)
 }
