@@ -6,7 +6,6 @@ jobs:
     working_directory: ~/komiser/public
     steps:
       - checkout
-      - nrun:
       - restore_cache:
           key: node-modules-{{checksum "package.json"}}
       - run:
