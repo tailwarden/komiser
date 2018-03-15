@@ -25,6 +25,16 @@ wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/windows/komiser
 wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
 ```
 
+## Docker
+
+Use the official Komiser image:
+
+```
+docker run -d -p 3000:3000 -v credentials:/root/.aws/credentials --name komiser mlabouardy/komiser:1.0.0
+```
+
+Credentials are installed on your container into the *~/.aws/config* and *~/.aws/credentials* properties files. You can override the default environment variables: **PORT**, **DURATION**.
+
 ## Supported AWS Services
 
 * EC2
