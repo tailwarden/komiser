@@ -78,6 +78,7 @@ jobs:
         - deploy:
             name: Push Komiser to DockerHub
             command: |
+              docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
               docker tag mlabouardy/komiser mlabouardy/komiser:1.0.0
               docker push mlabouardy/komiser:1.0.0
       
