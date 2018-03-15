@@ -79,9 +79,9 @@ jobs:
             name: Push Komiser to DockerHub
             command: |
               docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-              docker tag mlabouardy/komiser:latest mlabouardy/komiser:$CIRCLE_SHA1
+              docker tag mlabouardy/komiser:latest mlabouardy/komiser:${CIRCLE_SHA1}
               docker push mlabouardy/komiser:latest
-              docker push "mlabouardy/komiser:$CIRCLE_SHA1
+              docker push "mlabouardy/komiser:${CIRCLE_SHA1}
       
 
 workflows:
