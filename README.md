@@ -2,7 +2,6 @@
 [![License](https://img.shields.io/github/license/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/mlabouardy/komiser)](https://goreportcard.com/report/github.com/mlabouardy/komiser) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues)  
 
 
-
 ## Download
 
 Below are the available downloads for the latest version of Komiser (1.0.0). Please download the proper package for your operating system and architecture.
@@ -25,12 +24,18 @@ wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/windows/komiser
 wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
 ```
 
+## How to use
+
+```
+komiser start --port 3000 --duration 30
+```
+
 ## Docker
 
 Use the official Komiser image:
 
 ```
-docker run -d -p 3000:3000 -v credentials:/root/.aws/credentials --name komiser mlabouardy/komiser:1.0.0
+docker run -d -p 3000:3000 -v credentials:/root/.aws/credentials --name komiser mlabouardy/komiser
 ```
 
 ### Environment Variables
@@ -38,7 +43,7 @@ docker run -d -p 3000:3000 -v credentials:/root/.aws/credentials --name komiser 
 | Environment Variable | Description |
 | -------------------- | ----------- |
 | PORT | Server Port |
-| DURATION | Server Cache Expiration |
+| DURATION | Server Cache Expiration (minutes) |
 | AWS_ACCESS_KEY_ID | AWS Access Key |
 | AWS_SECRET_ACCESS_KEY | AWS Secret Key |
 | AWS_DEFAULT_REGION | AWS Region |
