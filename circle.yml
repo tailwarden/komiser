@@ -65,6 +65,22 @@ jobs:
       - run:
           name: Push Mac OS X binary
           command: aws s3 cp komiser_darwin_amd64 s3://komiser/1.0.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+
+  build_docker:
+    docker:
+       - image: docker:18.02.0-ce
+    steps:
+        - checkout
+        - setup_remote_docker
+        - run:
+            name: Build Komiser Docker Image
+            command: docker build -t mlabouardy/komiser .
+        - deploy:
+            name: Push Komiser to DockerHub
+            command: |
+              docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
+              docker tag mlabouardy/komiser mlabouardy/komiser:1.0.0
+              docker push mlabouardy/komiser:1.0.0
       
 
 workflows:
@@ -75,3 +91,6 @@ workflows:
             - build_cli:
                 requires:
                     - build_frontend
+            - build_docker:
+                requires:
+                    - build_cli
