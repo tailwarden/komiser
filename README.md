@@ -33,7 +33,15 @@ Use the official Komiser image:
 docker run -d -p 3000:3000 -v credentials:/root/.aws/credentials --name komiser mlabouardy/komiser:1.0.0
 ```
 
-Credentials are installed on your container into the *~/.aws/config* and *~/.aws/credentials* properties files. You can override the default environment variables: **PORT**, **DURATION**.
+### Environment Variables
+
+| Environment Variable | Description |
+| -------------------- | ----------- |
+| PORT | Server Port |
+| DURATION | Server Cache Expiration |
+| AWS_ACCESS_KEY_ID | AWS Access Key |
+| AWS_SECRET_ACCESS_KEY | AWS Secret Key |
+| AWS_DEFAULT_REGION | AWS Region |
 
 ## Supported AWS Services
 
