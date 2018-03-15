@@ -3,6 +3,9 @@ MAINTAINER mlabouardy <mohamed@labouardy.com>
 
 ENV PORT 3000
 ENV DURATION 30
+ENV AWS_ACCESS_KEY_ID
+ENV AWS_SECRET_ACCESS_KEY
+ENV AWS_DEFAULT_REGION 
 
 RUN apk update && apk add curl
 RUN curl -L https://s3.us-east-1.amazonaws.com/komiser/1.0.0/linux/komiser -o /usr/bin/komiser && \
