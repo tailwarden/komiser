@@ -35,7 +35,7 @@ komiser start --port 3000 --duration 30
 Use the official Komiser image:
 
 ```
-docker run -d -p 3000:3000 -v credentials:/root/.aws/credentials --name komiser mlabouardy/komiser
+docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser
 ```
 
 ### Environment Variables
