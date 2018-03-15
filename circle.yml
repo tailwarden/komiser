@@ -74,13 +74,14 @@ jobs:
         - setup_remote_docker
         - run:
             name: Build Komiser Docker Image
-            command: docker build -t mlabouardy/komiser .
+            command: docker build -t mlabouardy/komiser:latest .
         - deploy:
             name: Push Komiser to DockerHub
             command: |
               docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-              docker tag mlabouardy/komiser mlabouardy/komiser:1.0.0
-              docker push mlabouardy/komiser:1.0.0
+              docker tag mlabouardy/komiser:latest mlabouardy/komiser:{{ .Environment.CIRCLE_SHA1 }}
+              docker push mlabouardy/komiser:latest
+              docker push mlabouardy/komiser:{{ .Environment.CIRCLE_SHA1 }}
       
 
 workflows:
