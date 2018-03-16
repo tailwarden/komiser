@@ -6,16 +6,16 @@ import (
 	cache "github.com/patrickmn/go-cache"
 )
 
-func (handler *AWSHandler) CloudWatchAlarmsStateHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cloudwatch_alarm")
+func (handler *AWSHandler) CloudWatchAlarmsHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("cloudwatch")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeCloudWatchAlarmsPerState(handler.cfg)
+		response, err := handler.aws.DescribeCloudWatchAlarms(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "cloudwatch:DescribeAlarms is missing")
 		} else {
-			handler.cache.Set("cloudwatch_alarm", response, cache.DefaultExpiration)
+			handler.cache.Set("cloudwatch", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}

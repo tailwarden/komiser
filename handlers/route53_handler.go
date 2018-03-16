@@ -6,16 +6,16 @@ import (
 	cache "github.com/patrickmn/go-cache"
 )
 
-func (handler *AWSHandler) HostedZoneTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("hosted_zone_total")
+func (handler *AWSHandler) HostedZoneHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("hosted_zone")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeHostedZonesTotal(handler.cfg)
+		response, err := handler.aws.DescribeHostedZones(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "route53:ListHostedZones is missing")
 		} else {
-			handler.cache.Set("hosted_zone_total", response, cache.DefaultExpiration)
+			handler.cache.Set("hosted_zone", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}

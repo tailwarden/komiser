@@ -13,7 +13,7 @@ func (handler *AWSHandler) CostAndUsageHandler(w http.ResponseWriter, r *http.Re
 	} else {
 		response, err := handler.aws.DescribeCostAndUsage(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "ce:GetCostAndUsage is missing")
 		} else {
 			handler.cache.Set("cost_usage", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)

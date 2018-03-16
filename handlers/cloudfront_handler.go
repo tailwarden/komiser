@@ -6,16 +6,16 @@ import (
 	cache "github.com/patrickmn/go-cache"
 )
 
-func (handler *AWSHandler) CloudFrontDistributionsTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cloudfront_total")
+func (handler *AWSHandler) CloudFrontDistributionsHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("cloudfront")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeCloudFrontDistributionsTotal(handler.cfg)
+		response, err := handler.aws.DescribeCloudFrontDistributions(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "cloudfront:ListDistributions is missing")
 		} else {
-			handler.cache.Set("cloudfront_total", response, cache.DefaultExpiration)
+			handler.cache.Set("cloudfront", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}

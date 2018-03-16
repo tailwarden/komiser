@@ -5,7 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func (aws AWS) DescribeS3BucketsTotal(cfg aws.Config) (int, error) {
+func (aws AWS) DescribeS3Buckets(cfg aws.Config) (int, error) {
 	svc := s3.New(cfg)
 	req := svc.ListBucketsRequest(&s3.ListBucketsInput{})
 	result, err := req.Send()

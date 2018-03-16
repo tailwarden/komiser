@@ -6,7 +6,7 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeQueuesTotal(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeQueues(cfg aws.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {

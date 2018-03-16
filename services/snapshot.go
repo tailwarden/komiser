@@ -6,38 +6,27 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeSnapshotsTotal(cfg aws.Config) (int64, error) {
-	var sum int64
+func (aws AWS) DescribeSnapshots(cfg aws.Config) (map[string]int, error) {
+	tablesTotalSize := 0
+	tablesTotalNumber := 0
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return map[string]int{}, err
 	}
 	for _, region := range regions {
 		snapshots, err := aws.getSnapshots(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return map[string]int{}, err
 		}
-		sum += int64(len(snapshots))
-	}
-	return sum, nil
-}
-
-func (aws AWS) DescribeSnapshotsSize(cfg aws.Config) (int64, error) {
-	var sum int64
-	regions, err := aws.getRegions(cfg)
-	if err != nil {
-		return 0, err
-	}
-	for _, region := range regions {
-		snapshots, err := aws.getSnapshots(cfg, region.Name)
-		if err != nil {
-			return 0, err
-		}
+		tablesTotalNumber += len(snapshots)
 		for _, snapshot := range snapshots {
-			sum += snapshot.VolumeSize
+			tablesTotalSize += int(snapshot.VolumeSize)
 		}
 	}
-	return sum, nil
+	return map[string]int{
+		"total": tablesTotalNumber,
+		"size":  tablesTotalSize,
+	}, nil
 }
 
 func (aws AWS) getSnapshots(cfg aws.Config, region string) ([]Snapshot, error) {

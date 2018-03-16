@@ -5,7 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/route53"
 )
 
-func (aws AWS) DescribeHostedZonesTotal(cfg aws.Config) (int, error) {
+func (aws AWS) DescribeHostedZones(cfg aws.Config) (int, error) {
 	svc := route53.New(cfg)
 	req := svc.ListHostedZonesRequest(&route53.ListHostedZonesInput{})
 	result, err := req.Send()

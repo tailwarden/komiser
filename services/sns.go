@@ -6,7 +6,7 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeSNSTopicsTotal(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeSNSTopics(cfg aws.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeElasticLoadBalancerPerFamily(cfg aws.Config) (map[string]int, error) {
+func (aws AWS) DescribeElasticLoadBalancer(cfg aws.Config) (map[string]int, error) {
 	output := make(map[string]int, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {

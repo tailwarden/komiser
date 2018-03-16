@@ -6,33 +6,19 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeDynamoDBTablesTotal(cfg aws.Config) (int64, error) {
-	var sum int64
+func (aws AWS) DescribeDynamoDBTables(cfg aws.Config) (map[string]interface{}, error) {
+	outputThroughput := make(map[string]int, 0)
+	sumTables := 0
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return map[string]interface{}{}, err
 	}
 	for _, region := range regions {
 		tables, err := aws.getDynamoDBTables(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return map[string]interface{}{}, err
 		}
-		sum += int64(len(tables))
-	}
-	return sum, nil
-}
-
-func (aws AWS) DescribeDynamoDBTablesProvisionedThroughput(cfg aws.Config) (map[string]int, error) {
-	output := make(map[string]int, 0)
-	regions, err := aws.getRegions(cfg)
-	if err != nil {
-		return map[string]int{}, err
-	}
-	for _, region := range regions {
-		tables, err := aws.getDynamoDBTables(cfg, region.Name)
-		if err != nil {
-			return map[string]int{}, err
-		}
+		sumTables += len(tables)
 		for _, table := range tables {
 			cfg.Region = region.Name
 			svc := dynamodb.New(cfg)
@@ -41,13 +27,16 @@ func (aws AWS) DescribeDynamoDBTablesProvisionedThroughput(cfg aws.Config) (map[
 			})
 			result, err := req.Send()
 			if err != nil {
-				return map[string]int{}, err
+				return map[string]interface{}{}, err
 			}
-			output["readCapacity"] += int(*result.Table.ProvisionedThroughput.ReadCapacityUnits)
-			output["writeCapacity"] += int(*result.Table.ProvisionedThroughput.WriteCapacityUnits)
+			outputThroughput["readCapacity"] += int(*result.Table.ProvisionedThroughput.ReadCapacityUnits)
+			outputThroughput["writeCapacity"] += int(*result.Table.ProvisionedThroughput.WriteCapacityUnits)
 		}
 	}
-	return output, nil
+	return map[string]interface{}{
+		"throughput": outputThroughput,
+		"total":      sumTables,
+	}, nil
 }
 
 func (aws AWS) getDynamoDBTables(cfg aws.Config, region string) ([]Table, error) {

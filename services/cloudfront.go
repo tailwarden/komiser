@@ -5,7 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudfront"
 )
 
-func (aws AWS) DescribeCloudFrontDistributionsTotal(cfg aws.Config) (int, error) {
+func (aws AWS) DescribeCloudFrontDistributions(cfg aws.Config) (int, error) {
 	svc := cloudfront.New(cfg)
 	req := svc.ListDistributionsRequest(&cloudfront.ListDistributionsInput{})
 	result, err := req.Send()
