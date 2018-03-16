@@ -14,6 +14,21 @@
               </div>
               <!-- Navbar Menu -->
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                <!-- Notifications-->
+                <li class="nav-item dropdown">
+                  <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">
+                    <i class="far fa-bell"></i><span class="badge bg-red">{{errors.length}}</span>
+                  </a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu">
+                    <li *ngFor="let error of errors" class="notification">
+                       <a rel="nofollow" href="#" class="dropdown-item"> 
+                        <div class="notification">
+                          <div class="notification-content"><i class="fa fa-envelope bg-green"></i>{{error}} </div>
+                        </div>
+                       </a>
+                    </li>
+                  </ul>
+                </li>
                 <!-- Fork    -->
                 <li class="nav-item"><a href="https://github.com/mlabouardy/komiser" target="_blank" class="nav-link logout">Fork<i class="fas fa-code-branch"></i></a></li>
               </ul>
