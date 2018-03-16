@@ -190,132 +190,122 @@ export class AppComponent implements AfterViewInit {
   }
 
   constructor(private awsService: AWSService){
-    this.getCurrentVPC()
-    this.getCurrentACL()
-    this.getCurrentSecurityGroup()
-    this.getCurrentNatGateway()
-    this.getCurrentInternetGateway()
-    this.getCurrentElasticIP()
-    this.getCurrentKeyPair()
-    this.getCurrentAutoscalingGroup()
-    this.getCurrentRouteTable()
-    this.getCurrentDynamoDBTable()
-    this.getCurrentDynamoDBThroughput()
-    this.getCurrentEBSFamily()
-    this.getCurrentEC2Family()
-    this.getCurrentEBSSize()
-    this.getCurrentEC2State()
-    this.getCurrentSnapshot()
-    this.getCurrentSnapshotSize()
+    this.getCurrentVPCs()
+    this.getCurrentACLs()
+    this.getCurrentSecurityGroups()
+    this.getCurrentNatGateways()
+    this.getCurrentInternetGateways()
+    this.getCurrentElasticIPs()
+    this.getCurrentKeyPairs()
+    this.getCurrentAutoscalingGroups()
+    this.getCurrentRouteTables()
+    this.getCurrentDynamoDBTables()
+    this.getCurrentEBSVolumes()
+    this.getCurrentSnapshots()
     this.getCostAndUsage()
-    this.getCurrentLambdaRuntime()
-    this.getCurrentELBFamily()
+    this.getCurrentLambdaFunctions()
+    this.getCurrentElasticLoadBalancers()
     this.getCurrentSQSQueues()
     this.getCurrentSNSTopics()
     this.getCurrentHostedZones()
-    this.getCurrentCloudwatchAlarmsState()
+    this.getCurrentCloudwatchAlarms()
     this.getCurrentIAMRoles()
     this.getCurrentIAMGroups()
     this.getCurrentIAMPolicies()
     this.getCurrentIAMUsers()
     this.getCurrentCloudFrontDistributions()
+    this.getCurrentS3Buckets()
   }
 
-  private getCurrentVPC(): void {
-    this.awsService.getCurrentVPC().subscribe(current => {
+  private getCurrentVPCs(): void {
+    this.awsService.getCurrentVPCs().subscribe(current => {
       this.currentVPC = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentACL(): void {
-    this.awsService.getCurrentACL().subscribe(current => {
+  private getCurrentACLs(): void {
+    this.awsService.getCurrentACLs().subscribe(current => {
       this.currentACL = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentSecurityGroup(): void {
-    this.awsService.getCurrentSecurityGroup().subscribe(current => {
+  private getCurrentSecurityGroups(): void {
+    this.awsService.getCurrentSecurityGroups().subscribe(current => {
       this.currentSecurityGroup = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentNatGateway(): void {
-    this.awsService.getCurrentNatGateway().subscribe(current => {
+  private getCurrentNatGateways(): void {
+    this.awsService.getCurrentNatGateways().subscribe(current => {
       this.currentNatGateway = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentInternetGateway(): void {
-    this.awsService.getCurrentInternetGateway().subscribe(current => {
+  private getCurrentInternetGateways(): void {
+    this.awsService.getCurrentInternetGateways().subscribe(current => {
       this.currentInternetGateway = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentElasticIP(): void {
-    this.awsService.getCurrentElasticIP().subscribe(current => {
+  private getCurrentElasticIPs(): void {
+    this.awsService.getCurrentElasticIPs().subscribe(current => {
       this.currentElasticIP = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentKeyPair(): void {
-    this.awsService.getCurrentKeyPair().subscribe(current => {
+  private getCurrentKeyPairs(): void {
+    this.awsService.getCurrentKeyPairs().subscribe(current => {
       this.currentKeyPair = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentAutoscalingGroup(): void {
-    this.awsService.getCurrentAutoscalingGroup().subscribe(current => {
+  private getCurrentAutoscalingGroups(): void {
+    this.awsService.getCurrentAutoscalingGroups().subscribe(current => {
       this.currentAutoscalingGroup = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentRouteTable(): void {
-    this.awsService.getCurrentRouteTable().subscribe(current => {
+  private getCurrentRouteTables(): void {
+    this.awsService.getCurrentRouteTables().subscribe(current => {
       this.currentRouteTable = (current ? current : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentDynamoDBTable(): void {
-    this.awsService.getCurrentDynamoDBTable().subscribe(current => {
-      this.currentDynamoDBTable = (current ? current : 0)
+  private getCurrentDynamoDBTables(): void {
+    this.awsService.getCurrentDynamoDBTables().subscribe(current => {
+      this.currentDynamoDBTable = (current.total ? current.total : 0)
+      this.currentDynamoDBReadCapacity = (current.throughput.readCapacity ? current.throughput.readCapacity : 0)
+      this.currentDynamoDBWriteCapacity = (current.throughput.writeCapacity ? current.throughput.writeCapacity : 0)
     }, msg => {
       this.errors.push(msg)
     })
   }
 
-  private getCurrentDynamoDBThroughput(): void {
-    this.awsService.getCurrentDynamoDBThroughput().subscribe(current => {
-      this.currentDynamoDBReadCapacity = (current.readCapacity ? current.readCapacity : 0)
-      this.currentDynamoDBWriteCapacity = (current.writeCapacity ? current.writeCapacity : 0)
-    }, msg => {
-      this.errors.push(msg)
-    })
-  }
-
-  private getCurrentEBSFamily(): void {
+  private getCurrentEBSVolumes(): void {
     this.currentEBSVolumes = 0;
-    this.awsService.getCurrentEBSFamily().subscribe(res => {
-      for(var ebs in res){
-        this.currentEBSVolumes += res[ebs]
-        this.ebsFamiliesChartData.push(res[ebs])
+    this.awsService.getCurrentEBSVolumes().subscribe(current => {
+      this.currentEBSSize = (current.size ? current.size : 0)
+      for(var ebs in current.family){
+        this.currentEBSVolumes += current.family[ebs]
+        this.ebsFamiliesChartData.push(current.family[ebs])
         this.ebsFamiliesChartLabels.push(ebs)
       }
     }, msg => {
@@ -323,46 +313,10 @@ export class AppComponent implements AfterViewInit {
     })
   }
 
-  private getCurrentEC2Family(): void {
-    this.awsService.getCurrentEC2Family().subscribe(res => {
-      for(var i in res){
-        this.ec2FamilliesChartLabels.push(i)
-        this.ec2FamilliesChartData.push(res[i])
-      }
-    }, msg => {
-      this.errors.push(msg)
-    })
-  }
-
-  private getCurrentEBSSize(): void {
-    this.awsService.getCurrentEBSSize().subscribe(current => {
-      this.currentEBSSize = (current ? current : 0)
-    }, msg => {
-      this.errors.push(msg)
-    })
-  }
-
-  public getCurrentEC2State(): void {
-    this.awsService.getCurrentEC2State().subscribe(res => {
-      this.currentStoppedInstances = (res.stopped ? res.stopped : 0)
-      this.currentTerminatedInstances = (res.terminated ? res.terminated : 0)
-      this.currentRunningInstances = (res.running ? res.running : 0)
-    }, msg => {
-      this.errors.push(msg)
-    })
-  }
-
-  private getCurrentSnapshot(): void {
-    this.awsService.getCurrentSnapshot().subscribe(current => {
-      this.currentSnapshot = (current ? current : 0)
-    }, msg => {
-      this.errors.push(msg)
-    })
-  }
-
-  private getCurrentSnapshotSize(): void {
-    this.awsService.getCurrentSnapshotSize().subscribe(current => {
-      this.currentSnapshotSize = (current ? current : 0)
+  private getCurrentSnapshots(): void {
+    this.awsService.getCurrentSnapshots().subscribe(current => {
+      this.currentSnapshot = (current.total ? current.total : 0)
+      this.currentSnapshotSize = (current.size ? current.size : 0)
     }, msg => {
       this.errors.push(msg)
     })
@@ -432,8 +386,8 @@ export class AppComponent implements AfterViewInit {
     })
   }
 
-  private getCurrentCloudwatchAlarmsState(): void {
-    this.awsService.getCurrentCloudwatchAlarmsState().subscribe(current => {
+  private getCurrentCloudwatchAlarms(): void {
+    this.awsService.getCurrentCloudwatchAlarms().subscribe(current => {
       this.currentOKStateAlarms = (current.OK ? current.OK : 0)
       this.currentAlarmStateAlarms = (current.ALARM ? current.ALARM : 0)
       this.currentInsufficientDataStateAlarms = (current.INSUFFICIENT_DATA ? current.INSUFFICIENT_DATA : 0)
@@ -450,13 +404,13 @@ export class AppComponent implements AfterViewInit {
     })
   }
 
-  private getCurrentLambdaRuntime(): void {
+  private getCurrentLambdaFunctions(): void {
     this.currentGolangLambdaFunctions = 0
     this.currentNodeJSLambdaFunctions = 0
     this.currentJavaLambdaFunctions = 0
     this.currentPythonLambdaFunctions = 0
     this.currentCSharpLambdaFunctions = 0
-    this.awsService.getCurrentLambdaRuntime().subscribe(res => {
+    this.awsService.getCurrentLambdaFunctions().subscribe(res => {
       for(var runtime in res){
         if(runtime.startsWith('go')){
           this.currentGolangLambdaFunctions+=res[runtime]
@@ -479,10 +433,10 @@ export class AppComponent implements AfterViewInit {
     })
   }
 
-  private getCurrentELBFamily(): void {
+  private getCurrentElasticLoadBalancers(): void {
     let data = []
     let labels = []
-    this.awsService.getCurrentELBFamily().subscribe(res => {
+    this.awsService.getCurrentElasticLoadBalancers().subscribe(res => {
       for(var i in res){
         data.push(res[i])
         labels.push(i)
@@ -500,7 +454,7 @@ export class AppComponent implements AfterViewInit {
     })
   }
 
-  private getCurrentEC2Region(): void {
+  private getCurrentEC2Instances(): void {
     var map = new Datamap({
       scope: 'world',
       responsive: true,
@@ -515,16 +469,23 @@ export class AppComponent implements AfterViewInit {
       }
     });
     let data = []
-    this.awsService.getCurrentEC2Region().subscribe(res => {
-      for(var region in res){
+    this.awsService.getCurrentEC2Instances().subscribe(current => {
+      this.currentStoppedInstances = (current.state.stopped ? current.state.stopped : 0)
+      this.currentTerminatedInstances = (current.state.terminated ? current.state.terminated : 0)
+      this.currentRunningInstances = (current.state.running ? current.state.running : 0)
+      for(var i in current.family){
+        this.ec2FamilliesChartLabels.push(i)
+        this.ec2FamilliesChartData.push(current.family[i])
+      }
+      for(var region in current.region){
         var params = this.regions[region.split("-").join("_")]
         data.push({
-          radius: res[region] * 3,
+          radius: current.region[region] * 3,
           latitude: params.latitude,
           longitude: params.longitude,
           region: region,
           fillKey: 'instance',
-          instances: res[region]
+          instances: current.region[region]
         })
       }
       map.bubbles(data, {
@@ -581,6 +542,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.getCurrentEC2Region();
+    this.getCurrentEC2Instances();
   }
 }

@@ -6,40 +6,30 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeVolumesTotalSize(cfg aws.Config) (int64, error) {
-	var sum int64
+func (aws AWS) DescribeVolumes(cfg aws.Config) (map[string]interface{}, error) {
+	totalVolumesSize := 0
+	outputVolumesPerState := make(map[string]int, 0)
+	outputVolumesPerFamily := make(map[string]int, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return map[string]interface{}{}, err
 	}
 	for _, region := range regions {
 		volumes, err := aws.getVolumes(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return map[string]interface{}{}, err
 		}
 		for _, volume := range volumes {
-			sum += volume.Size
+			outputVolumesPerFamily[volume.VolumeType]++
+			outputVolumesPerState[volume.State]++
+			totalVolumesSize += int(volume.Size)
 		}
 	}
-	return sum, nil
-}
-
-func (aws AWS) DescribeVolumesPerFamily(cfg aws.Config) (map[string]int, error) {
-	output := make(map[string]int, 0)
-	regions, err := aws.getRegions(cfg)
-	if err != nil {
-		return map[string]int{}, err
-	}
-	for _, region := range regions {
-		volumes, err := aws.getVolumes(cfg, region.Name)
-		if err != nil {
-			return map[string]int{}, err
-		}
-		for _, volume := range volumes {
-			output[volume.VolumeType]++
-		}
-	}
-	return output, nil
+	return map[string]interface{}{
+		"total":  totalVolumesSize,
+		"state":  outputVolumesPerState,
+		"family": outputVolumesPerFamily,
+	}, nil
 }
 
 func (aws AWS) DescribeVolumesPerState(cfg aws.Config) (map[string]int, error) {

@@ -6,8 +6,8 @@ import (
 	cache "github.com/patrickmn/go-cache"
 )
 
-func (handler *AWSHandler) VPCTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpc_total")
+func (handler *AWSHandler) VPCHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("vpc")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -15,14 +15,14 @@ func (handler *AWSHandler) VPCTotalHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("vpc_total", response, cache.DefaultExpiration)
+			handler.cache.Set("vpc", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) ACLTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("acl_total")
+func (handler *AWSHandler) ACLHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("acl")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -30,14 +30,14 @@ func (handler *AWSHandler) ACLTotalHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("acl_total", response, cache.DefaultExpiration)
+			handler.cache.Set("acl", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) SecurityGroupTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("sg_total")
+func (handler *AWSHandler) SecurityGroupHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("sg")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -45,14 +45,14 @@ func (handler *AWSHandler) SecurityGroupTotalHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("sg_total", response, cache.DefaultExpiration)
+			handler.cache.Set("sg", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) NatGatewayTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("nat_total")
+func (handler *AWSHandler) NatGatewayHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("nat")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -60,14 +60,14 @@ func (handler *AWSHandler) NatGatewayTotalHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("nat_total", response, cache.DefaultExpiration)
+			handler.cache.Set("nat", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) ElasticIPTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("eip_total")
+func (handler *AWSHandler) ElasticIPHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("eip")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -75,14 +75,14 @@ func (handler *AWSHandler) ElasticIPTotalHandler(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("eip_total", response, cache.DefaultExpiration)
+			handler.cache.Set("eip", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) InternetGatewayTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("igw_total")
+func (handler *AWSHandler) InternetGatewayHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("igw")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -90,14 +90,14 @@ func (handler *AWSHandler) InternetGatewayTotalHandler(w http.ResponseWriter, r 
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("igw_total", response, cache.DefaultExpiration)
+			handler.cache.Set("igw", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) RouteTableTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("rt_total")
+func (handler *AWSHandler) RouteTableHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("rt")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -105,14 +105,14 @@ func (handler *AWSHandler) RouteTableTotalHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("rt_total", response, cache.DefaultExpiration)
+			handler.cache.Set("rt", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) KeyPairTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("kp_total")
+func (handler *AWSHandler) KeyPairHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("kp")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -120,7 +120,7 @@ func (handler *AWSHandler) KeyPairTotalHandler(w http.ResponseWriter, r *http.Re
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
 		} else {
-			handler.cache.Set("kp_total", response, cache.DefaultExpiration)
+			handler.cache.Set("kp", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}

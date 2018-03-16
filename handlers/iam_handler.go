@@ -6,61 +6,61 @@ import (
 	cache "github.com/patrickmn/go-cache"
 )
 
-func (handler *AWSHandler) IAMRolesTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("role_total")
+func (handler *AWSHandler) IAMRolesHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("role")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeIAMRolesTotal(handler.cfg)
+		response, err := handler.aws.DescribeIAMRoles(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "iam:ListRoles is missing")
 		} else {
-			handler.cache.Set("role_total", response, cache.DefaultExpiration)
+			handler.cache.Set("role", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) IAMGroupsTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("group_total")
+func (handler *AWSHandler) IAMGroupsHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("group")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeIAMGroupsTotal(handler.cfg)
+		response, err := handler.aws.DescribeIAMGroups(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "iam:ListGroups is missing")
 		} else {
-			handler.cache.Set("group_total", response, cache.DefaultExpiration)
+			handler.cache.Set("group", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) IAMPoliciesTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("policy_total")
+func (handler *AWSHandler) IAMPoliciesHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("policy")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeIAMPoliciesTotal(handler.cfg)
+		response, err := handler.aws.DescribeIAMPolicies(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "iam:ListPolicies is missing")
 		} else {
-			handler.cache.Set("policy_total", response, cache.DefaultExpiration)
+			handler.cache.Set("policy", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
-func (handler *AWSHandler) IAMUsersTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("user_total")
+func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("user")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeIAMUsersTotal(handler.cfg)
+		response, err := handler.aws.DescribeIAMUsers(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+			respondWithError(w, http.StatusInternalServerError, "iam:ListUsers is missing")
 		} else {
-			handler.cache.Set("user_total", response, cache.DefaultExpiration)
+			handler.cache.Set("user", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)
 		}
 	}

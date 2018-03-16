@@ -6,56 +6,30 @@ import (
 	. "github.com/mlabouardy/komiser/models"
 )
 
-func (aws AWS) DescribeInstancesPerRegion(cfg aws.Config) (map[string]int, error) {
-	output := make(map[string]int, 0)
+func (aws AWS) DescribeInstances(cfg aws.Config) (map[string]interface{}, error) {
+	outputInstancesPerRegion := make(map[string]int, 0)
+	outputInstancesPerState := make(map[string]int, 0)
+	outputInstancesPerFamily := make(map[string]int, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return map[string]int{}, err
+		return map[string]interface{}{}, err
 	}
 	for _, region := range regions {
 		instances, err := aws.getInstances(cfg, region.Name)
 		if err != nil {
-			return map[string]int{}, err
-		}
-		output[region.Name] = len(instances)
-	}
-	return output, nil
-}
-
-func (aws AWS) DescribeInstancesPerState(cfg aws.Config) (map[string]int, error) {
-	output := make(map[string]int, 0)
-	regions, err := aws.getRegions(cfg)
-	if err != nil {
-		return map[string]int{}, err
-	}
-	for _, region := range regions {
-		instances, err := aws.getInstances(cfg, region.Name)
-		if err != nil {
-			return map[string]int{}, err
+			return map[string]interface{}{}, err
 		}
 		for _, instance := range instances {
-			output[instance.State]++
+			outputInstancesPerState[instance.State]++
+			outputInstancesPerFamily[instance.InstanceType]++
 		}
+		outputInstancesPerRegion[region.Name] = len(instances)
 	}
-	return output, nil
-}
-
-func (aws AWS) DescribeInstancesPerFamily(cfg aws.Config) (map[string]int, error) {
-	output := make(map[string]int, 0)
-	regions, err := aws.getRegions(cfg)
-	if err != nil {
-		return map[string]int{}, err
-	}
-	for _, region := range regions {
-		instances, err := aws.getInstances(cfg, region.Name)
-		if err != nil {
-			return map[string]int{}, err
-		}
-		for _, instance := range instances {
-			output[instance.InstanceType]++
-		}
-	}
-	return output, nil
+	return map[string]interface{}{
+		"region": outputInstancesPerRegion,
+		"state":  outputInstancesPerState,
+		"family": outputInstancesPerFamily,
+	}, nil
 }
 
 func (aws AWS) getInstances(cfg aws.Config, region string) ([]EC2, error) {
