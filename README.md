@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="komiser.png" width="70%"/>
+    <img src="komiser.png" width="15%"/>
 </p>
 
 [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 

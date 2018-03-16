@@ -79,6 +79,8 @@ export class AppComponent implements AfterViewInit {
   public currentInsufficientDataStateAlarms: number = 0;
   public currentCloudFrontDistributions: number = 0;
 
+  public errors: string[] = [];
+
   public ec2FamilliesChartLabels:string[] = [];
   public ec2FamilliesChartData:number[] = [];
   public ec2FamilliesChartLegend:boolean = true;
@@ -222,60 +224,80 @@ export class AppComponent implements AfterViewInit {
   private getCurrentVPC(): void {
     this.awsService.getCurrentVPC().subscribe(current => {
       this.currentVPC = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentACL(): void {
     this.awsService.getCurrentACL().subscribe(current => {
       this.currentACL = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentSecurityGroup(): void {
     this.awsService.getCurrentSecurityGroup().subscribe(current => {
       this.currentSecurityGroup = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentNatGateway(): void {
     this.awsService.getCurrentNatGateway().subscribe(current => {
       this.currentNatGateway = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentInternetGateway(): void {
     this.awsService.getCurrentInternetGateway().subscribe(current => {
       this.currentInternetGateway = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentElasticIP(): void {
     this.awsService.getCurrentElasticIP().subscribe(current => {
       this.currentElasticIP = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentKeyPair(): void {
     this.awsService.getCurrentKeyPair().subscribe(current => {
       this.currentKeyPair = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentAutoscalingGroup(): void {
     this.awsService.getCurrentAutoscalingGroup().subscribe(current => {
       this.currentAutoscalingGroup = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentRouteTable(): void {
     this.awsService.getCurrentRouteTable().subscribe(current => {
       this.currentRouteTable = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentDynamoDBTable(): void {
     this.awsService.getCurrentDynamoDBTable().subscribe(current => {
       this.currentDynamoDBTable = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -283,6 +305,8 @@ export class AppComponent implements AfterViewInit {
     this.awsService.getCurrentDynamoDBThroughput().subscribe(current => {
       this.currentDynamoDBReadCapacity = (current.readCapacity ? current.readCapacity : 0)
       this.currentDynamoDBWriteCapacity = (current.writeCapacity ? current.writeCapacity : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -294,6 +318,8 @@ export class AppComponent implements AfterViewInit {
         this.ebsFamiliesChartData.push(res[ebs])
         this.ebsFamiliesChartLabels.push(ebs)
       }
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -303,12 +329,16 @@ export class AppComponent implements AfterViewInit {
         this.ec2FamilliesChartLabels.push(i)
         this.ec2FamilliesChartData.push(res[i])
       }
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentEBSSize(): void {
     this.awsService.getCurrentEBSSize().subscribe(current => {
       this.currentEBSSize = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -317,66 +347,88 @@ export class AppComponent implements AfterViewInit {
       this.currentStoppedInstances = (res.stopped ? res.stopped : 0)
       this.currentTerminatedInstances = (res.terminated ? res.terminated : 0)
       this.currentRunningInstances = (res.running ? res.running : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentSnapshot(): void {
     this.awsService.getCurrentSnapshot().subscribe(current => {
       this.currentSnapshot = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentSnapshotSize(): void {
     this.awsService.getCurrentSnapshotSize().subscribe(current => {
       this.currentSnapshotSize = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentS3Buckets(): void {
     this.awsService.getCurrentS3Buckets().subscribe(current => {
       this.currentS3Buckets = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentSQSQueues(): void {
     this.awsService.getCurrentSQSQueues().subscribe(current => {
       this.currentSQSQueues = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentSNSTopics(): void {
     this.awsService.getCurrentSNSTopics().subscribe(current => {
       this.currentSNSTopics = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentHostedZones(): void {
     this.awsService.getCurrentHostedZones().subscribe(current => {
       this.currentHostedZones = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentIAMRoles(): void {
     this.awsService.getCurrentIAMRoles().subscribe(current => {
       this.currentIAMRoles = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentIAMPolicies(): void {
     this.awsService.getCurrentIAMPolicies().subscribe(current => {
       this.currentIAMPolicies = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentIAMGroups(): void {
     this.awsService.getCurrentIAMGroups().subscribe(current => {
       this.currentIAMGroups = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentIAMUsers(): void {
     this.awsService.getCurrentIAMUsers().subscribe(current => {
       this.currentIAMUsers = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -385,12 +437,16 @@ export class AppComponent implements AfterViewInit {
       this.currentOKStateAlarms = (current.OK ? current.OK : 0)
       this.currentAlarmStateAlarms = (current.ALARM ? current.ALARM : 0)
       this.currentInsufficientDataStateAlarms = (current.INSUFFICIENT_DATA ? current.INSUFFICIENT_DATA : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
   private getCurrentCloudFrontDistributions(): void {
     this.awsService.getCurrentCloudFrontDistributions().subscribe(current => {
       this.currentCloudFrontDistributions = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -418,6 +474,8 @@ export class AppComponent implements AfterViewInit {
           this.currentCSharpLambdaFunctions+=res[runtime]
         }
       }
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -437,6 +495,8 @@ export class AppComponent implements AfterViewInit {
           }
       ]
       this.elbFamiliesChartLabels = labels
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -472,6 +532,8 @@ export class AppComponent implements AfterViewInit {
           return `<div class="hoverinfo">${data.region}: ${data.instances} EC2`
         }
       })
+    }, msg => {
+      this.errors.push(msg)
     })
   }
 
@@ -513,6 +575,8 @@ export class AppComponent implements AfterViewInit {
         }
       ]
       this.costAndUsageChartLabels = labels
+    }, msg => {
+      this.errors.push(msg)
     }) 
   }
 
