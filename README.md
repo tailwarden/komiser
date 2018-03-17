@@ -124,6 +124,10 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 
 * Mohamed Labouardy
 
+## Tutorial
+
+* [Komiser: AWS Environment Inspector](http://www.blog.labouardy.com/komiser-aws-environment-inspector/)
+
 ## License
 
 MIT
