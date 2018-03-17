@@ -302,7 +302,7 @@ export class AppComponent implements AfterViewInit {
   private getCurrentEBSVolumes(): void {
     this.currentEBSVolumes = 0;
     this.awsService.getCurrentEBSVolumes().subscribe(current => {
-      this.currentEBSSize = (current.size ? current.size : 0)
+      this.currentEBSSize = (current.total ? current.total : 0)
       for(var ebs in current.family){
         this.currentEBSVolumes += current.family[ebs]
         this.ebsFamiliesChartData.push(current.family[ebs])
