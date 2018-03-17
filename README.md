@@ -53,6 +53,10 @@ komiser start --port 3000 --duration 30
 
 * Point your browser to http://localhost:3000
 
+<p align="center">
+    <img src="screenshot.png"/>
+</p>
+
 ## Docker
 
 Use the official Komiser image:
