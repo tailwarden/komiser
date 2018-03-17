@@ -1,0 +1,63 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "1",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeRegions",
+                "ec2:DescribeInstances",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeNatGateways",
+                "ec2:DescribeRouteTables",
+                "ec2:DescribeSnapshots",
+                "ec2:DescribeNetworkAcls",
+                "ec2:DescribeKeyPairs",
+                "ec2:DescribeInternetGateways"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "2",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeAddresses",
+                "ec2:DescribeSnapshots",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "autoscaling:DescribeAutoScalingGroups",
+                "ce:GetCostAndUsage",
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "3",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:ListFunctions",
+                "dynamodb:ListTables",
+                "dynamodb:DescribeTable",
+                "rds:DescribeDBInstances",
+                "cloudwatch:DescribeAlarms",
+                "cloudfront:ListDistributions"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "4",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:ListQueues",
+                "route53:ListHostedZones",
+                "sns:ListTopics",
+                "iam:ListGroups",
+                "iam:ListRoles",
+                "iam:ListPolicies",
+                "iam:ListUsers"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
