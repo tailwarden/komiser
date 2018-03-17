@@ -30,9 +30,28 @@ wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
 
 ## How to use
 
+* Create an IAM user with the following IAM [policy](https://github.com/mlabouary/komiser/policy.json):
+
+```
+wget https://s3.amazonaws.com/komiser/policy.json
+```
+
+* Add your **Access Key ID** and **Secret Access Key** to *~/.aws/credentials* using this format
+
+``` 
+[default]
+aws_access_key_id = <access key id>
+aws_secret_access_key = <secret access key>
+region = us-east-1
+```
+
+* That should be it. Try out the following from your command prompt to start the server:
+
 ```
 komiser start --port 3000 --duration 30
 ```
+
+* Point your browser to http://localhost:3000
 
 ## Docker
 
