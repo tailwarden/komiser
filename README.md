@@ -75,6 +75,16 @@ docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -
 | AWS_SECRET_ACCESS_KEY | AWS Secret Key |
 | AWS_DEFAULT_REGION | AWS Region |
 
+## Configuring Credentials
+
+When using the CLI you'll generally need your AWS credentials to authenticate with AWS services. Komiser supports multiple methods of supporting these credentials. By default the CLI will source credentials automatically from its default credential chain.
+
+* Environment Credentials - Set of environment variables that are useful when sub processes are created for specific roles.
+
+* Shared Credentials file (~/.aws/credentials) - This file stores your credentials based on a profile name and is useful for local development.
+
+* EC2 Instance Role Credentials - Use EC2 Instance Role to assign credentials to application running on an EC2 instance. This removes the need to manage credential files in production.
+
 ## Supported AWS Services
 
 * EC2
