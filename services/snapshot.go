@@ -32,7 +32,9 @@ func (aws AWS) DescribeSnapshots(cfg aws.Config) (map[string]int, error) {
 func (aws AWS) getSnapshots(cfg aws.Config, region string) ([]Snapshot, error) {
 	cfg.Region = region
 	svc := ec2.New(cfg)
-	req := svc.DescribeSnapshotsRequest(&ec2.DescribeSnapshotsInput{})
+	req := svc.DescribeSnapshotsRequest(&ec2.DescribeSnapshotsInput{
+		OwnerIds: []string{"self"},
+	})
 	result, err := req.Send()
 	if err != nil {
 		return []Snapshot{}, err
