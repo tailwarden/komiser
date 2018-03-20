@@ -111,11 +111,11 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 * IAM
 * CloudWatch Alarms
 * CloudFront Distributions
+* ECS
 
 ## TO DO
 
 * EMR
-* ECS
 * Kinesis
 * Elastic Beanstalk
 * Glacier

@@ -78,6 +78,9 @@ export class AppComponent implements AfterViewInit {
   public currentAlarmStateAlarms: number = 0;
   public currentInsufficientDataStateAlarms: number = 0;
   public currentCloudFrontDistributions: number = 0;
+  public currentECSClusters: number = 0;
+  public currentECSTasks: number = 0;
+  public currentECSServices: number = 0;
 
   public errors: string[] = [];
 
@@ -399,6 +402,16 @@ export class AppComponent implements AfterViewInit {
   private getCurrentCloudFrontDistributions(): void {
     this.awsService.getCurrentCloudFrontDistributions().subscribe(current => {
       this.currentCloudFrontDistributions = (current ? current : 0)
+    }, msg => {
+      this.errors.push(msg)
+    })
+  }
+
+  private getCurrentECS(): void {
+    this.awsService.getCurrentECS().subscribe(current => {
+      this.currentECSClusters = (current.clusters ? current.clusters : 0)
+      this.currentECSTasks = (current.tasks ? current.tasks : 0)
+      this.currentECSServices = (current.services ? current.services : 0)
     }, msg => {
       this.errors.push(msg)
     })

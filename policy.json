@@ -41,7 +41,10 @@
                 "dynamodb:DescribeTable",
                 "rds:DescribeDBInstances",
                 "cloudwatch:DescribeAlarms",
-                "cloudfront:ListDistributions"
+                "cloudfront:ListDistributions",
+                "ecs:DescribeClusters",
+                "ecs:DescribeServices",
+                "ecs:DescribeTasks"
             ],
             "Resource": "*"
         },
