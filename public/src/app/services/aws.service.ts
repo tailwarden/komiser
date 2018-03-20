@@ -293,4 +293,15 @@ export class AWSService {
        return Observable.throw(err.json().error)
      })
   }
+
+  public getCurrentECS(){
+    return this.http
+     .get(`/ecs`)
+     .map(res => {
+       return res.json()
+     })
+     .catch(err => {
+       return Observable.throw(err.json().error)
+     })
+  }
 }

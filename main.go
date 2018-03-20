@@ -54,6 +54,7 @@ func startServer(port int, duration int) {
 	r.HandleFunc("/iam/group", awsHandler.IAMGroupsHandler)
 	r.HandleFunc("/iam/user", awsHandler.IAMUsersHandler)
 	r.HandleFunc("/iam/policy", awsHandler.IAMPoliciesHandler)
+	r.HandleFunc("/ecs", awsHandler.ECSHandler)
 	r.HandleFunc("/cloudwatch", awsHandler.CloudWatchAlarmsHandler)
 	r.HandleFunc("/cloudfront", awsHandler.CloudFrontDistributionsHandler)
 	r.HandleFunc("/s3", awsHandler.S3BucketsHandler)
@@ -87,10 +88,12 @@ func main() {
 				cli.IntFlag{
 					Name:  "port, p",
 					Usage: "Server port",
+					Value: 3000,
 				},
 				cli.IntFlag{
 					Name:  "duration, d",
 					Usage: "Cache expiration time",
+					Value: 30,
 				},
 			},
 			Action: func(c *cli.Context) error {
