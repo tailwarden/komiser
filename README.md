@@ -30,7 +30,7 @@ wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
 
 ## How to use
 
-* Create an IAM user with the following IAM [policy](https://github.com/mlabouary/komiser/policy.json):
+* Create an IAM user with the following IAM [policy](https://raw.githubusercontent.com/mlabouardy/komiser/master/policy.json):
 
 ```
 wget https://s3.amazonaws.com/komiser/policy.json
