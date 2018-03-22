@@ -127,8 +127,8 @@ export class AppComponent implements AfterViewInit {
 
   private regions = {
     us_east_1 : {
-      latitude : 39.3095135,
-      longitude : -119.6499793 
+      latitude : 39.020812,
+      longitude : -77.433357 
     },
     us_east_2 : {
       latitude : 40.4172871,
