@@ -74,6 +74,7 @@ docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -
 | AWS_ACCESS_KEY_ID | AWS Access Key |
 | AWS_SECRET_ACCESS_KEY | AWS Secret Key |
 | AWS_DEFAULT_REGION | AWS Region |
+| AWS_PROFILE | AWS Profile ([Docs](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html)) |
 
 ## Configuring Credentials
 
@@ -119,7 +120,6 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 * Kinesis
 * Elastic Beanstalk
 * Glacier
-* Ability To Specify An AWS Profile
 
 ## Maintainers
 
