@@ -120,6 +120,7 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 * Kinesis
 * Elastic Beanstalk
 * Glacier
+* EFS
 
 ## Maintainers
 
