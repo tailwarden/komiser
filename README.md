@@ -51,6 +51,8 @@ region = us-east-1
 komiser start --port 3000 --duration 30
 ```
 
+(You may need to `chmod +x komiser` on OSX after downloading.)
+
 * Point your browser to http://localhost:3000
 
 <p align="center">
