@@ -28,6 +28,8 @@ wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/windows/komiser
 wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
 ```
 
+_Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
+
 ## How to use
 
 * Create an IAM user with the following IAM [policy](https://raw.githubusercontent.com/mlabouardy/komiser/master/policy.json):
@@ -50,8 +52,6 @@ region = us-east-1
 ```
 komiser start --port 3000 --duration 30
 ```
-
-(You may need to `chmod +x komiser` on OSX after downloading.)
 
 * Point your browser to http://localhost:3000
 
