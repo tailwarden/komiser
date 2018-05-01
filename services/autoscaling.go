@@ -37,9 +37,7 @@ func (aws AWS) getAutoScalingGroups(cfg aws.Config, region string) ([]AutoScalin
 			asgTags = append(asgTags, *tag.Value)
 		}
 		listOfAutoScalingGroups = append(listOfAutoScalingGroups, AutoScaling{
-			Status: *asg.Status,
-			Tags:   asgTags,
-			ARN:    *asg.AutoScalingGroupARN,
+			ARN: *asg.AutoScalingGroupARN,
 		})
 	}
 	return listOfAutoScalingGroups, nil

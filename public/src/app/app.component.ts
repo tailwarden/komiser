@@ -493,7 +493,7 @@ export class AppComponent implements AfterViewInit {
       for(var region in current.region){
         var params = this.regions[region.split("-").join("_")]
         data.push({
-          radius: current.region[region] * 3,
+          radius: current.region[region],
           latitude: params.latitude,
           longitude: params.longitude,
           region: region,
