@@ -81,6 +81,7 @@ export class AppComponent implements AfterViewInit {
   public currentECSClusters: number = 0;
   public currentECSTasks: number = 0;
   public currentECSServices: number = 0;
+  public currentRDSInstances: number = 0;
 
   public errors: string[] = [];
 
@@ -218,6 +219,7 @@ export class AppComponent implements AfterViewInit {
     this.getCurrentIAMUsers()
     this.getCurrentCloudFrontDistributions()
     this.getCurrentS3Buckets()
+    this.getCurrentRDSInstances()
   }
 
   private getCurrentVPCs(): void {
@@ -552,6 +554,17 @@ export class AppComponent implements AfterViewInit {
     }, msg => {
       this.errors.push(msg)
     }) 
+  }
+
+  private getCurrentRDSInstances(): void {
+    this.awsService.getCurrentRDSInstances().subscribe(current => {
+      this.currentRDSInstances = 0
+      Object.keys(current).forEach(key => {
+        this.currentRDSInstances += current[key]
+      })
+    }, msg => {
+      this.errors.push(msg)
+    })
   }
 
   ngAfterViewInit(){

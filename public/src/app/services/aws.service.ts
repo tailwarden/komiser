@@ -304,4 +304,15 @@ export class AWSService {
        return Observable.throw(err.json().error)
      })
   }
+
+  public getCurrentRDSInstances(){
+    return this.http
+     .get(`/rds`)
+     .map(res => {
+       return res.json()
+     })
+     .catch(err => {
+       return Observable.throw(err.json().error)
+     })
+  }
 }
