@@ -1,10 +1,9 @@
 version: 2
-general:
-  branches:
-    only:
-     - master
 jobs:
   build_frontend:
+    branches:
+        only:
+            - master
     docker:
       - image: circleci/node:8.10-stretch-browsers
     working_directory: ~/komiser
@@ -27,6 +26,9 @@ jobs:
           paths:
             - dist
   build_cli:
+    branches:
+        only:
+            - master
     docker:
       - image: golang:1.8
     working_directory: /go/src/github.com/mlabouardy/komiser
@@ -74,6 +76,9 @@ jobs:
           command: aws s3 cp policy.json s3://komiser/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
   build_docker:
+    branches:
+        only:
+            - master
     docker:
        - image: docker:18.02.0-ce
     steps:
