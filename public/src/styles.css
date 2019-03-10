@@ -904,3 +904,71 @@ a>code{
         margin-left:15px
     }
 }
+
+
+body {
+    overflow-x: hidden;
+  }
+  
+  #sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+    background: white !important;
+  }
+  
+  #sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+    background: white !important;
+    height: 74px;
+  }
+  
+  #sidebar-wrapper .list-group {
+    width: 15rem;
+    background: white !important;
+  }
+
+  #sidebar-wrapper .list-group > a {
+    background: white !important;
+  }
+
+  #sidebar-wrapper .list-group > a {
+      padding-top: 30px;
+      padding-bottom: 30px;
+  }
+  
+  #sidebar-wrapper .list-group > a:hover {
+      background: #2F333E !important;
+      color: white;
+  }
+
+.sidebar-icon{
+    margin-right: 10px !important;
+}
+
+  #page-content-wrapper {
+    min-width: 100vw;
+  }
+  
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+  }
+  
+  @media (min-width: 768px) {
+    #sidebar-wrapper {
+      margin-left: 0;
+    }
+  
+    #page-content-wrapper {
+      min-width: 0;
+      width: 100%;
+    }
+  
+    #wrapper.toggled #sidebar-wrapper {
+      margin-left: -15rem;
+    }
+  }
