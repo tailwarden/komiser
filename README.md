@@ -90,39 +90,58 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 
 ## Supported AWS Services
 
+### Compute
+
 * EC2
-* EBS
-* Snapshots
-* Security Groups
-* Access Control Lists
-* Autoscalling groups
-* ELB
-* VPC
-* Key Pairs
-* Nat Gateway
-* Internet Gateway
-* Elastic IP
-* Route Table
-* Billing
-* Lambda Functions
-* RDS
-* DynamoDB
-* S3
-* Route53
-* SQS
-* SNS
-* IAM
-* CloudWatch Alarms
-* CloudFront Distributions
+* Lambda
+* Elasticbeanstalk
 * ECS
+* EKS
 
-## TO DO
+### Storage
 
-* EMR
-* Kinesis
-* Elastic Beanstalk
+* S3
+* EBS
+* RDS
+* DocumentDB
+* DynamoDB
+* Elasticache
 * Glacier
 * EFS
+* Snapshots
+
+### Security
+
+* IAM
+* Security Groups
+* ACL
+* VPC
+* KeyPairs
+* KMS
+* Route Tables
+
+### Network
+
+* Internet Gateway
+* Route53
+* ELB
+* CloudFront
+* Nat gateway
+* Elastic IP
+
+### Data & AI
+
+* Kinesis
+
+### Monitoring
+
+* CloudWatch
+* CloudTrail
+
+### Application Integrations
+
+* SES
+* SQS
 
 ## Maintainers
 
