@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard</title>
+  <title>Dashboard - Komiser</title>
   <base href="/">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport'>
@@ -10,7 +10,197 @@
 	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 </head>
 <body>
-  <app-root></app-root>
+    <div class="wrapper">
+        <div class="main-header">
+           <div class="logo-header">
+            <a class="logo" href="index.html">Komiser Dashboard</a> <button aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler sidenav-toggler ml-auto" data-target="collapse" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button> <button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
+           </div>
+           <nav class="navbar navbar-header navbar-expand-lg">
+            <div class="container-fluid">
+             <form action="" class="navbar-left navbar-form nav-search mr-md-3">
+              <div class="input-group">
+                 <input class="form-control" placeholder="Search ..." type="text">
+                 <div class="input-group-append">
+                  <span class="input-group-text"><i class="la la-search search-icon"></i></span>
+                 </div>
+              </div>
+             </form>
+             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+              <li class="nav-item dropdown hidden-caret">
+                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown" role="button"><i class="la la-envelope"></i></a>
+                 <div aria-labelledby="navbarDropdown" class="dropdown-menu">
+                  <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                 </div>
+              </li>
+              <li class="nav-item dropdown hidden-caret">
+                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown" role="button"><i class="la la-bell"></i> <span class="notification">3</span></a>
+                 <ul aria-labelledby="navbarDropdown" class="dropdown-menu notif-box">
+                  <li>
+                   <div class="dropdown-title">
+                    You have 4 new notification
+                   </div>
+                  </li>
+                  <li>
+                   <div class="notif-center">
+                    <a href="#">
+                       <div class="notif-icon notif-primary">
+                        <i class="la la-user-plus"></i>
+                       </div>
+                       <div class="notif-content">
+                        <span class="block">New user registered</span> <span class="time">5 minutes ago</span>
+                       </div>
+                    </a>
+                    <a href="#">
+                       <div class="notif-icon notif-success">
+                        <i class="la la-comment"></i>
+                       </div>
+                       <div class="notif-content">
+                        <span class="block">Rahmad commented on Admin</span> <span class="time">12 minutes ago</span>
+                       </div>
+                    </a>
+                    <a href="#">
+                       <div class="notif-img"><img alt="Img Profile" src="assets/images/profile2.jpg"></div>
+                       <div class="notif-content">
+                        <span class="block">Reza send messages to you</span> <span class="time">12 minutes ago</span>
+                       </div>
+                    </a>
+                    <a href="#">
+                       <div class="notif-icon notif-danger">
+                        <i class="la la-heart"></i>
+                       </div>
+                       <div class="notif-content">
+                        <span class="block">Farrah liked Admin</span> <span class="time">17 minutes ago</span>
+                       </div>
+                    </a>
+                   </div>
+                  </li>
+                  <li>
+                   <a class="see-all" href="javascript:void(0);"><strong>See all notifications</strong> <i class="la la-angle-right"></i></a>
+                  </li>
+                 </ul>
+              </li>
+              <li class="nav-item dropdown">
+                 <a aria-expanded="false" class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"><img alt="user-img" class="img-circle" src="assets/images/profile.jpg" width="36"><span>Hizrian</span></a>
+                 <ul class="dropdown-menu dropdown-user">
+                  <li>
+                   <div class="user-box">
+                    <div class="u-img"><img alt="user" src="assets/images/profile.jpg"></div>
+                    <div class="u-text">
+                       <h4>Hizrian</h4>
+                       <p class="text-muted">hello@themekita.com</p>
+                       <a class="btn btn-rounded btn-danger btn-sm" href="profile.html">View Profile</a>
+                    </div>
+                   </div>
+                  </li>
+                  <li style="list-style: none; display: inline">
+                   <div class="dropdown-divider"></div>
+                   <a class="dropdown-item" href="#"><i class="ti-user"></i> My Profile</a> <a class="dropdown-item" href="#">My Balance</a> <a class="dropdown-item" href="#"><i class="ti-email"></i> Inbox</a>
+                   <div class="dropdown-divider"></div>
+                   <a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a>
+                   <div class="dropdown-divider"></div>
+                   <a class="dropdown-item" href="#"><i class="fa fa-power-off"></i> Logout</a>
+                  </li>
+                 </ul>
+                 <!-- /.dropdown-user -->
+              </li>
+             </ul>
+            </div>
+           </nav>
+        </div>
+        <div class="sidebar">
+           <div class="scrollbar-inner sidebar-wrapper">
+            <div class="user">
+             <div class="photo"><img src="assets/images/profile.jpg"></div>
+             <div class="info">
+              <a aria-expanded="true" class="" data-toggle="collapse" href="#collapseExample"><span>Hizrian <span class="user-level">Administrator</span> <span class="caret"></span></span></a>
+              <div class="clearfix"></div>
+              <div aria-expanded="true" class="collapse in" id="collapseExample" style="">
+                 <ul class="nav">
+                  <li>
+                   <a href="#profile"><span class="link-collapse">My Profile</span></a>
+                  </li>
+                  <li>
+                   <a href="#edit"><span class="link-collapse">Edit Profile</span></a>
+                  </li>
+                  <li>
+                   <a href="#settings"><span class="link-collapse">Settings</span></a>
+                  </li>
+                 </ul>
+              </div>
+             </div>
+            </div>
+            <ul class="nav">
+             <li class="nav-item active">
+              <a href="index.html">
+                 <i class="la la-dashboard"></i>
+                 <p>Dashboard</p>
+                 <span class="badge badge-count">5</span>
+              </a>
+             </li>
+             <li class="nav-item">
+              <a href="components.html">
+                 <i class="la la-table"></i>
+                 <p>Compute</p>
+                 <span class="badge badge-count">14</span>
+              </a>
+             </li>
+             <li class="nav-item">
+              <a href="forms.html">
+                 <i class="la la-keyboard-o"></i>
+                 <p>Storage</p>
+                 <span class="badge badge-count">50</span>
+              </a>
+             </li>
+             <li class="nav-item">
+              <a href="tables.html">
+                 <i class="la la-th"></i>
+                 <p>Network</p>
+                 <span class="badge badge-count">6</span>
+              </a>
+             </li>
+             <li class="nav-item">
+              <a href="notifications.html">
+                 <i class="la la-bell"></i>
+                 <p>Security</p>
+                 <span class="badge badge-success">3</span>
+              </a>
+             </li>
+             <li class="nav-item">
+              <a href="typography.html">
+                 <i class="la la-font"></i>
+                 <p>Data & AI</p>
+                 <span class="badge badge-danger">25</span>
+              </a>
+             </li>
+            </ul>
+           </div>
+        </div>
+        <div class="main-panel">
+          <app-root></app-root>
+          <footer class="footer">
+              <div class="container-fluid">
+              <nav class="pull-left">
+                <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.github.com/komiser">GitHub</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Help</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Licenses</a>
+                </li>
+                </ul>
+              </nav>
+              <div class="copyright ml-auto">
+                2019, made with <i class="la la-heart heart text-danger"></i> by <a href="https://www.komiser.io">Komiser</a>
+              </div>
+              </div>
+          </footer>
+          </div>
+       </div>
 </body>
 	<script src="assets/js/core/jquery.3.2.1.min.js">
 	</script> 
