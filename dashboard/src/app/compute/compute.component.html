@@ -13,8 +13,8 @@
 								</div>
 								<div class="col-7 d-flex align-items-center">
 								   <div class="numbers">
-									  <p class="card-category">Number</p>
-									  <h4 class="card-title">150GB</h4>
+									  <p class="card-category">EC2 Running</p>
+									  <h4 class="card-title">150</h4>
 								   </div>
 								</div>
 							 </div>
@@ -32,8 +32,8 @@
 								</div>
 								<div class="col-7 d-flex align-items-center">
 								   <div class="numbers">
-									  <p class="card-category">Revenue</p>
-									  <h4 class="card-title">$ 1,345</h4>
+									  <p class="card-category">EC2 Stopped</p>
+									  <h4 class="card-title">2</h4>
 								   </div>
 								</div>
 							 </div>
@@ -51,7 +51,7 @@
 								</div>
 								<div class="col-7 d-flex align-items-center">
 								   <div class="numbers">
-									  <p class="card-category">Errors</p>
+									  <p class="card-category">EC2 Terminated</p>
 									  <h4 class="card-title">23</h4>
 								   </div>
 								</div>
@@ -79,8 +79,41 @@
 					   </div>
 					</div>
 				 </div>
+			
 			<div class="row">
-				<div class="col-md-12">
+					<div class="col-md-3">
+							<div class="card">
+							   <div class="card-header">
+								  <h4 class="card-title">Instance Family</h4>
+								  <p class="card-category">Complete</p>
+							   </div>
+							   <div class="card-body">
+								  <div class="chart-circle mt-4 mb-3" id="task-complete"></div>
+							   </div>
+							   <div class="card-footer">
+								  <div class="legend">
+									 <i class="la la-circle text-primary"></i> Completed
+								  </div>
+							   </div>
+							</div>
+						 </div>
+						 <div class="col-md-3">
+								<div class="card">
+								   <div class="card-header">
+									  <h4 class="card-title">Public Instances</h4>
+									  <p class="card-category">Complete</p>
+								   </div>
+								   <div class="card-body">
+									  <div class="chart-circle mt-4 mb-3" id="task-complete"></div>
+								   </div>
+								   <div class="card-footer">
+									  <div class="legend">
+										 <i class="la la-circle text-primary"></i> Completed
+									  </div>
+								   </div>
+								</div>
+							 </div>
+				<div class="col-md-6">
 					<div class="card">
 						<div class="card-header">
 							<h4 class="card-title">EC2</h4>
@@ -96,7 +129,47 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12">
+			</div>
+			<div class="row">
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-amazonwebservices-original"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">IAM Users</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-csharp-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">IAM Users</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				 <div class="col-md-6">
 						<div class="card">
 							<div class="card-header">
 								<h4 class="card-title">Lambda</h4>
@@ -112,6 +185,120 @@
 							</div>
 						</div>
 				</div>
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-ruby-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">IAM Users</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-java-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">IAM Users</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-go-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">IAM Users</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-python-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">IAM Users</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				<div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-python-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">Applications</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+				 <div class="col-md-3">
+					<div class="card card-stats card-warning">
+					   <div class="card-body">
+						  <div class="row">
+							 <div class="col-5">
+								<div class="icon-big text-center">
+								   <i class="devicon-python-plain"></i>
+								</div>
+							 </div>
+							 <div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+								   <p class="card-category">Environments</p>
+								   <h4 class="card-title">1,294</h4>
+								</div>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
 				<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
@@ -128,6 +315,63 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-md-3">
+						<div class="card card-stats card-warning">
+						   <div class="card-body">
+							  <div class="row">
+								 <div class="col-5">
+									<div class="icon-big text-center">
+									   <i class="devicon-python-plain"></i>
+									</div>
+								 </div>
+								 <div class="col-7 d-flex align-items-center">
+									<div class="numbers">
+									   <p class="card-category">Clusters</p>
+									   <h4 class="card-title">1,294</h4>
+									</div>
+								 </div>
+							  </div>
+						   </div>
+						</div>
+					 </div>
+					 <div class="col-md-3">
+						<div class="card card-stats card-warning">
+						   <div class="card-body">
+							  <div class="row">
+								 <div class="col-5">
+									<div class="icon-big text-center">
+									   <i class="devicon-python-plain"></i>
+									</div>
+								 </div>
+								 <div class="col-7 d-flex align-items-center">
+									<div class="numbers">
+									   <p class="card-category">Tasks</p>
+									   <h4 class="card-title">1,294</h4>
+									</div>
+								 </div>
+							  </div>
+						   </div>
+						</div>
+					 </div>
+					 <div class="col-md-3">
+						<div class="card card-stats card-warning">
+						   <div class="card-body">
+							  <div class="row">
+								 <div class="col-5">
+									<div class="icon-big text-center">
+									   <i class="devicon-python-plain"></i>
+									</div>
+								 </div>
+								 <div class="col-7 d-flex align-items-center">
+									<div class="numbers">
+									   <p class="card-category">Services</p>
+									   <h4 class="card-title">1,294</h4>
+									</div>
+								 </div>
+							  </div>
+						   </div>
+						</div>
+					 </div>
 					<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
