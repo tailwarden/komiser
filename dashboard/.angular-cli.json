@@ -21,7 +21,12 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/raphael/raphael.min.js",
+        "../node_modules/jquery-mapael/js/jquery.mapael.js",
+        "../node_modules/jquery-mapael/js/maps/world_countries.min.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
