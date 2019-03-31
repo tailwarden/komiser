@@ -3,7 +3,7 @@
 		   <h4 class="page-title">Dashboard</h4>
 		   <div class="row">
 			  <div class="col-md-3">
-				 <div class="card card-stats card-warning">
+				 <div class="card card-stats">
 					<div class="card-body">
 					   <div class="row">
 						  <div class="col-5">
@@ -14,7 +14,7 @@
 						  <div class="col-7 d-flex align-items-center">
 							 <div class="numbers">
 								<p class="card-category">IAM Users</p>
-								<h4 class="card-title">1,294</h4>
+								<h4 class="card-title">{{iamRoles}}</h4>
 							 </div>
 						  </div>
 					   </div>
@@ -22,18 +22,37 @@
 				 </div>
 			  </div>
 			  <div class="col-md-3">
-				 <div class="card card-stats card-success">
+				 <div class="card card-stats">
 					<div class="card-body">
 					   <div class="row">
 						  <div class="col-5">
 							 <div class="icon-big text-center">
-								<i class="la la-bar-chart"></i>
+								<i class="la la-money"></i>
 							 </div>
 						  </div>
 						  <div class="col-7 d-flex align-items-center">
 							 <div class="numbers">
 								<p class="card-category">Bill</p>
-								<h4 class="card-title">$ 1,345</h4>
+								<h4 class="card-title">$ {{currentBill}}</h4>
+							 </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+			  </div>
+			  <div class="col-md-3">
+				 <div class="card card-stats">
+					<div class="card-body">
+					   <div class="row">
+						  <div class="col-5">
+							 <div class="icon-big text-center">
+								<i class="la la-street-view"></i>
+							 </div>
+						  </div>
+						  <div class="col-7 d-flex align-items-center">
+							 <div class="numbers">
+								<p class="card-category">Regions</p>
+								<h4 class="card-title">{{usedRegions}}</h4>
 							 </div>
 						  </div>
 					   </div>
@@ -46,32 +65,13 @@
 					   <div class="row">
 						  <div class="col-5">
 							 <div class="icon-big text-center">
-								<i class="la la-newspaper-o"></i>
-							 </div>
-						  </div>
-						  <div class="col-7 d-flex align-items-center">
-							 <div class="numbers">
-								<p class="card-category">Regions</p>
-								<h4 class="card-title">1303</h4>
-							 </div>
-						  </div>
-					   </div>
-					</div>
-				 </div>
-			  </div>
-			  <div class="col-md-3">
-				 <div class="card card-stats card-primary">
-					<div class="card-body">
-					   <div class="row">
-						  <div class="col-5">
-							 <div class="icon-big text-center">
-								<i class="la la-check-circle"></i>
+								<i class="la la-warning"></i>
 							 </div>
 						  </div>
 						  <div class="col-7 d-flex align-items-center">
 							 <div class="numbers">
 								<p class="card-category">Alarms</p>
-								<h4 class="card-title">576</h4>
+								<h4 class="card-title">{{redAlarms}}</h4>
 							 </div>
 						  </div>
 					   </div>
@@ -87,7 +87,7 @@
 					   <p class="card-category">Number of instances per AWS region.</p>
 					</div>
 					<div class="card-body">
-					   <div class="mapcontainer">
+					   <div class="mapregions">
 						  <div class="map">
 							 <span>Alternative content for the map</span>
 						  </div>
@@ -101,7 +101,7 @@
 				 <div class="card">
 					<div class="card-body">
 					   <p class="fw-bold mt-1">My Balance</p>
-					   <h4><b>$ 3,018</b></h4>
+					   <h4><b>$ {{currentBill}}</b></h4>
 					   <a class="btn btn-primary btn-full text-left mt-3 mb-3" href="#"><i class="la la-plus"></i> Create Alert</a>
 					</div>
 					<div class="card-footer">
@@ -119,36 +119,12 @@
 			  <div class="col-md-5">
 				 <div class="card">
 					<div class="card-body">
-					   <div class="progress-card">
+					   <div class="progress-card" *ngFor="let service of mostUsedServices">
 						  <div class="d-flex justify-content-between mb-1">
-							 <span class="text-muted">EC2</span> <span class="text-muted fw-bold">$3K</span>
+							 <span class="text-muted">{{service.name}}</span> <span class="text-muted fw-bold">{{service.cost | number:'2.2-2'}}$</span>
 						  </div>
 						  <div class="progress mb-2" style="height: 7px;">
-							 <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="78" class="progress-bar bg-success" data-placement="top" data-toggle="tooltip" role="progressbar" style="width: 78%" title="78%"></div>
-						  </div>
-					   </div>
-					   <div class="progress-card">
-						  <div class="d-flex justify-content-between mb-1">
-							 <span class="text-muted">RDS</span> <span class="text-muted fw-bold">576</span>
-						  </div>
-						  <div class="progress mb-2" style="height: 7px;">
-							 <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" class="progress-bar bg-info" data-placement="top" data-toggle="tooltip" role="progressbar" style="width: 65%" title="65%"></div>
-						  </div>
-					   </div>
-					   <div class="progress-card">
-						  <div class="d-flex justify-content-between mb-1">
-							 <span class="text-muted">Lambda</span> <span class="text-muted fw-bold">70%</span>
-						  </div>
-						  <div class="progress mb-2" style="height: 7px;">
-							 <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="70" class="progress-bar bg-primary" data-placement="top" data-toggle="tooltip" role="progressbar" style="width: 70%" title="70%"></div>
-						  </div>
-					   </div>
-					   <div class="progress-card">
-						  <div class="d-flex justify-content-between mb-1">
-							 <span class="text-muted">DocumentDB</span> <span class="text-muted fw-bold">60%</span>
-						  </div>
-						  <div class="progress mb-2" style="height: 7px;">
-							 <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" class="progress-bar bg-warning" data-placement="top" data-toggle="tooltip" role="progressbar" style="width: 60%" title="60%"></div>
+							 <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" class="progress-bar bg-primary" data-placement="top" data-toggle="tooltip" role="progressbar" [style.width]="service.cost / currentBill | percent:'1.0-1'" title="{{service.cost / currentBill | percent:'1.0-1'}}"></div>
 						  </div>
 					   </div>
 					</div>
@@ -197,7 +173,7 @@
 					   <p class="card-category">Top most consumed services</p>
 					</div>
 					<div class="card-body">
-					   <div class="chart" id="salesChart"></div>
+					   <div class="chart" id="costHistoryChart"></div>
 					</div>
 				 </div>
 			  </div>

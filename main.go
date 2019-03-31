@@ -30,7 +30,14 @@ func startServer(port int, duration int) {
 	awsHandler := NewAWSHandler(cfg, cache)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/ec2", awsHandler.EC2InstancesHandler)
+	r.HandleFunc("/aws/iam/roles", awsHandler.IAMRolesHandler)
+	r.HandleFunc("/aws/cost/current", awsHandler.CurrentCostHandler)
+	r.HandleFunc("/aws/cost/history", awsHandler.CostAndUsageHandler)
+	r.HandleFunc("/aws/resources/regions", awsHandler.UsedRegionsHandler)
+	r.HandleFunc("/aws/cloudwatch/alarms", awsHandler.CloudWatchAlarmsHandler)
+	r.HandleFunc("/aws/ec2/regions", awsHandler.EC2InstancesHandler)
+
+	/*r.HandleFunc("/ec2", awsHandler.EC2InstancesHandler)
 	r.HandleFunc("/ebs", awsHandler.EBSHandler)
 	r.HandleFunc("/vpc", awsHandler.VPCHandler)
 	r.HandleFunc("/acl", awsHandler.ACLHandler)
@@ -57,7 +64,7 @@ func startServer(port int, duration int) {
 	r.HandleFunc("/ecs", awsHandler.ECSHandler)
 	r.HandleFunc("/cloudwatch", awsHandler.CloudWatchAlarmsHandler)
 	r.HandleFunc("/cloudfront", awsHandler.CloudFrontDistributionsHandler)
-	r.HandleFunc("/s3", awsHandler.S3BucketsHandler)
+	r.HandleFunc("/s3", awsHandler.S3BucketsHandler)*/
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS()(r))
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)

@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { ComputeComponent } from './compute/compute.component';
@@ -10,6 +11,8 @@ import { NetworkComponent } from './network/network.component';
 import { SecurityComponent } from './security/security.component';
 import { DataAndAiComponent } from './data-and-ai/data-and-ai.component';
 import { MonitoringComponent } from './monitoring/monitoring.component';
+
+import { AwsService } from './aws.service';
 
 
 const appRoutes: Routes = [
@@ -64,9 +67,12 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes
     ),
+    HttpModule,
     BrowserModule
   ],
-  providers: [],
+  providers: [
+    AwsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

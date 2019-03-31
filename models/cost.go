@@ -2,9 +2,19 @@ package models
 
 import "time"
 
+type Bill struct {
+	Total   float64 `json:"total"`
+	History []Cost  `json:"history"`
+}
+
 type Cost struct {
-	Start  time.Time
-	End    time.Time
-	Amount float64
-	Unit   string
+	Start  time.Time `json:"start"`
+	End    time.Time `json:"end"`
+	Unit   string    `json:"unit"`
+	Groups []Group   `json:"groups"`
+}
+
+type Group struct {
+	Key    string  `json:"key"`
+	Amount float64 `json:"amount"`
 }
