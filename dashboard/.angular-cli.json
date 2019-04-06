@@ -19,13 +19,16 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "../node_modules/chart.js/dist/Chart.min.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/raphael/raphael.min.js",
         "../node_modules/jquery-mapael/js/jquery.mapael.js",
-        "../node_modules/jquery-mapael/js/maps/world_countries.min.js"
+        "../node_modules/jquery-mapael/js/maps/world_countries.min.js",
+        "../node_modules/moment/min/moment.min.js",
+        "../node_modules/chart.js/dist/Chart.bundle.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

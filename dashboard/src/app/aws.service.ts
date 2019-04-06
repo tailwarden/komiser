@@ -32,9 +32,9 @@ export class AwsService {
      })
   }
 
-  public getIAMRoles(){
+  public getIAMUsers(){
     return this.http
-      .get(`${this.BASE_URL}/iam/roles`)
+      .get(`${this.BASE_URL}/iam/users`)
       .map(res => {
         return res.json()
       })
@@ -75,5 +75,116 @@ export class AwsService {
         return Observable.throw(err.json().error)
       })
   }
+
+  public getLambdaFunctions(){
+    return this.http
+      .get(`${this.BASE_URL}/lambda/functions`)
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getLambdaInvocationMetrics(){
+    return this.http
+      .get(`${this.BASE_URL}/lambda/invocations`)
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getAccountName(){
+    return this.http
+      .get(`${this.BASE_URL}/iam/account`)
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getNumberOfS3Buckets(){
+    return this.http
+      .get(`${this.BASE_URL}/s3/buckets`)
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getBucketObjects(){
+    return this.http
+    .get(`${this.BASE_URL}/s3/objects`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getBucketSize(){
+    return this.http
+    .get(`${this.BASE_URL}/s3/size`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getEBS(){
+    return this.http
+    .get(`${this.BASE_URL}/ebs`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getRDSInstances(){
+    return this.http
+    .get(`${this.BASE_URL}/rds/instances`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getDynamoDBTables(){
+    return this.http
+    .get(`${this.BASE_URL}/dynamodb/tables`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getElasticacheClusters(){
+    return this.http
+    .get(`${this.BASE_URL}/elasticache/clusters`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
 
 }

@@ -9,4 +9,5 @@ type EC2 struct {
 	LaunchTime   time.Time `json:"launchTime"`
 	State        string    `json:"state"`
 	Tags         []string  `json:"tags"`
+	Public       bool      `json:"public"`
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AwsService } from './aws.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+
+  public accountName: string;
+  
+  constructor(private awsService: AwsService){
+    this.awsService.getAccountName().subscribe(data => {
+      this.accountName = data;
+    }, err => {
+      console.log(err)
+      this.accountName = ""
+    });
+  }
+
 }

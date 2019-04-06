@@ -1,295 +1,277 @@
 <div class="content">
-		<div class="container-fluid">
-			<h4 class="page-title">Storage</h4>
-			<div class="row">
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body ">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center icon-warning">
-									  <i class="la la-pie-chart text-warning"></i>
-								   </div>
+	<div class="container-fluid">
+		<h4 class="page-title">Storage</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
 								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">S3 Buckets</p>
-									  <h4 class="card-title">150GB</h4>
-								   </div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">S3 Buckets</p>
+									<h4 class="card-title">{{s3Buckets}}</h4>
 								</div>
-							 </div>
-						  </div>
-					   </div>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body ">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center">
-									  <i class="la la-bar-chart text-success"></i>
-								   </div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-bar-chart text-success"></i>
 								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">S3 Size</p>
-									  <h4 class="card-title">$ 1,345</h4>
-								   </div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">S3 Size</p>
+									<h4 class="card-title">{{s3BucketSize}}</h4>
 								</div>
-							 </div>
-						  </div>
-					   </div>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center">
-									  <i class="la la-times-circle-o text-danger"></i>
-								   </div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-times-circle-o text-danger"></i>
 								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">S3 Objects</p>
-									  <h4 class="card-title">23</h4>
-								   </div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">S3 Objects</p>
+									<h4 class="card-title">{{s3BucketObjects}}</h4>
 								</div>
-							 </div>
-						  </div>
-					   </div>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center">
-									  <i class="la la-heart-o text-primary"></i>
-								   </div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
 								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">Public Buckets</p>
-									  <h4 class="card-title">+45K</h4>
-								   </div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Empty Buckets</p>
+									<h4 class="card-title">{{emptyBuckets}}</h4>
 								</div>
-							 </div>
-						  </div>
-					   </div>
+							</div>
+						</div>
 					</div>
-				 </div>
+				</div>
+			</div>
+		</div>
 
-				 <div class="row">
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header">
-								<h4 class="card-title">S3 Size</h4>
-								<p class="card-category">Here is a subtitle for this table</p>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">S3 Size</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body">
+							<canvas id="s3BucketsSize"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">S3 Objects</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body">
+						<canvas id="s3BucketObjects"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-2">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
 							</div>
-							<div class="card-body">
-								<p class="demo">
-									EC2 
-									Elasticbeanstalk
-									Lambda
-	
-								</p>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">EBS Total</p>
+									<h4 class="card-title">{{ebsTotal}}</h4>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header">
-								<h4 class="card-title">S3 Objects</h4>
-								<p class="card-category">Here is a subtitle for this table</p>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
 							</div>
-							<div class="card-body">
-								<p class="demo">
-									EC2 
-									Elasticbeanstalk
-									Lambda
-	
-								</p>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">EBS Size</p>
+									<h4 class="card-title">{{ebsTotalSize}}</h4>
+								</div>
 							</div>
 						</div>
 					</div>
-				 </div>
-
-				 <div class="row">
-						<div class="col-md-3">
-								<div class="card card-stats">
-								   <div class="card-body ">
-									  <div class="row">
-										 <div class="col-5">
-											<div class="icon-big text-center icon-warning">
-											   <i class="la la-pie-chart text-warning"></i>
-											</div>
-										 </div>
-										 <div class="col-7 d-flex align-items-center">
-											<div class="numbers">
-											   <p class="card-category">EBS Total</p>
-											   <h4 class="card-title">150GB</h4>
-											</div>
-										 </div>
-									  </div>
-								   </div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
 								</div>
-							 </div>
-					<div class="col-md-3">
-						<div class="card card-stats">
-						   <div class="card-body ">
-							  <div class="row">
-								 <div class="col-5">
-									<div class="icon-big text-center icon-warning">
-									   <i class="la la-pie-chart text-warning"></i>
-									</div>
-								 </div>
-								 <div class="col-7 d-flex align-items-center">
-									<div class="numbers">
-									   <p class="card-category">EBS Size</p>
-									   <h4 class="card-title">150GB</h4>
-									</div>
-								 </div>
-							  </div>
-						   </div>
-						</div>
-					 </div>
-					 <div class="col-md-3">
-						<div class="card card-stats">
-						   <div class="card-body ">
-							  <div class="row">
-								 <div class="col-5">
-									<div class="icon-big text-center icon-warning">
-									   <i class="la la-pie-chart text-warning"></i>
-									</div>
-								 </div>
-								 <div class="col-7 d-flex align-items-center">
-									<div class="numbers">
-									   <p class="card-category">Snapshots Total</p>
-									   <h4 class="card-title">150GB</h4>
-									</div>
-								 </div>
-							  </div>
-						   </div>
-						</div>
-					 </div>
-					 <div class="col-md-3">
-						<div class="card card-stats">
-						   <div class="card-body ">
-							  <div class="row">
-								 <div class="col-5">
-									<div class="icon-big text-center icon-warning">
-									   <i class="la la-pie-chart text-warning"></i>
-									</div>
-								 </div>
-								 <div class="col-7 d-flex align-items-center">
-									<div class="numbers">
-									   <p class="card-category">Snapshots Size</p>
-									   <h4 class="card-title">150GB</h4>
-									</div>
-								 </div>
-							  </div>
-						   </div>
-						</div>
-					 </div>
-				 </div>
-
-			<div class="row">
-					<div class="col-md-4">
-							<div class="card card-stats">
-							   <div class="card-body ">
-								  <div class="row">
-									 <div class="col-5">
-										<div class="icon-big text-center icon-warning">
-										   <i class="la la-pie-chart text-warning"></i>
-										</div>
-									 </div>
-									 <div class="col-7 d-flex align-items-center">
-										<div class="numbers">
-										   <p class="card-category">DynamoDB Instances</p>
-										   <h4 class="card-title">150GB</h4>
-										</div>
-									 </div>
-								  </div>
-							   </div>
 							</div>
-						 </div>
-						 <div class="col-md-4">
-								<div class="card card-stats">
-								   <div class="card-body ">
-									  <div class="row">
-										 <div class="col-5">
-											<div class="icon-big text-center icon-warning">
-											   <i class="la la-pie-chart text-warning"></i>
-											</div>
-										 </div>
-										 <div class="col-7 d-flex align-items-center">
-											<div class="numbers">
-											   <p class="card-category">RDS Instances</p>
-											   <h4 class="card-title">150GB</h4>
-											</div>
-										 </div>
-									  </div>
-								   </div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">EBS used</p>
+									<h4 class="card-title">{{ebsUsed}}</h4>
 								</div>
-							 </div>
-							 <div class="col-md-4">
-									<div class="card card-stats">
-									   <div class="card-body ">
-										  <div class="row">
-											 <div class="col-5">
-												<div class="icon-big text-center icon-warning">
-												   <i class="la la-pie-chart text-warning"></i>
-												</div>
-											 </div>
-											 <div class="col-7 d-flex align-items-center">
-												<div class="numbers">
-												   <p class="card-category">DocumentDB Instances</p>
-												   <h4 class="card-title">150GB</h4>
-												</div>
-											 </div>
-										  </div>
-									   </div>
-									</div>
-								 </div>
-								 <div class="col-md-6">
-										<div class="card card-stats">
-										   <div class="card-body ">
-											  <div class="row">
-												 <div class="col-5">
-													<div class="icon-big text-center icon-warning">
-													   <i class="la la-pie-chart text-warning"></i>
-													</div>
-												 </div>
-												 <div class="col-7 d-flex align-items-center">
-													<div class="numbers">
-													   <p class="card-category">Redis Clusters</p>
-													   <h4 class="card-title">150GB</h4>
-													</div>
-												 </div>
-											  </div>
-										   </div>
-										</div>
-									 </div>
-									 <div class="col-md-6">
-											<div class="card card-stats">
-											   <div class="card-body ">
-												  <div class="row">
-													 <div class="col-5">
-														<div class="icon-big text-center icon-warning">
-														   <i class="la la-pie-chart text-warning"></i>
-														</div>
-													 </div>
-													 <div class="col-7 d-flex align-items-center">
-														<div class="numbers">
-														   <p class="card-category">Memcached Clusters</p>
-														   <h4 class="card-title">150GB</h4>
-														</div>
-													 </div>
-												  </div>
-											   </div>
-											</div>
-										 </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">EBS Family</h4>
+							<p class="card-category">Here is a subtitle for this table</p>
+						</div>
+						<div class="card-body">
+							<div id="ebs-family"></div>
+						</div>
+					</div>
+				</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-4">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">DynamoDB Tables</p>
+									<h4 class="card-title">{{dynamodbTables}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">RDS Instances</p>
+									<h4 class="card-title">{{rdsInstances}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">DocumentDB Instances</p>
+									<h4 class="card-title">{{docdbInstances}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Redis Clusters</p>
+									<h4 class="card-title">{{redisClusters}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Memcached Clusters</p>
+									<h4 class="card-title">{{memcachedClusters}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
+</div>

@@ -52,13 +52,28 @@ func (handler *AWSHandler) IAMPoliciesHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("user")
+	response, found := handler.cache.Get("users")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
 		response, err := handler.aws.DescribeIAMUsers(handler.cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:ListUsers is missing")
+		} else {
+			handler.cache.Set("users", response, cache.DefaultExpiration)
+			respondWithJSON(w, 200, response)
+		}
+	}
+}
+
+func (handler *AWSHandler) IAMUserHandler(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("user")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response, err := handler.aws.DescribeIAMUser(handler.cfg)
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "iam:get-user is missing")
 		} else {
 			handler.cache.Set("user", response, cache.DefaultExpiration)
 			respondWithJSON(w, 200, response)

@@ -1,1 +1,178 @@
-<router-outlet></router-outlet>
+<div class="main-header">
+    <div class="logo-header">
+        <a class="logo" href="index.html">
+            <img src="assets/images/police-cap.png" style="width: 30px; margin-right:10px" /> Komiser Dashboard</a>
+        <button aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler sidenav-toggler ml-auto"
+            data-target="collapse" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <button class="topbar-toggler more">
+            <i class="la la-ellipsis-v"></i>
+        </button>
+    </div>
+    <nav class="navbar navbar-header navbar-expand-lg">
+        <div class="container-fluid">
+            <form action="" class="navbar-left navbar-form nav-search mr-md-3">
+                <div class="input-group">
+                    <input class="form-control" placeholder="Search ..." type="text">
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-search search-icon"></i>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                <li class="nav-item dropdown hidden-caret">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown"
+                        role="button">
+                        <i class="la la-bell"></i>
+                        <span class="notification">3</span>
+                    </a>
+                    <ul aria-labelledby="navbarDropdown" class="dropdown-menu notif-box">
+                        <li>
+                            <div class="dropdown-title">
+                                You have 2 new notification
+                            </div>
+                        </li>
+                        <li>
+                            <div class="notif-center">
+                                <a href="#">
+                                    <div class="notif-icon notif-primary">
+                                        <i class="la la-user-plus"></i>
+                                    </div>
+                                    <div class="notif-content">
+                                        <span class="block">lambda:invoke is missing</span>
+                                        <span class="time">5 minutes ago</span>
+                                    </div>
+                                </a>
+                                <a href="#">
+                                        <div class="notif-icon notif-primary">
+                                            <i class="la la-user-plus"></i>
+                                        </div>
+                                        <div class="notif-content">
+                                            <span class="block">rds:provision is missing</span>
+                                            <span class="time">1 minutes ago</span>
+                                        </div>
+                                    </a>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="see-all" href="javascript:void(0);">
+                                <strong>See all notifications</strong>
+                                <i class="la la-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="sidebar">
+    <div class="scrollbar-inner sidebar-wrapper">
+        <div class="user">
+            <div class="photo">
+                <img src="assets/images/aws.png">
+            </div>
+            <div class="info">
+                <a aria-expanded="true" class="" data-toggle="collapse" href="#collapseExample">
+                    <span>{{accountName}}
+                        <span class="user-level">Amazon Web Services</span>
+                        <span class="caret"></span>
+                    </span>
+                </a>
+                <div class="clearfix"></div>
+                <div aria-expanded="true" class="collapse in" id="collapseExample" style="">
+                    <ul class="nav">
+                        <li>
+                            <a href="#profile">
+                                <span class="link-collapse">My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#edit">
+                                <span class="link-collapse">Edit Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings">
+                                <span class="link-collapse">Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav">
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a routerLink="/">
+                    <i class="la la-home"></i>
+                    <p>Dashboard</p>
+                    <span class="badge badge-danger">15</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/compute">
+                    <i class="la la-cubes"></i>
+                    <p>Compute</p>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/storage">
+                    <i class="la la-server"></i>
+                    <p>Storage</p>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/network">
+                    <i class="la la-signal"></i>
+                    <p>Network</p>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/security">
+                    <i class="la la-shield"></i>
+                    <p>Security</p>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/data-and-ai">
+                    <i class="la la-commenting"></i>
+                    <p>Data & AI</p>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/monitoring">
+                    <i class="la la-dashboard"></i>
+                    <p>Monitoring</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="main-panel">
+    <router-outlet></router-outlet>
+    <footer class="footer">
+        <div class="container-fluid">
+            <nav class="pull-left">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.github.com/komiser">GitHub</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Licenses</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="copyright ml-auto">
+                2019, made with
+                <i class="la la-heart heart text-danger"></i> by
+                <a href="https://www.komiser.io">Komiser</a>
+            </div>
+        </div>
+    </footer>
+</div>

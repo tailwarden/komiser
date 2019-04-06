@@ -15,6 +15,7 @@ import { MonitoringComponent } from './monitoring/monitoring.component';
 import { AwsService } from './aws.service';
 
 
+
 const appRoutes: Routes = [
   { 
     path: 'compute',

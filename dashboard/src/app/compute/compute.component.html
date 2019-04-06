@@ -8,13 +8,13 @@
 							 <div class="row">
 								<div class="col-5">
 								   <div class="icon-big text-center icon-warning">
-									  <i class="la la-pie-chart text-warning"></i>
+									  <i class="la la-play text-success"></i>
 								   </div>
 								</div>
 								<div class="col-7 d-flex align-items-center">
 								   <div class="numbers">
 									  <p class="card-category">EC2 Running</p>
-									  <h4 class="card-title">150</h4>
+									  <h4 class="card-title">{{runningEC2Instances}}</h4>
 								   </div>
 								</div>
 							 </div>
@@ -27,13 +27,13 @@
 							 <div class="row">
 								<div class="col-5">
 								   <div class="icon-big text-center">
-									  <i class="la la-bar-chart text-success"></i>
+									  <i class="la la-stop text-warning"></i>
 								   </div>
 								</div>
 								<div class="col-7 d-flex align-items-center">
 								   <div class="numbers">
 									  <p class="card-category">EC2 Stopped</p>
-									  <h4 class="card-title">2</h4>
+									  <h4 class="card-title">{{stoppedEC2Instances}}</h4>
 								   </div>
 								</div>
 							 </div>
@@ -46,13 +46,13 @@
 							 <div class="row">
 								<div class="col-5">
 								   <div class="icon-big text-center">
-									  <i class="la la-times-circle-o text-danger"></i>
+									  <i class="la la-trash text-danger"></i>
 								   </div>
 								</div>
 								<div class="col-7 d-flex align-items-center">
 								   <div class="numbers">
 									  <p class="card-category">EC2 Terminated</p>
-									  <h4 class="card-title">23</h4>
+									  <h4 class="card-title">{{terminatedEC2Instances}}</h4>
 								   </div>
 								</div>
 							 </div>
@@ -65,11 +65,11 @@
 					<div class="col-md-6">
 							<div class="card">
 							   <div class="card-header">
-								  <h4 class="card-title">Instance Family</h4>
+								  <h4 class="card-title">Public vs Private Instances</h4>
 								  <p class="card-category">Complete</p>
 							   </div>
 							   <div class="card-body">
-								  <div class="chart-circle mt-4 mb-3" id="task-complete"></div>
+								  <div class="chart-circle mt-4 mb-3" id="instances-privacy"></div>
 							   </div>
 							   <div class="card-footer">
 								  <div class="legend">
@@ -81,23 +81,18 @@
 						 <div class="col-md-6">
 								<div class="card">
 								   <div class="card-header">
-									  <h4 class="card-title">Public Instances</h4>
+									  <h4 class="card-title">Instance Families</h4>
 									  <p class="card-category">Complete</p>
 								   </div>
 								   <div class="card-body">
-									  <div class="chart-circle mt-4 mb-3" id="task-complete"></div>
-								   </div>
-								   <div class="card-footer">
-									  <div class="legend">
-										 <i class="la la-circle text-primary"></i> Completed
-									  </div>
+									  <canvas class="chart-circle mt-4 mb-3" id="task-complete2"></canvas>
 								   </div>
 								</div>
 							 </div>
 			</div>
 			<div class="row">
 				 <div class="col-md-2">
-					<div class="card card-stats card-warning">
+					<div class="card card-stats card-warning card-csharp">
 					   <div class="card-body">
 						  <div class="row">
 							 <div class="col-5">
@@ -108,7 +103,7 @@
 							 <div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 								   <p class="card-category">C# Functions</p>
-								   <h4 class="card-title">1,294</h4>
+								   <h4 class="card-title">{{lambdaFunctions.csharp}}</h4>
 								</div>
 							 </div>
 						  </div>
@@ -116,7 +111,7 @@
 					</div>
 				 </div>
 				 <div class="col-md-2">
-					<div class="card card-stats card-warning">
+					<div class="card card-stats card-danger">
 					   <div class="card-body">
 						  <div class="row">
 							 <div class="col-5">
@@ -127,7 +122,7 @@
 							 <div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 								   <p class="card-category">Ruby Functions</p>
-								   <h4 class="card-title">1,294</h4>
+								   <h4 class="card-title">{{lambdaFunctions.ruby}}</h4>
 								</div>
 							 </div>
 						  </div>
@@ -135,7 +130,7 @@
 					</div>
 				 </div>
 				 <div class="col-md-2">
-					<div class="card card-stats card-warning">
+					<div class="card card-stats card">
 					   <div class="card-body">
 						  <div class="row">
 							 <div class="col-5">
@@ -146,7 +141,7 @@
 							 <div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 								   <p class="card-category">Java Functions</p>
-								   <h4 class="card-title">1,294</h4>
+								   <h4 class="card-title">{{lambdaFunctions.java}}</h4>
 								</div>
 							 </div>
 						  </div>
@@ -154,7 +149,7 @@
 					</div>
 				 </div>
 				 <div class="col-md-2">
-					<div class="card card-stats card-warning">
+					<div class="card card-stats card-primary card-golang">
 					   <div class="card-body">
 						  <div class="row">
 							 <div class="col-5">
@@ -165,7 +160,7 @@
 							 <div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 								   <p class="card-category">Golang Functions</p>
-								   <h4 class="card-title">1,294</h4>
+								   <h4 class="card-title">{{lambdaFunctions.golang}}</h4>
 								</div>
 							 </div>
 						  </div>
@@ -173,7 +168,7 @@
 					</div>
 				 </div>
 				 <div class="col-md-2">
-					<div class="card card-stats card-warning">
+					<div class="card card-stats card-warning card-python">
 					   <div class="card-body">
 						  <div class="row">
 							 <div class="col-5">
@@ -184,7 +179,7 @@
 							 <div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 								   <p class="card-category">Python Functions</p>
-								   <h4 class="card-title">1,294</h4>
+								   <h4 class="card-title">{{lambdaFunctions.python}}</h4>
 								</div>
 							 </div>
 						  </div>
@@ -192,18 +187,18 @@
 					</div>
 				 </div>
 				<div class="col-md-2">
-					<div class="card card-stats card-warning">
+					<div class="card card-stats card-success">
 					   <div class="card-body">
 						  <div class="row">
 							 <div class="col-5">
 								<div class="icon-big text-center">
-								   <i class="devicon-python-plain"></i>
+								   <i class="devicon-nodejs-plain"></i>
 								</div>
 							 </div>
 							 <div class="col-7 d-flex align-items-center">
 								<div class="numbers">
-								   <p class="card-category">Custom Functions</p>
-								   <h4 class="card-title">1,294</h4>
+								   <p class="card-category">Node.JS Functions</p>
+								   <h4 class="card-title">{{lambdaFunctions.node}}</h4>
 								</div>
 							 </div>
 						  </div>
@@ -212,23 +207,19 @@
 				 </div>
 				</div>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<h4 class="card-title">Lambda Invoked</h4>
 								<p class="card-category">Here is a subtitle for this table</p>
 							</div>
 							<div class="card-body">
-								<p class="demo">
-									EC2 
-									Elasticbeanstalk
-									Lambda
-	
+								<p class="lambdaInvocationsChart">
 								</p>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<h4 class="card-title">Lambda Duration</h4>
@@ -236,9 +227,6 @@
 							</div>
 							<div class="card-body">
 								<p class="demo">
-									EC2 
-									Elasticbeanstalk
-									Lambda
 	
 								</p>
 							</div>
@@ -247,18 +235,18 @@
 				</div>
 				<div class="row">
 					<div class="col-md-4">
-						<div class="card card-stats card-warning">
+						<div class="card card-stats card-primary card-docker">
 						   <div class="card-body">
 							  <div class="row">
 								 <div class="col-5">
 									<div class="icon-big text-center">
-									   <i class="devicon-python-plain"></i>
+									   <i class="devicon-docker-plain"></i>
 									</div>
 								 </div>
 								 <div class="col-7 d-flex align-items-center">
 									<div class="numbers">
 									   <p class="card-category">EKS Clusters</p>
-									   <h4 class="card-title">1,294</h4>
+									   <h4 class="card-title">0</h4>
 									</div>
 								 </div>
 							  </div>
@@ -266,18 +254,18 @@
 						</div>
 					 </div>
 					 <div class="col-md-4">
-						<div class="card card-stats card-warning">
+						<div class="card card-stats card-primary card-docker">
 						   <div class="card-body">
 							  <div class="row">
 								 <div class="col-5">
 									<div class="icon-big text-center">
-									   <i class="devicon-python-plain"></i>
+									   <i class="devicon-docker-plain"></i>
 									</div>
 								 </div>
 								 <div class="col-7 d-flex align-items-center">
 									<div class="numbers">
 									   <p class="card-category">EKS Tasks</p>
-									   <h4 class="card-title">1,294</h4>
+									   <h4 class="card-title">0</h4>
 									</div>
 								 </div>
 							  </div>
@@ -285,18 +273,18 @@
 						</div>
 					 </div>
 					 <div class="col-md-4">
-						<div class="card card-stats card-warning">
+						<div class="card card-stats card-primary card-docker">
 						   <div class="card-body">
 							  <div class="row">
 								 <div class="col-5">
 									<div class="icon-big text-center">
-									   <i class="devicon-python-plain"></i>
+									   <i class="devicon-docker-plain"></i>
 									</div>
 								 </div>
 								 <div class="col-7 d-flex align-items-center">
 									<div class="numbers">
 									   <p class="card-category">EKS Services</p>
-									   <h4 class="card-title">1,294</h4>
+									   <h4 class="card-title">0</h4>
 									</div>
 								 </div>
 							  </div>

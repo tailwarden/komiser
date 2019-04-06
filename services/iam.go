@@ -15,6 +15,16 @@ func (aws AWS) DescribeIAMRoles(cfg aws.Config) (int, error) {
 	return len(result.Roles), nil
 }
 
+func (aws AWS) DescribeIAMUser(cfg aws.Config) (string, error) {
+	svc := iam.New(cfg)
+	req := svc.GetUserRequest(&iam.GetUserInput{})
+	result, err := req.Send()
+	if err != nil {
+		return "", err
+	}
+	return *result.User.UserName, nil
+}
+
 func (aws AWS) DescribeIAMUsers(cfg aws.Config) (int, error) {
 	svc := iam.New(cfg)
 	req := svc.ListUsersRequest(&iam.ListUsersInput{})

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AwsService } from '../aws.service';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
+import 'jquery-mapael';
+import 'jquery-mapael/js/maps/world_countries.js';
 declare var $: any;
 
 @Component({
@@ -10,7 +12,7 @@ declare var $: any;
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  public iamRoles: number;
+  public iamUsers: number;
   public currentBill: number;
   public usedRegions: number;
   public redAlarms: number;
@@ -91,10 +93,10 @@ export class DashboardComponent implements OnInit {
   constructor(private AwsService: AwsService) {
     this.mostUsedServices = []
 
-    this.AwsService.getIAMRoles().subscribe(data => {
-      this.iamRoles = data;
+    this.AwsService.getIAMUsers().subscribe(data => {
+      this.iamUsers = data;
     }, err => {
-      this.iamRoles = 0;
+      this.iamUsers = 0;
     });
 
     this.AwsService.getCurrentCost().subscribe(data => {
