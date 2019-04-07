@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models"
@@ -41,4 +43,61 @@ func (aws AWS) getSecurityGroups(cfg aws.Config, region string) ([]SecurityGroup
 		})
 	}
 	return listOfSecurityGroups, nil
+}
+
+type UnrestrictedSecurityGroup struct {
+	Region   string
+	Name     string
+	ID       string
+	Protocol string
+	FromPort int64
+	ToPort   int64
+}
+
+func (awsClient AWS) ListUnrestrictedSecurityGroups(cfg aws.Config) ([]UnrestrictedSecurityGroup, error) {
+	groups := make([]UnrestrictedSecurityGroup, 0)
+
+	regions, err := awsClient.getRegions(cfg)
+	if err != nil {
+		return groups, err
+	}
+	for _, region := range regions {
+		cfg.Region = region.Name
+		svc := ec2.New(cfg)
+		req := svc.DescribeSecurityGroupsRequest(&ec2.DescribeSecurityGroupsInput{})
+		res, err := req.Send()
+		if err != nil {
+			return groups, err
+		}
+
+		for _, sg := range res.SecurityGroups {
+			for _, permission := range sg.IpPermissions {
+				for _, ip := range permission.IpRanges {
+					if *ip.CidrIp == "0.0.0.0/0" {
+						fmt.Println(permission)
+						if *permission.IpProtocol == "-1" {
+							groups = append(groups, UnrestrictedSecurityGroup{
+								Region:   region.Name,
+								Name:     *sg.GroupName,
+								ID:       *sg.GroupId,
+								Protocol: *permission.IpProtocol,
+							})
+						} else {
+							groups = append(groups, UnrestrictedSecurityGroup{
+								Region:   region.Name,
+								Name:     *sg.GroupName,
+								ID:       *sg.GroupId,
+								Protocol: *permission.IpProtocol,
+								FromPort: *permission.FromPort,
+								ToPort:   *permission.ToPort,
+							})
+						}
+
+					}
+				}
+			}
+		}
+
+	}
+	return groups, nil
 }

@@ -14,6 +14,8 @@ import { MonitoringComponent } from './monitoring/monitoring.component';
 
 import { AwsService } from './aws.service';
 
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 
 
 const appRoutes: Routes = [
@@ -69,7 +71,8 @@ const appRoutes: Routes = [
       appRoutes
     ),
     HttpModule,
-    BrowserModule
+    BrowserModule,
+    PaginationModule.forRoot()
   ],
   providers: [
     AwsService

@@ -14,7 +14,7 @@
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">KMS</p>
-									<h4 class="card-title">150GB</h4>
+									<h4 class="card-title">{{kmsKeys}}</h4>
 								</div>
 							</div>
 						</div>
@@ -33,7 +33,7 @@
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">Security Groups</p>
-									<h4 class="card-title">$ 1,345</h4>
+									<h4 class="card-title">{{securityGroups}}</h4>
 								</div>
 							</div>
 						</div>
@@ -52,7 +52,7 @@
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">KeyPairs</p>
-									<h4 class="card-title">23</h4>
+									<h4 class="card-title">{{keyPairs}}</h4>
 								</div>
 							</div>
 						</div>
@@ -71,7 +71,7 @@
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">Route Tables</p>
-									<h4 class="card-title">+45K</h4>
+									<h4 class="card-title">{{routeTables}}</h4>
 								</div>
 							</div>
 						</div>
@@ -116,7 +116,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-6">
 				<div class="card card-stats">
 					<div class="card-body">
 						<div class="row">
@@ -127,32 +127,63 @@
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
-									<p class="card-category">Expired Crdentials</p>
-									<h4 class="card-title">+45K</h4>
+									<p class="card-category">ACM Certificates</p>
+									<h4 class="card-title">{{acmCertificates}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Expired Certificates</p>
+									<h4 class="card-title">{{acmExpiredCertificates}}</h4>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="card card-stats">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">Unrestricted Security Groups</h4>
+						<p class="card-category">Checks security groups for rules that allow unrestricted access (0.0.0.0/0) to specific ports</p>
+					</div>
 					<div class="card-body">
-						<div class="row">
-							<div class="col-5">
-								<div class="icon-big text-center">
-									<i class="la la-heart-o text-primary"></i>
-								</div>
-							</div>
-							<div class="col-7 d-flex align-items-center">
-								<div class="numbers">
-									<p class="card-category">Expired ACM</p>
-									<h4 class="card-title">+45K</h4>
-								</div>
-							</div>
-						</div>
+						<table class="table table-head-bg-primary table-striped table-hover">
+							<thead>
+								<tr>
+									<th>Region</th>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Portocol</th>
+									<th>From/To Ports</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let sg of returnedUnrestrictedSecurityGroups">
+									<td>{{sg.Region}}</td>
+									<td>{{sg.ID}}</td>
+									<td>{{sg.Name}}</td>
+									<td>{{sg.Protocol}}</td>
+									<td>{{sg.FromPort}}/{{sg.ToPort}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<pagination [totalItems]="unrestrictedSecurityGroups.length" [itemsPerPage]="20" (pageChanged)="pageChanged($event)" size="sm"></pagination>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>

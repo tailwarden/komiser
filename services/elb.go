@@ -1,7 +1,11 @@
 package services
 
 import (
+	"sort"
+	"time"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/elb"
 	"github.com/aws/aws-sdk-go-v2/service/elbv2"
 	. "github.com/mlabouardy/komiser/models"
@@ -30,6 +34,60 @@ func (aws AWS) DescribeElasticLoadBalancer(cfg aws.Config) (map[string]int, erro
 		}
 	}
 	return output, nil
+}
+
+type ELBMetric struct {
+	Region     string
+	Datapoints []Datapoint
+}
+
+func (awsClient AWS) GetELBRequests(cfg aws.Config) ([]ELBMetric, error) {
+	metrics := make([]ELBMetric, 0)
+
+	regions, err := awsClient.getRegions(cfg)
+	if err != nil {
+		return metrics, err
+	}
+
+	for _, region := range regions {
+		cfg.Region = region.Name
+		cloudwatchClient := cloudwatch.New(cfg)
+		reqCloudwatch := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+			Namespace:  aws.String("AWS/ELB"),
+			MetricName: aws.String("RequestCount"),
+			StartTime:  aws.Time(time.Now().AddDate(0, -6, 0)),
+			EndTime:    aws.Time(time.Now()),
+			Period:     aws.Int64(86400),
+			Statistics: []cloudwatch.Statistic{
+				cloudwatch.StatisticSum,
+			},
+		})
+
+		resultCloudWatch, err := reqCloudwatch.Send()
+		if err != nil {
+			return metrics, err
+		}
+
+		series := make([]Datapoint, 0)
+
+		for _, metric := range resultCloudWatch.Datapoints {
+			series = append(series, Datapoint{
+				Timestamp: *metric.Timestamp,
+				Value:     *metric.Sum,
+			})
+		}
+
+		sort.Slice(series, func(i, j int) bool {
+			return series[i].Timestamp.Sub(series[j].Timestamp) < 0
+		})
+
+		metrics = append(metrics, ELBMetric{
+			Region:     region.Name,
+			Datapoints: series,
+		})
+	}
+
+	return metrics, nil
 }
 
 func (aws AWS) getClassicElasticLoadBalancers(cfg aws.Config, region string) ([]LoadBalancer, error) {

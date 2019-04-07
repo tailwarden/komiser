@@ -186,5 +186,172 @@ export class AwsService {
     })
   }
 
+  public getVirtualPrivateClouds(){
+    return this.http
+    .get(`${this.BASE_URL}/vpc`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getAccessControlLists(){
+    return this.http
+    .get(`${this.BASE_URL}/acl`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getRouteTables(){
+    return this.http
+    .get(`${this.BASE_URL}/route_tables`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getCloudFrontRequests(){
+    return this.http
+    .get(`${this.BASE_URL}/cloudfront/requests`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getCloudFrontDistributions(){
+    return this.http
+    .get(`${this.BASE_URL}/cloudfront/distributions`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getApiGatewayRequests(){
+    return this.http
+    .get(`${this.BASE_URL}/apigateway/requests`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getApiGatewayRestAPIs(){
+    return this.http
+    .get(`${this.BASE_URL}/apigateway/apis`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getELBRequests(){
+    return this.http
+    .get(`${this.BASE_URL}/elb/requests`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getELBFamily(){
+    return this.http
+    .get(`${this.BASE_URL}/elb/family`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getKMSKeys(){
+    return this.http
+    .get(`${this.BASE_URL}/kms`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getSecurityGroups(){
+    return this.http
+    .get(`${this.BASE_URL}/security_groups`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getKeyPairs(){
+    return this.http
+    .get(`${this.BASE_URL}/key_pairs`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getACMListCertificates(){
+    return this.http
+    .get(`${this.BASE_URL}/acm/certificates`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getACMExpiredCertificates(){
+    return this.http
+    .get(`${this.BASE_URL}/acm/expired`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+  public getUnrestrictedSecurityGroups(){
+    return this.http
+    .get(`${this.BASE_URL}/security_groups/unrestricted`)
+    .map(res => {
+      return res.json()
+    })
+    .catch(err => {
+      return Observable.throw(err.json().error)
+    })
+  }
+
+
+
 
 }

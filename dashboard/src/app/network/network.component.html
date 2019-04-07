@@ -1,133 +1,237 @@
 <div class="content">
-		<div class="container-fluid">
-			<h4 class="page-title">Network</h4>
-			<div class="row">
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body ">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center icon-warning">
-									  <i class="la la-pie-chart text-warning"></i>
-								   </div>
+	<div class="container-fluid">
+		<h4 class="page-title">Network</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center icon-warning">
+									<i class="la la-pie-chart text-warning"></i>
 								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">VPC</p>
-									  <h4 class="card-title">150GB</h4>
-								   </div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">VPC</p>
+									<h4 class="card-title">{{vpcNumber}}</h4>
 								</div>
-							 </div>
-						  </div>
-					   </div>
-					</div>
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body ">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center">
-									  <i class="la la-bar-chart text-success"></i>
-								   </div>
-								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">Subnets</p>
-									  <h4 class="card-title">$ 1,345</h4>
-								   </div>
-								</div>
-							 </div>
-						  </div>
-					   </div>
-					</div>
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center">
-									  <i class="la la-times-circle-o text-danger"></i>
-								   </div>
-								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">ACL</p>
-									  <h4 class="card-title">23</h4>
-								   </div>
-								</div>
-							 </div>
-						  </div>
-					   </div>
-					</div>
-					<div class="col-md-3">
-					   <div class="card card-stats">
-						  <div class="card-body">
-							 <div class="row">
-								<div class="col-5">
-								   <div class="icon-big text-center">
-									  <i class="la la-heart-o text-primary"></i>
-								   </div>
-								</div>
-								<div class="col-7 d-flex align-items-center">
-								   <div class="numbers">
-									  <p class="card-category">Route Tables</p>
-									  <h4 class="card-title">+45K</h4>
-								   </div>
-								</div>
-							 </div>
-						  </div>
-					   </div>
-					</div>
-				 </div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">CloudFront Distribution</h4>
-							<p class="card-category">Here is a subtitle for this table</p>
-						</div>
-						<div class="card-body">
-							<p class="demo">
-								EC2 
-								Elasticbeanstalk
-								Lambda
-
-							</p>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6">
-						<div class="card">
-							<div class="card-header">
-								<h4 class="card-title">API Gateway Requests</h4>
-								<p class="card-category">Here is a subtitle for this table</p>
+
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-times-circle-o text-danger"></i>
+								</div>
 							</div>
-							<div class="card-body">
-								<p class="demo">
-									EC2 
-									Elasticbeanstalk
-									Lambda
-	
-								</p>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">ACL</p>
+									<h4 class="card-title">{{aclNumber}}</h4>
+								</div>
 							</div>
 						</div>
 					</div>
-				<div class="col-md-6">
-						<div class="card">
-							<div class="card-header">
-								<h4 class="card-title">Elastic Load banaclers</h4>
-								<p class="card-category">Here is a subtitle for this table</p>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card card-stats">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-bar-chart text-success"></i>
+								</div>
 							</div>
-							<div class="card-body">
-								<p class="demo">
-									EC2 
-									Elasticbeanstalk
-									Lambda
-	
-								</p>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Subnets</p>
+									<h4 class="card-title">0</h4>
+								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Route Tables</p>
+									<h4 class="card-title">{{routeTablesNumber}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">CDN Distributions</p>
+									<h4 class="card-title">{{cloudfrontDistributions}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Today Incoming Requests</p>
+									<h4 class="card-title">{{cdnTodayRequests}} / {{cdnYesterdayRequests}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">CloudFront Distribution</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body">
+						<canvas id="cloudfrontRequests"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">API Gateway Requests</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body">
+						<canvas id="apigatewayRequests"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">RESTful APIs</p>
+									<h4 class="card-title">{{apigatewayApis}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Today Incoming Requests</p>
+									<h4 class="card-title">{{apigatewayTodayRequests}} / {{apigatewayYesterdayRequests}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">Elastic Load Balancers</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body">
+						<canvas id="elbRequests"></canvas>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Elastic Load Balancers</p>
+									<h4 class="card-title">{{cloudfrontDistributions}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card card-stats">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="la la-heart-o text-primary"></i>
+								</div>
+							</div>
+							<div class="col-7 d-flex align-items-center">
+								<div class="numbers">
+									<p class="card-category">Today Incoming Requests</p>
+									<h4 class="card-title">{{elbTodayRequests}} / {{elbYesterdayRequests}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">ELB Family</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body">
+						<canvas id="elbFamilyType"></canvas>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>

@@ -228,8 +228,11 @@ export class StorageComponent implements OnInit {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         title: {
+          display: false
+        },
+        legend: {
           display: false
         },
         tooltips: {
@@ -278,8 +281,11 @@ export class StorageComponent implements OnInit {
       options: {
         point:{display:false},
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         title: {
+          display: false
+        },
+        legend: {
           display: false
         },
         tooltips: {

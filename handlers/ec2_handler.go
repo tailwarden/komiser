@@ -35,3 +35,18 @@ func (handler *AWSHandler) AutoScalingGroupHandler(w http.ResponseWriter, r *htt
 		}
 	}
 }
+
+func (handler *AWSHandler) ListUnrestrictedSecurityGroups(w http.ResponseWriter, r *http.Request) {
+	response, found := handler.cache.Get("sg_unrestricted")
+	if found {
+		respondWithJSON(w, 200, response)
+	} else {
+		response, err := handler.aws.ListUnrestrictedSecurityGroups(handler.cfg)
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "You dont have the right permission")
+		} else {
+			handler.cache.Set("sg_unrestricted", response, cache.DefaultExpiration)
+			respondWithJSON(w, 200, response)
+		}
+	}
+}

@@ -18,7 +18,7 @@ export class ComputeComponent implements OnInit {
   public stoppedEC2Instances: number;
   public terminatedEC2Instances: number;
   
-  public lambdaFunctions: {};
+  public lambdaFunctions: Object;
 
   constructor(private awsService: AwsService) {
 
