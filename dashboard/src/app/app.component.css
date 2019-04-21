@@ -1,0 +1,18 @@
+.service-logo{
+    width: 30px;
+}
+
+.notif-box {
+    width: 370px;
+}
+
+.notif-content{
+    width: 100%;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0vh;
+    margin-top: 50px;
+}

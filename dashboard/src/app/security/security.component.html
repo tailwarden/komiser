@@ -8,13 +8,14 @@
 						<div class="row">
 							<div class="col-5">
 								<div class="icon-big text-center icon-warning">
-									<i class="la la-pie-chart text-warning"></i>
+										<img src="assets/images/services/aws/kms.png" class="service-logo" />
 								</div>
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">KMS</p>
-									<h4 class="card-title">{{kmsKeys}}</h4>
+									<h4 class="card-title" *ngIf="!loadingKMSKeys">{{kmsKeys}}</h4>
+									<div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKMSKeys"></div>
 								</div>
 							</div>
 						</div>
@@ -27,13 +28,14 @@
 						<div class="row">
 							<div class="col-5">
 								<div class="icon-big text-center">
-									<i class="la la-bar-chart text-success"></i>
+										<img src="assets/images/services/aws/security_group.png" class="service-logo" />
 								</div>
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">Security Groups</p>
-									<h4 class="card-title">{{securityGroups}}</h4>
+									<h4 class="card-title" *ngIf="!loadingSecurityGroups">{{securityGroups}}</h4>
+									<div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSecurityGroups"></div>
 								</div>
 							</div>
 						</div>
@@ -46,13 +48,14 @@
 						<div class="row">
 							<div class="col-5">
 								<div class="icon-big text-center">
-									<i class="la la-times-circle-o text-danger"></i>
+										<img src="assets/images/services/aws/keypair.png" class="service-logo" />
 								</div>
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">KeyPairs</p>
-									<h4 class="card-title">{{keyPairs}}</h4>
+									<h4 class="card-title" *ngIf="!loadingKeyPairs">{{keyPairs}}</h4>
+									<div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKeyPairs"></div>
 								</div>
 							</div>
 						</div>
@@ -65,51 +68,14 @@
 						<div class="row">
 							<div class="col-5">
 								<div class="icon-big text-center">
-									<i class="la la-heart-o text-primary"></i>
+										<img src="assets/images/services/aws/route_table.png" class="service-logo" />
 								</div>
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">Route Tables</p>
-									<h4 class="card-title">{{routeTables}}</h4>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card card-stats">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-5">
-								<div class="icon-big text-center">
-									<i class="la la-heart-o text-primary"></i>
-								</div>
-							</div>
-							<div class="col-7 d-flex align-items-center">
-								<div class="numbers">
-									<p class="card-category">Expired Accounts</p>
-									<h4 class="card-title">+45K</h4>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card card-stats">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-5">
-								<div class="icon-big text-center">
-									<i class="la la-heart-o text-primary"></i>
-								</div>
-							</div>
-							<div class="col-7 d-flex align-items-center">
-								<div class="numbers">
-									<p class="card-category">Expired SSH</p>
-									<h4 class="card-title">+45K</h4>
+									<h4 class="card-title" *ngIf="!loadingRouteTables">{{routeTables}}</h4>
+									<div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRouteTables"></div>
 								</div>
 							</div>
 						</div>
@@ -122,31 +88,34 @@
 						<div class="row">
 							<div class="col-5">
 								<div class="icon-big text-center">
-									<i class="la la-heart-o text-primary"></i>
+										<img src="assets/images/services/aws/acm.png" class="service-logo" />
 								</div>
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">ACM Certificates</p>
-									<h4 class="card-title">{{acmCertificates}}</h4>
+									<h4 class="card-title" *ngIf="!loadingACMCertificates">{{acmCertificates}}</h4>
+									<div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingACMCertificates"></div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
+			</div>
+			<div class="col-md-6">
 				<div class="card card-stats">
 					<div class="card-body">
 						<div class="row">
 							<div class="col-5">
 								<div class="icon-big text-center">
-									<i class="la la-heart-o text-primary"></i>
+										<img src="assets/images/services/aws/acm_expired.png" class="service-logo" />
 								</div>
 							</div>
 							<div class="col-7 d-flex align-items-center">
 								<div class="numbers">
 									<p class="card-category">Expired Certificates</p>
-									<h4 class="card-title">{{acmExpiredCertificates}}</h4>
+									<h4 class="card-title" *ngIf="!loadingACMExpiredCertificates">{{acmExpiredCertificates}}</h4>
+									<div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingACMExpiredCertificates"></div>
 								</div>
 							</div>
 						</div>
@@ -156,17 +125,47 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
+						<h4 class="card-title">AWS Console Sign-in Events</h4>
+						<p class="card-category">IAM Users attempted to login into AWS Management Console in last 7 days</p>
+					</div>
+					<div class="card-body">
+						<div id="signInEventsChart">
+								<div class="loader" *ngIf="loadingSignInEventsChart">Loading...</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">Geo Location of All Users</h4>
+						<p class="card-category">AWS Management Console Login Source</p>
+					</div>
+					<div class="card-body">
+						<div id="sourceIpsChart">
+							<div class="map">
+								<span>Alternative content for the map</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header">
 						<h4 class="card-title">Unrestricted Security Groups</h4>
 						<p class="card-category">Checks security groups for rules that allow unrestricted access (0.0.0.0/0) to specific ports</p>
 					</div>
 					<div class="card-body">
-						<table class="table table-head-bg-primary table-striped table-hover">
+						<table class="table table-head-bg-danger table-striped table-hover">
 							<thead>
 								<tr>
 									<th>Region</th>
 									<th>ID</th>
 									<th>Name</th>
-									<th>Portocol</th>
+									<th>Protocol</th>
 									<th>From/To Ports</th>
 								</tr>
 							</thead>
@@ -180,7 +179,25 @@
 								</tr>
 							</tbody>
 						</table>
-						<pagination [totalItems]="unrestrictedSecurityGroups.length" [itemsPerPage]="20" (pageChanged)="pageChanged($event)" size="sm"></pagination>
+						<pagination [totalItems]="unrestrictedSecurityGroups.length" [itemsPerPage]="20" (pageChanged)="pageChanged($event)" [maxSize]="18" size="sm"></pagination>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">Top Source Addresses</h4>
+						<p class="card-category">The source IP address of the API caller</p>
+					</div>
+					<div class="card-body">
+						<ul class="list-group">
+							<li class="list-group-item" *ngFor="let sourceIp of consoleLoginSourceIps">
+								{{sourceIp.ip}}
+								<span class="badge badge-danger badge-pill float-right">{{sourceIp.total}}</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 

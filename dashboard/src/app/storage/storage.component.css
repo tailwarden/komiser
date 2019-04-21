@@ -1,0 +1,24 @@
+#logsVolumeChart{
+    min-height: 150px;
+}
+
+#s3BucketsSize{
+    height: 150px !important;
+}
+
+#s3BucketObjects{
+    height: 150px !important;
+}
+
+#ebsFamilyChart{
+    height: 150px !important;
+}
+
+#s3BucketsSizeChart{
+    min-height: 150px;
+}
+
+
+#s3BucketsObjectsChart{
+    min-height: 150px;
+}

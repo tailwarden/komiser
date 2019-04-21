@@ -1,7 +1,7 @@
 <div class="main-header">
     <div class="logo-header">
         <a class="logo" href="index.html">
-            <img src="assets/images/police-cap.png" style="width: 30px; margin-right:10px" /> Komiser Dashboard</a>
+            <img src="assets/images/logo-home.png" style="width: 32px; margin-right:10px" /> Komiser Dashboard</a>
         <button aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler sidenav-toggler ml-auto"
             data-target="collapse" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
@@ -24,37 +24,37 @@
             </form>
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                 <li class="nav-item dropdown hidden-caret">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" routerLink="/limits" id="navbarDropdown"
+                        role="button">
+                        <i class="la la-rocket"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown hidden-caret">
                     <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown"
                         role="button">
                         <i class="la la-bell"></i>
-                        <span class="notification">3</span>
+                        <span class="notification" *ngIf="notifications.length > 0">{{notifications.length}}</span>
                     </a>
                     <ul aria-labelledby="navbarDropdown" class="dropdown-menu notif-box">
                         <li>
                             <div class="dropdown-title">
-                                You have 2 new notification
+                                You have {{notifications.length}} new notification
                             </div>
                         </li>
                         <li>
                             <div class="notif-center">
-                                <a href="#">
+                                <a href="#" *ngFor="let notification of notifications">
                                     <div class="notif-icon notif-primary">
                                         <i class="la la-user-plus"></i>
                                     </div>
                                     <div class="notif-content">
-                                        <span class="block">lambda:invoke is missing</span>
-                                        <span class="time">5 minutes ago</span>
+                                        <span class="block">
+                                            {{notification.content}} 
+                                        </span>
+                                        <span class="badge badge-secondary badge-pill float-right" *ngIf="notification.total > 1">{{notification.total}}</span>
+                                        <span class="time">{{calcMoment(notification.timestamp)}}</span>
                                     </div>
                                 </a>
-                                <a href="#">
-                                        <div class="notif-icon notif-primary">
-                                            <i class="la la-user-plus"></i>
-                                        </div>
-                                        <div class="notif-content">
-                                            <span class="block">rds:provision is missing</span>
-                                            <span class="time">1 minutes ago</span>
-                                        </div>
-                                    </a>
                             </div>
                         </li>
                         <li>
@@ -85,19 +85,9 @@
                 <div class="clearfix"></div>
                 <div aria-expanded="true" class="collapse in" id="collapseExample" style="">
                     <ul class="nav">
-                        <li>
-                            <a href="#profile">
+                        <li routerLinkActive="active">
+                            <a routerLink="/profile">
                                 <span class="link-collapse">My Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#edit">
-                                <span class="link-collapse">Edit Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#settings">
-                                <span class="link-collapse">Settings</span>
                             </a>
                         </li>
                     </ul>
@@ -109,7 +99,7 @@
                 <a routerLink="/">
                     <i class="la la-home"></i>
                     <p>Dashboard</p>
-                    <span class="badge badge-danger">15</span>
+                    <span class="badge badge-danger" *ngIf="redAlarms > 0">{{redAlarms}}</span>
                 </a>
             </li>
             <li class="nav-item" routerLinkActive="active">
@@ -140,12 +130,6 @@
                 <a routerLink="/data-and-ai">
                     <i class="la la-commenting"></i>
                     <p>Data & AI</p>
-                </a>
-            </li>
-            <li class="nav-item" routerLinkActive="active">
-                <a routerLink="/monitoring">
-                    <i class="la la-dashboard"></i>
-                    <p>Monitoring</p>
                 </a>
             </li>
         </ul>

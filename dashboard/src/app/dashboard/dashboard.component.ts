@@ -1,22 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AwsService } from '../aws.service';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
 import 'jquery-mapael';
 import 'jquery-mapael/js/maps/world_countries.js';
-declare var $: any;
+import * as $ from "jquery";
+declare var Chart: any;
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
-  public iamUsers: number;
-  public currentBill: number;
-  public usedRegions: number;
-  public redAlarms: number;
+export class DashboardComponent implements OnInit, AfterViewInit {
+  public iamUsers: number = 0;
+  public currentBill: number = 0;
+  public usedRegions: number = 0;
+  public redAlarms: number = 0;
   public mostUsedServices: Array<any> = [];
+  public openTickets: number = 0;
+  public resolvedTickets: number = 0;
+  public forecastBill: number = 0;
+
+  public loadingCurrentBill: boolean = true;
+  public loadingIamUsers: boolean = true;
+  public loadingUsedRegions: boolean = true;
+  public loadingRedAlarms: boolean = true;
+  public loadingOpenTickets: boolean = true;
+  public loadingResolvedTickets: boolean = true;
+  public loadingCostHistoryChart: boolean = true;
+  public loadingForecastBill: boolean = true;
+
+
+  public colors = ['#36A2EB', '#4BBFC0', '#FBAD4B', '#9368E9']
 
   private regions = {
     us_east_1: {
@@ -89,20 +105,23 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
   constructor(private AwsService: AwsService) {
     this.mostUsedServices = []
 
     this.AwsService.getIAMUsers().subscribe(data => {
       this.iamUsers = data;
+      this.loadingIamUsers = false;
     }, err => {
       this.iamUsers = 0;
+      this.loadingIamUsers = false;
     });
 
     this.AwsService.getCurrentCost().subscribe(data => {
       this.currentBill = data.toFixed(2);
+      this.loadingCurrentBill = false;
     }, err => {
       this.currentBill = 0;
+      this.loadingCurrentBill = false;
     });
 
     this.AwsService.getCostAndUsage().subscribe(data => {
@@ -130,8 +149,10 @@ export class DashboardComponent implements OnInit {
         series.push(serie)
       }
 
+      this.loadingCostHistoryChart = false;
       this.showLastSixMonth(periods, series);
     }, err => {
+      this.loadingCostHistoryChart = false;
       console.log(err)
     });
 
@@ -153,23 +174,73 @@ export class DashboardComponent implements OnInit {
 
     this.AwsService.getUsedRegions().subscribe(data => {
       this.usedRegions = data.length;
+      this.loadingUsedRegions = false;
     }, err => {
       this.usedRegions = 0;
+      this.loadingUsedRegions = false;
     });
 
     this.AwsService.getCloudwatchAlarms().subscribe(data => {
       this.redAlarms = data.ALARM;
+      this.loadingRedAlarms = false;
     }, err => {
       this.usedRegions = 0;
+      this.loadingRedAlarms = false;
     });
 
+    this.AwsService.getOpenSupportTickets().subscribe(data => {
+      this.openTickets = data.length;
+      this.loadingOpenTickets = false;
+    }, err => {
+      this.openTickets = 0;
+      this.loadingOpenTickets = false;
+    });
+
+    this.AwsService.getSupportTicketsHistory().subscribe(data => {
+      data.forEach(ticket => {
+        if (ticket.status == "resolved") {
+          this.resolvedTickets++;
+        }
+      })
+      this.loadingResolvedTickets = false;
+    }, err => {
+      this.resolvedTickets = 0;
+      this.loadingResolvedTickets = false;
+    });
+
+    this.AwsService.getForecastPrice().subscribe(data => {
+      this.forecastBill = this.formatNumber(data);
+      this.loadingForecastBill = false;
+    }, err => {
+      this.forecastBill = 0;
+      this.loadingForecastBill = false;
+    });
   }
 
-  ngOnInit() {
-    this.showLastSixMonth([], []);
+  ngOnInit() {}
+
+  ngAfterViewInit(): void {
     this.showEC2InstancesPerRegion({});
   }
+  
+  public formatNumber(labelValue) {
 
+    // Nine Zeroes for Billions
+    return Math.abs(Number(labelValue)) >= 1.0e+9
+
+      ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + " B"
+      // Six Zeroes for Millions 
+      : Math.abs(Number(labelValue)) >= 1.0e+6
+
+        ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + " M"
+        // Three Zeroes for Thousands
+        : Math.abs(Number(labelValue)) >= 1.0e+3
+
+          ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + " K"
+
+          : Math.abs(Number(labelValue));
+
+  }
 
   public showEC2InstancesPerRegion(plots) {
     $(".mapregions").mapael({
@@ -244,6 +315,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public showLastSixMonth(labels, series) {
+    let _this = this;
     var costHistory = {
       labels: labels,
       series: series
@@ -256,6 +328,12 @@ export class DashboardComponent implements OnInit {
       seriesBarDistance: 10,
       axisX: {
         showGrid: false
+      },
+      axisY: {
+        offset: 80,
+        labelInterpolationFnc: function(value) {
+          return _this.formatNumber(value)
+        },
       },
       height: "245px",
     }

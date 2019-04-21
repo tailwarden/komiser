@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AwsService } from '../aws.service';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
 declare var Chart: any;
 declare var Circles: any;
-declare var $: any;
+import * as $ from "jquery";
 declare var moment: any;
 
 @Component({
@@ -12,22 +12,61 @@ declare var moment: any;
   templateUrl: './compute.component.html',
   styleUrls: ['./compute.component.css']
 })
-export class ComputeComponent implements OnInit {
-
-  public runningEC2Instances: number;
-  public stoppedEC2Instances: number;
-  public terminatedEC2Instances: number;
-  
+export class ComputeComponent implements OnInit, AfterViewInit {
+  public runningEC2Instances: number = 0;
+  public stoppedEC2Instances: number = 0;
+  public terminatedEC2Instances: number = 0;
   public lambdaFunctions: Object;
+  public ecsServices: number = 0;
+  public ecsTasks: number = 0;
+  public ecsClusters: number = 0;
+  public reservedInstances: number = 0;
+  public spotInstances: number = 0;
+  public scheduledInstances: number = 0;
+  public eksClusters: number = 0;
+  public detchedElasticIps: number = 0;
+
+  public loadingRunningInstances: boolean = true;
+  public loadingStoppedInstances: boolean = true;
+  public loadingTerminatedInstances: boolean = true;
+  public loadingReservedInstances: boolean = true;
+  public loadingSpotInstances: boolean = true;
+  public loadingScheduledInstances: boolean = true;
+  public loadingDetachedIps: boolean = true;
+  public loadingLambdaFunctions: boolean = true;
+  public loadingEcsClusters: boolean = true;
+  public loadingEcsTasks: boolean = true;
+  public loadingEcsServices: boolean = true;
+  public loadingEksClusters: boolean = true;
+  public loadingInstancesPrivacyChart: boolean = true;
+  public loadingInstancesFamilyChart: boolean = true;
+  public loadingCostPerInstanceTypeChart: boolean = true;
+  public loadingLambdaInvocationsChart: boolean = true;
+  public loadingLambdaErrorsChart: boolean = true;
+
 
   constructor(private awsService: AwsService) {
 
     this.lambdaFunctions = {}
 
+    this.awsService.getDetachedElasticIps().subscribe(data => {
+      this.detchedElasticIps = data;
+      this.loadingDetachedIps = false;
+    }, err => {
+      this.loadingDetachedIps = false;
+      this.detchedElasticIps = 0;
+    });
+
     this.awsService.getInstancesPerRegion().subscribe(data => {
       this.runningEC2Instances = data.state.running ? data.state.running : 0;
       this.stoppedEC2Instances = data.state.stopped ? data.state.stopped : 0;
       this.terminatedEC2Instances = data.state.terminated ? data.state.terminated : 0;
+
+      this.loadingRunningInstances = false;
+      this.loadingStoppedInstances = false;
+      this.loadingTerminatedInstances = false;
+      this.loadingInstancesPrivacyChart = false;
+      this.loadingInstancesFamilyChart = false;
 
       let labels = [];
       let series = [];
@@ -38,8 +77,15 @@ export class ComputeComponent implements OnInit {
         colors.push(this.getRandomColor());
       })
 
+      this.showInstancesPrivacy([data.public, data.private]);
+
       this.showInstanceFamilies(labels, series, colors);
     }, err => {
+      this.loadingRunningInstances = false;
+      this.loadingStoppedInstances = false;
+      this.loadingInstancesPrivacyChart = false;
+      this.loadingTerminatedInstances = false;
+      this.loadingInstancesFamilyChart = false;
       this.runningEC2Instances = 0;
       this.stoppedEC2Instances = 0;
       this.terminatedEC2Instances = 0;
@@ -53,6 +99,7 @@ export class ComputeComponent implements OnInit {
       this.lambdaFunctions.python = data.python ? data.python : 0;
       this.lambdaFunctions.node = data.node ? data.node : 0;
       this.lambdaFunctions.custom = data.custom ? data.custom : 0;
+      this.loadingLambdaFunctions = false;
     }, err => {
       this.lambdaFunctions = {
         golang: 0,
@@ -63,6 +110,7 @@ export class ComputeComponent implements OnInit {
         node: 0,
         custom: 0
       };
+      this.loadingLambdaFunctions = false;
     });
 
     this.awsService.getLambdaInvocationMetrics().subscribe(data => {
@@ -88,33 +136,212 @@ export class ComputeComponent implements OnInit {
         }
         series.push(serie)
       }
+
+      this.loadingLambdaInvocationsChart = false;
       this.showLambdaInvocations(labels, series);
     }, err => {
+      this.loadingLambdaInvocationsChart = false;
       console.log(err)
-    })
+    });
+
+    this.awsService.getECS().subscribe(data => {
+      this.ecsServices = data.services;
+      this.ecsClusters = data.clusters;
+      this.ecsTasks = data.tasks;
+      this.loadingEcsClusters = false;
+      this.loadingEcsServices = false;
+      this.loadingEcsTasks = false;
+    }, err => {
+      this.ecsServices = 0;
+      this.ecsClusters = 0;
+      this.ecsTasks = 0;
+      this.loadingEcsClusters = false;
+      this.loadingEcsServices = false;
+      this.loadingEcsTasks = false;
+    });
+
+    this.awsService.getLambdaErrors().subscribe(data => {
+      let labels = [];
+      data.forEach(period => {
+        labels.push(new Date(period.timestamp).toISOString().split('T')[0])
+      })
+
+      let series = []
+      for (let i = 0; i < labels.length; i++) {
+        let serie = []
+        for (let j = 0; j < labels.length; j++) {
+          let item = data[j].metrics[i]
+          if(item){
+            serie.push({
+              meta: item.label, value: item.value
+            })
+          } else {
+            serie.push({
+              meta: 'others', value: 0
+            })
+          }
+        }
+        series.push(serie)
+      }
+
+      this.loadingLambdaErrorsChart = false;
+      this.showLambdaErrors(labels, series);
+    }, err => {
+      this.loadingLambdaErrorsChart = false;
+      console.log(err);
+    });
+
+    this.awsService.getReservedInstances().subscribe(data => {
+      this.reservedInstances = data;
+      this.loadingReservedInstances = false;
+    }, err => {
+      this.reservedInstances = 0;
+      this.loadingReservedInstances = false;
+    });
+
+    this.awsService.getScheduledInstances().subscribe(data => {
+      this.scheduledInstances = data;
+      this.loadingScheduledInstances = false;
+    }, err => {
+      this.scheduledInstances = 0;
+      this.loadingScheduledInstances = false;
+    });
+
+    this.awsService.getSpotInstances().subscribe(data => {
+      this.spotInstances = data;
+      this.loadingSpotInstances= false;
+    }, err => {
+      this.spotInstances = 0;
+      this.loadingSpotInstances= false;
+    });
+
+    this.awsService.getEKSClusters().subscribe(data => {
+      this.eksClusters = data;
+      this.loadingEksClusters = false;
+    }, err => {
+      this.eksClusters = 0;
+      this.loadingEksClusters = false;
+    });
+
+    this.awsService.getCostPerInstanceType().subscribe(data => {
+      let periods = [];
+      let series = []
+      data.history.forEach(period => {
+        periods.push(new Date(period.start).toLocaleString('en-us', { month: 'long' }));
+      });
+
+      for (let i = 0; i < periods.length; i++) {
+        let serie = []
+        for (let j = 0; j < periods.length; j++) {
+          let item = data.history[j].groups[i]
+          serie.push({
+            meta: item.key, value: item.amount.toFixed(2)
+          })
+        }
+        series.push(serie)
+      }
+
+      this.loadingCostPerInstanceTypeChart = false;
+
+      this.showCostPerInstanceType(periods, series);
+    }, err => {
+      this.loadingCostPerInstanceTypeChart = false;
+      console.log(err);
+    });
   }
 
-  ngOnInit() {
-    this.showInstanceFamilies([], [], []);
-    this.showLambdaInvocations([], []);
-    this.showInstancesPrivacy();
+  private formatNumber(labelValue) {
+
+    // Nine Zeroes for Billions
+    return Math.abs(Number(labelValue)) >= 1.0e+9
+
+      ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + " B"
+      // Six Zeroes for Millions 
+      : Math.abs(Number(labelValue)) >= 1.0e+6
+
+        ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + " M"
+        // Three Zeroes for Thousands
+        : Math.abs(Number(labelValue)) >= 1.0e+3
+
+          ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + " K"
+
+          : Math.abs(Number(labelValue));
+
   }
 
-  private showInstancesPrivacy(){
-    var data = {
-      series: [139, 10]
-    };
-    
-    var sum = function(a, b) { return a + b };
-    
-    new Chartist.Pie('#instances-privacy', data, {
-      labelInterpolationFnc: function(value) {
-        return Math.round(value / data.series.reduce(sum) * 100) + '%';
+  ngOnInit() {}
+
+  ngAfterViewInit(): void {}
+
+  private showCostPerInstanceType(labels, series) {
+    let _this = this;
+    var costHistory = {
+      labels: labels,
+      series: series
+    }
+
+    var optionChartCostHistory = {
+      plugins: [
+        Chartist.plugins.tooltip()
+      ],
+      seriesBarDistance: 10,
+      axisX: {
+        showGrid: false
+      },
+      axisY: {
+        offset: 80,
+        labelInterpolationFnc: function(value) {
+          return _this.formatNumber(value)
+        },
+      },
+      height: "245px",
+    }
+
+    new Chartist.Bar('.costPerInstanceTypeChart', costHistory, optionChartCostHistory);
+
+  }
+
+  private showInstancesPrivacy(series){
+    var ctx = document.getElementById('instancesPrivacyChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+          datasets: [{
+            data: series,
+            backgroundColor: ['#36A2EB','#4BC0C0']
+          }],
+          labels: ['Public Instances', 'Private Instances']
+        },
+        options: {}
+    });
+  }
+
+  private showLambdaErrors(labels, series){
+    let _this = this;
+    new Chartist.Line('.lambdaErrorsChart', {
+      labels: labels,
+      series: series
+    }, {
+      plugins: [
+        Chartist.plugins.tooltip()
+      ],
+      axisY: {
+        offset: 80,
+        labelInterpolationFnc: function(value) {
+          return _this.formatNumber(value)
+        }
+      }
+    }).on('draw', function(data) {
+      if(data.type === 'line') {
+        data.element.attr({
+          style: 'stroke-width: 1px'
+        });
       }
     });
   }
 
   private showLambdaInvocations(labels, series){
+    let _this = this;
     new Chartist.Bar('.lambdaInvocationsChart', {
       labels: labels,
       series: series
@@ -124,8 +351,9 @@ export class ComputeComponent implements OnInit {
       ],
       stackBars: true,
       axisY: {
+        offset: 80,
         labelInterpolationFnc: function(value) {
-          return (value/1000000) + 'M'
+          return _this.formatNumber(value)
         }
       }
     }).on('draw', function(data) {
@@ -178,7 +406,7 @@ export class ComputeComponent implements OnInit {
       }
     };
 
-    var ctx = document.getElementById('task-complete2');
+    var ctx = document.getElementById('instancesFamilyChart');
     var chart = new Chart.PolarArea(ctx, config);
   }
 

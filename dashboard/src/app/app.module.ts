@@ -10,11 +10,13 @@ import { StorageComponent } from './storage/storage.component';
 import { NetworkComponent } from './network/network.component';
 import { SecurityComponent } from './security/security.component';
 import { DataAndAiComponent } from './data-and-ai/data-and-ai.component';
-import { MonitoringComponent } from './monitoring/monitoring.component';
 
 import { AwsService } from './aws.service';
-
+import { StoreService } from './store.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ProfileComponent } from './profile/profile.component';
+import { LimitsComponent } from './limits/limits.component';
+import { GoogleAnalyticsService } from './google-analytics.service';
 
 
 
@@ -45,9 +47,14 @@ const appRoutes: Routes = [
     data: { title: 'Data & AI - Komiser' }
   },
   { 
-    path: 'monitoring',
-    component: MonitoringComponent,
-    data: { title: 'Monitoring - Komiser' }
+    path: 'profile',
+    component: ProfileComponent,
+    data: { title: 'Profile - Komiser' }
+  },
+  { 
+    path: 'limits',
+    component: LimitsComponent,
+    data: { title: 'Service Limits Checks - Komiser' }
   },
   { path: '',
     component: DashboardComponent,
@@ -64,7 +71,8 @@ const appRoutes: Routes = [
     NetworkComponent,
     SecurityComponent,
     DataAndAiComponent,
-    MonitoringComponent
+    ProfileComponent,
+    LimitsComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -75,8 +83,12 @@ const appRoutes: Routes = [
     PaginationModule.forRoot()
   ],
   providers: [
-    AwsService
+    AwsService,
+    StoreService,
+    GoogleAnalyticsService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(protected _googleAnalyticsService: GoogleAnalyticsService){}
+}

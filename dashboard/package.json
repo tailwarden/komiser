@@ -1,6 +1,6 @@
 {
-  "name": "dashboard",
-  "version": "0.0.0",
+  "name": "komiser-dashboard",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -42,6 +42,7 @@
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "@types/chartist": "^0.9.44",
+    "@types/google.analytics": "0.0.39",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",

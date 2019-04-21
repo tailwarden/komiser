@@ -13,3 +13,15 @@
 .card-docker{
     background: #009BC6 !important;
 }
+
+.costPerInstanceTypeChart{
+    min-height: 150px;
+}
+
+.lambdaInvocationsChart{
+    min-height: 150px;
+}
+
+.lambdaErrorsChart{
+    min-height: 150px;
+}

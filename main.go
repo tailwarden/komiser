@@ -10,8 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	. "github.com/mlabouardy/komiser/handlers"
-	cache "github.com/patrickmn/go-cache"
+	. "github.com/mlabouardy/komiser/handlers/aws"
+	. "github.com/mlabouardy/komiser/services/cache"
 	"github.com/urfave/cli"
 )
 
@@ -20,13 +20,14 @@ const (
 	DEFAULT_DURATION = 30
 )
 
-func startServer(port int, duration int) {
+func startServer(port int, cache Cache) {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cache := cache.New(time.Duration(duration)*time.Minute, time.Duration(duration)*time.Minute)
+	cache.Connect()
+
 	awsHandler := NewAWSHandler(cfg, cache)
 
 	r := mux.NewRouter()
@@ -61,35 +62,40 @@ func startServer(port int, duration int) {
 	r.HandleFunc("/aws/security_groups/unrestricted", awsHandler.ListUnrestrictedSecurityGroups)
 	r.HandleFunc("/aws/acm/certificates", awsHandler.APIGatewayListCertificatesHandler)
 	r.HandleFunc("/aws/acm/expired", awsHandler.APIGatewayExpiredCertificatesHandler)
-
-	/*r.HandleFunc("/ec2", awsHandler.EC2InstancesHandler)
-	r.HandleFunc("/ebs", awsHandler.EBSHandler)
-	r.HandleFunc("/vpc", awsHandler.VPCHandler)
-	r.HandleFunc("/acl", awsHandler.ACLHandler)
-	r.HandleFunc("/security_group", awsHandler.SecurityGroupHandler)
-	r.HandleFunc("/nat", awsHandler.NatGatewayHandler)
-	r.HandleFunc("/key_pair", awsHandler.KeyPairHandler)
-	r.HandleFunc("/route_table", awsHandler.RouteTableHandler)
-	r.HandleFunc("/internet_gateway", awsHandler.InternetGatewayHandler)
-	r.HandleFunc("/eip", awsHandler.ElasticIPHandler)
-	r.HandleFunc("/autoscaling_group", awsHandler.AutoScalingGroupHandler)
-	r.HandleFunc("/elb", awsHandler.ElasticLoadBalancerHandler)
-	r.HandleFunc("/cost", awsHandler.CostAndUsageHandler)
-	r.HandleFunc("/lambda", awsHandler.LambdaFunctionHandler)
-	r.HandleFunc("/rds", awsHandler.RDSInstanceHandler)
-	r.HandleFunc("/dynamodb", awsHandler.DynamoDBTableHandler)
-	r.HandleFunc("/snapshot", awsHandler.SnapshotHandler)
-	r.HandleFunc("/sqs", awsHandler.SQSQueuesHandler)
-	r.HandleFunc("/sns", awsHandler.SNSTopicsHandler)
-	r.HandleFunc("/hosted_zone", awsHandler.HostedZoneHandler)
-	r.HandleFunc("/iam/role", awsHandler.IAMRolesHandler)
-	r.HandleFunc("/iam/group", awsHandler.IAMGroupsHandler)
-	r.HandleFunc("/iam/user", awsHandler.IAMUsersHandler)
-	r.HandleFunc("/iam/policy", awsHandler.IAMPoliciesHandler)
-	r.HandleFunc("/ecs", awsHandler.ECSHandler)
-	r.HandleFunc("/cloudwatch", awsHandler.CloudWatchAlarmsHandler)
-	r.HandleFunc("/cloudfront", awsHandler.CloudFrontDistributionsHandler)
-	r.HandleFunc("/s3", awsHandler.S3BucketsHandler)*/
+	r.HandleFunc("/aws/sqs/messages", awsHandler.GetNumberOfMessagesSentAndDeletedSQSHandler)
+	r.HandleFunc("/aws/sqs/queues", awsHandler.SQSQueuesHandler)
+	r.HandleFunc("/aws/sns/topics", awsHandler.SNSTopicsHandler)
+	r.HandleFunc("/aws/mq/brokers", awsHandler.ActiveMQBrokersHandler)
+	r.HandleFunc("/aws/kinesis/streams", awsHandler.KinesisListStreamsHandler)
+	r.HandleFunc("/aws/kinesis/shards", awsHandler.KinesisListShardsHandler)
+	r.HandleFunc("/aws/glue/crawlers", awsHandler.GlueGetCrawlersHandler)
+	r.HandleFunc("/aws/glue/jobs", awsHandler.GlueGetJobsHandler)
+	r.HandleFunc("/aws/datapipeline/pipelines", awsHandler.DataPipelineListPipelines)
+	r.HandleFunc("/aws/es/domains", awsHandler.ESListDomainsHandler)
+	r.HandleFunc("/aws/swf/domains", awsHandler.SWFListDomainsHandler)
+	r.HandleFunc("/aws/support/open", awsHandler.SupportOpenTicketsHandler)
+	r.HandleFunc("/aws/support/history", awsHandler.SupportTicketsInLastSixMonthsHandlers)
+	r.HandleFunc("/aws/ecs", awsHandler.ECSHandler)
+	r.HandleFunc("/aws/route53/zones", awsHandler.Route53HostedZonesHandler)
+	r.HandleFunc("/aws/route53/records", awsHandler.Route53ARecordsHandler)
+	r.HandleFunc("/aws/logs/volume", awsHandler.LogsVolumeHandler)
+	r.HandleFunc("/aws/cloudtrail/sign_in_event", awsHandler.CloudTrailConsoleSignInEventsHandler)
+	r.HandleFunc("/aws/cloudtrail/source_ip", awsHandler.CloudTrailConsoleSignInSourceIpEventsHandler)
+	r.HandleFunc("/aws/lambda/errors", awsHandler.GetLambdaErrorsMetrics)
+	r.HandleFunc("/aws/ec2/scheduled", awsHandler.ScheduledEC2Instances)
+	r.HandleFunc("/aws/ec2/reserved", awsHandler.ReservedEC2Instances)
+	r.HandleFunc("/aws/ec2/spot", awsHandler.SpotEC2Instances)
+	r.HandleFunc("/aws/cost/instance_type", awsHandler.CostAndUsagePerInstanceTypeHandler)
+	r.HandleFunc("/aws/eks/clusters", awsHandler.EKSClustersHandler)
+	r.HandleFunc("/aws/logs/retention", awsHandler.MaximumLogsRetentionPeriodHandler)
+	r.HandleFunc("/aws/nat/traffic", awsHandler.GetNatGatewayTrafficHandler)
+	r.HandleFunc("/aws/iam/organization", awsHandler.DescribeOrganizationHandler)
+	r.HandleFunc("/aws/service/limits", awsHandler.DescribeServiceLimitsChecks)
+	r.HandleFunc("/aws/s3/empty", awsHandler.GetEmptyBucketsHandler)
+	r.HandleFunc("/aws/eip/detached", awsHandler.ElasticIPHandler)
+	r.HandleFunc("/aws/redshift/clusters", awsHandler.DescribeRedshiftClustersHandler)
+	r.HandleFunc("/aws/vpc/subnets", awsHandler.DescribeSubnetsHandler)
+	r.HandleFunc("/aws/cost/forecast", awsHandler.DescribeForecastPriceHandler)
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS()(r))
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
@@ -104,7 +110,8 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
 	app.Version = "1.0.0"
-	app.Usage = "AWS Environment Inspector"
+	app.Usage = "Cloud Environment Inspector"
+	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()
 	app.Authors = []cli.Author{
 		cli.Author{
@@ -120,24 +127,44 @@ func main() {
 				cli.IntFlag{
 					Name:  "port, p",
 					Usage: "Server port",
-					Value: 3000,
+					Value: DEFAULT_PORT,
 				},
 				cli.IntFlag{
 					Name:  "duration, d",
 					Usage: "Cache expiration time",
-					Value: 30,
+					Value: DEFAULT_DURATION,
+				},
+				cli.StringFlag{
+					Name:  "redis, r",
+					Usage: "Redis server",
 				},
 			},
 			Action: func(c *cli.Context) error {
 				port := c.Int("port")
 				duration := c.Int("duration")
+				redis := c.String("redis")
+
+				var cache Cache
+
 				if port == 0 {
 					port = DEFAULT_PORT
 				}
 				if duration == 0 {
 					duration = DEFAULT_DURATION
 				}
-				startServer(port, duration)
+
+				if redis == "" {
+					cache = &Memory{
+						Expiration: time.Duration(duration),
+					}
+				} else {
+					cache = &Redis{
+						Addr:       redis,
+						Expiration: time.Duration(duration),
+					}
+				}
+
+				startServer(port, cache)
 				return nil
 			},
 		},
