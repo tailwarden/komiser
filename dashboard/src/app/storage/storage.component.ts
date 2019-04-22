@@ -171,7 +171,7 @@ export class StorageComponent implements OnInit {
     });
 
     this.awsService.getRDSInstances().subscribe(data => {
-      this.docdbInstances = data.docdb;
+      this.docdbInstances = data.docdb ? data.docdb : 0;
       let total = 0;
       Object.keys(data).forEach(key => {
         if (key != "docdb") {

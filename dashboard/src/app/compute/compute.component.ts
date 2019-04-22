@@ -234,9 +234,15 @@ export class ComputeComponent implements OnInit, AfterViewInit {
         let serie = []
         for (let j = 0; j < periods.length; j++) {
           let item = data.history[j].groups[i]
-          serie.push({
-            meta: item.key, value: item.amount.toFixed(2)
-          })
+          if(item){
+            serie.push({
+              meta: item.key, value: item.amount.toFixed(2)
+            })
+          }else{
+            serie.push({
+              meta: 'others', value: 0
+            })
+          }
         }
         series.push(serie)
       }

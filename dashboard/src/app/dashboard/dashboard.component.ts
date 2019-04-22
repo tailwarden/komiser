@@ -238,7 +238,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
           ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + " K"
 
-          : Math.abs(Number(labelValue));
+          : Math.abs(Number(labelValue)).toFixed(2);
 
   }
 
