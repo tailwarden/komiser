@@ -32,7 +32,9 @@ jobs:
           at: /tmp/dashboard
       - run:
           name: Install dependencies
-          command: go get -v
+          command: |
+            go get -u github.com/tools/godep
+            godep restore
       - run:
           name: Install go-bin-data
           command: |
