@@ -1,35 +1,43 @@
 version: 2
 jobs:
   build_frontend:
+    branches:
+        only:
+            - master
+            - develop
     docker:
       - image: circleci/node:8.10-stretch-browsers
     working_directory: ~/komiser
     steps:
       - checkout
       - restore_cache:
-          key: node-modules-{{checksum "public/package.json"}}
+          key: node-modules-{{checksum "dashboard/package.json"}}
       - run:
           name: Install dependencies
-          command: cd public && npm install
+          command: cd dashboard && npm install
       - save_cache:
-          key: node-modules-{{checksum "public/package.json"}}
+          key: node-modules-{{checksum "dashboard/package.json"}}
           paths:
-            - public/node_modules
+            - dashboard/node_modules
       - run:
           name: Build artifact
-          command: cd public && npm run build
+          command: cd dashboard && npm run build
       - persist_to_workspace:
-          root: public
+          root: dashboard
           paths:
             - dist
   build_cli:
+    branches:
+        only:
+            - master
+            - develop
     docker:
-      - image: golang:1.8
+      - image: golang:1.10.3
     working_directory: /go/src/github.com/mlabouardy/komiser
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/public
+          at: /tmp/dashboard
       - run:
           name: Install dependencies
           command: go get -v
@@ -40,7 +48,7 @@ jobs:
            go get github.com/elazarl/go-bindata-assetfs/...
       - run:
          name: Fix path
-         command: mv /tmp/public/dist .
+         command: mv /tmp/dashboard/dist .
       - run:
          name: Create assets
          command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
@@ -70,8 +78,12 @@ jobs:
           command: aws s3 cp policy.json s3://komiser/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
   build_docker:
+    branches:
+        only:
+            - master
+            - develop
     docker:
-       - image: docker:18.02.0-ce
+       - image: docker:18.09.1-ce
     steps:
         - checkout
         - setup_remote_docker
@@ -86,7 +98,6 @@ jobs:
               docker push mlabouardy/komiser:latest
               docker push mlabouardy/komiser:${CIRCLE_SHA1}
       
-
 workflows:
     version: 2
     build_and_deploy:
