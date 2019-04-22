@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build --prod --aot false",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -32,7 +32,7 @@
     "jquery": "^3.3.1",
     "jquery-mapael": "^2.2.0",
     "moment": "^2.24.0",
-    "ngx-bootstrap": "^4.0.0",
+    "ngx-bootstrap": "^2.0.5",
     "raphael": "^2.2.8",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"

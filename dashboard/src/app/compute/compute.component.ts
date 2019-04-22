@@ -16,7 +16,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
   public runningEC2Instances: number = 0;
   public stoppedEC2Instances: number = 0;
   public terminatedEC2Instances: number = 0;
-  public lambdaFunctions: Object;
+  public lambdaFunctions: any;
   public ecsServices: number = 0;
   public ecsTasks: number = 0;
   public ecsClusters: number = 0;
@@ -274,7 +274,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   private showCostPerInstanceType(labels, series) {
-    let _this = this;
+    let scope = this;
     var costHistory = {
       labels: labels,
       series: series
@@ -291,7 +291,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
       axisY: {
         offset: 80,
         labelInterpolationFnc: function(value) {
-          return _this.formatNumber(value)
+          return scope.formatNumber(value)
         },
       },
       height: "245px",
@@ -302,7 +302,8 @@ export class ComputeComponent implements OnInit, AfterViewInit {
   }
 
   private showInstancesPrivacy(series){
-    var ctx = document.getElementById('instancesPrivacyChart').getContext('2d');
+    var canvas : any = document.getElementById('instancesPrivacyChart');
+    var ctx = canvas.getContext('2d');
     new Chart(ctx, {
         type: 'pie',
         data: {
@@ -317,7 +318,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
   }
 
   private showLambdaErrors(labels, series){
-    let _this = this;
+    let scope = this;
     new Chartist.Line('.lambdaErrorsChart', {
       labels: labels,
       series: series
@@ -328,7 +329,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
       axisY: {
         offset: 80,
         labelInterpolationFnc: function(value) {
-          return _this.formatNumber(value)
+          return scope.formatNumber(value)
         }
       }
     }).on('draw', function(data) {
@@ -341,7 +342,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
   }
 
   private showLambdaInvocations(labels, series){
-    let _this = this;
+    let scope = this;
     new Chartist.Bar('.lambdaInvocationsChart', {
       labels: labels,
       series: series
@@ -353,7 +354,7 @@ export class ComputeComponent implements OnInit, AfterViewInit {
       axisY: {
         offset: 80,
         labelInterpolationFnc: function(value) {
-          return _this.formatNumber(value)
+          return scope.formatNumber(value)
         }
       }
     }).on('draw', function(data) {

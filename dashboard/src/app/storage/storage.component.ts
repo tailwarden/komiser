@@ -108,7 +108,7 @@ export class StorageComponent implements OnInit {
       })
 
       this.loadingS3BucketObjects = false;
-      this.s3BucketObjects = this.formatNumber(total);
+      this.s3BucketObjects = this.formatNumber(total).toString();
       this.loadingS3BucketsObjectsChart = false;
 
       this.showS3BucketsObjects(labels, series);
@@ -245,7 +245,7 @@ export class StorageComponent implements OnInit {
 
   
   private showS3BucketsObjects(labels, series) {
-    let _this = this;
+    let scope = this;
     new Chartist.Bar('#s3BucketsObjectsChart', {
       labels: labels,
       series: series
@@ -257,7 +257,7 @@ export class StorageComponent implements OnInit {
         axisY: {
           offset: 80,
           labelInterpolationFnc: function (value) {
-            return _this.formatNumber(value);
+            return scope.formatNumber(value);
           }
         }
       }).on('draw', function (data) {
@@ -270,7 +270,7 @@ export class StorageComponent implements OnInit {
   }
 
   private showS3BucketsSize(labels, series) {
-    let _this = this;
+    let scope = this;
     new Chartist.Bar('#s3BucketsSizeChart', {
       labels: labels,
       series: series
@@ -282,7 +282,7 @@ export class StorageComponent implements OnInit {
         axisY: {
           offset: 80,
           labelInterpolationFnc: function (value) {
-            return _this.bytesToSizeWithUnit(value);
+            return scope.bytesToSizeWithUnit(value);
           }
         }
       }).on('draw', function (data) {
@@ -295,7 +295,7 @@ export class StorageComponent implements OnInit {
   }
 
   private showLogsVolume(labels, series) {
-    let _this = this;
+    let scope = this;
     new Chartist.Bar('#logsVolumeChart', {
       labels: labels,
       series: series
@@ -307,7 +307,7 @@ export class StorageComponent implements OnInit {
         axisY: {
           offset: 80,
           labelInterpolationFnc: function (value) {
-            return _this.bytesToSizeWithUnit(value);
+            return scope.bytesToSizeWithUnit(value);
           }
         }
       }).on('draw', function (data) {
@@ -337,7 +337,8 @@ export class StorageComponent implements OnInit {
 
     };
 
-    var ctx = document.getElementById('ebsFamilyChart').getContext('2d');
+    var canvas : any = document.getElementById('ebsFamilyChart');
+    var ctx = canvas.getContext('2d');
     new Chart(ctx, {
       type: 'pie',
       data: barChartData,
@@ -351,7 +352,7 @@ export class StorageComponent implements OnInit {
     });
   }
 
-  private formatNumber(labelValue) {
+  private formatNumber(labelValue: number) {
 
     // Nine Zeroes for Billions
     return Math.abs(Number(labelValue)) >= 1.0e+9
@@ -380,15 +381,15 @@ export class StorageComponent implements OnInit {
   private bytesToSizeWithUnit(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString());
+    return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
   };
 
   private bytesToSize(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2)
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString());
+    return Math.round(bytes / Math.pow(1024, i))
   };
 
 

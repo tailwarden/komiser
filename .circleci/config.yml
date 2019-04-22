@@ -43,7 +43,7 @@ jobs:
          command: mv /tmp/dashboard/dist .
       - run:
          name: Create assets
-         command: go-bindata-assetfs -o template.go dist/ dist/assets/images/
+         command: go-bindata-assetfs -o template.go dist/ dist/assets/images/ dist/assets/js/ dist/assets/fonts/
       - run:
          name: Install gox
          command: go get github.com/mitchellh/gox
@@ -58,13 +58,13 @@ jobs:
           chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
       - run:
           name: Push Linux binary
-          command: aws s3 cp komiser_linux_amd64 s3://komiser/1.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_linux_amd64 s3://komiser/2.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Windows binary
-          command: aws s3 cp komiser_windows_amd64.exe s3://komiser/1.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_windows_amd64.exe s3://komiser/2.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Mac OS X binary
-          command: aws s3 cp komiser_darwin_amd64 s3://komiser/1.0.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_darwin_amd64 s3://komiser/2.0.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Upload IAM policy
           command: aws s3 cp policy.json s3://komiser/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers

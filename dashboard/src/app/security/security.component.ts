@@ -159,7 +159,8 @@ export class SecurityComponent implements OnInit, AfterViewInit {
   ngOnInit() { }
 
   private showSourceIpLogin(plots) {
-    $("#sourceIpsChart").mapael({
+    var canvas : any = $("#sourceIpsChart");
+    canvas.mapael({
       map: {
         name: "world_countries",
         zoom: {

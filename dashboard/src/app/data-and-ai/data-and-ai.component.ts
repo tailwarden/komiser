@@ -179,7 +179,7 @@ export class DataAndAiComponent implements OnInit {
   }
 
   private showSQSMessages(labels, series) {
-    let _this = this;
+    let scope = this;
     new Chartist.Bar('#sqsMessagesChart', {
       labels: labels,
       series: series
@@ -191,7 +191,7 @@ export class DataAndAiComponent implements OnInit {
         axisY: {
           offset: 80,
           labelInterpolationFnc: function (value) {
-            return _this.formatNumber(value);
+            return scope.formatNumber(value);
           }
         }
       }).on('draw', function (data) {

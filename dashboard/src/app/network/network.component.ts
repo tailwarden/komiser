@@ -21,11 +21,11 @@ export class NetworkComponent implements OnInit {
   public cloudfrontDistributions: number;
   public cdnYesterdayRequests: string;
   public cdnTodayRequests: string;
-  public apigatewayYesterdayRequests: number;
-  public apigatewayTodayRequests: number;
+  public apigatewayYesterdayRequests: string;
+  public apigatewayTodayRequests: string;
   public apigatewayApis: number;
-  public elbYesterdayRequests: number;
-  public elbTodayRequests: number;
+  public elbYesterdayRequests: string;
+  public elbTodayRequests: string;
   public loadBalancers: number;
   public route53Records: number;
   public route53Zones: number;
@@ -133,13 +133,13 @@ export class NetworkComponent implements OnInit {
       })
 
       this.loadingCDNRequests = false;
-      this.cdnYesterdayRequests = this.formatNumber(yesterdayRequests);
-      this.cdnTodayRequests = this.formatNumber(todayRequests);
+      this.cdnYesterdayRequests = this.formatNumber(yesterdayRequests).toString();
+      this.cdnTodayRequests = this.formatNumber(todayRequests).toString();
       this.loadingCloudfrontRequestsChart = false;
       this.showCloudFrontRequests(datasets);
     }, err => {
-      this.cdnTodayRequests = 0;
-      this.cdnYesterdayRequests = 0;
+      this.cdnTodayRequests = '0';
+      this.cdnYesterdayRequests = '0';
       this.loadingCloudfrontRequestsChart = false;
       this.loadingCDNRequests = false;
     })
@@ -194,12 +194,12 @@ export class NetworkComponent implements OnInit {
       })
       this.loadingAPIRequests = false;
       this.loadingApigatewayRequestsChart = false;
-      this.apigatewayYesterdayRequests = this.formatNumber(yesterdayRequests);
-      this.apigatewayTodayRequests = this.formatNumber(todayRequests);
+      this.apigatewayYesterdayRequests = this.formatNumber(yesterdayRequests).toString();
+      this.apigatewayTodayRequests = this.formatNumber(todayRequests).toString()
       this.showApiGatewayRequests(datasets);
     }, err => {
-      this.apigatewayYesterdayRequests = 0;
-      this.apigatewayTodayRequests = 0;
+      this.apigatewayYesterdayRequests = '0';
+      this.apigatewayTodayRequests = '0';
       this.loadingAPIRequests = false;
       this.loadingApigatewayRequestsChart = false;
     });
@@ -262,12 +262,12 @@ export class NetworkComponent implements OnInit {
       })
       this.loadingElbRequests = false;
       this.loadingElbRequestsChart = false;
-      this.elbYesterdayRequests = this.formatNumber(yesterdayRequests);
-      this.elbTodayRequests = this.formatNumber(todayRequests);
+      this.elbYesterdayRequests = this.formatNumber(yesterdayRequests).toString();
+      this.elbTodayRequests = this.formatNumber(todayRequests).toString();
       this.showELBRequests(datasets);
     }, err => {
-      this.elbYesterdayRequests = 0;
-      this.elbTodayRequests = 0;
+      this.elbYesterdayRequests = '0';
+      this.elbTodayRequests = '0';
       this.loadingElbRequests = false;
       this.loadingElbRequestsChart = false;
     });
@@ -347,7 +347,7 @@ export class NetworkComponent implements OnInit {
   }
 
   private showNatGatewayTraffic(labels, series) {
-    let _this = this;
+    let scope = this;
     new Chartist.Bar('#natGatewayChartTraffic', {
       labels: labels,
       series: series
@@ -359,7 +359,7 @@ export class NetworkComponent implements OnInit {
         axisY: {
           offset: 80,
           labelInterpolationFnc: function (value) {
-            return _this.bytesToSizeWithUnit(value);
+            return scope.bytesToSizeWithUnit(value);
           }
         }
       }).on('draw', function (data) {
@@ -395,8 +395,8 @@ export class NetworkComponent implements OnInit {
   private bytesToSizeWithUnit(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString());
+    return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
   };
 
 
@@ -416,7 +416,8 @@ export class NetworkComponent implements OnInit {
 
     };
 
-    var ctx = document.getElementById('elbFamilyType').getContext('2d');
+    var canvas : any = document.getElementById('elbFamilyType');
+    var ctx = canvas.getContext('2d');
     window.myBar = new Chart(ctx, {
       type: 'pie',
       data: barChartData,
@@ -449,7 +450,7 @@ export class NetworkComponent implements OnInit {
   }
 
   private showApiGatewayRequests(datasets) {
-    let _this = this;
+    let scope = this;
     var config = {
       type: 'line',
       data: {
@@ -490,7 +491,7 @@ export class NetworkComponent implements OnInit {
             ticks: {
               beginAtZero: true,
               callback: function (value, index, values) {
-                return _this.formatNumber(value);
+                return scope.formatNumber(value);
               }
             }
           }]
@@ -498,12 +499,13 @@ export class NetworkComponent implements OnInit {
       }
     };
 
-    var ctx = document.getElementById('apigatewayRequests').getContext('2d');
+    var canvas : any = document.getElementById('apigatewayRequests');
+    var ctx = canvas.getContext('2d');
     new Chart(ctx, config);
   }
 
   private showCloudFrontRequests(datasets) {
-    let _this = this;
+    let scope = this;
     var config = {
       type: 'line',
       data: {
@@ -544,7 +546,7 @@ export class NetworkComponent implements OnInit {
             ticks: {
               beginAtZero: true,
               callback: function (value, index, values) {
-                return _this.formatNumber(value);
+                return scope.formatNumber(value);
               }
             }
           }]
@@ -552,12 +554,13 @@ export class NetworkComponent implements OnInit {
       }
     };
 
-    var ctx = document.getElementById('cloudfrontRequests').getContext('2d');
+    var canvas : any = document.getElementById('cloudfrontRequests');
+    var ctx = canvas.getContext('2d');
     new Chart(ctx, config);
   }
 
   private showELBRequests(datasets) {
-    let _this = this;
+    let scope = this;
     var config = {
       type: 'line',
       data: {
@@ -598,7 +601,7 @@ export class NetworkComponent implements OnInit {
             ticks: {
               beginAtZero: true,
               callback: function (value, index, values) {
-                return _this.formatNumber(value);
+                return scope.formatNumber(value);
               }
             }
           }]
@@ -606,7 +609,8 @@ export class NetworkComponent implements OnInit {
       }
     };
 
-    var ctx = document.getElementById('elbRequests').getContext('2d');
+    var canvas : any = document.getElementById('elbRequests');
+    var ctx = canvas.getContext('2d');
     new Chart(ctx, config);
   }
 

@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   public mostUsedServices: Array<any> = [];
   public openTickets: number = 0;
   public resolvedTickets: number = 0;
-  public forecastBill: number = 0;
+  public forecastBill: string = '0';
 
   public loadingCurrentBill: boolean = true;
   public loadingIamUsers: boolean = true;
@@ -209,10 +209,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
 
     this.AwsService.getForecastPrice().subscribe(data => {
-      this.forecastBill = this.formatNumber(data);
+      this.forecastBill = this.formatNumber(data).toString();
       this.loadingForecastBill = false;
     }, err => {
-      this.forecastBill = 0;
+      this.forecastBill = '0';
       this.loadingForecastBill = false;
     });
   }
@@ -243,7 +243,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   public showEC2InstancesPerRegion(plots) {
-    $(".mapregions").mapael({
+    var canvas : any = $(".mapregions");
+    canvas.mapael({
       map: {
         name: "world_countries",
         zoom: {
@@ -315,7 +316,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   public showLastSixMonth(labels, series) {
-    let _this = this;
+    let scope = this;
     var costHistory = {
       labels: labels,
       series: series
@@ -332,7 +333,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       axisY: {
         offset: 80,
         labelInterpolationFnc: function(value) {
-          return _this.formatNumber(value)
+          return scope.formatNumber(value)
         },
       },
       height: "245px",
