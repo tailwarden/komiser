@@ -2141,7 +2141,7 @@
     opacity: 0;
   }
   .main-header .logo-header .navbar-toggler .navbar-toggler-icon {
-    background: url(assets/images/menu2.png);
+    background: url(https://cdn.komiser.io/images/menu2.png);
     background-size: cover;
     height: 1em;
     width: 1em;
@@ -2347,15 +2347,15 @@
   
   @font-face {
     font-family: LineAwesome;
-    src: url(assets/fonts/line-awesome.eot?v=1.1.);
-    src: url(assets/fonts/line-awesome.eot??v=1.1.#iefix) format("embedded-opentype"), url(assets/fonts/line-awesome.woff2?v=1.1.) format("woff2"), url(assets/fonts/line-awesome.woff?v=1.1.) format("woff"), url(assets/fonts/line-awesome.ttf?v=1.1.) format("truetype"), url(assets/fonts/line-awesome.svg?v=1.1.#fa) format("svg");
+    src: url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.eot);
+    src: url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.eot) format("embedded-opentype"), url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.woff2) format("woff2"), url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.woff) format("woff"), url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.ttf) format("truetype"), url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.svg#fa) format("svg");
     font-weight: 400;
     font-style: normal;
   }
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     @font-face {
       font-family: LineAwesome;
-      src: url(assets/fonts/line-awesome.svg?v=1.1.#fa) format("svg");
+      src: url(http://komiser-assets.s3.eu-west-3.amazonaws.com/fonts/line-awesome.svg) format("svg");
     }
   }
   .la {
