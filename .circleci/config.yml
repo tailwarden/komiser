@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build_frontend:
     branches:
@@ -99,7 +99,7 @@ jobs:
               docker push mlabouardy/komiser:${CIRCLE_SHA1}
       
 workflows:
-    version: 2
+    version: 2.1
     build_and_deploy:
         jobs:
             - build_frontend
