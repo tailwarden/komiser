@@ -71,7 +71,7 @@ jobs:
 
   build_docker:
     docker:
-       - image: docker:18.09.1-ce
+       - image: docker:18.09.5
     steps:
         - checkout
         - setup_remote_docker
