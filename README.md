@@ -8,7 +8,7 @@
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (1.0.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.0.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
