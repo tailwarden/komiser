@@ -1,10 +1,6 @@
 version: 2.1
 jobs:
   build_frontend:
-    branches:
-        only:
-            - master
-            - develop
     docker:
       - image: circleci/node:8.10-stretch-browsers
     working_directory: ~/komiser
@@ -27,10 +23,6 @@ jobs:
           paths:
             - dist
   build_cli:
-    branches:
-        only:
-            - master
-            - develop
     docker:
       - image: golang:1.10.3
     working_directory: /go/src/github.com/mlabouardy/komiser
@@ -78,10 +70,6 @@ jobs:
           command: aws s3 cp policy.json s3://komiser/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
   build_docker:
-    branches:
-        only:
-            - master
-            - develop
     docker:
        - image: docker:18.09.1-ce
     steps:
