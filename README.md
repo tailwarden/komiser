@@ -4,10 +4,21 @@
 
 <a href="https://komiser.io"><img alt="Amp" src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/icon.png" width="120" valign="middle"></a>
 
-Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
-
 [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/mlabouardy/komiser)](https://goreportcard.com/report/github.com/mlabouardy/komiser) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [<img src="https://img.shields.io/badge/slack-@komiser-yellow.svg?logo=slack">](https://komiser.slack.com/messages/C9SQPU4Q0/)
+
+Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40mlabouardy)](https://twitter.com/mlabouardy) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/mlabouardy/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops)
+
+
+  and Security on AWS
+**Highlights**
+
+* Analyze and manage cloud cost, usage, security, and governance in one place.
+* Control your usage and create visibility across all used services to achieve maximum cost-effectiveness.
+* PDetect potential vulnerabilities that could put your cloud environment at risk.
+* Get a deep understanding of how you spend on the AWS, GCP and Azure.
 
 ## Download
 
@@ -66,9 +77,9 @@ komiser start --port 3000 --duration 30
 
 ## Documentation
 
-Documentation can be found on [komiser.io](https://docs.komiser.io) as well as in the [`./docs`](./docs) directory.
+See our documentation on [docs.komiser.io](https://docs.komiser.io). The source repository for the documentation website is [komiserio/docs](https://github.com/komiserio/docs).
 
-## Examples
+## Overview
 
 <p align="center">
 
@@ -76,6 +87,6 @@ Documentation can be found on [komiser.io](https://docs.komiser.io) as well as i
 
 </p>
 
-## License
+## Roadmap and contributing
 
-The MIT License (MIT). Please see [`LICENSE`](./LICENSE) for more information.
+Komiser is written in Golang and is MIT licensed - contributions are welcomed whether that means providing feedback or testing existing and new feature.
