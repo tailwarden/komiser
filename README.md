@@ -22,24 +22,24 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (1.0.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.0.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
 ```
-wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/linux/komiser
+wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/windows/komiser
+wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/windows/komiser
 ```
 
 ### Mac OS X:
 
 ```
-wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
+wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/osx/komiser
 ```
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
