@@ -1,11 +1,14 @@
-<p align="center">
-    <img src="komiser.png" width="15%"/>
-</p>
+<a href="https://amphp.org/">
+  <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/logo.png" width="200" align="right" alt="Amp Logo">
+</a>
+
+<a href="https://amphp.org/"><img alt="Amp" src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/icon.png
+" width="120" valign="middle"></a>
+
+Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
 
 [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/mlabouardy/komiser)](https://goreportcard.com/report/github.com/mlabouardy/komiser) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [<img src="https://img.shields.io/badge/slack-@komiser-yellow.svg?logo=slack">](https://komiser.slack.com/messages/C9SQPU4Q0/)
-
-
 
 ## Download
 
@@ -33,10 +36,12 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 
 ## How to use
 
+### AWS
+
 * Create an IAM user with the following IAM [policy](https://raw.githubusercontent.com/mlabouardy/komiser/master/policy.json):
 
 ```
-wget https://s3.amazonaws.com/komiser/policy.json
+wget https://s3.amazonaws.com/komiser/aws/policy.json
 ```
 
 * Add your **Access Key ID** and **Secret Access Key** to *~/.aws/credentials* using this format
@@ -57,105 +62,21 @@ komiser start --port 3000 --duration 30
 * Point your browser to http://localhost:3000
 
 <p align="center">
-    <img src="screenshot.png"/>
+    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard.png"/>
 </p>
 
-## Docker
+## Documentation
 
-Use the official Komiser image:
+Documentation can be found on [komiser.io](https://docs.komiser.io) as well as in the [`./docs`](./docs) directory.
 
-```
-docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser
-```
+## Examples
 
-### Environment Variables
+<p align="center">
 
-| Environment Variable | Description |
-| -------------------- | ----------- |
-| PORT | Server Port |
-| DURATION | Server Cache Expiration (minutes) |
-| AWS_ACCESS_KEY_ID | AWS Access Key |
-| AWS_SECRET_ACCESS_KEY | AWS Secret Key |
-| AWS_DEFAULT_REGION | AWS Region |
-| AWS_PROFILE | AWS Profile ([Docs](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html)) |
+[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
 
-## Configuring Credentials
-
-When using the CLI you'll generally need your AWS credentials to authenticate with AWS services. Komiser supports multiple methods of supporting these credentials. By default the CLI will source credentials automatically from its default credential chain.
-
-* Environment Credentials - Set of environment variables that are useful when sub processes are created for specific roles.
-
-* Shared Credentials file (~/.aws/credentials) - This file stores your credentials based on a profile name and is useful for local development.
-
-* EC2 Instance Role Credentials - Use EC2 Instance Role to assign credentials to application running on an EC2 instance. This removes the need to manage credential files in production.
-
-## Supported AWS Services
-
-### Compute
-
-* EC2
-* Lambda
-* Elasticbeanstalk
-* ECS
-* EKS
-
-### Storage
-
-* S3
-* EBS
-* RDS
-* DocumentDB
-* DynamoDB
-* Elasticache
-* Glacier
-* EFS
-* Snapshots
-
-### Security
-
-* IAM
-* Security Groups
-* ACL
-* VPC
-* KeyPairs
-* KMS
-* Route Tables
-
-### Network
-
-* Internet Gateway
-* Route53
-* ELB
-* CloudFront
-* Nat gateway
-* Elastic IP
-
-### Data & AI
-
-* Kinesis
-
-### Monitoring
-
-* CloudWatch
-* CloudTrail
-
-### Application Integrations
-
-* SES
-* SQS
-
-## Maintainers
-
-* Mohamed Labouardy
-
-## Discussion
-
-Join us on Slack: https://komiser.slack.com
-
-## Tutorial
-
-* [Komiser: AWS Environment Inspector](http://www.blog.labouardy.com/komiser-aws-environment-inspector/)
+</p>
 
 ## License
 
-MIT
+The MIT License (MIT). Please see [`LICENSE`](./LICENSE) for more information.
