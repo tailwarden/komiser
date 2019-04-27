@@ -42,6 +42,12 @@ wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/osx/komiser
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 
+### Docker:
+
+````
+docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.0.0
+```
+
 ## How to use
 
 ### AWS
@@ -58,7 +64,7 @@ wget https://s3.amazonaws.com/komiser/aws/policy.json
 [default]
 aws_access_key_id = <access key id>
 aws_secret_access_key = <secret access key>
-region = us-east-1
+region = <AWS region>
 ```
 
 * That should be it. Try out the following from your command prompt to start the server:
