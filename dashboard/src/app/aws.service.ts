@@ -7,7 +7,7 @@ import { StoreService } from './store.service';
 @Injectable()
 export class AwsService {
 
-  private BASE_URL = 'http://localhost:3000/aws'
+  private BASE_URL = '/aws'
 
   constructor(private http: Http, private storeService: StoreService) { }
 
