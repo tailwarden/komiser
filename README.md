@@ -64,7 +64,7 @@ region = us-east-1
 * That should be it. Try out the following from your command prompt to start the server:
 
 ```
-komiser start --port 3000 --duration 30
+komiser start --port 3000
 ```
 
 * Point your browser to http://localhost:3000
@@ -72,6 +72,28 @@ komiser start --port 3000 --duration 30
 <p align="center">
     <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard.png"/>
 </p>
+
+## Options
+
+```
+komiser start [OPTIONS]
+```
+
+```
+   --port value, -p value      Server port (default: 3000)
+   --duration value, -d value  Cache expiration time (default: 30 minutes)
+   --redis value, -r value     Redis server (localhost:6379)
+```
+
+## Configuring Credentials
+
+When using the CLI you'll generally need your AWS credentials to authenticate with AWS services. Komiser supports multiple methods of supporting these credentials. By default the CLI will source credentials automatically from its default credential chain.
+
+* Environment Credentials - Set of environment variables that are useful when sub processes are created for specific roles.
+
+* Shared Credentials file (~/.aws/credentials) - This file stores your credentials based on a profile name and is useful for local development.
+
+* EC2 Instance Role Credentials - Use EC2 Instance Role to assign credentials to application running on an EC2 instance. This removes the need to manage credential files in production.
 
 ## Documentation
 
