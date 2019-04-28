@@ -1,10 +1,28 @@
+<a href="https://komiser.io">
+  <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/logo.png" width="200" align="right" alt="Amp Logo">
+</a>
+
+<a href="https://komiser.io"><img alt="Amp" src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/icon.png" width="120" valign="middle"></a>
+
+[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/mlabouardy/komiser)](https://goreportcard.com/report/github.com/mlabouardy/komiser) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [<img src="https://img.shields.io/badge/slack-@komiser-yellow.svg?logo=slack">](https://komiser.slack.com/messages/C9SQPU4Q0/)
+
+Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40mlabouardy)](https://twitter.com/mlabouardy) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/mlabouardy/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops)
+
+**Highlights**
+
+* Analyze and manage cloud cost, usage, security, and governance in one place.
+* Control your usage and create visibility across all used services to achieve maximum cost-effectiveness.
+* Detect potential vulnerabilities that could put your cloud environment at risk.
+* Get a deep understanding of how you spend on the AWS, GCP and Azure.
+
 <p align="center">
-    <img src="komiser.png" width="15%"/>
+
+[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
+
 </p>
-
-[![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/mlabouardy/komiser)](https://goreportcard.com/report/github.com/mlabouardy/komiser) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues)  
-
 
 ## Download
 
@@ -13,29 +31,37 @@ Below are the available downloads for the latest version of Komiser (2.0.0). Ple
 ### Linux:
 
 ```
-wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/linux/komiser
+wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/windows/komiser
+wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/windows/komiser
 ```
 
 ### Mac OS X:
 
 ```
-wget https://s3.us-east-1.amazonaws.com/komiser/1.0.0/osx/komiser
+wget https://s3.us-east-1.amazonaws.com/komiser/2.0.0/osx/komiser
 ```
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 
+### Docker:
+
+```
+docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.0.0
+```
+
 ## How to use
+
+### AWS
 
 * Create an IAM user with the following IAM [policy](https://raw.githubusercontent.com/mlabouardy/komiser/master/policy.json):
 
 ```
-wget https://s3.amazonaws.com/komiser/policy.json
+wget https://s3.amazonaws.com/komiser/aws/policy.json
 ```
 
 * Add your **Access Key ID** and **Secret Access Key** to *~/.aws/credentials* using this format
@@ -44,39 +70,32 @@ wget https://s3.amazonaws.com/komiser/policy.json
 [default]
 aws_access_key_id = <access key id>
 aws_secret_access_key = <secret access key>
-region = us-east-1
+region = <AWS region>
 ```
 
 * That should be it. Try out the following from your command prompt to start the server:
 
 ```
-komiser start --port 3000 --duration 30
+komiser start --port 3000
 ```
 
 * Point your browser to http://localhost:3000
 
 <p align="center">
-    <img src="screenshot.png"/>
+    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard.png"/>
 </p>
 
-## Docker
-
-Use the official Komiser image:
+## Options
 
 ```
-docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser
+komiser start [OPTIONS]
 ```
 
-### Environment Variables
-
-| Environment Variable | Description |
-| -------------------- | ----------- |
-| PORT | Server Port |
-| DURATION | Server Cache Expiration (minutes) |
-| AWS_ACCESS_KEY_ID | AWS Access Key |
-| AWS_SECRET_ACCESS_KEY | AWS Secret Key |
-| AWS_DEFAULT_REGION | AWS Region |
-| AWS_PROFILE | AWS Profile ([Docs](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html)) |
+```
+   --port value, -p value      Server port (default: 3000)
+   --duration value, -d value  Cache expiration time (default: 30 minutes)
+   --redis value, -r value     Redis server (localhost:6379)
+```
 
 ## Configuring Credentials
 
@@ -88,54 +107,18 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 
 * EC2 Instance Role Credentials - Use EC2 Instance Role to assign credentials to application running on an EC2 instance. This removes the need to manage credential files in production.
 
-## Supported AWS Services
+## Documentation
 
-* EC2
-* EBS
-* Snapshots
-* Security Groups
-* Access Control Lists
-* Autoscalling groups
-* ELB
-* VPC
-* Key Pairs
-* Nat Gateway
-* Internet Gateway
-* Elastic IP
-* Route Table
-* Billing
-* Lambda Functions
-* RDS
-* DynamoDB
-* S3
-* Route53
-* SQS
-* SNS
-* IAM
-* CloudWatch Alarms
-* CloudFront Distributions
-* ECS
+See our documentation on [docs.komiser.io](https://docs.komiser.io). The source repository for the documentation website is [komiserio/docs](https://github.com/komiserio/docs).
 
-## TO DO
+## Bugs and feature requests
 
-* EMR
-* Kinesis
-* Elastic Beanstalk
-* Glacier
-* EFS
+Have a bug or a feature request? Please first read the issue guidelines and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/mlabouardy/komiser/issues/new).
 
-## Maintainers
+## Roadmap and contributing
 
-* Mohamed Labouardy
+Komiser is written in Golang and is MIT licensed - contributions are welcomed whether that means providing feedback or testing existing and new feature.
 
-## Discussion
+## Versioning
 
-Join us on Slack: https://komiser.slack.com
-
-## Tutorial
-
-* [Komiser: AWS Environment Inspector](http://www.blog.labouardy.com/komiser-aws-environment-inspector/)
-
-## License
-
-MIT
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/mlabouardy/komiser/tags). 

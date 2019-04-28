@@ -1,0 +1,27 @@
+.card-golang{
+    background: #72CEDD !important;
+}
+
+.card-csharp{
+    background: #9E4D99 !important;
+}
+
+.card-python{
+    background: #FFD344 !important;
+}
+
+.card-docker{
+    background: #009BC6 !important;
+}
+
+.costPerInstanceTypeChart{
+    min-height: 150px;
+}
+
+.lambdaInvocationsChart{
+    min-height: 150px;
+}
+
+.lambdaErrorsChart{
+    min-height: 150px;
+}
