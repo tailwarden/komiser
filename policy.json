@@ -61,6 +61,47 @@
                 "iam:ListUsers"
             ],
             "Resource": "*"
+        },
+        {
+            "Sid": "5",
+            "Effect": "Allow",
+            "Action": [
+                "acm:ListCertificates",
+                "mq:ListBrokers",
+                "cloudwatch:GetMetricStatistics",
+                "cloudtrail:LookupEvents",
+                "ce:GetCostAndUsage",
+                "ce:GetCostForecast",
+                "datapipeline:ListPipelines",
+                "ec2:DescribeReservedInstances",
+                "ec2:DescribeSpotFleetRequests",
+                "ec2:DescribeScheduledInstances",
+                "eks:ListClusters",
+                "elasticache:DescribeCacheClusters",
+                "es:ListDomainNames"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "6",
+            "Effect": "Allow",
+            "Action": [
+                "glue:GetCrawlers",
+                "glue:GetJobs",
+                "organizations:DescribeOrganization",
+                "iam:GetUser",
+                "kinesis:ListStreams",
+                "kinesis:ListShards",
+                "kms:ListKeys",
+                "redshift:DescribeClusters",
+                "tag:GetResources",
+                "route53:ListResourceRecordSets",
+                "s3:ListAllMyBuckets",
+                "support:DescribeCases",
+                "support:DescribeTrustedAdvisorChecks",
+                "swf:ListDomains"
+            ],
+            "Resource": "*"
         }
     ]
 }
