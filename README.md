@@ -20,7 +20,7 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 <p align="center">
 
-[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
+[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png?v=2)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
 
 </p>
 
