@@ -18,6 +18,12 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 * Detect potential vulnerabilities that could put your cloud environment at risk.
 * Get a deep understanding of how you spend on the AWS, GCP and Azure.
 
+<p align="center">
+
+[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
+
+</p>
+
 ## Download
 
 Below are the available downloads for the latest version of Komiser (2.0.0). Please download the proper package for your operating system and architecture.
@@ -104,14 +110,6 @@ When using the CLI you'll generally need your AWS credentials to authenticate wi
 ## Documentation
 
 See our documentation on [docs.komiser.io](https://docs.komiser.io). The source repository for the documentation website is [komiserio/docs](https://github.com/komiserio/docs).
-
-## Overview
-
-<p align="center">
-
-[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
-
-</p>
 
 ## Bugs and feature requests
 
