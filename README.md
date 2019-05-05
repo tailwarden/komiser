@@ -56,6 +56,17 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.0.0
 ```
 
+#### with AWS:
+
+```
+docker run -d -p 3000:3000 --name komiser \ 
+-e AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
+-e AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
+-e AWS_DEFAULT_REGION=us-west-2 \
+mlabouardy/komiser:2.0.0
+
+```
+
 ## How to use
 
 ### AWS
