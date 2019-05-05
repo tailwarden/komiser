@@ -56,7 +56,7 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.0.0
 ```
 
-#### with AWS:
+#### With AWS:
 
 ```
 docker run -d -p 3000:3000 --name komiser \ 
