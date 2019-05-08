@@ -53,7 +53,7 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 ### Docker:
 
 ```
-docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.0.0
+docker run -d -p 3000:3000 -v $HOME/.aws/credentials:/root/.aws/credentials --name komiser mlabouardy/komiser:2.0.0
 ```
 
 ## How to use
