@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -31,6 +32,7 @@ func (gcp GCP) GetDataflowJobs() (int, error) {
 	for _, project := range projects {
 		jobs, err := svc.Projects.Jobs.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return sum, err
 		}
 		sum += len(jobs.Jobs)

@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -22,6 +23,7 @@ func (gcp GCP) GetIamRoles() (int, error) {
 
 	roles, err := svc.Roles.List().Do()
 	if err != nil {
+		log.Println(err)
 		return 0, err
 	}
 
@@ -50,6 +52,7 @@ func (gcp GCP) GetServiceAccounts() (int, error) {
 	for _, project := range projects {
 		serviceAccounts, err := svc.Projects.ServiceAccounts.List("projects/" + project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return sum, err
 		}
 

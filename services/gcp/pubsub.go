@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -32,7 +33,7 @@ func (gcp GCP) GetTopics() (int, error) {
 		uri := fmt.Sprintf("projects/%s", project.ID)
 		topics, err := svc.Projects.Topics.List(uri).Do()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return 0, err
 		}
 		sum += len(topics.Topics)

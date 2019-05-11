@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	. "github.com/mlabouardy/komiser/models/gcp"
 	"golang.org/x/oauth2"
@@ -31,6 +32,7 @@ func (gcp GCP) GetEnabledAPIs() ([]API, error) {
 	for _, project := range projects {
 		data, err := svc.Services.List("projects/" + project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return listOfAPIs, err
 		}
 

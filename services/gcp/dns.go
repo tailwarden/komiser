@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -31,6 +32,7 @@ func (gcp GCP) GetManagedZones() (int, error) {
 	for _, project := range projects {
 		zones, err := svc.ManagedZones.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return 0, err
 		}
 		sum += len(zones.ManagedZones)
@@ -62,12 +64,14 @@ func (gcp GCP) GetARecords() (int, error) {
 	for _, project := range projects {
 		zones, err := svc.ManagedZones.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return sum, err
 		}
 
 		for _, zone := range zones.ManagedZones {
 			records, err := svc.ResourceRecordSets.List(project.ID, zone.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return sum, err
 			}
 

@@ -1,7 +1,6 @@
 package aws
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -147,7 +146,6 @@ func (handler *GCPHandler) NatGatewaysHandler(w http.ResponseWriter, r *http.Req
 	} else {
 		response, err := handler.gcp.GetNatGateways()
 		if err != nil {
-			fmt.Println(err)
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
 			handler.cache.Set("nat_gateways", response)

@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -30,16 +31,19 @@ func (gcp GCP) GetKMSCryptoKeys() (int, error) {
 	for _, project := range projects {
 		locations, err := svc.Projects.Locations.List("projects/" + project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		for _, location := range locations.Locations {
 			keyRings, err := svc.Projects.Locations.KeyRings.List("projects/" + project.ID + "/locations/" + location.LocationId).Do()
 			if err != nil {
+				log.Println(err)
 				return total, err
 			}
 			for _, keyRing := range keyRings.KeyRings {
 				keys, err := svc.Projects.Locations.KeyRings.CryptoKeys.List("projects/" + project.ID + "/locations/" + location.LocationId + "/keyRings/" + keyRing.Name).Do()
 				if err != nil {
+					log.Println(err)
 					return total, err
 				}
 				total += len(keys.CryptoKeys)

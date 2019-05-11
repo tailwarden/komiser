@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -29,6 +30,7 @@ func (gcp GCP) GetVpcNetworks() (int, error) {
 	for _, project := range projects {
 		networks, err := svc.Networks.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		total += len(networks.Items)
@@ -58,6 +60,7 @@ func (gcp GCP) GetNetworkFirewalls() (int, error) {
 	for _, project := range projects {
 		firewalls, err := svc.Firewalls.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		total += len(firewalls.Items)
@@ -87,11 +90,13 @@ func (gcp GCP) GetNetworkRouters() (int, error) {
 	for _, project := range projects {
 		regions, err := svc.Regions.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		for _, region := range regions.Items {
 			routers, err := svc.Routers.List(project.ID, region.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return total, err
 			}
 			total += len(routers.Items)
@@ -122,11 +127,13 @@ func (gcp GCP) GetNatGateways() (int, error) {
 	for _, project := range projects {
 		regions, err := svc.Regions.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		for _, region := range regions.Items {
 			routers, err := svc.Routers.List(project.ID, region.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return total, err
 			}
 
@@ -161,11 +168,13 @@ func (gcp GCP) GetSubnetsNumber() (int, error) {
 	for _, project := range projects {
 		regions, err := svc.Regions.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		for _, region := range regions.Items {
 			subnets, err := svc.Subnetworks.List(project.ID, region.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return total, err
 			}
 			total += len(subnets.Items)
@@ -196,11 +205,13 @@ func (gcp GCP) GetExternalAddresses() (int, error) {
 	for _, project := range projects {
 		regions, err := svc.Regions.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		for _, region := range regions.Items {
 			addresses, err := svc.Addresses.List(project.ID, region.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return total, err
 			}
 			total += len(addresses.Items)
@@ -231,11 +242,13 @@ func (gcp GCP) GetVpnTunnels() (int, error) {
 	for _, project := range projects {
 		regions, err := svc.Regions.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		for _, region := range regions.Items {
 			tunnels, err := svc.VpnTunnels.List(project.ID, region.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return total, err
 			}
 			total += len(tunnels.Items)
@@ -266,6 +279,7 @@ func (gcp GCP) GetSSLCertificates() (int, error) {
 	for _, project := range projects {
 		certificates, err := svc.SslCertificates.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		total += len(certificates.Items)
@@ -295,6 +309,7 @@ func (gcp GCP) GetSSLPolicies() (int, error) {
 	for _, project := range projects {
 		policies, err := svc.SslPolicies.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		total += len(policies.Items)
@@ -324,6 +339,7 @@ func (gcp GCP) GetSecurityPolicies() (int, error) {
 	for _, project := range projects {
 		policies, err := svc.SecurityPolicies.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return total, err
 		}
 		total += len(policies.Items)

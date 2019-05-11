@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -41,7 +42,7 @@ func (gcp GCP) GetLoadBalancerRequests() ([]*monitoring.TimeSeries, error) {
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 
@@ -70,6 +71,7 @@ func (gcp GCP) GetTotalLoadBalancers() (int, error) {
 	for _, project := range projects {
 		urls, err := svc.UrlMaps.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return 0, err
 		}
 		sum += len(urls.Items)

@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -33,11 +34,13 @@ func (gcp GCP) GetBigQueryTables() (int, error) {
 	for _, project := range projects {
 		datasets, err := svc.Datasets.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return sum, err
 		}
 		for _, dataset := range datasets.Datasets {
 			tables, err := svc.Tables.List(project.ID, dataset.DatasetReference.DatasetId).Do()
 			if err != nil {
+				log.Println(err)
 				return sum, err
 			}
 			sum += len(tables.Tables)
@@ -68,6 +71,7 @@ func (gcp GCP) GetBigQueryDatasets() (int, error) {
 	for _, project := range projects {
 		datasets, err := svc.Datasets.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return sum, err
 		}
 		sum += len(datasets.Datasets)
@@ -105,7 +109,7 @@ func (gcp GCP) GetBigQueryScannedStatements() ([]*monitoring.TimeSeries, error) 
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 
@@ -142,7 +146,7 @@ func (gcp GCP) GetBigQueryStoredBytes() ([]*monitoring.TimeSeries, error) {
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 

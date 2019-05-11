@@ -1,7 +1,6 @@
 package aws
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -12,7 +11,6 @@ func (handler *GCPHandler) BillingLastSixMonthsHandler(w http.ResponseWriter, r 
 	} else {
 		response, err := handler.gcp.CostInLastSixMonths()
 		if err != nil {
-			fmt.Println(err)
 			respondWithError(w, http.StatusInternalServerError, "bigquery:Query is missing")
 		} else {
 			handler.cache.Set("billing_history", response)
@@ -28,7 +26,6 @@ func (handler *GCPHandler) BillingPerServiceHandler(w http.ResponseWriter, r *ht
 	} else {
 		response, err := handler.gcp.MonthlyCostPerService()
 		if err != nil {
-			fmt.Println(err)
 			respondWithError(w, http.StatusInternalServerError, "bigquery:Query is missing")
 		} else {
 			handler.cache.Set("billing_per_service", response)

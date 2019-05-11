@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -39,7 +40,7 @@ func (gcp GCP) GetAppEngineOutgoingBandwidth() ([]*monitoring.TimeSeries, error)
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 

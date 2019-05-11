@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -33,6 +34,7 @@ func (gcp GCP) GetTotalBuckets() (int, error) {
 	for _, project := range projects {
 		buckets, err := svc.Buckets.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return 0, err
 		}
 		sum += len(buckets.Items)
@@ -70,7 +72,7 @@ func (gcp GCP) GetBucketSize() ([]*monitoring.TimeSeries, error) {
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 
@@ -106,7 +108,7 @@ func (gcp GCP) GetBucketObjects() ([]*monitoring.TimeSeries, error) {
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 

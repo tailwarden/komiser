@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 	"strings"
 
 	. "github.com/mlabouardy/komiser/models/gcp"
@@ -27,6 +28,7 @@ func (gcp GCP) GetProjects() ([]Project, error) {
 
 	res, err := svc.Projects.List().Do()
 	if err != nil {
+		log.Println(err)
 		return projects, err
 	}
 
@@ -63,6 +65,7 @@ func (gcp GCP) GetIamUsers() (int, error) {
 	for _, project := range projects {
 		policy, err := svc.Projects.GetIamPolicy(project.ID, &cloudresourcemanager.GetIamPolicyRequest{}).Do()
 		if err != nil {
+			log.Println(err)
 			return 0, err
 		}
 		for _, role := range policy.Bindings {

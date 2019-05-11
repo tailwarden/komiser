@@ -2,7 +2,7 @@ package gcp
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	. "github.com/mlabouardy/komiser/models/gcp"
 	"golang.org/x/oauth2"
@@ -32,7 +32,7 @@ func (gcp GCP) GetSqlInstances() ([]SqlInstance, error) {
 	for _, project := range projects {
 		instances, err := svc.Instances.List(project.ID).Do()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return listOfInstances, err
 		}
 

@@ -28,24 +28,24 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (2.0.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.1.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
 ```
-wget https://cli.komiser.io/2.0.0/linux/komiser
+wget https://cli.komiser.io/2.1.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://cli.komiser.io/2.0.0/windows/komiser
+wget https://cli.komiser.io/2.1.0/windows/komiser
 ```
 
 ### Mac OS X:
 
 ```
-wget https://cli.komiser.io/2.0.0/osx/komiser
+wget https://cli.komiser.io/2.1.0/osx/komiser
 ```
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
@@ -53,7 +53,7 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 ### Docker:
 
 ```
-docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.0.0
+docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.1.0
 ```
 
 ## How to use
@@ -87,6 +87,31 @@ komiser start --port 3000
     <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard.png"/>
 </p>
 
+### GCP
+
+* Create a service account with [](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
+* Enable the below APIs for your project through GCP Console, `gcloud` or using the Service Usage API. You can find out more about these options in the [Enabling and Disabling APIs docs](https://cloud.google.com/apis/docs/enable-disable-apis).
+  * x
+  * y
+  * z
+  * c
+* To analyze and optimize the infrastructure cost, you need to export your daily cost to BigQuery, see [Export Billing to BigQuery docs](https://cloud.google.com/billing/docs/how-to/export-data-bigquery).
+
+
+* Provide authentication credentials to your application code by setting the environment variable *GOOGLE_APPLICATION_CREDENTIALS*:
+
+``` 
+export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
+```
+
+* That should be it. Try out the following from your command prompt to start the server:
+
+```
+komiser start --port 3000 --dataset project-id.dataset-name.table-name
+```
+
+* Point your browser to http://localhost:3000
+
 ## Options
 
 ```
@@ -97,17 +122,20 @@ komiser start [OPTIONS]
    --port value, -p value      Server port (default: 3000)
    --duration value, -d value  Cache expiration time (default: 30 minutes)
    --redis value, -r value     Redis server (localhost:6379)
+   --dataset value, -ds value  BigQuery dataset name (project-id.dataset-name.table-name)
 ```
 
 ## Configuring Credentials
 
-When using the CLI you'll generally need your AWS credentials to authenticate with AWS services. Komiser supports multiple methods of supporting these credentials. By default the CLI will source credentials automatically from its default credential chain.
+When using the CLI with AWS, you'll generally need your AWS credentials to authenticate with AWS services. Komiser supports multiple methods of supporting these credentials. By default the CLI will source credentials automatically from its default credential chain.
 
 * Environment Credentials - Set of environment variables that are useful when sub processes are created for specific roles.
 
 * Shared Credentials file (~/.aws/credentials) - This file stores your credentials based on a profile name and is useful for local development.
 
 * EC2 Instance Role Credentials - Use EC2 Instance Role to assign credentials to application running on an EC2 instance. This removes the need to manage credential files in production.
+
+When using the CLI with GCP, Komiser checks to see if the environment variable `GOOGLE_APPLICATION_CREDENTIALS` is set. If not an error occurs.
 
 ## Documentation
 

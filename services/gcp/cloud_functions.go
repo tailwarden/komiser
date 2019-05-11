@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -33,6 +34,7 @@ func (gcp GCP) CloudFunctions() (map[string]int, error) {
 
 		functions, err := svc.Projects.Locations.Functions.List(uri).Do()
 		if err != nil {
+			log.Println(err)
 			return listOfFunctions, err
 		}
 		for _, function := range functions.Functions {

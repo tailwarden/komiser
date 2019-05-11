@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -32,7 +33,7 @@ func (gcp GCP) GetRedisInstances() (int, error) {
 		uri := fmt.Sprintf("projects/%s/locations/-", project.ID)
 		instances, err := svc.Projects.Locations.Instances.List(uri).Do()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return sum, err
 		}
 		sum += len(instances.Instances)

@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -35,12 +36,14 @@ func (gcp GCP) GetComputeInstances() ([]Instance, error) {
 	for _, project := range projects {
 		zones, err := svc.Zones.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return instancesList, err
 		}
 
 		for _, zone := range zones.Items {
 			instances, err := svc.Instances.List(project.ID, zone.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return instancesList, err
 			}
 
@@ -94,6 +97,7 @@ func (gcp GCP) GetRegions() ([]string, error) {
 	for _, project := range projects {
 		regions, err := svc.Regions.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return listOfRegions, err
 		}
 
@@ -126,12 +130,14 @@ func (gcp GCP) GetDisks() ([]Disk, error) {
 	for _, project := range projects {
 		zones, err := svc.Zones.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return listOfDisks, err
 		}
 
 		for _, zone := range zones.Items {
 			disks, err := svc.Disks.List(project.ID, zone.Name).Do()
 			if err != nil {
+				log.Println(err)
 				return listOfDisks, err
 			}
 
@@ -168,6 +174,7 @@ func (gcp GCP) GetDiskSnapshots() ([]Snapshot, error) {
 	for _, project := range projects {
 		snapshots, err := svc.Snapshots.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return listOfSnapshots, err
 		}
 
@@ -202,6 +209,7 @@ func (gcp GCP) GetComputeImages() ([]Image, error) {
 	for _, project := range projects {
 		images, err := svc.Images.List(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return listImages, err
 		}
 
@@ -243,7 +251,7 @@ func (gcp GCP) GetComputeCPUUtilization() ([]*monitoring.TimeSeries, error) {
 		Do()
 
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return []*monitoring.TimeSeries{}, err
 	}
 
@@ -272,6 +280,7 @@ func (gcp GCP) GetQuotas() ([]Quota, error) {
 	for _, project := range projects {
 		quotas, err := svc.Projects.Get(project.ID).Do()
 		if err != nil {
+			log.Println(err)
 			return limits, err
 		}
 

@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"log"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -37,6 +38,7 @@ func (gcp GCP) GetDataprocJobs() (int, error) {
 		for _, region := range regions {
 			jobs, err := svc.Projects.Regions.Jobs.List(project.ID, region).Do()
 			if err != nil {
+				log.Println(err)
 				return sum, err
 			}
 			sum += len(jobs.Jobs)
@@ -75,6 +77,7 @@ func (gcp GCP) GetDataprocClusters() (int, error) {
 		for _, region := range regions {
 			data, err := svc.Projects.Regions.Clusters.List(project.ID, region).Do()
 			if err != nil {
+				log.Println(err)
 				return sum, err
 			}
 			sum += len(data.Clusters)

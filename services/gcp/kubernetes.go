@@ -3,6 +3,7 @@ package gcp
 import (
 	"context"
 	"fmt"
+	"log"
 
 	. "github.com/mlabouardy/komiser/models/gcp"
 	"golang.org/x/oauth2"
@@ -33,7 +34,7 @@ func (gcp GCP) GetKubernetesClusters() ([]Kubernetes, error) {
 		uri := fmt.Sprintf("projects/%s/locations/-", project.ID)
 		clusters, err := svc.Projects.Locations.Clusters.List(uri).Do()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return listOfClusters, err
 		}
 
