@@ -263,7 +263,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
             , stroke: "#fafafa"
           }
           , attrsHover: {
-            fill: "#59d05d"
+            fill: "#FBAD4B"
           }
           , text: {
             attrs: {
@@ -292,7 +292,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
               label: "< 1",
               max: "0",
               attrs: {
-                fill: "#4B5F91"
+                fill: "#36A2EB"
               },
               legendSpecificAttrs: {
                 r: 25
@@ -302,7 +302,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
               min: "1",
               max: "50000",
               attrs: {
-                fill: "#59D05D"
+                fill: "#87CB14"
               },
               legendSpecificAttrs: {
                 r: 25
