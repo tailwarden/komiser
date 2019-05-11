@@ -1,7 +1,7 @@
 FROM alpine:3.9.3
 MAINTAINER mlabouardy <mohamed@labouardy.com>
 
-ENV VERSION 2.0.0
+ENV VERSION 2.1.0
 ENV PORT 3000
 ENV DURATION 30
 

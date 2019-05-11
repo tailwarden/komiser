@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/handlers/aws"
+	. "github.com/mlabouardy/komiser/handlers/gcp"
 	. "github.com/mlabouardy/komiser/services/cache"
 	"github.com/urfave/cli"
 )
@@ -20,7 +21,7 @@ const (
 	DEFAULT_DURATION = 30
 )
 
-func startServer(port int, cache Cache) {
+func startServer(port int, cache Cache, dataset string) {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -28,6 +29,7 @@ func startServer(port int, cache Cache) {
 
 	cache.Connect()
 
+	gcpHandler := NewGCPHandler(cache, dataset)
 	awsHandler := NewAWSHandler(cfg, cache)
 
 	r := mux.NewRouter()
@@ -96,6 +98,54 @@ func startServer(port int, cache Cache) {
 	r.HandleFunc("/aws/redshift/clusters", awsHandler.DescribeRedshiftClustersHandler)
 	r.HandleFunc("/aws/vpc/subnets", awsHandler.DescribeSubnetsHandler)
 	r.HandleFunc("/aws/cost/forecast", awsHandler.DescribeForecastPriceHandler)
+
+	r.HandleFunc("/gcp/resourcemanager/projects", gcpHandler.ProjectsHandler)
+	r.HandleFunc("/gcp/compute/instances", gcpHandler.ComputeInstancesHandler)
+	r.HandleFunc("/gcp/iam/roles", gcpHandler.IAMRolesHandler)
+	r.HandleFunc("/gcp/dns/zones", gcpHandler.DNSManagedZonesHandler)
+	r.HandleFunc("/gcp/storage/buckets", gcpHandler.StorageBucketsHandler)
+	r.HandleFunc("/gcp/cloudfunctions/functions", gcpHandler.CloudFunctionsHandler)
+	r.HandleFunc("/gcp/compute/disks", gcpHandler.ComputeDisksHandler)
+	r.HandleFunc("/gcp/pubsub/topics", gcpHandler.PubSubTopicsHandler)
+	r.HandleFunc("/gcp/sql/instances", gcpHandler.SqlInstancesHandler)
+	r.HandleFunc("/gcp/vpc/networks", gcpHandler.VpcNetworksHandler)
+	r.HandleFunc("/gcp/vpc/firewalls", gcpHandler.VpcFirewallsHandler)
+	r.HandleFunc("/gcp/vpc/routers", gcpHandler.VpcRoutersHandler)
+	r.HandleFunc("/gcp/compute/snapshots", gcpHandler.DiskSnapshotsHandler)
+	r.HandleFunc("/gcp/storage/size", gcpHandler.StorageBucketsSizeHandler)
+	r.HandleFunc("/gcp/storage/objects", gcpHandler.StorageBucketsObjectsHandler)
+	r.HandleFunc("/gcp/logging/bytes_ingested", gcpHandler.LoggingBillableReceivedBytesHandler)
+	r.HandleFunc("/gcp/kubernetes/clusters", gcpHandler.KubernetesClustersHandler)
+	r.HandleFunc("/gcp/compute/images", gcpHandler.ComputeImagesHandler)
+	r.HandleFunc("/gcp/redis/instances", gcpHandler.RedisInstancesHandler)
+	r.HandleFunc("/gcp/compute/cpu", gcpHandler.ComputeCPUUtilizationHandler)
+	r.HandleFunc("/gcp/iam/users", gcpHandler.IAMUsersHandler)
+	r.HandleFunc("/gcp/bigquery/statements", gcpHandler.BigQueryScannedStatementsHandler)
+	r.HandleFunc("/gcp/bigquery/storage", gcpHandler.BigQueryStoredBytesHandler)
+	r.HandleFunc("/gcp/bigquery/datasets", gcpHandler.BigQueryDatasetsHandler)
+	r.HandleFunc("/gcp/bigquery/tables", gcpHandler.BigQueryTablesHandler)
+	r.HandleFunc("/gcp/compute/quotas", gcpHandler.ComputeQuotasHandler)
+	r.HandleFunc("/gcp/lb/requests", gcpHandler.LoadBalancersRequestsHandler)
+	r.HandleFunc("/gcp/api/requests", gcpHandler.ConsumedAPIRequestsHandler)
+	r.HandleFunc("/gcp/lb/total", gcpHandler.LoadBalancersTotalHandler)
+	r.HandleFunc("/gcp/vpc/subnets", gcpHandler.VpcSubnetsHandler)
+	r.HandleFunc("/gcp/vpc/addresses", gcpHandler.VpcExternalAddressesHandler)
+	r.HandleFunc("/gcp/vpn/tunnels", gcpHandler.VpnTunnelsHandler)
+	r.HandleFunc("/gcp/ssl/certificates", gcpHandler.SSLCertificatesHandler)
+	r.HandleFunc("/gcp/ssl/policies", gcpHandler.SSLPoliciesHandler)
+	r.HandleFunc("/gcp/security/policies", gcpHandler.SecurityPoliciesHandler)
+	r.HandleFunc("/gcp/kms/cryptokeys", gcpHandler.KMSCryptoKeysHandler)
+	r.HandleFunc("/gcp/gae/bandwidth", gcpHandler.AppEngineOutgoingBandwidthHandler)
+	r.HandleFunc("/gcp/serviceusage/apis", gcpHandler.EnabledAPIsHandler)
+	r.HandleFunc("/gcp/dataproc/jobs", gcpHandler.DataprocJobsHandler)
+	r.HandleFunc("/gcp/dataproc/clusters", gcpHandler.DataprocClustersHandler)
+	r.HandleFunc("/gcp/billing/history", gcpHandler.BillingLastSixMonthsHandler)
+	r.HandleFunc("/gcp/billing/service", gcpHandler.BillingPerServiceHandler)
+	r.HandleFunc("/gcp/dns/records", gcpHandler.DNSARecordsHandler)
+	r.HandleFunc("/gcp/iam/service_accounts", gcpHandler.IAMServiceAccountsHandler)
+	r.HandleFunc("/gcp/dataflow/jobs", gcpHandler.DataflowJobsHandler)
+	r.HandleFunc("/gcp/nat/gateways", gcpHandler.NatGatewaysHandler)
+
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS()(r))
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
@@ -138,11 +188,16 @@ func main() {
 					Name:  "redis, r",
 					Usage: "Redis server",
 				},
+				cli.StringFlag{
+					Name:  "dataset, ds",
+					Usage: "BigQuery Bill dataset",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				port := c.Int("port")
 				duration := c.Int("duration")
 				redis := c.String("redis")
+				dataset := c.String("dataset")
 
 				var cache Cache
 
@@ -164,7 +219,7 @@ func main() {
 					}
 				}
 
-				startServer(port, cache)
+				startServer(port, cache, dataset)
 				return nil
 			},
 		},

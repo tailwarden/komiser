@@ -1,0 +1,196 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/services/gcp/vpc.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Networks</p>
+                <h4 class="card-title" *ngIf="!loadingNetworks">{{networks}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingNetworks"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/eip.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">External Addresses</p>
+                <h4 class="card-title" *ngIf="!loadingExternalAddresses">{{externalAddresses}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingExternalAddresses"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/subnet.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Subnets</p>
+                <h4 class="card-title" *ngIf="!loadingSubnets">{{subnets}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSubnets"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/router.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Routers</p>
+                <h4 class="card-title" *ngIf="!loadingRouters">{{routers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRouters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/elb.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Load Balancers</p>
+                <h4 class="card-title" *ngIf="!loadingLoadBalancers">{{loadBalancers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLoadBalancers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                    <img src="https://cdn.komiser.io/images/services/gcp/nat.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Cloud NAT</p>
+                  <h4 class="card-title" *ngIf="!loadingNatGateways">{{natGateways}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingNatGateways"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Load Balancer Requests</h4>
+          <p class="card-category">Incoming requests in the last 7 days</p>
+        </div>
+        <div class="card-body">
+          <div id="lbRequestsChart">
+            <div class="loader" *ngIf="loadingLBRequestsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Consumed API</h4>
+          <p class="card-category">The count of completed requests in the last 7 days</p>
+        </div>
+        <div class="card-body">
+          <div id="consumedRequestsChart">
+            <div class="loader" *ngIf="loadingConsumedRequestsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/dns.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Cloud DNS Zones</p>
+                <h4 class="card-title" *ngIf="!loadingDnsZones">{{dnsZones}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDnsZones"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                    <img src="https://cdn.komiser.io/images/services/gcp/dns.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Cloud DNS A Records</p>
+                  <h4 class="card-title" *ngIf="!loadingARecords">{{aRecords}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingARecords"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+</section>

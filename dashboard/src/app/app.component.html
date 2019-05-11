@@ -24,8 +24,8 @@
             </form>
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                 <li class="nav-item dropdown hidden-caret">
-                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" routerLink="/limits" id="navbarDropdown"
-                        role="button">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" routerLink="/limits"
+                        id="navbarDropdown" role="button">
                         <i class="la la-rocket"></i>
                     </a>
                 </li>
@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="notif-content">
                                         <span class="block">
-                                            {{notification.content}} 
+                                            {{notification.content}}
                                         </span>
                                         <span class="badge badge-secondary badge-pill float-right" *ngIf="notification.total > 1">{{notification.total}}</span>
                                         <span class="time">{{calcMoment(notification.timestamp)}}</span>
@@ -73,12 +73,12 @@
     <div class="scrollbar-inner sidebar-wrapper">
         <div class="user">
             <div class="photo">
-                <img src="https://cdn.komiser.io/images/aws.png">
+                <img [src]="currentProvider.logo">
             </div>
             <div class="info">
                 <a aria-expanded="true" class="" data-toggle="collapse" href="#collapseExample">
                     <span>{{accountName}}
-                        <span class="user-level">Amazon Web Services</span>
+                        <span class="user-level">{{currentProvider.label}}</span>
                         <span class="caret"></span>
                     </span>
                 </a>
@@ -132,7 +132,19 @@
                     <p>Data & AI</p>
                 </a>
             </li>
+
         </ul>
+        <div class="form-group" style="position: absolute;
+        bottom: 0vh;
+        display: block;
+        width: 100%;">
+            <label for="exampleFormControlSelect1">
+                <i class="la la-cloud" style="margin-left:10px"></i> Select Cloud Provider</label>
+            <select class="form-control" (change)="onCloudProviderSelected($event.target.value)">
+                <option *ngFor="let provider of availableProviders" [value]="provider.value" [selected]="provider.value == currentProvider.value">{{provider.label}}</option>
+            </select>
+        </div>
+
     </div>
 </div>
 <div class="main-panel">

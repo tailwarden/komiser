@@ -16,3 +16,7 @@
     bottom: 0vh;
     margin-top: 50px;
 }
+
+.photo img{
+    object-fit: contain !important;
+}

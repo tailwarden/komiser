@@ -1,0 +1,237 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/sqs.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SQS</p>
+                <h4 class="card-title" *ngIf="!loadingSQS">{{sqsQueues}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSQS"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/sqs_message.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Messages Sent/Deleted</p>
+                <h4 class="card-title" *ngIf="!loadingSQSMessages">{{formatNumber(numberOfMessagesSentToday)}}/{{formatNumber(numberOfMessagesDeletedToday)}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSQSMessages"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">SQS Sent & Deleted Messages</h4>
+          <p class="card-category">The number of messages sent/deleted to/from the queue over the last 7 days</p>
+        </div>
+        <div class="card-body">
+          <div id="sqsMessagesChart">
+            <div class="loader" *ngIf="loadingSQSMessagesChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/sns.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SNS Topics</p>
+                <h4 class="card-title" *ngIf="!loadingSNS">{{snsTopics}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSNS"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/glue_crawlers.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Glue Crawlers</p>
+                <h4 class="card-title" *ngIf="!loadingGlueCrawlers">{{glueCrawlers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingGlueCrawlers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <i class="devicon-apache-plain colored"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">ActiveMQ</p>
+                <h4 class="card-title" *ngIf="!loadingActiveMQBrokers">{{activemqBrokers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingActiveMQBrokers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/glue_jobs.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Glue Jobs</p>
+                <h4 class="card-title" *ngIf="!loadingGlueJobs">{{glueJobs}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingGlueJobs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/swf.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SWF Domains</p>
+                <h4 class="card-title" *ngIf="!loadingSwfDomains">{{swfDomains}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSwfDomains"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/pipeline.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Data Pipeline</p>
+                <h4 class="card-title" *ngIf="!loadingDataPipelines">{{dataPipelines}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDataPipelines"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/kinesis.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Kinesis Streams</p>
+                <h4 class="card-title" *ngIf="!loadingKinesisStreams">{{kinesisStreams}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKinesisStreams"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/kinesis_shards.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Kinesis Shards</p>
+                <h4 class="card-title" *ngIf="!loadingKinesisShards">{{kinesisShards}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKinesisShards"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/elasticsearch.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Elasticsearch</p>
+                <h4 class="card-title" *ngIf="!loadingESDomains">{{esDomains}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingESDomains"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</section>

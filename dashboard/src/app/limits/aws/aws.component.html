@@ -1,0 +1,28 @@
+<section>
+  <div class="row">
+    <div class="col-lg-12" *ngIf="loadingServiceLimits">
+      <div class="text-center spinner">
+        <div class="loader">Loading...</div>
+      </div>
+    </div>
+    <div class="col-md-3" *ngFor="let limit of serviceLimits">
+      <div [ngClass]="getColor(limit.status)">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="{{getServiceLogo(limit.name)}}" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category" style="line-height: 1">{{limit.name}}</p>
+                <h4 class="card-title" style="font-size: 8px">{{limit.checkId}}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,205 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/kms.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">KMS</p>
+                <h4 class="card-title" *ngIf="!loadingKMSKeys">{{kmsKeys}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKMSKeys"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/security_group.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Security Groups</p>
+                <h4 class="card-title" *ngIf="!loadingSecurityGroups">{{securityGroups}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSecurityGroups"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/keypair.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">KeyPairs</p>
+                <h4 class="card-title" *ngIf="!loadingKeyPairs">{{keyPairs}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKeyPairs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/route_table.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Route Tables</p>
+                <h4 class="card-title" *ngIf="!loadingRouteTables">{{routeTables}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRouteTables"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/acm.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">ACM Certificates</p>
+                <h4 class="card-title" *ngIf="!loadingACMCertificates">{{acmCertificates}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingACMCertificates"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/acm_expired.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Expired Certificates</p>
+                <h4 class="card-title" *ngIf="!loadingACMExpiredCertificates">{{acmExpiredCertificates}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingACMExpiredCertificates"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">AWS Console Sign-in Events</h4>
+          <p class="card-category">IAM Users attempted to login into AWS Management Console in last 7 days</p>
+        </div>
+        <div class="card-body">
+          <div id="signInEventsChart">
+            <div class="loader" *ngIf="loadingSignInEventsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Geo Location of All Users</h4>
+          <p class="card-category">AWS Management Console Login Source</p>
+        </div>
+        <div class="card-body">
+          <div id="sourceIpsChart">
+            <div class="map">
+              <span>Alternative content for the map</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Unrestricted Security Groups</h4>
+          <p class="card-category">Checks security groups for rules that allow unrestricted access (0.0.0.0/0) to specific ports</p>
+        </div>
+        <div class="card-body">
+          <table class="table table-head-bg-danger table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Protocol</th>
+                <th>From/To Ports</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sg of returnedUnrestrictedSecurityGroups">
+                <td>{{sg.Region}}</td>
+                <td>{{sg.ID}}</td>
+                <td>{{sg.Name}}</td>
+                <td>{{sg.Protocol}}</td>
+                <td>{{sg.FromPort}}/{{sg.ToPort}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination [totalItems]="unrestrictedSecurityGroups.length" [itemsPerPage]="20" (pageChanged)="pageChanged($event)" [maxSize]="18"
+            size="sm"></pagination>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Top Source Addresses</h4>
+          <p class="card-category">The source IP address of the API caller</p>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let sourceIp of consoleLoginSourceIps">
+              {{sourceIp.ip}}
+              <span class="badge badge-danger badge-pill float-right">{{sourceIp.total}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

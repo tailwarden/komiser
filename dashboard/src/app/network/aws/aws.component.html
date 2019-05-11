@@ -1,0 +1,304 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/vpc.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">VPC</p>
+                <h4 class="card-title" *ngIf="!loadingVPCNumbers">{{vpcNumber}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingVPCNumbers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/acl.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">ACL</p>
+                <h4 class="card-title" *ngIf="!loadingACLNumbers">{{aclNumber}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingACLNumbers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/subnet.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Subnets</p>
+                <h4 class="card-title" *ngIf="!loadingSubnetNumbers">{{subnetNumbers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSubnetNumbers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/routetables.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Route Tables</p>
+                <h4 class="card-title" *ngIf="!loadingRouteTablesNumber">{{routeTablesNumber}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRouteTablesNumber"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/cloudfront.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">CDN Distributions</p>
+                <h4 class="card-title" *ngIf="!loadingCDNNumbers">{{cloudfrontDistributions}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCDNNumbers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/traffic.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Today Incoming Requests</p>
+                <h4 class="card-title" *ngIf="!loadingCDNRequests">{{cdnTodayRequests}} / {{cdnYesterdayRequests}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCDNRequests"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">CloudFront Incoming Requests</h4>
+          <p class="card-category">Incoming requests over the last 6 months per distribution</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingCloudfrontRequestsChart">Loading...</div>
+          <canvas id="cloudfrontRequests"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">API Gateway Requests</h4>
+          <p class="card-category">Incoming requests over the last 6 months per API Gateway</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingApigatewayRequestsChart">Loading...</div>
+          <canvas id="apigatewayRequests"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/api.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">RESTful APIs</p>
+                <h4 class="card-title" *ngIf="!loadingAPIGateways">{{apigatewayApis}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingAPIGateways"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/traffic.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Today Incoming Requests</p>
+                <h4 class="card-title" *ngIf="!loadingAPIRequests">{{apigatewayTodayRequests}} / {{apigatewayYesterdayRequests}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingAPIRequests"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Elastic Load Balancers</h4>
+          <p class="card-category">Incoming requests over the last 6 months per AWS Region</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingElbRequestsChart">Loading...</div>
+          <canvas id="elbRequests"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/elb.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Elastic Load Balancers</p>
+                <h4 class="card-title" *ngIf="!loadingELBNumber">{{loadBalancers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingELBNumber"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/traffic.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Today Incoming Requests</p>
+                <h4 class="card-title" *ngIf="!loadingElbRequests">{{elbTodayRequests}} / {{elbYesterdayRequests}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingElbRequests"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/route53.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Route53 Domain Names</p>
+                <h4 class="card-title" *ngIf="!loadingRoute53Zones">{{route53Zones}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRoute53Zones"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/dns.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Route53 A Records</p>
+                <h4 class="card-title" *ngIf="!loadingRoute53ARecords">{{route53Records}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRoute53ARecords"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Load Balancer Types</h4>
+          <p class="card-category">Deployed Load Balancer per Type</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingElbFamilyType">Loading...</div>
+          <canvas id="elbFamilyType"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">NAT Gateway Traffic</h4>
+          <p class="card-category">Traffic over the last 7 days</p>
+        </div>
+        <div class="card-body">
+          <span *ngFor="let region of natGatewayAvailableRegions" (click)="showNatGatewayTrafficInRegion(region)" class="badge badge-primary region-badge">
+            {{region}}
+          </span>
+          <div>
+            <div id="natGatewayChartTraffic">
+              <div class="loader" *ngIf="loadingNatGatewayTrafficChart">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

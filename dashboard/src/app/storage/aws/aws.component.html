@@ -1,0 +1,345 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/s3.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">S3 Buckets</p>
+                <h4 class="card-title" *ngIf="!loadingS3Buckets">{{s3Buckets}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingS3Buckets"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/size.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">S3 Size</p>
+                <h4 class="card-title" *ngIf="!loadingS3BucketSize">{{s3BucketSize}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingS3BucketSize"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/s3_objects.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">S3 Objects</p>
+                <h4 class="card-title" *ngIf="!loadingS3BucketObjects">{{s3BucketObjects}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingS3BucketObjects"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/empty_buckets.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Empty Buckets</p>
+                <h4 class="card-title" *ngIf="!loadingEmptyBuckets">{{emptyBuckets}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEmptyBuckets"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">S3 Buckets Size</h4>
+          <p class="card-category">Total size of S3 buckets per AWS Region</p>
+        </div>
+        <div class="card-body">
+          <div id="s3BucketsSizeChart">
+            <div class="loader" *ngIf="loadingS3BucketsSizeChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">S3 Buckets Objects</h4>
+          <p class="card-category">Number of Objects per AWS Region</p>
+        </div>
+        <div class="card-body">
+          <div id="s3BucketsObjectsChart">
+            <div class="loader" *ngIf="loadingS3BucketsObjectsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/ebs.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">EBS Total</p>
+                <h4 class="card-title" *ngIf="!loadingEbsTotal">{{ebsTotal}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEbsTotal"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/ebs_snapshot.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">EBS Size</p>
+                <h4 class="card-title" *ngIf="!loadingEbsTotalSize">{{ebsTotalSize}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEbsTotalSize"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/ebs_used.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">EBS used</p>
+                <h4 class="card-title" *ngIf="!loadingEbsUsed">{{ebsUsed}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEbsUsed"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/cloudwatch_rt.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Logs Retention Period</p>
+                <h4 class="card-title" *ngIf="!loadingLogsRetentionPeriod">{{logsRetentionPeriod}} days</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLogsRetentionPeriod"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Amazon EBS Volume Types</h4>
+          <p class="card-category">Usage of EBS volume types</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingEbsFamilyChart">Loading...</div>
+          <canvas id="ebsFamilyChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">CloudWatch Logs Volume</h4>
+          <p class="card-category">The number of log events uploaded to CloudWatch Logs</p>
+        </div>
+        <div class="card-body">
+          <div id="logsVolumeChart">
+            <div class="loader" *ngIf="loadingLogsVolumeChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/dynamodb.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">DynamoDB Tables</p>
+                <h4 class="card-title" *ngIf="!loadingDynamoTables">{{dynamodbTables}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDynamoTables"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <i class="devicon-mysql-plain colored"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">RDS Instances</p>
+                <h4 class="card-title" *ngIf="!loadingRdsInstances">{{rdsInstances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRdsInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <i class="devicon-mongodb-plain colored"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">DocDB Instances</p>
+                <h4 class="card-title" *ngIf="!loadingDocDbInstances">{{docdbInstances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDocDbInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/redshift.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Redshift Clusters</p>
+                <h4 class="card-title" *ngIf="!loadingRedshiftClusters">{{redshiftClusters}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRedshiftClusters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+
+
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/memcached.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Memcached Clusters</p>
+                <h4 class="card-title" *ngIf="!loadingMemCachedClusters">{{memcachedClusters}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingMemCachedClusters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/redis.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Redis Clusters</p>
+                <h4 class="card-title" *ngIf="!loadingRedisClusters">{{redisClusters}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRedisClusters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

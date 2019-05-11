@@ -1,26 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { AwsService } from '../aws.service';
-
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { StoreService } from '../store.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
-  public account : Object = {};
-  public organization: Object = {};
+export class ProfileComponent implements OnInit, OnDestroy {
+  public provider: string;
+  public _subscription: Subscription;
 
-  constructor(private awsService: AwsService) {
-    this.awsService.getAccountName().subscribe(data => {
-      this.account = data;
-    }, err => {
-      this.account = {};
-    });
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
 
-    this.awsService.getOrganization().subscribe(data => {
-      this.organization = data;
-    }, err => {
-      this.organization = {};
+  constructor(private storeService: StoreService) {
+    this.provider = this.storeService.getProvider();
+    this._subscription = this.storeService.providerChanged.subscribe(provider => {
+      this.provider = provider;
     });
   }
 

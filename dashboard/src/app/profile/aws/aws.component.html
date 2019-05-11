@@ -1,0 +1,60 @@
+<section>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Account Settings</div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="email">Username</label>
+            <input type="text" class="form-control" id="disableinput" placeholder="{{account.username}}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="email">Password Last Used</label>
+            <input type="text" class="form-control" id="disableinput" placeholder="{{account.passwordLastUsed | date:short}}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="email">Creation Date</label>
+            <input type="text" class="form-control" id="disableinput" placeholder="{{account.createDate | date:short}}" disabled>
+          </div>
+          <div class="form-group">
+            <label class="control-label">
+              ARN
+            </label>
+            <p class="form-control-static">{{account.arn}}</p>
+          </div>
+          <div class="form-group">
+            <label class="control-label">
+              User ID
+            </label>
+            <p class="form-control-static">{{account.userId}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Contact Information</div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="email">Status</label>
+            <input type="text" class="form-control" id="disableinput" placeholder="{{organization.status}}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="email">Name</label>
+            <input type="text" class="form-control" id="disableinput" placeholder="{{organization.name}}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="{{organization.email}}" disabled>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

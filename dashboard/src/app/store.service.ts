@@ -4,11 +4,27 @@ import { Subject } from "rxjs/Subject";
 @Injectable()
 export class StoreService {
 
-  private notifications: Map<String, Object> = new Map();
+  private provider: string;
 
-  newNotification: Subject<Map<String, Object>> = new Subject<Map<String, Object>>();
+  private notifications: Map<string, Object> = new Map();
 
-  constructor() {}
+  public newNotification: Subject<Map<string, Object>> = new Subject<Map<string, Object>>();
+
+  public providerChanged: Subject<string> = new Subject<string>();
+
+  constructor() {
+    if(localStorage.getItem('provider')){
+      this.provider = localStorage.getItem('provider');
+    } else {
+      this.provider = 'aws';
+      localStorage.setItem('provider', this.provider);
+    }
+    this.providerChanged.next(this.provider);
+  }
+
+  public getProvider(){
+    return this.provider;
+  }
 
   public add(notification: string){
     let item = this.notifications[notification];
@@ -30,6 +46,14 @@ export class StoreService {
 
   public list(){
     return this.notifications;
+  }
+
+  public onProviderChanged(provider: string){
+    this.provider = provider;
+    localStorage.setItem('provider', this.provider);
+    this.providerChanged.next(this.provider);
+    this.notifications = new Map();
+    this.newNotification.next(this.notifications);
   }
 
 }

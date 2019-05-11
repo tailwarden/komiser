@@ -1,0 +1,166 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/gcp/pubsub.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Pub/Sub Topics</p>
+                <h4 class="card-title" *ngIf="!loadingPubSubTopics">{{pubSubTopics}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingPubSubTopics"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/gcp/dataproc.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Dataproc Clusters</p>
+                <h4 class="card-title" *ngIf="!loadingDataprocClusters">{{dataprocClusters}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDataprocClusters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/gcp/dataproc.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Dataproc Jobs</p>
+                <h4 class="card-title" *ngIf="!loadingDataprocJobs">{{dataprocJobs}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDataprocJobs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/services/gcp/dataflow.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">DataFlow Jobs</p>
+                  <h4 class="card-title" *ngIf="!loadingDataflowJobs">{{dataflowJobs}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDataflowJobs"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/gcp/bigquery.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">BigQuery Tables</p>
+                <h4 class="card-title" *ngIf="!loadingBigQueryTables">{{bigqueryTables}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingBigQueryTables"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/services/gcp/bigquery.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">BigQuery Datasets</p>
+                <h4 class="card-title" *ngIf="!loadingBigQueryDatasets">{{bigqueryDatasets}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingBigQueryDatasets"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/services/gcp/bigquery.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">BigQuery Size</p>
+                <h4 class="card-title" *ngIf="!loadingBigQuerySize">{{bigquerySize}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingBigQuerySize"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">BigQuery Statements</h4>
+          <p class="card-category">Scanned bytes billed broken down by statement type.</p>
+        </div>
+        <div class="card-body">
+          <div id="bigqueryStatementsChart">
+            <div class="loader" *ngIf="loadingBigqueryStatementsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">BigQuery Storage</h4>
+          <p class="card-category">Number of bytes stored.</p>
+        </div>
+        <div class="card-body">
+          <div id="bigqueryStorageChart">
+            <div class="loader" *ngIf="loadingBigqueryStorageChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
