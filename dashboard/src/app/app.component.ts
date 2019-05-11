@@ -19,7 +19,7 @@ export class AppComponent implements OnDestroy {
   public redAlarms: number;
   public notifications: Array<Object> = [];
   public _subscription: Subscription;
-  public currentProvider: Object;
+  public currentProvider: any;
   public availableProviders : Array<any> = [
     {
       label: 'Amazon Web Services',
@@ -54,7 +54,19 @@ export class AppComponent implements OnDestroy {
 
     this._storeService = storeService;
 
-    if (this.currentProvider == 'aws'){
+    this.getAccountName();
+
+    this._subscription = this.storeService.newNotification.subscribe(notifications => {
+      this.notifications = [];
+      Object.keys(notifications).forEach(key => {
+        this.notifications.push(notifications[key]);
+      })
+    })
+  }
+
+  private getAccountName(){
+    console.log(this.currentProvider);
+    if (this.currentProvider.value == 'aws'){
       this.awsService.getAccountName().subscribe(data => {
         this.accountName = data.username;
       }, err => {
@@ -75,13 +87,6 @@ export class AppComponent implements OnDestroy {
         this.accountName = 'Project Name';
       })
     }
-
-    this._subscription = this.storeService.newNotification.subscribe(notifications => {
-      this.notifications = [];
-      Object.keys(notifications).forEach(key => {
-        this.notifications.push(notifications[key]);
-      })
-    })
   }
 
   ngOnDestroy() {
@@ -95,6 +100,7 @@ export class AppComponent implements OnDestroy {
    public onCloudProviderSelected(provider){
      this.currentProvider = this.providers[provider];
      this._storeService.onProviderChanged(provider);
+     this.getAccountName();
    }
 
 }
