@@ -89,8 +89,8 @@ komiser start --port 3000
 
 ### GCP
 
-* Create a service account with *Viewer* permission, see [Creating and managing service accounts](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
-* Enable the below APIs for your project through GCP Console, `gcloud` or using the Service Usage API. You can find out more about these options in [Enabling an API in your GCP project docs](https://cloud.google.com/endpoints/docs/openapi/enable-api).
+* Create a service account with *Viewer* permission, see [Creating and managing service accounts](https://cloud.google.com/iam/docs/creating-managing-service-accounts) docs.
+* Enable the below APIs for your project through GCP Console, `gcloud` or using the Service Usage API. You can find out more about these options in [Enabling an API in your GCP project](https://cloud.google.com/endpoints/docs/openapi/enable-api) docs.
   * appengine.googleapis.com
   * bigquery-json.googleapis.com 
   * compute.googleapis.com 
@@ -108,7 +108,7 @@ komiser start --port 3000
   * serviceusage.googleapis.com
   * storage-api.googleapis.com
   * sqladmin.googleapis.com 
-* To analyze and optimize the infrastructure cost, you need to export your daily cost to BigQuery, see [Export Billing to BigQuery docs](https://cloud.google.com/billing/docs/how-to/export-data-bigquery).
+* To analyze and optimize the infrastructure cost, you need to export your daily cost to BigQuery, see [Export Billing to BigQuery](https://cloud.google.com/billing/docs/how-to/export-data-bigquery) docs.
 
 
 * Provide authentication credentials to your application code by setting the environment variable *GOOGLE_APPLICATION_CREDENTIALS*:
