@@ -2,3 +2,11 @@
     width: 40px !important;
     padding-bottom: 10px !important;
 }
+
+#bigqueryStorageChart{
+    height: 150px !important;
+}
+
+#bigqueryStatementsChart{
+    height: 150px !important;
+}

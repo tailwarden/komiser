@@ -18,3 +18,7 @@
     width: 40px !important;
     padding-bottom: 10px !important;
 }
+
+#gaeBandwidthChart{
+    min-height: 150px;
+}

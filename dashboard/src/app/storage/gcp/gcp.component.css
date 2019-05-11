@@ -2,3 +2,15 @@
     width: 40px !important;
     padding-bottom: 10px !important;
 }
+
+#logsVolumeChart{
+    height: 150px !important;
+}
+
+#storageBucketsObjectsChart{
+    height: 150px !important;
+}
+
+#storageBucketsSizeChart{
+    height: 150px !important;
+}
