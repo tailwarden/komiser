@@ -35,6 +35,7 @@
     "jquery-mapael": "^2.2.0",
     "moment": "^2.24.0",
     "ngx-bootstrap": "^2.0.5",
+    "ngx-trend": "^3.4.1",
     "raphael": "^2.2.8",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"

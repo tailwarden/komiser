@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) EBSHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ebs")
+	response, found := handler.cache.Get("aws_ebs")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) EBSHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeVolumes is missing")
 		} else {
-			handler.cache.Set("ebs", response)
+			handler.cache.Set("aws_ebs", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

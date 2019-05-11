@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) ESListDomainsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("es_domains")
+	response, found := handler.cache.Get("aws_es_domains")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) ESListDomainsHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "es:ListDomainNames is missing")
 		} else {
-			handler.cache.Set("es_domains", response)
+			handler.cache.Set("aws_es_domains", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

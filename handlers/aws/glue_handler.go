@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) GlueGetCrawlersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("glue_crawlers")
+	response, found := handler.cache.Get("aws_glue_crawlers")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) GlueGetCrawlersHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "glue:GetCrawlers is missing")
 		} else {
-			handler.cache.Set("glue_crawlers", response)
+			handler.cache.Set("aws_glue_crawlers", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) GlueGetJobsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("glue_jobs")
+	response, found := handler.cache.Get("aws_glue_jobs")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) GlueGetJobsHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "glue:GetJobs is missing")
 		} else {
-			handler.cache.Set("glue_jobs", response)
+			handler.cache.Set("aws_glue_jobs", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

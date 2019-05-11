@@ -1,0 +1,418 @@
+<section>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <i class="la la-play text-success"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Running EC2 Instances</p>
+                <h4 class="card-title" *ngIf="!loadingRunningInstances">{{runningEC2Instances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRunningInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-stop text-warning"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Stopped EC2 Instances</p>
+                <h4 class="card-title" *ngIf="!loadingStoppedInstances">{{stoppedEC2Instances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingStoppedInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-trash text-danger"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Terminated EC2 Instances</p>
+                <h4 class="card-title" *ngIf="!loadingTerminatedInstances">{{terminatedEC2Instances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingTerminatedInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Public vs Private Instances</h4>
+          <p class="card-category">Instances with Public IP Address</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingInstancesPrivacyChart">Loading...</div>
+          <canvas class="chart-circle mt-4 mb-3" id="instancesPrivacyChart"></canvas>
+        </div>
+        <div class="card-footer">
+          <div class="legend">
+            <i class="la la-circle text-primary"></i> Public Instances
+            <i class="la la-circle text-success" style="margin-left: 10px"></i> Private Instances
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Amazon EC2 Instance Families</h4>
+          <p class="card-category">Running EC2 Instances per Instance Type</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingInstancesFamilyChart">Loading...</div>
+          <canvas class="chart-circle mt-4 mb-3" id="instancesFamilyChart" style="max-height:275px"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/reserved.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Reserved Instances</p>
+                <h4 class="card-title" *ngIf="!loadingReservedInstances">{{reservedInstances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingReservedInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/spot.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Spot Instances</p>
+                <h4 class="card-title" *ngIf="!loadingSpotInstances">{{spotInstances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSpotInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/scheduled.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Scheduled Instances</p>
+                <h4 class="card-title" *ngIf="!loadingScheduledInstances">{{scheduledInstances}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingScheduledInstances"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/eip.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Detached Elastic IP</p>
+                <h4 class="card-title" *ngIf="!loadingDetachedIps">{{detchedElasticIps}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDetachedIps"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Monthly Spend by Instance Type</h4>
+          <p class="card-category">Monthly spend over last three months, grouped by instance type</p>
+        </div>
+        <div class="card-body">
+          <div class="costPerInstanceTypeChart">
+            <div class="loader" *ngIf="loadingCostPerInstanceTypeChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="card card-stats card-warning card-csharp">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-csharp-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">C# Functions</p>
+                <h4 class="card-title" *ngIf="!loadingLambdaFunctions">{{lambdaFunctions.csharp}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLambdaFunctions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-stats card-danger">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-ruby-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Ruby Functions</p>
+                <h4 class="card-title" *ngIf="!loadingLambdaFunctions">{{lambdaFunctions.ruby}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLambdaFunctions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-stats card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-java-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Java Functions</p>
+                <h4 class="card-title" *ngIf="!loadingLambdaFunctions">{{lambdaFunctions.java}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLambdaFunctions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-stats card-primary card-golang">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-go-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Golang Functions</p>
+                <h4 class="card-title" *ngIf="!loadingLambdaFunctions">{{lambdaFunctions.golang}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLambdaFunctions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-stats card-warning card-python">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-python-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Python Functions</p>
+                <h4 class="card-title" *ngIf="!loadingLambdaFunctions">{{lambdaFunctions.python}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLambdaFunctions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-stats card-success">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-nodejs-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Node.JS Functions</p>
+                <h4 class="card-title" *ngIf="!loadingLambdaFunctions">{{lambdaFunctions.node}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLambdaFunctions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Lambda Function Invocations</h4>
+          <p class="card-category">The number of times functions were invoked</p>
+        </div>
+        <div class="card-body">
+          <div class="lambdaInvocationsChart">
+            <div class="loader" *ngIf="loadingLambdaInvocationsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Lambda Function Errors</h4>
+          <p class="card-category">The number of executions that completed with error</p>
+        </div>
+        <div class="card-body">
+          <div class="lambdaErrorsChart">
+            <div class="loader" *ngIf="loadingLambdaErrorsChart">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats card-primary card-docker">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-docker-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">ECS Clusters</p>
+                <h4 class="card-title" *ngIf="!loadingEcsClusters">{{ecsClusters}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEcsClusters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats card-primary card-docker">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-docker-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">ECS Tasks</p>
+                <h4 class="card-title" *ngIf="!loadingEcsTasks">{{ecsTasks}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEcsTasks"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats card-primary card-docker">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="devicon-docker-plain"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">ECS Services</p>
+                <h4 class="card-title" *ngIf="!loadingEcsServices">{{ecsServices}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEcsServices"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo" style="padding-bottom: 12px" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">EKS Clusters</p>
+                <h4 class="card-title" *ngIf="!loadingEksClusters">{{eksClusters}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEksClusters"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

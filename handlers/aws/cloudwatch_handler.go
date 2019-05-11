@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) CloudWatchAlarmsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cloudwatch_alarms")
+	response, found := handler.cache.Get("aws_cloudwatch_alarms")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) CloudWatchAlarmsHandler(w http.ResponseWriter, r *htt
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudwatch:DescribeAlarms is missing")
 		} else {
-			handler.cache.Set("cloudwatch_alarms", response)
+			handler.cache.Set("aws_cloudwatch_alarms", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

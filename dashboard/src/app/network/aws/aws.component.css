@@ -1,0 +1,24 @@
+.region-badge {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#apigatewayRequests{
+    height: 150px !important;
+}
+
+#cloudfrontRequests{
+    height: 150px !important;
+}
+
+#elbRequests{
+    height: 150px !important;
+}
+
+#natGatewayTraffic{
+    height: 150px !important;
+}
+
+#natGatewayChartTraffic{
+    min-height: 150px;
+}

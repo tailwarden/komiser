@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) UsedRegionsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("used_regions")
+	response, found := handler.cache.Get("aws_used_regions")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) UsedRegionsHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "tag:GetResources is missing")
 		} else {
-			handler.cache.Set("used_regions", response)
+			handler.cache.Set("aws_used_regions", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

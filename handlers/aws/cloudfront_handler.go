@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) CloudFrontDistributionsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cloudfront")
+	response, found := handler.cache.Get("aws_cloudfront")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) CloudFrontDistributionsHandler(w http.ResponseWriter,
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudfront:ListDistributions is missing")
 		} else {
-			handler.cache.Set("cloudfront", response)
+			handler.cache.Set("aws_cloudfront", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) CloudFrontRequestsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cloudfront_requests")
+	response, found := handler.cache.Get("aws_cloudfront_requests")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) CloudFrontRequestsHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudwatch:GetMetricStatistics is missing")
 		} else {
-			handler.cache.Set("cloudfront_requests", response)
+			handler.cache.Set("aws_cloudfront_requests", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

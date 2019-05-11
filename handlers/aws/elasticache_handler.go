@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) ElasticacheClustersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("elasticache")
+	response, found := handler.cache.Get("aws_elasticache")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) ElasticacheClustersHandler(w http.ResponseWriter, r *
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "elasticache:DescribeCacheClusters is missing")
 		} else {
-			handler.cache.Set("elasticache", response)
+			handler.cache.Set("aws_elasticache", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

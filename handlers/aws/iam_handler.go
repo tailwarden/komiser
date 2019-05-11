@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) IAMRolesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("role")
+	response, found := handler.cache.Get("aws_role")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) IAMRolesHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:ListRoles is missing")
 		} else {
-			handler.cache.Set("role", response)
+			handler.cache.Set("aws_role", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) IAMGroupsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("group")
+	response, found := handler.cache.Get("aws_group")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *AWSHandler) IAMGroupsHandler(w http.ResponseWriter, r *http.Reque
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:ListGroups is missing")
 		} else {
-			handler.cache.Set("group", response)
+			handler.cache.Set("aws_group", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) IAMPoliciesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("policy")
+	response, found := handler.cache.Get("aws_policy")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,14 +43,14 @@ func (handler *AWSHandler) IAMPoliciesHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:ListPolicies is missing")
 		} else {
-			handler.cache.Set("policy", response)
+			handler.cache.Set("aws_policy", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("users")
+	response, found := handler.cache.Get("aws_users")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -58,14 +58,14 @@ func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:ListUsers is missing")
 		} else {
-			handler.cache.Set("users", response)
+			handler.cache.Set("aws_users", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) IAMUserHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("user")
+	response, found := handler.cache.Get("aws_user")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -73,14 +73,14 @@ func (handler *AWSHandler) IAMUserHandler(w http.ResponseWriter, r *http.Request
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:GetUser is missing")
 		} else {
-			handler.cache.Set("user", response)
+			handler.cache.Set("aws_user", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) DescribeOrganizationHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("organization")
+	response, found := handler.cache.Get("aws_organization")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -88,7 +88,7 @@ func (handler *AWSHandler) DescribeOrganizationHandler(w http.ResponseWriter, r 
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "organizations:DescribeOrganization is missing")
 		} else {
-			handler.cache.Set("organization", response)
+			handler.cache.Set("aws_organization", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

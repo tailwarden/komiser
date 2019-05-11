@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) ActiveMQBrokersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("mq_brokers")
+	response, found := handler.cache.Get("aws_mq_brokers")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) ActiveMQBrokersHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "mq:ListBrokers is missing")
 		} else {
-			handler.cache.Set("mq_brokers", response)
+			handler.cache.Set("aws_mq_brokers", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

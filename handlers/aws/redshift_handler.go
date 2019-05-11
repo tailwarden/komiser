@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) DescribeRedshiftClustersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("redshift_clusters")
+	response, found := handler.cache.Get("aws_redshift_clusters")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) DescribeRedshiftClustersHandler(w http.ResponseWriter
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "redshift:DescribeClusters is missing")
 		} else {
-			handler.cache.Set("redshift_clusters", response)
+			handler.cache.Set("aws_redshift_clusters", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

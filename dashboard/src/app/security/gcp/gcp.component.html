@@ -1,0 +1,199 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/services/gcp/iam.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">IAM Roles</p>
+                <h4 class="card-title" *ngIf="!loadingIamRoles">{{iamRoles}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingIamRoles"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/firewalls.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Firewalls</p>
+                <h4 class="card-title" *ngIf="!loadingFirewalls">{{firewalls}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingFirewalls"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/certificates.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SSL Certificates</p>
+                <h4 class="card-title" *ngIf="!loadingSSLCertificates">{{sslCertificates}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSSLCertificates"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/sslpolicies.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SSL Policies</p>
+                <h4 class="card-title" *ngIf="!loadingSSLPolicies">{{sslPolicies}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSSLPolicies"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/securitypolicies.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Security Policies</p>
+                <h4 class="card-title" *ngIf="!loadingSecurityPolicies">{{securityPolicies}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSecurityPolicies"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/gcp/vpn.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">VPN Tunnels</p>
+                <h4 class="card-title" *ngIf="!loadingVPNTunnels">{{vpnTunnels}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingVPNTunnels"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                    <img src="https://cdn.komiser.io/images/services/gcp/bigquery.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">KMS Keys</p>
+                  <h4 class="card-title" *ngIf="!loadingCryptoKeys">{{cryptoKeys}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCryptoKeys"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+          <div class="card card-stats">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-5">
+                  <div class="icon-big text-center">
+                      <img src="https://cdn.komiser.io/images/services/gcp/iam.png" class="gcp-logo" />
+                  </div>
+                </div>
+                <div class="col-7 d-flex align-items-center">
+                  <div class="numbers">
+                    <p class="card-category">Service Accounts</p>
+                    <h4 class="card-title" *ngIf="!loadingServiceAccounts">{{serviceAccounts}}</h4>
+                    <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingServiceAccounts"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Service Enabled APIs</h4>
+              <p class="card-category">Checks security groups for rules that allow unrestricted access (0.0.0.0/0) to specific ports</p>
+            </div>
+            <div class="card-body">
+              <table class="table table-head-bg-primary table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Namespace</th>
+                    <th>State</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let api of returnedEnabledAPIs">
+                    <td>{{api.title}}</td>
+                    <td>{{api.namespace}}</td>
+                    <td>
+                      <span [ngClass]="getState(api.enabled)">{{getStateLabel(api.enabled)}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination [totalItems]="enabledAPIs.length" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" [maxSize]="10"
+                size="sm"></pagination>
+            </div>
+          </div>
+    </div>
+  </div>
+</section>

@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) SnapshotHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("snapshot")
+	response, found := handler.cache.Get("aws_snapshot")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) SnapshotHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeSnapshots is missing")
 		} else {
-			handler.cache.Set("snapshot", response)
+			handler.cache.Set("aws_snapshot", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

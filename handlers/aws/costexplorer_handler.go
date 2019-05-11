@@ -35,7 +35,7 @@ func (handler *AWSHandler) CurrentCostHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (handler *AWSHandler) CostAndUsagePerInstanceTypeHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cost_per_instance_type")
+	response, found := handler.cache.Get("aws_cost_per_instance_type")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,14 +43,14 @@ func (handler *AWSHandler) CostAndUsagePerInstanceTypeHandler(w http.ResponseWri
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ce:GetCostAndUsage is missing")
 		} else {
-			handler.cache.Set("cost_per_instance_type", response)
+			handler.cache.Set("aws_cost_per_instance_type", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) DescribeForecastPriceHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cost_forecast")
+	response, found := handler.cache.Get("aws_cost_forecast")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -58,7 +58,7 @@ func (handler *AWSHandler) DescribeForecastPriceHandler(w http.ResponseWriter, r
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ce:GetCostForecast is missing")
 		} else {
-			handler.cache.Set("cost_forecast", response)
+			handler.cache.Set("aws_cost_forecast", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

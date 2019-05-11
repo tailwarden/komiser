@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) DataPipelineListPipelines(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("datapipeline_pipelines")
+	response, found := handler.cache.Get("aws_datapipeline_pipelines")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) DataPipelineListPipelines(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "datapipeline:ListPipelines is missing")
 		} else {
-			handler.cache.Set("datapipeline_pipelines", response)
+			handler.cache.Set("aws_datapipeline_pipelines", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) SNSTopicsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("sns")
+	response, found := handler.cache.Get("aws_sns")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *AWSHandler) SNSTopicsHandler(w http.ResponseWriter, r *http.Reque
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "sns:ListTopics is missing")
 		} else {
-			handler.cache.Set("sns", response)
+			handler.cache.Set("aws_sns", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
