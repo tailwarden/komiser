@@ -72,7 +72,7 @@ export class GcpNetworkComponent implements OnInit {
       });
 
       availablePeriods.sort((a, b) => {
-        return new Date(b) - new Date(a);
+        return new Date(b).getTime() - new Date(a).getTime();
       })
       availablePeriods = availablePeriods.reverse();
 
@@ -123,7 +123,7 @@ export class GcpNetworkComponent implements OnInit {
       });
 
       availablePeriods.sort((a, b) => {
-        return new Date(b) - new Date(a);
+        return new Date(b).getTime() - new Date(a).getTime();
       })
       availablePeriods = availablePeriods.reverse();
 

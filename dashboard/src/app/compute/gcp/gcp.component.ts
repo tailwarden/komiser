@@ -33,7 +33,7 @@ export class GcpComputeComponent implements OnInit, AfterViewInit {
   public loadingImages: boolean = true;
   public loadingGaeBandwidthChart: boolean = true;
 
-  private zones: Map<string, Object> = new Map<string, Object>([
+  private zones: Map<string, any> = new Map<string, any>([
     ["asia-east1", { "latitude": "23.697809", "longitude": "120.960518" }],
     ["asia-east2", { "latitude": "22.396427", "longitude": "114.109497" }],
     ["asia-northeast1", { "latitude": "35.689487", "longitude": "139.691711" }],
@@ -219,7 +219,7 @@ export class GcpComputeComponent implements OnInit, AfterViewInit {
       });
 
       availablePeriods.sort((a, b) => {
-        return new Date(b) - new Date(a);
+        return new Date(b).getTime() - new Date(a).getTime();
       })
       availablePeriods = availablePeriods.reverse();
 

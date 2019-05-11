@@ -167,7 +167,7 @@ export class GcpStorageComponent implements OnInit {
       });
 
       availablePeriods.sort((a, b) => {
-        return new Date(b) - new Date(a);
+        return new Date(b).getTime() - new Date(a).getTime();
       })
       availablePeriods = availablePeriods.reverse();
 

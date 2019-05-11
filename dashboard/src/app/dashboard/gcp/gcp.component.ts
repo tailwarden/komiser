@@ -1,4 +1,4 @@
-import { Component, OnInit, , AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { GcpService } from '../../gcp.service';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
