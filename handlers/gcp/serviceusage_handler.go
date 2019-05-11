@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) EnabledAPIsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("enabled_apis")
+	response, found := handler.cache.Get("gcp_enabled_apis")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *GCPHandler) EnabledAPIsHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "serviceusage:CloudPlatformReadOnlyScope is missing")
 		} else {
-			handler.cache.Set("enabled_apis", response)
+			handler.cache.Set("gcp_enabled_apis", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) EC2InstancesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ec2")
+	response, found := handler.cache.Get("aws_ec2")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) EC2InstancesHandler(w http.ResponseWriter, r *http.Re
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeInstances is missing")
 		} else {
-			handler.cache.Set("ec2", response)
+			handler.cache.Set("aws_ec2", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) AutoScalingGroupHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("asg")
+	response, found := handler.cache.Get("aws_asg")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *AWSHandler) AutoScalingGroupHandler(w http.ResponseWriter, r *htt
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "autoscaling:DescribeAutoScalingGroups is missing")
 		} else {
-			handler.cache.Set("asg", response)
+			handler.cache.Set("aws_asg", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) ListUnrestrictedSecurityGroups(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("sg_unrestricted")
+	response, found := handler.cache.Get("aws_sg_unrestricted")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,14 +43,14 @@ func (handler *AWSHandler) ListUnrestrictedSecurityGroups(w http.ResponseWriter,
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeSecurityGroups is missing")
 		} else {
-			handler.cache.Set("sg_unrestricted", response)
+			handler.cache.Set("aws_sg_unrestricted", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) ScheduledEC2Instances(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ec2_scheduled")
+	response, found := handler.cache.Get("aws_ec2_scheduled")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -58,14 +58,14 @@ func (handler *AWSHandler) ScheduledEC2Instances(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeScheduledInstances is missing")
 		} else {
-			handler.cache.Set("ec2_scheduled", response)
+			handler.cache.Set("aws_ec2_scheduled", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) SpotEC2Instances(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ec2_spot")
+	response, found := handler.cache.Get("aws_ec2_spot")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -73,14 +73,14 @@ func (handler *AWSHandler) SpotEC2Instances(w http.ResponseWriter, r *http.Reque
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeSpotFleetRequests is missing")
 		} else {
-			handler.cache.Set("ec2_spot", response)
+			handler.cache.Set("aws_ec2_spot", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) ReservedEC2Instances(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ec2_reserved")
+	response, found := handler.cache.Get("aws_ec2_reserved")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -88,7 +88,7 @@ func (handler *AWSHandler) ReservedEC2Instances(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeReservedInstances is missing")
 		} else {
-			handler.cache.Set("ec2_reserved", response)
+			handler.cache.Set("aws_ec2_reserved", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

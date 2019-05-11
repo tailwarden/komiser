@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) Route53HostedZonesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("route53_zones")
+	response, found := handler.cache.Get("aws_route53_zones")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) Route53HostedZonesHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "route53:ListHostedZones is missing")
 		} else {
-			handler.cache.Set("route53_zones", response)
+			handler.cache.Set("aws_route53_zones", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) Route53ARecordsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("route53_a_records")
+	response, found := handler.cache.Get("aws_route53_a_records")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) Route53ARecordsHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "route53:ListResourceRecordSets is missing")
 		} else {
-			handler.cache.Set("route53_a_records", response)
+			handler.cache.Set("aws_route53_a_records", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

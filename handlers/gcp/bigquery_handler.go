@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) BigQueryScannedStatementsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("bigquery_statements")
+	response, found := handler.cache.Get("gcp_bigquery_statements")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) BigQueryScannedStatementsHandler(w http.ResponseWrite
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("bigquery_statements", response)
+			handler.cache.Set("gcp_bigquery_statements", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) BigQueryStoredBytesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("bigquery_storage")
+	response, found := handler.cache.Get("gcp_bigquery_storage")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *GCPHandler) BigQueryStoredBytesHandler(w http.ResponseWriter, r *
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("bigquery_storage", response)
+			handler.cache.Set("gcp_bigquery_storage", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) BigQueryTablesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("bigquery_tables")
+	response, found := handler.cache.Get("gcp_bigquery_tables")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,14 +43,14 @@ func (handler *GCPHandler) BigQueryTablesHandler(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "bigquery:CloudPlatformReadOnlyScope is missing")
 		} else {
-			handler.cache.Set("bigquery_tables", response)
+			handler.cache.Set("gcp_bigquery_tables", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) BigQueryDatasetsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("bigquery_datasets")
+	response, found := handler.cache.Get("gcp_bigquery_datasets")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -58,7 +58,7 @@ func (handler *GCPHandler) BigQueryDatasetsHandler(w http.ResponseWriter, r *htt
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "bigquery:CloudPlatformReadOnlyScope is missing")
 		} else {
-			handler.cache.Set("bigquery_datasets", response)
+			handler.cache.Set("gcp_bigquery_datasets", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

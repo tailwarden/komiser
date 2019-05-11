@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) LambdaFunctionHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("lambda_functions")
+	response, found := handler.cache.Get("aws_lambda_functions")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) LambdaFunctionHandler(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "lambda:ListFunctions is missing")
 		} else {
-			handler.cache.Set("lambda_functions", response)
+			handler.cache.Set("aws_lambda_functions", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) GetLambdaInvocationMetrics(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("lambda_invocations")
+	response, found := handler.cache.Get("aws_lambda_invocations")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *AWSHandler) GetLambdaInvocationMetrics(w http.ResponseWriter, r *
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudwatch:GetMetricStatistics is missing")
 		} else {
-			handler.cache.Set("lambda_invocations", response)
+			handler.cache.Set("aws_lambda_invocations", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) GetLambdaErrorsMetrics(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("lambda_errors")
+	response, found := handler.cache.Get("aws_lambda_errors")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,7 +43,7 @@ func (handler *AWSHandler) GetLambdaErrorsMetrics(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudwatch:GetMetricStatistics is missing")
 		} else {
-			handler.cache.Set("lambda_errors", response)
+			handler.cache.Set("aws_lambda_errors", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

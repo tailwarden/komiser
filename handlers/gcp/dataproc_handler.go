@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) DataprocJobsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("dataproc_jobs")
+	response, found := handler.cache.Get("gcp_dataproc_jobs")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) DataprocJobsHandler(w http.ResponseWriter, r *http.Re
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "dataproc:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("dataproc_jobs", response)
+			handler.cache.Set("gcp_dataproc_jobs", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) DataprocClustersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("dataproc_clusters")
+	response, found := handler.cache.Get("gcp_dataproc_clusters")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *GCPHandler) DataprocClustersHandler(w http.ResponseWriter, r *htt
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "dataproc:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("dataproc_clusters", response)
+			handler.cache.Set("gcp_dataproc_clusters", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

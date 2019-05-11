@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) CloudTrailConsoleSignInEventsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("events_sign_in")
+	response, found := handler.cache.Get("aws_events_sign_in")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) CloudTrailConsoleSignInEventsHandler(w http.ResponseW
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudtrail:LookupEvents is missing")
 		} else {
-			handler.cache.Set("events_sign_in", response)
+			handler.cache.Set("aws_events_sign_in", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) CloudTrailConsoleSignInSourceIpEventsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("events_source_ip")
+	response, found := handler.cache.Get("aws_events_source_ip")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) CloudTrailConsoleSignInSourceIpEventsHandler(w http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudtrail:LookupEvents is missing")
 		} else {
-			handler.cache.Set("events_source_ip", response)
+			handler.cache.Set("aws_events_source_ip", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

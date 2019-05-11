@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) APIGatewayListCertificatesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("acm_certificates")
+	response, found := handler.cache.Get("aws_acm_certificates")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) APIGatewayListCertificatesHandler(w http.ResponseWrit
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "acm:ListCertificates is missing")
 		} else {
-			handler.cache.Set("acm_certificates", response)
+			handler.cache.Set("aws_acm_certificates", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) APIGatewayExpiredCertificatesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("acm_expired")
+	response, found := handler.cache.Get("aws_acm_expired")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) APIGatewayExpiredCertificatesHandler(w http.ResponseW
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "acm:ListCertificates is missing")
 		} else {
-			handler.cache.Set("acm_expired", response)
+			handler.cache.Set("aws_acm_expired", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

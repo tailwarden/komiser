@@ -3,7 +3,7 @@ package aws
 import "net/http"
 
 func (handler *GCPHandler) KMSCryptoKeysHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("kms_crypto_keys")
+	response, found := handler.cache.Get("gcp_kms_crypto_keys")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -11,7 +11,7 @@ func (handler *GCPHandler) KMSCryptoKeysHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudkms:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("kms_crypto_keys", response)
+			handler.cache.Set("gcp_kms_crypto_keys", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

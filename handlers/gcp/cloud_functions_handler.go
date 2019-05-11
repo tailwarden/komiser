@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) CloudFunctionsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cloud_functions")
+	response, found := handler.cache.Get("gcp_cloud_functions")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *GCPHandler) CloudFunctionsHandler(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudfunctions:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("cloud_functions", response)
+			handler.cache.Set("gcp_cloud_functions", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

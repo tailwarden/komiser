@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) ElasticLoadBalancerHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("elb")
+	response, found := handler.cache.Get("aws_elb")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) ElasticLoadBalancerHandler(w http.ResponseWriter, r *
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "elasticloadbalancing:DescribeLoadBalancers is missing")
 		} else {
-			handler.cache.Set("elb", response)
+			handler.cache.Set("aws_elb", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) ELBRequestsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("elb_requests")
+	response, found := handler.cache.Get("aws_elb_requests")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) ELBRequestsHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "elasticloadbalancing:DescribeLoadBalancers is missing")
 		} else {
-			handler.cache.Set("elb_requests", response)
+			handler.cache.Set("aws_elb_requests", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

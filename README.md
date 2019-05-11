@@ -22,7 +22,7 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 <p align="center">
 
-[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png?v=2)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
+[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png?v=3)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
 
 </p>
 
@@ -84,17 +84,30 @@ komiser start --port 3000
 * Point your browser to http://localhost:3000
 
 <p align="center">
-    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard.png"/>
+    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-aws.png"/>
 </p>
 
 ### GCP
 
-* Create a service account with [](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
-* Enable the below APIs for your project through GCP Console, `gcloud` or using the Service Usage API. You can find out more about these options in the [Enabling and Disabling APIs docs](https://cloud.google.com/apis/docs/enable-disable-apis).
-  * x
-  * y
-  * z
-  * c
+* Create a service account with *Viewer* permission, see [Creating and managing service accounts](https://cloud.google.com/iam/docs/creating-managing-service-accounts)
+* Enable the below APIs for your project through GCP Console, `gcloud` or using the Service Usage API. You can find out more about these options in [Enabling an API in your GCP project docs](https://cloud.google.com/endpoints/docs/openapi/enable-api).
+  * appengine.googleapis.com
+  * bigquery-json.googleapis.com 
+  * compute.googleapis.com 
+  * cloudfunctions.googleapis.com
+  * container.googleapis.com
+  * cloudresourcemanager.googleapis.com
+  * cloudkms.googleapis.com
+  * dns.googleapis.com
+  * dataflow.googleapis.com
+  * dataproc.googleapis.com
+  * iam.googleapis.com
+  * monitoring.googleapis.com
+  * pubsub.googleapis.com
+  * redis.googleapis.com
+  * serviceusage.googleapis.com
+  * storage-api.googleapis.com
+  * sqladmin.googleapis.com 
 * To analyze and optimize the infrastructure cost, you need to export your daily cost to BigQuery, see [Export Billing to BigQuery docs](https://cloud.google.com/billing/docs/how-to/export-data-bigquery).
 
 
@@ -111,6 +124,10 @@ komiser start --port 3000 --dataset project-id.dataset-name.table-name
 ```
 
 * Point your browser to http://localhost:3000
+
+<p align="center">
+    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-gcp.png"/>
+</p>
 
 ## Options
 

@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) ConsumedAPIRequestsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("api_consumed_requests")
+	response, found := handler.cache.Get("gcp_api_consumed_requests")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *GCPHandler) ConsumedAPIRequestsHandler(w http.ResponseWriter, r *
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("api_consumed_requests", response)
+			handler.cache.Set("gcp_api_consumed_requests", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

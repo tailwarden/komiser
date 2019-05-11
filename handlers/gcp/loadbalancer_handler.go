@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) LoadBalancersRequestsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("lb_requests")
+	response, found := handler.cache.Get("gcp_lb_requests")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) LoadBalancersRequestsHandler(w http.ResponseWriter, r
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("lb_requests", response)
+			handler.cache.Set("gcp_lb_requests", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) LoadBalancersTotalHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("lb_total")
+	response, found := handler.cache.Get("gcp_lb_total")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *GCPHandler) LoadBalancersTotalHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("lb_total", response)
+			handler.cache.Set("gcp_lb_total", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

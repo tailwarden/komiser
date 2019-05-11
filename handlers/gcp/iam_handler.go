@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) IAMRolesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("iam_roles")
+	response, found := handler.cache.Get("gcp_iam_roles")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) IAMRolesHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("iam_roles", response)
+			handler.cache.Set("gcp_iam_roles", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("iam_users")
+	response, found := handler.cache.Get("gcp_iam_users")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *GCPHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("iam_users", response)
+			handler.cache.Set("gcp_iam_users", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) IAMServiceAccountsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("iam_service_accounts")
+	response, found := handler.cache.Get("gcp_iam_service_accounts")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,7 +43,7 @@ func (handler *GCPHandler) IAMServiceAccountsHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("iam_service_accounts", response)
+			handler.cache.Set("gcp_iam_service_accounts", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

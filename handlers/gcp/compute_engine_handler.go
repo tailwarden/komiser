@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) ComputeInstancesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("compute_instances")
+	response, found := handler.cache.Get("gcp_compute_instances")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) ComputeInstancesHandler(w http.ResponseWriter, r *htt
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("compute_instances", response)
+			handler.cache.Set("gcp_compute_instances", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) ComputeDisksHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("compute_disks")
+	response, found := handler.cache.Get("gcp_compute_disks")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *GCPHandler) ComputeDisksHandler(w http.ResponseWriter, r *http.Re
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("compute_disks", response)
+			handler.cache.Set("gcp_compute_disks", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) DiskSnapshotsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("disk_snapshots")
+	response, found := handler.cache.Get("gcp_disk_snapshots")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,14 +43,14 @@ func (handler *GCPHandler) DiskSnapshotsHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("disk_snapshots", response)
+			handler.cache.Set("gcp_disk_snapshots", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) ComputeImagesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("compute_images")
+	response, found := handler.cache.Get("gcp_compute_images")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -58,14 +58,14 @@ func (handler *GCPHandler) ComputeImagesHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("compute_images", response)
+			handler.cache.Set("gcp_compute_images", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) ComputeCPUUtilizationHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("compute_cpu_utilization")
+	response, found := handler.cache.Get("gcp_compute_cpu_utilization")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -73,14 +73,14 @@ func (handler *GCPHandler) ComputeCPUUtilizationHandler(w http.ResponseWriter, r
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("compute_cpu_utilization", response)
+			handler.cache.Set("gcp_compute_cpu_utilization", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) ComputeQuotasHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("compute_quotas")
+	response, found := handler.cache.Get("gcp_compute_quotas")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -88,7 +88,7 @@ func (handler *GCPHandler) ComputeQuotasHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("compute_quotas", response)
+			handler.cache.Set("gcp_compute_quotas", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

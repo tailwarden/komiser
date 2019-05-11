@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *AWSHandler) KinesisListStreamsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("kinesis_streams")
+	response, found := handler.cache.Get("aws_kinesis_streams")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *AWSHandler) KinesisListStreamsHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "kinesis:ListStreams is missing")
 		} else {
-			handler.cache.Set("kinesis_streams", response)
+			handler.cache.Set("aws_kinesis_streams", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) KinesisListShardsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("kinesis_shards")
+	response, found := handler.cache.Get("aws_kinesis_shards")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *AWSHandler) KinesisListShardsHandler(w http.ResponseWriter, r *ht
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "kinesis:ListShards is missing")
 		} else {
-			handler.cache.Set("kinesis_shards", response)
+			handler.cache.Set("aws_kinesis_shards", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

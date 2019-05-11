@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) BillingLastSixMonthsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("billing_history")
+	response, found := handler.cache.Get("gcp_billing_history")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) BillingLastSixMonthsHandler(w http.ResponseWriter, r 
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "bigquery:Query is missing")
 		} else {
-			handler.cache.Set("billing_history", response)
+			handler.cache.Set("gcp_billing_history", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) BillingPerServiceHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("billing_per_service")
+	response, found := handler.cache.Get("gcp_billing_per_service")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,7 +28,7 @@ func (handler *GCPHandler) BillingPerServiceHandler(w http.ResponseWriter, r *ht
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "bigquery:Query is missing")
 		} else {
-			handler.cache.Set("billing_per_service", response)
+			handler.cache.Set("gcp_billing_per_service", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

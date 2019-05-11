@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) StorageBucketsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("storage_buckets")
+	response, found := handler.cache.Get("gcp_storage_buckets")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) StorageBucketsHandler(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "storage:CloudPlatformReadOnlyScope is missing")
 		} else {
-			handler.cache.Set("storage_buckets", response)
+			handler.cache.Set("gcp_storage_buckets", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) StorageBucketsSizeHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("storage_size")
+	response, found := handler.cache.Get("gcp_storage_size")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *GCPHandler) StorageBucketsSizeHandler(w http.ResponseWriter, r *h
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("storage_size", response)
+			handler.cache.Set("gcp_storage_size", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) StorageBucketsObjectsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("storage_objects")
+	response, found := handler.cache.Get("gcp_storage_objects")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,7 +43,7 @@ func (handler *GCPHandler) StorageBucketsObjectsHandler(w http.ResponseWriter, r
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "monitoring:MonitoringReadScope is missing")
 		} else {
-			handler.cache.Set("storage_objects", response)
+			handler.cache.Set("gcp_storage_objects", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

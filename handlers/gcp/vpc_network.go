@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) VpcNetworksHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpc_networks")
+	response, found := handler.cache.Get("gcp_vpc_networks")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,14 +13,14 @@ func (handler *GCPHandler) VpcNetworksHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("vpc_networks", response)
+			handler.cache.Set("gcp_vpc_networks", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) VpcFirewallsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpc_firewalls")
+	response, found := handler.cache.Get("gcp_vpc_firewalls")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -28,14 +28,14 @@ func (handler *GCPHandler) VpcFirewallsHandler(w http.ResponseWriter, r *http.Re
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("vpc_firewalls", response)
+			handler.cache.Set("gcp_vpc_firewalls", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) VpcRoutersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpc_routers")
+	response, found := handler.cache.Get("gcp_vpc_routers")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -43,14 +43,14 @@ func (handler *GCPHandler) VpcRoutersHandler(w http.ResponseWriter, r *http.Requ
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("vpc_routers", response)
+			handler.cache.Set("gcp_vpc_routers", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) VpcSubnetsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpc_subnets")
+	response, found := handler.cache.Get("gcp_vpc_subnets")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -58,14 +58,14 @@ func (handler *GCPHandler) VpcSubnetsHandler(w http.ResponseWriter, r *http.Requ
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("vpc_subnets", response)
+			handler.cache.Set("gcp_vpc_subnets", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) VpcExternalAddressesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpc_addresses")
+	response, found := handler.cache.Get("gcp_vpc_addresses")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -73,14 +73,14 @@ func (handler *GCPHandler) VpcExternalAddressesHandler(w http.ResponseWriter, r 
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("vpc_addresses", response)
+			handler.cache.Set("gcp_vpc_addresses", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) VpnTunnelsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("vpn_tunnels")
+	response, found := handler.cache.Get("gcp_vpn_tunnels")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -88,14 +88,14 @@ func (handler *GCPHandler) VpnTunnelsHandler(w http.ResponseWriter, r *http.Requ
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("vpn_tunnels", response)
+			handler.cache.Set("gcp_vpn_tunnels", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) SSLCertificatesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ssl_certificates")
+	response, found := handler.cache.Get("gcp_ssl_certificates")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -103,14 +103,14 @@ func (handler *GCPHandler) SSLCertificatesHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("ssl_certificates", response)
+			handler.cache.Set("gcp_ssl_certificates", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) SSLPoliciesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("ssl_policies")
+	response, found := handler.cache.Get("gcp_ssl_policies")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -118,14 +118,14 @@ func (handler *GCPHandler) SSLPoliciesHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("ssl_policies", response)
+			handler.cache.Set("gcp_ssl_policies", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) SecurityPoliciesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("security_policies")
+	response, found := handler.cache.Get("gcp_security_policies")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -133,14 +133,14 @@ func (handler *GCPHandler) SecurityPoliciesHandler(w http.ResponseWriter, r *htt
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("security_policies", response)
+			handler.cache.Set("gcp_security_policies", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *GCPHandler) NatGatewaysHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("nat_gateways")
+	response, found := handler.cache.Get("gcp_nat_gateways")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -148,7 +148,7 @@ func (handler *GCPHandler) NatGatewaysHandler(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "compute:ComputeReadonlyScope is missing")
 		} else {
-			handler.cache.Set("nat_gateways", response)
+			handler.cache.Set("gcp_nat_gateways", response)
 			respondWithJSON(w, 200, response)
 		}
 	}

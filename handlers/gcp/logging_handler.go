@@ -5,7 +5,7 @@ import (
 )
 
 func (handler *GCPHandler) LoggingBillableReceivedBytesHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("logging_bytes")
+	response, found := handler.cache.Get("gcp_logging_bytes")
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
@@ -13,7 +13,7 @@ func (handler *GCPHandler) LoggingBillableReceivedBytesHandler(w http.ResponseWr
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:CloudPlatformScope is missing")
 		} else {
-			handler.cache.Set("logging_bytes", response)
+			handler.cache.Set("gcp_logging_bytes", response)
 			respondWithJSON(w, 200, response)
 		}
 	}
