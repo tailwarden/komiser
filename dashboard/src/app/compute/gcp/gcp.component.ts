@@ -45,6 +45,7 @@ export class GcpComputeComponent implements OnInit, AfterViewInit {
     ["europe-west2", { "latitude": "51.507322", "longitude": "-0.127647" }],
     ["europe-west3", { "latitude": "50.110644", "longitude": "8.682092" }],
     ["europe-west4", { "latitude": "53.448402", "longitude": "6.846503" }],
+    ["europe-west6", { "latitude": "47.376888", "longitude": "8.541694" }],
     ["northamerica-northeast1", { "latitude": "45.509060", "longitude": "-73.553360" }],
     ["southamerica-east1", { "latitude": "23.550651", "longitude": "-46.633382" }],
     ["us-central1", { "latitude": "41.262128", "longitude": "-95.861391" }],
