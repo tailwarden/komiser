@@ -166,6 +166,12 @@ Have a bug or a feature request? Please first read the issue guidelines and sear
 
 Komiser is written in Golang and is MIT licensed - contributions are welcomed whether that means providing feedback or testing existing and new feature.
 
+## Users
+
+If you'd like to have your company represented and are using OpenFaaS please give formal written permission below via a comment and email to contact@komiser.io.
+
+We will need a URL to a svg or png logo, a text title and a company URL.
+
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/mlabouardy/komiser/tags). 
