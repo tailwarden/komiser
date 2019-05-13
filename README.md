@@ -168,7 +168,7 @@ Komiser is written in Golang and is MIT licensed - contributions are welcomed wh
 
 ## Users
 
-If you'd like to have your company represented and are using OpenFaaS please give formal written permission below via a comment on this [thread](https://github.com/mlabouardy/komiser/issues/76) or  via email to contact@komiser.io.
+If you'd like to have your company represented and are using Komiser please give formal written permission below via a comment on this [thread](https://github.com/mlabouardy/komiser/issues/76) or  via email to contact@komiser.io.
 
 We will need a URL to a svg or png logo, a text title and a company URL.
 
