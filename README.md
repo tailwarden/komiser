@@ -48,6 +48,13 @@ wget https://cli.komiser.io/2.1.0/windows/komiser
 wget https://cli.komiser.io/2.1.0/osx/komiser
 ```
 
+Docker for Mac is best installed with Homebrew:
+
+```
+brew tap mlabouardy/komiser
+brew install komiser
+```
+
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 
 ### Docker:
