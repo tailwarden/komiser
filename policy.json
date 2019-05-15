@@ -29,7 +29,8 @@
                 "autoscaling:DescribeAutoScalingGroups",
                 "ce:GetCostAndUsage",
                 "s3:ListAllMyBuckets",
-                "apigateway:GET"
+                "apigateway:GET",
+                "support:DescribeTrustedAdvisorCheckResult"
             ],
             "Resource": "*"
         },
