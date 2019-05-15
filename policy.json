@@ -78,7 +78,8 @@
                 "ec2:DescribeScheduledInstances",
                 "eks:ListClusters",
                 "elasticache:DescribeCacheClusters",
-                "es:ListDomainNames"
+                "es:ListDomainNames",
+                "cloudwatchlogs:DescribeLogGroups"
             ],
             "Resource": "*"
         },
