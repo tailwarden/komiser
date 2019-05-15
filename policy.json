@@ -28,7 +28,8 @@
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ce:GetCostAndUsage",
-                "s3:ListAllMyBuckets"
+                "s3:ListAllMyBuckets",
+                "apigateway:GET"
             ],
             "Resource": "*"
         },
