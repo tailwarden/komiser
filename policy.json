@@ -28,7 +28,9 @@
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ce:GetCostAndUsage",
-                "s3:ListAllMyBuckets"
+                "s3:ListAllMyBuckets",
+                "apigateway:GET",
+                "support:DescribeTrustedAdvisorCheckResult"
             ],
             "Resource": "*"
         },
@@ -78,7 +80,8 @@
                 "ec2:DescribeScheduledInstances",
                 "eks:ListClusters",
                 "elasticache:DescribeCacheClusters",
-                "es:ListDomainNames"
+                "es:ListDomainNames",
+                "cloudwatchlogs:DescribeLogGroups"
             ],
             "Resource": "*"
         },
