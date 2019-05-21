@@ -41,12 +41,17 @@ func (aws AWS) DescribeIAMUser(cfg aws.Config) (IAMUser, error) {
 		return IAMUser{}, err
 	}
 
+	lastUsed := time.Now()
+	if result.User.PasswordLastUsed != nil {
+		lastUsed = *result.User.PasswordLastUsed
+	}
+
 	return IAMUser{
 		Username:         *result.User.UserName,
 		ARN:              *result.User.Arn,
 		CreateDate:       *result.User.CreateDate,
 		UserId:           *result.User.UserId,
-		PasswordLastUsed: *result.User.PasswordLastUsed,
+		PasswordLastUsed: lastUsed,
 	}, nil
 }
 
