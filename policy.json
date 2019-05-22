@@ -81,7 +81,7 @@
                 "eks:ListClusters",
                 "elasticache:DescribeCacheClusters",
                 "es:ListDomainNames",
-                "cloudwatchlogs:DescribeLogGroups"
+                "logs:DescribeLogGroups"
             ],
             "Resource": "*"
         },
