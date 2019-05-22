@@ -88,6 +88,12 @@ region = <AWS region>
 komiser start --port 3000
 ```
 
+You can also use Redis as a caching server:
+
+```
+komiser start --port 3000 --redis localhost:6379 --duration 30
+```
+
 * Point your browser to http://localhost:3000
 
 <p align="center">
