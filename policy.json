@@ -60,7 +60,8 @@
                 "iam:ListGroups",
                 "iam:ListRoles",
                 "iam:ListPolicies",
-                "iam:ListUsers"
+                "iam:ListUsers",
+                "s3:GetBucketLocation"
             ],
             "Resource": "*"
         },
