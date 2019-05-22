@@ -25,6 +25,7 @@
             "Action": [
                 "ec2:DescribeAddresses",
                 "ec2:DescribeSnapshots",
+                "ec2:DescribeSubnets",
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ce:GetCostAndUsage",
@@ -100,7 +101,6 @@
                 "redshift:DescribeClusters",
                 "tag:GetResources",
                 "route53:ListResourceRecordSets",
-                "s3:ListAllMyBuckets",
                 "support:DescribeCases",
                 "support:DescribeTrustedAdvisorChecks",
                 "swf:ListDomains"
