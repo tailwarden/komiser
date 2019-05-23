@@ -30,8 +30,7 @@
                 "autoscaling:DescribeAutoScalingGroups",
                 "ce:GetCostAndUsage",
                 "s3:ListAllMyBuckets",
-                "apigateway:GET",
-                "support:DescribeTrustedAdvisorCheckResult"
+                "apigateway:GET"
             ],
             "Resource": "*"
         },
@@ -62,7 +61,8 @@
                 "iam:ListRoles",
                 "iam:ListPolicies",
                 "iam:ListUsers",
-                "s3:GetBucketLocation"
+                "s3:GetBucketLocation",
+                "apigateway:GET"
             ],
             "Resource": "*"
         },
@@ -101,8 +101,7 @@
                 "redshift:DescribeClusters",
                 "tag:GetResources",
                 "route53:ListResourceRecordSets",
-                "support:DescribeCases",
-                "support:DescribeTrustedAdvisorChecks",
+                "support:*",
                 "swf:ListDomains"
             ],
             "Resource": "*"
