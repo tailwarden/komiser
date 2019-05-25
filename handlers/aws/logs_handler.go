@@ -26,7 +26,7 @@ func (handler *AWSHandler) MaximumLogsRetentionPeriodHandler(w http.ResponseWrit
 	} else {
 		response, err := handler.aws.MaximumLogsRetentionPeriod(handler.cfg)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "cloudwatchlogs:DescribeLogGroups is missing")
+			respondWithError(w, http.StatusInternalServerError, "logs:DescribeLogGroups is missing")
 		} else {
 			handler.cache.Set("aws_logs_retention", response)
 			respondWithJSON(w, 200, response)

@@ -24,7 +24,7 @@ func (handler *GCPHandler) DataprocClustersHandler(w http.ResponseWriter, r *htt
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.gcp.GetDataprocJobs()
+		response, err := handler.gcp.GetDataprocClusters()
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "dataproc:CloudPlatformScope is missing")
 		} else {
