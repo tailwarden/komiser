@@ -1,19 +1,34 @@
 package aws
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
 func (handler *AWSHandler) ActiveMQBrokersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_mq_brokers")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.mq.brokers", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.ListBrokers(handler.cfg)
+		response, err := handler.aws.ListBrokers(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "mq:ListBrokers is missing")
 		} else {
-			handler.cache.Set("aws_mq_brokers", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}

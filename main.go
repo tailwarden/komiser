@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/handlers/aws"
 	. "github.com/mlabouardy/komiser/handlers/gcp"
 	. "github.com/mlabouardy/komiser/services/cache"
+	. "github.com/mlabouardy/komiser/services/ini"
 	"github.com/urfave/cli"
 )
 
@@ -21,18 +21,14 @@ const (
 	DEFAULT_DURATION = 30
 )
 
-func startServer(port int, cache Cache, dataset string) {
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+func startServer(port int, cache Cache, dataset string, multiple bool) {
 	cache.Connect()
 
 	gcpHandler := NewGCPHandler(cache, dataset)
-	awsHandler := NewAWSHandler(cfg, cache)
+	awsHandler := NewAWSHandler(cache, multiple)
 
 	r := mux.NewRouter()
+	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
 	r.HandleFunc("/aws/iam/users", awsHandler.IAMUsersHandler)
 	r.HandleFunc("/aws/iam/account", awsHandler.IAMUserHandler)
 	r.HandleFunc("/aws/cost/current", awsHandler.CurrentCostHandler)
@@ -145,10 +141,11 @@ func startServer(port int, cache Cache, dataset string) {
 	r.HandleFunc("/gcp/iam/service_accounts", gcpHandler.IAMServiceAccountsHandler)
 	r.HandleFunc("/gcp/dataflow/jobs", gcpHandler.DataflowJobsHandler)
 	r.HandleFunc("/gcp/nat/gateways", gcpHandler.NatGatewaysHandler)
-
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
-	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS()(r))
-	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
+
+	headersOk := handlers.AllowedHeaders([]string{"profile"})
+	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS(headersOk)(r))
+	err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -159,7 +156,7 @@ func startServer(port int, cache Cache, dataset string) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.1.0"
+	app.Version = "2.2.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()
@@ -192,12 +189,17 @@ func main() {
 					Name:  "dataset, ds",
 					Usage: "BigQuery Bill dataset",
 				},
+				cli.BoolFlag{
+					Name:  "multiple, m",
+					Usage: "Enable multiple AWS accounts",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				port := c.Int("port")
 				duration := c.Int("duration")
 				redis := c.String("redis")
 				dataset := c.String("dataset")
+				multiple := c.Bool("multiple")
 
 				var cache Cache
 
@@ -219,7 +221,7 @@ func main() {
 					}
 				}
 
-				startServer(port, cache, dataset)
+				startServer(port, cache, dataset, multiple)
 				return nil
 			},
 		},

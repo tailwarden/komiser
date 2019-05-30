@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs/Subject";
-
 @Injectable()
 export class StoreService {
 
@@ -11,6 +10,8 @@ export class StoreService {
   public newNotification: Subject<Map<string, Object>> = new Subject<Map<string, Object>>();
 
   public providerChanged: Subject<string> = new Subject<string>();
+
+  public profileChanged: Subject<string> = new Subject<string>();
 
   constructor() {
     if(localStorage.getItem('provider')){
@@ -48,10 +49,21 @@ export class StoreService {
     return this.notifications;
   }
 
+  public cleanNotifications(){
+    this.notifications = new Map();
+    this.newNotification.next(this.notifications);
+  }
+
   public onProviderChanged(provider: string){
     this.provider = provider;
     localStorage.setItem('provider', this.provider);
     this.providerChanged.next(this.provider);
+    this.notifications = new Map();
+    this.newNotification.next(this.notifications);
+  }
+
+  public onProfileChanged(profile: string){
+    this.profileChanged.next(profile);
     this.notifications = new Map();
     this.newNotification.next(this.notifications);
   }

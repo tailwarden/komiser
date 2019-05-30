@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
-
+import { StoreService } from '../../store.service';
+import { Subject, Subscription } from 'rxjs';
 declare var Chart: any;
 declare var $: any;
 declare var window: any;
@@ -14,7 +15,8 @@ import 'chartist-plugin-tooltips';
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsDataAndAIComponent implements OnInit {
+export class AwsDataAndAIComponent implements OnInit, OnDestroy {
+  private sqsMessagesChart:any;
 
   public sqsQueues: number = 0;
   public numberOfMessagesSentToday: number = 0;
@@ -42,7 +44,60 @@ export class AwsDataAndAIComponent implements OnInit {
   public loadingESDomains: boolean = true;
   public loadingSQSMessagesChart: boolean = true;
 
-  constructor(private awsService: AwsService) {
+  private _subscription: Subscription;
+
+  constructor(private awsService: AwsService, private storeService: StoreService) {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.sqsMessagesChart.detach();
+
+      let tooltips = document.getElementsByClassName('chartist-tooltip')
+      for (let i = 0; i < tooltips.length; i++) {
+        tooltips[i].outerHTML = ""
+      }
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+      this.sqsQueues = 0;
+      this.numberOfMessagesSentToday = 0;
+      this.numberOfMessagesDeletedToday = 0;
+      this.snsTopics = 0;
+      this.activemqBrokers = 0; 
+      this.kinesisStreams = 0;
+      this.kinesisShards = 0;
+      this.glueJobs = 0;
+      this.glueCrawlers = 0;
+      this.dataPipelines = 0;
+      this.esDomains = 0;
+      this.swfDomains = 0;
+
+      this.loadingSQS = true;
+      this.loadingSQSMessages = true;
+      this.loadingSNS = true;
+      this.loadingGlueCrawlers = true;
+      this.loadingActiveMQBrokers = true;
+      this.loadingGlueJobs = true;
+      this.loadingSwfDomains = true;
+      this.loadingDataPipelines = true;
+      this.loadingKinesisStreams = true;
+      this.loadingKinesisShards = true;
+      this.loadingESDomains = true;
+      this.loadingSQSMessagesChart = true;
+      
+      this.initState();
+    })
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
+  private initState(){
     this.awsService.getSQSPublishedMessagesMetrics().subscribe(data => {
       this.numberOfMessagesSentToday = data[0].Datapoints[Object.keys(data[0].Datapoints)[Object.keys(data[0].Datapoints).length - 1]]
       this.numberOfMessagesDeletedToday = data[1].Datapoints[Object.keys(data[1].Datapoints)[Object.keys(data[1].Datapoints).length - 1]]
@@ -74,7 +129,6 @@ export class AwsDataAndAIComponent implements OnInit {
     }, err => {
       this.loadingSQSMessagesChart = false;
       this.loadingSQSMessages = false;
-      console.log(err);
     })
 
     this.awsService.getSQSQueues().subscribe(data => {
@@ -181,7 +235,7 @@ export class AwsDataAndAIComponent implements OnInit {
 
   private showSQSMessages(labels, series) {
     let scope = this;
-    new Chartist.Bar('#sqsMessagesChart', {
+    this.sqsMessagesChart = new Chartist.Bar('#sqsMessagesChart', {
       labels: labels,
       series: series
     }, {

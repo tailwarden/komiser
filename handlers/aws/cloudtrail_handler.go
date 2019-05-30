@@ -1,34 +1,61 @@
 package aws
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
 func (handler *AWSHandler) CloudTrailConsoleSignInEventsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_events_sign_in")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.cloudtrail.signin", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.CloudTrailConsoleSignInEvents(handler.cfg)
+		response, err := handler.aws.CloudTrailConsoleSignInEvents(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudtrail:LookupEvents is missing")
 		} else {
-			handler.cache.Set("aws_events_sign_in", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) CloudTrailConsoleSignInSourceIpEventsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_events_source_ip")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.cloudtrail.sourceip", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.CloudTrailConsoleSignInSourceIpEvents(handler.cfg)
+		response, err := handler.aws.CloudTrailConsoleSignInSourceIpEvents(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudtrail:LookupEvents is missing")
 		} else {
-			handler.cache.Set("aws_events_source_ip", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}

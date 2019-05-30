@@ -1,64 +1,115 @@
 package aws
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
 func (handler *AWSHandler) CostAndUsageHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cost_usage_history")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.ce.history", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeCostAndUsage(handler.cfg)
+		response, err := handler.aws.DescribeCostAndUsage(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ce:GetCostAndUsage is missing")
 		} else {
-			handler.cache.Set("cost_usage_history", response.History)
+			handler.cache.Set(key, response.History)
 			respondWithJSON(w, 200, response.History)
 		}
 	}
 }
 
 func (handler *AWSHandler) CurrentCostHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("cost_usage_total")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.ce.total", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeCostAndUsage(handler.cfg)
+		response, err := handler.aws.DescribeCostAndUsage(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ce:GetCostAndUsage is missing")
 		} else {
-			handler.cache.Set("cost_usage_total", response.Total)
+			handler.cache.Set(key, response.Total)
 			respondWithJSON(w, 200, response.Total)
 		}
 	}
 }
 
 func (handler *AWSHandler) CostAndUsagePerInstanceTypeHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_cost_per_instance_type")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.ce.instance_type", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeCostAndUsagePerInstanceType(handler.cfg)
+		response, err := handler.aws.DescribeCostAndUsagePerInstanceType(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ce:GetCostAndUsage is missing")
 		} else {
-			handler.cache.Set("aws_cost_per_instance_type", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) DescribeForecastPriceHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_cost_forecast")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.ce.forecast", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeForecastPrice(handler.cfg)
+		response, err := handler.aws.DescribeForecastPrice(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ce:GetCostForecast is missing")
 		} else {
-			handler.cache.Set("aws_cost_forecast", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}

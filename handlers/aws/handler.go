@@ -4,22 +4,21 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
 	. "github.com/mlabouardy/komiser/services/aws"
 	. "github.com/mlabouardy/komiser/services/cache"
 )
 
 type AWSHandler struct {
-	cfg   aws.Config
-	cache Cache
-	aws   AWS
+	cache    Cache
+	multiple bool
+	aws      AWS
 }
 
-func NewAWSHandler(cfg aws.Config, cache Cache) *AWSHandler {
+func NewAWSHandler(cache Cache, multiple bool) *AWSHandler {
 	awsHandler := AWSHandler{
-		cfg:   cfg,
-		cache: cache,
-		aws:   AWS{},
+		cache:    cache,
+		multiple: multiple,
+		aws:      AWS{},
 	}
 	return &awsHandler
 }

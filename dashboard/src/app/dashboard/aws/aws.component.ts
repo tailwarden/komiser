@@ -1,5 +1,7 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
+import { StoreService } from '../../store.service';
+import { Subject, Subscription } from 'rxjs';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
 import 'jquery-mapael';
@@ -12,7 +14,7 @@ declare var Chart: any;
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsDashboardComponent implements OnInit, AfterViewInit {
+export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public iamUsers: number = 0;
   public currentBill: number = 0;
   public usedRegions: number = 0;
@@ -103,9 +105,41 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
       latitude: -23.5505199,
       longitude: -46.6333094
     }
+  };
+
+  private _subscription: Subscription;
+
+  constructor(private AwsService: AwsService, private storeService: StoreService) {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.iamUsers = 0;
+      this.currentBill = 0;
+      this.usedRegions = 0;
+      this.redAlarms = 0;
+      this.mostUsedServices = [];
+      this.openTickets = 0;
+      this.resolvedTickets = 0;
+      this.forecastBill = '0';
+
+      this.loadingCurrentBill = true;
+      this.loadingIamUsers = true;
+      this.loadingUsedRegions = true;
+      this.loadingRedAlarms = true;
+      this.loadingOpenTickets = true;
+      this.loadingResolvedTickets = true;
+      this.loadingCostHistoryChart = true;
+      this.loadingForecastBill = true;
+      
+      this.initState();
+    })
   }
 
-  constructor(private AwsService: AwsService) {
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
+  private initState() {
     this.mostUsedServices = []
 
     this.AwsService.getIAMUsers().subscribe(data => {
@@ -217,12 +251,12 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
     this.showEC2InstancesPerRegion({});
   }
-  
+
   public formatNumber(labelValue) {
 
     // Nine Zeroes for Billions
@@ -243,7 +277,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public showEC2InstancesPerRegion(plots) {
-    var canvas : any = $(".mapregions");
+    var canvas: any = $(".mapregions");
     canvas.mapael({
       map: {
         name: "world_countries",
@@ -332,7 +366,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit {
       },
       axisY: {
         offset: 80,
-        labelInterpolationFnc: function(value) {
+        labelInterpolationFnc: function (value) {
           return scope.formatNumber(value)
         },
       },

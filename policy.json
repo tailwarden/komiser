@@ -44,9 +44,9 @@
                 "rds:DescribeDBInstances",
                 "cloudwatch:DescribeAlarms",
                 "cloudfront:ListDistributions",
-                "ecs:DescribeClusters",
-                "ecs:DescribeServices",
-                "ecs:DescribeTasks"
+                "ecs:ListServices",
+                "ecs:ListTasks",
+                "ecs:ListClusters"
             ],
             "Resource": "*"
         },

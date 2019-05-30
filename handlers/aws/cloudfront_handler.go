@@ -1,34 +1,61 @@
 package aws
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
 func (handler *AWSHandler) CloudFrontDistributionsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_cloudfront")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.cloudfront.distributions", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeCloudFrontDistributions(handler.cfg)
+		response, err := handler.aws.DescribeCloudFrontDistributions(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudfront:ListDistributions is missing")
 		} else {
-			handler.cache.Set("aws_cloudfront", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}
 }
 
 func (handler *AWSHandler) CloudFrontRequestsHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_cloudfront_requests")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.cloudfront.requests", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.GetCloudFrontRequests(handler.cfg)
+		response, err := handler.aws.GetCloudFrontRequests(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "cloudwatch:GetMetricStatistics is missing")
 		} else {
-			handler.cache.Set("aws_cloudfront_requests", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}

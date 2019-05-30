@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
+import { StoreService } from '../../store.service';
+import { Subject, Subscription } from 'rxjs';
 declare var Chart: any;
 declare var $: any;
 declare var window: any;
@@ -13,7 +15,13 @@ import 'chartist-plugin-tooltips';
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsNetworkComponent implements OnInit {
+export class AwsNetworkComponent implements OnInit, OnDestroy {
+  private cloudfrontRequests:any;
+  private apigatewayRequests:any;
+  private elbRequests: any;
+  private elbFamilyType:any;
+  private natGatewayChartTraffic:any;
+
   public vpcNumber: number;
   public aclNumber: number;
   public subnetNumbers: number;
@@ -50,7 +58,74 @@ export class AwsNetworkComponent implements OnInit {
   public loadingNatGatewayTrafficChart: boolean = true;
   public loadingElbFamilyType: boolean = true;
 
-  constructor(private awsService: AwsService) {
+  private _subscription: Subscription;
+
+  constructor(private awsService: AwsService, private storeService: StoreService) {
+    this.initState();
+    
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.cloudfrontRequests.destroy();
+      this.apigatewayRequests.destroy();
+      this.elbRequests.destroy();
+      this.elbFamilyType.destroy();
+      //this.natGatewayChartTraffic.detach();
+
+      let tooltips = document.getElementsByClassName('chartist-tooltip')
+      for (let i = 0; i < tooltips.length; i++) {
+        tooltips[i].outerHTML = ""
+      }
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+      this.vpcNumber = 0;
+      this.aclNumber = 0;
+      this.subnetNumbers = 0;
+      this.routeTablesNumber = 0;
+      this.cloudfrontDistributions = 0;
+      this.cdnYesterdayRequests = '0';
+      this.cdnTodayRequests = '0';
+      this.apigatewayYesterdayRequests = '0';
+      this.apigatewayTodayRequests = '0';
+      this.apigatewayApis = 0;
+      this.elbYesterdayRequests = '0';
+      this.elbTodayRequests = '0';
+      this.loadBalancers = 0;
+      this.route53Records = 0;
+      this.route53Zones = 0;
+      this.natGatewayAvailableRegions = [];
+      this.natGatewayTraffic = [];
+
+      this.loadingVPCNumbers= true;
+      this.loadingACLNumbers = true;
+      this.loadingSubnetNumbers = true;
+      this.loadingRouteTablesNumber = true;
+      this.loadingCDNNumbers = true;
+      this.loadingCDNRequests = true;
+      this.loadingAPIGateways = true;
+      this.loadingAPIRequests = true;
+      this.loadingELBNumber = true;
+      this.loadingElbRequests = true;
+      this.loadingRoute53Zones = true;
+      this.loadingRoute53ARecords = true;
+      this.loadingCloudfrontRequestsChart = true;
+      this.loadingApigatewayRequestsChart = true;
+      this.loadingElbRequestsChart = true;
+      this.loadingNatGatewayTrafficChart = true;
+      this.loadingElbFamilyType = true;
+
+      this.initState();
+    });
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
+  private initState() {
     this.awsService.getVirtualPrivateClouds().subscribe(data => {
       this.vpcNumber = data;
       this.loadingVPCNumbers = false;
@@ -348,7 +423,7 @@ export class AwsNetworkComponent implements OnInit {
 
   private showNatGatewayTraffic(labels, series) {
     let scope = this;
-    new Chartist.Bar('#natGatewayChartTraffic', {
+    this.natGatewayChartTraffic = new Chartist.Bar('#natGatewayChartTraffic', {
       labels: labels,
       series: series
     }, {
@@ -416,9 +491,9 @@ export class AwsNetworkComponent implements OnInit {
 
     };
 
-    var canvas : any = document.getElementById('elbFamilyType');
+    var canvas: any = document.getElementById('elbFamilyType');
     var ctx = canvas.getContext('2d');
-    window.myBar = new Chart(ctx, {
+    this.elbFamilyType = new Chart(ctx, {
       type: 'pie',
       data: barChartData,
       options: {
@@ -499,9 +574,9 @@ export class AwsNetworkComponent implements OnInit {
       }
     };
 
-    var canvas : any = document.getElementById('apigatewayRequests');
+    var canvas: any = document.getElementById('apigatewayRequests');
     var ctx = canvas.getContext('2d');
-    new Chart(ctx, config);
+    this.apigatewayRequests = new Chart(ctx, config);
   }
 
   private showCloudFrontRequests(datasets) {
@@ -554,9 +629,9 @@ export class AwsNetworkComponent implements OnInit {
       }
     };
 
-    var canvas : any = document.getElementById('cloudfrontRequests');
+    var canvas: any = document.getElementById('cloudfrontRequests');
     var ctx = canvas.getContext('2d');
-    new Chart(ctx, config);
+    this.cloudfrontRequests = new Chart(ctx, config);
   }
 
   private showELBRequests(datasets) {
@@ -609,9 +684,9 @@ export class AwsNetworkComponent implements OnInit {
       }
     };
 
-    var canvas : any = document.getElementById('elbRequests');
+    var canvas: any = document.getElementById('elbRequests');
     var ctx = canvas.getContext('2d');
-    new Chart(ctx, config);
+    this.elbRequests = new Chart(ctx, config);
   }
 
 }

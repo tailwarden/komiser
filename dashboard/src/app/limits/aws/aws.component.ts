@@ -1,18 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
+import { StoreService } from '../../store.service';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'aws-limits',
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsLimitsComponent implements OnInit {
+export class AwsLimitsComponent implements OnInit,OnDestroy {
 
   public serviceLimits: Array<any> = [];
 
   public loadingServiceLimits: boolean = true;
 
-  constructor(private awsService: AwsService) {
+  private _subscription: Subscription;
+
+  constructor(private awsService: AwsService, private storeService: StoreService) {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.serviceLimits = [];
+      
+      this.loadingServiceLimits = true;
+
+      this.initState();
+    });
+  }
+
+  private initState(){
     this.awsService.getServiceLimits().subscribe(data => {
       this.serviceLimits = data;
       this.loadingServiceLimits = false;
@@ -20,6 +36,10 @@ export class AwsLimitsComponent implements OnInit {
       this.serviceLimits = [];
       this.loadingServiceLimits = false;
     });
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
   }
 
   public getColor(status: string) {

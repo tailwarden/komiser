@@ -1,10 +1,12 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
+import { StoreService } from '../../store.service';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
 declare var Chart: any;
 declare var Circles: any;
 import * as $ from "jquery";
+import { Subject, Subscription } from 'rxjs';
 declare var moment: any;
 
 @Component({
@@ -12,7 +14,13 @@ declare var moment: any;
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsComputeComponent implements OnInit, AfterViewInit {
+export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
+  private costPerInstanceTypeChart: any;
+  private lambdaInvocationsChart: any;
+  private lambdaErrorsChart:any;
+  private instancesFamilyChart:any;
+  private instancesPrivacyChart:any;
+
   public runningEC2Instances: number = 0;
   public stoppedEC2Instances: number = 0;
   public terminatedEC2Instances: number = 0;
@@ -44,9 +52,70 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
   public loadingLambdaInvocationsChart: boolean = true;
   public loadingLambdaErrorsChart: boolean = true;
 
+  private _subscription: Subscription;
 
-  constructor(private awsService: AwsService) {
 
+  constructor(private awsService: AwsService, private storeService: StoreService) {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.costPerInstanceTypeChart.detach();
+      this.lambdaInvocationsChart.detach();
+      this.lambdaErrorsChart.detach();
+      this.instancesFamilyChart.destroy();
+      this.instancesPrivacyChart.destroy();
+
+      let tooltips = document.getElementsByClassName('chartist-tooltip')
+      for (let i = 0; i < tooltips.length; i++) {
+        tooltips[i].outerHTML = ""
+      }
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+      this.runningEC2Instances = 0;
+      this.stoppedEC2Instances = 0;
+      this.terminatedEC2Instances = 0;
+      this.lambdaFunctions = {};
+      this.ecsServices = 0;
+      this.ecsTasks = 0;
+      this.ecsClusters = 0;
+      this.reservedInstances = 0;
+      this.spotInstances = 0;
+      this.scheduledInstances = 0;
+      this.eksClusters = 0;
+      this.detchedElasticIps = 0;
+
+      this.loadingRunningInstances = true;
+      this.loadingStoppedInstances = true;
+      this.loadingTerminatedInstances = true;
+      this.loadingReservedInstances = true;
+      this.loadingSpotInstances = true;
+      this.loadingScheduledInstances = true;
+      this.loadingDetachedIps = true;
+      this.loadingLambdaFunctions= true;
+      this.loadingEcsClusters= true;
+      this.loadingEcsTasks = true;
+      this.loadingEcsServices = true;
+      this.loadingEksClusters= true;
+      this.loadingInstancesPrivacyChart = true;
+      this.loadingInstancesFamilyChart= true;
+      this.loadingCostPerInstanceTypeChart= true;
+      this.loadingLambdaInvocationsChart= true;
+      this.loadingLambdaErrorsChart= true;
+
+      this.initState();
+    });
+  }
+
+  ngOnDestroy() {
+     this._subscription.unsubscribe();
+   }
+
+  private initState(){
     this.lambdaFunctions = {}
 
     this.awsService.getDetachedElasticIps().subscribe(data => {
@@ -141,7 +210,6 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
       this.showLambdaInvocations(labels, series);
     }, err => {
       this.loadingLambdaInvocationsChart = false;
-      console.log(err)
     });
 
     this.awsService.getECS().subscribe(data => {
@@ -188,7 +256,6 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
       this.showLambdaErrors(labels, series);
     }, err => {
       this.loadingLambdaErrorsChart = false;
-      console.log(err);
     });
 
     this.awsService.getReservedInstances().subscribe(data => {
@@ -252,7 +319,6 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
       this.showCostPerInstanceType(periods, series);
     }, err => {
       this.loadingCostPerInstanceTypeChart = false;
-      console.log(err);
     });
   }
 
@@ -303,14 +369,14 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
       height: "245px",
     }
 
-    new Chartist.Bar('.costPerInstanceTypeChart', costHistory, optionChartCostHistory);
+    this.costPerInstanceTypeChart = new Chartist.Bar('.costPerInstanceTypeChart', costHistory, optionChartCostHistory);
 
   }
 
   private showInstancesPrivacy(series){
     var canvas : any = document.getElementById('instancesPrivacyChart');
     var ctx = canvas.getContext('2d');
-    new Chart(ctx, {
+    this.instancesPrivacyChart = new Chart(ctx, {
         type: 'pie',
         data: {
           datasets: [{
@@ -325,7 +391,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
 
   private showLambdaErrors(labels, series){
     let scope = this;
-    new Chartist.Line('.lambdaErrorsChart', {
+    this.lambdaErrorsChart = new Chartist.Line('.lambdaErrorsChart', {
       labels: labels,
       series: series
     }, {
@@ -349,7 +415,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
 
   private showLambdaInvocations(labels, series){
     let scope = this;
-    new Chartist.Bar('.lambdaInvocationsChart', {
+    this.lambdaInvocationsChart = new Chartist.Bar('.lambdaInvocationsChart', {
       labels: labels,
       series: series
     }, {
@@ -415,7 +481,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit {
     };
 
     var ctx = document.getElementById('instancesFamilyChart');
-    var chart = new Chart.PolarArea(ctx, config);
+    this.instancesFamilyChart = new Chart.PolarArea(ctx, config);
   }
 
 }

@@ -1,0 +1,18 @@
+<div class="content">
+  <div class="container-fluid">
+    <h4 class="page-title">Notifications </h4>
+
+    <div class="row">
+      <div class="col-lg-12" *ngIf="notifications.length == 0">
+          <div class="alert alert-warning" role="alert">
+              <span><i class="la la-chevron-down badge-margin"></i></span> You have currently no notifications.
+          </div>
+      </div>
+      <div class="col-lg-12">
+          <div class="alert alert-danger" role="alert" *ngFor="let notification of notifications">
+              <span class="badge badge-secondary badge-pill badge-margin" *ngIf="notification.total > 1">{{notification.total}}</span> {{notification.content}} <span class="time float-right">{{calcMoment(notification.timestamp)}}</span>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
