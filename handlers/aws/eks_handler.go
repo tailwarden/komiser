@@ -1,19 +1,34 @@
 package aws
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
 func (handler *AWSHandler) EKSClustersHandler(w http.ResponseWriter, r *http.Request) {
-	response, found := handler.cache.Get("aws_eks_clusters")
+	profile := r.Header.Get("profile")
+	cfg, err := external.LoadDefaultAWSConfig()
+
+	if handler.multiple {
+		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
+		}
+	}
+
+	key := fmt.Sprintf("aws.%s.eks.clusters", profile)
+
+	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
 	} else {
-		response, err := handler.aws.DescribeEKSClusters(handler.cfg)
+		response, err := handler.aws.DescribeEKSClusters(cfg)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "eks:ListClusters is missing")
 		} else {
-			handler.cache.Set("aws_eks_clusters", response)
+			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
 	}

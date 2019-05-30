@@ -23,12 +23,12 @@ func (aws AWS) DescribeECS(cfg aws.Config) (map[string]int, error) {
 		}
 		countClusters += len(clusters)
 		for _, cluster := range clusters {
-			tasks, err := aws.getTasks(cfg, cluster.Name, region.Name)
+			tasks, err := aws.getTasks(cfg, cluster, region.Name)
 			if err != nil {
 				return map[string]int{}, err
 			}
 			countTasks += len(tasks)
-			services, err := aws.getServices(cfg, cluster.Name, region.Name)
+			services, err := aws.getServices(cfg, cluster, region.Name)
 			if err != nil {
 				return map[string]int{}, err
 			}
@@ -42,57 +42,30 @@ func (aws AWS) DescribeECS(cfg aws.Config) (map[string]int, error) {
 	}, nil
 }
 
-func (aws AWS) getClusters(cfg aws.Config, region string) ([]Cluster, error) {
+func (aws AWS) getClusters(cfg aws.Config, region string) ([]string, error) {
 	cfg.Region = region
 	svc := ecs.New(cfg)
-	req := svc.DescribeClustersRequest(&ecs.DescribeClustersInput{})
+	req := svc.ListClustersRequest(&ecs.ListClustersInput{})
 	result, err := req.Send(context.Background())
-	if err != nil {
-		return []Cluster{}, err
-	}
-	listOfClusters := make([]Cluster, 0, len(result.Clusters))
-	for _, cluster := range result.Clusters {
-		listOfClusters = append(listOfClusters, Cluster{
-			Name: *cluster.ClusterName,
-		})
-	}
-	return listOfClusters, nil
+	return result.ClusterArns, err
 }
 
-func (aws AWS) getTasks(cfg aws.Config, cluster string, region string) ([]Task, error) {
+func (aws AWS) getTasks(cfg aws.Config, cluster string, region string) ([]string, error) {
 	cfg.Region = region
 	svc := ecs.New(cfg)
-	req := svc.DescribeTasksRequest(&ecs.DescribeTasksInput{
+	req := svc.ListTasksRequest(&ecs.ListTasksInput{
 		Cluster: &cluster,
 	})
 	result, err := req.Send(context.Background())
-	if err != nil {
-		return []Task{}, err
-	}
-	listOfTasks := make([]Task, 0, len(result.Tasks))
-	for _, task := range result.Tasks {
-		listOfTasks = append(listOfTasks, Task{
-			ARN: *task.TaskArn,
-		})
-	}
-	return listOfTasks, nil
+	return result.TaskArns, err
 }
 
-func (aws AWS) getServices(cfg aws.Config, cluster string, region string) ([]Service, error) {
+func (aws AWS) getServices(cfg aws.Config, cluster string, region string) ([]string, error) {
 	cfg.Region = region
 	svc := ecs.New(cfg)
-	req := svc.DescribeServicesRequest(&ecs.DescribeServicesInput{
+	req := svc.ListServicesRequest(&ecs.ListServicesInput{
 		Cluster: &cluster,
 	})
 	result, err := req.Send(context.Background())
-	if err != nil {
-		return []Service{}, err
-	}
-	listOfServices := make([]Service, 0, len(result.Services))
-	for _, service := range result.Services {
-		listOfServices = append(listOfServices, Service{
-			Name: *service.ServiceName,
-		})
-	}
-	return listOfServices, nil
+	return result.ServiceArns, err
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
-
+import { StoreService } from '../../store.service';
+import { Subject, Subscription } from 'rxjs';
 declare var Chart: any;
 declare var $: any;
 declare var window: any;
@@ -13,7 +14,12 @@ import 'chartist-plugin-tooltips';
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsStorageComponent implements OnInit {
+export class AwsStorageComponent implements OnInit, OnDestroy {
+  private s3BucketsSizeChart: any;
+  private s3BucketsObjectsChart: any;
+  private ebsFamilyChart: any;
+  private logsVolumeChart: any;
+
   public s3Buckets: number;
   public emptyBuckets: number;
   public s3BucketSize: string;
@@ -48,7 +54,72 @@ export class AwsStorageComponent implements OnInit {
   public loadingEbsFamilyChart: boolean = true;
   public loadingLogsVolumeChart: boolean = true;
 
-  constructor(private awsService: AwsService) {
+  private _subscription: Subscription;
+
+  constructor(private awsService: AwsService, private storeService: StoreService) {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.s3BucketsSizeChart.detach();
+      this.s3BucketsObjectsChart.detach();
+      this.logsVolumeChart.detach();
+      this.ebsFamilyChart.destroy();
+
+      let tooltips = document.getElementsByClassName('chartist-tooltip')
+      for (let i = 0; i < tooltips.length; i++) {
+        tooltips[i].outerHTML = ""
+      }
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+
+      this.s3Buckets = 0;
+      this.emptyBuckets = 0;
+      this.s3BucketSize = '0 KB';
+      this.s3BucketObjects = '0';
+      this.ebsTotal = 0;
+      this.ebsTotalSize = '0 KB';
+      this.ebsUsed = 0;
+      this.dynamodbTables = 0;
+      this.rdsInstances = 0;
+      this.docdbInstances = 0;
+      this.memcachedClusters = 0;
+      this.redisClusters = 0;
+      this.logsRetentionPeriod = 0;
+      this.redshiftClusters = 0;
+
+      this.loadingS3Buckets = true;
+      this.loadingS3BucketSize = true;
+      this.loadingS3BucketObjects = true;
+      this.loadingEmptyBuckets = true;
+      this.loadingEbsTotal = true;
+      this.loadingEbsTotalSize = true;
+      this.loadingEbsUsed = true;
+      this.loadingLogsRetentionPeriod = true;
+      this.loadingDynamoTables = true;
+      this.loadingRdsInstances = true;
+      this.loadingDocDbInstances = true;
+      this.loadingRedshiftClusters = true;
+      this.loadingMemCachedClusters = true;
+      this.loadingRedisClusters = true;
+      this.loadingS3BucketsSizeChart = true;
+      this.loadingS3BucketsObjectsChart = true;
+      this.loadingEbsFamilyChart = true;
+      this.loadingLogsVolumeChart = true;
+
+      this.initState();
+    });
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
+  private initState() {
     this.awsService.getNumberOfS3Buckets().subscribe(data => {
       this.s3Buckets = data ? data : 0;
       this.loadingS3Buckets = false;
@@ -68,7 +139,7 @@ export class AwsStorageComponent implements OnInit {
       })
       this.ebsTotal = sum;
       this.loadingEbsTotal = false;
-      this.ebsTotalSize = this.bytesToSizeWithUnit(data.total*1024*1024);
+      this.ebsTotalSize = this.bytesToSizeWithUnit(data.total * 1024 * 1024);
       this.loadingEbsTotalSize = false;
       this.ebsUsed = data.state['in-use'];
       this.loadingEbsUsed = false;
@@ -99,7 +170,7 @@ export class AwsStorageComponent implements OnInit {
           serie.push({
             meta: region, value: data[region][timestamp]
           })
-          if (i==0){
+          if (i == 0) {
             labels.push(timestamp)
           }
         })
@@ -130,7 +201,7 @@ export class AwsStorageComponent implements OnInit {
           serie.push({
             meta: region, value: data[region][timestamp]
           })
-          if (i==0){
+          if (i == 0) {
             labels.push(timestamp)
           }
         })
@@ -143,11 +214,9 @@ export class AwsStorageComponent implements OnInit {
         total += data[region][Object.keys(data[region])[Object.keys(data[region]).length - 1]]
       });
 
-      console.log(labels)
-      console.log(series);
       this.loadingS3BucketsSizeChart = false;
       this.loadingS3BucketSize = false;
-      this.s3BucketSize = this.bytesToSizeWithUnit(total);    
+      this.s3BucketSize = this.bytesToSizeWithUnit(total);
       this.showS3BucketsSize(labels, series);
     }, err => {
       this.s3BucketObjects = '0';
@@ -225,7 +294,6 @@ export class AwsStorageComponent implements OnInit {
       ]);
     }, err => {
       this.loadingLogsVolumeChart = false;
-      console.log(err);
     });
 
     this.awsService.getLogsRetentionPeriod().subscribe(data => {
@@ -245,10 +313,10 @@ export class AwsStorageComponent implements OnInit {
     })
   }
 
-  
+
   private showS3BucketsObjects(labels, series) {
     let scope = this;
-    new Chartist.Bar('#s3BucketsObjectsChart', {
+    this.s3BucketsObjectsChart = new Chartist.Bar('#s3BucketsObjectsChart', {
       labels: labels,
       series: series
     }, {
@@ -273,7 +341,7 @@ export class AwsStorageComponent implements OnInit {
 
   private showS3BucketsSize(labels, series) {
     let scope = this;
-    new Chartist.Bar('#s3BucketsSizeChart', {
+    this.s3BucketsSizeChart = new Chartist.Bar('#s3BucketsSizeChart', {
       labels: labels,
       series: series
     }, {
@@ -298,7 +366,7 @@ export class AwsStorageComponent implements OnInit {
 
   private showLogsVolume(labels, series) {
     let scope = this;
-    new Chartist.Bar('#logsVolumeChart', {
+    this.logsVolumeChart = new Chartist.Bar('#logsVolumeChart', {
       labels: labels,
       series: series
     }, {
@@ -321,7 +389,7 @@ export class AwsStorageComponent implements OnInit {
       });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   private showEBSFamily(labels, series) {
     var barChartData = {
@@ -339,9 +407,9 @@ export class AwsStorageComponent implements OnInit {
 
     };
 
-    var canvas : any = document.getElementById('ebsFamilyChart');
+    let canvas: any = document.getElementById('ebsFamilyChart');
     var ctx = canvas.getContext('2d');
-    new Chart(ctx, {
+    this.ebsFamilyChart = new Chart(ctx, {
       type: 'pie',
       data: barChartData,
       options: {

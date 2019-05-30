@@ -28,24 +28,24 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (2.1.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.2.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
 ```
-wget https://cli.komiser.io/2.1.0/linux/komiser
+wget https://cli.komiser.io/2.2.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://cli.komiser.io/2.1.0/windows/komiser
+wget https://cli.komiser.io/2.2.0/windows/komiser
 ```
 
 ### Mac OS X:
 
 ```
-wget https://cli.komiser.io/2.1.0/osx/komiser
+wget https://cli.komiser.io/2.2.0/osx/komiser
 ```
 
 Docker for Mac is best installed with Homebrew:
@@ -60,7 +60,7 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 ### Docker:
 
 ```
-docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.1.0
+docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.2.0
 ```
 
 ## How to use
@@ -98,6 +98,38 @@ komiser start --port 3000 --redis localhost:6379 --duration 30
 
 <p align="center">
     <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-aws.png"/>
+</p>
+
+#### Multiple AWS Accounts Support
+
+Komiser support multiple AWS accounts through named profiles that are stored in the `config` and `credentials files`. You can configure additional profiles by using `aws configure` with the `--profile` option, or by adding entries to the `config` and `credentials` files.
+
+The following example shows a credentials file with 3 profiles (production, staging & sandbox accounts):
+
+```
+[Production]
+aws_access_key_id=<AWS_ACCESS_KEY_ID>
+aws_secret_access_key=<AWS_SECRET_ACCESS_KEY>
+
+[Staging]
+aws_access_key_id=<AWS_ACCESS_KEY_ID>
+aws_secret_access_key=<AWS_SECRET_ACCESS_KEY>
+
+[Sandbox]
+aws_access_key_id=<AWS_ACCESS_KEY_ID>
+aws_secret_access_key=<AWS_SECRET_ACCESS_KEY>
+```
+
+To enable multiple AWS accounts feature, add the --multiple option to Komiser:
+
+```
+komiser start --port 3000 --redis localhost:6379 --duration 30 --multiple
+```
+
+* If you point your browser to http://localhost:3000, you should be able to see your accounts:
+
+<p align="center">
+    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-aws-multiple.png"/>
 </p>
 
 ### GCP
@@ -153,6 +185,7 @@ komiser start [OPTIONS]
    --duration value, -d value  Cache expiration time (default: 30 minutes)
    --redis value, -r value     Redis server (localhost:6379)
    --dataset value, -ds value  BigQuery dataset name (project-id.dataset-name.table-name)
+   --multiple, -m              Enable multiple AWS accounts feature
 ```
 
 ## Configuring Credentials

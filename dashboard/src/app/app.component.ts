@@ -4,6 +4,7 @@ import { GcpService } from './gcp.service';
 import { StoreService } from './store.service';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { Subscription } from 'rxjs';
+import { Subject } from "rxjs/Subject";
 import * as moment from 'moment';
 
 declare var ga: Function;
@@ -17,10 +18,12 @@ export class AppComponent implements OnDestroy {
 
   public accountName: string = 'Username';
   public redAlarms: number;
+  public profiles: Array<string> = [];
+  public currentProfile: string;
   public notifications: Array<Object> = [];
   public _subscription: Subscription;
   public currentProvider: any;
-  public availableProviders : Array<any> = [
+  public availableProviders: Array<any> = [
     {
       label: 'Amazon Web Services',
       value: 'aws'
@@ -29,13 +32,13 @@ export class AppComponent implements OnDestroy {
       label: 'Google Cloud Platform',
       value: 'gcp'
     }
-  ]
+  ];
 
   private _storeService: StoreService;
 
   private providers: Map<String, Object> = new Map<String, Object>();
 
-  constructor(private awsService: AwsService, private gcpService: GcpService, private storeService: StoreService){
+  constructor(private awsService: AwsService, private gcpService: GcpService, private storeService: StoreService) {
 
     this.providers['aws'] = {
       label: 'Amazon Web Services',
@@ -48,6 +51,26 @@ export class AppComponent implements OnDestroy {
       value: 'gcp',
       logo: 'https://cdn.komiser.io/images/gcp.png'
     };
+
+    //if (this.storeService.getProvider() == 'aws') {
+      if (localStorage.getItem('profile')) {
+        this.currentProfile = localStorage.getItem('profile');
+      } else {
+        this.currentProfile = 'default';
+        localStorage.setItem('profile', this.currentProfile);
+      }
+
+      this.awsService.getProfiles().subscribe(profiles => {
+        this.profiles = profiles;
+        if (this.profiles.length > 0 && this.profiles.indexOf(this.currentProfile) == -1) {
+          this.currentProfile = this.profiles[0];
+          localStorage.setItem('profile', this.currentProfile);
+        }
+      }, err => {
+        this.profiles = [];
+      })
+   // }
+
 
     this.currentProvider = this.providers[this.storeService.getProvider()];
     this.storeService.onProviderChanged(this.storeService.getProvider());
@@ -64,22 +87,21 @@ export class AppComponent implements OnDestroy {
     })
   }
 
-  private getAccountName(){
-    console.log(this.currentProvider);
-    if (this.currentProvider.value == 'aws'){
+  private getAccountName() {
+    if (this.currentProvider.value == 'aws') {
       this.awsService.getAccountName().subscribe(data => {
         this.accountName = data.username;
       }, err => {
         this.accountName = 'Username';
       });
-  
+
       this.awsService.getCloudwatchAlarms().subscribe(data => {
         this.redAlarms = data.ALARM;
       }, err => {
         this.redAlarms = 0;
       });
     } else {
-      this.redAlarms = 0; 
+      this.redAlarms = 0;
 
       this.gcpService.getProjects().subscribe(data => {
         this.accountName = data[0].name;
@@ -90,17 +112,24 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-     this._subscription.unsubscribe();
-   }
+    this._subscription.unsubscribe();
+  }
 
-   public calcMoment(timestamp){
-      return moment(timestamp).fromNow();
-   }
+  public calcMoment(timestamp) {
+    return moment(timestamp).fromNow();
+  }
 
-   public onCloudProviderSelected(provider){
-     this.currentProvider = this.providers[provider];
-     this._storeService.onProviderChanged(provider);
-     this.getAccountName();
-   }
+  public onCloudProviderSelected(provider) {
+    this.currentProvider = this.providers[provider];
+    this._storeService.onProviderChanged(provider);
+    this.getAccountName();
+  }
+
+  public onProfileSelected(profile) {
+    this.currentProfile = profile;
+    localStorage.setItem('profile', this.currentProfile);
+    this._storeService.onProfileChanged(profile);
+    this.getAccountName();
+  }
 
 }

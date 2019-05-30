@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../aws.service';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-
+import { StoreService } from '../../store.service';
+import { Subject, Subscription } from 'rxjs';
 import 'jquery-mapael';
 import 'jquery-mapael/js/maps/world_countries.js';
 import * as $ from "jquery";
@@ -13,7 +14,8 @@ import 'chartist-plugin-tooltips';
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsSecurityComponent implements OnInit, AfterViewInit {
+export class AwsSecurityComponent implements OnInit, AfterViewInit, OnDestroy {
+  private signInEventsChart:any;
 
   public kmsKeys: number;
   public securityGroups: number;
@@ -33,7 +35,44 @@ export class AwsSecurityComponent implements OnInit, AfterViewInit {
   public loadingACMExpiredCertificates: boolean = true;
   public loadingSignInEventsChart: boolean = true;
 
-  constructor(private awsService: AwsService) {
+  private _subscription: Subscription;
+
+  constructor(private awsService: AwsService, private storeService: StoreService) {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.signInEventsChart.detach();
+
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+      this.kmsKeys = 0;
+      this.securityGroups = 0;
+      this.keyPairs = 0;
+      this.routeTables = 0;
+      this.acmCertificates = 0;
+      this.acmExpiredCertificates = 0;
+      this.unrestrictedSecurityGroups = [];
+      this.returnedUnrestrictedSecurityGroups = [];
+      this.consoleLoginSourceIps = [];
+
+      this.loadingKMSKeys = true;
+      this.loadingSecurityGroups = true;
+      this.loadingKeyPairs = true;
+      this.loadingRouteTables = true;
+      this.loadingACMCertificates = true;
+      this.loadingACMExpiredCertificates = true;
+      this.loadingSignInEventsChart = true;
+
+      this.initState();
+    });
+  }
+
+  private initState() {
     this.awsService.getKMSKeys().subscribe(data => {
       this.kmsKeys = data;
       this.loadingKMSKeys = false;
@@ -144,6 +183,10 @@ export class AwsSecurityComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
   pageChanged(event: PageChangedEvent): void {
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
@@ -158,7 +201,7 @@ export class AwsSecurityComponent implements OnInit, AfterViewInit {
   ngOnInit() { }
 
   private showSourceIpLogin(plots) {
-    var canvas : any = $("#sourceIpsChart");
+    var canvas: any = $("#sourceIpsChart");
     canvas.mapael({
       map: {
         name: "world_countries",
@@ -231,7 +274,7 @@ export class AwsSecurityComponent implements OnInit, AfterViewInit {
   }
 
   private showSignInEvents(labels, series) {
-    new Chartist.Bar('#signInEventsChart', {
+    this.signInEventsChart = new Chartist.Bar('#signInEventsChart', {
       labels: labels,
       series: series
     }, {

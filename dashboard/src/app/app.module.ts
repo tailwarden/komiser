@@ -37,6 +37,7 @@ import { AwsLimitsComponent } from './limits/aws/aws.component';
 import { GcpLimitsComponent } from './limits/gcp/gcp.component';
 import { AwsProfileComponent } from './profile/aws/aws.component';
 import { GcpProfileComponent } from './profile/gcp/gcp.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 
@@ -76,6 +77,11 @@ const appRoutes: Routes = [
     component: LimitsComponent,
     data: { title: 'Service Limits Checks - Komiser' }
   },
+  { 
+    path: 'notifications',
+    component: NotificationsComponent,
+    data: { title: 'Notifications - Komiser' }
+  },
   { path: '',
     component: DashboardComponent,
     data: { title: 'Dashboard - Komiser' }
@@ -108,7 +114,8 @@ const appRoutes: Routes = [
     AwsLimitsComponent,
     GcpLimitsComponent,
     AwsProfileComponent,
-    GcpProfileComponent
+    GcpProfileComponent,
+    NotificationsComponent
   ],
   imports: [
     RouterModule.forRoot(
