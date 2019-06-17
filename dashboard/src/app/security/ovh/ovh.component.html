@@ -1,0 +1,64 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/ssh.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SSH Keys</p>
+                <h4 class="card-title" *ngIf="!loadingSSHKeys">{{sshKeys}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSSHKeys"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/ssl.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SSL Certificates</p>
+                <h4 class="card-title" *ngIf="!loadingSSLCertificates">{{sslCertificates}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSSLCertificates"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/ssl_gateways.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">SSL Gateways</p>
+                <h4 class="card-title" *ngIf="!loadingSSLGateways">{{sslGateways}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSSLGateways"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

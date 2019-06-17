@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AwsService } from './aws.service';
 import { GcpService } from './gcp.service';
+import { OvhService } from './ovh.service';
 import { StoreService } from './store.service';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { Subscription } from 'rxjs';
@@ -31,6 +32,10 @@ export class AppComponent implements OnDestroy {
     {
       label: 'Google Cloud Platform',
       value: 'gcp'
+    },
+    {
+      label: 'OVH',
+      value: 'ovh'
     }
   ];
 
@@ -38,7 +43,7 @@ export class AppComponent implements OnDestroy {
 
   private providers: Map<String, Object> = new Map<String, Object>();
 
-  constructor(private awsService: AwsService, private gcpService: GcpService, private storeService: StoreService) {
+  constructor(private awsService: AwsService, private gcpService: GcpService, private storeService: StoreService, private ovhService: OvhService) {
 
     this.providers['aws'] = {
       label: 'Amazon Web Services',
@@ -50,6 +55,12 @@ export class AppComponent implements OnDestroy {
       label: 'Google Cloud Platform',
       value: 'gcp',
       logo: 'https://cdn.komiser.io/images/gcp.png'
+    };
+
+    this.providers['ovh'] = {
+      label: 'OVH',
+      value: 'ovh',
+      logo: 'https://cdn.komiser.io/images/ovh.jpg'
     };
 
     //if (this.storeService.getProvider() == 'aws') {
@@ -100,7 +111,19 @@ export class AppComponent implements OnDestroy {
       }, err => {
         this.redAlarms = 0;
       });
-    } else {
+    } else if(this.currentProvider.value == 'ovh'){
+      this.ovhService.getCloudAlerts().subscribe(data => {
+        this.redAlarms = data;
+      }, err => {
+        this.redAlarms = 0;
+      });
+
+      this.ovhService.getProfile().subscribe(data => {
+        this.accountName = data.nichandle;
+      }, err => {
+        this.accountName = 'Username';
+      });
+    }else {
       this.redAlarms = 0;
 
       this.gcpService.getProjects().subscribe(data => {

@@ -1,0 +1,179 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/container-storage.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Storage Containers</p>
+                <h4 class="card-title" *ngIf="!loadingStorageContainers">{{storageContainers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingStorageContainers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/ovh/storage-objects.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Storage Objects</p>
+                <h4 class="card-title" *ngIf="!loadingStoredObjects">{{storedObjects}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingStoredObjects"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/ovh/storage-size.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Storage Size</p>
+                <h4 class="card-title" *ngIf="!loadingStorageContainerTotalSize">{{storageContainerTotalSize}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingStorageContainerTotalSize"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/ovh/container-storage.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Empty Containers</p>
+                <h4 class="card-title" *ngIf="!loadingEmptyStorageContainers">{{emptyStorageContainers}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingEmptyStorageContainers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/volume.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Total Volumes</p>
+                <h4 class="card-title" *ngIf="!loadingTotalVolumes">{{totalVolumes}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingTotalVolumes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/volume-size.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Volumes Size</p>
+                <h4 class="card-title" *ngIf="!loadingVolumesSize">{{volumesSize}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingVolumesSize"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/ovh/volume.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Unattached Volumes</p>
+                <h4 class="card-title" *ngIf="!loadingUnattachedVolumes">{{unattachedVolumes}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUnattachedVolumes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/ovh/snapshot.png" class="ovh-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Snapshots</p>
+                <h4 class="card-title" *ngIf="!loadingSnapshots">{{snapshots}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSnapshots"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Volume Types</h4>
+          <p class="card-category">Usage of volume types</p>
+        </div>
+        <div class="card-body">
+          <div class="loader" *ngIf="loadingVolumesTypeChart">Loading...</div>
+          <canvas id="volumesTypeChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

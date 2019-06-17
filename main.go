@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/handlers/aws"
 	. "github.com/mlabouardy/komiser/handlers/gcp"
+	. "github.com/mlabouardy/komiser/handlers/ovh"
 	. "github.com/mlabouardy/komiser/services/cache"
 	. "github.com/mlabouardy/komiser/services/ini"
 	"github.com/urfave/cli"
@@ -26,6 +27,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 
 	gcpHandler := NewGCPHandler(cache, dataset)
 	awsHandler := NewAWSHandler(cache, multiple)
+	ovhHandler := NewOVHHandler(cache, "")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
@@ -141,6 +143,30 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/gcp/iam/service_accounts", gcpHandler.IAMServiceAccountsHandler)
 	r.HandleFunc("/gcp/dataflow/jobs", gcpHandler.DataflowJobsHandler)
 	r.HandleFunc("/gcp/nat/gateways", gcpHandler.NatGatewaysHandler)
+
+	r.HandleFunc("/ovh/cloud/projects", ovhHandler.DescribeCloudProjectsHandler)
+	r.HandleFunc("/ovh/cloud/instances", ovhHandler.DescribeCloudInstancesHandler)
+	r.HandleFunc("/ovh/cloud/storage", ovhHandler.DescribeCloudStorageContainersHandler)
+	r.HandleFunc("/ovh/cloud/users", ovhHandler.DescribeCloudUsersHandler)
+	r.HandleFunc("/ovh/cloud/volumes", ovhHandler.DescribeCloudVolumesHandler)
+	r.HandleFunc("/ovh/cloud/snapshots", ovhHandler.DescribeCloudSnapshotsHandler)
+	r.HandleFunc("/ovh/cloud/alerts", ovhHandler.DescribeCloudAlertsandler)
+	r.HandleFunc("/ovh/cloud/current", ovhHandler.DescribeCurrentUsageHandler)
+	r.HandleFunc("/ovh/cloud/images", ovhHandler.DescribeCloudImagesHandler)
+	r.HandleFunc("/ovh/cloud/ip", ovhHandler.DescribeCloudIpsHandler)
+	r.HandleFunc("/ovh/cloud/network/private", ovhHandler.DescribeCloudPrivateNetworksHandler)
+	r.HandleFunc("/ovh/cloud/network/public", ovhHandler.DescribeCloudPublicNetworksHandler)
+	r.HandleFunc("/ovh/cloud/failover/ip", ovhHandler.DescribeCloudFailoverIpsHandler)
+	r.HandleFunc("/ovh/cloud/vrack", ovhHandler.DescribeCloudVRacksHandler)
+	r.HandleFunc("/ovh/cloud/kube/clusters", ovhHandler.DescribeCloudKubeClustersHandler)
+	r.HandleFunc("/ovh/cloud/kube/nodes", ovhHandler.DescribeCloudKubeNodesHandler)
+	r.HandleFunc("/ovh/cloud/sshkeys", ovhHandler.DescribeCloudSSHKeysHandler)
+	r.HandleFunc("/ovh/cloud/quotas", ovhHandler.DescribeCloudLimitsHandler)
+	r.HandleFunc("/ovh/cloud/ssl/certificates", ovhHandler.DescribeSSLCertificatesHandler)
+	r.HandleFunc("/ovh/cloud/ssl/gateways", ovhHandler.DescribeSSLGatewaysHandler)
+	r.HandleFunc("/ovh/cloud/profile", ovhHandler.DescribeProfileHandler)
+	r.HandleFunc("/ovh/cloud/tickets", ovhHandler.DescribeTicketsHandler)
+
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
 	headersOk := handlers.AllowedHeaders([]string{"profile"})
@@ -156,7 +182,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.2.0"
+	app.Version = "2.3.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()
