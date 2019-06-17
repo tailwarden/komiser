@@ -43,7 +43,7 @@ export class OvhStorageComponent implements OnInit {
         totalObjects += container.storedObjects;
         totalSize += container.storedBytes;
       });
-      this.storedObjects = this.formatNumber(totalObjects);
+      this.storedObjects = this.formatNumber(totalObjects).toString();
       this.storageContainerTotalSize = this.bytesToSizeWithUnit(totalSize);
       this.storageContainers = data.length;
       this.loadingStorageContainers = false;
