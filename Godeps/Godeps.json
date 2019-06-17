@@ -432,6 +432,10 @@
 			"Rev": "c2b33e8439af944379acbdd9c3a5fe0bc44bd8a5"
 		},
 		{
+			"ImportPath": "github.com/ovh/go-ovh/ovh",
+			"Rev": "ba5adb4cf0148a3dbdbd30586f075266256a77b1"
+		},
+		{
 			"ImportPath": "github.com/patrickmn/go-cache",
 			"Comment": "v2.1.0",
 			"Rev": "a3647f8e31d79543b2d0f0ae2fe5c379d72cedc0"
@@ -885,6 +889,11 @@
 			"ImportPath": "google.golang.org/grpc/tap",
 			"Comment": "v1.2.0-906-gd5973a9",
 			"Rev": "d5973a91700d6143b4c45366641bd3911034e10f"
+		},
+		{
+			"ImportPath": "gopkg.in/ini.v1",
+			"Comment": "v1.42.0",
+			"Rev": "c85607071cf08ca1adaf48319cd1aa322e81d8c1"
 		}
 	]
 }
