@@ -25,5 +25,3 @@ func (aws AWS) getRegions(cfg aws.Config) ([]Region, error) {
 	}
 	return listOfRegions, nil
 }
-
-//AIzaSyC0bLwL_SjdVWWU5nRJcaopGV9SyVqXI6U

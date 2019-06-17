@@ -1,0 +1,17 @@
+.gcp-logo {
+    width: 40px !important;
+    padding-bottom: 10px !important;
+}
+
+#consumedRequestsChart{
+    height: 150px !important;
+}
+
+#lbRequestsChart{
+    height: 150px !important;
+}
+
+.ovh-logo{
+    width:80px;
+    padding-bottom: 10px !important;
+}

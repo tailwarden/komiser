@@ -16,6 +16,7 @@ import { DataAndAiComponent } from './data-and-ai/data-and-ai.component';
 
 import { AwsService } from './aws.service';
 import { GcpService } from './gcp.service';
+import { OvhService } from './ovh.service';
 import { StoreService } from './store.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ProfileComponent } from './profile/profile.component';
@@ -38,6 +39,14 @@ import { GcpLimitsComponent } from './limits/gcp/gcp.component';
 import { AwsProfileComponent } from './profile/aws/aws.component';
 import { GcpProfileComponent } from './profile/gcp/gcp.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { OvhDashboardComponent } from './dashboard/ovh/ovh.component';
+import { OvhComputeComponent } from './compute/ovh/ovh.component';
+import { OvhStorageComponent } from './storage/ovh/ovh.component';
+import { OvhNetworkComponent } from './network/ovh/ovh.component';
+import { OvhSecurityComponent } from './security/ovh/ovh.component';
+import { OvhDataAndAIComponent } from './data-and-ai/ovh/ovh.component';
+import { OvhLimitsComponent } from './limits/ovh/ovh.component';
+import { OvhProfileComponent } from './profile/ovh/ovh.component';
 
 
 
@@ -115,7 +124,15 @@ const appRoutes: Routes = [
     GcpLimitsComponent,
     AwsProfileComponent,
     GcpProfileComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    OvhDashboardComponent,
+    OvhComputeComponent,
+    OvhStorageComponent,
+    OvhNetworkComponent,
+    OvhSecurityComponent,
+    OvhDataAndAIComponent,
+    OvhLimitsComponent,
+    OvhProfileComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -132,7 +149,8 @@ const appRoutes: Routes = [
     AwsService,
     StoreService,
     GoogleAnalyticsService,
-    GcpService
+    GcpService,
+    OvhService
   ],
   bootstrap: [AppComponent]
 })

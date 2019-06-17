@@ -1,0 +1,180 @@
+<section>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-users"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Users</p>
+                <h4 class="card-title" *ngIf="!loadingUsers">{{users}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUsers"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-map-marker"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Regions</p>
+                <h4 class="card-title" *ngIf="!loadingUsedRegions">{{usedRegions}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUsedRegions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-building"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Projects</p>
+                <h4 class="card-title" *ngIf="!loadingProjects">{{projects}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingProjects"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats card-danger">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-warning"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Alerts</p>
+                <h4 class="card-title" *ngIf="!loadingAlerts">{{alerts}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingAlerts"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Compute Engine</h4>
+          <p class="card-category">Number of Compute Instances by Region</p>
+        </div>
+        <div class="card-body">
+          <div class="mapregions">
+            <div class="map">
+              <span>Alternative content for the map</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-card-no-pd">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="fw-bold mt-1">Current month-to-date balance</p>
+          <h4>
+            <b>$ {{currentBill}}</b>
+          </h4>
+          <a class="btn btn-primary btn-full text-left mt-3 mb-3" href="#">
+            <i class="la la-plus"></i> Create Alert</a>
+        </div>
+        <div class="card-footer">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="btn btn-default btn-link" href="#">
+                <i class="la la-history"></i> History</a>
+            </li>
+            <li class="nav-item ml-auto">
+              <a class="btn btn-default btn-link" href="#">
+                <i class="la la-refresh"></i> Refresh</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="progress-card" *ngFor="let service of mostUsedServices;index as i">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">{{service.name}}</span>
+              <span class="text-muted fw-bold">{{service.cost | number:'2.2-2'}}$</span>
+            </div>
+            <div class="progress mb-2" style="height: 7px;">
+              <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="progress-bar" [style.width]="service.cost / currentBill | percent:'1.0-1'"
+                [style.background]="colors[i]" data-placement="top" data-toggle="tooltip" role="progressbar" title="{{service.cost / currentBill | percent:'1.0-1'}}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stats">
+        <div class="card-body">
+          <p class="fw-bold mt-1">Support</p>
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-danger">
+                <i class="la la-ticket text-danger"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Open Tickets</p>
+                <h4 class="card-title" *ngIf="!loadingOpenTickets">{{openTickets}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingOpenTickets"></div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <i class="la la-check text-success"></i>
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">Resolved Tickets</p>
+                <h4 class="card-title" *ngIf="!loadingResolvedTickets">{{resolvedTickets}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingResolvedTickets"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

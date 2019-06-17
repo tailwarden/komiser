@@ -1,0 +1,41 @@
+<section>
+  <div class="row">
+      <div class="col-lg-12" *ngIf="loadingServiceLimits">
+          <div class="text-center spinner">
+            <div class="loader">Loading...</div>
+          </div>
+        </div>
+    <div class="col-lg-12" *ngIf="!loadingServiceLimits">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Current limits</h4>
+          <p class="card-category">The resources for your cloud project are limited, so that you can control your resource consumption</p>
+        </div>
+        <div class="card-body">
+          <table class="table table-head-bg table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Instances</th>
+                <th>Volumes</th>
+                <th>SSH Keys</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let limit of limits">
+                <td>
+                  <span>
+                      <img [src]="getFlagIcon(limit.region)" class="flag-icon"/> {{limit.region}}
+                  </span>
+                </td>
+                <td>{{limit.instance.usedInstances}} / {{limit.instance.maxInstances}}</td>
+                <td>{{limit.volume.usedGigabytes}} / {{limit.volume.maxGigabytes}}</td>
+                <td>{{limit.keypair.maxCount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
