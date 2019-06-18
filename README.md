@@ -3,6 +3,7 @@
 </a>
 
 <a href="https://komiser.io"><img alt="Amp" src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/icon.png" width="120" valign="middle"></a>
+<a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser.svg?type=shield"/></a>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/mlabouardy/komiser)](https://goreportcard.com/report/github.com/mlabouardy/komiser) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [<img src="https://img.shields.io/badge/slack-@komiser-yellow.svg?logo=slack">](https://mohamedlabouardy.typeform.com/to/p5qrA) <a href="https://github.com/mlabouardy/komiser#backers"><img src="https://opencollective.com/komiser/backers/badge.svg" alt="OpenCollective"></a>  <a href="https://github.com/mlabouardy/komiser#sponsors"><img src="https://opencollective.com/komiser/sponsors/badge.svg" alt="OpenCollective"></a>
@@ -259,3 +260,7 @@ We will need a URL to a svg or png logo, a text title and a company URL.
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/mlabouardy/komiser/tags). 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser?ref=badge_large)
