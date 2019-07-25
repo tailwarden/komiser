@@ -1,0 +1,144 @@
+<section>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/snapshot1.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Snapshots Number</p>
+                  <h4 class="card-title" *ngIf="!loadingSnapshotsNumber">{{snapshotsNumber}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSnapshotsNumber"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/snapshot1.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Snapshots Size</p>
+                  <h4 class="card-title" *ngIf="!loadingSnapshotsSize">{{snapshotsSize}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSnapshotsSize"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/volumes.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Volumes Number</p>
+                  <h4 class="card-title" *ngIf="!loadingVolumesNumber">{{volumesNumber}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingVolumesNumber"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/volumes.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Volumes Size</p>
+                  <h4 class="card-title" *ngIf="!loadingVolumesSize">{{volumesSize}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingVolumesSize"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <i class="devicon-mysql-plain colored"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">MySQL Instances</p>
+                  <h4 class="card-title" *ngIf="!loadingMySQLInstances">{{mysqlInstances}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingMySQLInstances"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <i class="devicon-postgresql-plain colored"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">PostgreSQL Instances</p>
+                  <h4 class="card-title"><span class="badge badge-info">BETA</span></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <i class="devicon-redis-plain colored"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Redis Instances</p>
+                  <h4 class="card-title"><span class="badge badge-info">BETA</span></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

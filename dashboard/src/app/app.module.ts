@@ -17,6 +17,7 @@ import { DataAndAiComponent } from './data-and-ai/data-and-ai.component';
 import { AwsService } from './aws.service';
 import { GcpService } from './gcp.service';
 import { OvhService } from './ovh.service';
+import { DigitaloceanService } from './digitalocean.service';
 import { StoreService } from './store.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ProfileComponent } from './profile/profile.component';
@@ -47,6 +48,11 @@ import { OvhSecurityComponent } from './security/ovh/ovh.component';
 import { OvhDataAndAIComponent } from './data-and-ai/ovh/ovh.component';
 import { OvhLimitsComponent } from './limits/ovh/ovh.component';
 import { OvhProfileComponent } from './profile/ovh/ovh.component';
+import { DigitaloceanDashboardComponent } from './dashboard/digitalocean/digitalocean.component';
+import { DigitaloceanComputeComponent } from './compute/digitalocean/digitalocean.component';
+import { DigitaloceanStorageComponent } from './storage/digitalocean/digitalocean.component';
+import { DigitaloceanNetworkComponent } from './network/digitalocean/digitalocean.component';
+import { DigitaloceanSecurityComponent } from './security/digitalocean/digitalocean.component';
 
 
 
@@ -132,7 +138,12 @@ const appRoutes: Routes = [
     OvhSecurityComponent,
     OvhDataAndAIComponent,
     OvhLimitsComponent,
-    OvhProfileComponent
+    OvhProfileComponent,
+    DigitaloceanDashboardComponent,
+    DigitaloceanComputeComponent,
+    DigitaloceanStorageComponent,
+    DigitaloceanNetworkComponent,
+    DigitaloceanSecurityComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -147,6 +158,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     AwsService,
+    DigitaloceanService,
     StoreService,
     GoogleAnalyticsService,
     GcpService,

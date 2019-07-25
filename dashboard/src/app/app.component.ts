@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { AwsService } from './aws.service';
 import { GcpService } from './gcp.service';
 import { OvhService } from './ovh.service';
+import { DigitaloceanService } from './digitalocean.service';
 import { StoreService } from './store.service';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { Subscription } from 'rxjs';
@@ -36,6 +37,10 @@ export class AppComponent implements OnDestroy {
     {
       label: 'OVH',
       value: 'ovh'
+    },
+    {
+      label: 'DigitalOcean',
+      value: 'digitalocean'
     }
   ];
 
@@ -43,7 +48,7 @@ export class AppComponent implements OnDestroy {
 
   private providers: Map<String, Object> = new Map<String, Object>();
 
-  constructor(private awsService: AwsService, private gcpService: GcpService, private storeService: StoreService, private ovhService: OvhService) {
+  constructor(private awsService: AwsService, private gcpService: GcpService, private storeService: StoreService, private digitaloceanService: DigitaloceanService, private ovhService: OvhService) {
 
     this.providers['aws'] = {
       label: 'Amazon Web Services',
@@ -61,6 +66,12 @@ export class AppComponent implements OnDestroy {
       label: 'OVH',
       value: 'ovh',
       logo: 'https://cdn.komiser.io/images/ovh.jpg'
+    };
+
+    this.providers['digitalocean'] = {
+      label: 'DigitalOcean',
+      value: 'digitalocean',
+      logo: 'https://cdn.komiser.io/images/digitalocean.png'
     };
 
     //if (this.storeService.getProvider() == 'aws') {
@@ -123,7 +134,14 @@ export class AppComponent implements OnDestroy {
       }, err => {
         this.accountName = 'Username';
       });
-    }else {
+    }else if(this.currentProvider.value == 'digitalocean'){
+      this.redAlarms = 0;
+      this.digitaloceanService.getProfile().subscribe(data => {
+        this.accountName = data.email.substring(0, data.email.indexOf('@'))
+      }, err => {
+        this.accountName = 'Username';
+      });
+    } else {
       this.redAlarms = 0;
 
       this.gcpService.getProjects().subscribe(data => {

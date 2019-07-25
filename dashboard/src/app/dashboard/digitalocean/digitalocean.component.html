@@ -1,0 +1,61 @@
+<section>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="la la-building"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Projects</p>
+                  <h4 class="card-title" *ngIf="!loadingProjects">{{projects}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingProjects"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="la la-map-marker"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Regions</p>
+                  <h4 class="card-title" *ngIf="!loadingUsedRegions">{{usedRegions}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUsedRegions"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Overview of Droplets</h4>
+            <p class="card-category">Number of Droplets by Region</p>
+          </div>
+          <div class="card-body">
+            <div class="mapregions">
+              <div class="map">
+                <span>Alternative content for the map</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
