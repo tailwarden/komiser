@@ -12,6 +12,8 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 **Discuss it on [Product Hunt](https://www.producthunt.com/posts/komiser) 🦄**
 
+*Komiser EE is available in private beta test stage, sign in for free at [https://cloud.komiser.io](https://cloud.komiser.io)*
+
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiseree) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/mlabouardy/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
 **Highlights**
@@ -19,7 +21,7 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 * Analyze and manage cloud cost, usage, security, and governance in one place.
 * Control your usage and create visibility across all used services to achieve maximum cost-effectiveness.
 * Detect potential vulnerabilities that could put your cloud environment at risk.
-* Get a deep understanding of how you spend on the AWS, GCP, OVH and Azure.
+* Get a deep understanding of how you spend on the AWS, GCP, OVH, DigitalOcean and Azure.
 
 <p align="center">
 
@@ -37,24 +39,24 @@ Does your company use Komiser?  Ask your manager or marketing team if your compa
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (2.3.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.4.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
 ```
-wget https://cli.komiser.io/2.3.0/linux/komiser
+wget https://cli.komiser.io/2.4.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://cli.komiser.io/2.3.0/windows/komiser
+wget https://cli.komiser.io/2.4.0/windows/komiser
 ```
 
 ### Mac OS X:
 
 ```
-wget https://cli.komiser.io/2.3.0/osx/komiser
+wget https://cli.komiser.io/2.4.0/osx/komiser
 ```
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
@@ -67,7 +69,7 @@ brew install komiser
 ### Docker:
 
 ```
-docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.3.0
+docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.4.0
 ```
 
 ## How to use
@@ -211,6 +213,25 @@ consumer_key=my_consumer_key
     <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-ovh.png"/>
 </p>
 
+### DigitalOcean
+
+* To generate a personal access token, log in to the [DigitalOcean Control Panel](https://cloud.digitalocean.com/).
+
+* Click the **API** link in the main navigation, In the **Personal access tokens** section, click the **Generate New Token** button.
+
+* Create a *ready-only* scope token. When you click **Generate Token**, your token will be generated.
+
+* Set *DIGITALOCEAN_ACCESS_TOKEN* environment variable:
+
+```
+export DIGITALOCEAN_ACCESS_TOKEN=<TOKEN>
+```
+
+* If you point your browser to http://localhost:3000, you should be able to see your projects:
+
+<p align="center">
+    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-digitalocean.png"/>
+</p>
 
 ## Options
 

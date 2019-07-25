@@ -342,6 +342,11 @@
 			"Rev": "80eda21e3854386d2a56de1236efe984f6e687de"
 		},
 		{
+			"ImportPath": "github.com/digitalocean/godo",
+			"Comment": "v1.19.0-2-g4677563",
+			"Rev": "4677563d2a4e3523791598dcbd3945ead86e5c0c"
+		},
+		{
 			"ImportPath": "github.com/elazarl/go-bindata-assetfs",
 			"Comment": "v1.0.0-2-g38087fe",
 			"Rev": "38087fe4dafb822e541b3f7955075cc1c30bd294"
@@ -405,6 +410,11 @@
 			"ImportPath": "github.com/golang/protobuf/ptypes/timestamp",
 			"Comment": "v1.3.1-4-ge91709a",
 			"Rev": "e91709a02e0e8ff8b86b7aa913fdc9ae9498e825"
+		},
+		{
+			"ImportPath": "github.com/google/go-querystring/query",
+			"Comment": "v1.0.0-5-gc8c88db",
+			"Rev": "c8c88dbee036db4e4808d1f2ec8c2e15e11c3f80"
 		},
 		{
 			"ImportPath": "github.com/googleapis/gax-go/v2",

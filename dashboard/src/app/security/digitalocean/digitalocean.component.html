@@ -1,0 +1,158 @@
+<section>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/services/aws/kms.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">SSH Keys</p>
+                  <h4 class="card-title" *ngIf="!loadingSSHKeys">{{sshKeys}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSSHKeys"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/aws/security_group.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Firewalls</p>
+                  <h4 class="card-title" *ngIf="!loadingFirewalls">{{firewalls}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingFirewalls"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/aws/acm.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Custom Certificates</p>
+                  <h4 class="card-title" *ngIf="!loadingCustomCertificates">{{customCertificates}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCustomCertificates"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/letsencrypt.svg" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">LetsEncrypt Certificates</p>
+                  <h4 class="card-title" *ngIf="!loadingLetsEncryptCertificates">{{letsEncryptCertificates}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingLetsEncryptCertificates"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Unrestricted Firewalls</h4>
+            <p class="card-category">Checks inbound rules that allow unrestricted access (0.0.0.0/0) to specific ports</p>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>ID</th>
+                  <th>Protocol</th>
+                  <th>Port</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sg of returnedUnrestrictedFirewalls">
+                  <td>
+                    <span class="badge badge-success" *ngIf="sg.status == 'succeeded'">Succeeded</span>
+                    <span class="badge badge-secondary" *ngIf="sg.status == 'waiting'">Waiting</span>
+                    <span class="badge badge-danger" *ngIf="sg.status == 'failed'">Failed</span>
+                  </td>
+                  <td>{{sg.id}}</td>
+                  <td>{{sg.protocol}}</td>
+                  <td>{{sg.port}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination [totalItems]="unrestrictedFirewalls.length" [itemsPerPage]="20" (pageChanged)="pageChanged($event)" [maxSize]="18"
+              size="sm"></pagination> 
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Security History</h4>
+              <p class="card-category">Your most recent account events</p>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Created At</th>
+                    <th>Type</th>
+                    <th>Resource</th>
+                    <th>Status</th>
+                    <th>Region</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let action of returnedActions">
+                        <td>{{calcMoment(action.at)}}</td>
+                        <td>{{action.type}}</td>
+                        <td>{{action.resource}}</td>
+                        <td>
+                          <span class="badge badge-success" *ngIf="action.status == 'completed'">Completed</span>
+                          <span class="badge badge-warning" *ngIf="action.status == 'in-progress'">In Progress</span>
+                          <span class="badge badge-danger" *ngIf="action.status == 'errored'">Completed</span>
+                        </td>
+                        <td>
+                            <img src="{{getFlagIcon(action.region.substring(0, action.region.length-1))}}" class="flag-icon" />
+                        </td>
+                      </tr>
+                </tbody>
+              </table>
+              <pagination [totalItems]="actions.length" [itemsPerPage]="20" (pageChanged)="pageChangedActions($event)" [maxSize]="18"
+              size="sm"></pagination> 
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>

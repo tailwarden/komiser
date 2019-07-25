@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/handlers/aws"
+	. "github.com/mlabouardy/komiser/handlers/digitalocean"
 	. "github.com/mlabouardy/komiser/handlers/gcp"
 	. "github.com/mlabouardy/komiser/handlers/ovh"
 	. "github.com/mlabouardy/komiser/services/cache"
@@ -25,6 +26,7 @@ const (
 func startServer(port int, cache Cache, dataset string, multiple bool) {
 	cache.Connect()
 
+	digitaloceanHandler := NewDigitalOceanHandler(cache)
 	gcpHandler := NewGCPHandler(cache, dataset)
 	awsHandler := NewAWSHandler(cache, multiple)
 	ovhHandler := NewOVHHandler(cache, "")
@@ -167,6 +169,24 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/ovh/cloud/profile", ovhHandler.DescribeProfileHandler)
 	r.HandleFunc("/ovh/cloud/tickets", ovhHandler.DescribeTicketsHandler)
 
+	r.HandleFunc("/digitalocean/account", digitaloceanHandler.AccountProfileHandler)
+	r.HandleFunc("/digitalocean/actions", digitaloceanHandler.ActionsHistoryHandler)
+	r.HandleFunc("/digitalocean/cdns", digitaloceanHandler.ContentDeliveryNetworksHandler)
+	r.HandleFunc("/digitalocean/certificates", digitaloceanHandler.CertificatesHandler)
+	r.HandleFunc("/digitalocean/databases", digitaloceanHandler.DatabasesHandler)
+	r.HandleFunc("/digitalocean/domains", digitaloceanHandler.DomainsHandler)
+	r.HandleFunc("/digitalocean/droplets", digitaloceanHandler.DropletsHandler)
+	r.HandleFunc("/digitalocean/firewalls/list", digitaloceanHandler.DescribeFirewallsHandler)
+	r.HandleFunc("/digitalocean/firewalls/unsecure", digitaloceanHandler.DescribeUnsecureFirewallsHandler)
+	r.HandleFunc("/digitalocean/floatingips", digitaloceanHandler.FloatingIpsHandler)
+	r.HandleFunc("/digitalocean/k8s", digitaloceanHandler.KubernetesHandler)
+	r.HandleFunc("/digitalocean/keys", digitaloceanHandler.SSHKeysHandler)
+	r.HandleFunc("/digitalocean/loadbalancers", digitaloceanHandler.LoadBalancersHandler)
+	r.HandleFunc("/digitalocean/projects", digitaloceanHandler.ProjectsHandler)
+	r.HandleFunc("/digitalocean/records", digitaloceanHandler.RecordsHandler)
+	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
+	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
+
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
 	headersOk := handlers.AllowedHeaders([]string{"profile"})
@@ -182,7 +202,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.3.0"
+	app.Version = "2.4.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()

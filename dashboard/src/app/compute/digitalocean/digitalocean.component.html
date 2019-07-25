@@ -1,0 +1,224 @@
+<section>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center icon-warning">
+                  <img src="https://cdn.komiser.io/images/droplet.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Active Droplets</p>
+                  <h4 class="card-title" *ngIf="!loadingActiveDroplets">{{activeDroplets}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingActiveDroplets"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                    <img src="https://cdn.komiser.io/images/droplet.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Off Droplets</p>
+                  <h4 class="card-title" *ngIf="!loadingOffDroplets">{{offDroplets}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingOffDroplets"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                    <img src="https://cdn.komiser.io/images/droplet.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Archived Droplets</p>
+                  <h4 class="card-title" *ngIf="!loadingArchivedDroplets">{{archivedDroplets}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingArchivedDroplets"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-2">
+        <div class="card card-stats card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="devicon-ubuntu-plain colored"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Ubuntu</p>
+                  <h4 class="card-title" *ngIf="!loadingImages">{{images.ubuntu}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingImages"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/bsd.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">FreeBSD</p>
+                  <h4 class="card-title" *ngIf="!loadingImages">{{images.bsd}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingImages"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/fedora.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Fedora</p>
+                  <h4 class="card-title" *ngIf="!loadingImages">{{images.fedora}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingImages"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="devicon-debian-plain colored"></i>
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Debian</p>
+                  <h4 class="card-title" *ngIf="!loadingImages">{{images.debian}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingImages"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/centos.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">CentOS</p>
+                  <h4 class="card-title" *ngIf="!loadingImages">{{images.centos}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingImages"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo" style="padding-bottom: 12px" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Kubernetes Clusters</p>
+                  <h4 class="card-title" *ngIf="!loadingKubernetesClusters">{{kubernetesClusters}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKubernetesClusters"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo" style="padding-bottom: 12px" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Kubernetes Nodes</p>
+                  <h4 class="card-title" *ngIf="!loadingKubernetesNodes">{{kubernetesNodes}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKubernetesNodes"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Kubernetes Clusters</h4>
+            <p class="card-category">Number of Clusters by Region</p>
+          </div>
+          <div class="card-body">
+            <div class="kubeclustersmap">
+              <div class="map">
+                <span>Alternative content for the map</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
