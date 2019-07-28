@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: komiser
+  labels:
+    app: komiser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: komiser
+  template:
+    metadata:
+      labels:
+        app: komiser
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: redis
+        image: redis:5.0.5-alpine
+        ports:
+          - containerPort: 6379
+        imagePullPolicy: IfNotPresent
+      
+      - name: komiser
+        image: mlabouardy/komiser:2.4.0
+        imagePullPolicy: Always
+        args: [
+          "--redis", "localhost:6379",
+          "--duration", "14",
+        ]
+        ports:
+          - containerPort: 3000
+            protocol: TCP
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                key: key
+                name: komiser
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                key: secret
+                name: komiser
+          - name: AWS_DEFAULT_REGION
+            value: eu-west-2
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "10Mi"
+          limits:
+            cpu: "50m"
+            memory: "100Mi"
