@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal #internet-facing # internal
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/target-type: instance # ip # instance
+    alb.ingress.kubernetes.io/subnets: subnet-0000,subnet-0000 # or tag the subnets for auto discovery https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/walkthrough/echoserver/
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:0000000 #comma delimited
+spec:
+  rules:
+  - host: komiser.domain.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: komiser
+          servicePort: 3000
