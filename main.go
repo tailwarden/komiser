@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+
 	"log"
 	"net/http"
 	"os"
@@ -22,6 +24,26 @@ const (
 	DEFAULT_PORT     = 3000
 	DEFAULT_DURATION = 30
 )
+
+func interceptHandler(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(&interceptResponseWriter{w, customErrorHandler}, r)
+	})
+}
+
+func customErrorHandler(w http.ResponseWriter, status int) {
+	if status == 404 {
+		file, _:= assetFS().Open("/index.html")
+		content, err := ioutil.ReadAll(file)
+		if(err != nil) {
+			panic("unreachable")
+		}
+		w.Header().Add("Content-Type", "text/html")
+		w.WriteHeader(200)
+		w.Write(content)
+	}
+}
+
 
 func startServer(port int, cache Cache, dataset string, multiple bool) {
 	cache.Connect()
@@ -187,7 +209,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
 	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
 
-	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
+	r.PathPrefix("/").Handler(interceptHandler(http.FileServer(assetFS())))
 
 	headersOk := handlers.AllowedHeaders([]string{"profile"})
 	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS(headersOk)(r))
