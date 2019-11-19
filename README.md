@@ -59,6 +59,18 @@ _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 
 ### Docker:
 
+make sure your .aws directory exist in your system, if not, create one;
+```
+mkdir ~/.aws
+touch ~/.aws/credentials
+vi ~/.aws/credentials
+```
+add Access Key ID and Secret Access Key to ~/.aws/credentials using this format:
+```
+[default]
+aws_access_key_id = <access key id>
+aws_secret_access_key = <secret access key>
+region = <AWS region>
 ```
 docker run -d -p 3000:3000 --name komiser mlabouardy/komiser:2.1.0
 ```
