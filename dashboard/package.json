@@ -31,7 +31,7 @@
     "core-js": "^2.4.1",
     "gulp": "^4.0.1",
     "gulp-webserver": "^0.9.1",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "jquery-mapael": "^2.2.0",
     "moment": "^2.24.0",
     "ngx-bootstrap": "^2.0.5",
