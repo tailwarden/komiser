@@ -15,6 +15,7 @@ import (
 	. "github.com/mlabouardy/komiser/handlers/ovh"
 	. "github.com/mlabouardy/komiser/services/cache"
 	. "github.com/mlabouardy/komiser/services/ini"
+	. "github.com/mlabouardy/komiser/handlers/azure"
 	"github.com/urfave/cli"
 )
 
@@ -30,8 +31,12 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	gcpHandler := NewGCPHandler(cache, dataset)
 	awsHandler := NewAWSHandler(cache, multiple)
 	ovhHandler := NewOVHHandler(cache, "")
+	azureHandler := NewAzureHandler(cache)
 
 	r := mux.NewRouter()
+	r.HandleFunc("/azure/acm/certificates", azureHandler.APIGatewayListCertificatesHandler)
+	r.HandleFunc("/azure/acm/expired", azureHandler.APIGatewayExpiredCertificatesHandler)
+
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
 	r.HandleFunc("/aws/iam/users", awsHandler.IAMUsersHandler)
 	r.HandleFunc("/aws/iam/account", awsHandler.IAMUserHandler)
