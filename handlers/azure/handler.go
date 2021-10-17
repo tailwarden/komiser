@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	. "github.com/mlabouardy/komiser/services/azure"
-	. "github.com/mlabouardy/komiser/services/cache"
+	. "github.com/narasago/komiser/services/azure"
+	. "github.com/narasago/komiser/services/cache"
 )
 
 type AzureHandler struct {

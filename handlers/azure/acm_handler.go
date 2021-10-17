@@ -2,10 +2,9 @@ package azure
 
 import (
 	"fmt"
-	//	"github.com/Azure-Samples/azure-sdk-for-go-samples/internal/config"
 	"net/http"
 
-	"github.com/mlabouardy/komiser/handlers/config"
+	"github.com/narasago/komiser/handlers/azure/config"
 )
 
 func (handler *AzureHandler) APIGatewayListCertificatesHandler(w http.ResponseWriter, r *http.Request) {
