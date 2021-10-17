@@ -2,8 +2,9 @@ package azure
 
 import (
 	"context"
-	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2020-12-01/web"
 	"time"
+
+	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2020-12-01/web"
 )
 
 func getCertificatesClient(subscriptionID string) web.CertificatesClient {
@@ -29,8 +30,9 @@ func (azure Azure) ListCertificates(subscriptionID string) (int64, error) {
 			return sum, err
 		}
 
-		return sum, nil
+		//return sum, nil
 	}
+	return sum, nil
 }
 
 func (azure Azure) ListExpiredCertificates(subscriptionID string) (int64, error) {
@@ -64,6 +66,7 @@ func (azure Azure) ListExpiredCertificates(subscriptionID string) (int64, error)
 			return sum, err
 		}
 
-		return sum, nil
+		//return sum, nil
 	}
+	return sum, nil
 }
