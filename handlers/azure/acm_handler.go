@@ -28,7 +28,7 @@ func (handler *AzureHandler) APIGatewayListCertificatesHandler(w http.ResponseWr
 	}
 }
 
-func (handler *AzureHandler) APIGatewayListExpiredCertificatesHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *AzureHandler) APIGatewayExpiredCertificatesHandler(w http.ResponseWriter, r *http.Request) {
 	err := config.ParseEnvironment()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't parse environment")
