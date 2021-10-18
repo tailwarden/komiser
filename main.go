@@ -14,8 +14,9 @@ import (
 	. "github.com/mlabouardy/komiser/handlers/gcp"
 	. "github.com/mlabouardy/komiser/handlers/ovh"
 	. "github.com/mlabouardy/komiser/services/cache"
-	. "github.com/mlabouardy/komiser/services/ini"
-	. "github.com/narasago/komiser/handlers/azure"
+
+	//	. "github.com/mlabouardy/komiser/services/ini"
+	. "github.com/mlabouardy/komiser/handlers/azure"
 	"github.com/urfave/cli"
 )
 
@@ -34,8 +35,6 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	azureHandler := NewAzureHandler(cache)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/azure/acm/certificates", azureHandler.APIGatewayListCertificatesHandler)
-	r.HandleFunc("/azure/acm/expired", azureHandler.APIGatewayExpiredCertificatesHandler)
 
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
 	r.HandleFunc("/aws/iam/users", awsHandler.IAMUsersHandler)
@@ -191,6 +190,9 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/digitalocean/records", digitaloceanHandler.RecordsHandler)
 	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
 	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
+
+	r.HandleFunc("/azure/acm/certificates", azureHandler.APIGatewayListCertificatesHandler)
+	//	r.HandleFunc("/azure/acm/expired", azureHandler.APIGatewayExpiredCertificatesHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 

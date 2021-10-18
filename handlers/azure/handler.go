@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	. "github.com/narasago/komiser/services/azure"
+	. "github.com/mlabouardy/komiser/services/azure"
 	. "github.com/narasago/komiser/services/cache"
 )
 
@@ -16,7 +16,7 @@ type AzureHandler struct {
 
 func NewAzureHandler(cache Cache) *AzureHandler {
 	azureHandler := AzureHandler{
-		cache: Cache,
+		cache: cache,
 		azure: Azure{},
 	}
 

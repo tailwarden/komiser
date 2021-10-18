@@ -13,7 +13,7 @@ func (handler *AzureHandler) APIGatewayListCertificatesHandler(w http.ResponseWr
 		respondWithError(w, http.StatusInternalServerError, "Couldn't parse environment")
 	}
 	subscriptionID := config.SubscriptionID()
-	key := fmt.Printf("azure.%s.acm.certificates", subscriptionID)
+	key := fmt.Sprintf("azure.%s.acm.certificates", subscriptionID)
 	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
@@ -34,7 +34,7 @@ func (handler *AzureHandler) APIGatewayListExpiredCertificatesHandler(w http.Res
 		respondWithError(w, http.StatusInternalServerError, "Couldn't parse environment")
 	}
 	subscriptionID := config.SubscriptionID()
-	key := fmt.Printf("azure.%s.acm.expired", subscriptionID)
+	key := fmt.Sprintf("azure.%s.acm.expired", subscriptionID)
 	response, found := handler.cache.Get(key)
 	if found {
 		respondWithJSON(w, 200, response)
