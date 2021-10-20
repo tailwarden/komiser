@@ -22,8 +22,12 @@ func getVMClient(subscriptionID string) compute.VirtualMachinesClient {
 func getGroups(subscriptionID string) ([]string, error) {
 	tab := make([]string, 0)
 	var err error
-
+	a, err := auth.NewAuthorizerFromEnvironment()
+	if err != nil {
+		panic(err)
+	}
 	grClient := resources.NewGroupsClient(subscriptionID)
+	grClient.Authorizer = a
 	for list, err := grClient.ListComplete(context.Background(), "", nil); list.NotDone(); err = list.Next() {
 		if err != nil {
 			return nil, errors.Wrap(err, "error traverising RG list")
