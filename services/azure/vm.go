@@ -11,7 +11,12 @@ import (
 )
 
 func getVMClient(subscriptionID string) compute.VirtualMachinesClient {
+	a, err := auth.NewAuthorizerFromEnvironment()
+	if err != nil {
+		panic(err)
+	}
 	vmClient := compute.NewVirtualMachinesClient(subscriptionID)
+	vmClient.Authorizer = a
 	return vmClient
 }
 
@@ -20,12 +25,6 @@ func getGroups(subscriptionID string) ([]string, error) {
 	var err error
 
 	grClient := resources.NewGroupsClient(subscriptionID)
-	a, err := auth.NewAuthorizerFromEnvironment()
-	if err != nil {
-		panic(err)
-	}
-	grClient.Authorizer = a
-
 	for list, err := grClient.ListComplete(context.Background(), "", nil); list.NotDone(); err = list.Next() {
 		if err != nil {
 			return nil, errors.Wrap(err, "error traverising RG list")
@@ -44,14 +43,9 @@ type Vm struct {
 }
 
 func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
-	a, err := auth.NewAuthorizerFromEnvironment()
-	if err != nil {
-		panic(err)
-	}
 	vmClient := getVMClient(subscriptionID)
-	vmClient.Authorizer = a
 	var filter string
-	groups, err := getGroups(subscriptionID)
+	groups, _ := getGroups(subscriptionID)
 	for _, group := range groups {
 		log.Println(group)
 	}
