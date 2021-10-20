@@ -5,12 +5,35 @@ import (
 	"log"
 
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2020-12-01/compute"
+	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2020-06-01/resources"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
+	"github.com/pkg/errors"
 )
 
 func getVMClient(subscriptionID string) compute.VirtualMachinesClient {
 	vmClient := compute.NewVirtualMachinesClient(subscriptionID)
 	return vmClient
+}
+
+func getGroups(subscriptionID string) ([]string, error) {
+	tab := make([]string, 0)
+	var err error
+
+	grClient := resources.NewGroupsClient(subscriptionID)
+	a, err := auth.NewAuthorizerFromEnvironment()
+	if err != nil {
+		panic(err)
+	}
+	grClient.Authorizer = a
+
+	for list, err := grClient.ListComplete(context.Background(), "", nil); list.NotDone(); err = list.Next() {
+		if err != nil {
+			return nil, errors.Wrap(err, "error traverising RG list")
+		}
+		rgName := *list.Value().Name
+		tab = append(tab, rgName)
+	}
+	return tab, err
 }
 
 type Vm struct {
@@ -28,11 +51,14 @@ func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
 	vmClient := getVMClient(subscriptionID)
 	vmClient.Authorizer = a
 	var filter string
+	groups, err := getGroups(subscriptionID)
+	for _, group := range groups {
+		log.Println(group)
+	}
+	//TODO Move below into new function and call using goroutine
 	filter = "myResourceGroup"
 	listOfVms := make([]Vm, 0)
 	ctx := context.Background()
-	vm, _ := vmClient.ListComplete(ctx, filter)
-	log.Println(vm)
 	for vm, _ := vmClient.ListComplete(ctx, filter); vm.NotDone(); vm.Next() {
 		i := vm.Value()
 		listOfVms = append(listOfVms, Vm{
