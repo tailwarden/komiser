@@ -10,17 +10,17 @@ import (
 )
 
 func getCertificatesClient(subscriptionID string) web.CertificatesClient {
-	certClient := web.NewCertificatesClient(subscriptionID)
-	return certClient
-}
-
-func (azure Azure) ListCertificates(subscriptionID string) (int64, error) {
 	a, err := auth.NewAuthorizerFromEnvironment()
 	if err != nil {
 		panic(err)
 	}
+	certClient := web.NewCertificatesClient(subscriptionID)
+	certClient.Authorizer = a
+	return certClient
+}
+
+func (azure Azure) ListCertificates(subscriptionID string) (int64, error) {
 	certsClient := getCertificatesClient(subscriptionID)
-	certsClient.Authorizer = a
 	var filter string
 	var sum int64
 	ctx := context.Background()
