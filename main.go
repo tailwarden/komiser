@@ -193,6 +193,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 
 	r.HandleFunc("/azure/acm/certificates", azureHandler.APIGatewayListCertificatesHandler)
 	r.HandleFunc("/azure/acm/expired", azureHandler.APIGatewayExpiredCertificatesHandler)
+	r.HandleFunc("/azure/compute/vm", azureHandler.VMHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
