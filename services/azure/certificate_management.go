@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2020-12-01/web"
+	"github.com/Azure/go-autorest/autorest/azure/auth"
 )
 
 func getCertificatesClient(subscriptionID string) web.CertificatesClient {
@@ -14,11 +15,15 @@ func getCertificatesClient(subscriptionID string) web.CertificatesClient {
 }
 
 func (azure Azure) ListCertificates(subscriptionID string) (int64, error) {
+	a, err := auth.NewAuthorizerFromEnvironment()
+	if err != nil {
+		panic(err)
+	}
 	certsClient := getCertificatesClient(subscriptionID)
+	certsClient.Authorizer = a
 	var filter string
 	var sum int64
 	ctx := context.Background()
-	//certificateCollectionPage, err := certsClient.List(ctx, filter)
 	for cert, err := certsClient.ListComplete(ctx, filter); cert.NotDone(); cert.Next() {
 		if err != nil {
 			log.Print("got error while traverising", err)
