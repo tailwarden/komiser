@@ -39,10 +39,10 @@ func getGroups(subscriptionID string) ([]string, error) {
 }
 
 type Vm struct {
+	Name   string `json:"name"`
 	Image  string `json:"image"`
 	Region string `json:"region"`
-	Status string `json:"status"`
-	Disk   int    `json:"disk"`
+	Disk   int32  `json:"disk"`
 }
 
 func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
@@ -54,10 +54,10 @@ func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
 		for vm, _ := vmClient.ListComplete(ctx, group); vm.NotDone(); vm.Next() {
 			i := vm.Value()
 			listOfVms = append(listOfVms, Vm{
-				Disk:   50,
-				Image:  *i.Name,
-				Status: *i.Name,
-				Region: *i.Name,
+				Name:   *i.Name,
+				Disk:   *i.StorageProfile.OsDisk.DiskSizeGB,
+				Image:  *i.StorageProfile.ImageReference.Offer,
+				Region: *i.Location,
 			})
 
 		}
