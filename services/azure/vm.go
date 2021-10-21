@@ -6,6 +6,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2020-12-01/compute"
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2020-06-01/resources"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
+	. "github.com/mlabouardy/komiser/models/azure"
 	"github.com/pkg/errors"
 )
 
@@ -38,13 +39,6 @@ func getGroups(subscriptionID string) ([]string, error) {
 	return tab, err
 }
 
-type Vm struct {
-	Image  string `json:"image"`
-	Region string `json:"region"`
-	Status string `json:"status"`
-	Disk   int    `json:"disk"`
-}
-
 func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
 	vmClient := getVMClient(subscriptionID)
 	groups, _ := getGroups(subscriptionID)
@@ -54,13 +48,32 @@ func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
 		for vm, _ := vmClient.ListComplete(ctx, group); vm.NotDone(); vm.Next() {
 			i := vm.Value()
 			listOfVms = append(listOfVms, Vm{
-				Disk:   50,
-				Image:  *i.Name,
-				Status: *i.Name,
-				Region: *i.Name,
+				Name:   *i.Name,
+				Disk:   *i.StorageProfile.OsDisk.DiskSizeGB,
+				Image:  *i.StorageProfile.ImageReference.Offer,
+				Region: *i.Location,
 			})
 
 		}
 	}
 	return listOfVms, nil
+}
+
+func (azure Azure) GetDisks(subscriptionID string) ([]Disk, error) {
+	listOfDisks := make([]Disk, 0)
+	a, err := auth.NewAuthorizerFromEnvironment()
+	if err != nil {
+		panic(err)
+	}
+	disksClient := compute.NewDisksClient(subscriptionID)
+	disksClient.Authorizer = a
+	ctx := context.Background()
+	for disk, _ := disksClient.ListComplete(ctx); disk.NotDone(); disk.Next() {
+		i := disk.Value()
+		listOfDisks = append(listOfDisks, Disk{
+			SizeGb: int64(*i.DiskSizeGB),
+			Status: "Active",
+		})
+	}
+	return listOfDisks, nil
 }
