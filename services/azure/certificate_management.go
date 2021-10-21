@@ -37,7 +37,7 @@ func (azure Azure) ListExpiredCertificates(subscriptionID string) (int64, error)
 	certsClient := getCertificatesClient(subscriptionID)
 	var filter string
 	var sum int64
-	var Count int64
+	var count int64
 	var expiredCertCount int64
 	ctx := context.Background()
 	for cert, err := certsClient.ListComplete(ctx, filter); cert.NotDone(); cert.Next() {
@@ -53,8 +53,8 @@ func (azure Azure) ListExpiredCertificates(subscriptionID string) (int64, error)
 		} else {
 			expiredCertCount++
 		}
-		Count = Count + 1
+		count = count + 1
 	}
-	sum += Count - expiredCertCount
+	sum += count - expiredCertCount
 	return sum, nil
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/narasago/komiser/handlers/azure/config"
+	"github.com/mlabouardy/komiser/handlers/azure/config"
 )
 
 func (handler *AzureHandler) VMHandler(w http.ResponseWriter, r *http.Request) {

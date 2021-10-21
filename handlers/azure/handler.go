@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	. "github.com/mlabouardy/komiser/services/azure"
-	. "github.com/narasago/komiser/services/cache"
+	. "github.com/mlabouardy/komiser/services/cache"
 )
 
 type AzureHandler struct {
