@@ -1,16 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DigitaloceanComponent } from './digitalocean.component';
+import { DigitaloceanComponent } from './azure.component';
 
-describe('DigitaloceanComponent', () => {
+describe("DigitaloceanComponent", () => {
   let component: DigitaloceanComponent;
   let fixture: ComponentFixture<DigitaloceanComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DigitaloceanComponent ]
-    })
-    .compileComponents();
+      declarations: [DigitaloceanComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('DigitaloceanComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
