@@ -9,23 +9,31 @@ import { Subscription } from 'rxjs';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { AzureService } from '../../azure.service';
+import { DigitaloceanService } from '../../digitalocean.service';
 import { StoreService } from '../../store.service';
 
 declare var Chart: any;
 
 @Component({
-  selector: "azure-dashboard",
+  selector: "azure-compute",
   templateUrl: "./azure.component.html",
   styleUrls: ["./azure.component.css"],
 })
-export class AzureDashboardComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
-  public projects: number;
-  public usedRegions: number;
+export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
+  public kubernetesClusters: number;
+  public kubernetesNodes: number;
+  public activeDroplets: number;
+  public offDroplets: number;
+  public archivedDroplets: number;
 
-  public loadingProjects: boolean = true;
-  public loadingUsedRegions: boolean = true;
+  public images: any = {};
+
+  public loadingKubernetesClusters: boolean;
+  public loadingKubernetesNodes: boolean;
+  public loadingArchivedDroplets: boolean;
+  public loadingOffDroplets: boolean;
+  public loadingActiveDroplets: boolean;
+  public loadingImages: boolean = true;
 
   private regions: Map<string, any> = new Map<string, any>([
     ["nyc", { latitude: "40.712776", longitude: "-74.005974" }],
@@ -42,7 +50,8 @@ export class AzureDashboardComponent
 
   constructor(
     private azureService: AzureService,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private digitaloceanService: DigitaloceanService
   ) {
     this.initState();
 
@@ -60,43 +69,103 @@ export class AzureDashboardComponent
   ngOnInit() {}
 
   private initState() {
-    this.projects = 0;
-    this.usedRegions = 0;
-
-    this.loadingProjects = true;
-    this.loadingUsedRegions = true;
-
-    this.azureService.getProjects().subscribe(
-      (data) => {
-        this.projects = data;
-        this.loadingProjects = false;
-      },
-      (err) => {
-        this.loadingProjects = false;
-        this.projects = 0;
-      }
-    );
+    this.images = {
+      ubuntu: 0,
+      bsd: 0,
+      debian: 0,
+      fedora: 0,
+      centos: 0,
+    };
+    this.kubernetesClusters = 0;
+    this.kubernetesNodes = 0;
+    this.activeDroplets = 0;
+    this.offDroplets = 0;
+    this.archivedDroplets = 0;
+    this.loadingActiveDroplets = true;
+    this.loadingArchivedDroplets = true;
+    this.loadingOffDroplets = true;
+    this.loadingKubernetesClusters = true;
+    this.loadingKubernetesNodes = true;
+    this.loadingImages = true;
 
     this.azureService.getDroplets().subscribe(
       (data) => {
+        data.forEach((droplet) => {
+          if (droplet.status == "active") {
+            this.activeDroplets++;
+          } else if (droplet.status == "off") {
+            this.offDroplets++;
+          } else {
+            this.archivedDroplets++;
+          }
+
+          switch (droplet.image) {
+            case "Ubuntu":
+              this.images.ubuntu++;
+              break;
+            case "CentOS":
+              this.images.centos++;
+              break;
+            case "FreeBSD":
+              this.images.bsd++;
+              break;
+            case "Debian":
+              this.images.debian++;
+              break;
+            case "Fedora":
+              this.images.fedora++;
+              break;
+          }
+        });
+        this.loadingActiveDroplets = false;
+        this.loadingArchivedDroplets = false;
+        this.loadingOffDroplets = false;
+        this.loadingImages = false;
+      },
+      (err) => {
+        this.activeDroplets = 0;
+        this.offDroplets = 0;
+        this.archivedDroplets = 0;
+        this.loadingActiveDroplets = false;
+        this.loadingArchivedDroplets = false;
+        this.loadingOffDroplets = false;
+        this.images = {
+          ubuntu: 0,
+          bsd: 0,
+          debian: 0,
+          fedora: 0,
+          centos: 0,
+        };
+        this.loadingImages = false;
+      }
+    );
+
+    this.digitaloceanService.getKubernetesClusters().subscribe(
+      (data) => {
+        this.kubernetesClusters = data.length;
+        data.forEach((cluster) => {
+          this.kubernetesNodes += cluster.nodes;
+        });
+        this.loadingKubernetesClusters = false;
+        this.loadingKubernetesNodes = false;
+
         let _usedRegions = new Map<string, number>();
         let plots = {};
         let scope = this;
 
-        data.forEach((droplet) => {
-          let region = droplet.region.substring(0, droplet.region.length - 1);
+        data.forEach((cluster) => {
+          let region = cluster.region.substring(0, cluster.region.length - 1);
           _usedRegions[region] =
             (_usedRegions[region] ? _usedRegions[region] : 0) + 1;
         });
 
         for (var region in _usedRegions) {
-          this.usedRegions++;
           plots[region] = {
             latitude: scope.regions.get(region).latitude,
             longitude: scope.regions.get(region).longitude,
             value: [_usedRegions[region], 1],
             tooltip: {
-              content: `${region}<br />Droplets: ${_usedRegions[region]}`,
+              content: `${region}<br />Clusters: ${_usedRegions[region]}`,
             },
           };
         }
@@ -113,27 +182,28 @@ export class AzureDashboardComponent
               latitude: this.regions.get(region).latitude,
               longitude: this.regions.get(region).longitude,
               value: [_usedRegions[region], 0],
-              tooltip: { content: `${region}<br />Droplets: 0` },
+              tooltip: { content: `${region}<br />Clusters: 0` },
             };
           }
         });
 
-        this.loadingUsedRegions = false;
-        this.showDropletsPerRegion(plots);
+        this.showKubernetesClustersPerRegion(plots);
       },
       (err) => {
-        this.loadingUsedRegions = false;
-        this.usedRegions = 0;
+        this.kubernetesClusters = 0;
+        this.kubernetesNodes = 0;
+        this.loadingKubernetesClusters = false;
+        this.loadingKubernetesNodes = false;
       }
     );
   }
 
   ngAfterViewInit(): void {
-    this.showDropletsPerRegion({});
+    this.showKubernetesClustersPerRegion({});
   }
 
-  private showDropletsPerRegion(plots) {
-    var canvas: any = $(".mapregions");
+  private showKubernetesClustersPerRegion(plots) {
+    var canvas: any = $(".kubeclustersmap");
     canvas.mapael({
       map: {
         name: "world_countries",

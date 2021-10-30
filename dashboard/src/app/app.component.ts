@@ -6,6 +6,7 @@ import { not } from '@angular/compiler/src/output/output_ast';
 import { Component, OnDestroy } from '@angular/core';
 
 import { AwsService } from './aws.service';
+import { AzureService } from './azure.service';
 import { DigitaloceanService } from './digitalocean.service';
 import { GcpService } from './gcp.service';
 import { OvhService } from './ovh.service';
@@ -58,7 +59,8 @@ export class AppComponent implements OnDestroy {
     private gcpService: GcpService,
     private storeService: StoreService,
     private digitaloceanService: DigitaloceanService,
-    private ovhService: OvhService
+    private ovhService: OvhService,
+    private azureService: AzureService
   ) {
     this.providers["aws"] = {
       label: "Amazon Web Services",

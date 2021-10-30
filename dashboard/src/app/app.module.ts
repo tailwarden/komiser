@@ -10,7 +10,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AwsService } from './aws.service';
+import { AzureService } from './azure.service';
 import { AwsComputeComponent } from './compute/aws/aws.component';
+import { AzureComputeComponent } from './compute/azure/azure.component';
 import { ComputeComponent } from './compute/compute.component';
 import { DigitaloceanComputeComponent } from './compute/digitalocean/digitalocean.component';
 import { GcpComputeComponent } from './compute/gcp/gcp.component';
@@ -106,6 +108,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    AzureComputeComponent,
     ComputeComponent,
     DashboardComponent,
     StorageComponent,
@@ -162,6 +165,7 @@ const appRoutes: Routes = [
     GoogleAnalyticsService,
     GcpService,
     OvhService,
+    AzureService,
   ],
   bootstrap: [AppComponent],
 })
