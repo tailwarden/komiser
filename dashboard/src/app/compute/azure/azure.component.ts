@@ -91,7 +91,7 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.azureService.getDroplets().subscribe(
       (data) => {
         data.forEach((droplet) => {
-          if (droplet.status == "active") {
+          if (droplet.name == "myVM") {
             this.activeDroplets++;
           } else if (droplet.status == "off") {
             this.offDroplets++;
