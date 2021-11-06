@@ -39,24 +39,34 @@ func getGroups(subscriptionID string) ([]string, error) {
 	return tab, err
 }
 
-func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
+func (azure Azure) DescribeVMs(subscriptionID string) (map[string]interface{}, error) {
+	outputVMsPerRegion := make(map[string]int, 0)
+	outputVMsPerStatus := make(map[string]int, 0)
+	outputVMsPerFamily := make(map[string]int, 0)
 	vmClient := getVMClient(subscriptionID)
-	groups, _ := getGroups(subscriptionID)
-	listOfVms := make([]Vm, 0)
+	groups, err := getGroups(subscriptionID)
+	if err != nil {
+		return map[string]interface{}{}, err
+	}
+
 	ctx := context.Background()
 	for _, group := range groups {
-		for vm, _ := vmClient.ListComplete(ctx, group); vm.NotDone(); vm.Next() {
-			i := vm.Value()
-			listOfVms = append(listOfVms, Vm{
-				Name:   *i.Name,
-				Disk:   *i.StorageProfile.OsDisk.DiskSizeGB,
-				Image:  *i.StorageProfile.ImageReference.Offer,
-				Region: *i.Location,
-			})
+		for vmItr, err := vmClient.ListComplete(ctx, group); vmItr.NotDone(); vmItr.Next() {
+			if err != nil {
+				return map[string]interface{}{}, err
+			}
+			vm := vmItr.Value()
+			outputVMsPerStatus[vm.Status]++
+			outputVMsPerRegion[*vm.Location]++
+			outputVMsPerFamily[*vm.Type]++
 
 		}
 	}
-	return listOfVms, nil
+	return map[string]interface{}{
+		"region":  outputVMsPerRegion,
+		"status":  outputVMsPerStatus,
+		"familty": outputVMsPerFamily,
+	}, nil
 }
 
 func (azure Azure) GetDisks(subscriptionID string) ([]Disk, error) {
