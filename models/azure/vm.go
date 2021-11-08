@@ -5,4 +5,5 @@ type Vm struct {
 	Image  string `json:"image"`
 	Region string `json:"region"`
 	Disk   int32  `json:"disk"`
+	Status string `json:"status"`
 }
