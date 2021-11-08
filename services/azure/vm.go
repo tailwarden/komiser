@@ -2,6 +2,7 @@ package azure
 
 import (
 	"context"
+	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2020-12-01/compute"
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2020-06-01/resources"
@@ -54,14 +55,29 @@ func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {
 				return vms, err
 			}
 			vm := vmItr.Value()
-			vms = append(vms, Vm{
-				Name:   *vm.Name,
-				Disk:   *vm.StorageProfile.OsDisk.DiskSizeGB,
-				Image:  *vm.StorageProfile.ImageReference.Sku,
-				Region: *vm.Location,
-				Status: *vm.ProvisioningState,
-			})
-
+			vmInstanceView, _ := vmClient.InstanceView(ctx, group, *vm.Name)
+			var status string
+			for _, vmStatus := range *vmInstanceView.Statuses {
+				if strings.HasPrefix(*vmStatus.Code, "PowerState") {
+					status = *vmStatus.DisplayStatus
+				}
+			}
+			if strings.Contains(status, "running") {
+				vms = append(vms, Vm{
+					Name:   *vm.Name,
+					Disk:   *vm.StorageProfile.OsDisk.DiskSizeGB,
+					Image:  *vm.StorageProfile.ImageReference.Offer,
+					Region: *vm.Location,
+					Status: status,
+				})
+			} else if strings.Contains(status, "deallocated") {
+				vms = append(vms, Vm{
+					Name:   *vm.Name,
+					Image:  *vm.StorageProfile.ImageReference.Offer,
+					Region: *vm.Location,
+					Status: status,
+				})
+			}
 		}
 	}
 	return vms, nil
