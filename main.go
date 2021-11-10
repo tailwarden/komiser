@@ -196,6 +196,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/azure/compute/vms", azureHandler.VMHandler)
 	r.HandleFunc("/azure/compute/disks", azureHandler.DiskHandler)
 	r.HandleFunc("/azure/resources/regions", azureHandler.SubscriptionHandler)
+	r.HandleFunc("/azure/managedclusters/clusters", azureHandler.ClusterHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
