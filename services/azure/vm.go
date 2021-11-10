@@ -96,7 +96,7 @@ func (azure Azure) GetDisks(subscriptionID string) ([]Disk, error) {
 		i := disk.Value()
 		listOfDisks = append(listOfDisks, Disk{
 			SizeGb: int64(*i.DiskSizeGB),
-			Status: "Active",
+			Status: string(i.DiskState),
 		})
 	}
 	return listOfDisks, nil
