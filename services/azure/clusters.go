@@ -31,6 +31,7 @@ func (azure Azure) DescribeManagedClusters(subscriptionID string) ([]Cluster, er
 			Name:              *cluster.Name,
 			NodeResourceGroup: *cluster.ManagedClusterProperties.NodeResourceGroup,
 			KubernetesVersion: *cluster.ManagedClusterProperties.KubernetesVersion,
+			Location:          *cluster.Location,
 		})
 	}
 	return clusters, nil
