@@ -22,17 +22,17 @@ declare var Chart: any;
 export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
   public kubernetesClusters: number;
   public kubernetesNodes: number;
-  public activeDroplets: number;
-  public offDroplets: number;
-  public archivedDroplets: number;
+  public activeVMs: number;
+  public offVMs: number;
+  public archivedVMs: number;
 
   public images: any = {};
 
   public loadingKubernetesClusters: boolean;
   public loadingKubernetesNodes: boolean;
-  public loadingArchivedDroplets: boolean;
-  public loadingOffDroplets: boolean;
-  public loadingActiveDroplets: boolean;
+  public loadingArchivedVMs: boolean;
+  public loadingOffVMs: boolean;
+  public loadingActiveVMs: boolean;
   public loadingImages: boolean = true;
 
   private regions: Map<string, any> = new Map<string, any>([
@@ -78,28 +78,28 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     this.kubernetesClusters = 0;
     this.kubernetesNodes = 0;
-    this.activeDroplets = 0;
-    this.offDroplets = 0;
-    this.archivedDroplets = 0;
-    this.loadingActiveDroplets = true;
-    this.loadingArchivedDroplets = true;
-    this.loadingOffDroplets = true;
+    this.activeVMs = 0;
+    this.offVMs = 0;
+    this.archivedVMs = 0;
+    this.loadingActiveVMs = true;
+    this.loadingArchivedVMs = true;
+    this.loadingOffVMs = true;
     this.loadingKubernetesClusters = true;
     this.loadingKubernetesNodes = true;
     this.loadingImages = true;
 
-    this.azureService.getDroplets().subscribe(
+    this.azureService.getVMs().subscribe(
       (data) => {
-        data.forEach((droplet) => {
-          if (droplet.name == "myVM") {
-            this.activeDroplets++;
-          } else if (droplet.status == "off") {
-            this.offDroplets++;
+        data.forEach((vm) => {
+          if (vm.name == "myVM") {
+            this.activeVMs++;
+          } else if (vm.status == "off") {
+            this.offVMs++;
           } else {
-            this.archivedDroplets++;
+            this.archivedVMs++;
           }
 
-          switch (droplet.image) {
+          switch (vm.image) {
             case "Ubuntu":
               this.images.ubuntu++;
               break;
@@ -117,18 +117,18 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
               break;
           }
         });
-        this.loadingActiveDroplets = false;
-        this.loadingArchivedDroplets = false;
-        this.loadingOffDroplets = false;
+        this.loadingActiveVMs = false;
+        this.loadingArchivedVMs = false;
+        this.loadingOffVMs = false;
         this.loadingImages = false;
       },
       (err) => {
-        this.activeDroplets = 0;
-        this.offDroplets = 0;
-        this.archivedDroplets = 0;
-        this.loadingActiveDroplets = false;
-        this.loadingArchivedDroplets = false;
-        this.loadingOffDroplets = false;
+        this.activeVMs = 0;
+        this.offVMs = 0;
+        this.archivedVMs = 0;
+        this.loadingActiveVMs = false;
+        this.loadingArchivedVMs = false;
+        this.loadingOffVMs = false;
         this.images = {
           ubuntu: 0,
           bsd: 0,
