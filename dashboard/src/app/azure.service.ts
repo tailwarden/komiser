@@ -40,7 +40,7 @@ export class AzureService {
         return Observable.throw(err.json().error);
       });
   }
-  public getDroplets() {
+  public getVMs() {
     return this.http
       .get(`${this.BASE_URL}/compute/vms`)
       .map((res) => {

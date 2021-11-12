@@ -77,14 +77,14 @@ export class AzureDashboardComponent
       }
     );
 
-    this.azureService.getDroplets().subscribe(
+    this.azureService.getVMs().subscribe(
       (data) => {
         let _usedRegions = new Map<string, number>();
         let plots = {};
         let scope = this;
 
-        data.forEach((droplet) => {
-          let region = droplet.region.substring(0, droplet.region.length - 1);
+        data.forEach((vm) => {
+          let region = vm.region.substring(0, vm.region.length - 1);
           _usedRegions[region] =
             (_usedRegions[region] ? _usedRegions[region] : 0) + 1;
         });
@@ -96,7 +96,7 @@ export class AzureDashboardComponent
             longitude: scope.regions.get(region).longitude,
             value: [_usedRegions[region], 1],
             tooltip: {
-              content: `${region}<br />Droplets: ${_usedRegions[region]}`,
+              content: `${region}<br />VMs: ${_usedRegions[region]}`,
             },
           };
         }
@@ -113,13 +113,13 @@ export class AzureDashboardComponent
               latitude: this.regions.get(region).latitude,
               longitude: this.regions.get(region).longitude,
               value: [_usedRegions[region], 0],
-              tooltip: { content: `${region}<br />Droplets: 0` },
+              tooltip: { content: `${region}<br />VMs: 0` },
             };
           }
         });
 
         this.loadingUsedRegions = false;
-        this.showDropletsPerRegion(plots);
+        this.showVMsPerRegion(plots);
       },
       (err) => {
         this.loadingUsedRegions = false;
@@ -129,10 +129,10 @@ export class AzureDashboardComponent
   }
 
   ngAfterViewInit(): void {
-    this.showDropletsPerRegion({});
+    this.showVMsPerRegion({});
   }
 
-  private showDropletsPerRegion(plots) {
+  private showVMsPerRegion(plots) {
     var canvas: any = $(".mapregions");
     canvas.mapael({
       map: {

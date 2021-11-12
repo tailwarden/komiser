@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DigitaloceanComponent } from './digitalocean.component';
+import { AzureComponent } from './azure.component';
 
-describe('DigitaloceanComponent', () => {
-  let component: DigitaloceanComponent;
-  let fixture: ComponentFixture<DigitaloceanComponent>;
+describe('AzureComponent', () => {
+  let component: AzureComponent;
+  let fixture: ComponentFixture<AzureComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DigitaloceanComponent ]
+      declarations: [ AzureComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DigitaloceanComponent);
+    fixture = TestBed.createComponent(AzureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
