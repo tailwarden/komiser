@@ -28,14 +28,21 @@ export class AzureDashboardComponent
   public loadingUsedRegions: boolean = true;
 
   private regions: Map<string, any> = new Map<string, any>([
-    ["nyc", { latitude: "40.712776", longitude: "-74.005974" }],
-    ["ams", { latitude: "52.370216", longitude: "4.895168" }],
+    ["eastus", { latitude: "37.3719", longitude: "-79.8164" }],
+    ["eastus2", { latitude: "36.6681", longitude: "-78.3889" }],
+    ["southcentralus", { latitude: "29.4167", longitude: "-98.5" }],
+    ["westus2", { latitude: "47.233", longitude: "-119.852" }],
+    ["westus3", { latitude: "33.448376", longitude: "-112.074036" }],
+    ["australiaeast", { latitude: "-33.86", longitude: "151.2094" }],
+    ["southeastasia", { latitude: "1.283", longitude: "103.833" }],
+    ["southeastasia", { latitude: "1.283", longitude: "103.833" }],
+   /* ["ams", { latitude: "52.370216", longitude: "4.895168" }],
     ["sfo", { latitude: "37.774929", longitude: "-122.419418" }],
     ["sgp", { latitude: "1.352083", longitude: "103.819839" }],
     ["lon", { latitude: "51.507351", longitude: "-0.127758" }],
     ["fra", { latitude: "50.110924", longitude: "8.682127" }],
     ["tor", { latitude: "43.653225", longitude: "-79.383186" }],
-    ["blr", { latitude: "12.971599", longitude: "77.594566" }],
+    ["blr", { latitude: "12.971599", longitude: "77.594566" }],*/
   ]);
 
   private _subscription: Subscription;
