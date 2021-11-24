@@ -51,6 +51,7 @@ import { GcpSecurityComponent } from './security/gcp/gcp.component';
 import { OvhSecurityComponent } from './security/ovh/ovh.component';
 import { SecurityComponent } from './security/security.component';
 import { AwsStorageComponent } from './storage/aws/aws.component';
+import { AzureStorageComponent } from './storage/azure/azure.component';
 import { DigitaloceanStorageComponent } from './storage/digitalocean/digitalocean.component';
 import { GcpStorageComponent } from './storage/gcp/gcp.component';
 import { OvhStorageComponent } from './storage/ovh/ovh.component';
@@ -122,6 +123,7 @@ const appRoutes: Routes = [
     AwsComputeComponent,
     GcpComputeComponent,
     AwsStorageComponent,
+    AzureStorageComponent,
     GcpStorageComponent,
     GcpNetworkComponent,
     AwsNetworkComponent,
