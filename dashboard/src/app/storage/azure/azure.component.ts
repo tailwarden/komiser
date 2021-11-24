@@ -11,14 +11,14 @@ import { StoreService } from '../../store.service';
 export class AzureStorageComponent implements OnInit, OnDestroy {
   public snapshotsNumber: number;
   public snapshotsSize: string;
-  public volumesNumber: number;
-  public volumesSize: string;
+  public disksNumber: number;
+  public disksSize: string;
   public mysqlInstances: number;
 
   public loadingSnapshotsNumber: boolean;
   public loadingSnapshotsSize: boolean;
-  public loadingVolumesNumber: boolean;
-  public loadingVolumesSize: boolean;
+  public loadingDisksNumber: boolean;
+  public loadingDisksSize: boolean;
   public loadingMySQLInstances: boolean;
 
   private _subscription: Subscription;
@@ -40,14 +40,14 @@ export class AzureStorageComponent implements OnInit, OnDestroy {
   private initState() {
     this.snapshotsNumber = 0;
     this.snapshotsSize = '0 KB';
-    this.volumesNumber = 0;
-    this.volumesSize = '0 KB';
+    this.disksNumber = 0;
+    this.disksSize = '0 KB';
     this.mysqlInstances = 0;
 
     this.loadingSnapshotsNumber = true;
     this.loadingSnapshotsSize = true;
-    this.loadingVolumesNumber = true;
-    this.loadingVolumesSize = true;
+    this.loadingDisksNumber = true;
+    this.loadingDisksSize = true;
     this.loadingMySQLInstances = true;
 
     this.azureService.getSnapshots().subscribe(data => {
@@ -67,19 +67,19 @@ export class AzureStorageComponent implements OnInit, OnDestroy {
     });
 
     this.azureService.getDisks().subscribe(data => {
-      this.volumesNumber = data.length;
+      this.disksNumber = data.length;
       let total = 0;
-      data.forEach(volume => {
-        total += volume.size;
+      data.forEach(disk => {
+        total += disk.size;
       });
-      this.volumesSize = this.bytesToSizeWithUnit(total * 1024 * 1024 * 1024);
-      this.loadingVolumesNumber = false;
-      this.loadingVolumesSize = false;
+      this.disksSize = this.bytesToSizeWithUnit(total * 1024 * 1024 * 1024);
+      this.loadingDisksNumber = false;
+      this.loadingDisksSize = false;
     }, err => {
-      this.volumesNumber = 0;
-      this.volumesSize = '0 KB';
-      this.loadingVolumesNumber = false;
-      this.loadingVolumesSize = false;
+      this.disksNumber = 0;
+      this.disksSize = '0 KB';
+      this.loadingDisksNumber = false;
+      this.loadingDisksSize = false;
     });
 
   }

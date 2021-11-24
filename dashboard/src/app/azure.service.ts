@@ -76,4 +76,16 @@ export class AzureService {
         return Observable.throw(err.json().error);
       })
   }
+  public getKubernetesClusters() {
+    return this.http
+      .get(`${this.BASE_URL}/managedclusters/clusters`)
+      .map((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        let payload = JSON.parse(err._body);
+        if (payload && payload.error) this.storeService.add(payload.error);
+        return Observable.throw(err.json().error);
+      })
+  }
 }

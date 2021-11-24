@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { AzureService } from '../../azure.service';
-import { DigitaloceanService } from '../../digitalocean.service';
 import { StoreService } from '../../store.service';
 
 declare var Chart: any;
@@ -50,8 +49,7 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private azureService: AzureService,
-    private storeService: StoreService,
-    private digitaloceanService: DigitaloceanService
+    private storeService: StoreService
   ) {
     this.initState();
 
@@ -91,9 +89,9 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.azureService.getVMs().subscribe(
       (data) => {
         data.forEach((vm) => {
-          if (vm.name == "myVM") {
+          if (vm.status.includes("running")) {
             this.activeVMs++;
-          } else if (vm.status == "off") {
+          } else if (vm.status.includes("deallocated")) {
             this.offVMs++;
           } else {
             this.archivedVMs++;
@@ -140,7 +138,7 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     );
 
-    this.digitaloceanService.getKubernetesClusters().subscribe(
+    this.azureService.getKubernetesClusters().subscribe(
       (data) => {
         this.kubernetesClusters = data.length;
         data.forEach((cluster) => {
