@@ -198,6 +198,9 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/azure/resources/regions", azureHandler.SubscriptionHandler)
 	r.HandleFunc("/azure/managedclusters/clusters", azureHandler.ClusterHandler)
 	r.HandleFunc("/azure/compute/snapshots", azureHandler.SnapshotHandler)
+	r.HandleFunc("/azure/storage/mysqls", azureHandler.MySQLHandler)
+	r.HandleFunc("/azure/storage/postgresqls", azureHandler.PostgreSQLHandler)
+	r.HandleFunc("/azure/storage/redis", azureHandler.RedisHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
