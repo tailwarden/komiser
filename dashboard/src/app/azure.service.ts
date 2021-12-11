@@ -11,18 +11,6 @@ import { StoreService } from './store.service';
 export class AzureService {
   private BASE_URL = "/azure";
   constructor(private http: Http, private storeService: StoreService) {}
-  public getRDSInstances() {
-    return this.http
-      .get(`${this.BASE_URL}/rds/instances`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        let payload = JSON.parse(err._body);
-        if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
-  }
   private getHeaders() {
     let headers = new Headers();
     headers.append("profile", localStorage.getItem("profile"));
@@ -87,5 +75,41 @@ export class AzureService {
         if (payload && payload.error) this.storeService.add(payload.error);
         return Observable.throw(err.json().error);
       })
+  }
+  public getMySQLs() {
+    return this.http
+       .get(`${this.BASE_URL}/storage/mysqls`)
+       .map((res) => {
+         return res.json();
+       })
+       .catch((err) => {
+         let payload = JSON.parse(err._body);
+         if (payload && payload.error) this.storeService.add(payload.error);
+         return Observable.throw(err.json().error);
+       })
+  }
+  public getPostgreSQLs() {
+    return this.http
+       .get(`${this.BASE_URL}/storage/postgresqls`)
+       .map((res) => {
+         return res.json();
+       })
+       .catch((err) => {
+         let payload = JSON.parse(err._body);
+         if (payload && payload.error) this.storeService.add(payload.error);
+         return Observable.throw(err.json().error);
+       })
+  }
+  public getRedisInstances() {
+    return this.http
+       .get(`${this.BASE_URL}/storage/redis`)
+       .map((res) => {
+         return res.json();
+       })
+       .catch((err) => {
+         let payload = JSON.parse(err._body);
+         if (payload && payload.error) this.storeService.add(payload.error);
+         return Observable.throw(err.json().error);
+       })
   }
 }

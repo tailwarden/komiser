@@ -14,12 +14,16 @@ export class AzureStorageComponent implements OnInit, OnDestroy {
   public disksNumber: number;
   public disksSize: string;
   public mysqlInstances: number;
+  public myPostgreSQLInstances: number;
+  public myRedisInstances: number;
 
   public loadingSnapshotsNumber: boolean;
   public loadingSnapshotsSize: boolean;
   public loadingDisksNumber: boolean;
   public loadingDisksSize: boolean;
   public loadingMySQLInstances: boolean;
+  public loadingMyPostgreSQLInstances: boolean;
+  public loadingMyRedisInstances: boolean;
 
   private _subscription: Subscription;
 
@@ -43,12 +47,16 @@ export class AzureStorageComponent implements OnInit, OnDestroy {
     this.disksNumber = 0;
     this.disksSize = '0 KB';
     this.mysqlInstances = 0;
+    this.myPostgreSQLInstances = 0;
+    this.myRedisInstances = 0;
 
     this.loadingSnapshotsNumber = true;
     this.loadingSnapshotsSize = true;
     this.loadingDisksNumber = true;
     this.loadingDisksSize = true;
     this.loadingMySQLInstances = true;
+    this.loadingMyPostgreSQLInstances = true;
+    this.loadingMyRedisInstances = true;
 
     this.azureService.getSnapshots().subscribe(data => {
       this.snapshotsNumber = data.length;
@@ -80,6 +88,30 @@ export class AzureStorageComponent implements OnInit, OnDestroy {
       this.disksSize = '0 KB';
       this.loadingDisksNumber = false;
       this.loadingDisksSize = false;
+    });
+
+    this.azureService.getMySQLs().subscribe(data => {
+      this.mysqlInstances = data.length;
+      this.loadingMySQLInstances = false;
+    }, err => {
+      this.mysqlInstances = 0;
+      this.loadingMySQLInstances = false;
+    });
+
+    this.azureService.getPostgreSQLs().subscribe(data => {
+      this.myPostgreSQLInstances = data.length;
+      this.loadingMyPostgreSQLInstances = false;
+    }, err => {
+      this.myPostgreSQLInstances = 0;
+      this.loadingMyPostgreSQLInstances = false;
+    });
+
+    this.azureService.getRedisInstances().subscribe(data => {
+      this.myRedisInstances = data.length;
+      this.loadingMyRedisInstances = false;
+    }, err => {
+      this.myRedisInstances = 0;
+      this.loadingMyRedisInstances = false;
     });
 
   }
