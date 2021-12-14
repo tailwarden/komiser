@@ -22,7 +22,7 @@ func getVMClient(subscriptionID string) compute.VirtualMachinesClient {
 }
 
 func getGroups(subscriptionID string) ([]string, error) {
-	tab := make([]string, 0)
+	groups := make([]string, 0)
 	var err error
 	a, err := auth.NewAuthorizerFromEnvironment()
 	if err != nil {
@@ -35,9 +35,9 @@ func getGroups(subscriptionID string) ([]string, error) {
 			return nil, errors.Wrap(err, "error traverising RG list")
 		}
 		rgName := *list.Value().Name
-		tab = append(tab, rgName)
+		groups = append(groups, rgName)
 	}
-	return tab, err
+	return groups, err
 }
 
 func (azure Azure) DescribeVMs(subscriptionID string) ([]Vm, error) {

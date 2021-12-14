@@ -201,6 +201,8 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/azure/storage/mysqls", azureHandler.MySQLHandler)
 	r.HandleFunc("/azure/storage/postgresqls", azureHandler.PostgreSQLHandler)
 	r.HandleFunc("/azure/storage/redis", azureHandler.RedisHandler)
+	r.HandleFunc("/azure/security/firewalls", azureHandler.FirewallsHandler)
+	r.HandleFunc("/azure/network/publicips", azureHandler.PublicIPHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
