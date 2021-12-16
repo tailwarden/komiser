@@ -203,6 +203,14 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/azure/storage/redis", azureHandler.RedisHandler)
 	r.HandleFunc("/azure/security/firewalls", azureHandler.FirewallsHandler)
 	r.HandleFunc("/azure/network/publicips", azureHandler.PublicIPHandler)
+	r.HandleFunc("/azure/network/loadbalancers", azureHandler.LoadBalancersHandler)
+	r.HandleFunc("/azure/security/profiles", azureHandler.ProfilesHandler)
+	r.HandleFunc("/azure/security/securitygroups", azureHandler.SecurityGroupsHandler)
+	r.HandleFunc("/azure/security/securityrules", azureHandler.SecurityRulesHandler)
+	r.HandleFunc("/azure/network/routetables", azureHandler.RouteTablesHandler)
+	r.HandleFunc("/azure/network/virtualnetworks", azureHandler.VirtualNetworksHandler)
+	r.HandleFunc("/azure/network/subnets", azureHandler.SubnetsHandler)
+	r.HandleFunc("/azure/network/dnszones", azureHandler.DNSZonesHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 

@@ -18,14 +18,14 @@ func getAzureFirewallsClient(subscriptionID string) network.AzureFirewallsClient
 }
 
 func (azure Azure) GetFirewallsCount(subscriptionID string) (int, error) {
-	var fwCount int 
+	var fwCount int
 	azureFirewallsClient := getAzureFirewallsClient(subscriptionID)
 	ctx := context.Background()
 	rGroups, err := getGroups(subscriptionID)
 	if err != nil {
-      return fwCount, err
+		return fwCount, err
 	}
-	for _, rGroup := rGroups {
+	for _, rGroup := range rGroups {
 		for fwItr, err := azureFirewallsClient.ListComplete(ctx, rGroup); fwItr.NotDone(); fwItr.Next() {
 			if err != nil {
 				return fwCount, err
