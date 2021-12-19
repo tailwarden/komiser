@@ -41,7 +41,7 @@ func (handler *AzureHandler) APIGatewayExpiredCertificatesHandler(w http.Respons
 	} else {
 		response, err := handler.azure.ListExpiredCertificates(subscriptionID)
 		if err != nil {
-			respondWithError(w, http.StatusInternalServerError, "acm:ListCertificates is missing")
+			respondWithError(w, http.StatusInternalServerError, "acm:ListExpiredCertificates is missing")
 		} else {
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
