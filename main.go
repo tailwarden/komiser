@@ -211,6 +211,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/azure/network/virtualnetworks", azureHandler.VirtualNetworksHandler)
 	r.HandleFunc("/azure/network/subnets", azureHandler.SubnetsHandler)
 	r.HandleFunc("/azure/network/dnszones", azureHandler.DNSZonesHandler)
+	r.HandleFunc("/azure/billing/total", azureHandler.InvoiceHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
