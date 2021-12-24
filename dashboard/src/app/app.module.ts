@@ -35,6 +35,7 @@ import { GcpLimitsComponent } from './limits/gcp/gcp.component';
 import { LimitsComponent } from './limits/limits.component';
 import { OvhLimitsComponent } from './limits/ovh/ovh.component';
 import { AwsNetworkComponent } from './network/aws/aws.component';
+import { AzureNetworkComponent } from './network/azure/azure.component';
 import { DigitaloceanNetworkComponent } from './network/digitalocean/digitalocean.component';
 import { GcpNetworkComponent } from './network/gcp/gcp.component';
 import { NetworkComponent } from './network/network.component';
@@ -46,6 +47,7 @@ import { GcpProfileComponent } from './profile/gcp/gcp.component';
 import { OvhProfileComponent } from './profile/ovh/ovh.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AwsSecurityComponent } from './security/aws/aws.component';
+import { AzureSecurityComponent } from './security/azure/azure.component';
 import { DigitaloceanSecurityComponent } from './security/digitalocean/digitalocean.component';
 import { GcpSecurityComponent } from './security/gcp/gcp.component';
 import { OvhSecurityComponent } from './security/ovh/ovh.component';
@@ -127,7 +129,9 @@ const appRoutes: Routes = [
     GcpStorageComponent,
     GcpNetworkComponent,
     AwsNetworkComponent,
+    AzureNetworkComponent,
     AwsSecurityComponent,
+    AzureSecurityComponent,
     GcpSecurityComponent,
     GcpDataAndAIComponent,
     AwsDataAndAIComponent,
