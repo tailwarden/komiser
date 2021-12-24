@@ -73,17 +73,6 @@ export class AzureDashboardComponent
     this.loadingProjects = true;
     this.loadingUsedRegions = true;
 
-    this.azureService.getProjects().subscribe(
-      (data) => {
-        this.projects = data;
-        this.loadingProjects = false;
-      },
-      (err) => {
-        this.loadingProjects = false;
-        this.projects = 0;
-      }
-    );
-
     this.azureService.getVMs().subscribe(
       (data) => {
         let _usedRegions = new Map<string, number>();
