@@ -51,6 +51,26 @@
       </div>
     </div>
   </div>
+  <div class="col-md-3">
+    <div class="card card-stats">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-5">
+            <div class="icon-big text-center">
+              <i class="la la-money"></i>
+            </div>
+          </div>
+          <div class="col-7 d-flex align-items-center">
+            <div class="numbers">
+              <p class="card-category">Bill</p>
+              <h4 class="card-title" *ngIf="!loadingTotalBill">$ {{formatNumber(totalBill)}}</h4>
+              <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingTotalBill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
