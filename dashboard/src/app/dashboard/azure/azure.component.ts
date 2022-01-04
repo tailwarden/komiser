@@ -23,9 +23,11 @@ export class AzureDashboardComponent
 {
   public projects: number;
   public usedRegions: number;
+  public totalBill: number = 0;
 
   public loadingProjects: boolean = true;
   public loadingUsedRegions: boolean = true;
+  public loadingTotalBill: boolean = true;
 
   private regions: Map<string, any> = new Map<string, any>([
     ["eastus", { latitude: "37.3719", longitude: "-79.8164" }],
@@ -69,9 +71,19 @@ export class AzureDashboardComponent
   private initState() {
     this.projects = 0;
     this.usedRegions = 0;
+    this.totalBill = 0;
 
     this.loadingProjects = true;
     this.loadingUsedRegions = true;
+    this.loadingTotalBill = true;
+
+    this.azureService.getTotalCost().subscribe(data => {
+      this.totalBill = data.toFixed(2);
+      this.loadingTotalBill = false;
+    }, err => {
+      this.totalBill = 0;
+      this.loadingTotalBill = false;
+    });
 
     this.azureService.getVMs().subscribe(
       (data) => {

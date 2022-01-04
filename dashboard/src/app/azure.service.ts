@@ -240,5 +240,17 @@ export class AzureService {
           return Observable.throw(err.json().error);
         })
   }
+  public getTotalCost() {
+    return this.http
+         .get(`${this.BASE_URL}/billing/total`)
+         .map((res) => {
+           return res.json();
+         })
+         .catch((err) => {
+           let payload = JSON.parse(err._body);
+           if (payload && payload.error) this.storeService.add(payload.error);
+           return Observable.throw(err.json().error);
+         })
+  }
 }
 
