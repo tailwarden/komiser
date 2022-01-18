@@ -6,7 +6,7 @@
             <div class="row">
               <div class="col-5">
                 <div class="icon-big text-center icon-warning">
-                  <img src="https://cdn.komiser.io/images/droplet.png" class="gcp-logo" />
+                  <i class="la la-play text-success"></i>
                 </div>
               </div>
               <div class="col-7 d-flex align-items-center">
@@ -26,12 +26,12 @@
             <div class="row">
               <div class="col-5">
                 <div class="icon-big text-center">
-                    <img src="https://cdn.komiser.io/images/droplet.png" class="gcp-logo" />
+                  <i class="la la-stop text-warning"></i>
                 </div>
               </div>
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
-                  <p class="card-category">Off VMs</p>
+                  <p class="card-category">Stopped VMs</p>
                   <h4 class="card-title" *ngIf="!loadingOffDroplets">{{offVMs}}</h4>
                   <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingOffDroplets"></div>
                 </div>
@@ -46,7 +46,7 @@
             <div class="row">
               <div class="col-5">
                 <div class="icon-big text-center">
-                    <img src="https://cdn.komiser.io/images/droplet.png" class="gcp-logo" />
+                  <i class="la la-trash text-danger"></i>
                 </div>
               </div>
               <div class="col-7 d-flex align-items-center">
@@ -179,26 +179,6 @@
                   <p class="card-category">Kubernetes Clusters</p>
                   <h4 class="card-title" *ngIf="!loadingKubernetesClusters">{{kubernetesClusters}}</h4>
                   <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKubernetesClusters"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card card-stats">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-5">
-                <div class="icon-big text-center">
-                  <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo" style="padding-bottom: 12px" />
-                </div>
-              </div>
-              <div class="col-7 d-flex align-items-center">
-                <div class="numbers">
-                  <p class="card-category">Kubernetes Nodes</p>
-                  <h4 class="card-title" *ngIf="!loadingKubernetesNodes">{{kubernetesNodes}}</h4>
-                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingKubernetesNodes"></div>
                 </div>
               </div>
             </div>
