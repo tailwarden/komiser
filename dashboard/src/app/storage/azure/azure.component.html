@@ -114,7 +114,8 @@
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
                   <p class="card-category">PostgreSQL Instances</p>
-                  <h4 class="card-title"><span class="badge badge-info">BETA</span></h4>
+                  <h4 class="card-title" *ngIf="!loadingMyPostgreSQLInstances">{{myPostgreSQLInstances}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingMyPostgreSQLInstances"></div>
                 </div>
               </div>
             </div>
@@ -133,7 +134,8 @@
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
                   <p class="card-category">Redis Instances</p>
-                  <h4 class="card-title"><span class="badge badge-info">BETA</span></h4>
+                  <h4 class="card-title" *ngIf="!loadingMyRedisInstances">{{myRedisInstances}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingMyRedisInstances"></div>
                 </div>
               </div>
             </div>
