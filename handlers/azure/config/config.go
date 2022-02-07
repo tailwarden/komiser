@@ -2,11 +2,9 @@
 package config
 
 import (
-	"bytes"
 	"fmt"
 
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/marstr/randname"
 )
 
 var (
@@ -117,26 +115,4 @@ func Environment() *azure.Environment {
 	}
 	environment = &env
 	return environment
-}
-
-// GenerateGroupName leverages BaseGroupName() to return a more detailed name,
-// helping to avoid collisions.  It appends each of the `affixes` to
-// BaseGroupName() separated by dashes, and adds a 5-character random string.
-func GenerateGroupName(affixes ...string) string {
-	// go1.10+
-	// import strings
-	// var b strings.Builder
-	// b.WriteString(BaseGroupName())
-	b := bytes.NewBufferString(BaseGroupName())
-	b.WriteRune('-')
-	for _, affix := range affixes {
-		b.WriteString(affix)
-		b.WriteRune('-')
-	}
-	return randname.GenerateWithPrefix(b.String(), 5)
-}
-
-// AppendRandomSuffix will append a suffix of five random characters to the specified prefix.
-func AppendRandomSuffix(prefix string) string {
-	return randname.GenerateWithPrefix(prefix, 5)
 }
