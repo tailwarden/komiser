@@ -3,59 +3,18 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs/Rx";
 import { StoreService } from './store.service';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class AwsService {
 
-  private BASE_URL = '/aws'
+  private BASE_URL = `${environment.apiUrl}/aws`
 
   constructor(private http: Http, private storeService: StoreService) { }
 
-  public getProfiles(){
+  public getProfiles() {
     return this.http
-     .get(`${this.BASE_URL}/profiles`)
-     .map(res => {
-       return res.json()
-     })
-     .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-       return Observable.throw(err.json().error)
-     })
-  }
-
-  public getCurrentCost(){
-    return this.http
-     .get(`${this.BASE_URL}/cost/current`, {headers: this.getHeaders()})
-     .map(res => {
-       return res.json()
-     })
-     .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-       return Observable.throw(err.json().error)
-     })
-  }
-
-  public getCostAndUsage(){
-    return this.http
-     .get(`${this.BASE_URL}/cost/history`, {headers: this.getHeaders()})
-     .map(res => {
-       return res.json()
-     })
-     .catch(err => {
-      let payload = JSON.parse(err._body)
-        if (payload && payload.error)
-          this.storeService.add(payload.error);
-       return Observable.throw(err.json().error)
-     })
-  }
-
-  public getIAMUsers(){
-    return this.http
-      .get(`${this.BASE_URL}/iam/users`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/profiles`)
       .map(res => {
         return res.json()
       })
@@ -67,9 +26,9 @@ export class AwsService {
       })
   }
 
-  public getInstancesPerRegion(){
+  public getCurrentCost() {
     return this.http
-      .get(`${this.BASE_URL}/ec2/regions`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/cost/current`, { headers: this.getHeaders() })
       .map(res => {
         return res.json()
       })
@@ -81,9 +40,9 @@ export class AwsService {
       })
   }
 
-  public getUsedRegions(){
+  public getCostAndUsage() {
     return this.http
-      .get(`${this.BASE_URL}/resources/regions`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/cost/history`, { headers: this.getHeaders() })
       .map(res => {
         return res.json()
       })
@@ -95,9 +54,9 @@ export class AwsService {
       })
   }
 
-  public getCloudwatchAlarms(){
+  public getIAMUsers() {
     return this.http
-      .get(`${this.BASE_URL}/cloudwatch/alarms`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/iam/users`, { headers: this.getHeaders() })
       .map(res => {
         return res.json()
       })
@@ -109,9 +68,9 @@ export class AwsService {
       })
   }
 
-  public getLambdaFunctions(){
+  public getInstancesPerRegion() {
     return this.http
-      .get(`${this.BASE_URL}/lambda/functions`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/ec2/regions`, { headers: this.getHeaders() })
       .map(res => {
         return res.json()
       })
@@ -123,23 +82,9 @@ export class AwsService {
       })
   }
 
-  public getLambdaInvocationMetrics(){
+  public getUsedRegions() {
     return this.http
-      .get(`${this.BASE_URL}/lambda/invocations`, {headers: this.getHeaders()})
-      .map(res => {
-        return res.json()
-      })
-      .catch(err => {
-        let payload = JSON.parse(err._body)
-        if (payload && payload.error)
-        this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
-  }
-
-  public getAccountName(){
-    return this.http
-      .get(`${this.BASE_URL}/iam/account`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/resources/regions`, { headers: this.getHeaders() })
       .map(res => {
         return res.json()
       })
@@ -151,9 +96,9 @@ export class AwsService {
       })
   }
 
-  public getNumberOfS3Buckets(){
+  public getCloudwatchAlarms() {
     return this.http
-      .get(`${this.BASE_URL}/s3/buckets`, {headers: this.getHeaders()})
+      .get(`${this.BASE_URL}/cloudwatch/alarms`, { headers: this.getHeaders() })
       .map(res => {
         return res.json()
       })
@@ -165,777 +110,833 @@ export class AwsService {
       })
   }
 
-  public getBucketObjects(){
+  public getLambdaFunctions() {
     return this.http
-    .get(`${this.BASE_URL}/s3/objects`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/lambda/functions`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getBucketSize(){
+  public getLambdaInvocationMetrics() {
     return this.http
-    .get(`${this.BASE_URL}/s3/size`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/lambda/invocations`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getEBS(){
+  public getAccountName() {
     return this.http
-    .get(`${this.BASE_URL}/ebs`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/iam/account`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getRDSInstances(){
+  public getNumberOfS3Buckets() {
     return this.http
-    .get(`${this.BASE_URL}/rds/instances`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/s3/buckets`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getDynamoDBTables(){
+  public getBucketObjects() {
     return this.http
-    .get(`${this.BASE_URL}/dynamodb/tables`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/s3/objects`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getElasticacheClusters(){
+  public getBucketSize() {
     return this.http
-    .get(`${this.BASE_URL}/elasticache/clusters`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/s3/size`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getVirtualPrivateClouds(){
+  public getEBS() {
     return this.http
-    .get(`${this.BASE_URL}/vpc`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/ebs`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getAccessControlLists(){
+  public getRDSInstances() {
     return this.http
-    .get(`${this.BASE_URL}/acl`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/rds/instances`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getRouteTables(){
+  public getDynamoDBTables() {
     return this.http
-    .get(`${this.BASE_URL}/route_tables`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/dynamodb/tables`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getCloudFrontRequests(){
+  public getElasticacheClusters() {
     return this.http
-    .get(`${this.BASE_URL}/cloudfront/requests`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/elasticache/clusters`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getCloudFrontDistributions(){
+  public getVirtualPrivateClouds() {
     return this.http
-    .get(`${this.BASE_URL}/cloudfront/distributions`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/vpc`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getApiGatewayRequests(){
+  public getAccessControlLists() {
     return this.http
-    .get(`${this.BASE_URL}/apigateway/requests`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/acl`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getApiGatewayRestAPIs(){
+  public getRouteTables() {
     return this.http
-    .get(`${this.BASE_URL}/apigateway/apis`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/route_tables`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getELBRequests(){
+  public getCloudFrontRequests() {
     return this.http
-    .get(`${this.BASE_URL}/elb/requests`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/cloudfront/requests`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getELBFamily(){
+  public getCloudFrontDistributions() {
     return this.http
-    .get(`${this.BASE_URL}/elb/family`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/cloudfront/distributions`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getKMSKeys(){
+  public getApiGatewayRequests() {
     return this.http
-    .get(`${this.BASE_URL}/kms`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/apigateway/requests`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSecurityGroups(){
+  public getApiGatewayRestAPIs() {
     return this.http
-    .get(`${this.BASE_URL}/security_groups`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/apigateway/apis`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getKeyPairs(){
+  public getELBRequests() {
     return this.http
-    .get(`${this.BASE_URL}/key_pairs`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/elb/requests`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getACMListCertificates(){
+  public getELBFamily() {
     return this.http
-    .get(`${this.BASE_URL}/acm/certificates`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/elb/family`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getACMExpiredCertificates(){
+  public getKMSKeys() {
     return this.http
-    .get(`${this.BASE_URL}/acm/expired`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/kms`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getUnrestrictedSecurityGroups(){
+  public getSecurityGroups() {
     return this.http
-    .get(`${this.BASE_URL}/security_groups/unrestricted`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/security_groups`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSQSPublishedMessagesMetrics(){
+  public getKeyPairs() {
     return this.http
-    .get(`${this.BASE_URL}/sqs/messages`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/key_pairs`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSQSQueues(){
+  public getACMListCertificates() {
     return this.http
-    .get(`${this.BASE_URL}/sqs/queues`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/acm/certificates`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSNSTopics(){
+  public getACMExpiredCertificates() {
     return this.http
-    .get(`${this.BASE_URL}/sns/topics`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/acm/expired`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getActiveMQBrokers(){
+  public getUnrestrictedSecurityGroups() {
     return this.http
-    .get(`${this.BASE_URL}/mq/brokers`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/security_groups/unrestricted`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getKinesisStreams(){
+  public getSQSPublishedMessagesMetrics() {
     return this.http
-    .get(`${this.BASE_URL}/kinesis/streams`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/sqs/messages`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getKinesisShards(){
+  public getSQSQueues() {
     return this.http
-    .get(`${this.BASE_URL}/kinesis/shards`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/sqs/queues`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getGlueCrawlers(){
+  public getSNSTopics() {
     return this.http
-    .get(`${this.BASE_URL}/glue/crawlers`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/sns/topics`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getGlueJobs(){
+  public getActiveMQBrokers() {
     return this.http
-    .get(`${this.BASE_URL}/glue/jobs`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/mq/brokers`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getDataPipelines(){
+  public getKinesisStreams() {
     return this.http
-    .get(`${this.BASE_URL}/datapipeline/pipelines`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/kinesis/streams`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getESDomains(){
+  public getKinesisShards() {
     return this.http
-    .get(`${this.BASE_URL}/es/domains`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/kinesis/shards`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSWFDomains(){
+  public getGlueCrawlers() {
     return this.http
-    .get(`${this.BASE_URL}/swf/domains`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/glue/crawlers`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getOpenSupportTickets(){
+  public getGlueJobs() {
     return this.http
-    .get(`${this.BASE_URL}/support/open`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/glue/jobs`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSupportTicketsHistory(){
+  public getDataPipelines() {
     return this.http
-    .get(`${this.BASE_URL}/support/history`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/datapipeline/pipelines`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getECS(){
+  public getESDomains() {
     return this.http
-    .get(`${this.BASE_URL}/ecs`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/es/domains`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getRoute53Records(){
+  public getSWFDomains() {
     return this.http
-    .get(`${this.BASE_URL}/route53/records`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/swf/domains`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getRoute53Zones(){
+  public getOpenSupportTickets() {
     return this.http
-    .get(`${this.BASE_URL}/route53/zones`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/support/open`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getLogsVolume(){
+  public getSupportTicketsHistory() {
     return this.http
-    .get(`${this.BASE_URL}/logs/volume`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/support/history`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getConsoleLoginEvents(){
+  public getECS() {
     return this.http
-    .get(`${this.BASE_URL}/cloudtrail/sign_in_event`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/ecs`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getLambdaErrors(){
+  public getRoute53Records() {
     return this.http
-    .get(`${this.BASE_URL}/lambda/errors`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/route53/records`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getReservedInstances(){
+  public getRoute53Zones() {
     return this.http
-    .get(`${this.BASE_URL}/ec2/reserved`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/route53/zones`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getScheduledInstances(){
+  public getLogsVolume() {
     return this.http
-    .get(`${this.BASE_URL}/ec2/scheduled`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/logs/volume`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getSpotInstances(){
+  public getConsoleLoginEvents() {
     return this.http
-    .get(`${this.BASE_URL}/ec2/spot`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/cloudtrail/sign_in_event`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getCostPerInstanceType(){
+  public getLambdaErrors() {
     return this.http
-    .get(`${this.BASE_URL}/cost/instance_type`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/lambda/errors`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getEKSClusters(){
+  public getReservedInstances() {
     return this.http
-    .get(`${this.BASE_URL}/eks/clusters`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/ec2/reserved`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getConsoleLoginSourceIps(){
+  public getScheduledInstances() {
     return this.http
-    .get(`${this.BASE_URL}/cloudtrail/source_ip`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/ec2/scheduled`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getLogsRetentionPeriod(){
+  public getSpotInstances() {
     return this.http
-    .get(`${this.BASE_URL}/logs/retention`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/ec2/spot`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getNatGatewayTraffic(){
+  public getCostPerInstanceType() {
     return this.http
-    .get(`${this.BASE_URL}/nat/traffic`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/cost/instance_type`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getOrganization(){
+  public getEKSClusters() {
     return this.http
-    .get(`${this.BASE_URL}/iam/organization`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/eks/clusters`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getServiceLimits(){
+  public getConsoleLoginSourceIps() {
     return this.http
-    .get(`${this.BASE_URL}/service/limits`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/cloudtrail/source_ip`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getEmptyBuckets(){
+  public getLogsRetentionPeriod() {
     return this.http
-    .get(`${this.BASE_URL}/s3/empty`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/logs/retention`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getDetachedElasticIps(){
+  public getNatGatewayTraffic() {
     return this.http
-    .get(`${this.BASE_URL}/eip/detached`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/nat/traffic`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getRedshiftClusters(){
+  public getOrganization() {
     return this.http
-    .get(`${this.BASE_URL}/redshift/clusters`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/iam/organization`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getVPCSubnets(){
+  public getServiceLimits() {
     return this.http
-    .get(`${this.BASE_URL}/vpc/subnets`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/service/limits`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  public getForecastPrice(){
+  public getEmptyBuckets() {
     return this.http
-    .get(`${this.BASE_URL}/cost/forecast`, {headers: this.getHeaders()})
-    .map(res => {
-      return res.json()
-    })
-    .catch(err => {
-      let payload = JSON.parse(err._body)
-      if (payload && payload.error)
-        this.storeService.add(payload.error);
-      return Observable.throw(err.json().error)
-    })
+      .get(`${this.BASE_URL}/s3/empty`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
   }
 
-  private getHeaders(){
+  public getDetachedElasticIps() {
+    return this.http
+      .get(`${this.BASE_URL}/eip/detached`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getRedshiftClusters() {
+    return this.http
+      .get(`${this.BASE_URL}/redshift/clusters`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getVPCSubnets() {
+    return this.http
+      .get(`${this.BASE_URL}/vpc/subnets`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  public getForecastPrice() {
+    return this.http
+      .get(`${this.BASE_URL}/cost/forecast`, { headers: this.getHeaders() })
+      .map(res => {
+        return res.json()
+      })
+      .catch(err => {
+        let payload = JSON.parse(err._body)
+        if (payload && payload.error)
+          this.storeService.add(payload.error);
+        return Observable.throw(err.json().error)
+      })
+  }
+
+  private getHeaders() {
     let headers = new Headers();
     headers.append('profile', localStorage.getItem('profile'));
     return headers;
