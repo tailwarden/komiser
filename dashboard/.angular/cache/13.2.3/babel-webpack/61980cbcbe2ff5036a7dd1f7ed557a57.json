@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var isArray = function () {\n  return Array.isArray || function (x) {\n    return x && typeof x.length === 'number';\n  };\n}(); //# sourceMappingURL=isArray.js.map","map":null,"metadata":{},"sourceType":"module"}

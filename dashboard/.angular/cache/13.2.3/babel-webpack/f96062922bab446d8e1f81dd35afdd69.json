@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { QueueAction } from './QueueAction';\nimport { QueueScheduler } from './QueueScheduler';\nexport var queueScheduler = new QueueScheduler(QueueAction);\nexport var queue = queueScheduler; //# sourceMappingURL=queue.js.map","map":null,"metadata":{},"sourceType":"module"}

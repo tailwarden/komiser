@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { FindValueOperator } from '../operators/find';\nexport function findIndex(predicate, thisArg) {\n  return function (source) {\n    return source.lift(new FindValueOperator(predicate, source, true, thisArg));\n  };\n} //# sourceMappingURL=findIndex.js.map","map":null,"metadata":{},"sourceType":"module"}
