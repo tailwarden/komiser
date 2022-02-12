@@ -17,9 +17,9 @@ declare var moment: any;
 export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
   private costPerInstanceTypeChart: any;
   private lambdaInvocationsChart: any;
-  private lambdaErrorsChart:any;
-  private instancesFamilyChart:any;
-  private instancesPrivacyChart:any;
+  private lambdaErrorsChart: any;
+  private instancesFamilyChart: any;
+  private instancesPrivacyChart: any;
 
   public runningEC2Instances: number = 0;
   public stoppedEC2Instances: number = 0;
@@ -96,29 +96,29 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loadingSpotInstances = true;
       this.loadingScheduledInstances = true;
       this.loadingDetachedIps = true;
-      this.loadingLambdaFunctions= true;
-      this.loadingEcsClusters= true;
+      this.loadingLambdaFunctions = true;
+      this.loadingEcsClusters = true;
       this.loadingEcsTasks = true;
       this.loadingEcsServices = true;
-      this.loadingEksClusters= true;
+      this.loadingEksClusters = true;
       this.loadingInstancesPrivacyChart = true;
-      this.loadingInstancesFamilyChart= true;
-      this.loadingCostPerInstanceTypeChart= true;
-      this.loadingLambdaInvocationsChart= true;
-      this.loadingLambdaErrorsChart= true;
+      this.loadingInstancesFamilyChart = true;
+      this.loadingCostPerInstanceTypeChart = true;
+      this.loadingLambdaInvocationsChart = true;
+      this.loadingLambdaErrorsChart = true;
 
       this.initState();
     });
   }
 
   ngOnDestroy() {
-     this._subscription.unsubscribe();
-   }
+    this._subscription.unsubscribe();
+  }
 
-  private initState(){
+  private initState() {
     this.lambdaFunctions = {}
 
-    this.awsService.getDetachedElasticIps().subscribe(data => {
+    this.awsService.getDetachedElasticIps().subscribe((data: any) => {
       this.detchedElasticIps = data;
       this.loadingDetachedIps = false;
     }, err => {
@@ -160,7 +160,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.terminatedEC2Instances = 0;
     });
 
-    this.awsService.getLambdaFunctions().subscribe(data => {
+    this.awsService.getLambdaFunctions().subscribe((data: any) => {
       this.lambdaFunctions.golang = data.golang ? data.golang : 0;
       this.lambdaFunctions.ruby = data.ruby ? data.ruby : 0;
       this.lambdaFunctions.java = data.java ? data.java : 0;
@@ -193,7 +193,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
         let serie = []
         for (let j = 0; j < labels.length; j++) {
           let item = data[j].metrics[i]
-          if(item){
+          if (item) {
             serie.push({
               meta: item.label, value: item.value
             })
@@ -239,7 +239,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
         let serie = []
         for (let j = 0; j < labels.length; j++) {
           let item = data[j].metrics[i]
-          if(item){
+          if (item) {
             serie.push({
               meta: item.label, value: item.value
             })
@@ -276,10 +276,10 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.awsService.getSpotInstances().subscribe(data => {
       this.spotInstances = data;
-      this.loadingSpotInstances= false;
+      this.loadingSpotInstances = false;
     }, err => {
       this.spotInstances = 0;
-      this.loadingSpotInstances= false;
+      this.loadingSpotInstances = false;
     });
 
     this.awsService.getEKSClusters().subscribe(data => {
@@ -301,11 +301,11 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
         let serie = []
         for (let j = 0; j < periods.length; j++) {
           let item = data.history[j].groups[i]
-          if(item){
+          if (item) {
             serie.push({
               meta: item.key, value: item.amount.toFixed(2)
             })
-          }else{
+          } else {
             serie.push({
               meta: 'others', value: 0
             })
@@ -341,9 +341,9 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void { }
 
   private showCostPerInstanceType(labels, series) {
     let scope = this;
@@ -362,7 +362,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       axisY: {
         offset: 80,
-        labelInterpolationFnc: function(value) {
+        labelInterpolationFnc: function (value) {
           return scope.formatNumber(value)
         },
       },
@@ -373,23 +373,23 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  private showInstancesPrivacy(series){
-    var canvas : any = document.getElementById('instancesPrivacyChart');
+  private showInstancesPrivacy(series) {
+    var canvas: any = document.getElementById('instancesPrivacyChart');
     var ctx = canvas.getContext('2d');
     this.instancesPrivacyChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          datasets: [{
-            data: series,
-            backgroundColor: ['#36A2EB','#4BC0C0']
-          }],
-          labels: ['Public Instances', 'Private Instances']
-        },
-        options: {}
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: series,
+          backgroundColor: ['#36A2EB', '#4BC0C0']
+        }],
+        labels: ['Public Instances', 'Private Instances']
+      },
+      options: {}
     });
   }
 
-  private showLambdaErrors(labels, series){
+  private showLambdaErrors(labels, series) {
     let scope = this;
     this.lambdaErrorsChart = new Chartist.Line('.lambdaErrorsChart', {
       labels: labels,
@@ -400,12 +400,12 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
       ],
       axisY: {
         offset: 80,
-        labelInterpolationFnc: function(value) {
+        labelInterpolationFnc: function (value) {
           return scope.formatNumber(value)
         }
       }
-    }).on('draw', function(data) {
-      if(data.type === 'line') {
+    }).on('draw', function (data) {
+      if (data.type === 'line') {
         data.element.attr({
           style: 'stroke-width: 1px'
         });
@@ -413,7 +413,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private showLambdaInvocations(labels, series){
+  private showLambdaInvocations(labels, series) {
     let scope = this;
     this.lambdaInvocationsChart = new Chartist.Bar('.lambdaInvocationsChart', {
       labels: labels,
@@ -425,12 +425,12 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
       stackBars: true,
       axisY: {
         offset: 80,
-        labelInterpolationFnc: function(value) {
+        labelInterpolationFnc: function (value) {
           return scope.formatNumber(value)
         }
       }
-    }).on('draw', function(data) {
-      if(data.type === 'bar') {
+    }).on('draw', function (data) {
+      if (data.type === 'bar') {
         data.element.attr({
           style: 'stroke-width: 30px'
         });

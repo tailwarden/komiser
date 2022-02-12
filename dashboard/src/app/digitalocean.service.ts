@@ -1,11 +1,13 @@
-import 'rxjs/add/operator/map';
 
-import { Observable } from 'rxjs/Rx';
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
 import { environment } from '../environments/environment';
+
 
 @Injectable()
 export class DigitaloceanService {
@@ -13,173 +15,173 @@ export class DigitaloceanService {
 
   constructor(private http: HttpClient, private storeService: StoreService) { }
 
-  public getProfile() {
+  public getProfile(): any {
     return this.http
-      .get(`${this.BASE_URL}/account`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/account`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getActionsHistory() {
+  public getActionsHistory(): any {
     return this.http
-      .get(`${this.BASE_URL}/actions`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/actions`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getContentDeliveryNetworks() {
+  public getContentDeliveryNetworks(): any {
     return this.http
-      .get(`${this.BASE_URL}/cdns`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/cdns`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getCertificates() {
+  public getCertificates(): any {
     return this.http
-      .get(`${this.BASE_URL}/certificates`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/certificates`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getDomains() {
+  public getDomains(): any {
     return this.http
-      .get(`${this.BASE_URL}/domains`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/domains`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getDroplets() {
+  public getDroplets(): any {
     return this.http
-      .get(`${this.BASE_URL}/droplets`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/droplets`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getListOfFirewalls() {
+  public getListOfFirewalls(): any {
     return this.http
-      .get(`${this.BASE_URL}/firewalls/list`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/firewalls/list`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getUnsecureFirewalls() {
+  public getUnsecureFirewalls(): any {
     return this.http
-      .get(`${this.BASE_URL}/firewalls/unsecure`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/firewalls/unsecure`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getFloatingIps() {
+  public getFloatingIps(): any {
     return this.http
-      .get(`${this.BASE_URL}/floatingips`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/floatingips`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getKubernetesClusters() {
+  public getKubernetesClusters(): any {
     return this.http
-      .get(`${this.BASE_URL}/k8s`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/k8s`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getSshKeys() {
+  public getSshKeys(): any {
     return this.http
-      .get(`${this.BASE_URL}/keys`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/keys`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getLoadBalancers() {
+  public getLoadBalancers(): any {
     return this.http
-      .get(`${this.BASE_URL}/loadbalancers`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/loadbalancers`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getProjects() {
+  public getProjects(): any {
     return this.http
-      .get(`${this.BASE_URL}/projects`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/projects`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getRecords() {
+  public getRecords(): any {
     return this.http
-      .get(`${this.BASE_URL}/records`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/records`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getSnapshots() {
+  public getSnapshots(): any {
     return this.http
-      .get(`${this.BASE_URL}/snapshots`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/snapshots`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getVolumes() {
+  public getVolumes(): any {
     return this.http
-      .get(`${this.BASE_URL}/volumes`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/volumes`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 
-  public getDatabases() {
+  public getDatabases(): any {
     return this.http
-      .get(`${this.BASE_URL}/databases`)
-      .catch((err) => {
+      .get(`${this.BASE_URL}/databases`).pipe(
+      catchError((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
-        return Observable.throw(err.json().error);
-      });
+        return observableThrowError(err.json().error);
+      }));
   }
 }

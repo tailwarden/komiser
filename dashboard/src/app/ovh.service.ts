@@ -1,9 +1,12 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/map';
-import { Observable } from "rxjs/Rx";
 import { StoreService } from './store.service';
 import { environment } from '../environments/environment';
+
 
 @Injectable()
 export class OvhService {
@@ -12,267 +15,266 @@ export class OvhService {
 
   constructor(private http: HttpClient, private storeService: StoreService) { }
 
-  public getCloudProjects() {
+  public getCloudProjects(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/projects`)
+      .get(`${this.BASE_URL}/cloud/projects`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCloudInstances() {
+  public getCloudInstances(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/instances`)
+      .get(`${this.BASE_URL}/cloud/instances`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getStorageContainers() {
+  public getStorageContainers(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/storage`)
-
-      .catch(err => {
+      .get(`${this.BASE_URL}/cloud/storage`).pipe(
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getUsers() {
+  public getUsers(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/users`)
+      .get(`${this.BASE_URL}/cloud/users`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCloudVolumes() {
+  public getCloudVolumes(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/volumes`)
+      .get(`${this.BASE_URL}/cloud/volumes`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCloudSnapshots() {
+  public getCloudSnapshots(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/snapshots`)
+      .get(`${this.BASE_URL}/cloud/snapshots`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCloudAlerts() {
+  public getCloudAlerts(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/alerts`)
+      .get(`${this.BASE_URL}/cloud/alerts`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCurrentBill() {
+  public getCurrentBill(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/current`)
+      .get(`${this.BASE_URL}/cloud/current`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCloudImages() {
+  public getCloudImages(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/images`)
+      .get(`${this.BASE_URL}/cloud/images`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getCloudIps() {
+  public getCloudIps(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/ip`)
+      .get(`${this.BASE_URL}/cloud/ip`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getPublicNetworks() {
+  public getPublicNetworks(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/network/public`)
+      .get(`${this.BASE_URL}/cloud/network/public`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getPrivateNetworks() {
+  public getPrivateNetworks(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/network/private`)
+      .get(`${this.BASE_URL}/cloud/network/private`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getFailoverIps() {
+  public getFailoverIps(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/failover/ip`)
+      .get(`${this.BASE_URL}/cloud/failover/ip`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getVRacks() {
+  public getVRacks(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/vrack`)
+      .get(`${this.BASE_URL}/cloud/vrack`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getKubeClusters() {
+  public getKubeClusters(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/kube/clusters`)
+      .get(`${this.BASE_URL}/cloud/kube/clusters`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getKubeNodes() {
+  public getKubeNodes(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/kube/nodes`)
+      .get(`${this.BASE_URL}/cloud/kube/nodes`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getSSHKeys() {
+  public getSSHKeys(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/sshkeys`)
+      .get(`${this.BASE_URL}/cloud/sshkeys`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getLimits() {
+  public getLimits(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/quotas`)
+      .get(`${this.BASE_URL}/cloud/quotas`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getSSLCertificates() {
+  public getSSLCertificates(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/ssl/certificates`)
+      .get(`${this.BASE_URL}/cloud/ssl/certificates`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getSSLGateways() {
+  public getSSLGateways(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/ssl/gateways`)
+      .get(`${this.BASE_URL}/cloud/ssl/gateways`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getProfile() {
+  public getProfile(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/profile`)
+      .get(`${this.BASE_URL}/cloud/profile`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 
-  public getTickets() {
+  public getTickets(): any {
     return this.http
-      .get(`${this.BASE_URL}/cloud/tickets`)
+      .get(`${this.BASE_URL}/cloud/tickets`).pipe(
 
-      .catch(err => {
+      catchError(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
           this.storeService.add(payload.error);
-        return Observable.throw(err.json().error)
-      })
+        return observableThrowError(err.json().error)
+      }))
   }
 }

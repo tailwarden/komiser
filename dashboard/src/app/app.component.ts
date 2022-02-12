@@ -1,6 +1,5 @@
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subscription ,  Subject } from 'rxjs';
 
 import { not } from '@angular/compiler/src/output/output_ast';
 import { Component, OnDestroy } from '@angular/core';
