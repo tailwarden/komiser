@@ -1,0 +1,24 @@
+.card-golang{
+    background: #72CEDD !important;
+}
+
+
+.card-python{
+    background: #FFD344 !important;
+}
+
+.limit-column{
+    max-width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.gcp-logo {
+    width: 40px !important;
+    padding-bottom: 10px !important;
+}
+
+#gaeBandwidthChart{
+    min-height: 150px;
+}

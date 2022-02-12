@@ -126,7 +126,7 @@
                     <p>Security</p>
                 </a>
             </li>
-            <li class="nav-item" routerLinkActive="active" *ngIf="currentProvider.value != 'digitalocean'">
+            <li class="nav-item" routerLinkActive="active" *ngIf="currentProvider.value != 'digitalocean' && currentProvider.value != 'azure'">
                 <a routerLink="/data-and-ai">
                     <i class="la la-commenting"></i>
                     <p>Data & AI</p>
