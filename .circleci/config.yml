@@ -26,6 +26,7 @@ jobs:
     docker:
       - image: golang:1.15
     working_directory: /go/src/github.com/mlabouardy/komiser
+    resource_class: large
     steps:
       - checkout
       - attach_workspace:
