@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DataAndAiComponent } from './data-and-ai.component';
 
@@ -6,7 +6,7 @@ describe('DataAndAiComponent', () => {
   let component: DataAndAiComponent;
   let fixture: ComponentFixture<DataAndAiComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DataAndAiComponent ]
     })

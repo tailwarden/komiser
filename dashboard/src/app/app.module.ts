@@ -156,7 +156,7 @@ const appRoutes: Routes = [
     AzureDashboardComponent,
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,

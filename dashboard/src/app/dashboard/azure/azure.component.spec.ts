@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AzureComponent } from './azure.component';
 
@@ -6,7 +6,7 @@ describe("DigitaloceanComponent", () => {
   let component: AzureComponent;
   let fixture: ComponentFixture<AzureComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AzureComponent],
     }).compileComponents();
