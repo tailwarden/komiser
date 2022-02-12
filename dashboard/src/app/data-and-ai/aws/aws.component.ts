@@ -16,13 +16,13 @@ import 'chartist-plugin-tooltips';
   styleUrls: ['./aws.component.css']
 })
 export class AwsDataAndAIComponent implements OnInit, OnDestroy {
-  private sqsMessagesChart:any;
+  private sqsMessagesChart: any;
 
   public sqsQueues: number = 0;
   public numberOfMessagesSentToday: number = 0;
   public numberOfMessagesDeletedToday: number = 0;
   public snsTopics: number = 0;
-  public activemqBrokers: number = 0; 
+  public activemqBrokers: number = 0;
   public kinesisStreams: number = 0;
   public kinesisShards: number = 0;
   public glueJobs: number = 0;
@@ -31,8 +31,8 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
   public esDomains: number = 0;
   public swfDomains: number = 0;
 
-  private loadingSQS: boolean = true;
-  private loadingSQSMessages: boolean = true;
+  public loadingSQS: boolean = true;
+  public loadingSQSMessages: boolean = true;
   public loadingSNS: boolean = true;
   public loadingGlueCrawlers: boolean = true;
   public loadingActiveMQBrokers: boolean = true;
@@ -67,7 +67,7 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
       this.numberOfMessagesSentToday = 0;
       this.numberOfMessagesDeletedToday = 0;
       this.snsTopics = 0;
-      this.activemqBrokers = 0; 
+      this.activemqBrokers = 0;
       this.kinesisStreams = 0;
       this.kinesisShards = 0;
       this.glueJobs = 0;
@@ -88,7 +88,7 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
       this.loadingKinesisShards = true;
       this.loadingESDomains = true;
       this.loadingSQSMessagesChart = true;
-      
+
       this.initState();
     })
   }
@@ -97,7 +97,7 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
     this._subscription.unsubscribe();
   }
 
-  private initState(){
+  private initState() {
     this.awsService.getSQSPublishedMessagesMetrics().subscribe(data => {
       this.numberOfMessagesSentToday = data[0].Datapoints[Object.keys(data[0].Datapoints)[Object.keys(data[0].Datapoints).length - 1]]
       this.numberOfMessagesDeletedToday = data[1].Datapoints[Object.keys(data[1].Datapoints)[Object.keys(data[1].Datapoints).length - 1]]
@@ -239,23 +239,23 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
       labels: labels,
       series: series
     }, {
-        plugins: [
-          Chartist.plugins.tooltip()
-        ],
-        stackBars: true,
-        axisY: {
-          offset: 80,
-          labelInterpolationFnc: function (value) {
-            return scope.formatNumber(value);
-          }
+      plugins: [
+        Chartist.plugins.tooltip()
+      ],
+      stackBars: true,
+      axisY: {
+        offset: 80,
+        labelInterpolationFnc: function (value) {
+          return scope.formatNumber(value);
         }
-      }).on('draw', function (data) {
-        if (data.type === 'bar') {
-          data.element.attr({
-            style: 'stroke-width: 30px'
-          });
-        }
-      });
+      }
+    }).on('draw', function (data) {
+      if (data.type === 'bar') {
+        data.element.attr({
+          style: 'stroke-width: 30px'
+        });
+      }
+    });
 
   }
 }

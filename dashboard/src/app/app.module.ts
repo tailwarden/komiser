@@ -1,4 +1,3 @@
-import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TrendModule } from 'ngx-trend';
 
 import { NgModule } from '@angular/core';
@@ -59,6 +58,7 @@ import { GcpStorageComponent } from './storage/gcp/gcp.component';
 import { OvhStorageComponent } from './storage/ovh/ovh.component';
 import { StorageComponent } from './storage/storage.component';
 import { StoreService } from './store.service';
+//import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
   {
@@ -159,7 +159,6 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     BrowserModule,
-    PaginationModule.forRoot(),
     BrowserAnimationsModule,
     TrendModule,
     FormsModule,

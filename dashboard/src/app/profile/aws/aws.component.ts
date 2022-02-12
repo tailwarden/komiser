@@ -9,14 +9,14 @@ import { Subject, Subscription } from 'rxjs';
   styleUrls: ['./aws.component.css']
 })
 export class AwsProfileComponent implements OnInit, OnDestroy {
-  public account : Object = {};
-  public organization: Object = {};
+  public account: any = {};
+  public organization: any = {};
 
   private _subscription: Subscription;
 
   constructor(private awsService: AwsService, private storeService: StoreService) {
     this.initState();
-    
+
     this._subscription = this.storeService.profileChanged.subscribe(profile => {
       this.account = {};
       this.organization = {};
@@ -25,7 +25,7 @@ export class AwsProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initState(){
+  private initState() {
     this.awsService.getAccountName().subscribe(data => {
       this.account = data;
     }, err => {

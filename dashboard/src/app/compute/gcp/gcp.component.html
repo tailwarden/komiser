@@ -6,7 +6,7 @@
           <div class="row">
             <div class="col-5">
               <div class="icon-big text-center icon-warning">
-                  <img src="https://cdn.komiser.io/images/services/gcp/compute.png" class="gcp-logo" />
+                <img src="https://cdn.komiser.io/images/services/gcp/compute.png" class="gcp-logo" />
               </div>
             </div>
             <div class="col-7 d-flex align-items-center">
@@ -26,7 +26,7 @@
           <div class="row">
             <div class="col-5">
               <div class="icon-big text-center">
-                  <img src="https://cdn.komiser.io/images/services/gcp/compute.png" class="gcp-logo" />
+                <img src="https://cdn.komiser.io/images/services/gcp/compute.png" class="gcp-logo" />
               </div>
             </div>
             <div class="col-7 d-flex align-items-center">
@@ -46,7 +46,7 @@
           <div class="row">
             <div class="col-5">
               <div class="icon-big text-center">
-                  <img src="https://cdn.komiser.io/images/services/gcp/image.png" class="gcp-logo" />
+                <img src="https://cdn.komiser.io/images/services/gcp/image.png" class="gcp-logo" />
               </div>
             </div>
             <div class="col-7 d-flex align-items-center">
@@ -80,14 +80,15 @@
               <tr *ngFor="let instance of returnedInstancesWithCPUUtilization">
                 <td class="limit-column">{{instance.name}}</td>
                 <td>
-                  <ngx-trend autoDraw="true" autoDrawDuration="3000" autoDrawEasing="ease-out" smooth="true" [gradient]="['#2196F3']" radius="18.5"
-                    strokeWidth="0.8" strokeLinecap="round" [data]="instance.series" title="{{instance.series[instance.series.length - 1]}}%"></ngx-trend>
+                  <ngx-trend autoDraw="true" autoDrawDuration="3000" autoDrawEasing="ease-out" smooth="true"
+                    [gradient]="['#2196F3']" radius="18.5" strokeWidth="0.8" strokeLinecap="round"
+                    [data]="instance.series" title="{{instance.series[instance.series.length - 1]}}%"></ngx-trend>
                 </td>
               </tr>
             </tbody>
           </table>
-          <pagination [totalItems]="instancesWithCPUUtilization.length" [itemsPerPage]="3" (pageChanged)="pageChanged($event)" [maxSize]="3"
-            size="sm"></pagination>
+          <!--   <ngb-pagination [totalItems]="instancesWithCPUUtilization.length" [itemsPerPage]="3"
+            (pageChanged)="pageChanged($event)" [maxSize]="3" size="sm"></ngb-pagination>-->
         </div>
       </div>
 
@@ -194,7 +195,8 @@
           <div class="row">
             <div class="col-5">
               <div class="icon-big text-center">
-                <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo" style="padding-bottom: 12px" />
+                <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo"
+                  style="padding-bottom: 12px" />
               </div>
             </div>
             <div class="col-7 d-flex align-items-center">
@@ -213,7 +215,8 @@
           <div class="row">
             <div class="col-5">
               <div class="icon-big text-center">
-                <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo" style="padding-bottom: 12px" />
+                <img src="https://cdn.komiser.io/images/services/aws/kube.png" class="service-logo"
+                  style="padding-bottom: 12px" />
               </div>
             </div>
             <div class="col-7 d-flex align-items-center">

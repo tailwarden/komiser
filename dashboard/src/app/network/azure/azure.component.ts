@@ -22,6 +22,11 @@ export class AzureNetworkComponent implements OnInit, OnDestroy {
   public loadingVirtualNetworks: boolean;
   public loadingSubnets: boolean;
   public loadingDNSZones: boolean;
+  public loadingCNAMERecords: boolean;
+  public loadingFloatingIps: boolean;
+  public loadingARecords: boolean;
+  public loadingDomains: boolean;
+  public loadingCDNEndpoints: boolean;
 
   private _subscription: Subscription;
 
@@ -33,12 +38,12 @@ export class AzureNetworkComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+
 
   ngOnInit() {
   }
 
-  private initState(){
+  private initState() {
     this.loadBalancers = 0;
     this.publicIPs = 0;
     this.routeTables = 0;
@@ -60,7 +65,7 @@ export class AzureNetworkComponent implements OnInit, OnDestroy {
       this.loadBalancers = 0;
       this.loadingLoadBalancers = false;
     });
-    
+
     this.azureService.getPublicIPs().subscribe(data => {
       this.publicIPs = data;
       this.loadingPublicIPs = false;

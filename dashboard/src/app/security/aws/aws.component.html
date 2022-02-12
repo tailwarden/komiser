@@ -154,7 +154,8 @@
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">Unrestricted Security Groups</h4>
-          <p class="card-category">Checks security groups for rules that allow unrestricted access (0.0.0.0/0) to specific ports</p>
+          <p class="card-category">Checks security groups for rules that allow unrestricted access (0.0.0.0/0) to
+            specific ports</p>
         </div>
         <div class="card-body">
           <table class="table table-head-bg-danger table-striped table-hover">
@@ -177,8 +178,8 @@
               </tr>
             </tbody>
           </table>
-          <pagination [totalItems]="unrestrictedSecurityGroups.length" [itemsPerPage]="20" (pageChanged)="pageChanged($event)" [maxSize]="18"
-            size="sm"></pagination>
+          <!--   <ngb-pagination [totalItems]="unrestrictedSecurityGroups.length" [itemsPerPage]="20"
+            (pageChanged)="pageChanged($event)" [maxSize]="18" size="sm"></ngb-pagination>-->
         </div>
       </div>
 

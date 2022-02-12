@@ -33,6 +33,9 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
   public loadingOffVMs: boolean;
   public loadingActiveVMs: boolean;
   public loadingImages: boolean = true;
+  public loadingArchivedDroplets: boolean;
+  public loadingActiveDroplets: boolean;
+  public loadingOffDroplets: boolean;
 
   private regions: Map<string, any> = new Map<string, any>([
     ["nyc", { latitude: "40.712776", longitude: "-74.005974" }],
@@ -64,7 +67,7 @@ export class AzureComputeComponent implements OnInit, OnDestroy, AfterViewInit {
     this._subscription.unsubscribe();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   private initState() {
     this.images = {

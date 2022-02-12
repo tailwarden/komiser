@@ -29,29 +29,31 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
   public loadingUsedRegions: boolean = true;
   public loadingForecastBill: boolean = true;
   public loadingCostHistoryChart: boolean = true;
+  public loadingResolvedTickets: boolean;
+  public loadingOpenTickets: boolean;
 
   public colors = ['#36A2EB', '#4BBFC0', '#FBAD4B', '#9368E9']
 
-  private zones: Map<string,any> = new Map<string,any>([
-    ["asia-east1", {"latitude":"23.697809", "longitude":"120.960518"}],
-    ["asia-east2", {"latitude":"22.396427", "longitude":"114.109497"}],
-    ["asia-northeast1", {"latitude":"35.689487", "longitude":"139.691711"}],
-    ["asia-south1", {"latitude":"19.075983", "longitude":"72.877655"}],
-    ["asia-southeast1", {"latitude":"1.339637", "longitude":"103.707339"}],
-    ["australia-southeast1", {"latitude":"43.498299", "longitude":"2.375200"}],
-    ["europe-north1", {"latitude":"60.568890", "longitude":"27.188188"}],
-    ["europe-west1", {"latitude":"50.447748", "longitude":"3.819524"}],
-    ["europe-west2", {"latitude":"51.507322", "longitude":"-0.127647"}],
-    ["europe-west3", {"latitude":"50.110644", "longitude":"8.682092"}],
-    ["europe-west4", {"latitude":"53.448402", "longitude":"6.846503"}],
+  private zones: Map<string, any> = new Map<string, any>([
+    ["asia-east1", { "latitude": "23.697809", "longitude": "120.960518" }],
+    ["asia-east2", { "latitude": "22.396427", "longitude": "114.109497" }],
+    ["asia-northeast1", { "latitude": "35.689487", "longitude": "139.691711" }],
+    ["asia-south1", { "latitude": "19.075983", "longitude": "72.877655" }],
+    ["asia-southeast1", { "latitude": "1.339637", "longitude": "103.707339" }],
+    ["australia-southeast1", { "latitude": "43.498299", "longitude": "2.375200" }],
+    ["europe-north1", { "latitude": "60.568890", "longitude": "27.188188" }],
+    ["europe-west1", { "latitude": "50.447748", "longitude": "3.819524" }],
+    ["europe-west2", { "latitude": "51.507322", "longitude": "-0.127647" }],
+    ["europe-west3", { "latitude": "50.110644", "longitude": "8.682092" }],
+    ["europe-west4", { "latitude": "53.448402", "longitude": "6.846503" }],
     ["europe-west6", { "latitude": "47.376888", "longitude": "8.541694" }],
-    ["northamerica-northeast1", {"latitude":"45.509060", "longitude":"-73.553360"}],
-    ["southamerica-east1", {"latitude":"23.550651", "longitude":"-46.633382"}],
-    ["us-central1", {"latitude":"41.262128", "longitude":"-95.861391"}],
-    ["us-east1", {"latitude":"33.196003", "longitude":"-80.013137"}],
-    ["us-east4", {"latitude":"39.029265", "longitude":"-77.467387"}],
-    ["us-west1", {"latitude":"45.601506", "longitude":"-121.184159"}],
-    ["us-west2", {"latitude":"34.053691", "longitude":"-118.242767"}],
+    ["northamerica-northeast1", { "latitude": "45.509060", "longitude": "-73.553360" }],
+    ["southamerica-east1", { "latitude": "23.550651", "longitude": "-46.633382" }],
+    ["us-central1", { "latitude": "41.262128", "longitude": "-95.861391" }],
+    ["us-east1", { "latitude": "33.196003", "longitude": "-80.013137" }],
+    ["us-east4", { "latitude": "39.029265", "longitude": "-77.467387" }],
+    ["us-west1", { "latitude": "45.601506", "longitude": "-121.184159" }],
+    ["us-west2", { "latitude": "34.053691", "longitude": "-118.242767" }],
   ])
 
   constructor(private gcpService: GcpService) {
@@ -68,13 +70,13 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
     this.gcpService.getComputeInstances().subscribe(data => {
       let _usedRegions = new Map<string, number>();
       let plots = {};
-      
+
       data.forEach(instance => {
         let region = instance.zone.substring(0, instance.zone.lastIndexOf("-"));
         _usedRegions[region] = (_usedRegions[region] ? _usedRegions[region] : 0) + 1;
       })
 
-      for(var region in _usedRegions){
+      for (var region in _usedRegions) {
         this.usedRegions++;
         plots[region] = {
           latitude: scope.zones.get(region).latitude,
@@ -86,12 +88,12 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
 
       Array.from(this.zones.keys()).forEach(region => {
         let found = false;
-        for(let _region in plots){
-          if(_region == region){
+        for (let _region in plots) {
+          if (_region == region) {
             found = true;
           }
         }
-        if(!found){
+        if (!found) {
           plots[region] = {
             latitude: this.zones.get(region).latitude,
             longitude: this.zones.get(region).longitude,
@@ -100,7 +102,7 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
           }
         }
       });
-      
+
       this.loadingUsedRegions = false;
       this.showComputeInstancesPerRegion(plots);
     }, err => {
@@ -135,13 +137,13 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
         let serie = []
         for (let j = 0; j < periods.length; j++) {
           let item = data[j].groups[i]
-          if(item){
+          if (item) {
             serie.push({
               meta: item.service, value: item.cost.toFixed(2)
             })
           } else {
             serie.push({
-              meta: 'Others', value:0
+              meta: 'Others', value: 0
             })
           }
         }
@@ -149,7 +151,7 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
       }
 
       this.loadingCostHistoryChart = false;
-      this.showLastSixMonth(periods,series);
+      this.showLastSixMonth(periods, series);
     }, err => {
       this.mostUsedServices = [];
       this.loadingCostHistoryChart = false;
@@ -180,7 +182,7 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
       },
       axisY: {
         offset: 80,
-        labelInterpolationFnc: function(value) {
+        labelInterpolationFnc: function (value) {
           return scope.formatNumber(value)
         },
       },
@@ -218,7 +220,7 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public showComputeInstancesPerRegion(plots) {
-    var canvas : any = $(".mapregions");
+    var canvas: any = $(".mapregions");
     canvas.mapael({
       map: {
         name: "world_countries",

@@ -12,11 +12,13 @@
           </div>
           <div class="form-group">
             <label for="email">Password Last Used</label>
-            <input type="text" class="form-control" id="disableinput" placeholder="{{account.passwordLastUsed | date:short}}" disabled>
+            <input type="text" class="form-control" id="disableinput"
+              placeholder="{{account.passwordLastUsed | date:'M/d/yy, h:mm a'}}" disabled>
           </div>
           <div class="form-group">
             <label for="email">Creation Date</label>
-            <input type="text" class="form-control" id="disableinput" placeholder="{{account.createDate | date:short}}" disabled>
+            <input type="text" class="form-control" id="disableinput"
+              placeholder="{{account.createDate | date:'M/d/yy, h:mm a'}}" disabled>
           </div>
           <div class="form-group">
             <label class="control-label">

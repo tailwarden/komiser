@@ -37,7 +37,7 @@ export class OvhStorageComponent implements OnInit {
       let totalObjects = 0;
       let totalSize = 0;
       data.forEach(container => {
-        if(container.storedObjects == 0) {
+        if (container.storedObjects == 0) {
           this.emptyStorageContainers++;
         }
         totalObjects += container.storedObjects;
@@ -68,12 +68,12 @@ export class OvhStorageComponent implements OnInit {
       let totalSize = 0;
       data.forEach(volume => {
         totalSize += volume.size;
-        if(volume.attachedTo.length == 0){
+        if (volume.attachedTo.length == 0) {
           this.unattachedVolumes++;
         }
-        if(volume.type == 'classic'){
+        if (volume.type == 'classic') {
           series[0]++;
-        }else{
+        } else {
           series[1]++;
         }
       });
