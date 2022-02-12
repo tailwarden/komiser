@@ -1,0 +1,53 @@
+.page-item.active .page-link{
+    background-color: #FF656D !important;
+    border-color: #FF656D !important;
+}
+
+#signInEventsChart{
+    min-height: 150px;
+}
+
+.empty-icon{
+    width: 100px;
+}
+
+.gcp-logo {
+    width: 40px !important;
+    padding-bottom: 10px !important;
+}
+
+.btn-signin{
+	height: 35px;
+	width: 150px;
+	justify-content: center;
+	display: flex;
+    border-radius: 5px;
+    margin: auto;
+    float: none;
+	align-items: center;
+	line-height: 1;
+	font-size: 14px;
+	box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.2);
+	background-color: #333333 !important;
+	color: #fff !important;
+    cursor: pointer;
+	text-decoration: none;
+	margin-top: 20px;
+}
+
+.btn-signin:hover,
+.btn-signin:focus {
+	background: #464646;
+	cursor: pointer;
+}
+
+.empty-text{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+.flag-icon{
+    width: 25px;
+    margin-right: 10px;
+}

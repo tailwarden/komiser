@@ -14,7 +14,9 @@ import (
 	. "github.com/mlabouardy/komiser/handlers/gcp"
 	. "github.com/mlabouardy/komiser/handlers/ovh"
 	. "github.com/mlabouardy/komiser/services/cache"
-	. "github.com/mlabouardy/komiser/services/ini"
+
+	//	. "github.com/mlabouardy/komiser/services/ini"
+	. "github.com/mlabouardy/komiser/handlers/azure"
 	"github.com/urfave/cli"
 )
 
@@ -30,8 +32,10 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	gcpHandler := NewGCPHandler(cache, dataset)
 	awsHandler := NewAWSHandler(cache, multiple)
 	ovhHandler := NewOVHHandler(cache, "")
+	azureHandler := NewAzureHandler(cache)
 
 	r := mux.NewRouter()
+
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
 	r.HandleFunc("/aws/iam/users", awsHandler.IAMUsersHandler)
 	r.HandleFunc("/aws/iam/account", awsHandler.IAMUserHandler)
@@ -186,6 +190,28 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/digitalocean/records", digitaloceanHandler.RecordsHandler)
 	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
 	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
+
+	r.HandleFunc("/azure/acm/certificates", azureHandler.APIGatewayListCertificatesHandler)
+	r.HandleFunc("/azure/acm/expired", azureHandler.APIGatewayExpiredCertificatesHandler)
+	r.HandleFunc("/azure/compute/vms", azureHandler.VMHandler)
+	r.HandleFunc("/azure/compute/disks", azureHandler.DiskHandler)
+	r.HandleFunc("/azure/resources/regions", azureHandler.SubscriptionHandler)
+	r.HandleFunc("/azure/managedclusters/clusters", azureHandler.ClusterHandler)
+	r.HandleFunc("/azure/compute/snapshots", azureHandler.SnapshotHandler)
+	r.HandleFunc("/azure/storage/mysqls", azureHandler.MySQLHandler)
+	r.HandleFunc("/azure/storage/postgresqls", azureHandler.PostgreSQLHandler)
+	r.HandleFunc("/azure/storage/redis", azureHandler.RedisHandler)
+	r.HandleFunc("/azure/security/firewalls", azureHandler.FirewallsHandler)
+	r.HandleFunc("/azure/network/publicips", azureHandler.PublicIPHandler)
+	r.HandleFunc("/azure/network/loadbalancers", azureHandler.LoadBalancersHandler)
+	r.HandleFunc("/azure/security/profiles", azureHandler.ProfilesHandler)
+	r.HandleFunc("/azure/security/securitygroups", azureHandler.SecurityGroupsHandler)
+	r.HandleFunc("/azure/security/securityrules", azureHandler.SecurityRulesHandler)
+	r.HandleFunc("/azure/network/routetables", azureHandler.RouteTablesHandler)
+	r.HandleFunc("/azure/network/virtualnetworks", azureHandler.VirtualNetworksHandler)
+	r.HandleFunc("/azure/network/subnets", azureHandler.SubnetsHandler)
+	r.HandleFunc("/azure/network/dnszones", azureHandler.DNSZonesHandler)
+	r.HandleFunc("/azure/billing/total", azureHandler.InvoiceHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
