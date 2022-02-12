@@ -1,1 +1,0 @@
-{"ast":null,"code":"export var isArrayLike = function isArrayLike(x) {\n  return x && typeof x.length === 'number' && typeof x !== 'function';\n}; //# sourceMappingURL=isArrayLike.js.map","map":null,"metadata":{},"sourceType":"module"}

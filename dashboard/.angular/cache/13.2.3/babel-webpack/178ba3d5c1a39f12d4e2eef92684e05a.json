@@ -1,1 +1,0 @@
-{"ast":null,"code":"export { PagerComponent } from './pager.component';\nexport { PaginationComponent } from './pagination.component';\nexport { PaginationModule } from './pagination.module';\nexport { PaginationConfig } from './pagination.config'; //# sourceMappingURL=index.js.map","map":null,"metadata":{},"sourceType":"module"}

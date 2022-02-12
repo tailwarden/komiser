@@ -11,7 +11,7 @@ require (
 	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/aws/aws-sdk-go-v2 v0.7.1-0.20190410190156-80eda21e3854
 	github.com/digitalocean/godo v1.19.1-0.20190722163849-4677563d2a4e
-	github.com/elazarl/go-bindata-assetfs v1.0.1-0.20180223160309-38087fe4dafb
+	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/go-redis/redis v6.15.3-0.20190419151012-721116ac0e91+incompatible
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/google/go-querystring v1.0.1-0.20190318165438-c8c88dbee036 // indirect
@@ -19,7 +19,9 @@ require (
 	github.com/gorilla/handlers v1.3.1-0.20180416203909-2b8556b16671
 	github.com/gorilla/mux v1.6.2-0.20180501031136-ded0c29b24f9
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
+	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/marstr/randname v0.0.0-20181206212954-d5b0f288ab8c
+	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.18.1 // indirect
 	github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014

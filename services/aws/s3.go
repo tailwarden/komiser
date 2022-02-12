@@ -11,6 +11,7 @@ import (
 )
 
 func (aws AWS) DescribeS3Buckets(cfg aws.Config) (int, error) {
+	cfg.Region = "eu-central-1"
 	svc := s3.New(cfg)
 	req := svc.ListBucketsRequest(&s3.ListBucketsInput{})
 	result, err := req.Send(context.Background())
@@ -27,7 +28,7 @@ type BucketMetric struct {
 
 func (awsClient AWS) GetBucketsSize(cfg aws.Config) (map[string]map[string]float64, error) {
 	metrics := make(map[string]map[string]float64, 0)
-
+	cfg.Region = "eu-central-1"
 	svc := s3.New(cfg)
 	req := svc.ListBucketsRequest(&s3.ListBucketsInput{})
 	result, err := req.Send(context.Background())
@@ -94,6 +95,7 @@ func (awsClient AWS) GetBucketsSize(cfg aws.Config) (map[string]map[string]float
 func (awsClient AWS) GetBucketsObjects(cfg aws.Config) (map[string]map[string]float64, error) {
 	metrics := make(map[string]map[string]float64, 0)
 
+	cfg.Region = "eu-central-1"
 	svc := s3.New(cfg)
 	req := svc.ListBucketsRequest(&s3.ListBucketsInput{})
 	result, err := req.Send(context.Background())
@@ -159,7 +161,7 @@ func (awsClient AWS) GetBucketsObjects(cfg aws.Config) (map[string]map[string]fl
 
 func (awsClient AWS) GetEmptyBuckets(cfg aws.Config) (float64, error) {
 	total := 0.0
-
+	cfg.Region = "eu-central-1"
 	svc := s3.New(cfg)
 	req := svc.ListBucketsRequest(&s3.ListBucketsInput{})
 	result, err := req.Send(context.Background())

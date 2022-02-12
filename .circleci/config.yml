@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build_frontend:
     docker:
-      - image: circleci/node:8.10-stretch-browsers
+      - image: circleci/node:14.15-stretch-browsers
     working_directory: ~/komiser
     steps:
       - checkout
@@ -17,14 +17,14 @@ jobs:
             - dashboard/node_modules
       - run:
           name: Build artifact
-          command: cd dashboard && npm run build
+          command: cd dashboard && npm run build -c production
       - persist_to_workspace:
           root: dashboard
           paths:
             - dist
   build_cli:
     docker:
-      - image: golang:1.10.3
+      - image: golang:1.15
     working_directory: /go/src/github.com/mlabouardy/komiser
     steps:
       - checkout
@@ -33,8 +33,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            go get -u github.com/tools/godep
-            godep restore
+            go mod download
       - run:
           name: Install go-bin-data
           command: |
@@ -60,20 +59,20 @@ jobs:
           chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
       - run:
           name: Push Linux binary
-          command: aws s3 cp komiser_linux_amd64 s3://komiser/2.4.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_linux_amd64 s3://komiser/2.5.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Windows binary
-          command: aws s3 cp komiser_windows_amd64.exe s3://komiser/2.4.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_windows_amd64.exe s3://komiser/2.5.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Mac OS X binary
-          command: aws s3 cp komiser_darwin_amd64 s3://komiser/2.4.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_darwin_amd64 s3://komiser/2.5.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Upload IAM policy
           command: aws s3 cp policy.json s3://komiser/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
   build_docker:
     docker:
-       - image: docker:18.09.5
+       - image: docker:20.10.6
     steps:
         - checkout
         - setup_remote_docker

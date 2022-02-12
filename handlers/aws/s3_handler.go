@@ -26,6 +26,7 @@ func (handler *AWSHandler) S3BucketsHandler(w http.ResponseWriter, r *http.Reque
 	} else {
 		response, err := handler.aws.DescribeS3Buckets(cfg)
 		if err != nil {
+			fmt.Println(err)
 			respondWithError(w, http.StatusInternalServerError, "s3:ListAllMyBuckets is missing")
 		} else {
 			handler.cache.Set(key, response)

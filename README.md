@@ -41,24 +41,24 @@ Does your company use Komiser?  Ask your manager or marketing team if your compa
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (2.4.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.5.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
 ```
-wget https://cli.komiser.io/2.4.0/linux/komiser
+wget https://cli.komiser.io/2.5.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://cli.komiser.io/2.4.0/windows/komiser
+wget https://cli.komiser.io/2.5.0/windows/komiser
 ```
 
 ### Mac OS X:
 
 ```
-wget https://cli.komiser.io/2.4.0/osx/komiser
+wget https://cli.komiser.io/2.5.0/osx/komiser
 ```
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
@@ -71,7 +71,7 @@ brew install komiser
 ### Docker:
 
 ```
-docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.4.0
+docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.5.0
 ```
 
 ## How to use
@@ -184,6 +184,25 @@ komiser start --port 3000 --dataset project-id.dataset-name.table-name
 <p align="center">
     <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-gcp.png"/>
 </p>
+
+### Azure
+
+* Set the following environment variables:
+  
+| Variable              | Description                                                      |
+| --------------------- | ---------------------------------------------------------------- |
+| AZURE_TENANT_ID       | The Azure Active Directory tenant(directory) ID.                 |
+| AZURE_CLIENT_ID       | The client(application) ID of an App Registration in the tenant. |
+| AZURE_CLIENT_SECRET   | A client secret that was generated for the App Registration.     |
+| AZURE_SUBSCRIPTION_ID | Azure subscription ID                                            |
+
+* That should be it. Try out the following from your command prompt to start the server:
+
+```
+komiser start --port 3000
+```
+
+* Point your browser to http://localhost:3000
 
 ### OVH
 

@@ -11,6 +11,7 @@ import (
 type AWS struct{}
 
 func (aws AWS) getRegions(cfg aws.Config) ([]Region, error) {
+	cfg.Region = "eu-central-1"
 	svc := ec2.New(cfg)
 	req := svc.DescribeRegionsRequest(&ec2.DescribeRegionsInput{})
 	regions, err := req.Send(context.Background())
