@@ -17,7 +17,7 @@ jobs:
             - dashboard/node_modules
       - run:
           name: Build artifact
-          command: cd dashboard && npm run build -c production
+          command: cd dashboard && npm run build
       - persist_to_workspace:
           root: dashboard
           paths:
