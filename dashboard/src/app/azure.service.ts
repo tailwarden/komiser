@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
 
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { StoreService } from './store.service';
 import { environment } from '../environments/environment';
@@ -11,14 +11,11 @@ import { environment } from '../environments/environment';
 @Injectable()
 export class AzureService {
   private BASE_URL = `${environment.apiUrl}/azure`;
-  constructor(private http: Http, private storeService: StoreService) { }
+  constructor(private http: HttpClient, private storeService: StoreService) { }
 
   public getVMs() {
     return this.http
       .get(`${this.BASE_URL}/compute/vms`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -28,9 +25,6 @@ export class AzureService {
   public getSnapshots() {
     return this.http
       .get(`${this.BASE_URL}/compute/snapshots`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -40,9 +34,6 @@ export class AzureService {
   public getDisks() {
     return this.http
       .get(`${this.BASE_URL}/compute/disks`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -52,9 +43,6 @@ export class AzureService {
   public getKubernetesClusters() {
     return this.http
       .get(`${this.BASE_URL}/managedclusters/clusters`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -64,9 +52,6 @@ export class AzureService {
   public getMySQLs() {
     return this.http
       .get(`${this.BASE_URL}/storage/mysqls`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -76,9 +61,6 @@ export class AzureService {
   public getPostgreSQLs() {
     return this.http
       .get(`${this.BASE_URL}/storage/postgresqls`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -88,9 +70,6 @@ export class AzureService {
   public getRedisInstances() {
     return this.http
       .get(`${this.BASE_URL}/storage/redis`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -100,9 +79,6 @@ export class AzureService {
   public getFirewalls() {
     return this.http
       .get(`${this.BASE_URL}/security/firewalls`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -112,9 +88,6 @@ export class AzureService {
   public getPublicIPs() {
     return this.http
       .get(`${this.BASE_URL}/network/publicips`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -124,9 +97,6 @@ export class AzureService {
   public getLoadBalancers() {
     return this.http
       .get(`${this.BASE_URL}/network/loadbalancers`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -136,9 +106,6 @@ export class AzureService {
   public getProfiles() {
     return this.http
       .get(`${this.BASE_URL}/security/profiles`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -148,9 +115,6 @@ export class AzureService {
   public getSecurityGroups() {
     return this.http
       .get(`${this.BASE_URL}/security/securitygroups`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -160,9 +124,6 @@ export class AzureService {
   public getSecurityRules() {
     return this.http
       .get(`${this.BASE_URL}/security/securityrules`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -172,9 +133,6 @@ export class AzureService {
   public getRouteTables() {
     return this.http
       .get(`${this.BASE_URL}/network/routetables`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -184,9 +142,6 @@ export class AzureService {
   public getVirtualNetworks() {
     return this.http
       .get(`${this.BASE_URL}/network/virtualnetworks`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -196,9 +151,6 @@ export class AzureService {
   public getSubnets() {
     return this.http
       .get(`${this.BASE_URL}/network/subnets`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -208,9 +160,6 @@ export class AzureService {
   public getDNSZones() {
     return this.http
       .get(`${this.BASE_URL}/network/dnszones`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -220,9 +169,6 @@ export class AzureService {
   public getCertificates() {
     return this.http
       .get(`${this.BASE_URL}/acm/certificates`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -232,9 +178,6 @@ export class AzureService {
   public getExpiredCertificates() {
     return this.http
       .get(`${this.BASE_URL}/acm/expired`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -244,9 +187,6 @@ export class AzureService {
   public getTotalCost() {
     return this.http
       .get(`${this.BASE_URL}/billing/total`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);

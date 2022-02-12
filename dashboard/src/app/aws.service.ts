@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
 
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { StoreService } from './store.service';
 import { environment } from '../environments/environment';
@@ -12,14 +12,11 @@ import { environment } from '../environments/environment';
 export class AwsService {
   private BASE_URL = `${environment.apiUrl}/aws`;
 
-  constructor(private http: Http, private storeService: StoreService) { }
+  constructor(private http: HttpClient, private storeService: StoreService) { }
 
   public getProfiles() {
     return this.http
       .get(`${this.BASE_URL}/profiles`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -30,9 +27,6 @@ export class AwsService {
   public getCurrentCost() {
     return this.http
       .get(`${this.BASE_URL}/cost/current`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -43,9 +37,6 @@ export class AwsService {
   public getCostAndUsage() {
     return this.http
       .get(`${this.BASE_URL}/cost/history`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -56,9 +47,6 @@ export class AwsService {
   public getIAMUsers() {
     return this.http
       .get(`${this.BASE_URL}/iam/users`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -69,9 +57,6 @@ export class AwsService {
   public getInstancesPerRegion() {
     return this.http
       .get(`${this.BASE_URL}/ec2/regions`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -82,9 +67,6 @@ export class AwsService {
   public getUsedRegions() {
     return this.http
       .get(`${this.BASE_URL}/resources/regions`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -95,9 +77,6 @@ export class AwsService {
   public getCloudwatchAlarms() {
     return this.http
       .get(`${this.BASE_URL}/cloudwatch/alarms`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -108,9 +87,6 @@ export class AwsService {
   public getLambdaFunctions() {
     return this.http
       .get(`${this.BASE_URL}/lambda/functions`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -123,9 +99,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/lambda/invocations`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -136,9 +109,6 @@ export class AwsService {
   public getAccountName() {
     return this.http
       .get(`${this.BASE_URL}/iam/account`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -149,9 +119,6 @@ export class AwsService {
   public getNumberOfS3Buckets() {
     return this.http
       .get(`${this.BASE_URL}/s3/buckets`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -162,9 +129,6 @@ export class AwsService {
   public getBucketObjects() {
     return this.http
       .get(`${this.BASE_URL}/s3/objects`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -175,9 +139,6 @@ export class AwsService {
   public getBucketSize() {
     return this.http
       .get(`${this.BASE_URL}/s3/size`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -188,9 +149,6 @@ export class AwsService {
   public getEBS() {
     return this.http
       .get(`${this.BASE_URL}/ebs`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -201,9 +159,6 @@ export class AwsService {
   public getRDSInstances() {
     return this.http
       .get(`${this.BASE_URL}/rds/instances`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -214,9 +169,6 @@ export class AwsService {
   public getDynamoDBTables() {
     return this.http
       .get(`${this.BASE_URL}/dynamodb/tables`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -229,9 +181,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/elasticache/clusters`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -242,9 +191,6 @@ export class AwsService {
   public getVirtualPrivateClouds() {
     return this.http
       .get(`${this.BASE_URL}/vpc`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -255,9 +201,6 @@ export class AwsService {
   public getAccessControlLists() {
     return this.http
       .get(`${this.BASE_URL}/acl`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -268,9 +211,6 @@ export class AwsService {
   public getRouteTables() {
     return this.http
       .get(`${this.BASE_URL}/route_tables`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -282,9 +222,6 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/cloudfront/requests`, {
         headers: this.getHeaders(),
-      })
-      .map((res) => {
-        return res.json();
       })
       .catch((err) => {
         let payload = JSON.parse(err._body);
@@ -298,9 +235,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/cloudfront/distributions`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -313,9 +247,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/apigateway/requests`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -326,9 +257,6 @@ export class AwsService {
   public getApiGatewayRestAPIs() {
     return this.http
       .get(`${this.BASE_URL}/apigateway/apis`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -339,9 +267,6 @@ export class AwsService {
   public getELBRequests() {
     return this.http
       .get(`${this.BASE_URL}/elb/requests`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -352,9 +277,6 @@ export class AwsService {
   public getELBFamily() {
     return this.http
       .get(`${this.BASE_URL}/elb/family`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -365,9 +287,6 @@ export class AwsService {
   public getKMSKeys() {
     return this.http
       .get(`${this.BASE_URL}/kms`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -378,9 +297,6 @@ export class AwsService {
   public getSecurityGroups() {
     return this.http
       .get(`${this.BASE_URL}/security_groups`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -391,9 +307,6 @@ export class AwsService {
   public getKeyPairs() {
     return this.http
       .get(`${this.BASE_URL}/key_pairs`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -404,9 +317,6 @@ export class AwsService {
   public getACMListCertificates() {
     return this.http
       .get(`${this.BASE_URL}/acm/certificates`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -417,9 +327,6 @@ export class AwsService {
   public getACMExpiredCertificates() {
     return this.http
       .get(`${this.BASE_URL}/acm/expired`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -432,9 +339,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/security_groups/unrestricted`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -445,9 +349,6 @@ export class AwsService {
   public getSQSPublishedMessagesMetrics() {
     return this.http
       .get(`${this.BASE_URL}/sqs/messages`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -458,9 +359,6 @@ export class AwsService {
   public getSQSQueues() {
     return this.http
       .get(`${this.BASE_URL}/sqs/queues`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -471,9 +369,6 @@ export class AwsService {
   public getSNSTopics() {
     return this.http
       .get(`${this.BASE_URL}/sns/topics`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -484,9 +379,6 @@ export class AwsService {
   public getActiveMQBrokers() {
     return this.http
       .get(`${this.BASE_URL}/mq/brokers`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -497,9 +389,6 @@ export class AwsService {
   public getKinesisStreams() {
     return this.http
       .get(`${this.BASE_URL}/kinesis/streams`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -510,9 +399,6 @@ export class AwsService {
   public getKinesisShards() {
     return this.http
       .get(`${this.BASE_URL}/kinesis/shards`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -523,9 +409,6 @@ export class AwsService {
   public getGlueCrawlers() {
     return this.http
       .get(`${this.BASE_URL}/glue/crawlers`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -536,9 +419,6 @@ export class AwsService {
   public getGlueJobs() {
     return this.http
       .get(`${this.BASE_URL}/glue/jobs`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -551,9 +431,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/datapipeline/pipelines`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -564,9 +441,6 @@ export class AwsService {
   public getESDomains() {
     return this.http
       .get(`${this.BASE_URL}/es/domains`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -577,9 +451,6 @@ export class AwsService {
   public getSWFDomains() {
     return this.http
       .get(`${this.BASE_URL}/swf/domains`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -590,9 +461,6 @@ export class AwsService {
   public getOpenSupportTickets() {
     return this.http
       .get(`${this.BASE_URL}/support/open`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -603,9 +471,6 @@ export class AwsService {
   public getSupportTicketsHistory() {
     return this.http
       .get(`${this.BASE_URL}/support/history`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -616,9 +481,6 @@ export class AwsService {
   public getECS() {
     return this.http
       .get(`${this.BASE_URL}/ecs`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -629,9 +491,6 @@ export class AwsService {
   public getRoute53Records() {
     return this.http
       .get(`${this.BASE_URL}/route53/records`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -642,9 +501,6 @@ export class AwsService {
   public getRoute53Zones() {
     return this.http
       .get(`${this.BASE_URL}/route53/zones`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -655,9 +511,6 @@ export class AwsService {
   public getLogsVolume() {
     return this.http
       .get(`${this.BASE_URL}/logs/volume`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -670,9 +523,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/cloudtrail/sign_in_event`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -683,9 +533,6 @@ export class AwsService {
   public getLambdaErrors() {
     return this.http
       .get(`${this.BASE_URL}/lambda/errors`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -696,9 +543,6 @@ export class AwsService {
   public getReservedInstances() {
     return this.http
       .get(`${this.BASE_URL}/ec2/reserved`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -709,9 +553,6 @@ export class AwsService {
   public getScheduledInstances() {
     return this.http
       .get(`${this.BASE_URL}/ec2/scheduled`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -722,9 +563,6 @@ export class AwsService {
   public getSpotInstances() {
     return this.http
       .get(`${this.BASE_URL}/ec2/spot`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -737,9 +575,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/cost/instance_type`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -750,9 +585,6 @@ export class AwsService {
   public getEKSClusters() {
     return this.http
       .get(`${this.BASE_URL}/eks/clusters`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -765,9 +597,6 @@ export class AwsService {
       .get(`${this.BASE_URL}/cloudtrail/source_ip`, {
         headers: this.getHeaders(),
       })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -778,9 +607,6 @@ export class AwsService {
   public getLogsRetentionPeriod() {
     return this.http
       .get(`${this.BASE_URL}/logs/retention`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -791,9 +617,6 @@ export class AwsService {
   public getNatGatewayTraffic() {
     return this.http
       .get(`${this.BASE_URL}/nat/traffic`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -804,9 +627,6 @@ export class AwsService {
   public getOrganization() {
     return this.http
       .get(`${this.BASE_URL}/iam/organization`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -817,9 +637,6 @@ export class AwsService {
   public getServiceLimits() {
     return this.http
       .get(`${this.BASE_URL}/service/limits`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -830,9 +647,6 @@ export class AwsService {
   public getEmptyBuckets() {
     return this.http
       .get(`${this.BASE_URL}/s3/empty`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -843,9 +657,6 @@ export class AwsService {
   public getDetachedElasticIps() {
     return this.http
       .get(`${this.BASE_URL}/eip/detached`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -856,9 +667,6 @@ export class AwsService {
   public getRedshiftClusters() {
     return this.http
       .get(`${this.BASE_URL}/redshift/clusters`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -869,9 +677,6 @@ export class AwsService {
   public getVPCSubnets() {
     return this.http
       .get(`${this.BASE_URL}/vpc/subnets`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -882,9 +687,6 @@ export class AwsService {
   public getForecastPrice() {
     return this.http
       .get(`${this.BASE_URL}/cost/forecast`, { headers: this.getHeaders() })
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -893,8 +695,8 @@ export class AwsService {
   }
 
   private getHeaders() {
-    let headers = new Headers();
-    headers.append("profile", localStorage.getItem("profile"));
+    let headers = new HttpHeaders();
+    headers = headers.set("profile", localStorage.getItem("profile"));
     return headers;
   }
 }

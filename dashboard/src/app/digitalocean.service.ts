@@ -3,8 +3,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
 
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-
+import { HttpClient } from '@angular/common/http';
 import { StoreService } from './store.service';
 import { environment } from '../environments/environment';
 
@@ -12,14 +11,11 @@ import { environment } from '../environments/environment';
 export class DigitaloceanService {
   private BASE_URL = `${environment.apiUrl}/digitalocean`;
 
-  constructor(private http: Http, private storeService: StoreService) { }
+  constructor(private http: HttpClient, private storeService: StoreService) { }
 
   public getProfile() {
     return this.http
       .get(`${this.BASE_URL}/account`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -30,9 +26,6 @@ export class DigitaloceanService {
   public getActionsHistory() {
     return this.http
       .get(`${this.BASE_URL}/actions`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -43,9 +36,6 @@ export class DigitaloceanService {
   public getContentDeliveryNetworks() {
     return this.http
       .get(`${this.BASE_URL}/cdns`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -56,9 +46,6 @@ export class DigitaloceanService {
   public getCertificates() {
     return this.http
       .get(`${this.BASE_URL}/certificates`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -69,9 +56,6 @@ export class DigitaloceanService {
   public getDomains() {
     return this.http
       .get(`${this.BASE_URL}/domains`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -82,9 +66,6 @@ export class DigitaloceanService {
   public getDroplets() {
     return this.http
       .get(`${this.BASE_URL}/droplets`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -95,9 +76,6 @@ export class DigitaloceanService {
   public getListOfFirewalls() {
     return this.http
       .get(`${this.BASE_URL}/firewalls/list`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -108,9 +86,6 @@ export class DigitaloceanService {
   public getUnsecureFirewalls() {
     return this.http
       .get(`${this.BASE_URL}/firewalls/unsecure`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -121,9 +96,6 @@ export class DigitaloceanService {
   public getFloatingIps() {
     return this.http
       .get(`${this.BASE_URL}/floatingips`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -134,9 +106,6 @@ export class DigitaloceanService {
   public getKubernetesClusters() {
     return this.http
       .get(`${this.BASE_URL}/k8s`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -147,9 +116,6 @@ export class DigitaloceanService {
   public getSshKeys() {
     return this.http
       .get(`${this.BASE_URL}/keys`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -160,9 +126,6 @@ export class DigitaloceanService {
   public getLoadBalancers() {
     return this.http
       .get(`${this.BASE_URL}/loadbalancers`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -173,9 +136,6 @@ export class DigitaloceanService {
   public getProjects() {
     return this.http
       .get(`${this.BASE_URL}/projects`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -186,9 +146,6 @@ export class DigitaloceanService {
   public getRecords() {
     return this.http
       .get(`${this.BASE_URL}/records`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -199,9 +156,6 @@ export class DigitaloceanService {
   public getSnapshots() {
     return this.http
       .get(`${this.BASE_URL}/snapshots`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -212,9 +166,6 @@ export class DigitaloceanService {
   public getVolumes() {
     return this.http
       .get(`${this.BASE_URL}/volumes`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);
@@ -225,9 +176,6 @@ export class DigitaloceanService {
   public getDatabases() {
     return this.http
       .get(`${this.BASE_URL}/databases`)
-      .map((res) => {
-        return res.json();
-      })
       .catch((err) => {
         let payload = JSON.parse(err._body);
         if (payload && payload.error) this.storeService.add(payload.error);

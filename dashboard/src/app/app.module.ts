@@ -3,7 +3,7 @@ import { TrendModule } from 'ngx-trend';
 
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -157,7 +157,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
-    HttpModule,
+    HttpClientModule,
     BrowserModule,
     PaginationModule.forRoot(),
     BrowserAnimationsModule,
@@ -176,5 +176,5 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) {}
+  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) { }
 }

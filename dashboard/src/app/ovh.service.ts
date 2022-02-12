@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs/Rx";
 import { StoreService } from './store.service';
@@ -10,14 +10,12 @@ export class OvhService {
 
   private BASE_URL = `${environment.apiUrl}/ovh`
 
-  constructor(private http: Http, private storeService: StoreService) { }
+  constructor(private http: HttpClient, private storeService: StoreService) { }
 
   public getCloudProjects() {
     return this.http
       .get(`${this.BASE_URL}/cloud/projects`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -29,9 +27,7 @@ export class OvhService {
   public getCloudInstances() {
     return this.http
       .get(`${this.BASE_URL}/cloud/instances`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -43,9 +39,7 @@ export class OvhService {
   public getStorageContainers() {
     return this.http
       .get(`${this.BASE_URL}/cloud/storage`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -57,9 +51,7 @@ export class OvhService {
   public getUsers() {
     return this.http
       .get(`${this.BASE_URL}/cloud/users`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -71,9 +63,7 @@ export class OvhService {
   public getCloudVolumes() {
     return this.http
       .get(`${this.BASE_URL}/cloud/volumes`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -85,9 +75,7 @@ export class OvhService {
   public getCloudSnapshots() {
     return this.http
       .get(`${this.BASE_URL}/cloud/snapshots`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -99,9 +87,7 @@ export class OvhService {
   public getCloudAlerts() {
     return this.http
       .get(`${this.BASE_URL}/cloud/alerts`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -113,9 +99,7 @@ export class OvhService {
   public getCurrentBill() {
     return this.http
       .get(`${this.BASE_URL}/cloud/current`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -127,9 +111,7 @@ export class OvhService {
   public getCloudImages() {
     return this.http
       .get(`${this.BASE_URL}/cloud/images`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -141,9 +123,7 @@ export class OvhService {
   public getCloudIps() {
     return this.http
       .get(`${this.BASE_URL}/cloud/ip`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -155,9 +135,7 @@ export class OvhService {
   public getPublicNetworks() {
     return this.http
       .get(`${this.BASE_URL}/cloud/network/public`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -169,9 +147,7 @@ export class OvhService {
   public getPrivateNetworks() {
     return this.http
       .get(`${this.BASE_URL}/cloud/network/private`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -183,9 +159,7 @@ export class OvhService {
   public getFailoverIps() {
     return this.http
       .get(`${this.BASE_URL}/cloud/failover/ip`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -197,9 +171,7 @@ export class OvhService {
   public getVRacks() {
     return this.http
       .get(`${this.BASE_URL}/cloud/vrack`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -211,9 +183,7 @@ export class OvhService {
   public getKubeClusters() {
     return this.http
       .get(`${this.BASE_URL}/cloud/kube/clusters`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -225,9 +195,7 @@ export class OvhService {
   public getKubeNodes() {
     return this.http
       .get(`${this.BASE_URL}/cloud/kube/nodes`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -239,9 +207,7 @@ export class OvhService {
   public getSSHKeys() {
     return this.http
       .get(`${this.BASE_URL}/cloud/sshkeys`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -253,9 +219,7 @@ export class OvhService {
   public getLimits() {
     return this.http
       .get(`${this.BASE_URL}/cloud/quotas`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -267,9 +231,7 @@ export class OvhService {
   public getSSLCertificates() {
     return this.http
       .get(`${this.BASE_URL}/cloud/ssl/certificates`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -281,9 +243,7 @@ export class OvhService {
   public getSSLGateways() {
     return this.http
       .get(`${this.BASE_URL}/cloud/ssl/gateways`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -295,9 +255,7 @@ export class OvhService {
   public getProfile() {
     return this.http
       .get(`${this.BASE_URL}/cloud/profile`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
@@ -309,9 +267,7 @@ export class OvhService {
   public getTickets() {
     return this.http
       .get(`${this.BASE_URL}/cloud/tickets`)
-      .map(res => {
-        return res.json()
-      })
+
       .catch(err => {
         let payload = JSON.parse(err._body)
         if (payload && payload.error)
