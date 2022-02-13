@@ -52,7 +52,7 @@ wget https://cli.komiser.io/2.5.0/linux/komiser
 ### Windows:
 
 ```
-wget https://cli.komiser.io/2.5.0/windows/komiser
+wget https://cli.komiser.io/2.5.0/windows/komiser -OutFile komiser.exe
 ```
 
 ### Mac OS X:
