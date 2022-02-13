@@ -1,27 +1,17 @@
-# Dashboard
+## Getting started
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+Komiser CE is an open source project and is supported by the community. You can buy a supported version of Komiser EE at komiser.io
 
-## Development server
+## Getting help
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Learn more about Portainer's community support channels [here.](https://community.komiser.io/)
 
-## Code scaffolding
+- Issues: https://github.com/mlabouardy/komiser/issues
+- Slack (chat): [https://community.komiser.io/](https://community.komiser.io/)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+You can join the Komiser Community by visiting community.portainer.io. This will give you advance notice of events, content and other related Komiser content.
 
-## Build
+# Reporting bugs and contributing
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- Want to report a bug or request a feature? Please open [an issue](https://github.com/mlabouardy/komiser/issues/new).
+- Want to help us build **_komiser_**? Follow our [contribution guidelines](https://github.com/mlabouardy/komiser/blob/master/CONTRIBUTING.md) to build it locally and make a pull request.
