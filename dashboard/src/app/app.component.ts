@@ -1,16 +1,15 @@
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subscription, Subject } from 'rxjs';
 
 import { not } from '@angular/compiler/src/output/output_ast';
 import { Component, OnDestroy } from '@angular/core';
 
-import { AwsService } from './aws.service';
-import { AzureService } from './azure.service';
-import { DigitaloceanService } from './digitalocean.service';
-import { GcpService } from './gcp.service';
-import { OvhService } from './ovh.service';
-import { StoreService } from './store.service';
+import { AwsService } from './services/aws.service';
+import { AzureService } from './services/azure.service';
+import { DigitaloceanService } from './services/digitalocean.service';
+import { GcpService } from './services/gcp.service';
+import { OvhService } from './services/ovh.service';
+import { StoreService } from './services/store.service';
 
 declare var ga: Function;
 
