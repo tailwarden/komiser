@@ -37,7 +37,7 @@
             <div class="col-7 d-flex align-items-center">
               <div class="numbers">
                 <p class="card-category">Bill</p>
-                <h4 class="card-title" *ngIf="!loadingTotalBill">$ {{formatNumber(totalBill)}}</h4>
+                <h4 class="card-title" *ngIf="!loadingTotalBill">$ {{totalBill}}</h4>
                 <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingTotalBill"></div>
               </div>
             </div>
