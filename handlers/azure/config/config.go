@@ -8,6 +8,7 @@ import (
 )
 
 var (
+
 	// these are our *global* config settings, to be shared by all packages.
 	// each has corresponding public accessors below.
 	// if anything requires a `Set` accessor, that indicates it perhaps
