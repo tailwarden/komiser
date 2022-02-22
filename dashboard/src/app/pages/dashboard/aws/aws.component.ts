@@ -215,7 +215,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.AwsService.getCloudwatchAlarms().subscribe(data => {
-      this.redAlarms = data.ALARM;
+      this.redAlarms = data.ALARM ? data.ALARM : 0;
       this.loadingRedAlarms = false;
     }, err => {
       this.usedRegions = 0;
