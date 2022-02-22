@@ -22,11 +22,6 @@ export class AzureNetworkComponent implements OnInit, OnDestroy {
   public loadingVirtualNetworks: boolean;
   public loadingSubnets: boolean;
   public loadingDNSZones: boolean;
-  public loadingCNAMERecords: boolean;
-  public loadingFloatingIps: boolean;
-  public loadingARecords: boolean;
-  public loadingDomains: boolean;
-  public loadingCDNEndpoints: boolean;
 
   private _subscription: Subscription;
 
@@ -83,7 +78,7 @@ export class AzureNetworkComponent implements OnInit, OnDestroy {
     })
 
     this.azureService.getVirtualNetworks().subscribe(data => {
-      this.virtualNetworks = data;
+      this.virtualNetworks = data.length;
       this.loadingVirtualNetworks = false;
     }, err => {
       this.virtualNetworks = 0;

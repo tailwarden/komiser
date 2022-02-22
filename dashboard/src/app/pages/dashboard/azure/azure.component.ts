@@ -77,7 +77,7 @@ export class AzureDashboardComponent
     this.loadingTotalBill = true;
 
     this.azureService.getTotalCost().subscribe(data => {
-      this.totalBill = data.toFixed(2);
+      this.totalBill = data.amount;
       this.loadingTotalBill = false;
     }, err => {
       this.totalBill = 0;

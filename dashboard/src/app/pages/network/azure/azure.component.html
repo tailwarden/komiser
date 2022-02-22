@@ -11,9 +11,9 @@
               </div>
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
-                  <p class="card-category">Floating IPs</p>
-                  <h4 class="card-title" *ngIf="!loadingFloatingIps">{{floatingIps}}</h4>
-                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingFloatingIps"></div>
+                  <p class="card-category">Public IPs</p>
+                  <h4 class="card-title" *ngIf="!loadingPublicIPs">{{publicIPs}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingPublicIPs"></div>
                 </div>
               </div>
             </div>
@@ -31,9 +31,9 @@
               </div>
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
-                  <p class="card-category">DNS Domains</p>
-                  <h4 class="card-title" *ngIf="!loadingDomains">{{domains}}</h4>
-                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDomains"></div>
+                  <p class="card-category">Route Tables</p>
+                  <h4 class="card-title" *ngIf="!loadingRouteTables">{{routeTables}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingRouteTables"></div>
                 </div>
               </div>
             </div>
@@ -71,31 +71,9 @@
               </div>
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
-                  <p class="card-category">CDN Endpoints</p>
-                  <h4 class="card-title" *ngIf="!loadingCDNEndpoints">{{cdnEndpoints}}</h4>
-                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCDNEndpoints"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card card-stats">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-5">
-                <div class="icon-big text-center">
-                  <img src="https://cdn.komiser.io/images/record.png" class="gcp-logo" />
-                </div>
-              </div>
-              <div class="col-7 d-flex align-items-center">
-                <div class="numbers">
-                  <p class="card-category">A Records</p>
-                  <h4 class="card-title" *ngIf="!loadingARecords">{{aRecords}}</h4>
-                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingARecords"></div>
+                  <p class="card-category">Virtual Networks</p>
+                  <h4 class="card-title" *ngIf="!loadingVirtualNetworks">{{virtualNetworks}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="virtualNetworks"></div>
                 </div>
               </div>
             </div>
@@ -113,15 +91,34 @@
               </div>
               <div class="col-7 d-flex align-items-center">
                 <div class="numbers">
-                  <p class="card-category">CNAME Records</p>
-                  <h4 class="card-title" *ngIf="!loadingCNAMERecords">{{cnameRecords}}</h4>
-                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCNAMERecords"></div>
+                  <p class="card-category">Subnets</p>
+                  <h4 class="card-title" *ngIf="!loadingSubnets">{{subnets}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingSubnets"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    <div class="col-md-6">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center">
+                <img src="https://cdn.komiser.io/images/record.png" class="gcp-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">DNS Zones</p>
+                <h4 class="card-title" *ngIf="!loadingDNSZones">{{dnsZones}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDNSZones"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  
+  </div> 
   </section>

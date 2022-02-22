@@ -84,7 +84,7 @@ export class AzureSecurityComponent implements OnInit, OnDestroy {
     })
 
     this.azureService.getSecurityGroups().subscribe(data => {
-      this.securityGroups = data;
+      this.securityGroups = data.length;
       this.loadingSecurityGroups = false;
     }, err => {
       this.securityGroups = 0;
