@@ -139,7 +139,7 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
       })
       this.ebsTotal = sum;
       this.loadingEbsTotal = false;
-      this.ebsTotalSize = this.bytesToSizeWithUnit(data.total * 1024 * 1024);
+      this.ebsTotalSize = this.bytesToSizeWithUnit(data.total * 1024 * 1024 * 1024);
       this.loadingEbsTotalSize = false;
       this.ebsUsed = data.state['in-use'];
       this.loadingEbsUsed = false;
