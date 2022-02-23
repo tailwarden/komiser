@@ -49,6 +49,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/aws/s3/buckets", awsHandler.S3BucketsHandler)
 	r.HandleFunc("/aws/s3/size", awsHandler.S3BucketsSizeHandler)
 	r.HandleFunc("/aws/s3/objects", awsHandler.S3BucketsObjectsHandler)
+	r.HandleFunc("/aws/glacier", awsHandler.GlacierVaultsHandler)
 	r.HandleFunc("/aws/ebs", awsHandler.EBSHandler)
 	r.HandleFunc("/aws/rds/instances", awsHandler.RDSInstanceHandler)
 	r.HandleFunc("/aws/dynamodb/tables", awsHandler.DynamoDBTableHandler)

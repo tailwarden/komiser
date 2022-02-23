@@ -34,6 +34,8 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
   public redisClusters: number;
   public logsRetentionPeriod: number;
   public redshiftClusters: number;
+  public glacierVaults: number;
+  public glacierVaultsSize: string;
 
   public loadingS3Buckets: boolean = true;
   public loadingS3BucketSize: boolean = true;
@@ -53,6 +55,7 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
   public loadingS3BucketsObjectsChart: boolean = true;
   public loadingEbsFamilyChart: boolean = true;
   public loadingLogsVolumeChart: boolean = true;
+  public loadingGlacier: boolean = true;
 
   private _subscription: Subscription;
 
@@ -91,6 +94,8 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
       this.redisClusters = 0;
       this.logsRetentionPeriod = 0;
       this.redshiftClusters = 0;
+      this.glacierVaults = 0;
+      this.glacierVaultsSize = '0 KB';
 
       this.loadingS3Buckets = true;
       this.loadingS3BucketSize = true;
@@ -190,6 +195,16 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
       this.loadingS3BucketObjects = false;
       this.loadingS3BucketsObjectsChart = false;
     });
+
+    this.awsService.getGlacierVaults().subscribe(data => {
+      this.loadingGlacier = false;
+      this.glacierVaults = data['vaults'];
+      this.glacierVaultsSize = this.bytesToSizeWithUnit(data['total'] ? data['total'] : 0);
+    }, err => {
+      this.loadingGlacier = false;
+      this.glacierVaults = 0;
+      this.glacierVaultsSize = '0 KB';
+    })
 
     this.awsService.getBucketSize().subscribe(data => {
       let labels = [];

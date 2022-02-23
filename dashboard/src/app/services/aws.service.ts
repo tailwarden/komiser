@@ -147,6 +147,16 @@ export class AwsService {
         }));
   }
 
+  public getGlacierVaults(): any {
+    return this.http
+      .get(`${this.BASE_URL}/glacier`, { headers: this.getHeaders() }).pipe(
+        catchError((err) => {
+          let payload = JSON.parse(err._body);
+          if (payload && payload.error) this.storeService.add(payload.error);
+          return observableThrowError(err.json().error);
+        }));
+  }
+
   public getEBS(): any {
     return this.http
       .get(`${this.BASE_URL}/ebs`, { headers: this.getHeaders() }).pipe(
