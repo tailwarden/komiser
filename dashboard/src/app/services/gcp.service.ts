@@ -19,7 +19,7 @@ export class GcpService {
     return this.http
       .get(`${this.BASE_URL}/resourcemanager/projects`).pipe(
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -30,7 +30,7 @@ export class GcpService {
     return this.http
       .get(`${this.BASE_URL}/compute/instances`).pipe(
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -42,7 +42,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/iam/roles`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -54,7 +54,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/storage/buckets`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -66,7 +66,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/compute/disks`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -78,7 +78,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/dns/zones`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -90,7 +90,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/pubsub/topics`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -102,7 +102,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/cloudfunctions/functions`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -114,7 +114,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/sql/instances`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -126,7 +126,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/vpc/networks`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -138,7 +138,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/vpc/firewalls`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -150,7 +150,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/vpc/routers`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -162,7 +162,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/compute/snapshots`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -174,7 +174,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/storage/size`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -186,7 +186,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/storage/objects`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -198,7 +198,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/logging/bytes_ingested`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -210,7 +210,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/kubernetes/clusters`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -222,7 +222,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/compute/images`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -234,7 +234,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/redis/instances`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -246,7 +246,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/compute/cpu`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -258,7 +258,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/iam/users`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -270,7 +270,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/bigquery/statements`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -282,7 +282,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/bigquery/storage`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -294,7 +294,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/bigquery/tables`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -306,7 +306,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/bigquery/datasets`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -318,7 +318,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/compute/quotas`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -330,7 +330,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/lb/requests`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -342,7 +342,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/api/requests`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -354,7 +354,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/lb/total`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -366,7 +366,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/vpc/subnets`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -378,7 +378,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/vpc/addresses`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -390,7 +390,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/vpn/tunnels`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -402,7 +402,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/ssl/policies`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -414,7 +414,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/ssl/certificates`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -426,7 +426,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/security/policies`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -438,7 +438,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/kms/cryptokeys`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -450,7 +450,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/gae/bandwidth`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -462,7 +462,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/serviceusage/apis`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -474,7 +474,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/dataproc/jobs`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -486,7 +486,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/dataproc/clusters`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -498,7 +498,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/billing/history`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -510,7 +510,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/billing/service`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -522,7 +522,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/dns/records`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -534,7 +534,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/iam/service_accounts`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -546,7 +546,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/dataflow/jobs`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -558,7 +558,7 @@ export class GcpService {
       .get(`${this.BASE_URL}/nat/gateways`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)

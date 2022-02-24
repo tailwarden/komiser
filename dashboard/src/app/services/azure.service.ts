@@ -18,7 +18,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/compute/vms`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -27,7 +27,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/compute/snapshots`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -36,7 +36,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/compute/disks`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -45,7 +45,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/managedclusters/clusters`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -54,7 +54,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/storage/mysqls`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -63,7 +63,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/storage/postgresqls`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -72,7 +72,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/storage/redis`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -81,7 +81,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/security/firewalls`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -90,7 +90,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/network/publicips`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -99,7 +99,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/network/loadbalancers`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -108,7 +108,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/security/profiles`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -117,7 +117,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/security/securitygroups`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -126,7 +126,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/security/securityrules`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -135,7 +135,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/network/routetables`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -144,7 +144,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/network/virtualnetworks`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -153,7 +153,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/network/subnets`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -162,7 +162,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/network/dnszones`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -171,7 +171,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/acm/certificates`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -180,7 +180,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/acm/expired`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
@@ -189,7 +189,7 @@ export class AzureService {
     return this.http
       .get(`${this.BASE_URL}/billing/total`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }))
