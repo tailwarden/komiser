@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { AwsService } from '../../../services/aws.service';
 import { StoreService } from '../../../services/store.service';
 import { Subject, Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import 'chartist-plugin-tooltips';
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsDataAndAIComponent implements OnInit, OnDestroy {
+export class AwsDataAndAIComponent implements OnInit, OnDestroy, AfterViewInit {
   private sqsMessagesChart: any;
 
   public sqsQueues: number = 0;
@@ -47,6 +47,14 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
   private _subscription: Subscription;
 
   constructor(private awsService: AwsService, private storeService: StoreService) {
+
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
+
+  ngAfterViewInit() {
     this.initState();
 
     this._subscription = this.storeService.profileChanged.subscribe(profile => {
@@ -91,10 +99,6 @@ export class AwsDataAndAIComponent implements OnInit, OnDestroy {
 
       this.initState();
     })
-  }
-
-  ngOnDestroy() {
-    this._subscription.unsubscribe();
   }
 
   private initState() {

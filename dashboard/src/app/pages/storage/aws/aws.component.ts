@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { AwsService } from '../../../services/aws.service';
 import { StoreService } from '../../../services/store.service';
 import { Subject, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import 'chartist-plugin-tooltips';
   templateUrl: './aws.component.html',
   styleUrls: ['./aws.component.css']
 })
-export class AwsStorageComponent implements OnInit, OnDestroy {
+export class AwsStorageComponent implements OnInit, OnDestroy, AfterViewInit {
   private s3BucketsSizeChart: any;
   private s3BucketsObjectsChart: any;
   private ebsFamilyChart: any;
@@ -60,64 +60,6 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
   private _subscription: Subscription;
 
   constructor(private awsService: AwsService, private storeService: StoreService) {
-    this.initState();
-
-    this._subscription = this.storeService.profileChanged.subscribe(profile => {
-      this.s3BucketsSizeChart.detach();
-      this.s3BucketsObjectsChart.detach();
-      this.logsVolumeChart.detach();
-      this.ebsFamilyChart.destroy();
-
-      let tooltips = document.getElementsByClassName('chartist-tooltip')
-      for (let i = 0; i < tooltips.length; i++) {
-        tooltips[i].outerHTML = ""
-      }
-      for (let j = 0; j < 3; j++) {
-        let charts = document.getElementsByTagName('svg');
-        for (let i = 0; i < charts.length; i++) {
-          charts[i].outerHTML = ""
-        }
-      }
-
-
-      this.s3Buckets = 0;
-      this.emptyBuckets = 0;
-      this.s3BucketSize = '0 KB';
-      this.s3BucketObjects = '0';
-      this.ebsTotal = 0;
-      this.ebsTotalSize = '0 KB';
-      this.ebsUsed = 0;
-      this.dynamodbTables = 0;
-      this.rdsInstances = 0;
-      this.docdbInstances = 0;
-      this.memcachedClusters = 0;
-      this.redisClusters = 0;
-      this.logsRetentionPeriod = 0;
-      this.redshiftClusters = 0;
-      this.glacierVaults = 0;
-      this.glacierVaultsSize = '0 KB';
-
-      this.loadingS3Buckets = true;
-      this.loadingS3BucketSize = true;
-      this.loadingS3BucketObjects = true;
-      this.loadingEmptyBuckets = true;
-      this.loadingEbsTotal = true;
-      this.loadingEbsTotalSize = true;
-      this.loadingEbsUsed = true;
-      this.loadingLogsRetentionPeriod = true;
-      this.loadingDynamoTables = true;
-      this.loadingRdsInstances = true;
-      this.loadingDocDbInstances = true;
-      this.loadingRedshiftClusters = true;
-      this.loadingMemCachedClusters = true;
-      this.loadingRedisClusters = true;
-      this.loadingS3BucketsSizeChart = true;
-      this.loadingS3BucketsObjectsChart = true;
-      this.loadingEbsFamilyChart = true;
-      this.loadingLogsVolumeChart = true;
-
-      this.initState();
-    });
   }
 
   ngOnDestroy() {
@@ -405,6 +347,67 @@ export class AwsStorageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() { }
+
+  ngAfterViewInit() {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.s3BucketsSizeChart.detach();
+      this.s3BucketsObjectsChart.detach();
+      this.logsVolumeChart.detach();
+      this.ebsFamilyChart.destroy();
+
+      let tooltips = document.getElementsByClassName('chartist-tooltip')
+      for (let i = 0; i < tooltips.length; i++) {
+        tooltips[i].outerHTML = ""
+      }
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+
+      this.s3Buckets = 0;
+      this.emptyBuckets = 0;
+      this.s3BucketSize = '0 KB';
+      this.s3BucketObjects = '0';
+      this.ebsTotal = 0;
+      this.ebsTotalSize = '0 KB';
+      this.ebsUsed = 0;
+      this.dynamodbTables = 0;
+      this.rdsInstances = 0;
+      this.docdbInstances = 0;
+      this.memcachedClusters = 0;
+      this.redisClusters = 0;
+      this.logsRetentionPeriod = 0;
+      this.redshiftClusters = 0;
+      this.glacierVaults = 0;
+      this.glacierVaultsSize = '0 KB';
+
+      this.loadingS3Buckets = true;
+      this.loadingS3BucketSize = true;
+      this.loadingS3BucketObjects = true;
+      this.loadingEmptyBuckets = true;
+      this.loadingEbsTotal = true;
+      this.loadingEbsTotalSize = true;
+      this.loadingEbsUsed = true;
+      this.loadingLogsRetentionPeriod = true;
+      this.loadingDynamoTables = true;
+      this.loadingRdsInstances = true;
+      this.loadingDocDbInstances = true;
+      this.loadingRedshiftClusters = true;
+      this.loadingMemCachedClusters = true;
+      this.loadingRedisClusters = true;
+      this.loadingS3BucketsSizeChart = true;
+      this.loadingS3BucketsObjectsChart = true;
+      this.loadingEbsFamilyChart = true;
+      this.loadingLogsVolumeChart = true;
+
+      this.initState();
+    });
+  }
 
   private showEBSFamily(labels, series) {
     var barChartData = {

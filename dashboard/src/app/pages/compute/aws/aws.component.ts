@@ -56,59 +56,7 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   constructor(private awsService: AwsService, private storeService: StoreService) {
-    this.initState();
 
-    this._subscription = this.storeService.profileChanged.subscribe(profile => {
-      this.costPerInstanceTypeChart.detach();
-      this.lambdaInvocationsChart.detach();
-      this.lambdaErrorsChart.detach();
-      this.instancesFamilyChart.destroy();
-      this.instancesPrivacyChart.destroy();
-
-      let tooltips = document.getElementsByClassName('chartist-tooltip')
-      for (let i = 0; i < tooltips.length; i++) {
-        tooltips[i].outerHTML = ""
-      }
-      for (let j = 0; j < 3; j++) {
-        let charts = document.getElementsByTagName('svg');
-        for (let i = 0; i < charts.length; i++) {
-          charts[i].outerHTML = ""
-        }
-      }
-
-      this.runningEC2Instances = 0;
-      this.stoppedEC2Instances = 0;
-      this.terminatedEC2Instances = 0;
-      this.lambdaFunctions = {};
-      this.ecsServices = 0;
-      this.ecsTasks = 0;
-      this.ecsClusters = 0;
-      this.reservedInstances = 0;
-      this.spotInstances = 0;
-      this.scheduledInstances = 0;
-      this.eksClusters = 0;
-      this.detchedElasticIps = 0;
-
-      this.loadingRunningInstances = true;
-      this.loadingStoppedInstances = true;
-      this.loadingTerminatedInstances = true;
-      this.loadingReservedInstances = true;
-      this.loadingSpotInstances = true;
-      this.loadingScheduledInstances = true;
-      this.loadingDetachedIps = true;
-      this.loadingLambdaFunctions = true;
-      this.loadingEcsClusters = true;
-      this.loadingEcsTasks = true;
-      this.loadingEcsServices = true;
-      this.loadingEksClusters = true;
-      this.loadingInstancesPrivacyChart = true;
-      this.loadingInstancesFamilyChart = true;
-      this.loadingCostPerInstanceTypeChart = true;
-      this.loadingLambdaInvocationsChart = true;
-      this.loadingLambdaErrorsChart = true;
-
-      this.initState();
-    });
   }
 
   ngOnDestroy() {
@@ -343,7 +291,61 @@ export class AwsComputeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() { }
 
-  ngAfterViewInit(): void { }
+  ngAfterViewInit(): void {
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.costPerInstanceTypeChart.detach();
+      this.lambdaInvocationsChart.detach();
+      this.lambdaErrorsChart.detach();
+      this.instancesFamilyChart.destroy();
+      this.instancesPrivacyChart.destroy();
+
+      let tooltips = document.getElementsByClassName('chartist-tooltip')
+      for (let i = 0; i < tooltips.length; i++) {
+        tooltips[i].outerHTML = ""
+      }
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+      this.runningEC2Instances = 0;
+      this.stoppedEC2Instances = 0;
+      this.terminatedEC2Instances = 0;
+      this.lambdaFunctions = {};
+      this.ecsServices = 0;
+      this.ecsTasks = 0;
+      this.ecsClusters = 0;
+      this.reservedInstances = 0;
+      this.spotInstances = 0;
+      this.scheduledInstances = 0;
+      this.eksClusters = 0;
+      this.detchedElasticIps = 0;
+
+      this.loadingRunningInstances = true;
+      this.loadingStoppedInstances = true;
+      this.loadingTerminatedInstances = true;
+      this.loadingReservedInstances = true;
+      this.loadingSpotInstances = true;
+      this.loadingScheduledInstances = true;
+      this.loadingDetachedIps = true;
+      this.loadingLambdaFunctions = true;
+      this.loadingEcsClusters = true;
+      this.loadingEcsTasks = true;
+      this.loadingEcsServices = true;
+      this.loadingEksClusters = true;
+      this.loadingInstancesPrivacyChart = true;
+      this.loadingInstancesFamilyChart = true;
+      this.loadingCostPerInstanceTypeChart = true;
+      this.loadingLambdaInvocationsChart = true;
+      this.loadingLambdaErrorsChart = true;
+
+      this.initState();
+    });
+  }
 
   private showCostPerInstanceType(labels, series) {
     let scope = this;

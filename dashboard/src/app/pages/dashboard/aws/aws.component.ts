@@ -110,29 +110,6 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private _subscription: Subscription;
 
   constructor(private AwsService: AwsService, private storeService: StoreService) {
-    this.initState();
-
-    this._subscription = this.storeService.profileChanged.subscribe(profile => {
-      this.iamUsers = 0;
-      this.currentBill = 0;
-      this.usedRegions = 0;
-      this.redAlarms = 0;
-      this.mostUsedServices = [];
-      this.openTickets = 0;
-      this.resolvedTickets = 0;
-      this.forecastBill = '0';
-
-      this.loadingCurrentBill = true;
-      this.loadingIamUsers = true;
-      this.loadingUsedRegions = true;
-      this.loadingRedAlarms = true;
-      this.loadingOpenTickets = true;
-      this.loadingResolvedTickets = true;
-      this.loadingCostHistoryChart = true;
-      this.loadingForecastBill = true;
-
-      this.initState();
-    })
   }
 
   ngOnDestroy() {
@@ -255,6 +232,30 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.showEC2InstancesPerRegion({});
+
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.iamUsers = 0;
+      this.currentBill = 0;
+      this.usedRegions = 0;
+      this.redAlarms = 0;
+      this.mostUsedServices = [];
+      this.openTickets = 0;
+      this.resolvedTickets = 0;
+      this.forecastBill = '0';
+
+      this.loadingCurrentBill = true;
+      this.loadingIamUsers = true;
+      this.loadingUsedRegions = true;
+      this.loadingRedAlarms = true;
+      this.loadingOpenTickets = true;
+      this.loadingResolvedTickets = true;
+      this.loadingCostHistoryChart = true;
+      this.loadingForecastBill = true;
+
+      this.initState();
+    })
   }
 
   public formatNumber(labelValue) {
