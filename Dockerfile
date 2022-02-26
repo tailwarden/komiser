@@ -1,4 +1,4 @@
-FROM alpine:3.9.4
+FROM alpine:3.15.0
 MAINTAINER mlabouardy <mohamed@labouardy.com>
 
 ENV VERSION 2.5.0
