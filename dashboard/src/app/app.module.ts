@@ -58,7 +58,8 @@ import { GcpStorageComponent } from './pages/storage/gcp/gcp.component';
 import { OvhStorageComponent } from './pages/storage/ovh/ovh.component';
 import { StorageComponent } from './pages/storage/storage.component';
 import { StoreService } from './services/store.service';
-//import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { SettingsService } from './services/settings.service';
 
 const appRoutes: Routes = [
   {
@@ -162,6 +163,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     TrendModule,
     FormsModule,
+    NgbModalModule,
   ],
   providers: [
     AwsService,
@@ -171,6 +173,7 @@ const appRoutes: Routes = [
     GcpService,
     OvhService,
     AzureService,
+    SettingsService
   ],
   bootstrap: [AppComponent],
 })

@@ -26,6 +26,5 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() { }
 
   ngAfterViewInit(): void {
-
   }
 }

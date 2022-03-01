@@ -7,7 +7,6 @@ import * as $ from 'jquery';
 import { Subscription } from 'rxjs';
 
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-
 import { AzureService } from '../../../services/azure.service';
 import { StoreService } from '../../../services/store.service';
 
@@ -50,7 +49,7 @@ export class AzureDashboardComponent
 
   constructor(
     private azureService: AzureService,
-    private storeService: StoreService
+    private storeService: StoreService,
   ) {
     this.initState();
 
@@ -65,7 +64,8 @@ export class AzureDashboardComponent
     this._subscription.unsubscribe();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   private initState() {
     this.projects = 0;

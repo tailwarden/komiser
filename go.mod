@@ -19,6 +19,7 @@ require (
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/handlers v1.3.1-0.20180416203909-2b8556b16671
 	github.com/gorilla/mux v1.6.2-0.20180501031136-ded0c29b24f9
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/marstr/randname v0.0.0-20181206212954-d5b0f288ab8c
@@ -28,6 +29,10 @@ require (
 	github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
+	github.com/robfig/cron v1.2.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/rs/cors v1.8.2 // indirect
+	github.com/slack-go/slack v0.10.2
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 	github.com/urfave/cli v1.20.1-0.20180226030253-8e01ec4cd3e2
 	go.opencensus.io v0.21.1-0.20190426231706-3f87460392ec // indirect
