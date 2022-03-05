@@ -105,6 +105,16 @@
                 "swf:ListDomains"
             ],
             "Resource": "*"
+        },
+        {
+            "Sid": "7",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:DescribeServices",
+                "ecs:DescribeTasks",
+                "ecs:DescribeClusters"
+            ],
+            "Resource": "*"
         }
     ]
 }
