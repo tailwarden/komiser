@@ -12,6 +12,7 @@ func (aws AWS) DescribeVolumes(cfg aws.Config) (map[string]interface{}, error) {
 	totalVolumesSize := 0
 	outputVolumesPerState := make(map[string]int, 0)
 	outputVolumesPerFamily := make(map[string]int, 0)
+	outputVolumesPerEncryption := make(map[bool]int, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
 		return map[string]interface{}{}, err
@@ -24,13 +25,15 @@ func (aws AWS) DescribeVolumes(cfg aws.Config) (map[string]interface{}, error) {
 		for _, volume := range volumes {
 			outputVolumesPerFamily[volume.VolumeType]++
 			outputVolumesPerState[volume.State]++
+			outputVolumesPerEncryption[volume.Encrypted]++
 			totalVolumesSize += int(volume.Size)
 		}
 	}
 	return map[string]interface{}{
-		"total":  totalVolumesSize,
-		"state":  outputVolumesPerState,
-		"family": outputVolumesPerFamily,
+		"total":     totalVolumesSize,
+		"state":     outputVolumesPerState,
+		"family":    outputVolumesPerFamily,
+		"encrypted": outputVolumesPerEncryption,
 	}, nil
 }
 
@@ -71,6 +74,7 @@ func (aws AWS) getVolumes(cfg aws.Config, region string) ([]Volume, error) {
 			Size:       *volume.Size,
 			State:      volumeState,
 			VolumeType: volumeType,
+			Encrypted:  *volume.Encrypted,
 		})
 	}
 	return listOfVolumes, nil
