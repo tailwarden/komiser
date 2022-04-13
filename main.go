@@ -12,8 +12,11 @@ import (
 	. "github.com/mlabouardy/komiser/handlers/aws"
 	. "github.com/mlabouardy/komiser/handlers/digitalocean"
 	. "github.com/mlabouardy/komiser/handlers/gcp"
+	. "github.com/mlabouardy/komiser/handlers/integrations"
 	. "github.com/mlabouardy/komiser/handlers/ovh"
 	. "github.com/mlabouardy/komiser/services/cache"
+	"github.com/robfig/cron"
+	"github.com/rs/cors"
 
 	//	. "github.com/mlabouardy/komiser/services/ini"
 	. "github.com/mlabouardy/komiser/handlers/azure"
@@ -21,11 +24,12 @@ import (
 )
 
 const (
-	DEFAULT_PORT     = 3000
-	DEFAULT_DURATION = 30
+	DEFAULT_PORT           = 3000
+	DEFAULT_DURATION       = 30
+	DEFAULT_ALERT_SCHEDULE = "0 9 * * * *"
 )
 
-func startServer(port int, cache Cache, dataset string, multiple bool) {
+func startServer(port int, cache Cache, dataset string, multiple bool, schedule string) {
 	cache.Connect()
 
 	digitaloceanHandler := NewDigitalOceanHandler(cache)
@@ -33,6 +37,10 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	awsHandler := NewAWSHandler(cache, multiple)
 	ovhHandler := NewOVHHandler(cache, "")
 	azureHandler := NewAzureHandler(cache)
+	alertHandler := NewAlertHandler(awsHandler, gcpHandler, azureHandler)
+	c := cron.New()
+	c.AddFunc(schedule, alertHandler.DailyNotifHandler)
+	c.Start()
 
 	r := mux.NewRouter()
 
@@ -49,6 +57,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/aws/s3/buckets", awsHandler.S3BucketsHandler)
 	r.HandleFunc("/aws/s3/size", awsHandler.S3BucketsSizeHandler)
 	r.HandleFunc("/aws/s3/objects", awsHandler.S3BucketsObjectsHandler)
+	r.HandleFunc("/aws/glacier", awsHandler.GlacierVaultsHandler)
 	r.HandleFunc("/aws/ebs", awsHandler.EBSHandler)
 	r.HandleFunc("/aws/rds/instances", awsHandler.RDSInstanceHandler)
 	r.HandleFunc("/aws/dynamodb/tables", awsHandler.DynamoDBTableHandler)
@@ -213,10 +222,17 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 	r.HandleFunc("/azure/network/dnszones", azureHandler.DNSZonesHandler)
 	r.HandleFunc("/azure/billing/total", azureHandler.InvoiceHandler)
 
+	r.HandleFunc("/integrations", alertHandler.ListIntegrationsHandler)
+	r.HandleFunc("/integrations/slack", alertHandler.SetupSlackHandler).Methods("POST")
+
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
-	headersOk := handlers.AllowedHeaders([]string{"profile"})
-	loggedRouter := handlers.LoggingHandler(os.Stdout, handlers.CORS(headersOk)(r))
+	cors := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders: []string{"profile", "X-Requested-With", "Content-Type", "Authorization"},
+	})
+	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
 	if err != nil {
 		log.Fatal(err)
@@ -228,7 +244,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.5.0"
+	app.Version = "2.6.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()
@@ -261,6 +277,11 @@ func main() {
 					Name:  "dataset, ds",
 					Usage: "BigQuery Bill dataset",
 				},
+				cli.StringFlag{
+					Name:  "cron, c",
+					Usage: "Daily budget alert schedule",
+					Value: DEFAULT_ALERT_SCHEDULE,
+				},
 				cli.BoolFlag{
 					Name:  "multiple, m",
 					Usage: "Enable multiple AWS accounts",
@@ -272,6 +293,7 @@ func main() {
 				redis := c.String("redis")
 				dataset := c.String("dataset")
 				multiple := c.Bool("multiple")
+				schedule := c.String("cron")
 
 				var cache Cache
 
@@ -293,7 +315,7 @@ func main() {
 					}
 				}
 
-				startServer(port, cache, dataset, multiple)
+				startServer(port, cache, dataset, multiple, schedule)
 				return nil
 			},
 		},

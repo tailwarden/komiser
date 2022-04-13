@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { GcpService } from '../../../services/gcp.service';
+import { SettingsService } from '../../../services/settings.service';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
 import 'jquery-mapael';
 import 'jquery-mapael/js/maps/world_countries.js';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as $ from "jquery";
 declare var Chart: any;
 
@@ -31,6 +33,9 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
   public loadingCostHistoryChart: boolean = true;
   public loadingResolvedTickets: boolean;
   public loadingOpenTickets: boolean;
+  public alertConfigured: boolean = false;
+
+  public slackConfig: any = {};
 
   public colors = ['#36A2EB', '#4BBFC0', '#FBAD4B', '#9368E9']
 
@@ -56,7 +61,13 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
     ["us-west2", { "latitude": "34.053691", "longitude": "-118.242767" }],
   ])
 
-  constructor(private gcpService: GcpService) {
+  constructor(private gcpService: GcpService, private modalService: NgbModal, private settingsService: SettingsService) {
+    this.settingsService.getIntegrations().subscribe(data => {
+      this.alertConfigured = data['slack'];
+    }, err => {
+      this.alertConfigured = false;
+    })
+
     this.gcpService.getProjects().subscribe(data => {
       this.project = data.length > 0 ? data[0].id : this.project;
       this.loadingProject = false;
@@ -165,6 +176,25 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  public configureSlack() {
+    this.settingsService.setupSlackIntegration(this.slackConfig).subscribe(data => {
+      this.alertConfigured = true;
+      this.slackConfig = {
+        token: '',
+        channel: '',
+        handler: 'slack'
+      };
+      this.modalService.dismissAll();
+    }, err => {
+      this.slackConfig = {
+        token: '',
+        channel: '',
+        handler: 'slack'
+      };
+      this.modalService.dismissAll();
+    })
+  }
+
   public showLastSixMonth(labels, series) {
     let scope = this;
     var costHistory = {
@@ -194,10 +224,19 @@ export class GcpDashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.slackConfig = {
+      token: '',
+      channel: '',
+      handler: 'slack'
+    }
   }
 
   ngAfterViewInit(): void {
     this.showComputeInstancesPerRegion({});
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
   public formatNumber(labelValue) {

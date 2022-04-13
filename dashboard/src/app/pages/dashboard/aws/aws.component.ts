@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { AwsService } from '../../../services/aws.service';
 import { StoreService } from '../../../services/store.service';
+import { SettingsService } from '../../../services/settings.service';
 import { Subject, Subscription } from 'rxjs';
 import * as Chartist from 'chartist';
 import 'chartist-plugin-tooltips';
@@ -8,6 +9,7 @@ import 'jquery-mapael';
 import 'jquery-mapael/js/maps/world_countries.js';
 import * as $ from "jquery";
 declare var Chart: any;
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'aws-dashboard',
@@ -32,6 +34,9 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public loadingResolvedTickets: boolean = true;
   public loadingCostHistoryChart: boolean = true;
   public loadingForecastBill: boolean = true;
+  public alertConfigured: boolean = false;
+
+  public slackConfig: any = {};
 
 
   public colors = ['#36A2EB', '#4BBFC0', '#FBAD4B', '#9368E9']
@@ -109,38 +114,26 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _subscription: Subscription;
 
-  constructor(private AwsService: AwsService, private storeService: StoreService) {
-    this.initState();
-
-    this._subscription = this.storeService.profileChanged.subscribe(profile => {
-      this.iamUsers = 0;
-      this.currentBill = 0;
-      this.usedRegions = 0;
-      this.redAlarms = 0;
-      this.mostUsedServices = [];
-      this.openTickets = 0;
-      this.resolvedTickets = 0;
-      this.forecastBill = '0';
-
-      this.loadingCurrentBill = true;
-      this.loadingIamUsers = true;
-      this.loadingUsedRegions = true;
-      this.loadingRedAlarms = true;
-      this.loadingOpenTickets = true;
-      this.loadingResolvedTickets = true;
-      this.loadingCostHistoryChart = true;
-      this.loadingForecastBill = true;
-
-      this.initState();
-    })
+  constructor(private AwsService: AwsService, private storeService: StoreService, private modalService: NgbModal, private settingsService: SettingsService) {
   }
 
   ngOnDestroy() {
     this._subscription.unsubscribe();
   }
 
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
   private initState() {
     this.mostUsedServices = []
+
+
+    this.settingsService.getIntegrations().subscribe(data => {
+      this.alertConfigured = data['slack'];
+    }, err => {
+      this.alertConfigured = false;
+    })
 
     this.AwsService.getIAMUsers().subscribe(data => {
       this.iamUsers = data;
@@ -187,7 +180,6 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.showLastSixMonth(periods, series);
     }, err => {
       this.loadingCostHistoryChart = false;
-      console.log(err)
     });
 
     this.AwsService.getInstancesPerRegion().subscribe(data => {
@@ -203,7 +195,6 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       this.showEC2InstancesPerRegion(plots);
     }, err => {
-      console.log(err);
     });
 
     this.AwsService.getUsedRegions().subscribe(data => {
@@ -215,7 +206,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.AwsService.getCloudwatchAlarms().subscribe(data => {
-      this.redAlarms = data.ALARM;
+      this.redAlarms = data.ALARM ? data.ALARM : 0;
       this.loadingRedAlarms = false;
     }, err => {
       this.usedRegions = 0;
@@ -251,10 +242,58 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnInit() { }
+  public configureSlack() {
+    this.settingsService.setupSlackIntegration(this.slackConfig).subscribe(data => {
+      this.alertConfigured = true;
+      this.slackConfig = {
+        token: '',
+        channel: '',
+        handler: 'slack'
+      };
+      this.modalService.dismissAll();
+    }, err => {
+      this.slackConfig = {
+        token: '',
+        channel: '',
+        handler: 'slack'
+      };
+      this.modalService.dismissAll();
+    })
+  }
+  ngOnInit() {
+    this.slackConfig = {
+      token: '',
+      channel: '',
+      handler: 'slack'
+    }
+  }
 
   ngAfterViewInit(): void {
     this.showEC2InstancesPerRegion({});
+
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.iamUsers = 0;
+      this.currentBill = 0;
+      this.usedRegions = 0;
+      this.redAlarms = 0;
+      this.mostUsedServices = [];
+      this.openTickets = 0;
+      this.resolvedTickets = 0;
+      this.forecastBill = '0';
+
+      this.loadingCurrentBill = true;
+      this.loadingIamUsers = true;
+      this.loadingUsedRegions = true;
+      this.loadingRedAlarms = true;
+      this.loadingOpenTickets = true;
+      this.loadingResolvedTickets = true;
+      this.loadingCostHistoryChart = true;
+      this.loadingForecastBill = true;
+
+      this.initState();
+    })
   }
 
   public formatNumber(labelValue) {

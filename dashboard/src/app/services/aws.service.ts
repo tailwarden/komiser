@@ -19,7 +19,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/profiles`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -29,7 +29,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/cost/current`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -39,7 +39,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/cost/history`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -49,7 +49,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/iam/users`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -59,7 +59,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/ec2/regions`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -69,7 +69,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/resources/regions`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -79,7 +79,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/cloudwatch/alarms`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -89,7 +89,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/lambda/functions`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -101,7 +101,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -111,7 +111,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/iam/account`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -121,7 +121,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/s3/buckets`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -131,7 +131,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/s3/objects`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -141,7 +141,17 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/s3/size`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
+          if (payload && payload.error) this.storeService.add(payload.error);
+          return observableThrowError(err.json().error);
+        }));
+  }
+
+  public getGlacierVaults(): any {
+    return this.http
+      .get(`${this.BASE_URL}/glacier`, { headers: this.getHeaders() }).pipe(
+        catchError((err) => {
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -151,7 +161,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/ebs`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -161,7 +171,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/rds/instances`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -171,7 +181,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/dynamodb/tables`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -183,7 +193,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -193,7 +203,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/vpc`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -203,7 +213,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/acl`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -213,7 +223,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/route_tables`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -225,7 +235,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -237,7 +247,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -249,7 +259,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -259,7 +269,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/apigateway/apis`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -269,7 +279,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/elb/requests`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -279,7 +289,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/elb/family`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -289,7 +299,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/kms`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -299,7 +309,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/security_groups`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -309,7 +319,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/key_pairs`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -319,7 +329,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/acm/certificates`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -329,7 +339,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/acm/expired`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -341,7 +351,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -351,7 +361,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/sqs/messages`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -361,7 +371,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/sqs/queues`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -371,7 +381,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/sns/topics`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -381,7 +391,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/mq/brokers`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -391,7 +401,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/kinesis/streams`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -401,7 +411,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/kinesis/shards`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -411,7 +421,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/glue/crawlers`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -421,7 +431,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/glue/jobs`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -433,7 +443,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -443,7 +453,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/es/domains`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -453,7 +463,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/swf/domains`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -463,7 +473,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/support/open`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -473,7 +483,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/support/history`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -483,7 +493,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/ecs`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -493,7 +503,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/route53/records`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -503,7 +513,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/route53/zones`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -513,7 +523,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/logs/volume`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -525,7 +535,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -535,7 +545,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/lambda/errors`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -545,7 +555,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/ec2/reserved`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -555,7 +565,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/ec2/scheduled`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -565,7 +575,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/ec2/spot`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -577,7 +587,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -587,7 +597,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/eks/clusters`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -599,7 +609,7 @@ export class AwsService {
         headers: this.getHeaders(),
       }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -609,7 +619,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/logs/retention`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -619,7 +629,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/nat/traffic`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -629,7 +639,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/iam/organization`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -639,7 +649,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/service/limits`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -649,7 +659,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/s3/empty`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -659,7 +669,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/eip/detached`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -669,7 +679,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/redshift/clusters`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -679,7 +689,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/vpc/subnets`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -689,7 +699,7 @@ export class AwsService {
     return this.http
       .get(`${this.BASE_URL}/cost/forecast`, { headers: this.getHeaders() }).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));

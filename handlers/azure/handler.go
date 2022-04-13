@@ -14,6 +14,10 @@ type AzureHandler struct {
 	azure    Azure
 }
 
+func (handler *AzureHandler) GetAzureHandler() Azure {
+	return handler.azure
+}
+
 func NewAzureHandler(cache Cache) *AzureHandler {
 	azureHandler := AzureHandler{
 		cache: cache,

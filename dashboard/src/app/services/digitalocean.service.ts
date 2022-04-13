@@ -19,7 +19,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/account`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -29,7 +29,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/actions`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -39,7 +39,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/cdns`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -49,7 +49,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/certificates`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -59,7 +59,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/domains`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -69,7 +69,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/droplets`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -79,7 +79,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/firewalls/list`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -89,7 +89,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/firewalls/unsecure`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -99,7 +99,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/floatingips`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -109,7 +109,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/k8s`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -119,7 +119,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/keys`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -129,7 +129,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/loadbalancers`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -139,7 +139,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/projects`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -149,7 +149,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/records`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -159,7 +159,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/snapshots`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -169,7 +169,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/volumes`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));
@@ -179,7 +179,7 @@ export class DigitaloceanService {
     return this.http
       .get(`${this.BASE_URL}/databases`).pipe(
         catchError((err) => {
-          let payload = JSON.parse(err._body);
+          let payload = err.error;
           if (payload && payload.error) this.storeService.add(payload.error);
           return observableThrowError(err.json().error);
         }));

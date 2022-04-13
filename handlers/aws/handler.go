@@ -23,6 +23,14 @@ func NewAWSHandler(cache Cache, multiple bool) *AWSHandler {
 	return &awsHandler
 }
 
+func (handler *AWSHandler) GetAWSHandler() AWS {
+	return handler.aws
+}
+
+func (handler *AWSHandler) HasMultipleEnvs() bool {
+	return handler.multiple
+}
+
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJSON(w, code, map[string]string{"error": msg})
 }

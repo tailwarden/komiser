@@ -205,19 +205,29 @@ func (awsModel AWS) GetLambdaErrorsMetrics(cfg aws.Config) ([]LambdaTotalInvocat
 func (aws AWS) getLambdaFunctions(cfg aws.Config, region string) ([]Lambda, error) {
 	cfg.Region = region
 	svc := lambda.New(cfg)
-	req := svc.ListFunctionsRequest(&lambda.ListFunctionsInput{})
-	result, err := req.Send(context.Background())
-	if err != nil {
-		return []Lambda{}, err
-	}
+	params := &lambda.ListFunctionsInput{}
 	listOfFunctions := make([]Lambda, 0)
-	for _, lambda := range result.Functions {
-		runtime, _ := lambda.Runtime.MarshalValue()
-		listOfFunctions = append(listOfFunctions, Lambda{
-			Name:    *lambda.FunctionName,
-			Memory:  *lambda.MemorySize,
-			Runtime: runtime,
-		})
+	for {
+		req := svc.ListFunctionsRequest(params)
+		result, err := req.Send(context.Background())
+		if err != nil {
+			return []Lambda{}, err
+		}
+
+		for _, lambda := range result.Functions {
+			runtime, _ := lambda.Runtime.MarshalValue()
+			listOfFunctions = append(listOfFunctions, Lambda{
+				Name:    *lambda.FunctionName,
+				Memory:  *lambda.MemorySize,
+				Runtime: runtime,
+			})
+		}
+		if result.NextMarker == nil {
+			break
+		}
+		params = &lambda.ListFunctionsInput{
+			Marker: result.NextMarker,
+		}
 	}
 	return listOfFunctions, nil
 }

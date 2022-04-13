@@ -20,7 +20,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/projects`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -32,7 +32,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/instances`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -43,7 +43,7 @@ export class OvhService {
     return this.http
       .get(`${this.BASE_URL}/cloud/storage`).pipe(
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -55,7 +55,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/users`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -67,7 +67,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/volumes`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -79,7 +79,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/snapshots`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -91,7 +91,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/alerts`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -103,7 +103,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/current`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -115,7 +115,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/images`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -127,7 +127,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/ip`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -139,7 +139,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/network/public`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -151,7 +151,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/network/private`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -163,7 +163,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/failover/ip`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -175,7 +175,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/vrack`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -187,7 +187,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/kube/clusters`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -199,7 +199,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/kube/nodes`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -211,7 +211,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/sshkeys`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -223,7 +223,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/quotas`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -235,7 +235,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/ssl/certificates`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -247,7 +247,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/ssl/gateways`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -259,7 +259,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/profile`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)
@@ -271,7 +271,7 @@ export class OvhService {
       .get(`${this.BASE_URL}/cloud/tickets`).pipe(
 
         catchError(err => {
-          let payload = JSON.parse(err._body)
+          let payload = err.error;
           if (payload && payload.error)
             this.storeService.add(payload.error);
           return observableThrowError(err.json().error)

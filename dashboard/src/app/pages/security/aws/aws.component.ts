@@ -38,38 +38,6 @@ export class AwsSecurityComponent implements OnInit, AfterViewInit, OnDestroy {
   private _subscription: Subscription;
 
   constructor(private awsService: AwsService, private storeService: StoreService) {
-    this.initState();
-
-    this._subscription = this.storeService.profileChanged.subscribe(profile => {
-      this.signInEventsChart.detach();
-
-      for (let j = 0; j < 3; j++) {
-        let charts = document.getElementsByTagName('svg');
-        for (let i = 0; i < charts.length; i++) {
-          charts[i].outerHTML = ""
-        }
-      }
-
-      this.kmsKeys = 0;
-      this.securityGroups = 0;
-      this.keyPairs = 0;
-      this.routeTables = 0;
-      this.acmCertificates = 0;
-      this.acmExpiredCertificates = 0;
-      this.unrestrictedSecurityGroups = [];
-      this.returnedUnrestrictedSecurityGroups = [];
-      this.consoleLoginSourceIps = [];
-
-      this.loadingKMSKeys = true;
-      this.loadingSecurityGroups = true;
-      this.loadingKeyPairs = true;
-      this.loadingRouteTables = true;
-      this.loadingACMCertificates = true;
-      this.loadingACMExpiredCertificates = true;
-      this.loadingSignInEventsChart = true;
-
-      this.initState();
-    });
   }
 
   private initState() {
@@ -196,6 +164,39 @@ export class AwsSecurityComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.showSourceIpLogin({});
+
+    this.initState();
+
+    this._subscription = this.storeService.profileChanged.subscribe(profile => {
+      this.signInEventsChart.detach();
+
+      for (let j = 0; j < 3; j++) {
+        let charts = document.getElementsByTagName('svg');
+        for (let i = 0; i < charts.length; i++) {
+          charts[i].outerHTML = ""
+        }
+      }
+
+      this.kmsKeys = 0;
+      this.securityGroups = 0;
+      this.keyPairs = 0;
+      this.routeTables = 0;
+      this.acmCertificates = 0;
+      this.acmExpiredCertificates = 0;
+      this.unrestrictedSecurityGroups = [];
+      this.returnedUnrestrictedSecurityGroups = [];
+      this.consoleLoginSourceIps = [];
+
+      this.loadingKMSKeys = true;
+      this.loadingSecurityGroups = true;
+      this.loadingKeyPairs = true;
+      this.loadingRouteTables = true;
+      this.loadingACMCertificates = true;
+      this.loadingACMExpiredCertificates = true;
+      this.loadingSignInEventsChart = true;
+
+      this.initState();
+    });
   }
 
   ngOnInit() { }

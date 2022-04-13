@@ -9,20 +9,23 @@ import (
 	. "github.com/mlabouardy/komiser/models/azure"
 )
 
-func getInvoicesClient(subscriptionID string) billing.InvoicesClient {
+func getInvoicesClient(subscriptionID string) (billing.InvoicesClient, error) {
 	a, err := auth.NewAuthorizerFromEnvironment()
 	if err != nil {
-		panic(err)
+		return billing.InvoicesClient{}, err
 	}
 	invoicesClient := billing.NewInvoicesClient(subscriptionID)
 	invoicesClient.Authorizer = a
-	return invoicesClient
+	return invoicesClient, nil
 }
 
 func (azure Azure) GetBilling(subscriptionID string) (Invoice, error) {
 	var bill float64
 	var currency string
-	invoicesClient := getInvoicesClient(subscriptionID)
+	invoicesClient, err := getInvoicesClient(subscriptionID)
+	if err != nil {
+		return Invoice{}, err
+	}
 	ctx := context.Background()
 	current, previous := getTargetDates()
 	for invItr, err := invoicesClient.ListByBillingSubscriptionComplete(ctx, previous, current); invItr.NotDone(); invItr.Next() {

@@ -1,9 +1,10 @@
 <div class="main-header">
     <div class="logo-header">
         <a class="logo" href="index.html">
-            <img src="https://cdn.komiser.io/images/logo-home.png" style="width: 32px; margin-right:10px" /> Komiser Dashboard</a>
-        <button aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler sidenav-toggler ml-auto"
-            data-target="collapse" data-toggle="collapse" type="button">
+            <img src="https://cdn.komiser.io/images/logo-home.png" style="width: 32px; margin-right:10px" /> Komiser
+            Dashboard</a>
+        <button aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler sidenav-toggler ml-auto" data-target="collapse" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <button class="topbar-toggler more">
@@ -24,14 +25,14 @@
             </form>
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                 <li class="nav-item dropdown hidden-caret">
-                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" routerLink="/limits"
-                        id="navbarDropdown" role="button">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                        data-toggle="dropdown" routerLink="/limits" id="navbarDropdown" role="button">
                         <i class="la la-rocket"></i>
                     </a>
                 </li>
                 <li class="nav-item dropdown hidden-caret">
-                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown"
-                        role="button">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                        data-toggle="dropdown" href="#" id="navbarDropdown" role="button">
                         <i class="la la-bell"></i>
                         <span class="notification" *ngIf="notifications.length > 0">{{notifications.length}}</span>
                     </a>
@@ -51,7 +52,8 @@
                                         <span class="block">
                                             {{notification.content}}
                                         </span>
-                                        <span class="badge badge-secondary badge-pill float-right" *ngIf="notification.total > 1">{{notification.total}}</span>
+                                        <span class="badge badge-secondary badge-pill float-right"
+                                            *ngIf="notification.total > 1">{{notification.total}}</span>
                                         <span class="time">{{calcMoment(notification.timestamp)}}</span>
                                     </div>
                                 </a>
@@ -126,7 +128,8 @@
                     <p>Security</p>
                 </a>
             </li>
-            <li class="nav-item" routerLinkActive="active" *ngIf="currentProvider.value != 'digitalocean' && currentProvider.value != 'azure'">
+            <li class="nav-item" routerLinkActive="active"
+                *ngIf="currentProvider.value != 'digitalocean' && currentProvider.value != 'azure'">
                 <a routerLink="/data-and-ai">
                     <i class="la la-commenting"></i>
                     <p>Data & AI</p>
@@ -139,18 +142,20 @@
         display: block;
         width: 100%;">
             <label for="exampleFormControlSelect1" style="font-weight: 700">
-                    <i class="la la-cloud" style="margin-left:10px;"></i>  Cloud Provider: </label>
+                <i class="la la-cloud" style="margin-left:10px;"></i> Cloud Provider: </label>
             <select class="form-control" (change)="onCloudProviderSelected($event.target.value)">
-                <option *ngFor="let provider of availableProviders" [value]="provider.value" [selected]="provider.value == currentProvider.value">{{provider.label}}</option>
+                <option *ngFor="let provider of availableProviders" [value]="provider.value"
+                    [selected]="provider.value == currentProvider.value">{{provider.label}}</option>
             </select>
             <div *ngIf="currentProvider.value == 'aws' && profiles.length > 1" style="margin-top:10px;">
-                    <label for="exampleFormControlSelect1" style="font-weight: 700">
-                            <i class="devicon-redhat-plain" style="margin-left:10px;"></i> AWS Account: </label>
-                        <select class="form-control" (change)="onProfileSelected($event.target.value)">
-                            <option *ngFor="let profile of profiles" [value]="profile" [selected]="profile == currentProfile">{{profile}}</option>
-                        </select>
+                <label for="exampleFormControlSelect1" style="font-weight: 700">
+                    <i class="devicon-redhat-plain" style="margin-left:10px;"></i> AWS Account: </label>
+                <select class="form-control" (change)="onProfileSelected($event.target.value)">
+                    <option *ngFor="let profile of profiles" [value]="profile" [selected]="profile == currentProfile">
+                        {{profile}}</option>
+                </select>
             </div>
-            
+
         </div>
 
     </div>
@@ -162,18 +167,19 @@
             <nav class="pull-left">
                 <ul class="nav">
                     <li class="nav-item">
+                        <a class="nav-link"
+                            href="https://join.slack.com/t/komiser/shared_invite/zt-141wqevac-mjY6psVrChaf0EUGryHJjA">Slack</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="https://www.github.com/mlabouardy/komiser">GitHub</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://docs.komiser.io">Help</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.komiser.io">Licenses</a>
-                    </li>
                 </ul>
             </nav>
             <div class="copyright ml-auto">
-                2019, made with
+                2022, made with
                 <i class="la la-heart heart text-danger"></i> by
                 <a href="https://www.komiser.io">Komiser</a>
             </div>

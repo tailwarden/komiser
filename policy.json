@@ -101,8 +101,18 @@
                 "redshift:DescribeClusters",
                 "tag:GetResources",
                 "route53:ListResourceRecordSets",
-                "support:*",
+                "support:DescribeCases",
                 "swf:ListDomains"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "7",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:DescribeServices",
+                "ecs:DescribeTasks",
+                "ecs:DescribeClusters"
             ],
             "Resource": "*"
         }

@@ -13,6 +13,10 @@ type GCPHandler struct {
 	gcp   GCP
 }
 
+func (handler *GCPHandler) GetGCPHandler() GCP {
+	return handler.gcp
+}
+
 func NewGCPHandler(cache Cache, dataset string) *GCPHandler {
 	gcpHandler := GCPHandler{
 		cache: cache,
