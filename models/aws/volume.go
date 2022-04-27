@@ -9,4 +9,5 @@ type Volume struct {
 	Size       int64
 	State      string
 	VolumeType string
+	Encrypted  bool
 }

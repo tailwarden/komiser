@@ -191,6 +191,24 @@
           </div>
         </div>
       </div>
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5">
+              <div class="icon-big text-center icon-warning">
+                <img src="https://cdn.komiser.io/images/services/aws/ebs.png" class="service-logo" />
+              </div>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+              <div class="numbers">
+                <p class="card-category">EBS Unencrypted</p>
+                <h4 class="card-title" *ngIf="!loadingUnencryptedEBS">{{unencryptedEBS}}</h4>
+                <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUnencryptedEBS"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col-md-3">
       <div class="card card-stats">
