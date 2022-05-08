@@ -10,6 +10,7 @@ import { DigitaloceanService } from './services/digitalocean.service';
 import { GcpService } from './services/gcp.service';
 import { OvhService } from './services/ovh.service';
 import { StoreService } from './services/store.service';
+import { CivoService } from './services/civo.service';
 
 declare var ga: Function;
 
@@ -47,6 +48,10 @@ export class AppComponent implements OnDestroy {
       label: "Azure",
       value: "azure",
     },
+    {
+      label: "Civo",
+      value: "civo",
+    },
   ];
 
   private _storeService: StoreService;
@@ -59,7 +64,8 @@ export class AppComponent implements OnDestroy {
     private storeService: StoreService,
     private digitaloceanService: DigitaloceanService,
     private ovhService: OvhService,
-    private azureService: AzureService
+    private azureService: AzureService,
+    private civoService: CivoService,
   ) {
     this.providers["aws"] = {
       label: "Amazon Web Services",
@@ -89,6 +95,11 @@ export class AppComponent implements OnDestroy {
       value: "azure",
       logo: "https://swimburger.net/media/fbqnp2ie/azure.svg",
     };
+    this.providers["civo"] = {
+      label: "Civo",
+      value: "civo",
+      logo: "https://www.civo.com/brand-assets/logo/full-colour/civo-logo-fullcolour.png",
+    }
 
     //if (this.storeService.getProvider() == 'aws') {
     if (localStorage.getItem("profile")) {

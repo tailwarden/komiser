@@ -20,6 +20,7 @@ import (
 
 	//	. "github.com/mlabouardy/komiser/services/ini"
 	. "github.com/mlabouardy/komiser/handlers/azure"
+	. "github.com/mlabouardy/komiser/handlers/civo"
 	"github.com/urfave/cli"
 )
 
@@ -38,6 +39,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	ovhHandler := NewOVHHandler(cache, "")
 	azureHandler := NewAzureHandler(cache)
 	alertHandler := NewAlertHandler(awsHandler, gcpHandler, azureHandler)
+	civoHandler := NewCivoHandler(cache)
 	c := cron.New()
 	c.AddFunc(schedule, alertHandler.DailyNotifHandler)
 	c.Start()
@@ -221,6 +223,17 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/azure/network/subnets", azureHandler.SubnetsHandler)
 	r.HandleFunc("/azure/network/dnszones", azureHandler.DNSZonesHandler)
 	r.HandleFunc("/azure/billing/total", azureHandler.InvoiceHandler)
+
+	r.HandleFunc("/civo/compute/disks", civoHandler.DisksHandler)
+	r.HandleFunc("/civo/kubernetes/clusters", civoHandler.K8sClustersHandler)
+	r.HandleFunc("/civo/network/dnsdomains", civoHandler.DNSDomainsHandler)
+	r.HandleFunc("/civo/security/firewallrules", civoHandler.FirewallRulesHandler)
+	r.HandleFunc("/civo/compute/instances", civoHandler.InstancesHandler)
+	r.HandleFunc("/civo/network/loadbalancers", civoHandler.LoadBalancersHandler)
+	r.HandleFunc("/civo/network/private", civoHandler.PrivateNetworksHandler)
+	r.HandleFunc("/civo/resources/regions", civoHandler.RegionsHandler)
+	r.HandleFunc("/civo/security/sshkeys", civoHandler.SSHKeysHandler)
+	r.HandleFunc("/civo/compute/volumes", civoHandler.VolumesHandler)
 
 	r.HandleFunc("/integrations", alertHandler.ListIntegrationsHandler)
 	r.HandleFunc("/integrations/slack", alertHandler.SetupSlackHandler).Methods("POST")

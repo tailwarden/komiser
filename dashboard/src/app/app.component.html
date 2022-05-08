@@ -129,7 +129,7 @@
                 </a>
             </li>
             <li class="nav-item" routerLinkActive="active"
-                *ngIf="currentProvider.value != 'digitalocean' && currentProvider.value != 'azure'">
+                *ngIf="currentProvider.value != 'digitalocean' && currentProvider.value != 'azure' && currentProvider.value != 'civo'">
                 <a routerLink="/data-and-ai">
                     <i class="la la-commenting"></i>
                     <p>Data & AI</p>

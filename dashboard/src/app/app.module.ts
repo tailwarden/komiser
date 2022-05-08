@@ -10,14 +10,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AwsService } from './services/aws.service';
 import { AzureService } from './services/azure.service';
+import { CivoService } from './services/civo.service';
 import { AwsComputeComponent } from './pages/compute/aws/aws.component';
 import { AzureComputeComponent } from './pages/compute/azure/azure.component';
+import { CivoComputeComponent } from './pages/compute/civo/civo.component';
 import { ComputeComponent } from './pages/compute/compute.component';
 import { DigitaloceanComputeComponent } from './pages/compute/digitalocean/digitalocean.component';
 import { GcpComputeComponent } from './pages/compute/gcp/gcp.component';
 import { OvhComputeComponent } from './pages/compute/ovh/ovh.component';
 import { AwsDashboardComponent } from './pages/dashboard/aws/aws.component';
 import { AzureDashboardComponent } from './pages/dashboard/azure/azure.component';
+import { CivoDashboardComponent } from './pages/dashboard/civo/civo.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DigitaloceanDashboardComponent } from './pages/dashboard/digitalocean/digitalocean.component';
 import { GcpDashboardComponent } from './pages/dashboard/gcp/gcp.component';
@@ -35,6 +38,7 @@ import { LimitsComponent } from './pages/limits/limits.component';
 import { OvhLimitsComponent } from './pages/limits/ovh/ovh.component';
 import { AwsNetworkComponent } from './pages/network/aws/aws.component';
 import { AzureNetworkComponent } from './pages/network/azure/azure.component';
+import { CivoNetworkComponent } from './pages/network/civo/civo.component';
 import { DigitaloceanNetworkComponent } from './pages/network/digitalocean/digitalocean.component';
 import { GcpNetworkComponent } from './pages/network/gcp/gcp.component';
 import { NetworkComponent } from './pages/network/network.component';
@@ -47,12 +51,14 @@ import { OvhProfileComponent } from './pages/profile/ovh/ovh.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AwsSecurityComponent } from './pages/security/aws/aws.component';
 import { AzureSecurityComponent } from './pages/security/azure/azure.component';
+import { CivoSecurityComponent } from './pages/security/civo/civo.component';
 import { DigitaloceanSecurityComponent } from './pages/security/digitalocean/digitalocean.component';
 import { GcpSecurityComponent } from './pages/security/gcp/gcp.component';
 import { OvhSecurityComponent } from './pages/security/ovh/ovh.component';
 import { SecurityComponent } from './pages/security/security.component';
 import { AwsStorageComponent } from './pages/storage/aws/aws.component';
 import { AzureStorageComponent } from './pages/storage/azure/azure.component';
+import { CivoStorageComponent } from './pages/storage/civo/civo.component';
 import { DigitaloceanStorageComponent } from './pages/storage/digitalocean/digitalocean.component';
 import { GcpStorageComponent } from './pages/storage/gcp/gcp.component';
 import { OvhStorageComponent } from './pages/storage/ovh/ovh.component';
@@ -155,6 +161,11 @@ const appRoutes: Routes = [
     DigitaloceanNetworkComponent,
     DigitaloceanSecurityComponent,
     AzureDashboardComponent,
+    CivoComputeComponent,
+    CivoDashboardComponent,
+    CivoNetworkComponent,
+    CivoSecurityComponent,
+    CivoStorageComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
@@ -173,7 +184,8 @@ const appRoutes: Routes = [
     GcpService,
     OvhService,
     AzureService,
-    SettingsService
+    SettingsService,
+    CivoService
   ],
   bootstrap: [AppComponent],
 })

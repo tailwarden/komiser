@@ -1,0 +1,44 @@
+<section>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/volumes.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Disks Number</p>
+                  <h4 class="card-title" *ngIf="!loadingDisksNumber">{{disksNumber}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingDisksNumber"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <img src="https://cdn.komiser.io/images/volumes.png" class="gcp-logo" />
+                </div>
+              </div>
+              <div class="col-7 d-flex align-items-center">
+                <div class="numbers">
+                  <p class="card-category">Volumes</p>
+                  <h4 class="card-title" *ngIf="!loadingVolumes">{{volumes}}</h4>
+                  <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingVolumes"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

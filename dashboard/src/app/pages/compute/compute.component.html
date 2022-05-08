@@ -13,5 +13,7 @@
     <digitalocean-compute
       *ngIf="provider == 'digitalocean'"
     ></digitalocean-compute>
+
+    <civo-compute *ngIf="provider == 'civo'"></civo-compute>
   </div>
 </div>
