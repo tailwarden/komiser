@@ -1,10 +1,10 @@
 **Komiser is back 🎉 and we're looking for maintainers to work on the new roadmap, if you're interested, join us on our <a href="https://discord.gg/MfUy73AUyd">Discord</a> community**
 
 <a href="https://komiser.io">
-  <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/logo.png" width="200" align="right" alt="Amp Logo">
+  <img src="https://cdn.komiser.io/images/logo.png" width="200" align="right" alt="Amp Logo">
 </a>
 
-<a href="https://komiser.io"><img alt="Amp" src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/icon.png" width="120" valign="middle"></a>
+<a href="https://komiser.io"><img alt="Amp" src="https://cdn.komiser.io/images/icon.png" width="120" valign="middle"></a>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/MfUy73AUyd) <a href="https://github.com/mlabouardy/komiser#backers"><img src="https://opencollective.com/komiser/backers/badge.svg" alt="OpenCollective"></a>  <a href="https://github.com/mlabouardy/komiser#sponsors"><img src="https://opencollective.com/komiser/sponsors/badge.svg" alt="OpenCollective"></a> <a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser.svg?type=shield"/></a> <span class="badge-patreon"><a href="https://patreon.com/komiser" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span> <span class="badge-opencollective"><a href="https://opencollective.com/komiser" title="Donate to this project using Open Collective"><img src="https://img.shields.io/badge/open%20collective-donate-yellow.svg" alt="Open Collective donate button" /></a></span>
@@ -27,7 +27,7 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 <p align="center">
 
-[![IMAGE ALT TEXT HERE](https://s3.eu-west-3.amazonaws.com/komiser-assets/images/thumbnail.png?v=3)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
+[![IMAGE ALT TEXT HERE](https://cdn.komiser.io/images/thumbnail.png?v=3)](https://www.youtube.com/watch?v=DDWf2KnvgE8)
 
 </p>
 
@@ -108,7 +108,7 @@ komiser start --port 3000 --redis localhost:6379 --duration 30
 * Point your browser to http://localhost:3000
 
 <p align="center">
-    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-aws.png"/>
+    <img src="https://cdn.komiser.io/images/dashboard-aws.png"/>
 </p>
 
 #### Multiple AWS Accounts Support
@@ -140,7 +140,7 @@ komiser start --port 3000 --redis localhost:6379 --duration 30 --multiple
 * If you point your browser to http://localhost:3000, you should be able to see your accounts:
 
 <p align="center">
-    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-aws-multiple.png"/>
+    <img src="https://cdn.komiser.io/images/dashboard-aws-multiple.png"/>
 </p>
 
 ### GCP
@@ -182,7 +182,7 @@ komiser start --port 3000 --dataset project-id.dataset-name.table-name
 * Point your browser to http://localhost:3000
 
 <p align="center">
-    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-gcp.png"/>
+    <img src="https://cdn.komiser.io/images/dashboard-gcp.png"/>
 </p>
 
 ### Azure
@@ -231,7 +231,7 @@ consumer_key=my_consumer_key
 * If you point your browser to http://localhost:3000, you should be able to see your projects:
 
 <p align="center">
-    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-ovh.png"/>
+    <img src="https://cdn.komiser.io/images/dashboard-ovh.png"/>
 </p>
 
 ### DigitalOcean
@@ -251,7 +251,7 @@ export DIGITALOCEAN_ACCESS_TOKEN=<TOKEN>
 * If you point your browser to http://localhost:3000, you should be able to see your projects:
 
 <p align="center">
-    <img src="https://s3.eu-west-3.amazonaws.com/komiser-assets/images/dashboard-digitalocean.png"/>
+    <img src="https://cdn.komiser.io/images/dashboard-digitalocean.png"/>
 </p>
 
 ## Options
