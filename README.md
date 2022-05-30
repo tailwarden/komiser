@@ -7,7 +7,7 @@
 <a href="https://komiser.io"><img alt="Amp" src="https://cdn.komiser.io/images/icon.png" width="120" valign="middle"></a>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/MfUy73AUyd)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.oraculi.io/)
 
 
 Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
