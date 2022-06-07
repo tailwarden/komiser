@@ -1,20 +1,20 @@
-**Komiser is back 🎉 and we're looking for maintainers to work on the new roadmap, if you're interested, join us on our <a href="https://discord.gg/MfUy73AUyd">Discord</a> community**
+**Komiser is back 🎉 and we're looking for maintainers to work on the new roadmap, if you're interested, join us on our <a href="https://discord.oraculi.io">Discord</a> community**
 
 <a href="https://komiser.io">
   <img src="https://cdn.komiser.io/images/logo.png" width="200" align="right" alt="Amp Logo">
 </a>
 
-<a href="https://komiser.io"><img alt="Amp" src="https://cdn.komiser.io/images/icon.png" width="120" valign="middle"></a>
+<a href="https://komiser.io"><img alt="Amp" src="https://cdn.komiser.io/images/komiser-oraculi.png" width="120" valign="middle"></a>
 
-[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser/) 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.oraculi.io/)
+[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
+[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/mlabouardy/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.oraculi.io/)
 
 
 Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
 
 **Discuss it on [Product Hunt](https://www.producthunt.com/posts/komiser) 🦄**
 
-*Komiser EE is available in private beta test stage, sign in for free at [https://cloud.komiser.io](https://cloud.komiser.io)*
+*Cloud version is available in private beta test stage, sign in for free at [https://cloud.oraculi.io](https://cloud.oraculi.io)*
 
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiseree) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/mlabouardy/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
@@ -286,18 +286,14 @@ Have a bug or a feature request? Please first read the issue guidelines and sear
 
 ## Roadmap and contributing
 
-Komiser is written in Golang and is MIT licensed - contributions are welcomed whether that means providing feedback or testing existing and new feature.
+Komiser is written in Golang and is Elv2 licensed - contributions are welcomed whether that means providing feedback or testing existing and new feature.
 
 ## Users
 
-If you'd like to have your company represented and are using Komiser please give formal written permission below via a comment on this [thread](https://github.com/mlabouardy/komiser/issues/76) or  via email to contact@komiser.io.
+If you'd like to have your company represented and are using Komiser please give formal written permission below via a comment on this [thread](https://github.com/mlabouardy/komiser/issues/76) or via email to contact@oraculi.io.
 
 We will need a URL to a svg or png logo, a text title and a company URL.
 
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/mlabouardy/komiser/tags). 
-
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmlabouardy%2Fkomiser?ref=badge_large)
