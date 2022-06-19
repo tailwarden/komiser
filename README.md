@@ -37,24 +37,24 @@ Does your company use Komiser?  Ask your manager or marketing team if your compa
 
 ## Download
 
-Below are the available downloads for the latest version of Komiser (2.6.0). Please download the proper package for your operating system and architecture.
+Below are the available downloads for the latest version of Komiser (2.7.0). Please download the proper package for your operating system and architecture.
 
 ### Linux:
 
 ```
-wget https://cli.komiser.io/2.6.0/linux/komiser
+wget https://cli.komiser.io/2.7.0/linux/komiser
 ```
 
 ### Windows:
 
 ```
-wget https://cli.komiser.io/2.6.0/windows/komiser -OutFile komiser.exe
+wget https://cli.komiser.io/2.7.0/windows/komiser -OutFile komiser.exe
 ```
 
 ### Mac OS X:
 
 ```
-wget https://cli.komiser.io/2.6.0/osx/komiser
+wget https://cli.komiser.io/2.7.0/osx/komiser
 ```
 
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
@@ -67,7 +67,7 @@ brew install komiser
 ### Docker:
 
 ```
-docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.6.0
+docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e AWS_DEFAULT_REGION="" --name komiser mlabouardy/komiser:2.7.0
 ```
 
 ## How to use
@@ -199,6 +199,10 @@ komiser start --port 3000
 ```
 
 * Point your browser to http://localhost:3000
+
+<p align="center">
+    <img src="https://cdn.komiser.io/images/dashboard-azure.png"/>
+</p>
 
 ### OVH
 

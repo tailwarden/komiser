@@ -1,4 +1,4 @@
-.service-logo{
+.service-logo {
     width: 30px;
 }
 
@@ -6,7 +6,7 @@
     width: 370px;
 }
 
-.notif-content{
+.notif-content {
     width: 100%;
 }
 
@@ -17,6 +17,10 @@
     margin-top: 50px;
 }
 
-.photo img{
+.photo img {
     object-fit: contain !important;
+}
+
+.logo img {
+    width: 125px;
 }

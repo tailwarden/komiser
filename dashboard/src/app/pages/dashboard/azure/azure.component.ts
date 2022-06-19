@@ -35,14 +35,7 @@ export class AzureDashboardComponent
     ["westus3", { latitude: "33.448376", longitude: "-112.074036" }],
     ["australiaeast", { latitude: "-33.86", longitude: "151.2094" }],
     ["southeastasia", { latitude: "1.283", longitude: "103.833" }],
-    ["southeastasia", { latitude: "1.283", longitude: "103.833" }],
-    /* ["ams", { latitude: "52.370216", longitude: "4.895168" }],
-     ["sfo", { latitude: "37.774929", longitude: "-122.419418" }],
-     ["sgp", { latitude: "1.352083", longitude: "103.819839" }],
-     ["lon", { latitude: "51.507351", longitude: "-0.127758" }],
-     ["fra", { latitude: "50.110924", longitude: "8.682127" }],
-     ["tor", { latitude: "43.653225", longitude: "-79.383186" }],
-     ["blr", { latitude: "12.971599", longitude: "77.594566" }],*/
+    ['australiaeas', { latitude: '-31.84', longitude: '145.61' }],
   ]);
 
   private _subscription: Subscription;

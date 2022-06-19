@@ -29,10 +29,6 @@ import { OvhDataAndAIComponent } from './pages/data-and-ai/ovh/ovh.component';
 import { DigitaloceanService } from './services/digitalocean.service';
 import { GcpService } from './services/gcp.service';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
-import { AwsLimitsComponent } from './pages/limits/aws/aws.component';
-import { GcpLimitsComponent } from './pages/limits/gcp/gcp.component';
-import { LimitsComponent } from './pages/limits/limits.component';
-import { OvhLimitsComponent } from './pages/limits/ovh/ovh.component';
 import { AwsNetworkComponent } from './pages/network/aws/aws.component';
 import { AzureNetworkComponent } from './pages/network/azure/azure.component';
 import { DigitaloceanNetworkComponent } from './pages/network/digitalocean/digitalocean.component';
@@ -93,11 +89,6 @@ const appRoutes: Routes = [
     data: { title: "Profile - Komiser" },
   },
   {
-    path: "limits",
-    component: LimitsComponent,
-    data: { title: "Service Limits Checks - Komiser" },
-  },
-  {
     path: "notifications",
     component: NotificationsComponent,
     data: { title: "Notifications - Komiser" },
@@ -120,7 +111,6 @@ const appRoutes: Routes = [
     SecurityComponent,
     DataAndAiComponent,
     ProfileComponent,
-    LimitsComponent,
     AwsDashboardComponent,
     GcpDashboardComponent,
     AwsComputeComponent,
@@ -136,8 +126,6 @@ const appRoutes: Routes = [
     GcpSecurityComponent,
     GcpDataAndAIComponent,
     AwsDataAndAIComponent,
-    AwsLimitsComponent,
-    GcpLimitsComponent,
     AwsProfileComponent,
     GcpProfileComponent,
     NotificationsComponent,
@@ -147,7 +135,6 @@ const appRoutes: Routes = [
     OvhNetworkComponent,
     OvhSecurityComponent,
     OvhDataAndAIComponent,
-    OvhLimitsComponent,
     OvhProfileComponent,
     DigitaloceanDashboardComponent,
     DigitaloceanComputeComponent,
