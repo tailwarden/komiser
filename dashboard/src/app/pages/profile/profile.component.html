@@ -1,10 +1,11 @@
 <div class="content">
-  <div class="container-fluid">
-    <h4 class="page-title">Profile</h4>
-    
-    <aws-profile *ngIf="provider == 'aws'"></aws-profile>
+    <div class="container-fluid">
+        <h4 class="page-title">Profile</h4>
 
-    <gcp-profile *ngIf="provider == 'gcp'"></gcp-profile>
+        <aws-profile *ngIf="provider === 'aws'"></aws-profile>
 
-    <ovh-profile *ngIf="provider == 'ovh'"></ovh-profile>
-  </div>
+        <gcp-profile *ngIf="provider === 'gcp'"></gcp-profile>
+
+        <ovh-profile *ngIf="provider === 'ovh'"></ovh-profile>
+    </div>
+</div>

@@ -3,26 +3,27 @@ import { StoreService } from '../../services/store.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-network',
-  templateUrl: './network.component.html',
-  styleUrls: ['./network.component.css']
+    selector: 'app-network',
+    templateUrl: './network.component.html',
+    styleUrls: ['./network.component.css'],
 })
 export class NetworkComponent implements OnInit, OnDestroy {
-  public provider: string;
-  public _subscription: Subscription;
+    public provider: string;
+    public _subscription: Subscription;
 
-  constructor(private storeService: StoreService) {
-    this.provider = this.storeService.getProvider();
-    this._subscription = this.storeService.providerChanged.subscribe(provider => {
-      console.log(provider);
-      this.provider = provider;
-    })
-  }
+    constructor(private storeService: StoreService) {
+        this.provider = this.storeService.getProvider();
+        this._subscription = this.storeService.providerChanged.subscribe(
+            (provider) => {
+                console.log(provider);
+                this.provider = provider;
+            }
+        );
+    }
 
-  ngOnDestroy() {
-    this._subscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this._subscription.unsubscribe();
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {}
 }

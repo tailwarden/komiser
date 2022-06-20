@@ -3,22 +3,22 @@
     margin-bottom: 10px;
 }
 
-#apigatewayRequests{
+#apigatewayRequests {
     height: 150px !important;
 }
 
-#cloudfrontRequests{
+#cloudfrontRequests {
     height: 150px !important;
 }
 
-#elbRequests{
+#elbRequests {
     height: 150px !important;
 }
 
-#natGatewayTraffic{
+#natGatewayTraffic {
     height: 150px !important;
 }
 
-#natGatewayChartTraffic{
+#natGatewayChartTraffic {
     min-height: 150px;
 }

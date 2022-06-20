@@ -1,13 +1,12 @@
-.card-golang{
-    background: #72CEDD !important;
+.card-golang {
+    background: #72cedd !important;
 }
 
-
-.card-python{
-    background: #FFD344 !important;
+.card-python {
+    background: #ffd344 !important;
 }
 
-.limit-column{
+.limit-column {
     max-width: 300px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -19,6 +18,6 @@
     padding-bottom: 10px !important;
 }
 
-#gaeBandwidthChart{
+#gaeBandwidthChart {
     min-height: 150px;
 }
