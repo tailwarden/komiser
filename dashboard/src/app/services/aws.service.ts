@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 export class AwsService {
     private BASE_URL = `${environment.apiUrl}/aws`;
 
-    constructor(private http: HttpClient, private storeService: StoreService) {}
+    constructor(private http: HttpClient, private storeService: StoreService) { }
 
     public getProfiles(): any {
         return this.http.get(`${this.BASE_URL}/profiles`).pipe(
@@ -20,7 +20,7 @@ export class AwsService {
                 let payload = err.error;
                 if (payload && payload.error)
                     this.storeService.add(payload.error);
-                return observableThrowError(err.json().error);
+                return observableThrowError(err.error);
             })
         );
     }
@@ -35,7 +35,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -50,7 +50,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -63,7 +63,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -76,7 +76,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -91,7 +91,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -106,7 +106,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -121,7 +121,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -136,7 +136,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -149,7 +149,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -162,7 +162,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -175,7 +175,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -188,7 +188,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -201,7 +201,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -214,7 +214,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -229,7 +229,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -244,7 +244,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -259,7 +259,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -272,7 +272,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -285,7 +285,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -300,7 +300,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -315,7 +315,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -330,7 +330,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -345,7 +345,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -360,7 +360,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -375,7 +375,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -388,7 +388,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -401,7 +401,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -416,7 +416,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -429,7 +429,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -444,7 +444,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -457,7 +457,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -472,7 +472,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -487,7 +487,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -500,7 +500,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -513,7 +513,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -526,7 +526,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -541,7 +541,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -556,7 +556,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -571,7 +571,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -584,7 +584,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -599,7 +599,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -612,7 +612,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -625,7 +625,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -640,7 +640,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -655,7 +655,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -668,7 +668,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -683,7 +683,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -698,7 +698,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -711,7 +711,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -726,7 +726,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -741,7 +741,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -756,7 +756,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -771,7 +771,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -784,7 +784,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -799,7 +799,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -814,7 +814,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -829,7 +829,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -844,7 +844,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -857,7 +857,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -872,7 +872,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -887,7 +887,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -900,7 +900,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -915,7 +915,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -930,7 +930,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -943,7 +943,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
@@ -958,7 +958,7 @@ export class AwsService {
                     let payload = err.error;
                     if (payload && payload.error)
                         this.storeService.add(payload.error);
-                    return observableThrowError(err.json().error);
+                    return observableThrowError(err.error);
                 })
             );
     }
