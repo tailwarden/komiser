@@ -1,15 +1,17 @@
 <div class="content">
-	<div class="container-fluid">
-		<h4 class="page-title">Network</h4>
-		
-		<gcp-network *ngIf="provider == 'gcp'"></gcp-network>
+    <div class="container-fluid">
+        <h4 class="page-title">Network</h4>
 
-		<aws-network *ngIf="provider == 'aws'"></aws-network>
+        <gcp-network *ngIf="provider === 'gcp'"></gcp-network>
 
-		<ovh-network *ngIf="provider == 'ovh'"></ovh-network>
+        <aws-network *ngIf="provider === 'aws'"></aws-network>
 
-		<digitalocean-network *ngIf="provider == 'digitalocean'"></digitalocean-network>
+        <ovh-network *ngIf="provider === 'ovh'"></ovh-network>
 
-		<azure-network *ngIf="provider == 'azure'"></azure-network>
-	</div>
+        <digitalocean-network
+            *ngIf="provider === 'digitalocean'"
+        ></digitalocean-network>
+
+        <azure-network *ngIf="provider === 'azure'"></azure-network>
+    </div>
 </div>

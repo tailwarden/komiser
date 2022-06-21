@@ -1,8 +1,8 @@
-.page-item.active .page-link{
-    background-color: #FF656D !important;
-    border-color: #FF656D !important;
+.page-item.active .page-link {
+    background-color: #ff656d !important;
+    border-color: #ff656d !important;
 }
 
-#signInEventsChart{
+#signInEventsChart {
     min-height: 150px;
 }

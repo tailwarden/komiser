@@ -3,14 +3,14 @@
     padding-bottom: 10px !important;
 }
 
-#logsVolumeChart{
+#logsVolumeChart {
     height: 150px !important;
 }
 
-#storageBucketsObjectsChart{
+#storageBucketsObjectsChart {
     height: 150px !important;
 }
 
-#storageBucketsSizeChart{
+#storageBucketsSizeChart {
     height: 150px !important;
 }

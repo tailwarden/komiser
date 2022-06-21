@@ -1,27 +1,27 @@
-.card-golang{
-    background: #72CEDD !important;
+.card-golang {
+    background: #72cedd !important;
 }
 
-.card-csharp{
-    background: #9E4D99 !important;
+.card-csharp {
+    background: #9e4d99 !important;
 }
 
-.card-python{
-    background: #FFD344 !important;
+.card-python {
+    background: #ffd344 !important;
 }
 
-.card-docker{
-    background: #009BC6 !important;
+.card-docker {
+    background: #009bc6 !important;
 }
 
-.costPerInstanceTypeChart{
+.costPerInstanceTypeChart {
     min-height: 150px;
 }
 
-.lambdaInvocationsChart{
+.lambdaInvocationsChart {
     min-height: 150px;
 }
 
-.lambdaErrorsChart{
+.lambdaErrorsChart {
     min-height: 150px;
 }

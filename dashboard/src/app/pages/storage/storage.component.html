@@ -1,15 +1,17 @@
 <div class="content">
-	<div class="container-fluid">
-		<h4 class="page-title">Storage</h4>
-		
-		<gcp-storage *ngIf="provider == 'gcp'"></gcp-storage>
+    <div class="container-fluid">
+        <h4 class="page-title">Storage</h4>
 
-		<aws-storage *ngIf="provider == 'aws'"></aws-storage>
+        <gcp-storage *ngIf="provider === 'gcp'"></gcp-storage>
 
-		<ovh-storage *ngIf="provider == 'ovh'"></ovh-storage>
+        <aws-storage *ngIf="provider === 'aws'"></aws-storage>
 
-		<digitalocean-storage *ngIf="provider == 'digitalocean'"></digitalocean-storage>
+        <ovh-storage *ngIf="provider === 'ovh'"></ovh-storage>
 
-		<azure-storage *ngIf="provider == 'azure'"></azure-storage>
-	</div>
+        <digitalocean-storage
+            *ngIf="provider === 'digitalocean'"
+        ></digitalocean-storage>
+
+        <azure-storage *ngIf="provider === 'azure'"></azure-storage>
+    </div>
 </div>
