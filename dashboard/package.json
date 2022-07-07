@@ -35,7 +35,7 @@
     "gulp-webserver": "^0.9.1",
     "jquery": "^3.6.0",
     "jquery-mapael": "^2.2.0",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "ngx-bootstrap": "^2.0.5",
     "ngx-trend": "^3.4.3",
     "raphael": "^2.3.0",
