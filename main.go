@@ -244,14 +244,14 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.6.0"
+	app.Version = "2.7.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()
 	app.Authors = []cli.Author{
 		cli.Author{
 			Name:  "Mohamed Labouardy",
-			Email: "mohamed@labouardy.com",
+			Email: "mohamed@oraculi.io",
 		},
 	}
 	app.Commands = []cli.Command{
