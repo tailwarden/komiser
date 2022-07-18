@@ -4,9 +4,11 @@ We are always thrilled to receive pull requests, and do our best to process them
 
 ## Guidelines 
 
-We recommend discussing your plans on our Discord (join our <a href="https://discord.oraculi.io/">community channel</a>) before starting to code - especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give feedback on your design, and maybe point out if someone else is working on the same thing.
+We recommend discussing your plans on our Discord (join our <a href="https://discord.oraculi.io/">community server</a>) head to the `contributors` section before starting to code - especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give feedback on your design, and maybe point out if someone else is working on the same thing.
 
-Any significant improvement should be documented as a github issue before anybody starts working on it. Please take a moment to check that an issue doesn’t already exist documenting your bug report or improvement proposal. If it does, it never hurts to add a quick “+1” or “I have this problem too”. This will help prioritize the most common problems and requests
+Any significant improvements should be documented as a github issue before anybody starts working on it. Please take a moment to check that an issue doesn’t already exist documenting your bug report or improvement proposal. If it does, it never hurts to add a quick “+1” or “I have this problem too”. This will help prioritize the most common problems and requests
+
+Feel free to communicate through the `#feedback` and `#feature-request` Discord channels. If we identify you as a `contributor`, we will add you to a private `#contributors` channel, to expedite internal communication (Hope you see you there!).
 
 ## Conventions
 
