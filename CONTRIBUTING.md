@@ -8,7 +8,7 @@ We recommend discussing your plans on our Discord (join our <a href="https://dis
 
 Any significant improvements should be documented as a github issue before anybody starts working on it. Please take a moment to check that an issue doesn’t already exist documenting your bug report or improvement proposal. If it does, it never hurts to add a quick “+1” or “I have this problem too”. This will help prioritize the most common problems and requests
 
-Feel free to communicate through the `#feedback` and `#feature-request` Discord channels. If we identify you as a `contributor`, we will add you to a private `#contributors` channel, to expedite internal communication (Hope you see you there!).
+Feel free to communicate through the `#feedback` and `#feature-request` Discord channels. If we identify you as a `contributor`, we will add you to a private `#contributors` channel, to expedite internal communication (Hope to see you there!).
 
 ## Conventions
 
