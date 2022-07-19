@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 export class AwsService {
     private BASE_URL = `${environment.apiUrl}/aws`;
 
-    constructor(private http: HttpClient, private storeService: StoreService) { }
+    constructor(private http: HttpClient, private storeService: StoreService) {}
 
     public getProfiles(): any {
         return this.http.get(`${this.BASE_URL}/profiles`).pipe(

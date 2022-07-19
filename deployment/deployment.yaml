@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: IfNotPresent
       
       - name: komiser
-        image: mlabouardy/komiser:2.7.0
+        image: mlabouardy/komiser:2.8.0
         imagePullPolicy: Always
         args: [
           "--redis", "localhost:6379",
