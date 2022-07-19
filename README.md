@@ -31,10 +31,6 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 
 </p>
 
-## Sponsors
-
-Does your company use Komiser?  Ask your manager or marketing team if your company would be interested in supporting our project.  Support will allow the maintainers to dedicate more time for maintenance and new features for everyone.  Also, your company's logo will show [on GitHub](https://github.com/mlabouardy/komiser#readme) and on [our site](https://komiser.io) - who doesn't want a little extra exposure?  [Here's the info](https://opencollective.com/komiser#sponsor).
-
 ## Download
 
 Below are the available downloads for the latest version of Komiser (2.8.0). Please download the proper package for your operating system and architecture.
