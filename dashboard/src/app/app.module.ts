@@ -37,10 +37,6 @@ import { NetworkComponent } from './pages/network/network.component';
 import { OvhNetworkComponent } from './pages/network/ovh/ovh.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { OvhService } from './services/ovh.service';
-import { AwsProfileComponent } from './pages/profile/aws/aws.component';
-import { GcpProfileComponent } from './pages/profile/gcp/gcp.component';
-import { OvhProfileComponent } from './pages/profile/ovh/ovh.component';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { AwsSecurityComponent } from './pages/security/aws/aws.component';
 import { AzureSecurityComponent } from './pages/security/azure/azure.component';
 import { DigitaloceanSecurityComponent } from './pages/security/digitalocean/digitalocean.component';
@@ -84,11 +80,6 @@ const appRoutes: Routes = [
         data: { title: 'Data & AI - Komiser' },
     },
     {
-        path: 'profile',
-        component: ProfileComponent,
-        data: { title: 'Profile - Komiser' },
-    },
-    {
         path: 'notifications',
         component: NotificationsComponent,
         data: { title: 'Notifications - Komiser' },
@@ -110,7 +101,6 @@ const appRoutes: Routes = [
         NetworkComponent,
         SecurityComponent,
         DataAndAiComponent,
-        ProfileComponent,
         AwsDashboardComponent,
         GcpDashboardComponent,
         AwsComputeComponent,
@@ -126,8 +116,6 @@ const appRoutes: Routes = [
         GcpSecurityComponent,
         GcpDataAndAIComponent,
         AwsDataAndAIComponent,
-        AwsProfileComponent,
-        GcpProfileComponent,
         NotificationsComponent,
         OvhDashboardComponent,
         OvhComputeComponent,
@@ -135,7 +123,6 @@ const appRoutes: Routes = [
         OvhNetworkComponent,
         OvhSecurityComponent,
         OvhDataAndAIComponent,
-        OvhProfileComponent,
         DigitaloceanDashboardComponent,
         DigitaloceanComputeComponent,
         DigitaloceanStorageComponent,

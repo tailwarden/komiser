@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: IfNotPresent
       
       - name: komiser
-        image: mlabouardy/komiser:2.4.0
+        image: mlabouardy/komiser:2.7.0
         imagePullPolicy: Always
         args: [
           "--redis", "localhost:6379",
@@ -45,7 +45,7 @@ spec:
                 key: secret
                 name: komiser
           - name: AWS_DEFAULT_REGION
-            value: eu-west-2
+            value: us-east-1
         resources:
           requests:
             cpu: "10m"
