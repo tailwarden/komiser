@@ -73,7 +73,7 @@ docker run -d -p 3000:3000 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -
 * Create an IAM user with the following IAM [policy](https://raw.githubusercontent.com/mlabouardy/komiser/master/policy.json):
 
 ```
-wget https://komiser.s3.amazonaws.com/policy.json
+wget [https://raw.githubusercontent.com/mlabouardy/komiser/master/policy.json]
 ```
 
 * Add your **Access Key ID** and **Secret Access Key** to *~/.aws/credentials* using this format
