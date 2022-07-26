@@ -3,8 +3,11 @@ package aws
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/aws/stscreds"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
 func (handler *AWSHandler) IAMRolesHandler(w http.ResponseWriter, r *http.Request) {
@@ -92,6 +95,12 @@ func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Reques
 	profile := r.Header.Get("profile")
 	cfg, err := external.LoadDefaultAWSConfig()
 
+	fmt.Println("before assume role")
+
+	creds := stscreds.NewAssumeRoleProvider(sts.New(cfg), os.Getenv("AWS_ROLE_ARN"))
+	cfg.Credentials = creds
+
+	fmt.Println("after assume role")
 	if handler.multiple {
 		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
 		if err != nil {

@@ -630,7 +630,6 @@ export class AwsService {
             );
     }
 
-
     public getECS(): any {
         return this.http
             .get(`${this.BASE_URL}/ecs`, { headers: this.getHeaders() })

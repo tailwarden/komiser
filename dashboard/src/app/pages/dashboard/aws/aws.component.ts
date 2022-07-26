@@ -240,8 +240,6 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         );
 
-    
-
         this.AwsService.getForecastPrice().subscribe(
             (data) => {
                 this.forecastBill = this.formatNumber(data).toString();
