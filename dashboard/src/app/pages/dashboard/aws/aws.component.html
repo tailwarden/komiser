@@ -167,7 +167,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
                     <div
@@ -199,58 +199,6 @@
                                         | percent: '1.0-1'
                                 }}"
                             ></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card card-stats">
-                <div class="card-body">
-                    <p class="fw-bold mt-1">Support</p>
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="icon-big text-center icon-danger">
-                                <i class="la la-ticket text-danger"></i>
-                            </div>
-                        </div>
-                        <div class="col-7 d-flex align-items-center">
-                            <div class="numbers">
-                                <p class="card-category">Open Tickets</p>
-                                <h4
-                                    class="card-title"
-                                    *ngIf="!loadingOpenTickets"
-                                >
-                                    {{ openTickets }}
-                                </h4>
-                                <div
-                                    class="spinner-border spinner-border-sm text-muted"
-                                    *ngIf="loadingOpenTickets"
-                                ></div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="icon-big text-center">
-                                <i class="la la-check text-success"></i>
-                            </div>
-                        </div>
-                        <div class="col-7 d-flex align-items-center">
-                            <div class="numbers">
-                                <p class="card-category">Resolved Tickets</p>
-                                <h4
-                                    class="card-title"
-                                    *ngIf="!loadingResolvedTickets"
-                                >
-                                    {{ resolvedTickets }}
-                                </h4>
-                                <div
-                                    class="spinner-border spinner-border-sm text-muted"
-                                    *ngIf="loadingResolvedTickets"
-                                ></div>
-                            </div>
                         </div>
                     </div>
                 </div>

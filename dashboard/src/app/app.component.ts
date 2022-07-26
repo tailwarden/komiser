@@ -20,7 +20,6 @@ declare var ga: Function;
 })
 export class AppComponent implements OnDestroy {
     public accountName: string = 'Username';
-    public redAlarms: number;
     public profiles: Array<string> = [];
     public currentProfile: string;
     public notifications: Array<Object> = [];
@@ -142,25 +141,7 @@ export class AppComponent implements OnDestroy {
                     this.accountName = 'Username';
                 }
             );
-
-            this.awsService.getCloudwatchAlarms().subscribe(
-                (data) => {
-                    this.redAlarms = data.ALARM;
-                },
-                (err) => {
-                    this.redAlarms = 0;
-                }
-            );
         } else if (this.currentProvider.value == 'ovh') {
-            this.ovhService.getCloudAlerts().subscribe(
-                (data) => {
-                    this.redAlarms = data;
-                },
-                (err) => {
-                    this.redAlarms = 0;
-                }
-            );
-
             this.ovhService.getProfile().subscribe(
                 (data) => {
                     this.accountName = data.nichandle;
@@ -170,7 +151,6 @@ export class AppComponent implements OnDestroy {
                 }
             );
         } else if (this.currentProvider.value == 'digitalocean') {
-            this.redAlarms = 0;
             this.digitaloceanService.getProfile().subscribe(
                 (data) => {
                     this.accountName = data.email.substring(
@@ -183,8 +163,6 @@ export class AppComponent implements OnDestroy {
                 }
             );
         } else {
-            this.redAlarms = 0;
-
             this.gcpService.getProjects().subscribe(
                 (data) => {
                     this.accountName = data[0].name;

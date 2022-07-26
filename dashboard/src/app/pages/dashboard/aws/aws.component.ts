@@ -22,16 +22,12 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     public usedRegions: number = 0;
     public redAlarms: number = 0;
     public mostUsedServices: Array<any> = [];
-    public openTickets: number = 0;
-    public resolvedTickets: number = 0;
     public forecastBill: string = '0';
 
     public loadingCurrentBill: boolean = true;
     public loadingIamUsers: boolean = true;
     public loadingUsedRegions: boolean = true;
     public loadingRedAlarms: boolean = true;
-    public loadingOpenTickets: boolean = true;
-    public loadingResolvedTickets: boolean = true;
     public loadingCostHistoryChart: boolean = true;
     public loadingForecastBill: boolean = true;
     public alertConfigured: boolean = false;
@@ -244,31 +240,7 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         );
 
-        this.AwsService.getOpenSupportTickets().subscribe(
-            (data) => {
-                this.openTickets = data.length;
-                this.loadingOpenTickets = false;
-            },
-            (err) => {
-                this.openTickets = 0;
-                this.loadingOpenTickets = false;
-            }
-        );
-
-        this.AwsService.getSupportTicketsHistory().subscribe(
-            (data) => {
-                data.forEach((ticket) => {
-                    if (ticket.status == 'resolved') {
-                        this.resolvedTickets++;
-                    }
-                });
-                this.loadingResolvedTickets = false;
-            },
-            (err) => {
-                this.resolvedTickets = 0;
-                this.loadingResolvedTickets = false;
-            }
-        );
+    
 
         this.AwsService.getForecastPrice().subscribe(
             (data) => {
@@ -323,16 +295,12 @@ export class AwsDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.usedRegions = 0;
                 this.redAlarms = 0;
                 this.mostUsedServices = [];
-                this.openTickets = 0;
-                this.resolvedTickets = 0;
                 this.forecastBill = '0';
 
                 this.loadingCurrentBill = true;
                 this.loadingIamUsers = true;
                 this.loadingUsedRegions = true;
                 this.loadingRedAlarms = true;
-                this.loadingOpenTickets = true;
-                this.loadingResolvedTickets = true;
                 this.loadingCostHistoryChart = true;
                 this.loadingForecastBill = true;
 

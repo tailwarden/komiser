@@ -112,7 +112,8 @@
             "Action": [
                 "ecs:DescribeServices",
                 "ecs:DescribeTasks",
-                "ecs:DescribeClusters"
+                "ecs:DescribeClusters",
+                "glacier:ListVaults"
             ],
             "Resource": "*"
         }

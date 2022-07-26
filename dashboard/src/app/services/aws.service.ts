@@ -630,35 +630,6 @@ export class AwsService {
             );
     }
 
-    public getOpenSupportTickets(): any {
-        return this.http
-            .get(`${this.BASE_URL}/support/open`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getSupportTicketsHistory(): any {
-        return this.http
-            .get(`${this.BASE_URL}/support/history`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
 
     public getECS(): any {
         return this.http
