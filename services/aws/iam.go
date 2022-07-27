@@ -2,7 +2,6 @@ package aws
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
@@ -25,6 +24,7 @@ type Organization struct {
 }
 
 func (aws AWS) DescribeIAMRoles(cfg awsConfig.Config) (int, error) {
+	cfg.Region = "us-east-1"
 	svc := iam.NewFromConfig(cfg)
 	result, err := svc.ListRoles(context.Background(), &iam.ListRolesInput{})
 	if err != nil {
@@ -34,26 +34,30 @@ func (aws AWS) DescribeIAMRoles(cfg awsConfig.Config) (int, error) {
 }
 
 func (aws AWS) DescribeIAMUser(cfg awsConfig.Config) (IAMUser, error) {
+	cfg.Region = "us-east-1"
 	svc := iam.NewFromConfig(cfg)
 	result, err := svc.GetUser(context.Background(), &iam.GetUserInput{})
 	if err != nil {
 		return IAMUser{}, err
 	}
 
-	fmt.Println(*result.User)
+	passwordLastUser := time.Now()
+	if result.User.PasswordLastUsed != nil {
+		passwordLastUser = *result.User.PasswordLastUsed
+	}
 
 	return IAMUser{
 		Username:         *result.User.UserName,
 		ARN:              *result.User.Arn,
 		CreateDate:       *result.User.CreateDate,
 		UserId:           *result.User.UserId,
-		PasswordLastUsed: *result.User.PasswordLastUsed,
+		PasswordLastUsed: passwordLastUser,
 	}, nil
 }
 
 func (aws AWS) DescribeIAMUsers(cfg awsConfig.Config) (int, error) {
+	cfg.Region = "us-east-1"
 	svc := iam.NewFromConfig(cfg)
-	fmt.Println(svc)
 	result, err := svc.ListUsers(context.Background(), &iam.ListUsersInput{})
 	if err != nil {
 		return 0, err
@@ -62,6 +66,7 @@ func (aws AWS) DescribeIAMUsers(cfg awsConfig.Config) (int, error) {
 }
 
 func (aws AWS) DescribeIAMGroups(cfg awsConfig.Config) (int, error) {
+	cfg.Region = "us-east-1"
 	svc := iam.NewFromConfig(cfg)
 	result, err := svc.ListGroups(context.Background(), &iam.ListGroupsInput{})
 	if err != nil {
@@ -71,6 +76,7 @@ func (aws AWS) DescribeIAMGroups(cfg awsConfig.Config) (int, error) {
 }
 
 func (aws AWS) DescribeIAMPolicies(cfg awsConfig.Config) (int, error) {
+	cfg.Region = "us-east-1"
 	svc := iam.NewFromConfig(cfg)
 	result, err := svc.ListPolicies(context.Background(), &iam.ListPoliciesInput{})
 	if err != nil {
@@ -80,6 +86,7 @@ func (aws AWS) DescribeIAMPolicies(cfg awsConfig.Config) (int, error) {
 }
 
 func (aws AWS) DescribeOrganization(cfg awsConfig.Config) (Organization, error) {
+	cfg.Region = "us-east-1"
 	svc := organizations.NewFromConfig(cfg)
 	result, err := svc.DescribeOrganization(context.Background(), &organizations.DescribeOrganizationInput{})
 	if err != nil {

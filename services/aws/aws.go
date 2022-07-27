@@ -11,6 +11,7 @@ import (
 type AWS struct{}
 
 func (aws AWS) getRegions(cfg awsConfig.Config) ([]Region, error) {
+	cfg.Region = "us-east-1"
 	svc := ec2.NewFromConfig(cfg)
 	regions, err := svc.DescribeRegions(context.Background(), &ec2.DescribeRegionsInput{})
 	if err != nil {

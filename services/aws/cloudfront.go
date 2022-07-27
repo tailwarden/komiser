@@ -14,6 +14,7 @@ import (
 )
 
 func (aws AWS) DescribeCloudFrontDistributions(cfg awsConfig.Config) (int, error) {
+	cfg.Region = "us-east-1"
 	svc := cloudfront.NewFromConfig(cfg)
 	result, err := svc.ListDistributions(context.Background(), &cloudfront.ListDistributionsInput{})
 	if err != nil {
@@ -29,7 +30,7 @@ type CloudFrontMetric struct {
 
 func (awsClient AWS) GetCloudFrontRequests(cfg awsConfig.Config) ([]CloudFrontMetric, error) {
 	metrics := make([]CloudFrontMetric, 0)
-
+	cfg.Region = "us-east-1"
 	svc := cloudfront.NewFromConfig(cfg)
 	res, err := svc.ListDistributions(context.Background(), &cloudfront.ListDistributionsInput{})
 	if err != nil {

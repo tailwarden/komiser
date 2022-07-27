@@ -92,7 +92,6 @@ func (handler *AWSHandler) IAMPoliciesHandler(w http.ResponseWriter, r *http.Req
 func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
 	cfg, err := config.LoadDefaultConfig(context.Background())
-	fmt.Println(err)
 
 	if handler.multiple {
 		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
@@ -108,7 +107,6 @@ func (handler *AWSHandler) IAMUsersHandler(w http.ResponseWriter, r *http.Reques
 		respondWithJSON(w, 200, response)
 	} else {
 		response, err := handler.aws.DescribeIAMUsers(cfg)
-		fmt.Println(err)
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "iam:ListUsers is missing")
 		} else {

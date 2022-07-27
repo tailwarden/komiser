@@ -27,6 +27,7 @@ func (handler *AWSHandler) EC2InstancesHandler(w http.ResponseWriter, r *http.Re
 	} else {
 		response, err := handler.aws.DescribeInstances(cfg)
 		if err != nil {
+			fmt.Println(err)
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeInstances is missing")
 		} else {
 			handler.cache.Set(key, response)

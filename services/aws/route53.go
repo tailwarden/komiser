@@ -9,6 +9,7 @@ import (
 )
 
 func (aws AWS) DescribeHostedZones(cfg awsConfig.Config) (int, error) {
+	cfg.Region = "us-east-1"
 	svc := route53.NewFromConfig(cfg)
 	result, err := svc.ListHostedZones(context.Background(), &route53.ListHostedZonesInput{})
 	if err != nil {
@@ -19,6 +20,7 @@ func (aws AWS) DescribeHostedZones(cfg awsConfig.Config) (int, error) {
 
 func (aws AWS) DescribeARecords(cfg awsConfig.Config) (int64, error) {
 	var sum int64
+	cfg.Region = "us-east-1"
 	svc := route53.NewFromConfig(cfg)
 	result, err := svc.ListHostedZones(context.Background(), &route53.ListHostedZonesInput{})
 	if err != nil {
