@@ -24,7 +24,7 @@ jobs:
             - dist
   build_cli:
     docker:
-      - image: golang:1.17
+      - image: golang:1.18.3
     working_directory: /go/src/github.com/mlabouardy/komiser
     resource_class: large
     steps:
@@ -48,7 +48,7 @@ jobs:
          command: go-bindata-assetfs -o template.go dist/
       - run:
          name: Install gox
-         command: go get github.com/mitchellh/gox
+         command: go install github.com/mitchellh/gox@latest
       - run:
          name: Build binary
          command: gox -osarch="linux/amd64 windows/amd64 darwin/amd64"
