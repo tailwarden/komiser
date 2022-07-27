@@ -23,7 +23,10 @@ func (awsClient AWS) DescribeCacheClusters(cfg awsConfig.Config) (map[string]int
 		}
 
 		for _, cluster := range result.CacheClusters {
-			output[*cluster.Engine]++
+			if output[*cluster.ReplicationGroupId] == 0 {
+				output[*cluster.Engine]++
+				output[*cluster.ReplicationGroupId]++
+			}
 		}
 	}
 	return output, nil
