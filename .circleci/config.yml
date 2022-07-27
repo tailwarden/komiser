@@ -24,7 +24,7 @@ jobs:
             - dist
   build_cli:
     docker:
-      - image: golang:1.15
+      - image: golang:1.17
     working_directory: /go/src/github.com/mlabouardy/komiser
     resource_class: large
     steps:
