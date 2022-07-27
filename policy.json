@@ -113,7 +113,8 @@
                 "ecs:DescribeServices",
                 "ecs:DescribeTasks",
                 "ecs:DescribeClusters",
-                "glacier:ListVaults"
+                "glacier:ListVaults",
+                "ec2:DescribeSpotFleetInstances"
             ],
             "Resource": "*"
         }
