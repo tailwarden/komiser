@@ -116,9 +116,14 @@ func (awsClient AWS) getElasticLoadBalancersV2(cfg aws.Config, region string) ([
 	}
 	listOfElasticLoadBalancers := make([]LoadBalancer, 0)
 	for _, lb := range result.LoadBalancers {
+		state := ""
+		if lb.State != nil && lb.State.Reason != nil {
+			state = *lb.State.Reason
+		}
+
 		listOfElasticLoadBalancers = append(listOfElasticLoadBalancers, LoadBalancer{
 			DNSName: *lb.DNSName,
-			State:   *lb.State.Reason,
+			State:   state,
 			Type:    string(lb.Type),
 		})
 	}
