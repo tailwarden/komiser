@@ -3,18 +3,16 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
 type AWS struct{}
 
-func (aws AWS) getRegions(cfg aws.Config) ([]Region, error) {
-	cfg.Region = "eu-central-1"
-	svc := ec2.New(cfg)
-	req := svc.DescribeRegionsRequest(&ec2.DescribeRegionsInput{})
-	regions, err := req.Send(context.Background())
+func (aws AWS) getRegions(cfg awsConfig.Config) ([]Region, error) {
+	svc := ec2.NewFromConfig(cfg)
+	regions, err := svc.DescribeRegions(context.Background(), &ec2.DescribeRegionsInput{})
 	if err != nil {
 		return []Region{}, err
 	}

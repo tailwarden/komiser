@@ -8,11 +8,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudtrail"
+	"github.com/aws/aws-sdk-go-v2/service/cloudtrail/types"
+	"github.com/aws/aws-sdk-go/aws"
 )
 
-func (awsClient AWS) CloudTrailConsoleSignInEvents(cfg aws.Config) (map[string]map[string]int64, error) {
+func (awsClient AWS) CloudTrailConsoleSignInEvents(cfg awsConfig.Config) (map[string]map[string]int64, error) {
 	events := make(map[string]map[string]int64, 0)
 
 	regions, err := awsClient.getRegions(cfg)
@@ -22,18 +24,17 @@ func (awsClient AWS) CloudTrailConsoleSignInEvents(cfg aws.Config) (map[string]m
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		cloudtrailClient := cloudtrail.New(cfg)
-		req := cloudtrailClient.LookupEventsRequest(&cloudtrail.LookupEventsInput{
-			LookupAttributes: []cloudtrail.LookupAttribute{
-				cloudtrail.LookupAttribute{
-					AttributeKey:   cloudtrail.LookupAttributeKeyEventName,
+		cloudtrailClient := cloudtrail.NewFromConfig(cfg)
+		res, err := cloudtrailClient.LookupEvents(context.Background(), &cloudtrail.LookupEventsInput{
+			LookupAttributes: []types.LookupAttribute{
+				types.LookupAttribute{
+					AttributeKey:   types.LookupAttributeKeyEventName,
 					AttributeValue: aws.String("ConsoleLogin"),
 				},
 			},
 			StartTime: aws.Time(time.Now().AddDate(0, 0, -7)),
 			EndTime:   aws.Time(time.Now()),
 		})
-		res, err := req.Send(context.Background())
 		if err != nil {
 			return events, err
 		}
@@ -63,7 +64,7 @@ type SourceIp struct {
 	Total      int64      `json:"total"`
 }
 
-func (awsClient AWS) CloudTrailConsoleSignInSourceIpEvents(cfg aws.Config) (map[string]SourceIp, error) {
+func (awsClient AWS) CloudTrailConsoleSignInSourceIpEvents(cfg awsConfig.Config) (map[string]SourceIp, error) {
 	events := make(map[string]SourceIp, 0)
 
 	regions, err := awsClient.getRegions(cfg)
@@ -73,18 +74,17 @@ func (awsClient AWS) CloudTrailConsoleSignInSourceIpEvents(cfg aws.Config) (map[
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		cloudtrailClient := cloudtrail.New(cfg)
-		req := cloudtrailClient.LookupEventsRequest(&cloudtrail.LookupEventsInput{
-			LookupAttributes: []cloudtrail.LookupAttribute{
-				cloudtrail.LookupAttribute{
-					AttributeKey:   cloudtrail.LookupAttributeKeyEventName,
+		cloudtrailClient := cloudtrail.NewFromConfig(cfg)
+		res, err := cloudtrailClient.LookupEvents(context.Background(), &cloudtrail.LookupEventsInput{
+			LookupAttributes: []types.LookupAttribute{
+				types.LookupAttribute{
+					AttributeKey:   types.LookupAttributeKeyEventName,
 					AttributeValue: aws.String("ConsoleLogin"),
 				},
 			},
 			StartTime: aws.Time(time.Now().AddDate(0, 0, -7)),
 			EndTime:   aws.Time(time.Now()),
 		})
-		res, err := req.Send(context.Background())
 		if err != nil {
 			return events, err
 		}

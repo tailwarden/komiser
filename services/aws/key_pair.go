@@ -3,12 +3,12 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeKeyPairsTotal(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeKeyPairsTotal(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -24,11 +24,10 @@ func (aws AWS) DescribeKeyPairsTotal(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) getKeyPairs(cfg aws.Config, region string) ([]KeyPair, error) {
+func (aws AWS) getKeyPairs(cfg awsConfig.Config, region string) ([]KeyPair, error) {
 	cfg.Region = region
-	svc := ec2.New(cfg)
-	req := svc.DescribeKeyPairsRequest(&ec2.DescribeKeyPairsInput{})
-	result, err := req.Send(context.Background())
+	svc := ec2.NewFromConfig(cfg)
+	result, err := svc.DescribeKeyPairs(context.Background(), &ec2.DescribeKeyPairsInput{})
 	if err != nil {
 		return []KeyPair{}, err
 	}

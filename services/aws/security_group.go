@@ -3,12 +3,12 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeSecurityGroupsTotal(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeSecurityGroupsTotal(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -24,11 +24,10 @@ func (aws AWS) DescribeSecurityGroupsTotal(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) getSecurityGroups(cfg aws.Config, region string) ([]SecurityGroup, error) {
+func (aws AWS) getSecurityGroups(cfg awsConfig.Config, region string) ([]SecurityGroup, error) {
 	cfg.Region = region
-	svc := ec2.New(cfg)
-	req := svc.DescribeSecurityGroupsRequest(&ec2.DescribeSecurityGroupsInput{})
-	result, err := req.Send(context.Background())
+	svc := ec2.NewFromConfig(cfg)
+	result, err := svc.DescribeSecurityGroups(context.Background(), &ec2.DescribeSecurityGroupsInput{})
 	if err != nil {
 		return []SecurityGroup{}, err
 	}
@@ -54,7 +53,7 @@ type UnrestrictedSecurityGroup struct {
 	ToPort   int64
 }
 
-func (awsClient AWS) ListUnrestrictedSecurityGroups(cfg aws.Config) ([]UnrestrictedSecurityGroup, error) {
+func (awsClient AWS) ListUnrestrictedSecurityGroups(cfg awsConfig.Config) ([]UnrestrictedSecurityGroup, error) {
 	groups := make([]UnrestrictedSecurityGroup, 0)
 
 	regions, err := awsClient.getRegions(cfg)
@@ -63,9 +62,8 @@ func (awsClient AWS) ListUnrestrictedSecurityGroups(cfg aws.Config) ([]Unrestric
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := ec2.New(cfg)
-		req := svc.DescribeSecurityGroupsRequest(&ec2.DescribeSecurityGroupsInput{})
-		res, err := req.Send(context.Background())
+		svc := ec2.NewFromConfig(cfg)
+		res, err := svc.DescribeSecurityGroups(context.Background(), &ec2.DescribeSecurityGroupsInput{})
 		if err != nil {
 			return groups, err
 		}
@@ -87,8 +85,8 @@ func (awsClient AWS) ListUnrestrictedSecurityGroups(cfg aws.Config) ([]Unrestric
 								Name:     *sg.GroupName,
 								ID:       *sg.GroupId,
 								Protocol: *permission.IpProtocol,
-								FromPort: *permission.FromPort,
-								ToPort:   *permission.ToPort,
+								FromPort: int64(*permission.FromPort),
+								ToPort:   int64(*permission.ToPort),
 							})
 						}
 

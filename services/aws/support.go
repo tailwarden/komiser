@@ -4,18 +4,18 @@ import (
 	"context"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/support"
+	"github.com/aws/aws-sdk-go/aws"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) OpenSupportTickets(cfg aws.Config) ([]Ticket, error) {
+func (aws AWS) OpenSupportTickets(cfg awsConfig.Config) ([]Ticket, error) {
 	tickets := make([]Ticket, 0)
 
 	cfg.Region = "us-east-1"
-	svc := support.New(cfg)
-	req := svc.DescribeCasesRequest(&support.DescribeCasesInput{})
-	res, err := req.Send(context.Background())
+	svc := support.NewFromConfig(cfg)
+	res, err := svc.DescribeCases(context.Background(), &support.DescribeCasesInput{})
 	if err != nil {
 		return tickets, err
 	}
@@ -34,16 +34,15 @@ func (aws AWS) OpenSupportTickets(cfg aws.Config) ([]Ticket, error) {
 	return tickets, nil
 }
 
-func (awsClient AWS) TicketsInLastSixMonthsTickets(cfg aws.Config) ([]Ticket, error) {
+func (awsClient AWS) TicketsInLastSixMonthsTickets(cfg awsConfig.Config) ([]Ticket, error) {
 	tickets := make([]Ticket, 0)
 
 	cfg.Region = "us-east-1"
-	svc := support.New(cfg)
-	req := svc.DescribeCasesRequest(&support.DescribeCasesInput{
-		IncludeResolvedCases: aws.Bool(true),
+	svc := support.NewFromConfig(cfg)
+	res, err := svc.DescribeCases(context.Background(), &support.DescribeCasesInput{
+		IncludeResolvedCases: true,
 		AfterTime:            aws.String(aws.Time(time.Now().AddDate(0, -6, 0)).Format("2006-01-02")),
 	})
-	res, err := req.Send(context.Background())
 	if err != nil {
 		return tickets, err
 	}
@@ -68,26 +67,24 @@ type ServiceLimit struct {
 	Status  string `json:"status"`
 }
 
-func (awsClient AWS) DescribeServiceLimitsChecks(cfg aws.Config) ([]ServiceLimit, error) {
+func (awsClient AWS) DescribeServiceLimitsChecks(cfg awsConfig.Config) ([]ServiceLimit, error) {
 	limits := make([]ServiceLimit, 0)
 
 	cfg.Region = "us-east-1"
-	svc := support.New(cfg)
-	req := svc.DescribeTrustedAdvisorChecksRequest(&support.DescribeTrustedAdvisorChecksInput{
+	svc := support.NewFromConfig(cfg)
+	res, err := svc.DescribeTrustedAdvisorChecks(context.Background(), &support.DescribeTrustedAdvisorChecksInput{
 		Language: aws.String("en"),
 	})
-	res, err := req.Send(context.Background())
 	if err != nil {
 		return limits, err
 	}
 
 	for _, check := range res.Checks {
 		if *check.Category == "service_limits" {
-			reqCheckResult := svc.DescribeTrustedAdvisorCheckResultRequest(&support.DescribeTrustedAdvisorCheckResultInput{
+			res, err := svc.DescribeTrustedAdvisorCheckResult(context.Background(), &support.DescribeTrustedAdvisorCheckResultInput{
 				CheckId: check.Id,
 			})
 
-			res, err := reqCheckResult.Send(context.Background())
 			if err != nil {
 				return limits, err
 			}

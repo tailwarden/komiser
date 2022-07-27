@@ -6,9 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
+	"github.com/aws/aws-sdk-go/aws"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
@@ -28,7 +30,7 @@ func getRuntime(input string) string {
 	return "custom"
 }
 
-func (aws AWS) DescribeLambdaFunctions(cfg aws.Config) (map[string]int, error) {
+func (aws AWS) DescribeLambdaFunctions(cfg awsConfig.Config) (map[string]int, error) {
 	output := make(map[string]int, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -56,7 +58,7 @@ type MetricKeyPair struct {
 	Value float64 `json:"value"`
 }
 
-func (awsModel AWS) GetLambdaInvocationMetrics(cfg aws.Config) ([]LambdaTotalInvocationMetric, error) {
+func (awsModel AWS) GetLambdaInvocationMetrics(cfg awsConfig.Config) ([]LambdaTotalInvocationMetric, error) {
 	datapoints := make([]LambdaInvocationMetric, 0)
 
 	regions, err := awsModel.getRegions(cfg)
@@ -65,18 +67,17 @@ func (awsModel AWS) GetLambdaInvocationMetrics(cfg aws.Config) ([]LambdaTotalInv
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := cloudwatch.New(cfg)
-		req := svc.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+		svc := cloudwatch.NewFromConfig(cfg)
+		result, err := svc.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 			Namespace:  aws.String("AWS/Lambda"),
 			MetricName: aws.String("Invocations"),
 			StartTime:  aws.Time(time.Now().AddDate(0, -6, 0)),
 			EndTime:    aws.Time(time.Now()),
-			Period:     aws.Int64(86400),
-			Statistics: []cloudwatch.Statistic{
-				cloudwatch.StatisticSum,
+			Period:     aws.Int32(86400),
+			Statistics: []types.Statistic{
+				types.StatisticSum,
 			},
 		})
-		result, err := req.Send(context.Background())
 		if err != nil {
 			return []LambdaTotalInvocationMetric{}, err
 		}
@@ -129,7 +130,7 @@ func (awsModel AWS) GetLambdaInvocationMetrics(cfg aws.Config) ([]LambdaTotalInv
 	return output, err
 }
 
-func (awsModel AWS) GetLambdaErrorsMetrics(cfg aws.Config) ([]LambdaTotalInvocationMetric, error) {
+func (awsModel AWS) GetLambdaErrorsMetrics(cfg awsConfig.Config) ([]LambdaTotalInvocationMetric, error) {
 	datapoints := make([]LambdaInvocationMetric, 0)
 
 	regions, err := awsModel.getRegions(cfg)
@@ -138,18 +139,17 @@ func (awsModel AWS) GetLambdaErrorsMetrics(cfg aws.Config) ([]LambdaTotalInvocat
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := cloudwatch.New(cfg)
-		req := svc.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+		svc := cloudwatch.NewFromConfig(cfg)
+		result, err := svc.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 			Namespace:  aws.String("AWS/Lambda"),
 			MetricName: aws.String("Errors"),
 			StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 			EndTime:    aws.Time(time.Now()),
-			Period:     aws.Int64(86400),
-			Statistics: []cloudwatch.Statistic{
-				cloudwatch.StatisticSum,
+			Period:     aws.Int32(86400),
+			Statistics: []types.Statistic{
+				types.StatisticSum,
 			},
 		})
-		result, err := req.Send(context.Background())
 		if err != nil {
 			return []LambdaTotalInvocationMetric{}, err
 		}
@@ -202,24 +202,21 @@ func (awsModel AWS) GetLambdaErrorsMetrics(cfg aws.Config) ([]LambdaTotalInvocat
 	return output, err
 }
 
-func (aws AWS) getLambdaFunctions(cfg aws.Config, region string) ([]Lambda, error) {
+func (aws AWS) getLambdaFunctions(cfg awsConfig.Config, region string) ([]Lambda, error) {
 	cfg.Region = region
-	svc := lambda.New(cfg)
+	svc := lambda.NewFromConfig(cfg)
 	params := &lambda.ListFunctionsInput{}
 	listOfFunctions := make([]Lambda, 0)
 	for {
-		req := svc.ListFunctionsRequest(params)
-		result, err := req.Send(context.Background())
+		result, err := svc.ListFunctions(context.Background(), params)
 		if err != nil {
 			return []Lambda{}, err
 		}
-
 		for _, lambda := range result.Functions {
-			runtime, _ := lambda.Runtime.MarshalValue()
 			listOfFunctions = append(listOfFunctions, Lambda{
 				Name:    *lambda.FunctionName,
-				Memory:  *lambda.MemorySize,
-				Runtime: runtime,
+				Memory:  int64(*lambda.MemorySize),
+				Runtime: string(lambda.Runtime),
 			})
 		}
 		if result.NextMarker == nil {

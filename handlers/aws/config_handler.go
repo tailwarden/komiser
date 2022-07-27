@@ -3,13 +3,13 @@ package aws
 import (
 	"net/http"
 
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
 	. "github.com/mlabouardy/komiser/services/ini"
 )
 
 func (handler *AWSHandler) ConfigProfilesHandler(w http.ResponseWriter, r *http.Request) {
 	if handler.multiple {
-		sections, err := OpenFile(external.DefaultSharedCredentialsFilename())
+		sections, err := OpenFile(config.DefaultSharedCredentialsFilename())
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't parse credentials file")
 		}

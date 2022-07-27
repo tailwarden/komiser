@@ -3,23 +3,23 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeInstances(cfg aws.Config) (map[string]interface{}, error) {
+func (awsClient AWS) DescribeInstances(cfg awsConfig.Config) (map[string]interface{}, error) {
 	outputInstancesPerRegion := make(map[string]int, 0)
 	outputInstancesPerState := make(map[string]int, 0)
 	outputInstancesPerFamily := make(map[string]int, 0)
 	totalPublicInstances := 0
 	totalPrivateInstances := 0
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return map[string]interface{}{}, err
 	}
 	for _, region := range regions {
-		instances, err := aws.getInstances(cfg, region.Name)
+		instances, err := awsClient.getInstances(cfg, region.Name)
 		if err != nil {
 			return map[string]interface{}{}, err
 		}
@@ -43,20 +43,17 @@ func (aws AWS) DescribeInstances(cfg aws.Config) (map[string]interface{}, error)
 	}, nil
 }
 
-func (awsClient AWS) getInstances(cfg aws.Config, region string) ([]EC2, error) {
+func (awsClient AWS) getInstances(cfg awsConfig.Config, region string) ([]EC2, error) {
 	cfg.Region = region
-	ec2Svc := ec2.New(cfg)
+	ec2Svc := ec2.NewFromConfig(cfg)
 	params := &ec2.DescribeInstancesInput{}
-	req := ec2Svc.DescribeInstancesRequest(params)
-	result, err := req.Send(context.Background())
+	result, err := ec2Svc.DescribeInstances(context.Background(), params)
 	if err != nil {
 		return []EC2{}, err
 	}
 	listOfInstances := make([]EC2, 0)
 	for _, reservation := range result.Reservations {
 		for _, instance := range reservation.Instances {
-			instanceType, _ := instance.InstanceType.MarshalValue()
-			instanceState, _ := instance.State.Name.MarshalValue()
 			instanceTags := make([]string, 0)
 			for _, tag := range instance.Tags {
 				instanceTags = append(instanceTags, *tag.Value)
@@ -67,10 +64,10 @@ func (awsClient AWS) getInstances(cfg aws.Config, region string) ([]EC2, error) 
 			}
 			listOfInstances = append(listOfInstances, EC2{
 				ID:           *instance.InstanceId,
-				InstanceType: instanceType,
+				InstanceType: string(instance.InstanceType),
 				LaunchTime:   *instance.LaunchTime,
 				Tags:         instanceTags,
-				State:        instanceState,
+				State:        string(instance.State.Name),
 				Public:       isPublic,
 			})
 		}
@@ -78,69 +75,65 @@ func (awsClient AWS) getInstances(cfg aws.Config, region string) ([]EC2, error) 
 	return listOfInstances, nil
 }
 
-func (aws AWS) DescribeScheduledInstances(cfg aws.Config) (int64, error) {
+func (awsClient AWS) DescribeScheduledInstances(cfg awsConfig.Config) (int64, error) {
 	var sum int64
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return 0, err
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := ec2.New(cfg)
-		req := svc.DescribeScheduledInstancesRequest(&ec2.DescribeScheduledInstancesInput{})
-		res, _ := req.Send(context.Background())
+		svc := ec2.NewFromConfig(cfg)
+		res, _ := svc.DescribeScheduledInstances(context.Background(), &ec2.DescribeScheduledInstancesInput{})
 
 		if res != nil {
 			for _, set := range res.ScheduledInstanceSet {
-				sum += *set.InstanceCount
+				sum += int64(*set.InstanceCount)
 			}
 		}
 	}
 	return sum, nil
 }
 
-func (aws AWS) DescribeReservedInstances(cfg aws.Config) (int64, error) {
+func (awsClient AWS) DescribeReservedInstances(cfg awsConfig.Config) (int64, error) {
 	var sum int64
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return 0, err
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := ec2.New(cfg)
-		req := svc.DescribeReservedInstancesRequest(&ec2.DescribeReservedInstancesInput{})
-		res, err := req.Send(context.Background())
+		svc := ec2.NewFromConfig(cfg)
+		res, err := svc.DescribeReservedInstances(context.Background(), &ec2.DescribeReservedInstancesInput{})
 		if err != nil {
 			return sum, err
 		}
 
 		for _, reservation := range res.ReservedInstances {
-			sum += *reservation.InstanceCount
+			sum += int64(*reservation.InstanceCount)
 		}
 	}
 	return sum, nil
 }
 
-func (aws AWS) DescribeSpotInstances(cfg aws.Config) (int64, error) {
+func (awsClient AWS) DescribeSpotInstances(cfg awsConfig.Config) (int64, error) {
 	var sum int64
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return 0, err
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := ec2.New(cfg)
-		req := svc.DescribeSpotFleetRequestsRequest(&ec2.DescribeSpotFleetRequestsInput{})
-		res, err := req.Send(context.Background())
+		svc := ec2.NewFromConfig(cfg)
+		res, err := svc.DescribeSpotFleetRequests(context.Background(), &ec2.DescribeSpotFleetRequestsInput{})
 		if err != nil {
 			return sum, err
 		}
 
 		for _, request := range res.SpotFleetRequestConfigs {
-			req2 := svc.DescribeSpotFleetInstancesRequest(&ec2.DescribeSpotFleetInstancesInput{
+			res2, err := svc.DescribeSpotFleetInstances(context.Background(), &ec2.DescribeSpotFleetInstancesInput{
 				SpotFleetRequestId: request.SpotFleetRequestId,
 			})
-			res2, err := req2.Send(context.Background())
 			if err != nil {
 				return sum, err
 			}

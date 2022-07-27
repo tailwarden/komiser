@@ -3,11 +3,11 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
 )
 
-func (aws AWS) ListKeys(cfg aws.Config) (int64, error) {
+func (aws AWS) ListKeys(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -15,9 +15,8 @@ func (aws AWS) ListKeys(cfg aws.Config) (int64, error) {
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := kms.New(cfg)
-		req := svc.ListKeysRequest(&kms.ListKeysInput{})
-		res, err := req.Send(context.Background())
+		svc := kms.NewFromConfig(cfg)
+		res, err := svc.ListKeys(context.Background(), &kms.ListKeysInput{})
 		if err != nil {
 			return sum, err
 		}

@@ -28,9 +28,8 @@ func (aws AWS) DescribeRDSInstances(cfg aws.Config) (map[string]int, error) {
 
 func (aws AWS) getRDSInstances(cfg aws.Config, region string) ([]DBInstance, error) {
 	cfg.Region = region
-	svc := rds.New(cfg)
-	req := svc.DescribeDBInstancesRequest(&rds.DescribeDBInstancesInput{})
-	result, err := req.Send(context.Background())
+	svc := rds.NewFromConfig(cfg)
+	result, err := svc.DescribeDBInstances(context.Background(), &rds.DescribeDBInstancesInput{})
 	if err != nil {
 		return []DBInstance{}, err
 	}
@@ -39,7 +38,7 @@ func (aws AWS) getRDSInstances(cfg aws.Config, region string) ([]DBInstance, err
 		listOfInstances = append(listOfInstances, DBInstance{
 			Status:           *instance.DBInstanceStatus,
 			StorageType:      *instance.StorageType,
-			AllocatedStorage: *instance.AllocatedStorage,
+			AllocatedStorage: int64(instance.AllocatedStorage),
 			InstanceClass:    *instance.DBInstanceClass,
 			Engine:           *instance.Engine,
 		})

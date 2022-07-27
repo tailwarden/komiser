@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
@@ -29,9 +30,8 @@ func (aws AWS) DescribeQueues(cfg aws.Config) (int64, error) {
 
 func (aws AWS) getSQS(cfg aws.Config, region string) ([]Queue, error) {
 	cfg.Region = region
-	svc := sqs.New(cfg)
-	req := svc.ListQueuesRequest(&sqs.ListQueuesInput{})
-	result, err := req.Send(context.Background())
+	svc := sqs.NewFromConfig(cfg)
+	result, err := svc.ListQueues(context.Background(), &sqs.ListQueuesInput{})
 	if err != nil {
 		return []Queue{}, err
 	}
@@ -68,9 +68,8 @@ func (awsClient AWS) GetNumberOfMessagesSentAndDeletedSQS(cfg aws.Config) ([]SQS
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := sqs.New(cfg)
-		req := svc.ListQueuesRequest(&sqs.ListQueuesInput{})
-		result, err := req.Send(context.Background())
+		svc := sqs.NewFromConfig(cfg)
+		result, err := svc.ListQueues(context.Background(), &sqs.ListQueuesInput{})
 		if err != nil {
 			return data, err
 		}
@@ -78,24 +77,23 @@ func (awsClient AWS) GetNumberOfMessagesSentAndDeletedSQS(cfg aws.Config) ([]SQS
 		for _, queue := range result.QueueUrls {
 			queueName := strings.Split(queue, "/")[len(strings.Split(queue, "/"))-1]
 
-			cloudwatchClient := cloudwatch.New(cfg)
-			reqCloudwatch := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+			cloudwatchClient := cloudwatch.NewFromConfig(cfg)
+			resultCloudWatch, err := cloudwatchClient.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 				Namespace:  aws.String("AWS/SQS"),
 				MetricName: aws.String("NumberOfMessagesSent"),
 				StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 				EndTime:    aws.Time(time.Now()),
-				Period:     aws.Int64(86400),
-				Statistics: []cloudwatch.Statistic{
-					cloudwatch.StatisticSum,
+				Period:     aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
 				},
-				Dimensions: []cloudwatch.Dimension{
-					cloudwatch.Dimension{
+				Dimensions: []types.Dimension{
+					types.Dimension{
 						Name:  aws.String("QueueName"),
 						Value: aws.String(queueName),
 					},
 				},
 			})
-			resultCloudWatch, err := reqCloudwatch.Send(context.Background())
 			if err != nil {
 				return data, err
 			}
@@ -105,23 +103,22 @@ func (awsClient AWS) GetNumberOfMessagesSentAndDeletedSQS(cfg aws.Config) ([]SQS
 				data[0].Datapoints[key] += *metric.Sum
 			}
 
-			reqCloudwatch2 := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+			resultCloudWatch2, err := cloudwatchClient.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 				Namespace:  aws.String("AWS/SQS"),
 				MetricName: aws.String("NumberOfMessagesDeleted"),
 				StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 				EndTime:    aws.Time(time.Now()),
-				Period:     aws.Int64(86400),
-				Statistics: []cloudwatch.Statistic{
-					cloudwatch.StatisticSum,
+				Period:     aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
 				},
-				Dimensions: []cloudwatch.Dimension{
-					cloudwatch.Dimension{
+				Dimensions: []types.Dimension{
+					types.Dimension{
 						Name:  aws.String("QueueName"),
 						Value: aws.String(queueName),
 					},
 				},
 			})
-			resultCloudWatch2, err := reqCloudwatch2.Send(context.Background())
 			if err != nil {
 				return data, err
 			}

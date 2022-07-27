@@ -1,18 +1,19 @@
 package aws
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
 )
 
 func (handler *AWSHandler) CostAndUsageHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -36,10 +37,10 @@ func (handler *AWSHandler) CostAndUsageHandler(w http.ResponseWriter, r *http.Re
 
 func (handler *AWSHandler) CurrentCostHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -63,10 +64,10 @@ func (handler *AWSHandler) CurrentCostHandler(w http.ResponseWriter, r *http.Req
 
 func (handler *AWSHandler) CostAndUsagePerInstanceTypeHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -90,10 +91,10 @@ func (handler *AWSHandler) CostAndUsagePerInstanceTypeHandler(w http.ResponseWri
 
 func (handler *AWSHandler) DescribeForecastPriceHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}

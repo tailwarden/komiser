@@ -3,31 +3,30 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	. "github.com/mlabouardy/komiser/models/aws"
+	models "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeDynamoDBTables(cfg aws.Config) (map[string]interface{}, error) {
+func (awsClient AWS) DescribeDynamoDBTables(cfg awsConfig.Config) (map[string]interface{}, error) {
 	outputThroughput := make(map[string]int, 0)
 	sumTables := 0
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return map[string]interface{}{}, err
 	}
 	for _, region := range regions {
-		tables, err := aws.getDynamoDBTables(cfg, region.Name)
+		tables, err := awsClient.getDynamoDBTables(cfg, region.Name)
 		if err != nil {
 			return map[string]interface{}{}, err
 		}
 		sumTables += len(tables)
 		for _, table := range tables {
 			cfg.Region = region.Name
-			svc := dynamodb.New(cfg)
-			req := svc.DescribeTableRequest(&dynamodb.DescribeTableInput{
+			svc := dynamodb.NewFromConfig(cfg)
+			result, err := svc.DescribeTable(context.Background(), &dynamodb.DescribeTableInput{
 				TableName: &table.Name,
 			})
-			result, err := req.Send(context.Background())
 			if err != nil {
 				return map[string]interface{}{}, err
 			}
@@ -41,17 +40,16 @@ func (aws AWS) DescribeDynamoDBTables(cfg aws.Config) (map[string]interface{}, e
 	}, nil
 }
 
-func (aws AWS) getDynamoDBTables(cfg aws.Config, region string) ([]Table, error) {
+func (awsClient AWS) getDynamoDBTables(cfg awsConfig.Config, region string) ([]models.Table, error) {
 	cfg.Region = region
-	svc := dynamodb.New(cfg)
-	req := svc.ListTablesRequest(&dynamodb.ListTablesInput{})
-	result, err := req.Send(context.Background())
+	svc := dynamodb.NewFromConfig(cfg)
+	result, err := svc.ListTables(context.Background(), &dynamodb.ListTablesInput{})
 	if err != nil {
-		return []Table{}, err
+		return []models.Table{}, err
 	}
-	listOfTables := make([]Table, 0)
+	listOfTables := make([]models.Table, 0)
 	for _, table := range result.TableNames {
-		listOfTables = append(listOfTables, Table{
+		listOfTables = append(listOfTables, models.Table{
 			Name: table,
 		})
 	}

@@ -3,12 +3,12 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeInternetGatewaysTotal(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeInternetGatewaysTotal(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -24,11 +24,10 @@ func (aws AWS) DescribeInternetGatewaysTotal(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) getInternetGateways(cfg aws.Config, region string) ([]InternetGateway, error) {
+func (aws AWS) getInternetGateways(cfg awsConfig.Config, region string) ([]InternetGateway, error) {
 	cfg.Region = region
-	svc := ec2.New(cfg)
-	req := svc.DescribeInternetGatewaysRequest(&ec2.DescribeInternetGatewaysInput{})
-	result, err := req.Send(context.Background())
+	svc := ec2.NewFromConfig(cfg)
+	result, err := svc.DescribeInternetGateways(context.Background(), &ec2.DescribeInternetGatewaysInput{})
 	if err != nil {
 		return []InternetGateway{}, err
 	}

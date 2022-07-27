@@ -3,11 +3,12 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/acm"
+	"github.com/aws/aws-sdk-go-v2/service/acm/types"
 )
 
-func (aws AWS) ListCertificates(cfg aws.Config) (int64, error) {
+func (aws AWS) ListCertificates(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -15,9 +16,8 @@ func (aws AWS) ListCertificates(cfg aws.Config) (int64, error) {
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := acm.New(cfg)
-		req := svc.ListCertificatesRequest(&acm.ListCertificatesInput{})
-		res, err := req.Send(context.Background())
+		svc := acm.NewFromConfig(cfg)
+		res, err := svc.ListCertificates(context.Background(), &acm.ListCertificatesInput{})
 		if err != nil {
 			return sum, err
 		}
@@ -27,7 +27,7 @@ func (aws AWS) ListCertificates(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) ListExpiredCertificates(cfg aws.Config) (int64, error) {
+func (aws AWS) ListExpiredCertificates(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -35,13 +35,12 @@ func (aws AWS) ListExpiredCertificates(cfg aws.Config) (int64, error) {
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := acm.New(cfg)
-		req := svc.ListCertificatesRequest(&acm.ListCertificatesInput{
-			CertificateStatuses: []acm.CertificateStatus{
-				acm.CertificateStatusExpired,
+		svc := acm.NewFromConfig(cfg)
+		res, err := svc.ListCertificates(context.Background(), &acm.ListCertificatesInput{
+			CertificateStatuses: []types.CertificateStatus{
+				types.CertificateStatusExpired,
 			},
 		})
-		res, err := req.Send(context.Background())
 		if err != nil {
 			return sum, err
 		}

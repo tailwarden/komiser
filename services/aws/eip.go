@@ -3,19 +3,19 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeElasticIPsTotal(cfg aws.Config) (int64, error) {
+func (awsClient AWS) DescribeElasticIPsTotal(cfg awsConfig.Config) (int64, error) {
 	var sum int64
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return 0, err
 	}
 	for _, region := range regions {
-		ips, err := aws.getElasticIPs(cfg, region.Name)
+		ips, err := awsClient.getElasticIPs(cfg, region.Name)
 		if err != nil {
 			return 0, err
 		}
@@ -24,11 +24,10 @@ func (aws AWS) DescribeElasticIPsTotal(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) getElasticIPs(cfg aws.Config, region string) ([]EIP, error) {
+func (awsClient AWS) getElasticIPs(cfg awsConfig.Config, region string) ([]EIP, error) {
 	cfg.Region = region
-	svc := ec2.New(cfg)
-	req := svc.DescribeAddressesRequest(&ec2.DescribeAddressesInput{})
-	result, err := req.Send(context.Background())
+	svc := ec2.NewFromConfig(cfg)
+	result, err := svc.DescribeAddresses(context.Background(), &ec2.DescribeAddressesInput{})
 	if err != nil {
 		return []EIP{}, err
 	}

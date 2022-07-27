@@ -3,12 +3,12 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeSNSTopics(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeSNSTopics(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -24,11 +24,10 @@ func (aws AWS) DescribeSNSTopics(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) getSNSTopics(cfg aws.Config, region string) ([]Topic, error) {
+func (aws AWS) getSNSTopics(cfg awsConfig.Config, region string) ([]Topic, error) {
 	cfg.Region = region
-	svc := sns.New(cfg)
-	req := svc.ListTopicsRequest(&sns.ListTopicsInput{})
-	result, err := req.Send(context.Background())
+	svc := sns.NewFromConfig(cfg)
+	result, err := svc.ListTopics(context.Background(), &sns.ListTopicsInput{})
 	if err != nil {
 		return []Topic{}, err
 	}

@@ -7,23 +7,24 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
-	"github.com/aws/aws-sdk-go-v2/service/elb"
-	"github.com/aws/aws-sdk-go-v2/service/elbv2"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	"github.com/aws/aws-sdk-go-v2/service/elasticloadbalancing"
+	"github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeElasticLoadBalancer(cfg aws.Config) (map[string]int, error) {
+func (awsClient AWS) DescribeElasticLoadBalancer(cfg aws.Config) (map[string]int, error) {
 	output := make(map[string]int, 0)
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return map[string]int{}, err
 	}
 	for _, region := range regions {
-		elbsv1, err := aws.getClassicElasticLoadBalancers(cfg, region.Name)
+		elbsv1, err := awsClient.getClassicElasticLoadBalancers(cfg, region.Name)
 		if err != nil {
 			return map[string]int{}, err
 		}
-		elbsv2, err := aws.getElasticLoadBalancersV2(cfg, region.Name)
+		elbsv2, err := awsClient.getElasticLoadBalancersV2(cfg, region.Name)
 		if err != nil {
 			return map[string]int{}, err
 		}
@@ -52,19 +53,17 @@ func (awsClient AWS) GetELBRequests(cfg aws.Config) ([]ELBMetric, error) {
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		cloudwatchClient := cloudwatch.New(cfg)
-		reqCloudwatch := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+		cloudwatchClient := cloudwatch.NewFromConfig(cfg)
+		resultCloudWatch, err := cloudwatchClient.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 			Namespace:  aws.String("AWS/ELB"),
 			MetricName: aws.String("RequestCount"),
 			StartTime:  aws.Time(time.Now().AddDate(0, -6, 0)),
 			EndTime:    aws.Time(time.Now()),
-			Period:     aws.Int64(86400),
-			Statistics: []cloudwatch.Statistic{
-				cloudwatch.StatisticSum,
+			Period:     aws.Int32(86400),
+			Statistics: []types.Statistic{
+				types.StatisticSum,
 			},
 		})
-
-		resultCloudWatch, err := reqCloudwatch.Send(context.Background())
 		if err != nil {
 			return metrics, err
 		}
@@ -91,11 +90,10 @@ func (awsClient AWS) GetELBRequests(cfg aws.Config) ([]ELBMetric, error) {
 	return metrics, nil
 }
 
-func (aws AWS) getClassicElasticLoadBalancers(cfg aws.Config, region string) ([]LoadBalancer, error) {
+func (awsClient AWS) getClassicElasticLoadBalancers(cfg aws.Config, region string) ([]LoadBalancer, error) {
 	cfg.Region = region
-	svc := elb.New(cfg)
-	req := svc.DescribeLoadBalancersRequest(&elb.DescribeLoadBalancersInput{})
-	result, err := req.Send(context.Background())
+	svc := elasticloadbalancing.NewFromConfig(cfg)
+	result, err := svc.DescribeLoadBalancers(context.Background(), &elasticloadbalancing.DescribeLoadBalancersInput{})
 	if err != nil {
 		return []LoadBalancer{}, err
 	}
@@ -109,21 +107,19 @@ func (aws AWS) getClassicElasticLoadBalancers(cfg aws.Config, region string) ([]
 	return listOfElasticLoadBalancers, nil
 }
 
-func (aws AWS) getElasticLoadBalancersV2(cfg aws.Config, region string) ([]LoadBalancer, error) {
+func (awsClient AWS) getElasticLoadBalancersV2(cfg aws.Config, region string) ([]LoadBalancer, error) {
 	cfg.Region = region
-	svc := elbv2.New(cfg)
-	req := svc.DescribeLoadBalancersRequest(&elbv2.DescribeLoadBalancersInput{})
-	result, err := req.Send(context.Background())
+	svc := elasticloadbalancingv2.NewFromConfig(cfg)
+	result, err := svc.DescribeLoadBalancers(context.Background(), &elasticloadbalancingv2.DescribeLoadBalancersInput{})
 	if err != nil {
 		return []LoadBalancer{}, err
 	}
 	listOfElasticLoadBalancers := make([]LoadBalancer, 0)
 	for _, lb := range result.LoadBalancers {
-		lbType, _ := lb.Type.MarshalValue()
 		listOfElasticLoadBalancers = append(listOfElasticLoadBalancers, LoadBalancer{
 			DNSName: *lb.DNSName,
-			State:   lb.State.String(),
-			Type:    lbType,
+			State:   *lb.State.Reason,
+			Type:    string(lb.Type),
 		})
 	}
 	return listOfElasticLoadBalancers, nil

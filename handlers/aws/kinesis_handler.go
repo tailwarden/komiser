@@ -1,18 +1,19 @@
 package aws
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
 )
 
 func (handler *AWSHandler) KinesisListStreamsHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -36,10 +37,10 @@ func (handler *AWSHandler) KinesisListStreamsHandler(w http.ResponseWriter, r *h
 
 func (handler *AWSHandler) KinesisListShardsHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}

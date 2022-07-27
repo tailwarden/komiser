@@ -3,12 +3,12 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeAutoScalingGroups(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeAutoScalingGroups(cfg awsConfig.Config) (int64, error) {
 	var sum int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -24,11 +24,10 @@ func (aws AWS) DescribeAutoScalingGroups(cfg aws.Config) (int64, error) {
 	return sum, nil
 }
 
-func (aws AWS) getAutoScalingGroups(cfg aws.Config, region string) ([]AutoScaling, error) {
+func (aws AWS) getAutoScalingGroups(cfg awsConfig.Config, region string) ([]AutoScaling, error) {
 	cfg.Region = region
-	svc := autoscaling.New(cfg)
-	req := svc.DescribeAutoScalingGroupsRequest(&autoscaling.DescribeAutoScalingGroupsInput{})
-	result, err := req.Send(context.Background())
+	svc := autoscaling.NewFromConfig(cfg)
+	result, err := svc.DescribeAutoScalingGroups(context.Background(), &autoscaling.DescribeAutoScalingGroupsInput{})
 	if err != nil {
 		return []AutoScaling{}, err
 	}

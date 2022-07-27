@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
@@ -28,22 +29,20 @@ func (aws AWS) DescribeNatGatewaysTotal(cfg aws.Config) (int64, error) {
 
 func (aws AWS) getNatGateways(cfg aws.Config, region string) ([]NatGateway, error) {
 	cfg.Region = region
-	svc := ec2.New(cfg)
-	req := svc.DescribeNatGatewaysRequest(&ec2.DescribeNatGatewaysInput{})
-	result, err := req.Send(context.Background())
+	svc := ec2.NewFromConfig(cfg)
+	result, err := svc.DescribeNatGateways(context.Background(), &ec2.DescribeNatGatewaysInput{})
 	if err != nil {
 		return []NatGateway{}, err
 	}
 	listOfNatGateways := make([]NatGateway, 0)
 	for _, ngw := range result.NatGateways {
-		ngwState, _ := ngw.State.MarshalValue()
 		ngwTags := make([]string, 0)
 		for _, tag := range ngw.Tags {
 			ngwTags = append(ngwTags, *tag.Value)
 		}
 		listOfNatGateways = append(listOfNatGateways, NatGateway{
 			ID:    *ngw.NatGatewayId,
-			State: ngwState,
+			State: string(ngw.State),
 			Tags:  ngwTags,
 		})
 	}
@@ -64,31 +63,29 @@ func (awsModel AWS) GetNatGatewayTraffic(cfg aws.Config) (map[string]map[string]
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := ec2.New(cfg)
-		req := svc.DescribeNatGatewaysRequest(&ec2.DescribeNatGatewaysInput{})
-		result, err := req.Send(context.Background())
+		svc := ec2.NewFromConfig(cfg)
+		result, err := svc.DescribeNatGateways(context.Background(), &ec2.DescribeNatGatewaysInput{})
 		if err != nil {
 			return metrics, err
 		}
 		for _, ngw := range result.NatGateways {
-			cloudwatchService := cloudwatch.New(cfg)
-			reqCloudWatch := cloudwatchService.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+			cloudwatchService := cloudwatch.NewFromConfig(cfg)
+			result, err := cloudwatchService.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 				Namespace:  aws.String("AWS/NATGateway"),
 				MetricName: aws.String("BytesOutToDestination"),
 				StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 				EndTime:    aws.Time(time.Now()),
-				Period:     aws.Int64(86400),
-				Statistics: []cloudwatch.Statistic{
-					cloudwatch.StatisticSum,
+				Period:     aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
 				},
-				Dimensions: []cloudwatch.Dimension{
-					cloudwatch.Dimension{
+				Dimensions: []types.Dimension{
+					types.Dimension{
 						Name:  aws.String("NatGatewayId"),
 						Value: ngw.NatGatewayId,
 					},
 				},
 			})
-			result, err := reqCloudWatch.Send(context.Background())
 			if err != nil {
 				return metrics, err
 			}
@@ -105,23 +102,22 @@ func (awsModel AWS) GetNatGatewayTraffic(cfg aws.Config) (map[string]map[string]
 				}
 			}
 
-			reqCloudWatch2 := cloudwatchService.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+			result2, err := cloudwatchService.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 				Namespace:  aws.String("AWS/NATGateway"),
 				MetricName: aws.String("BytesInFromDestination"),
 				StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 				EndTime:    aws.Time(time.Now()),
-				Period:     aws.Int64(86400),
-				Statistics: []cloudwatch.Statistic{
-					cloudwatch.StatisticSum,
+				Period:     aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
 				},
-				Dimensions: []cloudwatch.Dimension{
-					cloudwatch.Dimension{
+				Dimensions: []types.Dimension{
+					types.Dimension{
 						Name:  aws.String("NatGatewayId"),
 						Value: ngw.NatGatewayId,
 					},
 				},
 			})
-			result2, err := reqCloudWatch2.Send(context.Background())
 			if err != nil {
 				return metrics, err
 			}

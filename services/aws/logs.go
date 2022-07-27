@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
 )
 
@@ -22,16 +23,15 @@ func (aws AWS) MaximumLogsRetentionPeriod(cfg aws.Config) (int64, error) {
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := cloudwatchlogs.New(cfg)
-		req := svc.DescribeLogGroupsRequest(&cloudwatchlogs.DescribeLogGroupsInput{})
-		res, err := req.Send(context.Background())
+		svc := cloudwatchlogs.NewFromConfig(cfg)
+		res, err := svc.DescribeLogGroups(context.Background(), &cloudwatchlogs.DescribeLogGroupsInput{})
 		if err != nil {
 			return retention, err
 		}
 
 		for _, group := range res.LogGroups {
-			if group.RetentionInDays != nil && retention < *group.RetentionInDays {
-				retention = *group.RetentionInDays
+			if group.RetentionInDays != nil && retention < int64(*group.RetentionInDays) {
+				retention = int64(*group.RetentionInDays)
 			}
 		}
 	}
@@ -57,18 +57,17 @@ func (awsClient AWS) GetLogsVolume(cfg aws.Config) ([]LogsMetric, error) {
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		cloudwatchClient := cloudwatch.New(cfg)
-		reqCloudwatch := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+		cloudwatchClient := cloudwatch.NewFromConfig(cfg)
+		resultCloudWatch, err := cloudwatchClient.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 			Namespace:  aws.String("AWS/Logs"),
 			MetricName: aws.String("IncomingBytes"),
 			StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 			EndTime:    aws.Time(time.Now()),
-			Period:     aws.Int64(86400),
-			Statistics: []cloudwatch.Statistic{
-				cloudwatch.StatisticSum,
+			Period:     aws.Int32(86400),
+			Statistics: []types.Statistic{
+				types.StatisticSum,
 			},
 		})
-		resultCloudWatch, err := reqCloudwatch.Send(context.Background())
 		if err != nil {
 			return data, err
 		}
@@ -78,17 +77,16 @@ func (awsClient AWS) GetLogsVolume(cfg aws.Config) ([]LogsMetric, error) {
 			data[0].Datapoints[key] += *metric.Sum
 		}
 
-		reqCloudwatch2 := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+		resultCloudWatch2, err := cloudwatchClient.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 			Namespace:  aws.String("AWS/Logs"),
 			MetricName: aws.String("IncomingLogEvents"),
 			StartTime:  aws.Time(time.Now().AddDate(0, 0, -7)),
 			EndTime:    aws.Time(time.Now()),
-			Period:     aws.Int64(86400),
-			Statistics: []cloudwatch.Statistic{
-				cloudwatch.StatisticSum,
+			Period:     aws.Int32(86400),
+			Statistics: []types.Statistic{
+				types.StatisticSum,
 			},
 		})
-		resultCloudWatch2, err := reqCloudwatch2.Send(context.Background())
 		if err != nil {
 			return data, err
 		}

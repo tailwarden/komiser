@@ -1,9 +1,10 @@
 package slack
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	. "github.com/mlabouardy/komiser/handlers/aws"
 	. "github.com/mlabouardy/komiser/handlers/azure"
 	"github.com/mlabouardy/komiser/handlers/azure/config"
@@ -50,16 +51,16 @@ func (slack *Slack) sendCostAlert(provider string, logo string, costs float64, l
 func (slack *Slack) SendDailyNotification(awsHandler *AWSHandler, gcpHandler *GCPHandler, azureHandler *AzureHandler) {
 	// AWS Alert
 	if awsHandler.HasMultipleEnvs() {
-		profiles, _ := OpenFile(external.DefaultSharedCredentialsFilename())
+		profiles, _ := OpenFile(awsConfig.DefaultSharedCredentialsFilename())
 		for _, profile := range profiles.List() {
-			cfg, _ := external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+			cfg, _ := awsConfig.LoadDefaultConfig(context.Background(), awsConfig.WithSharedConfigProfile(profile))
 			bill, err := awsHandler.GetAWSHandler().DescribeCostAndUsage(cfg)
 			if err == nil {
 				slack.sendCostAlert("Amazon Web Services", "https://cdn.komiser.io/images/aws.png", bill.Total, profile)
 			}
 		}
 	} else {
-		cfg, _ := external.LoadDefaultAWSConfig()
+		cfg, _ := awsConfig.LoadDefaultConfig(context.Background())
 		bill, err := awsHandler.GetAWSHandler().DescribeCostAndUsage(cfg)
 		if err == nil {
 			slack.sendCostAlert("Amazon Web Services", "https://cdn.komiser.io/images/aws.png", bill.Total, "default")

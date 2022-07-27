@@ -1,18 +1,19 @@
 package aws
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
 )
 
 func (handler *AWSHandler) VPCHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -35,10 +36,10 @@ func (handler *AWSHandler) VPCHandler(w http.ResponseWriter, r *http.Request) {
 
 func (handler *AWSHandler) ACLHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -62,10 +63,10 @@ func (handler *AWSHandler) ACLHandler(w http.ResponseWriter, r *http.Request) {
 
 func (handler *AWSHandler) SecurityGroupHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -89,10 +90,10 @@ func (handler *AWSHandler) SecurityGroupHandler(w http.ResponseWriter, r *http.R
 
 func (handler *AWSHandler) NatGatewayHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -116,10 +117,10 @@ func (handler *AWSHandler) NatGatewayHandler(w http.ResponseWriter, r *http.Requ
 
 func (handler *AWSHandler) ElasticIPHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -143,10 +144,10 @@ func (handler *AWSHandler) ElasticIPHandler(w http.ResponseWriter, r *http.Reque
 
 func (handler *AWSHandler) InternetGatewayHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -170,10 +171,10 @@ func (handler *AWSHandler) InternetGatewayHandler(w http.ResponseWriter, r *http
 
 func (handler *AWSHandler) RouteTableHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -197,10 +198,10 @@ func (handler *AWSHandler) RouteTableHandler(w http.ResponseWriter, r *http.Requ
 
 func (handler *AWSHandler) KeyPairHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -224,10 +225,10 @@ func (handler *AWSHandler) KeyPairHandler(w http.ResponseWriter, r *http.Request
 
 func (handler *AWSHandler) GetNatGatewayTrafficHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}
@@ -250,10 +251,10 @@ func (handler *AWSHandler) GetNatGatewayTrafficHandler(w http.ResponseWriter, r 
 
 func (handler *AWSHandler) DescribeSubnetsHandler(w http.ResponseWriter, r *http.Request) {
 	profile := r.Header.Get("profile")
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig(context.Background())
 
 	if handler.multiple {
-		cfg, err = external.LoadDefaultAWSConfig(external.WithSharedConfigProfile(profile))
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profile))
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "Couldn't read "+profile+" profile")
 		}

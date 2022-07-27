@@ -8,22 +8,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/apigateway"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
-	. "github.com/mlabouardy/komiser/models/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	models "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) GetRestAPIs(cfg aws.Config) (int, error) {
+func (awsClient AWS) GetRestAPIs(cfg aws.Config) (int, error) {
 	total := 0
 
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return 0, err
 	}
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		apigatewayClient := apigateway.New(cfg)
-		req := apigatewayClient.GetRestApisRequest(&apigateway.GetRestApisInput{})
-		res, err := req.Send(context.Background())
+		apigatewayClient := apigateway.NewFromConfig(cfg)
+		res, err := apigatewayClient.GetRestApis(context.Background(), &apigateway.GetRestApisInput{})
 		if err != nil {
 			return total, err
 		}
@@ -36,7 +36,7 @@ func (aws AWS) GetRestAPIs(cfg aws.Config) (int, error) {
 
 type APIGatewayMetric struct {
 	Region     string
-	Datapoints []Datapoint
+	Datapoints []models.Datapoint
 }
 
 func (awsClient AWS) GetAPIGatewayRequests(cfg aws.Config) ([]APIGatewayMetric, error) {
@@ -49,27 +49,25 @@ func (awsClient AWS) GetAPIGatewayRequests(cfg aws.Config) ([]APIGatewayMetric, 
 
 	for _, region := range regions {
 		cfg.Region = region.Name
-		cloudwatchClient := cloudwatch.New(cfg)
-		reqCloudwatch := cloudwatchClient.GetMetricStatisticsRequest(&cloudwatch.GetMetricStatisticsInput{
+		cloudwatchClient := cloudwatch.NewFromConfig(cfg)
+		resultCloudWatch, err := cloudwatchClient.GetMetricStatistics(context.Background(), &cloudwatch.GetMetricStatisticsInput{
 			Namespace:  aws.String("AWS/ApiGateway"),
 			MetricName: aws.String("Count"),
 			StartTime:  aws.Time(time.Now().AddDate(0, -6, 0)),
 			EndTime:    aws.Time(time.Now()),
-			Period:     aws.Int64(86400),
-			Statistics: []cloudwatch.Statistic{
-				cloudwatch.StatisticSum,
+			Period:     aws.Int32(86400),
+			Statistics: []types.Statistic{
+				types.StatisticSum,
 			},
 		})
-
-		resultCloudWatch, err := reqCloudwatch.Send(context.Background())
 		if err != nil {
 			return metrics, err
 		}
 
-		series := make([]Datapoint, 0)
+		series := make([]models.Datapoint, 0)
 
 		for _, metric := range resultCloudWatch.Datapoints {
-			series = append(series, Datapoint{
+			series = append(series, models.Datapoint{
 				Timestamp: *metric.Timestamp,
 				Value:     *metric.Sum,
 			})

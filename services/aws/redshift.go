@@ -3,11 +3,11 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/redshift"
 )
 
-func (aws AWS) DescribeRedshiftClusters(cfg aws.Config) (int64, error) {
+func (aws AWS) DescribeRedshiftClusters(cfg awsConfig.Config) (int64, error) {
 	var total int64
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
@@ -15,9 +15,8 @@ func (aws AWS) DescribeRedshiftClusters(cfg aws.Config) (int64, error) {
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
-		svc := redshift.New(cfg)
-		req := svc.DescribeClustersRequest(&redshift.DescribeClustersInput{})
-		res, err := req.Send(context.Background())
+		svc := redshift.NewFromConfig(cfg)
+		res, err := svc.DescribeClusters(context.Background(), &redshift.DescribeClustersInput{})
 		if err != nil {
 			return total, err
 		}

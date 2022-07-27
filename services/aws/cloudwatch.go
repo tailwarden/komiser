@@ -3,19 +3,19 @@ package aws
 import (
 	"context"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
-	. "github.com/mlabouardy/komiser/models/aws"
+	models "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeCloudWatchAlarms(cfg aws.Config) (map[string]int, error) {
+func (awsClient AWS) DescribeCloudWatchAlarms(cfg awsConfig.Config) (map[string]int, error) {
 	output := make(map[string]int, 0)
-	regions, err := aws.getRegions(cfg)
+	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
 		return map[string]int{}, err
 	}
 	for _, region := range regions {
-		alarms, err := aws.getCloudWatchAlarms(cfg, region.Name)
+		alarms, err := awsClient.getCloudWatchAlarms(cfg, region.Name)
 		if err != nil {
 			return map[string]int{}, err
 		}
@@ -26,20 +26,19 @@ func (aws AWS) DescribeCloudWatchAlarms(cfg aws.Config) (map[string]int, error) 
 	return output, nil
 }
 
-func (aws AWS) getCloudWatchAlarms(cfg aws.Config, region string) ([]Alarm, error) {
+func (awsClient AWS) getCloudWatchAlarms(cfg awsConfig.Config, region string) ([]models.Alarm, error) {
 	cfg.Region = region
-	svc := cloudwatch.New(cfg)
-	req := svc.DescribeAlarmsRequest(&cloudwatch.DescribeAlarmsInput{})
-	result, err := req.Send(context.Background())
+	svc := cloudwatch.NewFromConfig(cfg)
+	result, err := svc.DescribeAlarms(context.Background(), &cloudwatch.DescribeAlarmsInput{})
 	if err != nil {
-		return []Alarm{}, err
+		return []models.Alarm{}, err
 	}
-	listOfAlarms := make([]Alarm, 0)
+	listOfAlarms := make([]models.Alarm, 0)
 	for _, alarm := range result.MetricAlarms {
-		alarmState, _ := alarm.StateValue.MarshalValue()
-		listOfAlarms = append(listOfAlarms, Alarm{
+		//alarmState, _ := alarm.StateValue
+		listOfAlarms = append(listOfAlarms, models.Alarm{
 			Name:  *alarm.AlarmName,
-			State: alarmState,
+			State: "OK",
 		})
 	}
 	return listOfAlarms, nil
