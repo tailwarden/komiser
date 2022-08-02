@@ -56,7 +56,7 @@ wget https://cli.komiser.io/2.9.0/osx/komiser
 _Note_: make sure to add the execution permission to Komiser `chmod +x komiser`
 
 ```
-brew tap komiserio/komiser
+brew tap HelloOraculi/komiser
 brew install komiser
 ```
 
