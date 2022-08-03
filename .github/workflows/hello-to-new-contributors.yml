@@ -10,4 +10,4 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: "Hey, thank you for opening your first Issue! 🙂 While an Oraculi team member takes a look at your issue we would like to invite you to join our official Discord server, where you can interact directly with other contributors and Oraculi team members. Link here: https://discord.oraculi.io"
-          pr-message: "Hey, thank you for opening your Pull Request ! 🙂 While an Oraculi team member takes a look at your PR we would like to invite you to join our official Discord server, where we you can interact directly with other contributors and Oraculi team members. Link here: https://discord.oraculi.io"
+          pr-message: "Hey, thank you for opening your Pull Request ! 🙂 While an Oraculi team member takes a look at your PR we would like to invite you to join our official Discord server, where you can interact directly with other contributors and Oraculi team members. Link here: https://discord.oraculi.io"
