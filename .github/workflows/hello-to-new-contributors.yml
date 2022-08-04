@@ -1,9 +1,16 @@
 name: Auto message for PR's and Issues
 # description: Automatically send hello message to the first PR and Issue for new contributor.
-on: [pull_request, issues]
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - opened
 jobs:
   build:
     name: Hello new contributor
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: actions/first-interaction@v1
