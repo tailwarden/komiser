@@ -75,13 +75,13 @@ Below are the available downloads for the latest version of Komiser (2.9.0). Ple
 ## Installation on AWS
 
 ### Connect Komiser CLI to your AWS account. 
-* Connect a [local deployment](https://docs.komiser.io/docs/Cloud%20Providers/aws#usage) of Komiser CLI to you AWS account
+* Connect a [local deployment](https://docs.komiser.io/docs/Cloud%20Providers/aws#local-komiser-cli-single-account) of Komiser CLI to you AWS account
 
 ### Deploy Komiser to single account access EKS cluster (Helm chart)
-* If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/Cloud%20Providers/aws).
+* If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#eks-installation-single-account).
 
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
-* If you are would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://github.com/HelloOraculi/helm#configuration-multiple-aws-accounts).
+* If you are would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#multiple-account-eks-helm-chart-installation).
 
 ## Installtion on GCP 
 
