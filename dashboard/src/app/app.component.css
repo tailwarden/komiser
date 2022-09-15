@@ -22,5 +22,13 @@
 }
 
 .logo img {
-    width: 125px;
+    padding-top: 16px;
+    width: 178px;
+}
+
+@media screen and (max-width: 991px) {
+    .logo img {
+        padding-top: 0;
+        width: 124px;
+    }
 }
