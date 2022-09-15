@@ -1,7 +1,7 @@
 <div class="main-header">
     <div class="logo-header">
         <a class="logo" href="index.html">
-            <img src="https://cdn.komiser.io/images/komiser-oraculi.png"
+            <img src="./assets/img/komiser.svg"
         /></a>
         <button
             aria-controls="sidebar"
@@ -173,9 +173,15 @@
         </ul>
         <div
             class="form-group"
-            style="position: absolute; bottom: 0vh; display: block; width: 100%"
+            style="
+                position: absolute;
+                bottom: 0vh;
+                display: block;
+                width: 100%;
+                padding: 0 20px 20px 20px;
+            "
         >
-            <label for="exampleFormControlSelect1" style="font-weight: 700">
+            <label for="exampleFormControlSelect1">
                 <i class="la la-cloud" style="margin-left: 10px"></i> Cloud
                 Provider:
             </label>
@@ -195,7 +201,7 @@
                 *ngIf="currentProvider.value === 'aws' && profiles.length > 1"
                 style="margin-top: 10px"
             >
-                <label for="exampleFormControlSelect1" style="font-weight: 700">
+                <label for="exampleFormControlSelect1">
                     <i
                         class="devicon-redhat-plain"
                         style="margin-left: 10px"
