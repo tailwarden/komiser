@@ -51,6 +51,7 @@ jobs:
          command: go install github.com/mitchellh/gox@latest
       - run:
          name: Build binary
+         no_output_timeout: 20m
          command: gox -osarch="linux/amd64 windows/amd64 darwin/amd64"
       - run:
          name: Install AWS CLI
