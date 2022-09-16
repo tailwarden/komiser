@@ -244,7 +244,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.9.0"
+	app.Version = "2.10.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()

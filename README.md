@@ -41,16 +41,20 @@ brew install komiser
 
 - [What is Komiser?](#what-is-komiser)
   - [Who is using it?](#who-is-using-it)
-- [Getting Started](#getting-started)
+- [Getting started](#getting-started)
   - [Download](#download)
   - [Installation on AWS](#installation-on-aws)
-  - [Installation on GCP](#installtion-on-gcp)
-  - [Installation on Azure](#instalation-on-azure)
+    - [Connect Komiser CLI to your AWS account.](#connect-komiser-cli-to-your-aws-account)
+    - [Deploy Komiser to single account access EKS cluster (Helm chart)](#deploy-komiser-to-single-account-access-eks-cluster-helm-chart)
+    - [Deploy Komiser to a multi account access EKS cluster (Helm chart)](#deploy-komiser-to-a-multi-account-access-eks-cluster-helm-chart)
+  - [Installtion on GCP](#installtion-on-gcp)
+  - [Instalation on Azure](#instalation-on-azure)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
   - [Installation on OVH](#installation-on-ovh)
 - [Documentation](#documentation)
-  - [Jump right in](#jump-right-in)
+  - [Jump right in:](#jump-right-in)
 - [Bugs and feature requests](#bugs-and-feature-requests)
+- [Roadmap and Contributing](#roadmap-and-contributing)
 - [Users](#users)
 - [Versioning](#versioning)
 
@@ -70,7 +74,7 @@ Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE 
 ## Download
 
 You can run Komiser locally, as a Docker container or running it inside a Kubernetes cluster.
-Below are the available downloads for the latest version of Komiser (2.9.0). Please [download](https://docs.komiser.io/docs/overview/introduction/getting-started) the appropriate package for your operating system and architecture. 
+Below are the available downloads for the latest version of Komiser (2.10.0). Please [download](https://docs.komiser.io/docs/overview/introduction/getting-started) the appropriate package for your operating system and architecture. 
 
 ## Installation on AWS
 
