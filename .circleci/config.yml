@@ -4,6 +4,7 @@ jobs:
     docker:
       - image: circleci/node:14.15-stretch-browsers
     working_directory: ~/komiser
+    resource_class: large
     steps:
       - checkout
       - restore_cache:
@@ -26,7 +27,7 @@ jobs:
     docker:
       - image: golang:1.18.3
     working_directory: /go/src/github.com/mlabouardy/komiser
-    resource_class: xlarge
+    resource_class: large
     steps:
       - checkout
       - attach_workspace:
@@ -75,6 +76,7 @@ jobs:
   build_docker:
     docker:
        - image: docker:20.10.6
+    resource_class: large
     steps:
         - checkout
         - setup_remote_docker
