@@ -12,7 +12,7 @@
     <a href="https://docs.komiser.io/docs/docs/how-to-komiser/alerts">How to Komiser</a> |
     <a href="https://docs.komiser.io/docs/intro">Docs</a><br/><br/>
     <a href="https://docs.komiser.io/docs/introduction/contribute">Contribute</a> | 
-    <a href="https://docs.komiser.io/docs/FAQ/">FAQs</a><br/><br/>
+    <a href="https://roadmap.oraculi.io">Roadmap</a><br/><br/>
 </h4>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
