@@ -301,8 +301,10 @@ func main() {
 				schedule := c.String("cron")
 				regions := c.String("regions")
 
+				listOfRegions := []string{}
+
 				if len(regions) > 0 {
-					listOfRegions := strings.Split(regions, ",")
+					listOfRegions = strings.Split(regions, ",")
 					log.Println("Restrict Komiser inspection to the following AWS regions:", listOfRegions)
 				}
 
@@ -326,7 +328,7 @@ func main() {
 					}
 				}
 
-				startServer(port, cache, dataset, multiple, schedule, regions)
+				startServer(port, cache, dataset, multiple, schedule, listOfRegions)
 				return nil
 			},
 		},
