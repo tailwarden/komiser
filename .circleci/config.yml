@@ -65,13 +65,13 @@ jobs:
           chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
       - run:
           name: Push Linux binary
-          command: aws s3 cp komiser_linux_amd64 s3://komiser-releases/2.10.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_linux_amd64 s3://komiser-releases/2.11.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Windows binary
-          command: aws s3 cp komiser_windows_amd64.exe s3://komiser-releases/2.10.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_windows_amd64.exe s3://komiser-releases/2.11.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Mac OS X binary
-          command: aws s3 cp komiser_darwin_amd64 s3://komiser-releases/2.10.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp komiser_darwin_amd64 s3://komiser-releases/2.11.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Upload IAM policy
           command: aws s3 cp policy.json s3://komiser-releases/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
@@ -91,9 +91,9 @@ jobs:
             command: |
               docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
               docker tag mlabouardy/komiser:latest mlabouardy/komiser:${CIRCLE_SHA1}
-              docker tag mlabouardy/komiser:latest mlabouardy/komiser:2.10.0
+              docker tag mlabouardy/komiser:latest mlabouardy/komiser:2.11.0
               docker push mlabouardy/komiser:latest
-              docker push mlabouardy/komiser:2.10.0
+              docker push mlabouardy/komiser:2.11.0
               docker push mlabouardy/komiser:${CIRCLE_SHA1}
       
 workflows:

@@ -14,11 +14,13 @@ type AWSHandler struct {
 	aws      AWS
 }
 
-func NewAWSHandler(cache Cache, multiple bool) *AWSHandler {
+func NewAWSHandler(cache Cache, multiple bool, regions []string) *AWSHandler {
 	awsHandler := AWSHandler{
 		cache:    cache,
 		multiple: multiple,
-		aws:      AWS{},
+		aws: AWS{
+			Regions: regions,
+		},
 	}
 	return &awsHandler
 }

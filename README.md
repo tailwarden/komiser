@@ -72,7 +72,7 @@ Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE 
 ## Download
 
 You can run Komiser locally, as a Docker container or running it inside a Kubernetes cluster.
-Below are the available downloads for the latest version of Komiser (2.10.0). Please [download](https://docs.komiser.io/docs/overview/introduction/getting-started) the appropriate package for your operating system and architecture. 
+Below are the available downloads for the latest version of Komiser (2.11.0). Please [download](https://docs.komiser.io/docs/overview/introduction/getting-started) the appropriate package for your operating system and architecture. 
 
 ## Installation on AWS
 

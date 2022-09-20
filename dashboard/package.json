@@ -1,6 +1,6 @@
 {
   "name": "komiser-dashboard",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "license": "ELv2",
   "scripts": {
     "ng": "ng",

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -29,12 +30,12 @@ const (
 	DEFAULT_ALERT_SCHEDULE = "0 9 * * * *"
 )
 
-func startServer(port int, cache Cache, dataset string, multiple bool, schedule string) {
+func startServer(port int, cache Cache, dataset string, multiple bool, schedule string, regions []string) {
 	cache.Connect()
 
 	digitaloceanHandler := NewDigitalOceanHandler(cache)
 	gcpHandler := NewGCPHandler(cache, dataset)
-	awsHandler := NewAWSHandler(cache, multiple)
+	awsHandler := NewAWSHandler(cache, multiple, regions)
 	ovhHandler := NewOVHHandler(cache, "")
 	azureHandler := NewAzureHandler(cache)
 	alertHandler := NewAlertHandler(awsHandler, gcpHandler, azureHandler)
@@ -244,7 +245,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 func main() {
 	app := cli.NewApp()
 	app.Name = "Komiser"
-	app.Version = "2.10.0"
+	app.Version = "2.11.0"
 	app.Usage = "Cloud Environment Inspector"
 	app.Copyright = "Komiser - https://komiser.io"
 	app.Compiled = time.Now()
@@ -278,6 +279,10 @@ func main() {
 					Usage: "BigQuery Bill dataset",
 				},
 				cli.StringFlag{
+					Name:  "regions, re",
+					Usage: "Restrict Komiser inspection to list of regions",
+				},
+				cli.StringFlag{
 					Name:  "cron, c",
 					Usage: "Daily budget alert schedule",
 					Value: DEFAULT_ALERT_SCHEDULE,
@@ -294,6 +299,12 @@ func main() {
 				dataset := c.String("dataset")
 				multiple := c.Bool("multiple")
 				schedule := c.String("cron")
+				regions := c.String("regions")
+
+				if len(regions) > 0 {
+					listOfRegions := strings.Split(regions, ",")
+					log.Println("Restrict Komiser inspection to the following AWS regions:", listOfRegions)
+				}
 
 				var cache Cache
 
@@ -315,7 +326,7 @@ func main() {
 					}
 				}
 
-				startServer(port, cache, dataset, multiple, schedule)
+				startServer(port, cache, dataset, multiple, schedule, regions)
 				return nil
 			},
 		},
