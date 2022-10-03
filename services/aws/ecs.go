@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
@@ -52,8 +53,14 @@ func (awsClient AWS) getClusters(cfg awsConfig.Config, region string) ([]Cluster
 	}
 	listOfClusters := make([]Cluster, 0, len(result.Clusters))
 	for _, cluster := range result.Clusters {
+		tags := make([]string, 0)
+		for _, t := range cluster.Tags {
+			tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
+		}
 		listOfClusters = append(listOfClusters, Cluster{
+			ARN:  *cluster.ClusterArn,
 			Name: *cluster.ClusterName,
+			Tags: tags,
 		})
 	}
 	return listOfClusters, nil

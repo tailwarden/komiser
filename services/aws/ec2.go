@@ -8,39 +8,32 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (awsClient AWS) DescribeInstances(cfg awsConfig.Config) (map[string]interface{}, error) {
-	outputInstancesPerRegion := make(map[string]int, 0)
-	outputInstancesPerState := make(map[string]int, 0)
-	outputInstancesPerFamily := make(map[string]int, 0)
-	totalPublicInstances := 0
-	totalPrivateInstances := 0
+type EC2Instance struct {
+	ID           string   `json:"id"`
+	InstanceType string   `json:"instanceType"`
+	Tags         []string `json:"tags"`
+}
+
+func (awsClient AWS) DescribeInstances(cfg awsConfig.Config) ([]EC2Instance, error) {
+	listOfInstances := make([]EC2Instance, 0)
 	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
-		return map[string]interface{}{}, err
+		return listOfInstances, err
 	}
 	for _, region := range regions {
 		instances, err := awsClient.getInstances(cfg, region.Name)
 		if err != nil {
-			return map[string]interface{}{}, err
+			return listOfInstances, err
 		}
 		for _, instance := range instances {
-			outputInstancesPerState[instance.State]++
-			outputInstancesPerFamily[instance.InstanceType]++
-			if instance.Public {
-				totalPublicInstances++
-			} else {
-				totalPrivateInstances++
-			}
+			listOfInstances = append(listOfInstances, EC2Instance{
+				ID:           instance.ID,
+				InstanceType: instance.InstanceType,
+				Tags:         instance.Tags,
+			})
 		}
-		outputInstancesPerRegion[region.Name] = len(instances)
 	}
-	return map[string]interface{}{
-		"region":  outputInstancesPerRegion,
-		"state":   outputInstancesPerState,
-		"family":  outputInstancesPerFamily,
-		"public":  totalPublicInstances,
-		"private": totalPrivateInstances,
-	}, nil
+	return listOfInstances, nil
 }
 
 func (awsClient AWS) getInstances(cfg awsConfig.Config, region string) ([]EC2, error) {

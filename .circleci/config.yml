@@ -101,9 +101,21 @@ workflows:
     build_and_deploy:
         jobs:
             - build_frontend
+                filters:
+                    branches:
+                    only:
+                        - master
             - build_cli:
                 requires:
                     - build_frontend
+                filters:
+                    branches:
+                    only:
+                        - master
             - build_docker:
                 requires:
                     - build_cli
+                filters:
+                    branches:
+                    only:
+                        - master
