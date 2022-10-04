@@ -12,20 +12,23 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeQueues(cfg aws.Config) (int64, error) {
-	var sum int64
+func (aws AWS) DescribeQueues(cfg aws.Config) ([]Queue, error) {
+	queues := make([]Queue, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return queues, err
 	}
 	for _, region := range regions {
-		queues, err := aws.getSQS(cfg, region.Name)
+		queuesResp, err := aws.getSQS(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return queues, err
 		}
-		sum += int64(len(queues))
+
+		for _, queue := range queuesResp {
+			queues = append(queues, queue)
+		}
 	}
-	return sum, nil
+	return queues, nil
 }
 
 func (aws AWS) getSQS(cfg aws.Config, region string) ([]Queue, error) {
@@ -38,7 +41,9 @@ func (aws AWS) getSQS(cfg aws.Config, region string) ([]Queue, error) {
 	listOfQueues := make([]Queue, 0, len(result.QueueUrls))
 	for _, queue := range result.QueueUrls {
 		listOfQueues = append(listOfQueues, Queue{
-			Name: queue,
+			Name:   queue,
+			ID:     queue,
+			Region: region,
 		})
 	}
 	return listOfQueues, nil

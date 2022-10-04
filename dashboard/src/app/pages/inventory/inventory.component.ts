@@ -73,6 +73,42 @@ export class InventoryComponent implements OnInit {
             });
         });
 
+        this.awsService.getVPCSubnets().subscribe((data) => {
+            data.forEach((subnet) => {
+                this.services.push({
+                    account: 'Sandbox',
+                    service: 'Subnet',
+                    name: subnet.name,
+                    tags: subnet.tags,
+                    region: subnet.region,
+                });
+            });
+        });
+
+        this.awsService.getSecurityGroups().subscribe((data) => {
+            data.forEach((sg) => {
+                this.services.push({
+                    account: 'Sandbox',
+                    service: 'Security Group',
+                    name: sg.name,
+                    tags: sg.tags,
+                    region: sg.region,
+                });
+            });
+        });
+
+        this.awsService.getSQSQueues().subscribe((data) => {
+            data.forEach((queue) => {
+                this.services.push({
+                    account: 'Sandbox',
+                    service: 'SQS',
+                    name: queue.name,
+                    tags: queue.tags,
+                    region: queue.region,
+                });
+            });
+        });
+
         this.awsService.getInstancesPerRegion().subscribe((data) => {
             data.forEach((item) => {
                 this.services.push({

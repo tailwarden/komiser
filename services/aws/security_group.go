@@ -8,20 +8,23 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeSecurityGroupsTotal(cfg awsConfig.Config) (int64, error) {
-	var sum int64
+func (aws AWS) DescribeSecurityGroupsTotal(cfg awsConfig.Config) ([]SecurityGroup, error) {
+	securityGroups := make([]SecurityGroup, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return securityGroups, err
 	}
 	for _, region := range regions {
 		sgs, err := aws.getSecurityGroups(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return securityGroups, err
 		}
-		sum += int64(len(sgs))
+
+		for _, sg := range sgs {
+			securityGroups = append(securityGroups, sg)
+		}
 	}
-	return sum, nil
+	return securityGroups, nil
 }
 
 func (aws AWS) getSecurityGroups(cfg awsConfig.Config, region string) ([]SecurityGroup, error) {
@@ -38,7 +41,10 @@ func (aws AWS) getSecurityGroups(cfg awsConfig.Config, region string) ([]Securit
 			sgTags = append(sgTags, *tag.Value)
 		}
 		listOfSecurityGroups = append(listOfSecurityGroups, SecurityGroup{
-			Tags: sgTags,
+			Tags:   sgTags,
+			Name:   *securityGroup.GroupName,
+			ID:     *securityGroup.GroupId,
+			Region: region,
 		})
 	}
 	return listOfSecurityGroups, nil

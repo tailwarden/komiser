@@ -1,5 +1,8 @@
 package aws
 
 type SecurityGroup struct {
-	Tags []string
+	Name   string   `json:"name"`
+	ID     string   `json:"id"`
+	Region string   `json:"region"`
+	Tags   []string `json:"tags"`
 }

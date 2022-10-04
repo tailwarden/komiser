@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 
 	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -9,6 +10,13 @@ import (
 )
 
 type AWSVPC struct {
+	Name   string   `json:"name"`
+	Region string   `json:"region"`
+	ARN    string   `json:"arn"`
+	Tags   []string `json:"tags"`
+}
+
+type AWSSubnet struct {
 	Name   string   `json:"name"`
 	Region string   `json:"region"`
 	ARN    string   `json:"arn"`
@@ -39,22 +47,35 @@ func (aws AWS) DescribeVPCsTotal(cfg awsConfig.Config) ([]AWSVPC, error) {
 	return vpcs, nil
 }
 
-func (aws AWS) DescribeSubnets(cfg awsConfig.Config) (int64, error) {
-	var sum int64
+func (aws AWS) DescribeSubnets(cfg awsConfig.Config) ([]AWSSubnet, error) {
+	subnets := make([]AWSSubnet, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return sum, err
+		return subnets, err
 	}
 	for _, region := range regions {
 		cfg.Region = region.Name
 		svc := ec2.NewFromConfig(cfg)
-		res, err := svc.DescribeSubnets(context.Background(), &ec2.DescribeSubnetsInput{})
+		subnetsResp, err := svc.DescribeSubnets(context.Background(), &ec2.DescribeSubnetsInput{})
 		if err != nil {
-			return sum, err
+			return subnets, err
 		}
-		sum += int64(len(res.Subnets))
+
+		for _, subnet := range subnetsResp.Subnets {
+			tags := make([]string, 0)
+			for _, t := range subnet.Tags {
+				tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
+			}
+
+			subnets = append(subnets, AWSSubnet{
+				Name:   *subnet.SubnetId,
+				ARN:    *subnet.SubnetId,
+				Region: region.Name,
+				Tags:   tags,
+			})
+		}
 	}
-	return sum, nil
+	return subnets, nil
 }
 
 func (aws AWS) getVPCs(cfg awsConfig.Config, region string) ([]VPC, error) {
