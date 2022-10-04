@@ -7,4 +7,5 @@ type Cluster struct {
 	ARN       string
 	Tags      []string
 	CreatedAt time.Time
+	Region    string
 }

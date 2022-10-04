@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
@@ -12,14 +13,51 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeS3Buckets(cfg awsConfig.Config) (int, error) {
+type S3Bucket struct {
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+	Tags      []string  `json:"tags"`
+	Region    string    `json:"region"`
+}
+
+func (aws AWS) DescribeS3Buckets(cfg awsConfig.Config) ([]S3Bucket, error) {
+	buckets := make([]S3Bucket, 0)
 	cfg.Region = "us-east-1"
 	svc := s3.NewFromConfig(cfg)
 	result, err := svc.ListBuckets(context.Background(), &s3.ListBucketsInput{})
 	if err != nil {
-		return 0, err
+		return buckets, err
 	}
-	return len(result.Buckets), nil
+
+	for _, bucket := range result.Buckets {
+		tagsResp, err := svc.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
+			Bucket: bucket.Name,
+		})
+		if err != nil {
+			return buckets, err
+		}
+
+		tags := make([]string, 0)
+		for _, t := range tagsResp.TagSet {
+			tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
+		}
+
+		bucketLocationResp, err := svc.GetBucketLocation(context.Background(), &s3.GetBucketLocationInput{
+			Bucket: bucket.Name,
+		})
+		if err != nil {
+			return buckets, err
+		}
+
+		buckets = append(buckets, S3Bucket{
+			Name:      *bucket.Name,
+			CreatedAt: *bucket.CreationDate,
+			Tags:      tags,
+			Region:    string(bucketLocationResp.LocationConstraint),
+		})
+
+	}
+	return buckets, nil
 }
 
 type BucketMetric struct {

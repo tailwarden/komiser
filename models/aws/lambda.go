@@ -3,9 +3,12 @@ package aws
 import "time"
 
 type Lambda struct {
-	Name    string
-	Memory  int64
-	Runtime string
+	Name        string   `json:"name"`
+	Memory      int64    `json:"memory"`
+	Runtime     string   `json:"runtime"`
+	FunctionArn string   `json:"arn"`
+	Tags        []string `json:"tags"`
+	Region      string   `json:"region"`
 }
 
 type LambdaInvocationMetric struct {

@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -13,6 +14,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	. "github.com/mlabouardy/komiser/models/aws"
 )
+
+type LambdaFunction struct {
+}
 
 func getRuntime(input string) string {
 	if strings.HasPrefix(input, "go") {
@@ -30,19 +34,20 @@ func getRuntime(input string) string {
 	return "custom"
 }
 
-func (aws AWS) DescribeLambdaFunctions(cfg awsConfig.Config) (map[string]int, error) {
-	output := make(map[string]int, 0)
+func (aws AWS) DescribeLambdaFunctions(cfg awsConfig.Config) ([]Lambda, error) {
+	output := make([]Lambda, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return map[string]int{}, err
+		return output, err
 	}
 	for _, region := range regions {
 		functions, err := aws.getLambdaFunctions(cfg, region.Name)
 		if err != nil {
-			return map[string]int{}, err
+			return output, err
 		}
-		for _, lambda := range functions {
-			output[getRuntime(lambda.Runtime)]++
+
+		for _, f := range functions {
+			output = append(output, f)
 		}
 	}
 	return output, nil
@@ -212,11 +217,26 @@ func (aws AWS) getLambdaFunctions(cfg awsConfig.Config, region string) ([]Lambda
 		if err != nil {
 			return []Lambda{}, err
 		}
-		for _, lambda := range result.Functions {
+		for _, l := range result.Functions {
+			tagsResp, err := svc.ListTags(context.Background(), &lambda.ListTagsInput{
+				Resource: *&l.FunctionArn,
+			})
+			if err != nil {
+				return []Lambda{}, err
+			}
+
+			tags := make([]string, 0)
+			for key, value := range tagsResp.Tags {
+				tags = append(tags, fmt.Sprintf("%s:%s", key, value))
+			}
+
 			listOfFunctions = append(listOfFunctions, Lambda{
-				Name:    *lambda.FunctionName,
-				Memory:  int64(*lambda.MemorySize),
-				Runtime: string(lambda.Runtime),
+				Name:        *l.FunctionName,
+				Memory:      int64(*l.MemorySize),
+				Runtime:     string(l.Runtime),
+				FunctionArn: *l.FunctionArn,
+				Tags:        tags,
+				Region:      region,
 			})
 		}
 		if result.NextMarker == nil {

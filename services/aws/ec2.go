@@ -12,6 +12,7 @@ type EC2Instance struct {
 	ID           string   `json:"id"`
 	InstanceType string   `json:"instanceType"`
 	Tags         []string `json:"tags"`
+	Region       string   `json:"region"`
 }
 
 func (awsClient AWS) DescribeInstances(cfg awsConfig.Config) ([]EC2Instance, error) {
@@ -30,6 +31,7 @@ func (awsClient AWS) DescribeInstances(cfg awsConfig.Config) ([]EC2Instance, err
 				ID:           instance.ID,
 				InstanceType: instance.InstanceType,
 				Tags:         instance.Tags,
+				Region:       region.Name,
 			})
 		}
 	}

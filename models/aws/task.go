@@ -1,5 +1,10 @@
 package aws
 
+import "time"
+
 type Task struct {
-	ARN string
+	ARN       string
+	Tags      []string
+	CreatedAt time.Time
+	Region    string
 }

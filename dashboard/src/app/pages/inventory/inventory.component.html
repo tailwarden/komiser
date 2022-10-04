@@ -2,6 +2,97 @@
     <div class="container-fluid">
         <h4 class="page-title">Inventory</h4>
 
-        <aws-inventory *ngIf="provider === 'aws'"></aws-inventory>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="icon-big text-center">
+                                    <i class="la la-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-7 d-flex align-items-center">
+                                <div class="numbers">
+                                    <p class="card-category">Cloud Accounts</p>
+                                    <h4 class="card-title">
+                                        5
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="icon-big text-center">
+                                    <i class="la la-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-7 d-flex align-items-center">
+                                <div class="numbers">
+                                    <p class="card-category">Regions</p>
+                                    <h4 class="card-title">
+                                        5
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="icon-big text-center">
+                                    <i class="la la-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-7 d-flex align-items-center">
+                                <div class="numbers">
+                                    <p class="card-category">Resources</p>
+                                    <h4 class="card-title">
+                                        5
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <input type="text" class="form-control" placeholder="Search for a resource by name, service, region or tags">
+                    <table class="table table-hover">
+                        <thead>
+                            <th>Account</th>
+                            <th>Region</th>
+                            <th>Service</th>
+                            <th>Name</th>
+                            <th>Tags</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let service of services">
+                                <td>{{ service.account }}</td>
+                                <td>{{ service.region }}</td>
+                                <td>{{ service.service }}</td>
+                                <td>{{ service.name }}</td>
+                                <td>{{ service.tags }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

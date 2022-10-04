@@ -25,7 +25,6 @@ import { StoreService } from './services/store.service';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsService } from './services/settings.service';
 import { InventoryComponent } from './pages/inventory/inventory.component';
-import { AwsComponent } from './pages/inventory/aws/aws.component';
 
 const appRoutes: Routes = [
     {
@@ -56,7 +55,6 @@ const appRoutes: Routes = [
         DigitaloceanDashboardComponent,
         AzureDashboardComponent,
         InventoryComponent,
-        AwsComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),

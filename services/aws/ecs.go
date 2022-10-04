@@ -10,38 +10,53 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (awsClient AWS) DescribeECS(cfg awsConfig.Config) (map[string]int, error) {
-	countClusters := 0
-	countTasks := 0
-	countServices := 0
+type ECSData struct {
+	Services []Service
+	Clusters []Cluster
+	Tasks    []Task
+}
+
+func (awsClient AWS) DescribeECS(cfg awsConfig.Config) (ECSData, error) {
+	ecsData := ECSData{
+		Services: make([]Service, 0),
+		Clusters: make([]Cluster, 0),
+		Tasks:    make([]Task, 0),
+	}
+
 	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
-		return map[string]int{}, err
+		return ecsData, err
 	}
 	for _, region := range regions {
 		clusters, err := awsClient.getClusters(cfg, region.Name)
 		if err != nil {
-			return map[string]int{}, err
+			return ecsData, err
 		}
-		countClusters += len(clusters)
+
+		for _, cluster := range clusters {
+			ecsData.Clusters = append(ecsData.Clusters, cluster)
+		}
+
 		for _, cluster := range clusters {
 			tasks, err := awsClient.getTasks(cfg, cluster.Name, region.Name)
 			if err != nil {
-				return map[string]int{}, err
+				return ecsData, err
 			}
-			countTasks += len(tasks)
+
+			for _, t := range tasks {
+				ecsData.Tasks = append(ecsData.Tasks, t)
+			}
+
 			services, err := awsClient.getServices(cfg, cluster.Name, region.Name)
 			if err != nil {
-				return map[string]int{}, err
+				return ecsData, err
 			}
-			countServices += len(services)
+			for _, s := range services {
+				ecsData.Services = append(ecsData.Services, s)
+			}
 		}
 	}
-	return map[string]int{
-		"clusters": countClusters,
-		"tasks":    countTasks,
-		"services": countServices,
-	}, nil
+	return ecsData, nil
 }
 
 func (awsClient AWS) getClusters(cfg awsConfig.Config, region string) ([]Cluster, error) {
@@ -58,9 +73,10 @@ func (awsClient AWS) getClusters(cfg awsConfig.Config, region string) ([]Cluster
 			tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
 		}
 		listOfClusters = append(listOfClusters, Cluster{
-			ARN:  *cluster.ClusterArn,
-			Name: *cluster.ClusterName,
-			Tags: tags,
+			ARN:    *cluster.ClusterArn,
+			Name:   *cluster.ClusterName,
+			Tags:   tags,
+			Region: region,
 		})
 	}
 	return listOfClusters, nil
@@ -77,8 +93,15 @@ func (awsClient AWS) getTasks(cfg aws.Config, cluster string, region string) ([]
 	}
 	listOfTasks := make([]Task, 0, len(result.Tasks))
 	for _, task := range result.Tasks {
+		tags := make([]string, 0)
+		for _, t := range task.Tags {
+			tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
+		}
 		listOfTasks = append(listOfTasks, Task{
-			ARN: *task.TaskArn,
+			ARN:       *task.TaskArn,
+			CreatedAt: *task.CreatedAt,
+			Tags:      tags,
+			Region:    region,
 		})
 	}
 	return listOfTasks, nil
@@ -95,8 +118,15 @@ func (awsClient AWS) getServices(cfg awsConfig.Config, cluster string, region st
 	}
 	listOfServices := make([]Service, 0, len(result.Services))
 	for _, service := range result.Services {
+		tags := make([]string, 0)
+		for _, t := range service.Tags {
+			tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
+		}
 		listOfServices = append(listOfServices, Service{
-			Name: *service.ServiceName,
+			Name:      *service.ServiceName,
+			CreatedAt: *service.CreatedAt,
+			Tags:      tags,
+			Region:    region,
 		})
 	}
 	return listOfServices, nil
