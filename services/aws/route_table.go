@@ -8,20 +8,35 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeRouteTablesTotal(cfg awsConfig.Config) (int64, error) {
-	var sum int64
+type AWSRouteTable struct {
+	Name   string   `json:"name"`
+	ID     string   `json:"id"`
+	Region string   `json:"region"`
+	Tags   []string `json:"tags"`
+}
+
+func (aws AWS) DescribeRouteTablesTotal(cfg awsConfig.Config) ([]AWSRouteTable, error) {
+	rts := make([]AWSRouteTable, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return rts, err
 	}
 	for _, region := range regions {
-		rts, err := aws.getRouteTables(cfg, region.Name)
+		rtsResp, err := aws.getRouteTables(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return rts, err
 		}
-		sum += int64(len(rts))
+
+		for _, rt := range rtsResp {
+			rts = append(rts, AWSRouteTable{
+				Name:   rt.ID,
+				ID:     rt.ID,
+				Region: region.Name,
+				Tags:   rt.Tags,
+			})
+		}
 	}
-	return sum, nil
+	return rts, nil
 }
 
 func (aws AWS) getRouteTables(cfg awsConfig.Config, region string) ([]RouteTable, error) {

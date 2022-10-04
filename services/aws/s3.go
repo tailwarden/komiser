@@ -30,23 +30,24 @@ func (aws AWS) DescribeS3Buckets(cfg awsConfig.Config) ([]S3Bucket, error) {
 	}
 
 	for _, bucket := range result.Buckets {
-		tagsResp, err := svc.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
-			Bucket: bucket.Name,
-		})
-		if err != nil {
-			return buckets, err
-		}
-
-		tags := make([]string, 0)
-		for _, t := range tagsResp.TagSet {
-			tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
-		}
-
 		bucketLocationResp, err := svc.GetBucketLocation(context.Background(), &s3.GetBucketLocationInput{
 			Bucket: bucket.Name,
 		})
 		if err != nil {
 			return buckets, err
+		}
+
+		cfg.Region = string(bucketLocationResp.LocationConstraint)
+		svc := s3.NewFromConfig(cfg)
+		tagsResp, err := svc.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
+			Bucket: bucket.Name,
+		})
+
+		tags := make([]string, 0)
+		if err == nil {
+			for _, t := range tagsResp.TagSet {
+				tags = append(tags, fmt.Sprintf("%s:%s", *t.Key, *t.Value))
+			}
 		}
 
 		buckets = append(buckets, S3Bucket{

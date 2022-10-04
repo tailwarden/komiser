@@ -13,7 +13,10 @@ export class InventoryComponent implements OnInit {
     public _subscription: Subscription;
     public services: Array<any> = new Array<any>();
 
-    constructor(private storeService: StoreService, private awsService: AwsService) {
+    constructor(
+        private storeService: StoreService,
+        private awsService: AwsService
+    ) {
         this.provider = this.storeService.getProvider();
         this._subscription = this.storeService.providerChanged.subscribe(
             (provider) => {
@@ -22,8 +25,7 @@ export class InventoryComponent implements OnInit {
             }
         );
 
-
-        this.awsService.getLambdaFunctions().subscribe(data => {
+        this.awsService.getLambdaFunctions().subscribe((data) => {
             data.forEach((f) => {
                 this.services.push({
                     account: 'Sandbox',
@@ -32,10 +34,10 @@ export class InventoryComponent implements OnInit {
                     tags: f.tags,
                     region: f.region,
                 });
-            })
-        })
+            });
+        });
 
-        this.awsService.getNumberOfS3Buckets().subscribe(data => {
+        this.awsService.getNumberOfS3Buckets().subscribe((data) => {
             data.forEach((bucket) => {
                 this.services.push({
                     account: 'Sandbox',
@@ -44,8 +46,32 @@ export class InventoryComponent implements OnInit {
                     tags: bucket.tags,
                     region: bucket.region,
                 });
-            })
-        })
+            });
+        });
+
+        this.awsService.getVirtualPrivateClouds().subscribe((data) => {
+            data.forEach((vpc) => {
+                this.services.push({
+                    account: 'Sandbox',
+                    service: 'VPC',
+                    name: vpc.name,
+                    tags: vpc.tags,
+                    region: vpc.region,
+                });
+            });
+        });
+
+        this.awsService.getRouteTables().subscribe((data) => {
+            data.forEach((rt) => {
+                this.services.push({
+                    account: 'Sandbox',
+                    service: 'Route Table',
+                    name: rt.name,
+                    tags: rt.tags,
+                    region: rt.region,
+                });
+            });
+        });
 
         this.awsService.getInstancesPerRegion().subscribe((data) => {
             data.forEach((item) => {
@@ -59,8 +85,8 @@ export class InventoryComponent implements OnInit {
             });
         });
 
-        this.awsService.getECS().subscribe(data => {
-            data.services.forEach(service => {
+        this.awsService.getECS().subscribe((data) => {
+            data.services.forEach((service) => {
                 this.services.push({
                     account: 'Sandbox',
                     service: 'ECS Services',
@@ -69,7 +95,7 @@ export class InventoryComponent implements OnInit {
                     region: service.region,
                 });
             });
-            data.tasks.forEach(task => {
+            data.tasks.forEach((task) => {
                 this.services.push({
                     account: 'Sandbox',
                     service: 'ECS Tasks',
@@ -78,7 +104,7 @@ export class InventoryComponent implements OnInit {
                     region: task.region,
                 });
             });
-            data.clusters.forEach(cluster => {
+            data.clusters.forEach((cluster) => {
                 this.services.push({
                     account: 'Sandbox',
                     service: 'ECS Clusters',
@@ -87,7 +113,7 @@ export class InventoryComponent implements OnInit {
                     region: cluster.region,
                 });
             });
-        })
+        });
     }
 
     ngOnInit(): void {}

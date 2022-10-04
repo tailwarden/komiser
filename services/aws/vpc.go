@@ -8,20 +8,35 @@ import (
 	. "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (aws AWS) DescribeVPCsTotal(cfg awsConfig.Config) (int64, error) {
-	var sum int64
+type AWSVPC struct {
+	Name   string   `json:"name"`
+	Region string   `json:"region"`
+	ARN    string   `json:"arn"`
+	Tags   []string `json:"tags"`
+}
+
+func (aws AWS) DescribeVPCsTotal(cfg awsConfig.Config) ([]AWSVPC, error) {
+	vpcs := make([]AWSVPC, 0)
 	regions, err := aws.getRegions(cfg)
 	if err != nil {
-		return 0, err
+		return vpcs, err
 	}
 	for _, region := range regions {
-		vpcs, err := aws.getVPCs(cfg, region.Name)
+		vpcsRes, err := aws.getVPCs(cfg, region.Name)
 		if err != nil {
-			return 0, err
+			return vpcs, err
 		}
-		sum += int64(len(vpcs))
+
+		for _, vpc := range vpcsRes {
+			vpcs = append(vpcs, AWSVPC{
+				Name:   vpc.ID,
+				Region: region.Name,
+				ARN:    vpc.ID,
+				Tags:   vpc.Tags,
+			})
+		}
 	}
-	return sum, nil
+	return vpcs, nil
 }
 
 func (aws AWS) DescribeSubnets(cfg awsConfig.Config) (int64, error) {
