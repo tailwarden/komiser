@@ -11,7 +11,6 @@ import * as $ from 'jquery';
 declare var Chart: any;
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',

@@ -15,7 +15,9 @@
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Cloud Accounts</p>
-                                    <h4 class="card-title">{{getCloudAccounts()}}</h4>
+                                    <h4 class="card-title">
+                                        {{ getCloudAccounts() }}
+                                    </h4>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +36,9 @@
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Regions</p>
-                                    <h4 class="card-title">{{regions.size}}</h4>
+                                    <h4 class="card-title">
+                                        {{ regions.size }}
+                                    </h4>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +57,9 @@
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Resources</p>
-                                    <h4 class="card-title">{{services.length}}</h4>
+                                    <h4 class="card-title">
+                                        {{ services.length }}
+                                    </h4>
                                 </div>
                             </div>
                         </div>
@@ -66,34 +72,55 @@
             <div class="col-lg-12">
                 <div class="card">
                     <i *ngIf="!term" class="la la-search search-icon"></i>
-                    <i *ngIf="term" class="la la-times search-icon clickable" (click)="cleanSelection()"></i>
-                    <input type="text" class="new-input border-bottom"
-                        placeholder="Search by tags, service, name, region..." type="text" data-form-type="”other”"
-                        autocomplete="off" [(ngModel)]="term" />
+                    <i
+                        *ngIf="term"
+                        class="la la-times search-icon clickable"
+                        (click)="cleanSelection()"
+                    ></i>
+                    <input
+                        type="text"
+                        class="new-input border-bottom"
+                        placeholder="Search by tags, service, name, region..."
+                        type="text"
+                        data-form-type="”other”"
+                        autocomplete="off"
+                        [(ngModel)]="term"
+                        (ngModelChange)="changeSearchFilter($event)"
+                    />
                     <table class="table table-hover">
                         <thead>
                             <th>Provider</th>
-                            <th >Account</th>
+                            <th>Account</th>
                             <th>Region</th>
                             <th>Service</th>
-                            <th style="width: 15%;">Name</th>
-                            <th style="width: 15%;">Tags</th>
+                            <th style="width: 15%">Name</th>
+                            <th style="width: 15%">Tags</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let service of services | search: term">
+                            <tr *ngFor="let service of selectedResources">
                                 <td>
-                                    <img src="assets/img/aws.png" style="width: 25px;"/>
+                                    <img
+                                        src="assets/img/aws.png"
+                                        style="width: 25px"
+                                    />
                                 </td>
                                 <td>{{ service.account }}</td>
                                 <td>{{ service.region }}</td>
                                 <td>
-                                    <badge class="badge badge-secondary" [style.background-color]="stringToColour(service.service)" >{{ service.service }}</badge>
+                                    <badge
+                                        class="badge badge-secondary"
+                                        [style.background-color]="
+                                            stringToColour(service.service)
+                                        "
+                                        >{{ service.service }}</badge
+                                    >
                                 </td>
                                 <td>{{ service.name }}</td>
-                                <td >{{ service.tags }}</td>
+                                <td>{{ service.tags }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <pagination class="d-flex justify-content-center" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage" (pageChanged)="pageChanged($event)" [maxSize]="10" [totalItems]="services.length" [boundaryLinks]="true"></pagination>
                 </div>
             </div>
         </div>

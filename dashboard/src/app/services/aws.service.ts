@@ -70,7 +70,9 @@ export class AwsService {
 
     public getInstancesPerRegion(account): any {
         return this.http
-            .get(`${this.BASE_URL}/ec2/regions`, { headers: this.getHeaders(account) })
+            .get(`${this.BASE_URL}/ec2/regions`, {
+                headers: this.getHeaders(account),
+            })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -128,7 +130,9 @@ export class AwsService {
 
     public getNumberOfS3Buckets(account): any {
         return this.http
-            .get(`${this.BASE_URL}/s3/buckets`, { headers: this.getHeaders(account) })
+            .get(`${this.BASE_URL}/s3/buckets`, {
+                headers: this.getHeaders(account),
+            })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -349,7 +353,9 @@ export class AwsService {
 
     public getSQSQueues(account): any {
         return this.http
-            .get(`${this.BASE_URL}/sqs/queues`, { headers: this.getHeaders(account) })
+            .get(`${this.BASE_URL}/sqs/queues`, {
+                headers: this.getHeaders(account),
+            })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -575,7 +581,9 @@ export class AwsService {
 
     public getVPCSubnets(account): any {
         return this.http
-            .get(`${this.BASE_URL}/vpc/subnets`, { headers: this.getHeaders(account) })
+            .get(`${this.BASE_URL}/vpc/subnets`, {
+                headers: this.getHeaders(account),
+            })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -585,7 +593,6 @@ export class AwsService {
                 })
             );
     }
-
 
     private getHeaders(account?): any {
         let headers = new HttpHeaders();

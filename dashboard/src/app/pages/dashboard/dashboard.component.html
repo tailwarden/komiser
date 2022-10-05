@@ -15,11 +15,19 @@
                                 </div>
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="numbers">
-                                        <p class="card-category">Cloud Accounts</p>
-                                        <h4 class="card-title" *ngIf="!loadingIamUsers">
+                                        <p class="card-category">
+                                            Cloud Accounts
+                                        </p>
+                                        <h4
+                                            class="card-title"
+                                            *ngIf="!loadingIamUsers"
+                                        >
                                             {{ iamUsers }}
                                         </h4>
-                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingIamUsers"></div>
+                                        <div
+                                            class="spinner-border spinner-border-sm text-muted"
+                                            *ngIf="loadingIamUsers"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -38,10 +46,16 @@
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="numbers">
                                         <p class="card-category">IAM Users</p>
-                                        <h4 class="card-title" *ngIf="!loadingIamUsers">
+                                        <h4
+                                            class="card-title"
+                                            *ngIf="!loadingIamUsers"
+                                        >
                                             {{ iamUsers }}
                                         </h4>
-                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingIamUsers"></div>
+                                        <div
+                                            class="spinner-border spinner-border-sm text-muted"
+                                            *ngIf="loadingIamUsers"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -60,17 +74,25 @@
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="numbers">
                                         <p class="card-category">Bill</p>
-                                        <h4 class="card-title" *ngIf="!loadingCurrentBill">
+                                        <h4
+                                            class="card-title"
+                                            *ngIf="!loadingCurrentBill"
+                                        >
                                             $ {{ formatNumber(currentBill) }}
                                         </h4>
-                                        <h4 class="card-title forecast" *ngIf="!loadingForecastBill">
+                                        <h4
+                                            class="card-title forecast"
+                                            *ngIf="!loadingForecastBill"
+                                        >
                                             <span>
                                                 <i class="la la-arrow-up"></i>
                                             </span>
                                             Forecast $ {{ forecastBill }}
                                         </h4>
-                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCurrentBill">
-                                        </div>
+                                        <div
+                                            class="spinner-border spinner-border-sm text-muted"
+                                            *ngIf="loadingCurrentBill"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -89,11 +111,16 @@
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="numbers">
                                         <p class="card-category">Regions</p>
-                                        <h4 class="card-title" *ngIf="!loadingUsedRegions">
+                                        <h4
+                                            class="card-title"
+                                            *ngIf="!loadingUsedRegions"
+                                        >
                                             {{ usedRegions }}
                                         </h4>
-                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUsedRegions">
-                                        </div>
+                                        <div
+                                            class="spinner-border spinner-border-sm text-muted"
+                                            *ngIf="loadingUsedRegions"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-        
+
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
@@ -128,11 +155,9 @@
                                 Number of Amazon EC2 Instances by Region
                             </p>
                         </div>
-                        <div class="card-body">
-                        </div>
+                        <div class="card-body"></div>
                     </div>
                 </div>
-        
             </div>
         </section>
     </div>

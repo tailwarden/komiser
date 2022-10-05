@@ -3,6 +3,7 @@ import { StoreService } from '../../services/store.service';
 import { Subscription } from 'rxjs';
 import { AwsService } from '../../services/aws.service';
 import { CloudService } from '../../services/cloud.service';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 
 @Component({
     selector: 'app-inventory',
@@ -13,28 +14,31 @@ export class InventoryComponent implements OnInit {
     public provider: string;
     public _subscription: Subscription;
     public services: Array<any> = new Array<any>();
+    public selectedResources: Array<any> = new Array<any>();
     public accounts: Array<any> = new Array<any>();
     public term: string = '';
     public regions: Set<any> = new Set<any>();
+    public currentPage: number = 1;
+    public itemsPerPage: number = 10;
 
     constructor(
         private storeService: StoreService,
         private awsService: AwsService,
         private cloudService: CloudService
     ) {
-        this.cloudService.getCloudAccounts().subscribe(accounts => {
+        this.cloudService.getCloudAccounts().subscribe((accounts) => {
             this.accounts = accounts;
-            if(this.accounts) {
-                if (this.accounts['AWS']){
-                    this.accounts['AWS'].forEach(account => {
+            if (this.accounts) {
+                if (this.accounts['AWS']) {
+                    this.accounts['AWS'].forEach((account) => {
                         this.getAWSResources(account);
-                    })
+                    });
                 }
             }
-        })
+        });
     }
 
-    private getAWSResources(account){
+    private getAWSResources(account) {
         this.awsService.getLambdaFunctions(account).subscribe((data) => {
             data.forEach((f) => {
                 this.services.push({
@@ -48,6 +52,8 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getNumberOfS3Buckets(account).subscribe((data) => {
@@ -63,6 +69,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getVirtualPrivateClouds(account).subscribe((data) => {
@@ -78,6 +85,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getRouteTables(account).subscribe((data) => {
@@ -93,6 +101,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getVPCSubnets(account).subscribe((data) => {
@@ -108,6 +117,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getSecurityGroups(account).subscribe((data) => {
@@ -123,6 +133,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getSQSQueues(account).subscribe((data) => {
@@ -138,6 +149,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getDynamoDBTables(account).subscribe((data) => {
@@ -153,6 +165,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getInstancesPerRegion(account).subscribe((data) => {
@@ -168,6 +181,7 @@ export class InventoryComponent implements OnInit {
             });
 
             this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
 
         this.awsService.getECS(account).subscribe((data) => {
@@ -180,9 +194,7 @@ export class InventoryComponent implements OnInit {
                     tags: service.tags,
                     region: service.region,
                 });
-
-                this.getRegions();
-            }); 
+            });
             data.tasks.forEach((task) => {
                 this.services.push({
                     provider: 'AWS',
@@ -192,8 +204,6 @@ export class InventoryComponent implements OnInit {
                     tags: task.tags,
                     region: task.region,
                 });
-
-                this.getRegions();
             });
             data.clusters.forEach((cluster) => {
                 this.services.push({
@@ -204,9 +214,9 @@ export class InventoryComponent implements OnInit {
                     tags: cluster.tags,
                     region: cluster.region,
                 });
-
-                this.getRegions();
             });
+            this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
         });
     }
 
@@ -217,30 +227,53 @@ export class InventoryComponent implements OnInit {
     public stringToColour(str) {
         var hash = 0;
         for (var i = 0; i < str.length; i++) {
-          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
         }
         var colour = '#';
         for (var i = 0; i < 3; i++) {
-          var value = (hash >> (i * 8)) & 0xFF;
-          colour += ('00' + value.toString(16)).substr(-2);
+            var value = (hash >> (i * 8)) & 0xff;
+            colour += ('00' + value.toString(16)).substr(-2);
         }
         return colour;
     }
 
-    public getRegions(){
+    public getRegions() {
         let tempRegions = new Set<any>();
-        this.services.forEach(service => {
-            tempRegions.add(service.region)
-        })
+        this.services.forEach((service) => {
+            tempRegions.add(service.region);
+        });
         this.regions = tempRegions;
     }
 
-    public getCloudAccounts(){
+    public getCloudAccounts() {
         let count = 0;
-        Object.keys(this.accounts).forEach(provider => {
-            count += (this.accounts[provider]?.length)
-        })
+        Object.keys(this.accounts).forEach((provider) => {
+            count += this.accounts[provider]?.length;
+        });
         return count;
+    }
+
+    public pageChanged(event: PageChangedEvent): void {
+        this.cleanSelection();
+        const startItem = (event.page - 1) * event.itemsPerPage;
+        const endItem = event.page * event.itemsPerPage;
+        this.selectedResources = this.services.slice(startItem, endItem);
+    }
+
+    public changeSearchFilter(term){
+        this.selectedResources = this.services.filter((service) => {
+            return (
+                service.region.toLowerCase().includes(term.toLowerCase()) ||
+                service.account.toLowerCase().includes(term.toLowerCase()) ||
+                service.provider.toLowerCase().includes(term.toLowerCase()) ||
+                service.service.toLowerCase().includes(term.toLowerCase()) ||
+                service.name.toLowerCase().includes(term.toLowerCase()) ||
+                service.tags?.filter((tag) => {
+                    tag.toLowerCase().includes(term.toLowerCase());
+                }).length > 0
+            );
+        });
+        this.selectedResources = this.selectedResources.slice(0, 10);
     }
 
     ngOnInit(): void {}

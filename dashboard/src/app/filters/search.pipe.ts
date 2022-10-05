@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'search',
 })
 export class SearchFilterPipe implements PipeTransform {
-    transform(services: any, term: any): any {
+    transform(selectedResources: any, term: any, services: any): any {
         if (!term) return services;
 
         return services.filter((service) => {
@@ -13,10 +13,10 @@ export class SearchFilterPipe implements PipeTransform {
                 service.account.toLowerCase().includes(term.toLowerCase()) ||
                 service.provider.toLowerCase().includes(term.toLowerCase()) ||
                 service.service.toLowerCase().includes(term.toLowerCase()) ||
-                service.name.toLowerCase().includes(term.toLowerCase()) || 
-                (service.tags?.filter((tag) => {
-                    tag.toLowerCase().includes(term.toLowerCase())
-                }).length > 0)
+                service.name.toLowerCase().includes(term.toLowerCase()) ||
+                service.tags?.filter((tag) => {
+                    tag.toLowerCase().includes(term.toLowerCase());
+                }).length > 0
             );
         });
     }

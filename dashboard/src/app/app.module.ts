@@ -18,10 +18,11 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { OvhService } from './services/ovh.service';
 import { StoreService } from './services/store.service';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+//import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsService } from './services/settings.service';
 import { InventoryComponent } from './pages/inventory/inventory.component';
 import { SearchFilterPipe } from './filters/search.pipe';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 const appRoutes: Routes = [
     {
@@ -47,7 +48,7 @@ const appRoutes: Routes = [
         DashboardComponent,
         NotificationsComponent,
         InventoryComponent,
-        SearchFilterPipe
+        SearchFilterPipe,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
@@ -56,7 +57,8 @@ const appRoutes: Routes = [
         BrowserAnimationsModule,
         TrendModule,
         FormsModule,
-        NgbModalModule,
+      //  NgbModalModule,
+        PaginationModule.forRoot(),
     ],
     providers: [
         AwsService,
