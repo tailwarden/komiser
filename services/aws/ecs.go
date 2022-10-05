@@ -11,9 +11,9 @@ import (
 )
 
 type ECSData struct {
-	Services []Service
-	Clusters []Cluster
-	Tasks    []Task
+	Services []Service `json:"services"`
+	Clusters []Cluster `json:"clusters"`
+	Tasks    []Task    `json:"tasks"`
 }
 
 func (awsClient AWS) DescribeECS(cfg awsConfig.Config) (ECSData, error) {

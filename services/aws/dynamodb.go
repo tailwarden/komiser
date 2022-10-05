@@ -2,55 +2,65 @@ package aws
 
 import (
 	"context"
+	"fmt"
 
 	awsConfig "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	models "github.com/mlabouardy/komiser/models/aws"
 )
 
-func (awsClient AWS) DescribeDynamoDBTables(cfg awsConfig.Config) (map[string]interface{}, error) {
-	outputThroughput := make(map[string]int, 0)
-	sumTables := 0
+type AWSDynamoDBTable struct {
+	Name   string   `json:"name"`
+	Region string   `json:"region"`
+	ID     string   `json:"id"`
+	Tags   []string `json:"tags"`
+}
+
+func (awsClient AWS) DescribeDynamoDBTables(cfg awsConfig.Config) ([]AWSDynamoDBTable, error) {
+	listOfTables := make([]AWSDynamoDBTable, 0)
 	regions, err := awsClient.getRegions(cfg)
 	if err != nil {
-		return map[string]interface{}{}, err
+		return listOfTables, err
 	}
 	for _, region := range regions {
 		tables, err := awsClient.getDynamoDBTables(cfg, region.Name)
 		if err != nil {
-			return map[string]interface{}{}, err
+			return listOfTables, err
 		}
-		sumTables += len(tables)
+
 		for _, table := range tables {
-			cfg.Region = region.Name
-			svc := dynamodb.NewFromConfig(cfg)
-			result, err := svc.DescribeTable(context.Background(), &dynamodb.DescribeTableInput{
-				TableName: &table.Name,
-			})
-			if err != nil {
-				return map[string]interface{}{}, err
-			}
-			outputThroughput["readCapacity"] += int(*result.Table.ProvisionedThroughput.ReadCapacityUnits)
-			outputThroughput["writeCapacity"] += int(*result.Table.ProvisionedThroughput.WriteCapacityUnits)
+			listOfTables = append(listOfTables, table)
 		}
 	}
-	return map[string]interface{}{
-		"throughput": outputThroughput,
-		"total":      sumTables,
-	}, nil
+	return listOfTables, nil
 }
 
-func (awsClient AWS) getDynamoDBTables(cfg awsConfig.Config, region string) ([]models.Table, error) {
+func (awsClient AWS) getDynamoDBTables(cfg awsConfig.Config, region string) ([]AWSDynamoDBTable, error) {
 	cfg.Region = region
 	svc := dynamodb.NewFromConfig(cfg)
 	result, err := svc.ListTables(context.Background(), &dynamodb.ListTablesInput{})
 	if err != nil {
-		return []models.Table{}, err
+		return []AWSDynamoDBTable{}, err
 	}
-	listOfTables := make([]models.Table, 0)
+	listOfTables := make([]AWSDynamoDBTable, 0)
 	for _, table := range result.TableNames {
-		listOfTables = append(listOfTables, models.Table{
-			Name: table,
+
+		tagsResp, err := svc.ListTagsOfResource(context.Background(), &dynamodb.ListTagsOfResourceInput{
+			ResourceArn: &table,
+		})
+		if err != nil {
+			return []AWSDynamoDBTable{}, err
+		}
+
+		tags := make([]string, 0)
+		for _, tag := range tagsResp.Tags {
+			tags = append(tags, fmt.Sprintf("%s:%s", *tag.Key, *tag.Value))
+		}
+
+		listOfTables = append(listOfTables, AWSDynamoDBTable{
+			Name:   table,
+			ID:     table,
+			Region: region,
+			Tags:   tags,
 		})
 	}
 	return listOfTables, nil

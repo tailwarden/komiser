@@ -15,6 +15,7 @@ import (
 	. "github.com/mlabouardy/komiser/handlers/gcp"
 	. "github.com/mlabouardy/komiser/handlers/integrations"
 	. "github.com/mlabouardy/komiser/handlers/ovh"
+	. "github.com/mlabouardy/komiser/handlers/settings"
 	. "github.com/mlabouardy/komiser/services/cache"
 	"github.com/robfig/cron"
 	"github.com/rs/cors"
@@ -39,12 +40,27 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	ovhHandler := NewOVHHandler(cache, "")
 	azureHandler := NewAzureHandler(cache)
 	alertHandler := NewAlertHandler(awsHandler, gcpHandler, azureHandler)
+	accountHandler := NewAccountHandler(awsHandler, gcpHandler, azureHandler, digitaloceanHandler)
 	c := cron.New()
 	c.AddFunc(schedule, alertHandler.DailyNotifHandler)
 	c.Start()
 
 	r := mux.NewRouter()
 
+	r.HandleFunc("/accounts", accountHandler.ListCloudAccountsHandler)
+
+	r.HandleFunc("/aws/ec2/regions", awsHandler.EC2InstancesHandler)
+	r.HandleFunc("/aws/lambda/functions", awsHandler.LambdaFunctionHandler)
+	r.HandleFunc("/aws/s3/buckets", awsHandler.S3BucketsHandler)
+	r.HandleFunc("/aws/dynamodb/tables", awsHandler.DynamoDBTableHandler)
+	r.HandleFunc("/aws/vpc", awsHandler.VPCHandler)
+	r.HandleFunc("/aws/route_tables", awsHandler.RouteTableHandler)
+	r.HandleFunc("/aws/security_groups", awsHandler.SecurityGroupHandler)
+	r.HandleFunc("/aws/sqs/queues", awsHandler.SQSQueuesHandler)
+	r.HandleFunc("/aws/ecs", awsHandler.ECSHandler)
+	r.HandleFunc("/aws/vpc/subnets", awsHandler.DescribeSubnetsHandler)
+
+	// Deprecated
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
 	r.HandleFunc("/aws/iam/users", awsHandler.IAMUsersHandler)
 	r.HandleFunc("/aws/iam/account", awsHandler.IAMUserHandler)
@@ -52,20 +68,14 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/aws/cost/history", awsHandler.CostAndUsageHandler)
 	r.HandleFunc("/aws/resources/regions", awsHandler.UsedRegionsHandler)
 	r.HandleFunc("/aws/cloudwatch/alarms", awsHandler.CloudWatchAlarmsHandler)
-	r.HandleFunc("/aws/ec2/regions", awsHandler.EC2InstancesHandler)
-	r.HandleFunc("/aws/lambda/functions", awsHandler.LambdaFunctionHandler)
 	r.HandleFunc("/aws/lambda/invocations", awsHandler.GetLambdaInvocationMetrics)
-	r.HandleFunc("/aws/s3/buckets", awsHandler.S3BucketsHandler)
 	r.HandleFunc("/aws/s3/size", awsHandler.S3BucketsSizeHandler)
 	r.HandleFunc("/aws/s3/objects", awsHandler.S3BucketsObjectsHandler)
 	r.HandleFunc("/aws/glacier", awsHandler.GlacierVaultsHandler)
 	r.HandleFunc("/aws/ebs", awsHandler.EBSHandler)
 	r.HandleFunc("/aws/rds/instances", awsHandler.RDSInstanceHandler)
-	r.HandleFunc("/aws/dynamodb/tables", awsHandler.DynamoDBTableHandler)
 	r.HandleFunc("/aws/elasticache/clusters", awsHandler.ElasticacheClustersHandler)
-	r.HandleFunc("/aws/vpc", awsHandler.VPCHandler)
 	r.HandleFunc("/aws/acl", awsHandler.ACLHandler)
-	r.HandleFunc("/aws/route_tables", awsHandler.RouteTableHandler)
 	r.HandleFunc("/aws/cloudfront/requests", awsHandler.CloudFrontRequestsHandler)
 	r.HandleFunc("/aws/cloudfront/distributions", awsHandler.CloudFrontDistributionsHandler)
 	r.HandleFunc("/aws/apigateway/requests", awsHandler.APIGatewayRequestsHandler)
@@ -74,12 +84,10 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/aws/elb/family", awsHandler.ElasticLoadBalancerHandler)
 	r.HandleFunc("/aws/kms", awsHandler.KMSKeysHandler)
 	r.HandleFunc("/aws/key_pairs", awsHandler.KeyPairHandler)
-	r.HandleFunc("/aws/security_groups", awsHandler.SecurityGroupHandler)
 	r.HandleFunc("/aws/security_groups/unrestricted", awsHandler.ListUnrestrictedSecurityGroups)
 	r.HandleFunc("/aws/acm/certificates", awsHandler.APIGatewayListCertificatesHandler)
 	r.HandleFunc("/aws/acm/expired", awsHandler.APIGatewayExpiredCertificatesHandler)
 	r.HandleFunc("/aws/sqs/messages", awsHandler.GetNumberOfMessagesSentAndDeletedSQSHandler)
-	r.HandleFunc("/aws/sqs/queues", awsHandler.SQSQueuesHandler)
 	r.HandleFunc("/aws/sns/topics", awsHandler.SNSTopicsHandler)
 	r.HandleFunc("/aws/mq/brokers", awsHandler.ActiveMQBrokersHandler)
 	r.HandleFunc("/aws/kinesis/streams", awsHandler.KinesisListStreamsHandler)
@@ -91,7 +99,6 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/aws/swf/domains", awsHandler.SWFListDomainsHandler)
 	r.HandleFunc("/aws/support/open", awsHandler.SupportOpenTicketsHandler)
 	r.HandleFunc("/aws/support/history", awsHandler.SupportTicketsInLastSixMonthsHandlers)
-	r.HandleFunc("/aws/ecs", awsHandler.ECSHandler)
 	r.HandleFunc("/aws/route53/zones", awsHandler.Route53HostedZonesHandler)
 	r.HandleFunc("/aws/route53/records", awsHandler.Route53ARecordsHandler)
 	r.HandleFunc("/aws/logs/volume", awsHandler.LogsVolumeHandler)
@@ -110,7 +117,6 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/aws/s3/empty", awsHandler.GetEmptyBucketsHandler)
 	r.HandleFunc("/aws/eip/detached", awsHandler.ElasticIPHandler)
 	r.HandleFunc("/aws/redshift/clusters", awsHandler.DescribeRedshiftClustersHandler)
-	r.HandleFunc("/aws/vpc/subnets", awsHandler.DescribeSubnetsHandler)
 	r.HandleFunc("/aws/cost/forecast", awsHandler.DescribeForecastPriceHandler)
 
 	r.HandleFunc("/gcp/resourcemanager/projects", gcpHandler.ProjectsHandler)

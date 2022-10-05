@@ -119,8 +119,6 @@ export class AppComponent implements OnDestroy {
 
         this._storeService = storeService;
 
-        this.getAccountName();
-
         this._subscription = this.storeService.newNotification.subscribe(
             (notifications) => {
                 this.notifications = [];
@@ -131,67 +129,11 @@ export class AppComponent implements OnDestroy {
         );
     }
 
-    private getAccountName() {
-        if (this.currentProvider.value == 'aws') {
-            this.awsService.getAccountName().subscribe(
-                (data) => {
-                    this.accountName = data.username;
-                },
-                (err) => {
-                    this.accountName = 'Username';
-                }
-            );
-        } else if (this.currentProvider.value == 'ovh') {
-            this.ovhService.getProfile().subscribe(
-                (data) => {
-                    this.accountName = data.nichandle;
-                },
-                (err) => {
-                    this.accountName = 'Username';
-                }
-            );
-        } else if (this.currentProvider.value == 'digitalocean') {
-            this.digitaloceanService.getProfile().subscribe(
-                (data) => {
-                    this.accountName = data.email.substring(
-                        0,
-                        data.email.indexOf('@')
-                    );
-                },
-                (err) => {
-                    this.accountName = 'Username';
-                }
-            );
-        } else {
-            this.gcpService.getProjects().subscribe(
-                (data) => {
-                    this.accountName = data[0].name;
-                },
-                (err) => {
-                    this.accountName = 'Project Name';
-                }
-            );
-        }
-    }
-
     ngOnDestroy() {
         this._subscription.unsubscribe();
     }
 
     public calcMoment(timestamp) {
         return moment(timestamp).fromNow();
-    }
-
-    public onCloudProviderSelected(provider) {
-        this.currentProvider = this.providers[provider];
-        this._storeService.onProviderChanged(provider);
-        this.getAccountName();
-    }
-
-    public onProfileSelected(profile) {
-        this.currentProfile = profile;
-        localStorage.setItem('profile', this.currentProfile);
-        this._storeService.onProfileChanged(profile);
-        this.getAccountName();
     }
 }

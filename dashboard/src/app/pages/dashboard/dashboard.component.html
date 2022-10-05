@@ -2,16 +2,138 @@
     <div class="container-fluid">
         <h4 class="page-title">Dashboard</h4>
 
-        <gcp-dashboard *ngIf="provider === 'gcp'"></gcp-dashboard>
-
-        <aws-dashboard *ngIf="provider === 'aws'"></aws-dashboard>
-
-        <ovh-dashboard *ngIf="provider === 'ovh'"></ovh-dashboard>
-
-        <azure-dashboard *ngIf="provider === 'azure'"></azure-dashboard>
-
-        <digitalocean-dashboard
-            *ngIf="provider === 'digitalocean'"
-        ></digitalocean-dashboard>
+        <section>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="la la-users"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 d-flex align-items-center">
+                                    <div class="numbers">
+                                        <p class="card-category">Cloud Accounts</p>
+                                        <h4 class="card-title" *ngIf="!loadingIamUsers">
+                                            {{ iamUsers }}
+                                        </h4>
+                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingIamUsers"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="la la-users"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 d-flex align-items-center">
+                                    <div class="numbers">
+                                        <p class="card-category">IAM Users</p>
+                                        <h4 class="card-title" *ngIf="!loadingIamUsers">
+                                            {{ iamUsers }}
+                                        </h4>
+                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingIamUsers"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="la la-money"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 d-flex align-items-center">
+                                    <div class="numbers">
+                                        <p class="card-category">Bill</p>
+                                        <h4 class="card-title" *ngIf="!loadingCurrentBill">
+                                            $ {{ formatNumber(currentBill) }}
+                                        </h4>
+                                        <h4 class="card-title forecast" *ngIf="!loadingForecastBill">
+                                            <span>
+                                                <i class="la la-arrow-up"></i>
+                                            </span>
+                                            Forecast $ {{ forecastBill }}
+                                        </h4>
+                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingCurrentBill">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="la la-map-marker"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 d-flex align-items-center">
+                                    <div class="numbers">
+                                        <p class="card-category">Regions</p>
+                                        <h4 class="card-title" *ngIf="!loadingUsedRegions">
+                                            {{ usedRegions }}
+                                        </h4>
+                                        <div class="spinner-border spinner-border-sm text-muted" *ngIf="loadingUsedRegions">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Elastic Compute Cloud</h4>
+                            <p class="card-category">
+                                Number of Amazon EC2 Instances by Region
+                            </p>
+                        </div>
+                        <div class="card-body">
+                            <div class="mapregions">
+                                <div class="map">
+                                    <span>Alternative content for the map</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Cost breakdown</h4>
+                            <p class="card-category">
+                                Number of Amazon EC2 Instances by Region
+                            </p>
+                        </div>
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        </section>
     </div>
 </div>

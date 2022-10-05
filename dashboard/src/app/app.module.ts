@@ -10,12 +10,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AwsService } from './services/aws.service';
 import { AzureService } from './services/azure.service';
-import { AwsDashboardComponent } from './pages/dashboard/aws/aws.component';
-import { AzureDashboardComponent } from './pages/dashboard/azure/azure.component';
+import { CloudService } from './services/cloud.service';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { DigitaloceanDashboardComponent } from './pages/dashboard/digitalocean/digitalocean.component';
-import { GcpDashboardComponent } from './pages/dashboard/gcp/gcp.component';
-import { OvhDashboardComponent } from './pages/dashboard/ovh/ovh.component';
 import { DigitaloceanService } from './services/digitalocean.service';
 import { GcpService } from './services/gcp.service';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
@@ -25,6 +21,7 @@ import { StoreService } from './services/store.service';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsService } from './services/settings.service';
 import { InventoryComponent } from './pages/inventory/inventory.component';
+import { SearchFilterPipe } from './filters/search.pipe';
 
 const appRoutes: Routes = [
     {
@@ -48,13 +45,9 @@ const appRoutes: Routes = [
     declarations: [
         AppComponent,
         DashboardComponent,
-        AwsDashboardComponent,
-        GcpDashboardComponent,
         NotificationsComponent,
-        OvhDashboardComponent,
-        DigitaloceanDashboardComponent,
-        AzureDashboardComponent,
         InventoryComponent,
+        SearchFilterPipe
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
@@ -74,6 +67,7 @@ const appRoutes: Routes = [
         OvhService,
         AzureService,
         SettingsService,
+        CloudService,
     ],
     bootstrap: [AppComponent],
 })

@@ -9,13 +9,13 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <i class="la la-users"></i>
+                                    <i class="fa fa-cloud"></i>
                                 </div>
                             </div>
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Cloud Accounts</p>
-                                    <h4 class="card-title">5</h4>
+                                    <h4 class="card-title">{{getCloudAccounts()}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -28,13 +28,13 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <i class="la la-users"></i>
+                                    <i class="fa fa-globe"></i>
                                 </div>
                             </div>
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Regions</p>
-                                    <h4 class="card-title">5</h4>
+                                    <h4 class="card-title">{{regions.size}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -47,13 +47,13 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <i class="la la-users"></i>
+                                    <i class="fa fa-th"></i>
                                 </div>
                             </div>
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Resources</p>
-                                    <h4 class="card-title">5</h4>
+                                    <h4 class="card-title">{{services.length}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -65,26 +65,32 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Search for a resource by name, service, region or tags"
-                    />
+                    <i *ngIf="!term" class="la la-search search-icon"></i>
+                    <i *ngIf="term" class="la la-times search-icon clickable" (click)="cleanSelection()"></i>
+                    <input type="text" class="new-input border-bottom"
+                        placeholder="Search by tags, service, name, region..." type="text" data-form-type="”other”"
+                        autocomplete="off" [(ngModel)]="term" />
                     <table class="table table-hover">
                         <thead>
-                            <th>Account</th>
+                            <th>Provider</th>
+                            <th >Account</th>
                             <th>Region</th>
                             <th>Service</th>
-                            <th>Name</th>
-                            <th>Tags</th>
+                            <th style="width: 15%;">Name</th>
+                            <th style="width: 15%;">Tags</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let service of services">
+                            <tr *ngFor="let service of services | search: term">
+                                <td>
+                                    <img src="assets/img/aws.png" style="width: 25px;"/>
+                                </td>
                                 <td>{{ service.account }}</td>
                                 <td>{{ service.region }}</td>
-                                <td>{{ service.service }}</td>
+                                <td>
+                                    <badge class="badge badge-secondary" [style.background-color]="stringToColour(service.service)" >{{ service.service }}</badge>
+                                </td>
                                 <td>{{ service.name }}</td>
-                                <td>{{ service.tags }}</td>
+                                <td >{{ service.tags }}</td>
                             </tr>
                         </tbody>
                     </table>

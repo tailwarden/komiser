@@ -68,9 +68,9 @@ export class AwsService {
             );
     }
 
-    public getInstancesPerRegion(): any {
+    public getInstancesPerRegion(account): any {
         return this.http
-            .get(`${this.BASE_URL}/ec2/regions`, { headers: this.getHeaders() })
+            .get(`${this.BASE_URL}/ec2/regions`, { headers: this.getHeaders(account) })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -111,10 +111,10 @@ export class AwsService {
             );
     }
 
-    public getLambdaFunctions(): any {
+    public getLambdaFunctions(account): any {
         return this.http
             .get(`${this.BASE_URL}/lambda/functions`, {
-                headers: this.getHeaders(),
+                headers: this.getHeaders(account),
             })
             .pipe(
                 catchError((err) => {
@@ -126,37 +126,9 @@ export class AwsService {
             );
     }
 
-    public getLambdaInvocationMetrics(): any {
+    public getNumberOfS3Buckets(account): any {
         return this.http
-            .get(`${this.BASE_URL}/lambda/invocations`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getAccountName(): any {
-        return this.http
-            .get(`${this.BASE_URL}/iam/account`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getNumberOfS3Buckets(): any {
-        return this.http
-            .get(`${this.BASE_URL}/s3/buckets`, { headers: this.getHeaders() })
+            .get(`${this.BASE_URL}/s3/buckets`, { headers: this.getHeaders(account) })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -234,10 +206,10 @@ export class AwsService {
             );
     }
 
-    public getDynamoDBTables(): any {
+    public getDynamoDBTables(account): any {
         return this.http
             .get(`${this.BASE_URL}/dynamodb/tables`, {
-                headers: this.getHeaders(),
+                headers: this.getHeaders(account),
             })
             .pipe(
                 catchError((err) => {
@@ -249,24 +221,9 @@ export class AwsService {
             );
     }
 
-    public getElasticacheClusters(): any {
+    public getVirtualPrivateClouds(account): any {
         return this.http
-            .get(`${this.BASE_URL}/elasticache/clusters`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getVirtualPrivateClouds(): any {
-        return this.http
-            .get(`${this.BASE_URL}/vpc`, { headers: this.getHeaders() })
+            .get(`${this.BASE_URL}/vpc`, { headers: this.getHeaders(account) })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -290,55 +247,10 @@ export class AwsService {
             );
     }
 
-    public getRouteTables(): any {
+    public getRouteTables(account): any {
         return this.http
             .get(`${this.BASE_URL}/route_tables`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getCloudFrontRequests(): any {
-        return this.http
-            .get(`${this.BASE_URL}/cloudfront/requests`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getCloudFrontDistributions(): any {
-        return this.http
-            .get(`${this.BASE_URL}/cloudfront/distributions`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getApiGatewayRequests(): any {
-        return this.http
-            .get(`${this.BASE_URL}/apigateway/requests`, {
-                headers: this.getHeaders(),
+                headers: this.getHeaders(account),
             })
             .pipe(
                 catchError((err) => {
@@ -406,10 +318,10 @@ export class AwsService {
             );
     }
 
-    public getSecurityGroups(): any {
+    public getSecurityGroups(account): any {
         return this.http
             .get(`${this.BASE_URL}/security_groups`, {
-                headers: this.getHeaders(),
+                headers: this.getHeaders(account),
             })
             .pipe(
                 catchError((err) => {
@@ -420,63 +332,6 @@ export class AwsService {
                 })
             );
     }
-
-    public getKeyPairs(): any {
-        return this.http
-            .get(`${this.BASE_URL}/key_pairs`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getACMListCertificates(): any {
-        return this.http
-            .get(`${this.BASE_URL}/acm/certificates`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getACMExpiredCertificates(): any {
-        return this.http
-            .get(`${this.BASE_URL}/acm/expired`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getUnrestrictedSecurityGroups(): any {
-        return this.http
-            .get(`${this.BASE_URL}/security_groups/unrestricted`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
     public getSQSPublishedMessagesMetrics(): any {
         return this.http
             .get(`${this.BASE_URL}/sqs/messages`, {
@@ -492,80 +347,9 @@ export class AwsService {
             );
     }
 
-    public getSQSQueues(): any {
+    public getSQSQueues(account): any {
         return this.http
-            .get(`${this.BASE_URL}/sqs/queues`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getSNSTopics(): any {
-        return this.http
-            .get(`${this.BASE_URL}/sns/topics`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getActiveMQBrokers(): any {
-        return this.http
-            .get(`${this.BASE_URL}/mq/brokers`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getKinesisStreams(): any {
-        return this.http
-            .get(`${this.BASE_URL}/kinesis/streams`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getKinesisShards(): any {
-        return this.http
-            .get(`${this.BASE_URL}/kinesis/shards`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getGlueCrawlers(): any {
-        return this.http
-            .get(`${this.BASE_URL}/glue/crawlers`, {
-                headers: this.getHeaders(),
-            })
+            .get(`${this.BASE_URL}/sqs/queues`, { headers: this.getHeaders(account) })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -630,9 +414,9 @@ export class AwsService {
             );
     }
 
-    public getECS(): any {
+    public getECS(account): any {
         return this.http
-            .get(`${this.BASE_URL}/ecs`, { headers: this.getHeaders() })
+            .get(`${this.BASE_URL}/ecs`, { headers: this.getHeaders(account) })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -789,11 +573,9 @@ export class AwsService {
             );
     }
 
-    public getConsoleLoginSourceIps(): any {
+    public getVPCSubnets(account): any {
         return this.http
-            .get(`${this.BASE_URL}/cloudtrail/source_ip`, {
-                headers: this.getHeaders(),
-            })
+            .get(`${this.BASE_URL}/vpc/subnets`, { headers: this.getHeaders(account) })
             .pipe(
                 catchError((err) => {
                     let payload = err.error;
@@ -804,138 +586,10 @@ export class AwsService {
             );
     }
 
-    public getLogsRetentionPeriod(): any {
-        return this.http
-            .get(`${this.BASE_URL}/logs/retention`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
 
-    public getNatGatewayTraffic(): any {
-        return this.http
-            .get(`${this.BASE_URL}/nat/traffic`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getOrganization(): any {
-        return this.http
-            .get(`${this.BASE_URL}/iam/organization`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getServiceLimits(): any {
-        return this.http
-            .get(`${this.BASE_URL}/service/limits`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getEmptyBuckets(): any {
-        return this.http
-            .get(`${this.BASE_URL}/s3/empty`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getDetachedElasticIps(): any {
-        return this.http
-            .get(`${this.BASE_URL}/eip/detached`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getRedshiftClusters(): any {
-        return this.http
-            .get(`${this.BASE_URL}/redshift/clusters`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getVPCSubnets(): any {
-        return this.http
-            .get(`${this.BASE_URL}/vpc/subnets`, { headers: this.getHeaders() })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    public getForecastPrice(): any {
-        return this.http
-            .get(`${this.BASE_URL}/cost/forecast`, {
-                headers: this.getHeaders(),
-            })
-            .pipe(
-                catchError((err) => {
-                    let payload = err.error;
-                    if (payload && payload.error)
-                        this.storeService.add(payload.error);
-                    return observableThrowError(err.error);
-                })
-            );
-    }
-
-    private getHeaders(): any {
+    private getHeaders(account?): any {
         let headers = new HttpHeaders();
-        headers = headers.set('profile', localStorage.getItem('profile'));
+        headers = headers.set('profile', account);
         return headers;
     }
 }

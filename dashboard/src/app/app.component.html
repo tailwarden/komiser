@@ -18,96 +18,9 @@
             <i class="la la-ellipsis-v"></i>
         </button>
     </div>
-    <nav class="navbar navbar-header navbar-expand-lg">
-        <div class="container-fluid">
-            <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-                <li class="nav-item dropdown hidden-caret">
-                    <a
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        class="nav-link dropdown-toggle"
-                        data-toggle="dropdown"
-                        href="#"
-                        id="navbarDropdown"
-                        role="button"
-                    >
-                        <i class="la la-bell"></i>
-                        <span
-                            class="notification"
-                            *ngIf="notifications.length > 0"
-                            >{{ notifications.length }}</span
-                        >
-                    </a>
-                    <ul
-                        aria-labelledby="navbarDropdown"
-                        class="dropdown-menu notif-box"
-                    >
-                        <li>
-                            <div class="dropdown-title">
-                                You have {{ notifications.length }} new
-                                notification
-                            </div>
-                        </li>
-                        <li>
-                            <div class="notif-center">
-                                <a
-                                    href="#"
-                                    *ngFor="let notification of notifications"
-                                >
-                                    <div class="notif-icon notif-danger">
-                                        <i class="la la-user-plus"></i>
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="block">
-                                            {{ notification.content }}
-                                        </span>
-                                        <span
-                                            class="badge badge-secondary badge-pill float-right"
-                                            *ngIf="notification.total > 1"
-                                            >{{ notification.total }}</span
-                                        >
-                                        <span class="time">{{
-                                            calcMoment(notification.timestamp)
-                                        }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="see-all" routerLink="/notifications">
-                                <strong>See all notifications</strong>
-                                <i class="la la-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
 </div>
 <div class="sidebar">
     <div class="scrollbar-inner sidebar-wrapper">
-        <div class="user">
-            <div class="photo">
-                <img [src]="currentProvider.logo" />
-            </div>
-            <div class="info">
-                <a
-                    aria-expanded="true"
-                    class=""
-                    data-toggle="collapse"
-                    href="#collapseExample"
-                >
-                    <span
-                        >{{ accountName }}
-                        <span class="user-level">{{
-                            currentProvider.label
-                        }}</span>
-                    </span>
-                </a>
-                <div class="clearfix"></div>
-            </div>
-        </div>
         <ul class="nav">
             <li
                 class="nav-item"
@@ -125,58 +38,13 @@
                     <p>Inventory</p>
                 </a>
             </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/notifications">
+                    <i class="la la-cubes"></i>
+                    <p>Notifications</p>
+                </a>
+            </li>
         </ul>
-        <div
-            class="form-group"
-            style="
-                position: absolute;
-                bottom: 0vh;
-                display: block;
-                width: 100%;
-                padding: 0 20px 20px 20px;
-            "
-        >
-            <label for="exampleFormControlSelect1">
-                <i class="la la-cloud" style="margin-left: 10px"></i> Cloud
-                Provider:
-            </label>
-            <select
-                class="form-control"
-                (change)="onCloudProviderSelected($event.target.value)"
-            >
-                <option
-                    *ngFor="let provider of availableProviders"
-                    [value]="provider.value"
-                    [selected]="provider.value === currentProvider.value"
-                >
-                    {{ provider.label }}
-                </option>
-            </select>
-            <div
-                *ngIf="currentProvider.value === 'aws' && profiles.length > 1"
-                style="margin-top: 10px"
-            >
-                <label for="exampleFormControlSelect1">
-                    <i
-                        class="devicon-redhat-plain"
-                        style="margin-left: 10px"
-                    ></i>
-                    AWS Account:
-                </label>
-                <select
-                    class="form-control"
-                    (change)="onProfileSelected($event.target.value)"
-                >
-                    <option
-                        *ngFor="let profile of profiles"
-                        [value]="profile"
-                        [selected]="profile === currentProfile"
-                    >
-                        {{ profile }}
-                    </option>
-                </select>
-            </div>
-        </div>
     </div>
 </div>
 <div class="main-panel">

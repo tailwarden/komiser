@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"log"
 	"os"
 	"strconv"
@@ -41,6 +42,10 @@ func ParseEnvironment() error {
 
 	// subscriptionID (ARM)
 	subscriptionID = os.Getenv("AZURE_SUBSCRIPTION_ID")
+
+	if clientID == "" {
+		return errors.New("Azure client id is missing")
+	}
 
 	return nil
 }
