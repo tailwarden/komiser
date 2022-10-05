@@ -67,6 +67,9 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
 	r.HandleFunc("/digitalocean/databases", digitaloceanHandler.DatabasesHandler)
 
+	// GCP supported services
+	r.HandleFunc("/gcp/compute/instances", gcpHandler.ComputeInstancesHandler)
+
 	// Deprecated
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
 	r.HandleFunc("/aws/iam/users", awsHandler.IAMUsersHandler)
@@ -127,7 +130,6 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/aws/cost/forecast", awsHandler.DescribeForecastPriceHandler)
 
 	r.HandleFunc("/gcp/resourcemanager/projects", gcpHandler.ProjectsHandler)
-	r.HandleFunc("/gcp/compute/instances", gcpHandler.ComputeInstancesHandler)
 	r.HandleFunc("/gcp/iam/roles", gcpHandler.IAMRolesHandler)
 	r.HandleFunc("/gcp/dns/zones", gcpHandler.DNSManagedZonesHandler)
 	r.HandleFunc("/gcp/storage/buckets", gcpHandler.StorageBucketsHandler)

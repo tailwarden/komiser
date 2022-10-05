@@ -5,6 +5,7 @@ import { AwsService } from '../../services/aws.service';
 import { DigitaloceanService } from '../../services/digitalocean.service';
 import { CloudService } from '../../services/cloud.service';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { GcpService } from '../../services/gcp.service';
 
 @Component({
     selector: 'app-inventory',
@@ -27,6 +28,7 @@ export class InventoryComponent implements OnInit {
         private awsService: AwsService,
         private cloudService: CloudService,
         private digitalOceanService: DigitaloceanService,
+        private gcpService: GcpService,
     ) {
         this.cloudService.getCloudAccounts().subscribe((accounts) => {
             this.accounts = accounts;
@@ -36,19 +38,40 @@ export class InventoryComponent implements OnInit {
                         this.getAWSResources(account);
                     });
                 }
-                if (this.accounts['DIGITALOCEAN']){
-                    console.log('here')
+                if (this.accounts['DIGITALOCEAN']) {
                     this.accounts['DIGITALOCEAN'].forEach((account) => {
                         this.getDigitalOceanResources(account);
+                    });
+                }
+                if (this.accounts['GCP']) {
+                    this.accounts['GCP'].forEach((account) => {
+                        this.getGCPResources(account);
                     });
                 }
             }
         });
     }
 
-    private getDigitalOceanResources(account){
-        this.digitalOceanService.getDroplets().subscribe(data => {
-            data.forEach(droplet => {
+    private getGCPResources(account) {
+        this.gcpService.getComputeInstances().subscribe(data => {
+            data.forEach((instance) => {
+                this.services.push({
+                    provider: 'GCP',
+                    account: account,
+                    service: 'Compute Engine',
+                    name: instance.name,
+                    tags: instance.tags,
+                    region: instance.region,
+                });
+            });
+            this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
+        })
+    }
+
+    private getDigitalOceanResources(account) {
+        this.digitalOceanService.getDroplets().subscribe((data) => {
+            data.forEach((droplet) => {
                 this.services.push({
                     provider: 'DIGITALOCEAN',
                     account: account,
@@ -57,13 +80,13 @@ export class InventoryComponent implements OnInit {
                     tags: droplet.tags,
                     region: droplet.region,
                 });
-            })
+            });
             this.getRegions();
             this.selectedResources = this.services.slice(0, 10);
-        })
+        });
 
-        this.digitalOceanService.getSnapshots().subscribe(data => {
-            data.forEach(snapshot => {
+        this.digitalOceanService.getSnapshots().subscribe((data) => {
+            data.forEach((snapshot) => {
                 this.services.push({
                     provider: 'DIGITALOCEAN',
                     account: account,
@@ -72,13 +95,13 @@ export class InventoryComponent implements OnInit {
                     tags: snapshot.tags,
                     region: snapshot.region,
                 });
-            })
+            });
             this.getRegions();
             this.selectedResources = this.services.slice(0, 10);
-        })
+        });
 
-        this.digitalOceanService.getVolumes().subscribe(data => {
-            data.forEach(volume => {
+        this.digitalOceanService.getVolumes().subscribe((data) => {
+            data.forEach((volume) => {
                 this.services.push({
                     provider: 'DIGITALOCEAN',
                     account: account,
@@ -87,13 +110,13 @@ export class InventoryComponent implements OnInit {
                     tags: volume.tags,
                     region: volume.region,
                 });
-            })
+            });
             this.getRegions();
             this.selectedResources = this.services.slice(0, 10);
-        })
+        });
 
-        this.digitalOceanService.getDatabases().subscribe(data => {
-            data.forEach(database => {
+        this.digitalOceanService.getDatabases().subscribe((data) => {
+            data.forEach((database) => {
                 this.services.push({
                     provider: 'DIGITALOCEAN',
                     account: account,
@@ -102,10 +125,10 @@ export class InventoryComponent implements OnInit {
                     tags: database.tags,
                     region: database.region,
                 });
-            })
+            });
             this.getRegions();
             this.selectedResources = this.services.slice(0, 10);
-        })
+        });
     }
 
     private getAWSResources(account) {

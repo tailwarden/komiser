@@ -61,13 +61,21 @@ func (gcp GCP) GetComputeInstances() ([]Instance, error) {
 				parts := strings.Split(instance.MachineType, "/")
 				machineType := parts[len(parts)-1]
 
+				tags := make([]string, 0)
+				for _, tag := range instance.Tags.Items {
+					tags = append(tags, tag)
+				}
+
 				instancesList = append(instancesList, Instance{
+					ID:          fmt.Sprintf("%d", instance.Id),
 					Name:        instance.Name,
 					MachineType: machineType,
 					Status:      instance.Status,
 					CPUPlatform: instance.CpuPlatform,
 					Public:      public,
 					Zone:        zone.Name,
+					Tags:        tags,
+					Region:      zone.Region,
 				})
 			}
 		}

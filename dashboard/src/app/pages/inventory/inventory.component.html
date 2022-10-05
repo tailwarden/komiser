@@ -72,10 +72,21 @@
             <div class="col-lg-12">
                 <div class="card">
                     <i *ngIf="!term" class="la la-search search-icon"></i>
-                    <i *ngIf="term" class="la la-times search-icon clickable" (click)="cleanSelection()"></i>
-                    <input type="text" class="new-input border-bottom"
-                        placeholder="Search by tags, service, name, region..." type="text" data-form-type="”other”"
-                        autocomplete="off" [(ngModel)]="term" (ngModelChange)="changeSearchFilter($event)" />
+                    <i
+                        *ngIf="term"
+                        class="la la-times search-icon clickable"
+                        (click)="cleanSelection()"
+                    ></i>
+                    <input
+                        type="text"
+                        class="new-input border-bottom"
+                        placeholder="Search by tags, service, name, region..."
+                        type="text"
+                        data-form-type="”other”"
+                        autocomplete="off"
+                        [(ngModel)]="term"
+                        (ngModelChange)="changeSearchFilter($event)"
+                    />
                     <table class="table table-hover">
                         <thead>
                             <th>Provider</th>
@@ -88,26 +99,51 @@
                         <tbody>
                             <tr *ngFor="let service of selectedResources">
                                 <td>
-                                    <img src="assets/img/aws.png" style="width: 25px"
-                                        *ngIf="service.provider == 'AWS'" />
-                                    <img src="assets/img/digitalocean.png" style="width: 25px"
-                                        *ngIf="service.provider == 'DIGITALOCEAN'" />
+                                    <img
+                                        src="assets/img/aws.png"
+                                        style="width: 25px"
+                                        *ngIf="service.provider === 'AWS'"
+                                    />
+                                    <img
+                                        src="assets/img/digitalocean.png"
+                                        style="width: 25px"
+                                        *ngIf="
+                                            service.provider === 'DIGITALOCEAN'
+                                        "
+                                    />
+                                    <img
+                                        src="assets/img/gcp.png"
+                                        style="width: 25px"
+                                        *ngIf="
+                                            service.provider === 'GCP'
+                                        "
+                                    />
                                 </td>
                                 <td>{{ service.account }}</td>
                                 <td>{{ service.region }}</td>
                                 <td>
-                                    <badge class="badge badge-secondary" [style.background-color]="
+                                    <badge
+                                        class="badge badge-secondary"
+                                        [style.background-color]="
                                             stringToColour(service.service)
-                                        ">{{ service.service }}</badge>
+                                        "
+                                        >{{ service.service }}</badge
+                                    >
                                 </td>
                                 <td>{{ service.name }}</td>
                                 <td>{{ service.tags }}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <pagination class="d-flex justify-content-center" [(ngModel)]="currentPage"
-                        [itemsPerPage]="itemsPerPage" (pageChanged)="pageChanged($event)" [maxSize]="10"
-                        [totalItems]="services.length" [boundaryLinks]="true"></pagination>
+                    <pagination
+                        class="d-flex justify-content-center"
+                        [(ngModel)]="currentPage"
+                        [itemsPerPage]="itemsPerPage"
+                        (pageChanged)="pageChanged($event)"
+                        [maxSize]="10"
+                        [totalItems]="services.length"
+                        [boundaryLinks]="true"
+                    ></pagination>
                 </div>
             </div>
         </div>
