@@ -57,7 +57,7 @@ const appRoutes: Routes = [
         BrowserAnimationsModule,
         TrendModule,
         FormsModule,
-      //  NgbModalModule,
+        //  NgbModalModule,
         PaginationModule.forRoot(),
     ],
     providers: [

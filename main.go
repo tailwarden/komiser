@@ -49,6 +49,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 
 	r.HandleFunc("/accounts", accountHandler.ListCloudAccountsHandler)
 
+	// AWS supported services
 	r.HandleFunc("/aws/ec2/regions", awsHandler.EC2InstancesHandler)
 	r.HandleFunc("/aws/lambda/functions", awsHandler.LambdaFunctionHandler)
 	r.HandleFunc("/aws/s3/buckets", awsHandler.S3BucketsHandler)
@@ -59,6 +60,12 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/aws/sqs/queues", awsHandler.SQSQueuesHandler)
 	r.HandleFunc("/aws/ecs", awsHandler.ECSHandler)
 	r.HandleFunc("/aws/vpc/subnets", awsHandler.DescribeSubnetsHandler)
+
+	// DigitalOcean supported services
+	r.HandleFunc("/digitalocean/droplets", digitaloceanHandler.DropletsHandler)
+	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
+	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
+	r.HandleFunc("/digitalocean/databases", digitaloceanHandler.DatabasesHandler)
 
 	// Deprecated
 	r.HandleFunc("/aws/profiles", awsHandler.ConfigProfilesHandler)
@@ -193,9 +200,6 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/digitalocean/actions", digitaloceanHandler.ActionsHistoryHandler)
 	r.HandleFunc("/digitalocean/cdns", digitaloceanHandler.ContentDeliveryNetworksHandler)
 	r.HandleFunc("/digitalocean/certificates", digitaloceanHandler.CertificatesHandler)
-	r.HandleFunc("/digitalocean/databases", digitaloceanHandler.DatabasesHandler)
-	r.HandleFunc("/digitalocean/domains", digitaloceanHandler.DomainsHandler)
-	r.HandleFunc("/digitalocean/droplets", digitaloceanHandler.DropletsHandler)
 	r.HandleFunc("/digitalocean/firewalls/list", digitaloceanHandler.DescribeFirewallsHandler)
 	r.HandleFunc("/digitalocean/firewalls/unsecure", digitaloceanHandler.DescribeUnsecureFirewallsHandler)
 	r.HandleFunc("/digitalocean/floatingips", digitaloceanHandler.FloatingIpsHandler)
@@ -204,8 +208,6 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r.HandleFunc("/digitalocean/loadbalancers", digitaloceanHandler.LoadBalancersHandler)
 	r.HandleFunc("/digitalocean/projects", digitaloceanHandler.ProjectsHandler)
 	r.HandleFunc("/digitalocean/records", digitaloceanHandler.RecordsHandler)
-	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
-	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
 
 	r.HandleFunc("/azure/acm/certificates", azureHandler.APIGatewayListCertificatesHandler)
 	r.HandleFunc("/azure/acm/expired", azureHandler.APIGatewayExpiredCertificatesHandler)

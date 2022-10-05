@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { Subscription } from 'rxjs';
 import { AwsService } from '../../services/aws.service';
+import { DigitaloceanService } from '../../services/digitalocean.service';
 import { CloudService } from '../../services/cloud.service';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 
@@ -24,7 +25,8 @@ export class InventoryComponent implements OnInit {
     constructor(
         private storeService: StoreService,
         private awsService: AwsService,
-        private cloudService: CloudService
+        private cloudService: CloudService,
+        private digitalOceanService: DigitaloceanService,
     ) {
         this.cloudService.getCloudAccounts().subscribe((accounts) => {
             this.accounts = accounts;
@@ -34,8 +36,76 @@ export class InventoryComponent implements OnInit {
                         this.getAWSResources(account);
                     });
                 }
+                if (this.accounts['DIGITALOCEAN']){
+                    console.log('here')
+                    this.accounts['DIGITALOCEAN'].forEach((account) => {
+                        this.getDigitalOceanResources(account);
+                    });
+                }
             }
         });
+    }
+
+    private getDigitalOceanResources(account){
+        this.digitalOceanService.getDroplets().subscribe(data => {
+            data.forEach(droplet => {
+                this.services.push({
+                    provider: 'DIGITALOCEAN',
+                    account: account,
+                    service: 'Droplet',
+                    name: droplet.name,
+                    tags: droplet.tags,
+                    region: droplet.region,
+                });
+            })
+            this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
+        })
+
+        this.digitalOceanService.getSnapshots().subscribe(data => {
+            data.forEach(snapshot => {
+                this.services.push({
+                    provider: 'DIGITALOCEAN',
+                    account: account,
+                    service: 'Snapshot',
+                    name: snapshot.name,
+                    tags: snapshot.tags,
+                    region: snapshot.region,
+                });
+            })
+            this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
+        })
+
+        this.digitalOceanService.getVolumes().subscribe(data => {
+            data.forEach(volume => {
+                this.services.push({
+                    provider: 'DIGITALOCEAN',
+                    account: account,
+                    service: 'Volume',
+                    name: volume.name,
+                    tags: volume.tags,
+                    region: volume.region,
+                });
+            })
+            this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
+        })
+
+        this.digitalOceanService.getDatabases().subscribe(data => {
+            data.forEach(database => {
+                this.services.push({
+                    provider: 'DIGITALOCEAN',
+                    account: account,
+                    service: 'Database',
+                    name: database.name,
+                    tags: database.tags,
+                    region: database.region,
+                });
+            })
+            this.getRegions();
+            this.selectedResources = this.services.slice(0, 10);
+        })
     }
 
     private getAWSResources(account) {
@@ -260,7 +330,7 @@ export class InventoryComponent implements OnInit {
         this.selectedResources = this.services.slice(startItem, endItem);
     }
 
-    public changeSearchFilter(term){
+    public changeSearchFilter(term) {
         this.selectedResources = this.services.filter((service) => {
             return (
                 service.region.toLowerCase().includes(term.toLowerCase()) ||

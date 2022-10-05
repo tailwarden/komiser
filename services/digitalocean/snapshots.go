@@ -7,7 +7,11 @@ import (
 )
 
 type Snapshot struct {
-	Size float64 `json:"size"`
+	ID     string   `json:"id"`
+	Name   string   `json:"name"`
+	Size   float64  `json:"size"`
+	Region string   `json:"region"`
+	Tags   []string `json:"tags"`
 }
 
 func (dg DigitalOcean) DescribeSnapshots(client *godo.Client) ([]Snapshot, error) {
@@ -20,7 +24,11 @@ func (dg DigitalOcean) DescribeSnapshots(client *godo.Client) ([]Snapshot, error
 
 	for _, snapshot := range snapshots {
 		listOfSnapshots = append(listOfSnapshots, Snapshot{
-			Size: snapshot.SizeGigaBytes,
+			Size:   snapshot.SizeGigaBytes,
+			ID:     snapshot.ID,
+			Name:   snapshot.Name,
+			Region: snapshot.Regions[0],
+			Tags:   snapshot.Tags,
 		})
 	}
 
