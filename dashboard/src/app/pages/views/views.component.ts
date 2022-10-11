@@ -30,7 +30,7 @@ export class ViewsComponent implements OnInit {
         });
     }
 
-    private getFilteredServices(){
+    private getFilteredServices() {
         this.cloudService.getCloudAccounts().subscribe((accounts) => {
             if (accounts) {
                 if (accounts['AWS']) {
@@ -300,22 +300,23 @@ export class ViewsComponent implements OnInit {
 
     public onNewServices() {
         this.filteredServices = [];
-        this.services.forEach(service => {
+        this.services.forEach((service) => {
             let found = false;
-            service.tags?.forEach(serviceTag => {
-                this.view.tags?.forEach(tag => {
-                    if (serviceTag.includes(tag.key) || serviceTag.includes(tag.value)){
+            service.tags?.forEach((serviceTag) => {
+                this.view.tags?.forEach((tag) => {
+                    if (
+                        serviceTag.includes(tag.key) ||
+                        serviceTag.includes(tag.value)
+                    ) {
                         found = true;
                     }
-                })
-            })
-            if (found){
-                this.filteredServices.push(service)
+                });
+            });
+            if (found) {
+                this.filteredServices.push(service);
             }
-        })
-
+        });
     }
-
 
     ngOnInit(): void {}
 

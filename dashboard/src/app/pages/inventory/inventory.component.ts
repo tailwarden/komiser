@@ -22,7 +22,7 @@ export class InventoryComponent implements OnInit {
     public accounts: Array<any> = new Array<any>();
     public term: string = '';
     public regions: Set<any> = new Set<any>();
-    public cloudServices : Set<any> = new Set<any>();
+    public cloudServices: Set<any> = new Set<any>();
     public currentPage: number = 1;
     public itemsPerPage: number = 10;
     public totalResources: number = 0;

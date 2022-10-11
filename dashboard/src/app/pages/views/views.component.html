@@ -26,18 +26,28 @@
                                 <img
                                     src="assets/img/digitalocean.png"
                                     style="width: 25px"
-                                    *ngIf="
-                                        service.provider === 'DIGITALOCEAN'
-                                    "
+                                    *ngIf="service.provider === 'DIGITALOCEAN'"
                                 />
                                 <img
                                     src="assets/img/gcp.png"
                                     style="width: 25px"
                                     *ngIf="service.provider === 'GCP'"
                                 />
-                                <span class="ml-2" *ngIf="service.provider === 'AWS'">AWS</span>
-                                <span class="ml-2" *ngIf="service.provider === 'GCP'">GCP</span>
-                                <span class="ml-2" *ngIf="service.provider === 'DIGITALOCEAN'">DigitalOcean</span>
+                                <span
+                                    class="ml-2"
+                                    *ngIf="service.provider === 'AWS'"
+                                    >AWS</span
+                                >
+                                <span
+                                    class="ml-2"
+                                    *ngIf="service.provider === 'GCP'"
+                                    >GCP</span
+                                >
+                                <span
+                                    class="ml-2"
+                                    *ngIf="service.provider === 'DIGITALOCEAN'"
+                                    >DigitalOcean</span
+                                >
                             </td>
                             <td>{{ service.account }}</td>
                             <td>{{ service.region }}</td>
