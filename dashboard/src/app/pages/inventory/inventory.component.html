@@ -56,7 +56,7 @@
                             <div class="col-7 d-flex align-items-center">
                                 <div class="numbers">
                                     <p class="card-category">Services</p>
-                                    <h4 class="card-title">4</h4>
+                                    <h4 class="card-title">{{cloudServices.size}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -154,6 +154,9 @@
                                         style="width: 25px"
                                         *ngIf="service.provider === 'GCP'"
                                     />
+                                    <span class="ml-2" *ngIf="service.provider === 'AWS'">AWS</span>
+                                    <span class="ml-2" *ngIf="service.provider === 'GCP'">GCP</span>
+                                    <span class="ml-2" *ngIf="service.provider === 'DIGITALOCEAN'">DigitalOcean</span>
                                 </td>
                                 <td>{{ service.account }}</td>
                                 <td>{{ service.region }}</td>

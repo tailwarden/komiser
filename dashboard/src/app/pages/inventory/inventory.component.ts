@@ -22,6 +22,7 @@ export class InventoryComponent implements OnInit {
     public accounts: Array<any> = new Array<any>();
     public term: string = '';
     public regions: Set<any> = new Set<any>();
+    public cloudServices : Set<any> = new Set<any>();
     public currentPage: number = 1;
     public itemsPerPage: number = 10;
     public totalResources: number = 0;
@@ -355,7 +356,8 @@ export class InventoryComponent implements OnInit {
 
     public onNewServices() {
         this.getRegions();
-        this.selectedResources = this.services.slice(0, 10);
+        this.getServices();
+        this.selectedResources = this.services;
         this.totalResources = this.services.length;
         if (this.tags.length > 0 && this.tags[0].key != '') {
             this.applyFilters();
@@ -387,6 +389,14 @@ export class InventoryComponent implements OnInit {
             tempRegions.add(service.region);
         });
         this.regions = tempRegions;
+    }
+
+    public getServices() {
+        let tempServices = new Set<any>();
+        this.services.forEach((service) => {
+            tempServices.add(service.service);
+        });
+        this.cloudServices = tempServices;
     }
 
     public getCloudAccounts() {
