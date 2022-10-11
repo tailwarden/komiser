@@ -45,6 +45,10 @@ func NewDigitalOceanHandler(cache Cache) *DigitalOceanHandler {
 	return &digitaloceanHandler
 }
 
+func (handler *DigitalOceanHandler) GetDigitalOceanHandler() DigitalOcean {
+	return handler.digitalocean
+}
+
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJSON(w, code, map[string]string{"error": msg})
 }

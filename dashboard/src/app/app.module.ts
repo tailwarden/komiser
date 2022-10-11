@@ -23,6 +23,8 @@ import { SettingsService } from './services/settings.service';
 import { InventoryComponent } from './pages/inventory/inventory.component';
 import { SearchFilterPipe } from './filters/search.pipe';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ViewsComponent } from './pages/views/views.component';
 
 const appRoutes: Routes = [
     {
@@ -40,6 +42,12 @@ const appRoutes: Routes = [
         component: DashboardComponent,
         data: { title: 'Dashboard - Komiser' },
     },
+
+    {
+        path: 'views/:id',
+        component: ViewsComponent,
+        data: { title: 'Views - Komiser' },
+    },
 ];
 
 @NgModule({
@@ -49,6 +57,7 @@ const appRoutes: Routes = [
         NotificationsComponent,
         InventoryComponent,
         SearchFilterPipe,
+        ViewsComponent,
     ],
     imports: [
         RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
@@ -58,6 +67,7 @@ const appRoutes: Routes = [
         TrendModule,
         FormsModule,
         //  NgbModalModule,
+        ModalModule.forRoot(),
         PaginationModule.forRoot(),
     ],
     providers: [

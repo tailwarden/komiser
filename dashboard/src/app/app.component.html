@@ -44,39 +44,21 @@
                     <p>Notifications</p>
                 </a>
             </li>
+
+            <hr />
+            <li
+                class="nav-item"
+                routerLinkActive="active"
+                *ngFor="let view of views"
+            >
+                <a routerLink="/views/{{ view.id }}">
+                    <i class="fa fa-bar-chart"></i>
+                    <p>{{ view.name }}</p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
 <div class="main-panel">
     <router-outlet></router-outlet>
-    <footer class="footer">
-        <div class="container-fluid">
-            <nav class="pull-left">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://discord.oraculi.io"
-                            >Discord</a
-                        >
-                    </li>
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            href="https://www.github.com/mlabouardy/komiser"
-                            >GitHub</a
-                        >
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://docs.komiser.io"
-                            >Help</a
-                        >
-                    </li>
-                </ul>
-            </nav>
-            <div class="copyright ml-auto">
-                2022, made with
-                <i class="la la-heart heart text-danger"></i> by
-                <a href="https://www.oraculi.io">Oraculi</a>
-            </div>
-        </div>
-    </footer>
 </div>

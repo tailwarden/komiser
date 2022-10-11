@@ -1,9 +1,8 @@
 <div class="content">
     <div class="container-fluid">
         <h4 class="page-title">Inventory</h4>
-
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card card-stats">
                     <div class="card-body">
                         <div class="row">
@@ -24,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card card-stats">
                     <div class="card-body">
                         <div class="row">
@@ -45,7 +44,26 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="icon-big text-center">
+                                    <i class="fa fa-th"></i>
+                                </div>
+                            </div>
+                            <div class="col-7 d-flex align-items-center">
+                                <div class="numbers">
+                                    <p class="card-category">Services</p>
+                                    <h4 class="card-title">4</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
                 <div class="card card-stats">
                     <div class="card-body">
                         <div class="row">
@@ -69,6 +87,26 @@
         </div>
 
         <div class="row">
+            <div class="col-lg-12">
+                <div class="float-right">
+                    <button
+                        class="btn btn-primary pull-right mb-2"
+                        (click)="openModal(filters)"
+                    >
+                        <span *ngIf="tags.length > 0 && tags[0].key !== ''"
+                            >+</span
+                        >
+                        Filters
+                    </button>
+                    <button
+                        class="btn btn-info pull-right mr-2"
+                        *ngIf="tags.length > 0 && tags[0].key !== ''"
+                        (click)="openModal(views)"
+                    >
+                        Save view
+                    </button>
+                </div>
+            </div>
             <div class="col-lg-12">
                 <div class="card">
                     <i *ngIf="!term" class="la la-search search-icon"></i>
@@ -114,9 +152,7 @@
                                     <img
                                         src="assets/img/gcp.png"
                                         style="width: 25px"
-                                        *ngIf="
-                                            service.provider === 'GCP'
-                                        "
+                                        *ngIf="service.provider === 'GCP'"
                                     />
                                 </td>
                                 <td>{{ service.account }}</td>
@@ -135,17 +171,68 @@
                             </tr>
                         </tbody>
                     </table>
-                    <pagination
-                        class="d-flex justify-content-center"
-                        [(ngModel)]="currentPage"
-                        [itemsPerPage]="itemsPerPage"
-                        (pageChanged)="pageChanged($event)"
-                        [maxSize]="10"
-                        [totalItems]="services.length"
-                        [boundaryLinks]="true"
-                    ></pagination>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #filters>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Filter by tags:</label>
+            <div
+                class="row col-lg-12 mt-2"
+                *ngFor="let tag of tags; let index = index"
+            >
+                <input
+                    type="text"
+                    class="form-control col-lg-5 mr-1"
+                    placeholder="Key"
+                    [(ngModel)]="tags[index].key"
+                />
+                <input
+                    type="text"
+                    class="form-control col-lg-5"
+                    placeholder="Value"
+                    [(ngModel)]="tags[index].value"
+                />
+                <div class="ml-2" *ngIf="index > 0">
+                    <badge class="badge badge-danger" (click)="deleteTag(index)"
+                        >Delete</badge
+                    >
+                </div>
+            </div>
+            <button class="btn btn-info btn-sm mt-2" (click)="addTags()">
+                + add a filter
+            </button>
+        </div>
+        <button class="btn btn-primary pull-right" (click)="applyFilters()">
+            Apply filters
+        </button>
+        <button
+            class="btn btn-danger pull-right mr-2"
+            (click)="cleanFilters()"
+            *ngIf="tags.length > 0 && tags[0].key !== ''"
+        >
+            Clean filters
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #views>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Name:</label>
+            <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="view.name"
+                placeholder="Enter view's name"
+            />
+        </div>
+        <button class="btn btn-primary pull-right" (click)="saveView()">
+            Save
+        </button>
+    </div>
+</ng-template>

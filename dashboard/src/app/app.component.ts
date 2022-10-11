@@ -19,118 +19,31 @@ declare var ga: Function;
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnDestroy {
-    public accountName: string = 'Username';
-    public profiles: Array<string> = [];
     public currentProfile: string;
     public notifications: Array<Object> = [];
-    public _subscription: Subscription;
-    public currentProvider: any;
-    public availableProviders: Array<any> = [
-        {
-            label: 'Amazon Web Services',
-            value: 'aws',
-        },
-        {
-            label: 'Google Cloud Platform',
-            value: 'gcp',
-        },
-        {
-            label: 'OVH',
-            value: 'ovh',
-        },
-        {
-            label: 'DigitalOcean',
-            value: 'digitalocean',
-        },
-        {
-            label: 'Azure',
-            value: 'azure',
-        },
-    ];
+    public views: Array<Object> = [];
+    public _subscriptionNotifications: Subscription;
+    public _subscriptionViews: Subscription;
 
-    private _storeService: StoreService;
-
-    private providers: Map<String, Object> = new Map<String, Object>();
-
-    constructor(
-        private awsService: AwsService,
-        private gcpService: GcpService,
-        private storeService: StoreService,
-        private digitaloceanService: DigitaloceanService,
-        private ovhService: OvhService,
-        private azureService: AzureService
-    ) {
-        this.providers['aws'] = {
-            label: 'Amazon Web Services',
-            value: 'aws',
-            logo: 'https://cdn.komiser.io/images/aws.png',
-        };
-
-        this.providers['gcp'] = {
-            label: 'Google Cloud Platform',
-            value: 'gcp',
-            logo: 'https://cdn.komiser.io/images/gcp.png',
-        };
-
-        this.providers['ovh'] = {
-            label: 'OVH',
-            value: 'ovh',
-            logo: 'https://cdn.komiser.io/images/ovh.jpg',
-        };
-
-        this.providers['digitalocean'] = {
-            label: 'DigitalOcean',
-            value: 'digitalocean',
-            logo: 'https://cdn.komiser.io/images/digitalocean.png',
-        };
-        this.providers['azure'] = {
-            label: 'Azure',
-            value: 'azure',
-            logo: 'https://swimburger.net/media/fbqnp2ie/azure.svg',
-        };
-
-        //if (this.storeService.getProvider() == 'aws') {
-        if (localStorage.getItem('profile')) {
-            this.currentProfile = localStorage.getItem('profile');
-        } else {
-            this.currentProfile = 'default';
-            localStorage.setItem('profile', this.currentProfile);
-        }
-
-        this.awsService.getProfiles().subscribe(
-            (profiles) => {
-                this.profiles = profiles;
-                if (
-                    this.profiles.length > 0 &&
-                    this.profiles.indexOf(this.currentProfile) == -1
-                ) {
-                    this.currentProfile = this.profiles[0];
-                    localStorage.setItem('profile', this.currentProfile);
-                }
-            },
-            (err) => {
-                this.profiles = [];
-            }
-        );
-        // }
-
-        this.currentProvider = this.providers[this.storeService.getProvider()];
-        this.storeService.onProviderChanged(this.storeService.getProvider());
-
-        this._storeService = storeService;
-
-        this._subscription = this.storeService.newNotification.subscribe(
-            (notifications) => {
+    constructor(private storeService: StoreService) {
+        this._subscriptionNotifications =
+            this.storeService.newNotification.subscribe((notifications) => {
                 this.notifications = [];
                 Object.keys(notifications).forEach((key) => {
                     this.notifications.push(notifications[key]);
                 });
+            });
+
+        this._subscriptionViews = this.storeService.newView.subscribe(
+            (views) => {
+                this.views = views;
             }
         );
     }
 
     ngOnDestroy() {
-        this._subscription.unsubscribe();
+        this._subscriptionNotifications.unsubscribe();
+        this._subscriptionViews.unsubscribe();
     }
 
     public calcMoment(timestamp) {

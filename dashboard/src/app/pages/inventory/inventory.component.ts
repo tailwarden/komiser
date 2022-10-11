@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { Subscription } from 'rxjs';
 import { AwsService } from '../../services/aws.service';
@@ -6,6 +6,7 @@ import { DigitaloceanService } from '../../services/digitalocean.service';
 import { CloudService } from '../../services/cloud.service';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { GcpService } from '../../services/gcp.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'app-inventory',
@@ -17,11 +18,16 @@ export class InventoryComponent implements OnInit {
     public _subscription: Subscription;
     public services: Array<any> = new Array<any>();
     public selectedResources: Array<any> = new Array<any>();
+    public filteredResources: Array<any> = new Array<any>();
     public accounts: Array<any> = new Array<any>();
     public term: string = '';
     public regions: Set<any> = new Set<any>();
     public currentPage: number = 1;
     public itemsPerPage: number = 10;
+    public totalResources: number = 0;
+    public tags: Array<any> = new Array<any>();
+    public filtersModalRef: any;
+    public view: any = {};
 
     constructor(
         private storeService: StoreService,
@@ -29,7 +35,15 @@ export class InventoryComponent implements OnInit {
         private cloudService: CloudService,
         private digitalOceanService: DigitaloceanService,
         private gcpService: GcpService,
+        private modalService: BsModalService
     ) {
+        this.tags = [
+            {
+                key: '',
+                value: '',
+            },
+        ];
+
         this.cloudService.getCloudAccounts().subscribe((accounts) => {
             this.accounts = accounts;
             if (this.accounts) {
@@ -53,7 +67,7 @@ export class InventoryComponent implements OnInit {
     }
 
     private getGCPResources(account) {
-        this.gcpService.getComputeInstances().subscribe(data => {
+        this.gcpService.getComputeInstances().subscribe((data) => {
             data.forEach((instance) => {
                 this.services.push({
                     provider: 'GCP',
@@ -66,7 +80,47 @@ export class InventoryComponent implements OnInit {
             });
             this.getRegions();
             this.selectedResources = this.services.slice(0, 10);
-        })
+            this.totalResources = this.services.length;
+        });
+    }
+
+    public openModal(template: TemplateRef<any>) {
+        this.filtersModalRef = this.modalService.show(template);
+    }
+
+    public addTags() {
+        this.tags.push({
+            key: '',
+            value: '',
+        });
+    }
+
+    public deleteTag(index) {
+        this.tags.splice(index, 1);
+    }
+
+    public applyFilters() {
+        this.filtersModalRef.hide();
+        let matchedServices = [];
+        this.services.forEach((service) => {
+            let found = false;
+            service.tags?.forEach((serviceTag) => {
+                this.tags.forEach((tag) => {
+                    if (
+                        serviceTag.includes(tag.value) ||
+                        serviceTag.includes(tag.key)
+                    ) {
+                        found = true;
+                    }
+                });
+            });
+            if (found) {
+                matchedServices.push(service);
+            }
+        });
+        this.filteredResources = matchedServices;
+        this.selectedResources = this.filteredResources.slice(0, 10);
+        this.totalResources = this.filteredResources.length;
     }
 
     private getDigitalOceanResources(account) {
@@ -81,8 +135,7 @@ export class InventoryComponent implements OnInit {
                     region: droplet.region,
                 });
             });
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.digitalOceanService.getSnapshots().subscribe((data) => {
@@ -96,8 +149,7 @@ export class InventoryComponent implements OnInit {
                     region: snapshot.region,
                 });
             });
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.digitalOceanService.getVolumes().subscribe((data) => {
@@ -111,8 +163,7 @@ export class InventoryComponent implements OnInit {
                     region: volume.region,
                 });
             });
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.digitalOceanService.getDatabases().subscribe((data) => {
@@ -126,8 +177,7 @@ export class InventoryComponent implements OnInit {
                     region: database.region,
                 });
             });
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
     }
 
@@ -144,9 +194,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getNumberOfS3Buckets(account).subscribe((data) => {
@@ -161,8 +209,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getVirtualPrivateClouds(account).subscribe((data) => {
@@ -177,8 +224,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getRouteTables(account).subscribe((data) => {
@@ -193,8 +239,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getVPCSubnets(account).subscribe((data) => {
@@ -209,8 +254,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getSecurityGroups(account).subscribe((data) => {
@@ -225,8 +269,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getSQSQueues(account).subscribe((data) => {
@@ -241,8 +284,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getDynamoDBTables(account).subscribe((data) => {
@@ -257,8 +299,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getInstancesPerRegion(account).subscribe((data) => {
@@ -273,8 +314,7 @@ export class InventoryComponent implements OnInit {
                 });
             });
 
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+            this.onNewServices();
         });
 
         this.awsService.getECS(account).subscribe((data) => {
@@ -308,13 +348,24 @@ export class InventoryComponent implements OnInit {
                     region: cluster.region,
                 });
             });
-            this.getRegions();
-            this.selectedResources = this.services.slice(0, 10);
+
+            this.onNewServices();
         });
+    }
+
+    public onNewServices() {
+        this.getRegions();
+        this.selectedResources = this.services.slice(0, 10);
+        this.totalResources = this.services.length;
+        if (this.tags.length > 0 && this.tags[0].key != '') {
+            this.applyFilters();
+        }
     }
 
     public cleanSelection() {
         this.term = '';
+        this.selectedResources = this.services.slice(0, 10);
+        this.totalResources = this.services.length;
     }
 
     public stringToColour(str) {
@@ -346,11 +397,33 @@ export class InventoryComponent implements OnInit {
         return count;
     }
 
+    public saveView() {
+        this.view.tags = this.tags;
+        this.view.id = 'id' + new Date().getTime();
+        this.storeService.addView(this.view);
+        this.filtersModalRef.hide();
+        this.view = {};
+    }
+
+    public cleanFilters() {
+        this.tags = [{ key: '', value: '' }];
+        this.selectedResources = this.services.slice(0, 10);
+        this.totalResources = this.services.length;
+        this.filtersModalRef.hide();
+    }
+
     public pageChanged(event: PageChangedEvent): void {
         this.cleanSelection();
         const startItem = (event.page - 1) * event.itemsPerPage;
         const endItem = event.page * event.itemsPerPage;
-        this.selectedResources = this.services.slice(startItem, endItem);
+        if (this.tags.length > 0 && this.tags[0].key != '') {
+            this.selectedResources = this.filteredResources.slice(
+                startItem,
+                endItem
+            );
+        } else {
+            this.selectedResources = this.services.slice(startItem, endItem);
+        }
     }
 
     public changeSearchFilter(term) {

@@ -4,7 +4,7 @@
 
         <section>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card card-stats">
                         <div class="card-body">
                             <div class="row">
@@ -18,51 +18,16 @@
                                         <p class="card-category">
                                             Cloud Accounts
                                         </p>
-                                        <h4
-                                            class="card-title"
-                                            *ngIf="!loadingIamUsers"
-                                        >
-                                            {{ iamUsers }}
+                                        <h4 class="card-title">
+                                            {{ getCloudAccounts() }}
                                         </h4>
-                                        <div
-                                            class="spinner-border spinner-border-sm text-muted"
-                                            *ngIf="loadingIamUsers"
-                                        ></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card card-stats">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-5">
-                                    <div class="icon-big text-center">
-                                        <i class="la la-users"></i>
-                                    </div>
-                                </div>
-                                <div class="col-7 d-flex align-items-center">
-                                    <div class="numbers">
-                                        <p class="card-category">IAM Users</p>
-                                        <h4
-                                            class="card-title"
-                                            *ngIf="!loadingIamUsers"
-                                        >
-                                            {{ iamUsers }}
-                                        </h4>
-                                        <div
-                                            class="spinner-border spinner-border-sm text-muted"
-                                            *ngIf="loadingIamUsers"
-                                        ></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card card-stats">
                         <div class="card-body">
                             <div class="row">
@@ -73,33 +38,15 @@
                                 </div>
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="numbers">
-                                        <p class="card-category">Bill</p>
-                                        <h4
-                                            class="card-title"
-                                            *ngIf="!loadingCurrentBill"
-                                        >
-                                            $ {{ formatNumber(currentBill) }}
-                                        </h4>
-                                        <h4
-                                            class="card-title forecast"
-                                            *ngIf="!loadingForecastBill"
-                                        >
-                                            <span>
-                                                <i class="la la-arrow-up"></i>
-                                            </span>
-                                            Forecast $ {{ forecastBill }}
-                                        </h4>
-                                        <div
-                                            class="spinner-border spinner-border-sm text-muted"
-                                            *ngIf="loadingCurrentBill"
-                                        ></div>
+                                        <p class="card-category">Cost</p>
+                                        <h4 class="card-title">$ {{ cost }}</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card card-stats">
                         <div class="card-body">
                             <div class="row">
@@ -111,16 +58,9 @@
                                 <div class="col-7 d-flex align-items-center">
                                     <div class="numbers">
                                         <p class="card-category">Regions</p>
-                                        <h4
-                                            class="card-title"
-                                            *ngIf="!loadingUsedRegions"
-                                        >
-                                            {{ usedRegions }}
+                                        <h4 class="card-title">
+                                            {{ regions.length }}
                                         </h4>
-                                        <div
-                                            class="spinner-border spinner-border-sm text-muted"
-                                            *ngIf="loadingUsedRegions"
-                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -132,16 +72,14 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Elastic Compute Cloud</h4>
+                            <h4 class="card-title">Cloud Service Map</h4>
                             <p class="card-category">
-                                Number of Amazon EC2 Instances by Region
+                                List of regions with running or active servers
                             </p>
                         </div>
                         <div class="card-body">
                             <div class="mapregions">
-                                <div class="map">
-                                    <span>Alternative content for the map</span>
-                                </div>
+                                <div class="map"></div>
                             </div>
                         </div>
                     </div>
@@ -155,7 +93,25 @@
                                 Number of Amazon EC2 Instances by Region
                             </p>
                         </div>
-                        <div class="card-body"></div>
+                        <div class="card-body">
+                            <div>
+                                <label for="">Group by</label>
+                                <select
+                                    class="form-control"
+                                    [ngModel]="groupBy"
+                                    (ngModelChange)="onGroupByChanged($event)"
+                                >
+                                    <option value="account">
+                                        Cloud account
+                                    </option>
+                                    <option value="provider">
+                                        Cloud provider
+                                    </option>
+                                    <option value="region">Cloud region</option>
+                                </select>
+                            </div>
+                            <canvas id="monthlyCostBreakdownChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>

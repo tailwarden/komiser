@@ -40,7 +40,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	ovhHandler := NewOVHHandler(cache, "")
 	azureHandler := NewAzureHandler(cache)
 	alertHandler := NewAlertHandler(awsHandler, gcpHandler, azureHandler)
-	accountHandler := NewAccountHandler(awsHandler, gcpHandler, azureHandler, digitaloceanHandler)
+	accountHandler := NewAccountHandler(cache, awsHandler, gcpHandler, azureHandler, digitaloceanHandler)
 	c := cron.New()
 	c.AddFunc(schedule, alertHandler.DailyNotifHandler)
 	c.Start()
@@ -48,6 +48,12 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 	r := mux.NewRouter()
 
 	r.HandleFunc("/accounts", accountHandler.ListCloudAccountsHandler)
+	r.HandleFunc("/regions", accountHandler.ListActiveRegionsHandler)
+	r.HandleFunc("/billing/providers", accountHandler.CostBreakdownByCloudProviderHandler)
+	r.HandleFunc("/billing/accounts", accountHandler.CostBreakdownByCloudAccountHandler)
+	r.HandleFunc("/billing/regions", accountHandler.CostBreakdownByCloudRegionHandler)
+	r.HandleFunc("/views", accountHandler.ListViewsHandler).Methods("GET")
+	r.HandleFunc("/views", accountHandler.NewViewHandler).Methods("POST")
 
 	// AWS supported services
 	r.HandleFunc("/aws/ec2/regions", awsHandler.EC2InstancesHandler)

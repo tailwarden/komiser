@@ -39,7 +39,7 @@ func (awsClient AWS) DescribeCostAndUsage(cfg aws.Config) (models.Bill, error) {
 	cfg.Region = "us-east-1"
 	svc := costexplorer.NewFromConfig(cfg)
 	result, err := svc.GetCostAndUsage(context.Background(), &costexplorer.GetCostAndUsageInput{
-		Metrics:     []string{"BlendedCost"},
+		Metrics:     []string{"UnblendedCost"},
 		Granularity: types.GranularityMonthly,
 		TimePeriod: &types.DateInterval{
 			Start: &start,
@@ -65,12 +65,76 @@ func (awsClient AWS) DescribeCostAndUsage(cfg aws.Config) (models.Bill, error) {
 
 		groups := make([]models.Group, 0)
 		for _, group := range res.Groups {
-			amount, _ := strconv.ParseFloat(*group.Metrics["BlendedCost"].Amount, 64)
+			amount, _ := strconv.ParseFloat(*group.Metrics["UnblendedCost"].Amount, 64)
 			groups = append(groups, models.Group{
 				Key:    group.Keys[0],
 				Amount: amount,
 			})
-			unit = *group.Metrics["BlendedCost"].Unit
+			unit = *group.Metrics["UnblendedCost"].Unit
+		}
+
+		sort.Slice(groups, func(i, j int) bool {
+			return groups[i].Amount > groups[j].Amount
+		})
+
+		costs = append(costs, models.Cost{
+			Start:  start,
+			End:    end,
+			Unit:   unit,
+			Groups: groups,
+		})
+	}
+
+	var currentBill float64
+	for _, group := range costs[len(costs)-1].Groups {
+		currentBill += group.Amount
+	}
+
+	return models.Bill{
+		Total:   currentBill,
+		History: costs,
+	}, nil
+}
+
+func (awsClient AWS) DescribeCostAndUsageByRegion(cfg aws.Config) (models.Bill, error) {
+	currentTime := time.Now().Local()
+	start := currentTime.AddDate(0, -6, 0).Format("2006-01-02")
+	end := currentTime.Format("2006-01-02")
+	cfg.Region = "us-east-1"
+	svc := costexplorer.NewFromConfig(cfg)
+	result, err := svc.GetCostAndUsage(context.Background(), &costexplorer.GetCostAndUsageInput{
+		Metrics:     []string{"UnblendedCost"},
+		Granularity: types.GranularityMonthly,
+		TimePeriod: &types.DateInterval{
+			Start: &start,
+			End:   &end,
+		},
+		GroupBy: []types.GroupDefinition{
+			types.GroupDefinition{
+				Key:  aws.String("REGION"),
+				Type: types.GroupDefinitionTypeDimension,
+			},
+		},
+	})
+	if err != nil {
+		return models.Bill{}, err
+	}
+
+	costs := make([]models.Cost, 0)
+	for _, res := range result.ResultsByTime {
+		start, _ := time.Parse("2006-01-02", *res.TimePeriod.Start)
+		end, _ := time.Parse("2006-01-02", *res.TimePeriod.End)
+
+		unit := "USD"
+
+		groups := make([]models.Group, 0)
+		for _, group := range res.Groups {
+			amount, _ := strconv.ParseFloat(*group.Metrics["UnblendedCost"].Amount, 64)
+			groups = append(groups, models.Group{
+				Key:    group.Keys[0],
+				Amount: amount,
+			})
+			unit = *group.Metrics["UnblendedCost"].Unit
 		}
 
 		sort.Slice(groups, func(i, j int) bool {
@@ -103,7 +167,7 @@ func (awsClient AWS) DescribeCostAndUsagePerInstanceType(cfg aws.Config) (models
 	cfg.Region = "us-east-1"
 	svc := costexplorer.NewFromConfig(cfg)
 	result, err := svc.GetCostAndUsage(context.Background(), &costexplorer.GetCostAndUsageInput{
-		Metrics:     []string{"BlendedCost"},
+		Metrics:     []string{"UnblendedCost"},
 		Granularity: types.GranularityMonthly,
 		TimePeriod: &types.DateInterval{
 			Start: &start,
@@ -135,12 +199,12 @@ func (awsClient AWS) DescribeCostAndUsagePerInstanceType(cfg aws.Config) (models
 
 		groups := make([]models.Group, 0)
 		for _, group := range res.Groups {
-			amount, _ := strconv.ParseFloat(*group.Metrics["BlendedCost"].Amount, 64)
+			amount, _ := strconv.ParseFloat(*group.Metrics["UnblendedCost"].Amount, 64)
 			groups = append(groups, models.Group{
 				Key:    group.Keys[0],
 				Amount: amount,
 			})
-			unit = *group.Metrics["BlendedCost"].Unit
+			unit = *group.Metrics["UnblendedCost"].Unit
 		}
 
 		sort.Slice(groups, func(i, j int) bool {
@@ -173,7 +237,7 @@ func (awsClient AWS) DescribeForecastPrice(cfg aws.Config) (string, error) {
 	cfg.Region = "us-east-1"
 	svc := costexplorer.NewFromConfig(cfg)
 	result, err := svc.GetCostForecast(context.Background(), &costexplorer.GetCostForecastInput{
-		Metric:      types.MetricBlendedCost,
+		Metric:      types.MetricUnblendedCost,
 		Granularity: types.GranularityMonthly,
 		TimePeriod: &types.DateInterval{
 			Start: &start,
