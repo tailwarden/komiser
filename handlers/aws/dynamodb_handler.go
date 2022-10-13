@@ -29,6 +29,7 @@ func (handler *AWSHandler) DynamoDBTableHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "dynamodb:ListTables or dynamodb:DescribeTable is missing")
 		} else {
+			handler.services["aws:tables"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}

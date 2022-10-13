@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	. "github.com/mlabouardy/komiser/handlers/aws"
@@ -13,6 +14,8 @@ import (
 	azureConfig "github.com/mlabouardy/komiser/handlers/azure/config"
 	. "github.com/mlabouardy/komiser/handlers/digitalocean"
 	. "github.com/mlabouardy/komiser/handlers/gcp"
+	models "github.com/mlabouardy/komiser/models/aws"
+	"github.com/mlabouardy/komiser/services/aws"
 	. "github.com/mlabouardy/komiser/services/cache"
 	. "github.com/mlabouardy/komiser/services/ini"
 	. "github.com/mlabouardy/komiser/services/integrations/slack"
@@ -20,6 +23,11 @@ import (
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/compute/v1"
 )
+
+type Tag struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
 
 type Region struct {
 	Name      string `json:"name" bson:"name"`
@@ -35,6 +43,7 @@ type AccountHandler struct {
 	azureHandler        *AzureHandler
 	digitaloceanHandler *DigitalOceanHandler
 	slack               Slack
+	services            map[string]interface{}
 }
 
 type View struct {
@@ -46,13 +55,14 @@ type View struct {
 	} `json:"tags"`
 }
 
-func NewAccountHandler(cache Cache, awsHandler *AWSHandler, gcpHandler *GCPHandler, azureHandler *AzureHandler, digitaloceanHandler *DigitalOceanHandler) *AccountHandler {
+func NewAccountHandler(cache Cache, awsHandler *AWSHandler, gcpHandler *GCPHandler, azureHandler *AzureHandler, digitaloceanHandler *DigitalOceanHandler, services map[string]interface{}) *AccountHandler {
 	accountHandler := AccountHandler{
 		cache:               cache,
 		awsHandler:          awsHandler,
 		gcpHandler:          gcpHandler,
 		azureHandler:        azureHandler,
 		digitaloceanHandler: digitaloceanHandler,
+		services:            services,
 	}
 	return &accountHandler
 }
@@ -234,8 +244,6 @@ func (handler *AccountHandler) NewViewHandler(w http.ResponseWriter, r *http.Req
 	var view View
 	json.NewDecoder(r.Body).Decode(&view)
 
-	fmt.Println(view)
-
 	response, found := handler.cache.Get("komiser.views")
 	if found {
 		views := response.([]View)
@@ -248,6 +256,95 @@ func (handler *AccountHandler) NewViewHandler(w http.ResponseWriter, r *http.Req
 		handler.cache.Set("komiser.views", views)
 		respondWithJSON(w, 200, view)
 	}
+}
+
+func (handler *AccountHandler) FilterbyTagsHandler(w http.ResponseWriter, r *http.Request) {
+	var tags []Tag
+	json.NewDecoder(r.Body).Decode(&tags)
+
+	listOfResources := make([]interface{}, 0)
+
+	for key, resources := range handler.services {
+		if key == "aws:instances" {
+			instances := resources.([]aws.EC2Instance)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:lambda" {
+			instances := resources.([]models.Lambda)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:buckets" {
+			instances := resources.([]aws.S3Bucket)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:tables" {
+			instances := resources.([]aws.AWSDynamoDBTable)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:vpcs" {
+			instances := resources.([]aws.AWSVPC)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:routetables" {
+			instances := resources.([]aws.AWSRouteTable)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:securitygroups" {
+			instances := resources.([]models.SecurityGroup)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:queues" {
+			instances := resources.([]models.Queue)
+			for _, instance := range instances {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		} else if key == "aws:ecs" {
+			instances := resources.(aws.ECSData)
+			for _, instance := range instances.Clusters {
+				if hasMatchingTags(instance.Tags, tags) {
+					listOfResources = append(listOfResources, instance)
+				}
+			}
+		}
+	}
+
+	respondWithJSON(w, 200, listOfResources)
+}
+
+func hasMatchingTags(sources []string, values []Tag) bool {
+	matches := 0
+	for _, source := range sources {
+		for _, value := range values {
+
+			if strings.Contains(source, value.Key) || strings.Contains(source, value.Value) {
+				matches++
+			}
+		}
+	}
+	return matches == len(sources)
 }
 
 func getSupportedRegions() []Region {

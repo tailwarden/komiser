@@ -29,6 +29,7 @@ func (handler *AWSHandler) LambdaFunctionHandler(w http.ResponseWriter, r *http.
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "lambda:ListFunctions is missing")
 		} else {
+			handler.services["aws:lambda"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}

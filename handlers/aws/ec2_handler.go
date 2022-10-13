@@ -31,6 +31,7 @@ func (handler *AWSHandler) EC2InstancesHandler(w http.ResponseWriter, r *http.Re
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeInstances is missing")
 		} else {
 			handler.cache.Set(key, response)
+			handler.services["aws:instances"] = response
 			respondWithJSON(w, 200, response)
 		}
 	}

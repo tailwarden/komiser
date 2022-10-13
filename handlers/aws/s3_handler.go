@@ -30,6 +30,7 @@ func (handler *AWSHandler) S3BucketsHandler(w http.ResponseWriter, r *http.Reque
 			fmt.Println(err)
 			respondWithError(w, http.StatusInternalServerError, "s3:ListAllMyBuckets is missing")
 		} else {
+			handler.services["aws:buckets"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}

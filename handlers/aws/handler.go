@@ -12,15 +12,17 @@ type AWSHandler struct {
 	cache    Cache
 	multiple bool
 	aws      AWS
+	services map[string]interface{}
 }
 
-func NewAWSHandler(cache Cache, multiple bool, regions []string) *AWSHandler {
+func NewAWSHandler(cache Cache, multiple bool, regions []string, services map[string]interface{}) *AWSHandler {
 	awsHandler := AWSHandler{
 		cache:    cache,
 		multiple: multiple,
 		aws: AWS{
 			Regions: regions,
 		},
+		services: services,
 	}
 	return &awsHandler
 }

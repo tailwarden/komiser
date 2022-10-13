@@ -28,6 +28,7 @@ func (handler *AWSHandler) VPCHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeVpcs is missing")
 		} else {
+			handler.services["aws:vpcs"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
@@ -82,6 +83,7 @@ func (handler *AWSHandler) SecurityGroupHandler(w http.ResponseWriter, r *http.R
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeSecurityGroups is missing")
 		} else {
+			handler.services["aws:securitygroups"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
@@ -190,6 +192,7 @@ func (handler *AWSHandler) RouteTableHandler(w http.ResponseWriter, r *http.Requ
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeRouteTables is missing")
 		} else {
+			handler.services["aws:routetables"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
@@ -270,6 +273,7 @@ func (handler *AWSHandler) DescribeSubnetsHandler(w http.ResponseWriter, r *http
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ec2:DescribeSubnets is missing")
 		} else {
+			handler.services["aws:subnets"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}

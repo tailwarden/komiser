@@ -25,6 +25,7 @@ func (handler *AWSHandler) ECSHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "ecs:DescribeClusters or ecs:DescribeTasks or ecs:DescribeServices is missing")
 		} else {
+			handler.services["aws:ecs"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}

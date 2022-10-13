@@ -29,6 +29,7 @@ func (handler *AWSHandler) SQSQueuesHandler(w http.ResponseWriter, r *http.Reque
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "sqs:ListQueues is missing")
 		} else {
+			handler.services["aws:queues"] = response
 			handler.cache.Set(key, response)
 			respondWithJSON(w, 200, response)
 		}
