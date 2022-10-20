@@ -65,13 +65,13 @@ Komiser is an open source project created in 2017. Created to **analyse** and **
 * Get a deep understanding of **how you spend** on the AWS, GCP, OVH, DigitalOcean and Azure.
 
 ## Who is using it?
-Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE in mind. We understand that tackling cost savings, security improvements and resource usage analyse efforts can be hard, sometimes just knowing where to start, can be the most challenging part at tomes. Komiser is here to help those cloud practitioners see their cloud resources and accounts much more clearly. Only with clear insight can timely and efficient actions take place.
+Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE in mind. We understand that tackling cost savings, security improvements and resource usage analyse efforts can be hard, sometimes just knowing where to start, can be the most challenging part at times. Komiser is here to help those cloud practitioners see their cloud resources and accounts much more clearly. Only with clear insight can timely and efficient actions take place.
 
 # Getting started
 
 ## Download
 
-You can run Komiser locally, as a Docker container or running it inside a Kubernetes cluster.
+You can run Komiser locally, as a Docker container or by running it inside a Kubernetes cluster.
 Below are the available downloads for the latest version of Komiser (2.11.0). Please [download](https://docs.komiser.io/docs/overview/introduction/getting-started) the appropriate package for your operating system and architecture. 
 
 ## Installation on AWS
@@ -83,23 +83,23 @@ Below are the available downloads for the latest version of Komiser (2.11.0). Pl
 * If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#eks-installation-single-account).
 
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
-* If you are would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#multiple-account-eks-helm-chart-installation).
+* If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#multiple-account-eks-helm-chart-installation).
 
-## Installtion on GCP 
+## Installation on GCP 
 
 Connect a local deployment of Komiser CLI to your [**GCP**](https://docs.komiser.io/docs/Cloud%20Providers/gcp) account.
 
-## Instalation on Azure
+## Installation on Azure
 
-Connect a local deployment of Komiser CLI to you [**Azure**](https://docs.komiser.io/docs/Cloud%20Providers/azure) account.
+Connect a local deployment of Komiser CLI to your [**Azure**](https://docs.komiser.io/docs/Cloud%20Providers/azure) account.
 
 ## Installation on Digital Ocean
 
-Connect a local deployment of Komiser CLI to you [**Digital Ocean**](https://docs.komiser.io/docs/Cloud%20Providers/digital-ocean) account.
+Connect a local deployment of Komiser CLI to you r[**Digital Ocean**](https://docs.komiser.io/docs/Cloud%20Providers/digital-ocean) account.
 
 ## Installation on OVH
 
-Connect a local deployment of Komiser CLI to you [**OVH**](https://docs.komiser.io/docs/Cloud%20Providers/ovh) account
+Connect a local deployment of Komiser CLI to your [**OVH**](https://docs.komiser.io/docs/Cloud%20Providers/ovh) account
 
 # Documentation
 
