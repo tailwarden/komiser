@@ -3,6 +3,7 @@ package instances
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -63,5 +64,6 @@ func Instances(ctx context.Context, cfg aws.Config, account string) ([]Resource,
 
 		nextToken = *output.NextToken
 	}
+	log.Printf("[%s] Fetched %d AWS EC2 instances from %s\n", account, len(resources), cfg.Region)
 	return resources, nil
 }

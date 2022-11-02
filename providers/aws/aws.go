@@ -5,19 +5,41 @@ import (
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers/aws/cloudfront"
 	. "github.com/mlabouardy/komiser/providers/aws/ec2"
+	. "github.com/mlabouardy/komiser/providers/aws/eks"
+	. "github.com/mlabouardy/komiser/providers/aws/iam"
+	. "github.com/mlabouardy/komiser/providers/aws/lambda"
+	. "github.com/mlabouardy/komiser/providers/aws/s3"
 	"github.com/uptrace/bun"
 )
+
+type FetchDataFunction func(ctx context.Context, cfg aws.Config, account string) ([]Resource, error)
+
+func listOfSupportedServices() []FetchDataFunction {
+	return []FetchDataFunction{
+		Instances,
+		Functions,
+		Buckets,
+		SecurityGroups,
+		Roles,
+		KubernetesClusters,
+		Distributions,
+	}
+}
 
 func FetchAwsData(ctx context.Context, cfg aws.Config, account string, db *bun.DB) {
 	for _, region := range getRegions() {
 		cfg.Region = region
-		resources, err := Instances(ctx, cfg, account)
-		if err != nil {
-			log.Println(err)
-		} else {
-			for _, resource := range resources {
-				db.NewInsert().Model(&resource).Exec(context.Background())
+		for _, function := range listOfSupportedServices() {
+			resources, err := function(ctx, cfg, account)
+			if err != nil {
+				log.Println(err)
+			} else {
+				for _, resource := range resources {
+					db.NewInsert().Model(&resource).Exec(context.Background())
+				}
 			}
 		}
 	}
