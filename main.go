@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,77 +10,44 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	. "github.com/mlabouardy/komiser/handlers/aws"
-	. "github.com/mlabouardy/komiser/handlers/digitalocean"
-	. "github.com/mlabouardy/komiser/handlers/gcp"
-	. "github.com/mlabouardy/komiser/handlers/integrations"
-	. "github.com/mlabouardy/komiser/handlers/settings"
-	. "github.com/mlabouardy/komiser/services/cache"
-	"github.com/robfig/cron"
+	. "github.com/mlabouardy/komiser/handlers"
+	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers/aws"
 	"github.com/rs/cors"
-
-	//	. "github.com/mlabouardy/komiser/services/ini"
-	. "github.com/mlabouardy/komiser/handlers/azure"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/driver/pgdriver"
 	"github.com/urfave/cli"
+	"gopkg.in/ini.v1"
 )
 
 const (
-	DEFAULT_PORT           = 3000
-	DEFAULT_DURATION       = 30
-	DEFAULT_ALERT_SCHEDULE = "0 9 * * * *"
+	DEFAULT_PORT = 3000
 )
 
-func startServer(port int, cache Cache, dataset string, multiple bool, schedule string, regions []string) {
-	cache.Connect()
+func startServer(port int) {
+	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(os.Getenv("KOMISER_POSTGRES_URI"))))
+	db := bun.NewDB(sqldb, pgdialect.New())
 
-	services := make(map[string]interface{}, 0)
+	db.NewCreateTable().Model((*Resource)(nil)).Exec(context.Background())
 
-	digitaloceanHandler := NewDigitalOceanHandler(cache)
-	gcpHandler := NewGCPHandler(cache, dataset)
-	awsHandler := NewAWSHandler(cache, multiple, regions, services)
-	azureHandler := NewAzureHandler(cache)
-	alertHandler := NewAlertHandler(awsHandler, gcpHandler, azureHandler)
-	accountHandler := NewAccountHandler(cache, awsHandler, gcpHandler, azureHandler, digitaloceanHandler, services)
-	c := cron.New()
-	c.AddFunc(schedule, alertHandler.DailyNotifHandler)
-	c.Start()
+	f, err := ini.Load(config.DefaultSharedCredentialsFilename())
+
+	for _, section := range f.Sections() {
+		profileName := strings.ToLower(section.Name())
+		log.Println("Fetch resources from AWS:", profileName)
+		cfg, _ := config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profileName))
+		FetchAwsData(context.Background(), cfg, profileName, db)
+	}
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/accounts", accountHandler.ListCloudAccountsHandler)
-	r.HandleFunc("/regions", accountHandler.ListActiveRegionsHandler)
-	r.HandleFunc("/billing/providers", accountHandler.CostBreakdownByCloudProviderHandler)
-	r.HandleFunc("/billing/accounts", accountHandler.CostBreakdownByCloudAccountHandler)
-	r.HandleFunc("/billing/regions", accountHandler.CostBreakdownByCloudRegionHandler)
-	r.HandleFunc("/views", accountHandler.ListViewsHandler).Methods("GET")
-	r.HandleFunc("/views", accountHandler.NewViewHandler).Methods("POST")
+	resourcesHandler := NewResourcesHandler(context.Background(), db)
 
-	// AWS supported services
-	r.HandleFunc("/aws/ec2/regions", awsHandler.EC2InstancesHandler)
-	r.HandleFunc("/aws/lambda/functions", awsHandler.LambdaFunctionHandler)
-	r.HandleFunc("/aws/s3/buckets", awsHandler.S3BucketsHandler)
-	r.HandleFunc("/aws/dynamodb/tables", awsHandler.DynamoDBTableHandler)
-	r.HandleFunc("/aws/vpc", awsHandler.VPCHandler)
-	r.HandleFunc("/aws/route_tables", awsHandler.RouteTableHandler)
-	r.HandleFunc("/aws/security_groups", awsHandler.SecurityGroupHandler)
-	r.HandleFunc("/aws/sqs/queues", awsHandler.SQSQueuesHandler)
-	r.HandleFunc("/aws/ecs", awsHandler.ECSHandler)
-	r.HandleFunc("/aws/vpc/subnets", awsHandler.DescribeSubnetsHandler)
-
-	// DigitalOcean supported services
-	r.HandleFunc("/digitalocean/droplets", digitaloceanHandler.DropletsHandler)
-	r.HandleFunc("/digitalocean/snapshots", digitaloceanHandler.SnapshotsHandler)
-	r.HandleFunc("/digitalocean/volumes", digitaloceanHandler.VolumesHandler)
-	r.HandleFunc("/digitalocean/databases", digitaloceanHandler.DatabasesHandler)
-
-	// GCP supported services
-	r.HandleFunc("/gcp/compute/instances", gcpHandler.ComputeInstancesHandler)
-
-	// Deprecated
-	r.HandleFunc("/integrations", alertHandler.ListIntegrationsHandler)
-	r.HandleFunc("/integrations/slack", alertHandler.SetupSlackHandler).Methods("POST")
+	r.HandleFunc("/resources", resourcesHandler.ListResourcesHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
@@ -88,7 +57,7 @@ func startServer(port int, cache Cache, dataset string, multiple bool, schedule 
 		AllowedHeaders: []string{"profile", "X-Requested-With", "Content-Type", "Authorization"},
 	})
 	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -119,40 +88,13 @@ func main() {
 					Usage: "Server port",
 					Value: DEFAULT_PORT,
 				},
-				cli.IntFlag{
-					Name:  "duration, d",
-					Usage: "Cache expiration time",
-					Value: DEFAULT_DURATION,
-				},
-				cli.StringFlag{
-					Name:  "redis, r",
-					Usage: "Redis server",
-				},
-				cli.StringFlag{
-					Name:  "dataset, ds",
-					Usage: "BigQuery Bill dataset",
-				},
 				cli.StringFlag{
 					Name:  "regions, re",
 					Usage: "Restrict Komiser inspection to list of regions",
 				},
-				cli.StringFlag{
-					Name:  "cron, c",
-					Usage: "Daily budget alert schedule",
-					Value: DEFAULT_ALERT_SCHEDULE,
-				},
-				cli.BoolFlag{
-					Name:  "multiple, m",
-					Usage: "Enable multiple AWS accounts",
-				},
 			},
 			Action: func(c *cli.Context) error {
 				port := c.Int("port")
-				duration := c.Int("duration")
-				redis := c.String("redis")
-				dataset := c.String("dataset")
-				multiple := c.Bool("multiple")
-				schedule := c.String("cron")
 				regions := c.String("regions")
 
 				listOfRegions := []string{}
@@ -162,27 +104,7 @@ func main() {
 					log.Println("Restrict Komiser inspection to the following AWS regions:", listOfRegions)
 				}
 
-				var cache Cache
-
-				if port == 0 {
-					port = DEFAULT_PORT
-				}
-				if duration == 0 {
-					duration = DEFAULT_DURATION
-				}
-
-				if redis == "" {
-					cache = &Memory{
-						Expiration: time.Duration(duration),
-					}
-				} else {
-					cache = &Redis{
-						Addr:       redis,
-						Expiration: time.Duration(duration),
-					}
-				}
-
-				startServer(port, cache, dataset, multiple, schedule, listOfRegions)
+				startServer(port)
 				return nil
 			},
 		},
