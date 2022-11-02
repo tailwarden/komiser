@@ -23,15 +23,17 @@ func Functions(ctx context.Context, cfg aws.Config, account string) ([]Resource,
 
 		for _, o := range output.Functions {
 			tags := make([]Tag, 0)
-			tagsResp, _ := lambdaClient.ListTags(context.Background(), &lambda.ListTagsInput{
+			tagsResp, err := lambdaClient.ListTags(context.Background(), &lambda.ListTagsInput{
 				Resource: o.FunctionArn,
 			})
 
-			for key, value := range tagsResp.Tags {
-				tags = append(tags, Tag{
-					Key:   key,
-					Value: value,
-				})
+			if err == nil {
+				for key, value := range tagsResp.Tags {
+					tags = append(tags, Tag{
+						Key:   key,
+						Value: value,
+					})
+				}
 			}
 
 			resources = append(resources, Resource{

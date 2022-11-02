@@ -30,6 +30,26 @@ func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *
 	respondWithJSON(w, 200, resources)
 }
 
+func (handler *ResourcesHandler) RegionsCounterHandler(w http.ResponseWriter, r *http.Request) {
+	output := struct {
+		Count int `bun:"count", json:"total"`
+	}{}
+
+	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &output)
+
+	respondWithJSON(w, 200, output)
+}
+
+func (handler *ResourcesHandler) ResourcesCounterHandler(w http.ResponseWriter, r *http.Request) {
+	output := struct {
+		Count int `bun:"count", json:"total"`
+	}{}
+
+	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &output)
+
+	respondWithJSON(w, 200, output)
+}
+
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJSON(w, code, map[string]string{"error": msg})
 }

@@ -11,11 +11,13 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/digitalocean/godo"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/handlers"
 	. "github.com/mlabouardy/komiser/models"
 	. "github.com/mlabouardy/komiser/providers/aws"
+	. "github.com/mlabouardy/komiser/providers/digitalocean"
 	"github.com/rs/cors"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
@@ -29,18 +31,28 @@ const (
 )
 
 func startServer(port int) {
+
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(os.Getenv("KOMISER_POSTGRES_URI"))))
 	db := bun.NewDB(sqldb, pgdialect.New())
 
 	db.NewCreateTable().Model((*Resource)(nil)).Exec(context.Background())
 
+	// if AWS is enabled
 	f, err := ini.Load(config.DefaultSharedCredentialsFilename())
-
 	for _, section := range f.Sections() {
 		profileName := strings.ToLower(section.Name())
 		log.Println("Fetch resources from AWS:", profileName)
 		cfg, _ := config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profileName))
-		FetchAwsData(context.Background(), cfg, profileName, db)
+		go func() {
+			FetchAwsData(context.Background(), cfg, profileName, db)
+		}()
+	}
+	// if DigitalOcean is supported
+	if os.Getenv("KOMISER_DIGITALOCEAN_TOKEN") != "" {
+		digitalOceanClient := godo.NewFromToken(os.Getenv("KOMISER_DIGITALOCEAN_TOKEN"))
+		go func() {
+			FetchDigitalOceanData(context.Background(), digitalOceanClient, "Default", db)
+		}()
 	}
 
 	r := mux.NewRouter()
@@ -48,6 +60,8 @@ func startServer(port int) {
 	resourcesHandler := NewResourcesHandler(context.Background(), db)
 
 	r.HandleFunc("/resources", resourcesHandler.ListResourcesHandler)
+	r.HandleFunc("/regions", resourcesHandler.RegionsCounterHandler)
+	r.HandleFunc("/resources/count", resourcesHandler.ResourcesCounterHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
