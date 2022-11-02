@@ -1,10 +1,8 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div>
       <table className="table-auto text-sm text-left bg-white dark:bg-purplin-700 text-gray-900 dark:text-black-100 w-full">
         <thead className="sticky top-0 bg-white dark:bg-purplin-700 z-20">
           <tr>
