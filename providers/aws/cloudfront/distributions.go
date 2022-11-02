@@ -30,12 +30,12 @@ func Distributions(ctx context.Context, cfg aws.Config, account string) ([]Resou
 				Cost:      0,
 				FetchedAt: time.Now(),
 			})
-
-			if aws.ToString(output.DistributionList.NextMarker) == "" {
-				break
-			}
-			config.Marker = output.DistributionList.Marker
 		}
+
+		if aws.ToString(output.DistributionList.NextMarker) == "" {
+			break
+		}
+		config.Marker = output.DistributionList.Marker
 	}
 	log.Printf("[%s] Fetched %d AWS Cloudfront distributions from %s\n", account, len(resources), cfg.Region)
 	return resources, nil

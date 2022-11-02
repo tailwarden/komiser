@@ -7,7 +7,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	. "github.com/mlabouardy/komiser/models"
 	. "github.com/mlabouardy/komiser/providers/aws/cloudfront"
+	. "github.com/mlabouardy/komiser/providers/aws/dynamodb"
 	. "github.com/mlabouardy/komiser/providers/aws/ec2"
+	. "github.com/mlabouardy/komiser/providers/aws/ecs"
 	. "github.com/mlabouardy/komiser/providers/aws/eks"
 	. "github.com/mlabouardy/komiser/providers/aws/iam"
 	. "github.com/mlabouardy/komiser/providers/aws/lambda"
@@ -26,6 +28,10 @@ func listOfSupportedServices() []FetchDataFunction {
 		Roles,
 		KubernetesClusters,
 		Distributions,
+		Tables,
+		Tasks,
+		Services,
+		EcsClusters,
 	}
 }
 
