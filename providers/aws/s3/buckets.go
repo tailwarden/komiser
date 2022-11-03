@@ -5,16 +5,16 @@ import (
 	"log"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func Buckets(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	if cfg.Region != "us-east-1" {
+	if client.AWSClient.Region != "us-east-1" {
 		var config s3.ListBucketsInput
-		s3Client := s3.NewFromConfig(cfg)
+		s3Client := s3.NewFromConfig(*client.AWSClient)
 		output, err := s3Client.ListBuckets(context.Background(), &config)
 		if err != nil {
 			return resources, err
@@ -37,9 +37,9 @@ func Buckets(ctx context.Context, cfg aws.Config, account string) ([]Resource, e
 
 			resources = append(resources, Resource{
 				Provider:  "AWS",
-				Account:   account,
+				Account:   client.Name,
 				Service:   "S3",
-				Region:    cfg.Region,
+				Region:    client.AWSClient.Region,
 				Name:      *o.Name,
 				Cost:      0,
 				CreatedAt: *o.CreationDate,
@@ -48,6 +48,6 @@ func Buckets(ctx context.Context, cfg aws.Config, account string) ([]Resource, e
 			})
 		}
 	}
-	log.Printf("[%s] Fetched %d AWS S3 buckets from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS S3 buckets from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

@@ -8,12 +8,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudfront"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func Distributions(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config cloudfront.ListDistributionsInput
-	cloudfrontClient := cloudfront.NewFromConfig(cfg)
+	cloudfrontClient := cloudfront.NewFromConfig(*client.AWSClient)
 	for {
 		output, err := cloudfrontClient.ListDistributions(context.Background(), &config)
 		if err != nil {
@@ -23,9 +24,9 @@ func Distributions(ctx context.Context, cfg aws.Config, account string) ([]Resou
 		for _, distribution := range output.DistributionList.Items {
 			resources = append(resources, Resource{
 				Provider:  "AWS",
-				Account:   account,
+				Account:   client.Name,
 				Service:   "CloudFront",
-				Region:    cfg.Region,
+				Region:    client.AWSClient.Region,
 				Name:      *distribution.DomainName,
 				Cost:      0,
 				FetchedAt: time.Now(),
@@ -37,6 +38,6 @@ func Distributions(ctx context.Context, cfg aws.Config, account string) ([]Resou
 		}
 		config.Marker = output.DistributionList.Marker
 	}
-	log.Printf("[%s] Fetched %d AWS Cloudfront distributions from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS Cloudfront distributions from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

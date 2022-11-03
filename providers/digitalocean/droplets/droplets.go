@@ -7,16 +7,17 @@ import (
 
 	"github.com/digitalocean/godo"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func Droplets(ctx context.Context, client *godo.Client, account string) ([]Resource, error) {
+func Droplets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	droplets, _, _ := client.Droplets.List(ctx, &godo.ListOptions{})
+	droplets, _, _ := client.DigitalOceanClient.Droplets.List(ctx, &godo.ListOptions{})
 
 	for _, droplet := range droplets {
 		resources = append(resources, Resource{
 			Provider:  "DigitalOcean",
-			Account:   account,
+			Account:   client.Name,
 			Service:   "Droplet",
 			Region:    droplet.Region.Name,
 			Name:      droplet.Name,
@@ -25,6 +26,6 @@ func Droplets(ctx context.Context, client *godo.Client, account string) ([]Resou
 		})
 	}
 
-	log.Printf("[%s] Fetched %d DigitalOcean Droplets\n", account, len(resources))
+	log.Printf("[%s] Fetched %d DigitalOcean Droplets\n", client.Name, len(resources))
 	return resources, nil
 }

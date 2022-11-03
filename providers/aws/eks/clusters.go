@@ -8,12 +8,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/eks"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func KubernetesClusters(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config eks.ListClustersInput
-	eksClient := eks.NewFromConfig(cfg)
+	eksClient := eks.NewFromConfig(*client.AWSClient)
 	for {
 		output, err := eksClient.ListClusters(context.Background(), &config)
 		if err != nil {
@@ -24,9 +25,9 @@ func KubernetesClusters(ctx context.Context, cfg aws.Config, account string) ([]
 
 			resources = append(resources, Resource{
 				Provider:  "AWS",
-				Account:   account,
+				Account:   client.Name,
 				Service:   "EKS",
-				Region:    cfg.Region,
+				Region:    client.AWSClient.Region,
 				Name:      cluster,
 				Cost:      0,
 				FetchedAt: time.Now(),
@@ -39,6 +40,6 @@ func KubernetesClusters(ctx context.Context, cfg aws.Config, account string) ([]
 
 		config.NextToken = output.NextToken
 	}
-	log.Printf("[%s] Fetched %d AWS EKS clusters from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS EKS clusters from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

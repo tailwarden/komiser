@@ -4,13 +4,10 @@ import (
 	"context"
 	"log"
 
-	"github.com/digitalocean/godo"
-	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 	. "github.com/mlabouardy/komiser/providers/digitalocean/droplets"
 	"github.com/uptrace/bun"
 )
-
-type FetchDataFunction func(ctx context.Context, client *godo.Client, account string) ([]Resource, error)
 
 func listOfSupportedServices() []FetchDataFunction {
 	return []FetchDataFunction{
@@ -18,11 +15,11 @@ func listOfSupportedServices() []FetchDataFunction {
 	}
 }
 
-func FetchDigitalOceanData(ctx context.Context, client *godo.Client, account string, db *bun.DB) {
+func FetchDigitalOceanData(ctx context.Context, client ProviderClient, db *bun.DB) {
 	for _, function := range listOfSupportedServices() {
-		resources, err := function(ctx, client, account)
+		resources, err := function(ctx, client)
 		if err != nil {
-			log.Println(err)
+			log.Printf("[%s][DigitalOcean] %s", client.Name, err)
 		} else {
 			for _, resource := range resources {
 				db.NewInsert().Model(&resource).Exec(context.Background())

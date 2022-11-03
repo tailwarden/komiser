@@ -4,8 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 	. "github.com/mlabouardy/komiser/providers/aws/cloudfront"
 	. "github.com/mlabouardy/komiser/providers/aws/dynamodb"
 	. "github.com/mlabouardy/komiser/providers/aws/ec2"
@@ -16,8 +15,6 @@ import (
 	. "github.com/mlabouardy/komiser/providers/aws/s3"
 	"github.com/uptrace/bun"
 )
-
-type FetchDataFunction func(ctx context.Context, cfg aws.Config, account string) ([]Resource, error)
 
 func listOfSupportedServices() []FetchDataFunction {
 	return []FetchDataFunction{
@@ -35,13 +32,13 @@ func listOfSupportedServices() []FetchDataFunction {
 	}
 }
 
-func FetchAwsData(ctx context.Context, cfg aws.Config, account string, db *bun.DB) {
+func FetchAwsData(ctx context.Context, client ProviderClient, db *bun.DB) {
 	for _, region := range getRegions() {
-		cfg.Region = region
+		client.AWSClient.Region = region
 		for _, function := range listOfSupportedServices() {
-			resources, err := function(ctx, cfg, account)
+			resources, err := function(ctx, client)
 			if err != nil {
-				log.Println(err)
+				log.Printf("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
 					db.NewInsert().Model(&resource).Exec(context.Background())

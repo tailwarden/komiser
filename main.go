@@ -10,12 +10,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/digitalocean/godo"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/handlers"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 	. "github.com/mlabouardy/komiser/providers/aws"
 	. "github.com/mlabouardy/komiser/providers/digitalocean"
 	"github.com/rs/cors"
@@ -23,7 +25,6 @@ import (
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
 	"github.com/urfave/cli"
-	"gopkg.in/ini.v1"
 )
 
 const (
@@ -31,28 +32,51 @@ const (
 )
 
 func startServer(port int) {
+	komiserConfig := &ConfigFile{}
+	data, _ := os.ReadFile("config.toml")
+	err := toml.Unmarshal([]byte(data), komiserConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(os.Getenv("KOMISER_POSTGRES_URI"))))
+	if komiserConfig.Postgres.URI == "" {
+		log.Fatalf("Postgres URI is missing")
+	}
+
+	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(komiserConfig.Postgres.URI)))
 	db := bun.NewDB(sqldb, pgdialect.New())
 
 	db.NewCreateTable().Model((*Resource)(nil)).Exec(context.Background())
 
-	// if AWS is enabled
-	f, err := ini.Load(config.DefaultSharedCredentialsFilename())
-	for _, section := range f.Sections() {
-		profileName := strings.ToLower(section.Name())
-		log.Println("Fetch resources from AWS:", profileName)
-		cfg, _ := config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(profileName))
-		go func() {
-			FetchAwsData(context.Background(), cfg, profileName, db)
-		}()
+	if len(komiserConfig.AWS) > 0 {
+		for _, account := range komiserConfig.AWS {
+			if account.Source == "CREDENTIALS_FILE" {
+				go func(account AWSConfig) {
+					cfg, err := config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(account.Profile))
+					if err != nil {
+						log.Fatal(err)
+					}
+					providerClient := ProviderClient{
+						AWSClient: &cfg,
+						Name:      account.Name,
+					}
+					FetchAwsData(context.Background(), providerClient, db)
+				}(account)
+			}
+		}
 	}
-	// if DigitalOcean is supported
-	if os.Getenv("KOMISER_DIGITALOCEAN_TOKEN") != "" {
-		digitalOceanClient := godo.NewFromToken(os.Getenv("KOMISER_DIGITALOCEAN_TOKEN"))
-		go func() {
-			FetchDigitalOceanData(context.Background(), digitalOceanClient, "Default", db)
-		}()
+
+	if len(komiserConfig.DigitalOcean) > 0 {
+		for _, account := range komiserConfig.DigitalOcean {
+			go func(account DigitalOceanConfig) {
+				digitalOceanClient := godo.NewFromToken(account.Token)
+				providerClient := ProviderClient{
+					DigitalOceanClient: digitalOceanClient,
+					Name:               account.Name,
+				}
+				FetchDigitalOceanData(context.Background(), providerClient, db)
+			}(account)
+		}
 	}
 
 	r := mux.NewRouter()
@@ -60,8 +84,8 @@ func startServer(port int) {
 	resourcesHandler := NewResourcesHandler(context.Background(), db)
 
 	r.HandleFunc("/resources", resourcesHandler.ListResourcesHandler)
-	r.HandleFunc("/regions", resourcesHandler.RegionsCounterHandler)
 	r.HandleFunc("/resources/count", resourcesHandler.ResourcesCounterHandler)
+	r.HandleFunc("/regions", resourcesHandler.RegionsCounterHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 

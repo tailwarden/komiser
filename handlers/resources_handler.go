@@ -3,7 +3,9 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	. "github.com/mlabouardy/komiser/models"
 	"github.com/uptrace/bun"
@@ -25,7 +27,28 @@ func NewResourcesHandler(ctx context.Context, db *bun.DB) *ResourcesHandler {
 func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *http.Request) {
 	resources := make([]Resource, 0)
 
-	handler.db.NewRaw("SELECT * FROM resources").Scan(handler.ctx, &resources)
+	limitRaw := r.URL.Query().Get("limit")
+	skipRaw := r.URL.Query().Get("skip")
+
+	var limit int64
+	var skip int64
+	limit = 0
+	skip = 0
+	l, err := strconv.ParseInt(limitRaw, 10, 64)
+	if err != nil {
+		limit = 0
+	} else {
+		limit = l
+	}
+
+	s, err := strconv.ParseInt(skipRaw, 10, 64)
+	if err != nil {
+		skip = 0
+	} else {
+		skip = s
+	}
+
+	handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
 
 	respondWithJSON(w, 200, resources)
 }

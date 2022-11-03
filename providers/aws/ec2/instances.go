@@ -9,12 +9,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func Instances(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var nextToken string
 	resources := make([]Resource, 0)
-	ec2Client := ec2.NewFromConfig(cfg)
+	ec2Client := ec2.NewFromConfig(*client.AWSClient)
 	for {
 		output, err := ec2Client.DescribeInstances(ctx, &ec2.DescribeInstancesInput{
 			NextToken: &nextToken,
@@ -42,9 +43,9 @@ func Instances(ctx context.Context, cfg aws.Config, account string) ([]Resource,
 
 				resources = append(resources, Resource{
 					Provider:  "AWS",
-					Account:   account,
+					Account:   client.Name,
 					Service:   "EC2",
-					Region:    cfg.Region,
+					Region:    client.AWSClient.Region,
 					Name:      name,
 					CreatedAt: *instance.LaunchTime,
 					FetchedAt: time.Now(),
@@ -64,6 +65,6 @@ func Instances(ctx context.Context, cfg aws.Config, account string) ([]Resource,
 
 		nextToken = *output.NextToken
 	}
-	log.Printf("[%s] Fetched %d AWS EC2 instances from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS EC2 instances from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

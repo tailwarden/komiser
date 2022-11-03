@@ -8,12 +8,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func Roles(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func Roles(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config iam.ListRolesInput
-	iamClient := iam.NewFromConfig(cfg)
+	iamClient := iam.NewFromConfig(*client.AWSClient)
 	output, err := iamClient.ListRoles(context.Background(), &config)
 	if err != nil {
 		return resources, err
@@ -31,9 +32,9 @@ func Roles(ctx context.Context, cfg aws.Config, account string) ([]Resource, err
 
 		resources = append(resources, Resource{
 			Provider:  "AWS",
-			Account:   account,
+			Account:   client.Name,
 			Service:   "IAM Role",
-			Region:    cfg.Region,
+			Region:    client.AWSClient.Region,
 			Name:      *o.RoleName,
 			Cost:      0,
 			CreatedAt: *o.CreateDate,
@@ -47,6 +48,6 @@ func Roles(ctx context.Context, cfg aws.Config, account string) ([]Resource, err
 
 		config.Marker = output.Marker
 	}
-	log.Printf("[%s] Fetched %d AWS IAM roles from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS IAM roles from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

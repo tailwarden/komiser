@@ -9,12 +9,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func Functions(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config lambda.ListFunctionsInput
 	resources := make([]Resource, 0)
-	lambdaClient := lambda.NewFromConfig(cfg)
+	lambdaClient := lambda.NewFromConfig(*client.AWSClient)
 	for {
 		output, err := lambdaClient.ListFunctions(context.Background(), &config)
 		if err != nil {
@@ -38,9 +39,9 @@ func Functions(ctx context.Context, cfg aws.Config, account string) ([]Resource,
 
 			resources = append(resources, Resource{
 				Provider: "AWS",
-				Account:  account,
+				Account:  client.Name,
 				Service:  "Lambda",
-				Region:   cfg.Region,
+				Region:   client.AWSClient.Region,
 				Name:     *o.FunctionName,
 				Cost:     0,
 				Metadata: map[string]string{
@@ -57,6 +58,6 @@ func Functions(ctx context.Context, cfg aws.Config, account string) ([]Resource,
 
 		config.Marker = output.NextMarker
 	}
-	log.Printf("[%s] Fetched %d AWS Lambda functions from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS Lambda functions from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

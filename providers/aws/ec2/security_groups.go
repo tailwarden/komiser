@@ -8,12 +8,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
 )
 
-func SecurityGroups(ctx context.Context, cfg aws.Config, account string) ([]Resource, error) {
+func SecurityGroups(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config ec2.DescribeSecurityGroupsInput
 	resources := make([]Resource, 0)
-	ec2Client := ec2.NewFromConfig(cfg)
+	ec2Client := ec2.NewFromConfig(*client.AWSClient)
 	for {
 		output, err := ec2Client.DescribeSecurityGroups(ctx, &config)
 		if err != nil {
@@ -31,9 +32,9 @@ func SecurityGroups(ctx context.Context, cfg aws.Config, account string) ([]Reso
 
 			resources = append(resources, Resource{
 				Provider:  "AWS",
-				Account:   account,
+				Account:   client.Name,
 				Service:   "Security Group",
-				Region:    cfg.Region,
+				Region:    client.AWSClient.Region,
 				Cost:      0,
 				Name:      *o.GroupName,
 				FetchedAt: time.Now(),
@@ -46,6 +47,6 @@ func SecurityGroups(ctx context.Context, cfg aws.Config, account string) ([]Reso
 
 		config.NextToken = output.NextToken
 	}
-	log.Printf("[%s] Fetched %d AWS Security groups from %s\n", account, len(resources), cfg.Region)
+	log.Printf("[%s] Fetched %d AWS Security groups from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }
