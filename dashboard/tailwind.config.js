@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#A107EA",
+        primary: "#009999",
         secondary: "#5000B5",
         komiser: {
           100: "#F4F9F9",
@@ -33,7 +33,7 @@ module.exports = {
           200: "#D2CADB",
           300: "#978EA1",
           400: "#635972",
-          900: "#070011",
+          900: "#0C1717",
         },
       },
       fontFamily: {
