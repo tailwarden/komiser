@@ -8,11 +8,14 @@ import (
 	. "github.com/mlabouardy/komiser/providers/aws/cloudfront"
 	. "github.com/mlabouardy/komiser/providers/aws/dynamodb"
 	. "github.com/mlabouardy/komiser/providers/aws/ec2"
+	. "github.com/mlabouardy/komiser/providers/aws/ecr"
 	. "github.com/mlabouardy/komiser/providers/aws/ecs"
 	. "github.com/mlabouardy/komiser/providers/aws/eks"
 	. "github.com/mlabouardy/komiser/providers/aws/iam"
 	. "github.com/mlabouardy/komiser/providers/aws/lambda"
 	. "github.com/mlabouardy/komiser/providers/aws/s3"
+	. "github.com/mlabouardy/komiser/providers/aws/sns"
+	. "github.com/mlabouardy/komiser/providers/aws/sqs"
 	"github.com/uptrace/bun"
 )
 
@@ -29,6 +32,9 @@ func listOfSupportedServices() []FetchDataFunction {
 		Tasks,
 		Services,
 		EcsClusters,
+		Repositories,
+		Topics,
+		Queues,
 	}
 }
 

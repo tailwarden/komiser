@@ -1,0 +1,11 @@
+[[aws]]
+name = "production"
+source = "CREDENTIALS_FILE"
+profile = "default"
+
+[[digitalocean]]
+name = "sandbox"
+token = "YOUR TOKEN HERE"
+
+[postgres]
+uri = "postgres://postgres:komiser@localhost:5432/komiser?sslmode=disable"
