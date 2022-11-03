@@ -8,10 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#009999",
-        secondary: "#5000B5",
+        primary: "#33CCCC",
+        secondary: "#009999",
         komiser: {
-          100: "#F4F9F9",
+          100: "#F5FDFD",
+          200: "#CCF2F2",
+          300: "#99E5E5",
+          400: "#66D9D9",
+          500: "#33CCCC",
         },
         warning: {
           100: "#FFF5DA",
@@ -28,11 +32,10 @@ module.exports = {
           600: "#56BA5B",
         },
         black: {
-          100: "#F6F2FB",
-          150: "#E9E4EC",
-          200: "#D2CADB",
-          300: "#978EA1",
-          400: "#635972",
+          100: "#F4F9F9",
+          200: "#CFD7D7",
+          300: "#95A3A3",
+          400: "#697372",
           900: "#0C1717",
         },
       },

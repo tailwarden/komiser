@@ -6,7 +6,7 @@ function Navbar() {
       </picture>
       <div className="flex gap-10 text-sm font-medium text-black-900">
         <a
-          className="flex gap-2 items-center hover:text-primary"
+          className="flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://docs.komiser.io/"
           target="_blank"
         >
@@ -37,8 +37,8 @@ function Navbar() {
           Docs
         </a>
         <a
-          className="flex gap-2 items-center hover:text-primary"
-          href=""
+          className="flex gap-2 items-center hover:text-secondary transition-colors"
+          href="https://www.oraculi.io/changelog"
           target="_blank"
         >
           <svg
@@ -67,8 +67,8 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="flex gap-2 items-center hover:text-primary"
-          href=""
+          className="flex gap-2 items-center hover:text-secondary transition-colors"
+          href="https://tally.so/r/mZjY40"
           target="_blank"
         >
           <svg
