@@ -3,6 +3,7 @@ package droplets
 import (
 	"context"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/digitalocean/godo"
@@ -15,6 +16,22 @@ func Droplets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	droplets, _, _ := client.DigitalOceanClient.Droplets.List(ctx, &godo.ListOptions{})
 
 	for _, droplet := range droplets {
+		tags := make([]Tag, 0)
+		for _, tag := range droplet.Tags {
+			if strings.Contains(tag, ":") {
+				parts := strings.Split(tag, ":")
+				tags = append(tags, Tag{
+					Key:   parts[0],
+					Value: parts[1],
+				})
+			} else {
+				tags = append(tags, Tag{
+					Key:   tag,
+					Value: tag,
+				})
+			}
+		}
+
 		resources = append(resources, Resource{
 			Provider:  "DigitalOcean",
 			Account:   client.Name,
@@ -22,6 +39,7 @@ func Droplets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Region:    droplet.Region.Name,
 			Name:      droplet.Name,
 			Cost:      0,
+			Tags:      tags,
 			FetchedAt: time.Now(),
 		})
 	}
