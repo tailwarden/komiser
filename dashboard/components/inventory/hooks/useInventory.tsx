@@ -29,7 +29,7 @@ export type InventoryItem = {
   workspaceId: string;
 };
 
-type Pages = "tags" | "delete";
+export type Pages = "tags" | "delete";
 
 function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   const [inventoryStats, setInventoryStats] = useState<
@@ -157,13 +157,15 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     };
   }, [query]);
 
+   */
+
   // Tags saved list refresh effect
   useEffect(() => {
     let mounted = true;
 
-    if (workspaceId && inventoryHasUpdate) {
+    if (inventoryHasUpdate) {
       settingsService
-        .getInventoryList(workspaceId, `?limit=50&skip=0`)
+        .getInventoryList(`?limit=50&skip=0`)
         .then((res) => {
           if (mounted) {
             if (res === Error) {
@@ -181,7 +183,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     return () => {
       mounted = false;
     };
-  }, [inventoryHasUpdate]); */
+  }, [inventoryHasUpdate]);
 
   // Listen to ESC key on modal effect
   useEffect(() => {
