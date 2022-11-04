@@ -16,12 +16,27 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 	var config cloudfront.ListDistributionsInput
 	cloudfrontClient := cloudfront.NewFromConfig(*client.AWSClient)
 	for {
-		output, err := cloudfrontClient.ListDistributions(context.Background(), &config)
+		output, err := cloudfrontClient.ListDistributions(ctx, &config)
 		if err != nil {
 			return resources, err
 		}
 
 		for _, distribution := range output.DistributionList.Items {
+			outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
+				Resource: distribution.ARN,
+			})
+
+			tags := make([]Tag, 0)
+
+			if err == nil {
+				for _, tag := range outputTags.Tags.Items {
+					tags = append(tags, Tag{
+						Key:   *tag.Key,
+						Value: *tag.Value,
+					})
+				}
+			}
+
 			resources = append(resources, Resource{
 				Provider:  "AWS",
 				Account:   client.Name,
@@ -29,6 +44,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				Region:    client.AWSClient.Region,
 				Name:      *distribution.DomainName,
 				Cost:      0,
+				Tags:      tags,
 				FetchedAt: time.Now(),
 			})
 		}
