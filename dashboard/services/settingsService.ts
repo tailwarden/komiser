@@ -76,10 +76,10 @@ const settingsService = {
     }
   },
 
-  async searchInventory(workspaceId: string, query: string) {
+  async searchInventory(query: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/workspaces/${workspaceId}/inventory?query=${query}`,
+        `${BASE_URL}/inventory?query=${query}`,
         settings("GET")
       );
       const data = await res.json();
@@ -89,11 +89,11 @@ const settingsService = {
     }
   },
 
-  async saveTags(workspaceId: string, serviceId: string, payload: string) {
+  async saveTags(serviceId: string, payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/workspaces/${workspaceId}/inventory/${serviceId}`,
-        settings("PUT", payload)
+        `${BASE_URL}/resources/${serviceId}/tags`,
+        settings("POST", payload)
       );
       const data = await res.json();
       return data;

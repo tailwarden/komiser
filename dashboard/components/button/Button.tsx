@@ -39,13 +39,13 @@ function Button({
     size === 'lg' ? 'rounded' : 'rounded-lg'
   } flex items-center justify-center gap-2  text-sm font-medium box-border w-full sm:w-auto disabled:cursor-not-allowed transition-all`;
 
-  const primary = `${base} bg-secondary hover:bg-secondary text-white active:bg-secondary disabled:bg-purplin-300`;
+  const primary = `${base} bg-komiser-600 hover:bg-komiser-700 text-white active:bg-secondary disabled:bg-komiser-600/30`;
 
-  const secondary = `${base} bg-black-100 hover:bg-black-150 active:bg-black-100 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
+  const secondary = `${base} bg-black-100 hover:bg-black-200/50 active:bg-black-100 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
 
   const outline = `${base} bg-transparent text-secondary border-2 border-secondary hover:bg-komiser-100 active:border-secondary active:text-secondary disabled:bg-transparent disabled:opacity-50`;
 
-  const ghost = `${base} bg-transparent hover:bg-black-150 active:bg-black-100 text-black-300  disabled:bg-transparent disabled:opacity-50`;
+  const ghost = `${base} bg-transparent hover:bg-black-200/50 active:bg-black-100 text-black-300  disabled:bg-transparent disabled:opacity-50`;
 
   const deleteStyle = `${base} bg-error-100 text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
 

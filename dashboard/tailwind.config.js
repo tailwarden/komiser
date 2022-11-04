@@ -16,6 +16,8 @@ module.exports = {
           300: "#99E5E5",
           400: "#66D9D9",
           500: "#33CCCC",
+          600: "#009999",
+          700: "#007D7D"
         },
         warning: {
           100: "#FFF5DA",
@@ -49,6 +51,61 @@ module.exports = {
           "sans-serif",
         ],
       },
+      keyframes: {
+        'fade-in': {
+          '0%': {
+            opacity: 0.5
+          },
+          '100%': {
+            opacity: 1
+          }
+        },
+        'fade-in-down': {
+          '0%': {
+            opacity: 0.5,
+            transform: 'translateY(-15%)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
+        'fade-in-up': {
+          '0%': {
+            opacity: 0.5,
+            transform: 'translateY(15%)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
+        'fade-in-left': {
+          '0%': {
+            opacity: 0.5,
+            transform: 'translateX(3%)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
+        'width-to-fit': {
+          '0%': {
+            width: '0%'
+          },
+          '100%': {
+            width: '100%'
+          }
+        }
+      },
+      animation: {
+        'fade-in': 'fade-in 250ms ease forwards',
+        'fade-in-up': 'fade-in-up 250ms ease forwards',
+        'fade-in-down': 'fade-in-down 250ms ease forwards',
+        'fade-in-left': 'fade-in-left 250ms ease forwards',
+        'width-to-fit': 'width-to-fit 5000ms ease-in forwards'
+      }
     },
   },
   plugins: [],

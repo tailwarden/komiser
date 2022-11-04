@@ -94,11 +94,10 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   }, []);
 
   // Infinite scrolling fetch effect
-  /* useEffect(() => {
+  useEffect(() => {
     let mounted = true;
 
     if (
-      workspaceId &&
       inventoryStats &&
       skipped < inventoryStats.resources &&
       isVisible &&
@@ -107,7 +106,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
       setError(false);
 
       settingsService
-        .getInventoryList(workspaceId, `?limit=50&skip=${skipped}`)
+        .getInventoryList(`?limit=50&skip=${skipped}`)
         .then((res) => {
           if (mounted) {
             if (res === Error) {
@@ -129,7 +128,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
       mounted = false;
     };
   }, [isVisible]);
-
+  /* 
   // Search effect
   useEffect(() => {
     let mounted = true;
@@ -257,7 +256,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   }
 
   function updateTags(action?: "delete") {
-    /* if (tags && workspaceId && data) {
+    if (tags && data) {
       const serviceId = data.id;
       let payload;
 
@@ -269,7 +268,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
         payload = JSON.stringify([]);
       }
 
-      settingsService.saveTags(workspaceId, serviceId, payload).then((res) => {
+      settingsService.saveTags(serviceId, payload).then((res) => {
         if (res === Error) {
           setLoading(false);
           setDeleteLoading(false);
@@ -287,14 +286,14 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
             hasError: false,
             title: `Tags have been ${!action ? "saved" : "deleted"}!`,
             message: `The tags have been ${!action ? "saved" : "deleted"} for ${
-              data.cloud
+              data.provider
             } ${data.service} ${data.name}`,
           });
           setInventoryHasUpdate(true);
           closeModal();
         }
       });
-    } */
+    }
   }
 
   return {
