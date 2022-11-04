@@ -14,10 +14,10 @@ type Resource struct {
 	FetchedAt time.Time         `json:"fetchedAt"`
 	Cost      float64           `json:"cost"`
 	Metadata  map[string]string `json:"metadata"`
-	Tags      []Tag             `json:"tags"`
+	Tags      []Tag             `json:"tags" bun:"tags"`
 }
 
 type Tag struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Key   string `json:"key" bun:"key"`
+	Value string `json:"value" bun:"value"`
 }

@@ -30,6 +30,7 @@ func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *
 
 	limitRaw := r.URL.Query().Get("limit")
 	skipRaw := r.URL.Query().Get("skip")
+	query := r.URL.Query().Get("query")
 
 	var limit int64
 	var skip int64
@@ -49,7 +50,12 @@ func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *
 		skip = s
 	}
 
-	handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
+	if len(query) > 0 {
+		whereClause := fmt.Sprintf("name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR tags ilike '%s' OR account ilike '%s'", query, query, query, query, query, query)
+		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s LIMIT %d OFFSET %d ORDER BY name", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+	} else {
+		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources LIMIT %d OFFSET %d ORDER BY name", limit, skip)).Scan(handler.ctx, &resources)
+	}
 
 	respondWithJSON(w, 200, resources)
 }
