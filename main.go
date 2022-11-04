@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
-	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -20,39 +18,45 @@ import (
 	. "github.com/mlabouardy/komiser/providers"
 	. "github.com/mlabouardy/komiser/providers/aws"
 	. "github.com/mlabouardy/komiser/providers/digitalocean"
+	. "github.com/mlabouardy/komiser/providers/oci"
+	"github.com/oracle/oci-go-sdk/common"
 	"github.com/rs/cors"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
-	"github.com/urfave/cli"
 )
 
 const (
 	DEFAULT_PORT = 3000
 )
 
-func startServer(port int) {
-	komiserConfig := &ConfigFile{}
-	data, _ := os.ReadFile("config.toml")
-	err := toml.Unmarshal([]byte(data), komiserConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
+var db *bun.DB
 
-	if komiserConfig.Postgres.URI == "" {
-		log.Fatalf("Postgres URI is missing")
-	}
+func setupSchema(uri string) {
+	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(uri)))
+	db = bun.NewDB(sqldb, pgdialect.New())
 
-	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(komiserConfig.Postgres.URI)))
-	db := bun.NewDB(sqldb, pgdialect.New())
+	db.NewCreateTable().Model((*Resource)(nil)).IfNotExists().Exec(context.Background())
+}
 
-	db.NewCreateTable().Model((*Resource)(nil)).Exec(context.Background())
-
+func loadCloudAccounts(komiserConfig ConfigFile) {
 	if len(komiserConfig.AWS) > 0 {
 		for _, account := range komiserConfig.AWS {
 			if account.Source == "CREDENTIALS_FILE" {
 				go func(account AWSConfig) {
 					cfg, err := config.LoadDefaultConfig(context.Background(), config.WithSharedConfigProfile(account.Profile))
+					if err != nil {
+						log.Fatal(err)
+					}
+					providerClient := ProviderClient{
+						AWSClient: &cfg,
+						Name:      account.Name,
+					}
+					FetchAwsData(context.Background(), providerClient, db)
+				}(account)
+			} else if account.Source == "ENVIRONMENT_VARIABLES" {
+				go func(account AWSConfig) {
+					cfg, err := config.LoadDefaultConfig(context.Background())
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -78,6 +82,38 @@ func startServer(port int) {
 			}(account)
 		}
 	}
+
+	if len(komiserConfig.Oci) > 0 {
+		for _, account := range komiserConfig.Oci {
+			if account.Source == "CREDENTIALS_FILE" {
+				go func(account OciConfig) {
+					configProvider := common.DefaultConfigProvider()
+					providerClient := ProviderClient{
+						OciClient: configProvider,
+						Name:      account.Name,
+					}
+					FetchOciData(context.Background(), providerClient, db)
+				}(account)
+			}
+		}
+
+	}
+}
+
+func startServer(port int) {
+	komiserConfig := &ConfigFile{}
+	data, _ := os.ReadFile("config.toml")
+	err := toml.Unmarshal([]byte(data), komiserConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if komiserConfig.Postgres.URI == "" {
+		log.Fatalf("Postgres URI is missing")
+	}
+
+	setupSchema(komiserConfig.Postgres.URI)
+	loadCloudAccounts(*komiserConfig)
 
 	r := mux.NewRouter()
 
@@ -107,7 +143,7 @@ func startServer(port int) {
 }
 
 func main() {
-	app := cli.NewApp()
+	/*app := cli.NewApp()
 	app.Name = "Komiser"
 	app.Version = "3.0.0"
 	app.Usage = "Cloud Environment Inspector"
@@ -153,5 +189,5 @@ func main() {
 	app.CommandNotFound = func(c *cli.Context, command string) {
 		fmt.Fprintf(c.App.Writer, "Command not found %q !", command)
 	}
-	app.Run(os.Args)
+	app.Run(os.Args)*/
 }

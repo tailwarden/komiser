@@ -1,11 +1,16 @@
 [[aws]]
 name = "production"
-source = "CREDENTIALS_FILE"
-profile = "default"
+source = "CREDENTIALS_FILE" # CREDENTIALS_FILE, ENVIRONMENT_VARIABLES
+profile = "default" # Required if CREDENTIALS_FILE is set
 
 [[digitalocean]]
 name = "sandbox"
 token = "YOUR TOKEN HERE"
+
+[[oci]]
+name = "demo"
+source = "CREDENTIALS_FILE"
+profile = "DEFAULT"
 
 [postgres]
 uri = "postgres://postgres:komiser@localhost:5432/komiser?sslmode=disable"

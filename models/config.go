@@ -3,6 +3,7 @@ package models
 type ConfigFile struct {
 	AWS          []AWSConfig
 	DigitalOcean []DigitalOceanConfig
+	Oci          []OciConfig
 	Postgres     PostgresConfig
 }
 
@@ -19,4 +20,10 @@ type DigitalOceanConfig struct {
 
 type PostgresConfig struct {
 	URI string
+}
+
+type OciConfig struct {
+	Name    string
+	Profile string
+	Source  string
 }
