@@ -88,6 +88,7 @@ func startServer(port int) {
 	r.HandleFunc("/resources/{id}/tags", resourcesHandler.UpdateTagsHandler).Methods("POST")
 	r.HandleFunc("/regions", resourcesHandler.RegionsCounterHandler)
 	r.HandleFunc("/costs", resourcesHandler.CostCounterHandler)
+	r.HandleFunc("/stats", resourcesHandler.StatsHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
