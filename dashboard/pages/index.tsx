@@ -2,18 +2,15 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import Button from "../components/button/Button";
+import EmptyState from "../components/empty-state/EmptyState";
 import ErrorPage from "../components/error/ErrorPage";
-import InventorySearchBar from "../components/inventory/components/InventorySearchBar";
-import InventorySidePanel from "../components/inventory/components/InventorySidepanel";
+import InventorySidePanel from "../components/inventory/components/InventorySidePanel";
 import InventoryStatsCards from "../components/inventory/components/InventoryStatsCards";
 import InventoryTable from "../components/inventory/components/InventoryTable";
-import TagWrapper from "../components/inventory/components/TagWrapper";
 import useInventory from "../components/inventory/hooks/useInventory";
 import SkeletonInventory from "../components/skeleton/SkeletonInventory";
 import SkeletonStats from "../components/skeleton/SkeletonStats";
 import Toast from "../components/toast/Toast";
-import formatNumber from "../utils/formatNumber";
-import providers from "../utils/providerHelper";
 
 export default function Inventory() {
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -55,32 +52,50 @@ export default function Inventory() {
       <p className="text-xl font-medium text-black-900">Inventory</p>
       <div className="mt-8"></div>
 
-      {/* Toaster */}
+      {/* Toast */}
       {toast && <Toast {...toast} dismissToast={dismissToast} />}
 
-      {/* Error page */}
+      {/* Error */}
       {((error && !inventoryStats) || (error && !inventory)) && (
         <ErrorPage
-          title="Network request error."
+          title="Network request error"
           message="There was an error fetching the inventory resources. Check out the server logs for more info and try again."
           action={
-            <Button style="outline" onClick={() => router.reload()}>
+            <Button size="lg" style="outline" onClick={() => router.reload()}>
               Refresh the page
             </Button>
           }
         />
       )}
 
-      {/* Inventory stats */}
-      {inventoryStats && !error && <InventoryStatsCards {...inventoryStats} />}
+      {/* Empty state */}
+      {((!error &&
+        inventoryStats &&
+        Object.keys(inventoryStats).length === 0) ||
+        (!error && inventory && inventory.length === 0)) && (
+        <EmptyState
+          title="No inventory available"
+          message="Check if your connected cloud accounts have active services running or if you have attached the proper permissions."
+          action={() => {
+            router.push(
+              "https://docs.komiser.io/docs/overview/introduction/getting-started/"
+            );
+          }}
+          actionLabel="Check our docs"
+          mascotPose="greetings"
+        />
+      )}
 
       {/* Inventory stats loading */}
       {!inventoryStats && !error && <SkeletonStats />}
 
+      {/* Inventory stats */}
+      <InventoryStatsCards inventoryStats={inventoryStats} error={error} />
+
       <div className="mt-8"></div>
 
-      {/* Search bar */}
-      {!error && <InventorySearchBar query={query} setQuery={setQuery} />}
+      {/* Inventory list loading */}
+      {!inventory && !error && <SkeletonInventory />}
 
       {/* Inventory list */}
       <InventoryTable

@@ -8,9 +8,9 @@ type InventorySidePanelProps = {
   data: InventoryItem;
   goTo: (page: Pages) => void;
   page: Pages;
-  updateTags: (action?: "delete" | undefined) => void
+  updateTags: (action?: "delete" | undefined) => void;
   tags: Tag[] | [] | undefined;
-  handleChange: (newData: Partial<Tag>, id?: number | undefined) => void
+  handleChange: (newData: Partial<Tag>, id?: number | undefined) => void;
   removeTag: (id: number) => void;
   addNewTag: () => void;
   loading: boolean;
@@ -152,7 +152,19 @@ function InventorySidePanel({
                   </svg>
                   Add new tag
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-end gap-6">
+                  {data && data.tags && data.tags.length > 0 && (
+                    <Button
+                      size="lg"
+                      style="delete"
+                      loading={deleteLoading}
+                      onClick={() => {
+                        updateTags("delete");
+                      }}
+                    >
+                      Delete all tags
+                    </Button>
+                  )}
                   <Button
                     type="submit"
                     size="lg"
@@ -166,18 +178,6 @@ function InventorySidePanel({
                       ? "Save changes"
                       : "Add tags"}
                   </Button>
-                  {data && data.tags && data.tags.length > 0 && (
-                    <Button
-                      size="lg"
-                      style="delete"
-                      loading={deleteLoading}
-                      onClick={() => {
-                        updateTags("delete");
-                      }}
-                    >
-                      Delete all tags
-                    </Button>
-                  )}
                 </div>
               </form>
             )}

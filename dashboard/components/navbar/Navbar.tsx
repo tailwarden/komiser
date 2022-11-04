@@ -7,7 +7,7 @@ function Navbar() {
       <div className="flex gap-10 text-sm font-medium text-black-900">
         <a
           className="flex gap-2 items-center hover:text-secondary transition-colors"
-          href="https://docs.komiser.io/"
+          href="https://docs.komiser.io/docs/intro"
           target="_blank"
         >
           <svg
