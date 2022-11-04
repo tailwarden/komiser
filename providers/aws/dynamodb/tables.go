@@ -14,12 +14,27 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config dynamodb.ListTablesInput
 	dynamodbClient := dynamodb.NewFromConfig(*client.AWSClient)
-	output, err := dynamodbClient.ListTables(context.Background(), &config)
+	output, err := dynamodbClient.ListTables(ctx, &config)
 	if err != nil {
 		return resources, err
 	}
 
 	for _, table := range output.TableNames {
+		outputTags, err := dynamodbClient.ListTagsOfResource(ctx, &dynamodb.ListTagsOfResourceInput{
+			ResourceArn: &table,
+		})
+
+		tags := make([]Tag, 0)
+
+		if err == nil {
+			for _, tag := range outputTags.Tags {
+				tags = append(tags, Tag{
+					Key:   *tag.Key,
+					Value: *tag.Value,
+				})
+			}
+		}
+
 		resources = append(resources, Resource{
 			Provider:  "AWS",
 			Account:   client.Name,
@@ -27,6 +42,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Region:    client.AWSClient.Region,
 			Name:      table,
 			Cost:      0,
+			Tags:      tags,
 			FetchedAt: time.Now(),
 		})
 	}
