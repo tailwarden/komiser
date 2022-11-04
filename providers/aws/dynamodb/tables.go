@@ -2,10 +2,12 @@ package instances
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/mlabouardy/komiser/models"
 	. "github.com/mlabouardy/komiser/providers"
 )
@@ -19,9 +21,18 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
+	stsClient := sts.NewFromConfig(*client.AWSClient)
+	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	if err != nil {
+		return resources, err
+	}
+
+	accountId := stsOutput.Account
+
 	for _, table := range output.TableNames {
+		resourceArn := fmt.Sprintf("arn:aws:dynamodb:%s:%s:table/%s", client.AWSClient.Region, *accountId, table)
 		outputTags, err := dynamodbClient.ListTagsOfResource(ctx, &dynamodb.ListTagsOfResourceInput{
-			ResourceArn: &table,
+			ResourceArn: &resourceArn,
 		})
 
 		tags := make([]Tag, 0)

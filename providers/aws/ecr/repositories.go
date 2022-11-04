@@ -13,23 +13,38 @@ import (
 
 func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	var config ecr.ListImagesInput
+	var config ecr.DescribeRepositoriesInput
 	ecrClient := ecr.NewFromConfig(*client.AWSClient)
-
 	for {
-		output, err := ecrClient.ListImages(context.Background(), &config)
+		output, err := ecrClient.DescribeRepositories(context.Background(), &config)
 		if err != nil {
 			return resources, err
 		}
 
-		for _, image := range output.ImageIds {
+		for _, repository := range output.Repositories {
+			outputTags, err := ecrClient.ListTagsForResource(ctx, &ecr.ListTagsForResourceInput{
+				ResourceArn: repository.RepositoryArn,
+			})
+
+			tags := make([]Tag, 0)
+
+			if err == nil {
+				for _, tag := range outputTags.Tags {
+					tags = append(tags, Tag{
+						Key:   *tag.Key,
+						Value: *tag.Value,
+					})
+				}
+			}
+
 			resources = append(resources, Resource{
 				Provider:  "AWS",
 				Account:   client.Name,
 				Service:   "ECR",
 				Region:    client.AWSClient.Region,
-				Name:      *image.ImageTag,
+				Name:      *repository.RepositoryName,
 				Cost:      0,
+				Tags:      tags,
 				FetchedAt: time.Now(),
 			})
 		}

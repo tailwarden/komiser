@@ -23,6 +23,21 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, topic := range output.Topics {
+			outputTags, err := snsClient.ListTagsForResource(ctx, &sns.ListTagsForResourceInput{
+				ResourceArn: topic.TopicArn,
+			})
+
+			tags := make([]Tag, 0)
+
+			if err == nil {
+				for _, tag := range outputTags.Tags {
+					tags = append(tags, Tag{
+						Key:   *tag.Key,
+						Value: *tag.Value,
+					})
+				}
+			}
+
 			resources = append(resources, Resource{
 				Provider:  "AWS",
 				Account:   client.Name,
@@ -30,6 +45,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:    client.AWSClient.Region,
 				Name:      *topic.TopicArn,
 				Cost:      0,
+				Tags:      tags,
 				FetchedAt: time.Now(),
 			})
 		}

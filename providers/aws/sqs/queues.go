@@ -23,6 +23,21 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, queue := range output.QueueUrls {
+			outputTags, err := sqsClient.ListQueueTags(ctx, &sqs.ListQueueTagsInput{
+				QueueUrl: &queue,
+			})
+
+			tags := make([]Tag, 0)
+
+			if err == nil {
+				for key, value := range outputTags.Tags {
+					tags = append(tags, Tag{
+						Key:   key,
+						Value: value,
+					})
+				}
+			}
+
 			resources = append(resources, Resource{
 				Provider:  "AWS",
 				Account:   client.Name,
@@ -30,6 +45,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:    client.AWSClient.Region,
 				Name:      queue,
 				Cost:      0,
+				Tags:      tags,
 				FetchedAt: time.Now(),
 			})
 		}
