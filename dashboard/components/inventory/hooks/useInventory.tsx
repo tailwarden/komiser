@@ -6,7 +6,7 @@ import useIsVisible from "./useOnScreen";
 
 export type InventoryStats = {
   resources: number;
-  cost: number;
+  costs: number;
   savings: number;
   regions: number;
 };
@@ -60,7 +60,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
 
     setError(false);
 
-/*     settingsService.getInventoryStats(workspaceId).then((res) => {
+    settingsService.getInventoryStats().then((res) => {
       if (mounted) {
         if (res === Error) {
           setError(true);
@@ -68,7 +68,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
           setInventoryStats(res);
         }
       }
-    }); */
+    });
 
     settingsService
       .getInventoryList(`?limit=50&skip=${skipped}`)

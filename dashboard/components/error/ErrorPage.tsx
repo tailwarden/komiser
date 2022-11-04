@@ -13,7 +13,7 @@ function ErrorPage({ title, message, action }: ErrorPageProps) {
         <div className="flex flex-col items-center justify-center max-w-sm bg-white p-12 rounded-lg gap-6">
           <picture>
             <img
-              src="/assets/img/branding/purplin/serious.png"
+              src="/assets/img/purplin/fixing.svg"
               className="w-48"
               alt="Purplin"
             />
@@ -26,7 +26,6 @@ function ErrorPage({ title, message, action }: ErrorPageProps) {
           </p>
           {action && (
             <>
-              <div className="mt-8"></div>
               {action}
             </>
           )}

@@ -1,22 +1,22 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useRef } from "react";
+import Button from "../components/button/Button";
 import ErrorPage from "../components/error/ErrorPage";
+import InventorySearchBar from "../components/inventory/components/InventorySearchBar";
 import InventoryStatsCards from "../components/inventory/components/InventoryStatsCards";
 import useInventory from "../components/inventory/hooks/useInventory";
+import SkeletonInventory from "../components/skeleton/SkeletonInventory";
 import SkeletonStats from "../components/skeleton/SkeletonStats";
 import Toast from "../components/toast/Toast";
 import formatNumber from "../utils/formatNumber";
 import providers from "../utils/providerHelper";
 
 export default function Inventory() {
-  const inventoryStats = {
-    resources: 140,
-    cost: 33242,
-    savings: 55,
-    regions: 8,
-  };
   const reloadDiv = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const {
+    inventoryStats,
     inventory,
     searchedInventory,
     error,
@@ -39,8 +39,6 @@ export default function Inventory() {
     deleteLoading,
   } = useInventory(reloadDiv);
 
-  console.log(inventory);
-
   return (
     <>
       <Head>
@@ -56,7 +54,12 @@ export default function Inventory() {
       {((error && !inventoryStats) || (error && !inventory)) && (
         <ErrorPage
           title="Network request error."
-          message="There was an error fetching the inventory data. Please refresh the page."
+          message="There was an error fetching the inventory resources. Make sure the backend is up and running and please refresh the page."
+          action={
+            <Button style="outline" onClick={() => router.reload()}>
+              Refresh the page
+            </Button>
+          }
         />
       )}
 
@@ -67,18 +70,23 @@ export default function Inventory() {
       {!inventoryStats && !error && <SkeletonStats />}
 
       <div className="mt-8"></div>
+
+      {/* Search bar */}
+      {!error && <InventorySearchBar query={query} setQuery={setQuery} />}
+
+      {/* Inventory list */}
       <div className="pb-24 rounded-lg rounded-t-none">
         <table className="table-auto text-sm text-left bg-white text-gray-900 w-full">
           {!error && (
             <thead>
               <tr className="border-b border-black-200/30">
-                <th className="py-4 pl-4 pr-6">Cloud</th>
+                <th className="py-4 px-6">Cloud</th>
                 <th className="py-4 px-6">Service</th>
                 <th className="py-4 px-6">Name</th>
                 <th className="py-4 px-6">Region</th>
                 <th className="py-4 px-6">Account</th>
                 <th className="py-4 px-6">Cost</th>
-                <th className="py-4 px-6"></th>
+                <th className="py-4 px-6">Tags</th>
               </tr>
             </thead>
           )}
@@ -94,7 +102,7 @@ export default function Inventory() {
                 >
                   <td
                     onClick={() => openModal(item)}
-                    className="py-4 pl-4 pr-6 min-w-[7rem]"
+                    className="py-4 px-6 min-w-[7rem]"
                   >
                     <div className="flex items-center gap-3">
                       <picture className="flex-shrink-0">
@@ -212,7 +220,13 @@ export default function Inventory() {
               ))}
           </tbody>
         </table>
+
+        {/* Inventory loading */}
+        {!inventory && !error && <SkeletonInventory />}
       </div>
+
+      {/* Infite scroll trigger */}
+      {!error && <div ref={reloadDiv} className="-mt-12"></div>}
     </>
   );
 }

@@ -50,10 +50,10 @@ function settings(arg: string, payload?: string) {
 }
 
 const settingsService = {
-  async getInventoryStats(workspaceId: string) {
+  async getInventoryStats() {
     try {
       const res = await fetch(
-        `${BASE_URL}/workspaces/${workspaceId}/inventory/stats`,
+        `${BASE_URL}/stats`,
         settings("GET")
       );
       const data = await res.json();

@@ -13,7 +13,7 @@ function InventorySearchBar({ query, setQuery }: Props) {
           height="16"
           fill="none"
           viewBox="0 0 24 24"
-          className="absolute top-[1.125rem] left-6 dark:text-black-150"
+          className="absolute top-[1.125rem] left-6"
         >
           <path
             stroke="currentColor"
@@ -31,7 +31,7 @@ function InventorySearchBar({ query, setQuery }: Props) {
           height="16"
           fill="none"
           viewBox="0 0 24 24"
-          className="absolute top-[1.175rem] left-6 dark:text-black-150 cursor-pointer"
+          className="absolute top-[1.175rem] left-6 cursor-pointer"
         >
           <path
             stroke="currentColor"
@@ -48,7 +48,7 @@ function InventorySearchBar({ query, setQuery }: Props) {
         onChange={e => setQuery(e.target.value)}
         type="text"
         placeholder="Search by tags, service, name, region..."
-        className="w-full py-4 pl-14 pr-6 text-sm bg-white dark:bg-purplin-700 text-black-900 dark:text-black-100 placeholder:text-black-300 caret-primary border-b border-black-150 dark:border-purplin-650 dark:caret-black-100 focus:outline-none"
+        className="w-full py-4 pl-14 pr-6 text-sm bg-white text-black-900 placeholder:text-black-300 caret-secondary border-b border-black-150 focus:outline-none"
       />
     </div>
   );

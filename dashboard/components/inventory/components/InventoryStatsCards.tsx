@@ -101,7 +101,7 @@ function InventoryStatsCards(inventoryStats: InventoryStats) {
         </div>
         <div className="flex flex-col">
           <p className="text-xl font-medium">
-            ${formatNumber(inventoryStats.cost)}
+            ${formatNumber(inventoryStats.costs)}
           </p>
           <p className="text-sm text-black-300">Cost</p>
         </div>
