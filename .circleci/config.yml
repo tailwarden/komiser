@@ -22,7 +22,7 @@ jobs:
       - persist_to_workspace:
           root: dashboard
           paths:
-            - dist
+            - out
   build_cli:
     docker:
       - image: golang:1.18.3
