@@ -25,8 +25,8 @@ jobs:
             - out
   build_cli:
     docker:
-      - image: golang:1.18.3
-    working_directory: /go/src/github.com/mlabouardy/komiser
+      - image: golang:1.19.3
+    working_directory: /go/src/github.com/HelloOraculi/komiser
     resource_class: large
     steps:
       - checkout
