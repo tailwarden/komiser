@@ -1,4 +1,4 @@
-const BASE_URL = `/`;
+const BASE_URL = ``;
 
 type Settings = {
   method: "GET" | "PUT" | "POST" | "DELETE" | undefined;
