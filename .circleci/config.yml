@@ -106,6 +106,7 @@ workflows:
                         only:
                             - master
                             - v3.0.0
+                            - v3.0.0-beta
             - build_cli:
                 requires:
                     - build_frontend
@@ -114,6 +115,7 @@ workflows:
                         only:
                             - master
                             - v3.0.0
+                            - v3.0.0-beta
             - build_docker:
                 requires:
                     - build_cli
@@ -122,3 +124,4 @@ workflows:
                         only:
                             - master
                             - v3.0.0
+                            - v3.0.0-beta
