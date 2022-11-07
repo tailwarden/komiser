@@ -2,6 +2,7 @@ package droplets
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -33,14 +34,15 @@ func Droplets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		resources = append(resources, Resource{
-			Provider:  "DigitalOcean",
-			Account:   client.Name,
-			Service:   "Droplet",
-			Region:    droplet.Region.Name,
-			Name:      droplet.Name,
-			Cost:      0,
-			Tags:      tags,
-			FetchedAt: time.Now(),
+			Provider:   "DigitalOcean",
+			Account:    client.Name,
+			Service:    "Droplet",
+			ResourceId: fmt.Sprint("%d", droplet.ID),
+			Region:     droplet.Region.Name,
+			Name:       droplet.Name,
+			Cost:       0,
+			Tags:       tags,
+			FetchedAt:  time.Now(),
 		})
 	}
 

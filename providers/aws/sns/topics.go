@@ -39,14 +39,15 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			resources = append(resources, Resource{
-				Provider:  "AWS",
-				Account:   client.Name,
-				Service:   "SNS",
-				Region:    client.AWSClient.Region,
-				Name:      *topic.TopicArn,
-				Cost:      0,
-				Tags:      tags,
-				FetchedAt: time.Now(),
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "SNS",
+				ResourceId: *topic.TopicArn,
+				Region:     client.AWSClient.Region,
+				Name:       *topic.TopicArn,
+				Cost:       0,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
 			})
 		}
 

@@ -42,14 +42,15 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		resources = append(resources, Resource{
-			Provider:  "OCI",
-			Account:   client.Name,
-			Service:   "VM",
-			Region:    *instance.Region,
-			Name:      *instance.DisplayName,
-			Cost:      0,
-			Tags:      tags,
-			FetchedAt: time.Now(),
+			Provider:   "OCI",
+			Account:    client.Name,
+			ResourceId: *instance.Id,
+			Service:    "VM",
+			Region:     *instance.Region,
+			Name:       *instance.DisplayName,
+			Cost:       0,
+			Tags:       tags,
+			FetchedAt:  time.Now(),
 		})
 	}
 

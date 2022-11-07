@@ -1,6 +1,6 @@
 [[aws]]
 name = "production"
-source = "CREDENTIALS_FILE" # CREDENTIALS_FILE, ENVIRONMENT_VARIABLES
+source = "CREDENTIALS_FILE" # CREDENTIALS_FILE or ENVIRONMENT_VARIABLES
 profile = "default" # Required if CREDENTIALS_FILE is set
 
 [[digitalocean]]

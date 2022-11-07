@@ -20,27 +20,103 @@ Fork the repo and make changes on your fork in a feature branch based on the mas
 - Make sure you include relevant updates or additions to documentation when creating or modifying features.
 - Write clean code. Universally formatted code promotes ease of writing, reading, and maintenance. Always run go fmt before committing your changes. Most editors have plugins that do this automatically.
 
-## How Can I Contribute to Komiser Dashboard?
+## How to add a new cloud provider?
+
+1. Create a `provider.go` under `providers/provider` folder with the following content:
+
+```go
+package aws
+
+import (
+	"context"
+	"log"
+
+	. "github.com/mlabouardy/komiser/providers"
+	"github.com/uptrace/bun"
+)
+
+func listOfSupportedServices() []FetchDataFunction {
+	return []FetchDataFunction{}
+}
+
+func FetchProviderData(ctx context.Context, client ProviderClient, db *bun.DB) {
+	for _, function := range listOfSupportedServices() {
+		resources, err := function(ctx, client)
+		if err != nil {
+			log.Printf("[%s][PROVIDER] %s", client.Name, err)
+		} else {
+			for _, resource := range resources {
+				db.NewInsert().Model(&resource).Exec(context.Background())
+			}
+		}
+	}
+}
+```
+
+2. Add provider SDK client in `providers/providers.go`
+3. Include provider configuration in TOML format under `config.toml`
+
+## How to add a new cloud service/resource?
+
+The process to follow for adding a new cloud service is:
+
+1. Create a new folder under the `providers/providername/service` path called `servicename.go`
+2. Inside the new file, add the following:
+
+```go
+package service
+
+import (
+	"context"
+	"log"
+	"time"
+
+	. "github.com/mlabouardy/komiser/models"
+	. "github.com/mlabouardy/komiser/providers"
+)
+
+func MyServiceResources(ctx context.Context, client ProviderClient) ([]Resource, error) {
+	resources := make([]Resource, 0)
+	
+    // Logic goes here
+
+	log.Printf("[%s] Fetched %d CLOUD PROVIDER NAME resources\n", client.Name, len(resources))
+	return resources, nil
+}
+```
+
+3. Call the function from `providers/providername/providername.go` by adding `MyServiceResources()` to `listOfSupportedServices()` function.
+
+## General tips
+
+A few important things to note when adding functions that call the cloud provider API:
+
+- If possible, always use an API call that allows you to fetch many resources at once
+- Take pagination into account. Ensure you fetch all the resources.
+- Make sure the resource has a tags JSON column (if possible). Sometimes this requires additional SDK calls.
+- Code is required to be formatted using gofmt, this covers most code style requirements. It is also highly recommended to use goimports to automatically order imports.
+- Please try to keep lines length under 80 characters, the exact number of characters is not strict but it generally helps with readability.
+
+## How can I contribute to Komiser dashboard?
 
 * Clone the project
 * Install Go dependencies:
 
 ```
-go get -v
+go download
 ```
 
-* Switch to public folder and install npm dependencies and angular cli:
+* Switch to dashboard folder and install npm dependencies:
 
 ```
-cd public
-npm install -g @angular/cli
+cd dashboard
 npm install
 ```
 
 * Deploy to a local server:
 
 ```
-ng serve
+npm run dev
 ```
 
 * Once you implemented your frontend changes, build the artifact, build it as golang assets:

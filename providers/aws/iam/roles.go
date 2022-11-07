@@ -31,15 +31,16 @@ func Roles(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		resources = append(resources, Resource{
-			Provider:  "AWS",
-			Account:   client.Name,
-			Service:   "IAM Role",
-			Region:    client.AWSClient.Region,
-			Name:      *o.RoleName,
-			Cost:      0,
-			CreatedAt: *o.CreateDate,
-			Tags:      tags,
-			FetchedAt: time.Now(),
+			Provider:   "AWS",
+			Account:    client.Name,
+			Service:    "IAM Role",
+			ResourceId: *o.Arn,
+			Region:     client.AWSClient.Region,
+			Name:       *o.RoleName,
+			Cost:       0,
+			CreatedAt:  *o.CreateDate,
+			Tags:       tags,
+			FetchedAt:  time.Now(),
 		})
 
 		if aws.ToString(output.Marker) == "" {

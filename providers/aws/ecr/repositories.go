@@ -38,14 +38,15 @@ func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error
 			}
 
 			resources = append(resources, Resource{
-				Provider:  "AWS",
-				Account:   client.Name,
-				Service:   "ECR",
-				Region:    client.AWSClient.Region,
-				Name:      *repository.RepositoryName,
-				Cost:      0,
-				Tags:      tags,
-				FetchedAt: time.Now(),
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "ECR",
+				ResourceId: *repository.RepositoryArn,
+				Region:     client.AWSClient.Region,
+				Name:       *repository.RepositoryName,
+				Cost:       0,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
 			})
 		}
 

@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
-	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -26,7 +24,6 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
-	"github.com/urfave/cli"
 )
 
 const (
@@ -146,7 +143,7 @@ func startServer(port int) {
 }
 
 func main() {
-	app := cli.NewApp()
+	/*app := cli.NewApp()
 	app.Name = "Komiser"
 	app.Version = "3.0.0"
 	app.Usage = "Cloud Environment Inspector"
@@ -192,5 +189,5 @@ func main() {
 	app.CommandNotFound = func(c *cli.Context, command string) {
 		fmt.Fprintf(c.App.Writer, "Command not found %q !", command)
 	}
-	app.Run(os.Args)
+	app.Run(os.Args)*/
 }

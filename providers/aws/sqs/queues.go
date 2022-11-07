@@ -39,14 +39,15 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			resources = append(resources, Resource{
-				Provider:  "AWS",
-				Account:   client.Name,
-				Service:   "SQS",
-				Region:    client.AWSClient.Region,
-				Name:      queue,
-				Cost:      0,
-				Tags:      tags,
-				FetchedAt: time.Now(),
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "SQS",
+				ResourceId: queue,
+				Region:     client.AWSClient.Region,
+				Name:       queue,
+				Cost:       0,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
 			})
 		}
 

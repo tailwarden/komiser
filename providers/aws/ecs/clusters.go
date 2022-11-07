@@ -2,11 +2,13 @@ package instances
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/mlabouardy/komiser/models"
 	. "github.com/mlabouardy/komiser/providers"
 )
@@ -15,21 +17,35 @@ func EcsClusters(ctx context.Context, client ProviderClient) ([]Resource, error)
 	resources := make([]Resource, 0)
 	var config ecs.ListClustersInput
 	ecsClient := ecs.NewFromConfig(*client.AWSClient)
-	output, err := ecsClient.ListClusters(context.Background(), &config)
+
+	stsClient := sts.NewFromConfig(*client.AWSClient)
+	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
 		return resources, err
 	}
 
-	for _, cluster := range output.ClusterArns {
-		resources = append(resources, Resource{
-			Provider:  "AWS",
-			Account:   client.Name,
-			Service:   "ECS Cluster",
-			Region:    client.AWSClient.Region,
-			Name:      cluster,
-			Cost:      0,
-			FetchedAt: time.Now(),
-		})
+	accountId := stsOutput.Account
+
+	for {
+		output, err := ecsClient.ListClusters(context.Background(), &config)
+		if err != nil {
+			return resources, err
+		}
+
+		for _, cluster := range output.ClusterArns {
+			resourceArn := fmt.Sprintf("arn:aws:ecs:%s:%s:cluster/%s", client.AWSClient.Region, *accountId, cluster)
+
+			resources = append(resources, Resource{
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "ECS Cluster",
+				ResourceId: resourceArn,
+				Region:     client.AWSClient.Region,
+				Name:       cluster,
+				Cost:       0,
+				FetchedAt:  time.Now(),
+			})
+		}
 
 		if aws.ToString(output.NextToken) == "" {
 			break

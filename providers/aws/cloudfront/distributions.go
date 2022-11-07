@@ -38,14 +38,15 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			}
 
 			resources = append(resources, Resource{
-				Provider:  "AWS",
-				Account:   client.Name,
-				Service:   "CloudFront",
-				Region:    client.AWSClient.Region,
-				Name:      *distribution.DomainName,
-				Cost:      0,
-				Tags:      tags,
-				FetchedAt: time.Now(),
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "CloudFront",
+				ResourceId: *distribution.ARN,
+				Region:     client.AWSClient.Region,
+				Name:       *distribution.DomainName,
+				Cost:       0,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
 			})
 		}
 

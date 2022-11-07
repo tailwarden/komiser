@@ -103,22 +103,22 @@ workflows:
             - build_frontend:
                 filters:
                     branches:
-                    only:
-                        - master
-                        - v3.0.0
+                        only:
+                            - master
+                            - v3.0.0
             - build_cli:
                 requires:
                     - build_frontend
                 filters:
                     branches:
-                    only:
-                        - master
-                        - v3.0.0
+                        only:
+                            - master
+                            - v3.0.0
             - build_docker:
                 requires:
                     - build_cli
                 filters:
                     branches:
-                    only:
-                        - master
-                        - v3.0.0
+                        only:
+                            - master
+                            - v3.0.0

@@ -38,12 +38,13 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			resources = append(resources, Resource{
-				Provider: "AWS",
-				Account:  client.Name,
-				Service:  "Lambda",
-				Region:   client.AWSClient.Region,
-				Name:     *o.FunctionName,
-				Cost:     0,
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "Lambda",
+				ResourceId: *o.FunctionArn,
+				Region:     client.AWSClient.Region,
+				Name:       *o.FunctionName,
+				Cost:       0,
 				Metadata: map[string]string{
 					"runtime": fmt.Sprintf("%s", o.Runtime),
 				},

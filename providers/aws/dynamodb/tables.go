@@ -47,14 +47,15 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		resources = append(resources, Resource{
-			Provider:  "AWS",
-			Account:   client.Name,
-			Service:   "DynamoDB",
-			Region:    client.AWSClient.Region,
-			Name:      table,
-			Cost:      0,
-			Tags:      tags,
-			FetchedAt: time.Now(),
+			Provider:   "AWS",
+			Account:    client.Name,
+			Service:    "DynamoDB",
+			ResourceId: resourceArn,
+			Region:     client.AWSClient.Region,
+			Name:       table,
+			Cost:       0,
+			Tags:       tags,
+			FetchedAt:  time.Now(),
 		})
 	}
 	log.Printf("[%s] Fetched %d AWS DynamoDB tables from %s\n", client.Name, len(resources), client.AWSClient.Region)

@@ -50,14 +50,15 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 			}
 
 			resources = append(resources, Resource{
-				Provider:  "AWS",
-				Account:   client.Name,
-				Service:   "EKS",
-				Region:    client.AWSClient.Region,
-				Name:      cluster,
-				Cost:      0,
-				Tags:      tags,
-				FetchedAt: time.Now(),
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "EKS",
+				ResourceId: resourceArn,
+				Region:     client.AWSClient.Region,
+				Name:       cluster,
+				Cost:       0,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
 			})
 		}
 

@@ -52,7 +52,6 @@ func FetchAwsData(ctx context.Context, client ProviderClient, db *bun.DB) {
 			}
 		}
 	}
-
 }
 
 func getRegions() []string {

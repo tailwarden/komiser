@@ -2,6 +2,7 @@ package instances
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -20,9 +21,9 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			return resources, err
 		}
 
-		for _, o := range output.Buckets {
+		for _, bucket := range output.Buckets {
 			tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
-				Bucket: o.Name,
+				Bucket: bucket.Name,
 			})
 
 			tags := make([]Tag, 0)
@@ -35,16 +36,19 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				}
 			}
 
+			resourceArn := fmt.Sprintf("arn:aws:s3:::%s", bucket.Name)
+
 			resources = append(resources, Resource{
-				Provider:  "AWS",
-				Account:   client.Name,
-				Service:   "S3",
-				Region:    client.AWSClient.Region,
-				Name:      *o.Name,
-				Cost:      0,
-				CreatedAt: *o.CreationDate,
-				Tags:      tags,
-				FetchedAt: time.Now(),
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "S3",
+				Region:     client.AWSClient.Region,
+				ResourceId: resourceArn,
+				Name:       *bucket.Name,
+				Cost:       0,
+				CreatedAt:  *bucket.CreationDate,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
 			})
 		}
 	}
