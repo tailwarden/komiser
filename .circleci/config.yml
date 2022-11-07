@@ -46,7 +46,7 @@ jobs:
          command: mv /tmp/dashboard/out .
       - run:
          name: Create assets
-         command: go-bindata-assetfs -o template.go out/...
+         command: /go/bin/go-bindata-assetfs -o template.go out/...
       - run:
          name: Install gox
          command: go install github.com/mitchellh/gox@latest
