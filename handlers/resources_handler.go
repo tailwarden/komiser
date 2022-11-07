@@ -51,7 +51,7 @@ func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *
 	}
 
 	if len(query) > 0 {
-		whereClause := fmt.Sprintf("name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR tags::json->>'key' ilike '%s' OR tags::json->>'value' ilike '%s' OR account ilike '%s'", query, query, query, query, query, query, query)
+		whereClause := fmt.Sprintf("name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]'", query, query, query, query, query, query, query)
 		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 	} else {
 		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
