@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Install go-bin-data
           command: |
-           go install -v github.com/go-bindata/go-bindata/...
+           go install -a -v github.com/go-bindata/go-bindata/...@latest
            go install -v github.com/elazarl/go-bindata-assetfs/...
       - run:
          name: Fix path
