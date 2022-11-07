@@ -43,10 +43,10 @@ jobs:
            go install github.com/elazarl/go-bindata-assetfs/...
       - run:
          name: Fix path
-         command: mv /tmp/dashboard/dist .
+         command: mv /tmp/dashboard/out .
       - run:
          name: Create assets
-         command: go-bindata-assetfs -o template.go dist/...
+         command: go-bindata-assetfs -o template.go out/...
       - run:
          name: Install gox
          command: go install github.com/mitchellh/gox@latest
