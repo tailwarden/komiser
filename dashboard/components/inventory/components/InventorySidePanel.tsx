@@ -8,9 +8,9 @@ type InventorySidePanelProps = {
   data: InventoryItem;
   goTo: (page: Pages) => void;
   page: Pages;
-  updateTags: (action?: "delete" | undefined) => void;
+  updateTags: (action?: "delete") => void;
   tags: Tag[] | [] | undefined;
-  handleChange: (newData: Partial<Tag>, id?: number | undefined) => void;
+  handleChange: (newData: Partial<Tag>, id?: number) => void;
   removeTag: (id: number) => void;
   addNewTag: () => void;
   loading: boolean;

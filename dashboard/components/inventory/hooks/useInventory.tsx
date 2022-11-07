@@ -1,4 +1,4 @@
-import { ChangeEvent, RefObject, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import settingsService from "../../../services/settingsService";
 import { Provider } from "../../../utils/providerHelper";
 import useToast from "../../toast/hooks/useToast";
@@ -31,18 +31,20 @@ export type InventoryItem = {
 
 export type Pages = "tags" | "delete";
 
-function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
+function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
     InventoryStats | undefined
   >();
   const [inventory, setInventory] = useState<InventoryItem[] | undefined>();
   const [error, setError] = useState(false);
   const [skipped, setSkipped] = useState(0);
+  const [skippedSearch, setSkippedSearch] = useState(0);
   const [inventoryHasUpdate, setInventoryHasUpdate] = useState(false);
   const [query, setQuery] = useState("");
   const [searchedInventory, setSearchedInventory] = useState<
     InventoryItem[] | undefined
   >();
+  const [shouldFetchMore, setShouldFetchMore] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryItem>();
   const [page, setPage] = useState<Pages>("tags");
@@ -51,8 +53,10 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
-
+  const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
+
+  console.log('shouldFetchMore:', shouldFetchMore, 'skipped:', skipped, 'skipped search:', skippedSearch)
 
   // First fetch effect
   useEffect(() => {
@@ -97,6 +101,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   useEffect(() => {
     let mounted = true;
 
+    // Fetching on unsearched list
     if (
       inventoryStats &&
       skipped < inventoryStats.resources &&
@@ -124,31 +129,71 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
         });
     }
 
+    // Fetching on searched list
+    if (shouldFetchMore && isVisible && query) {
+      console.log("rodei do isvisible");
+      setError(false);
+
+      settingsService
+        .getInventoryList(`?limit=50&skip=${skippedSearch}&query=${query}`)
+        .then((res) => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+            }
+
+            setSearchedInventory((prev) => {
+              if (prev) {
+                return [...prev, ...res];
+              }
+              return res;
+            });
+
+            if (res.length >= 50) {
+              console.log("cheguei aqui");
+              setShouldFetchMore(true);
+            } else {
+              setShouldFetchMore(false);
+            }
+
+            setSkippedSearch((prev) => prev + 50);
+          }
+        });
+    }
+
     return () => {
       mounted = false;
     };
   }, [isVisible]);
-  /* 
+
   // Search effect
   useEffect(() => {
     let mounted = true;
-
     setSearchedInventory(undefined);
+    setSkippedSearch(0)
+    setShouldFetchMore(false);
 
-    if (query && workspaceId) {
+    if (query) {
       setError(false);
-
       setTimeout(() => {
         if (mounted) {
-          settingsService.searchInventory(workspaceId, query).then((res) => {
-            if (mounted) {
-              if (res === Error) {
-                setError(true);
-              } else {
+          settingsService
+            .getInventoryList(`?limit=50&skip=0&query=${query}`)
+            .then((res) => {
+              if (mounted) {
+                if (res === Error) {
+                  setError(true);
+                }
+
                 setSearchedInventory(res);
+
+                if (res.length >= 50) {
+                  console.log("cheguei aqui");
+                  setShouldFetchMore(true);
+                  setSkippedSearch((prev) => prev + 50);
+                }
               }
-            }
-          });
+            });
         }
       }, 700);
     }
@@ -157,27 +202,23 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     };
   }, [query]);
 
-   */
-
   // Tags saved list refresh effect
   useEffect(() => {
     let mounted = true;
 
     if (inventoryHasUpdate) {
-      settingsService
-        .getInventoryList(`?limit=50&skip=0`)
-        .then((res) => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-            } else {
-              setQuery("");
-              setInventory(res);
-              setSkipped(50);
-              setInventoryHasUpdate(false);
-            }
+      settingsService.getInventoryList(`?limit=50&skip=0`).then((res) => {
+        if (mounted) {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setQuery("");
+            setInventory(res);
+            setSkipped(50);
+            setInventoryHasUpdate(false);
           }
-        });
+        }
+      });
     }
 
     return () => {
@@ -320,6 +361,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     toast,
     dismissToast,
     deleteLoading,
+    reloadDiv,
   };
 }
 

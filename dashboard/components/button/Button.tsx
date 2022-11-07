@@ -47,7 +47,7 @@ function Button({
 
   const ghost = `${base} bg-transparent hover:bg-black-400/10 active:bg-black-400/20 text-black-900/60  disabled:bg-transparent disabled:opacity-50`;
 
-  const deleteStyle = `${base} bg-error-100 text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
+  const deleteStyle = `${base} bg-transparent text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
 
   function handleStyle() {
     let buttonStyle;
