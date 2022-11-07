@@ -9,6 +9,7 @@ function Navbar() {
           className="flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://docs.komiser.io/docs/intro"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,6 +41,7 @@ function Navbar() {
           className="flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://www.oraculi.io/changelog"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -70,6 +72,7 @@ function Navbar() {
           className="flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://tally.so/r/mZjY40"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -100,6 +103,7 @@ function Navbar() {
           className="flex gap-2 items-center bg-[#5865F2] hover:bg-[#4f5be2] py-2 px-4 rounded-lg text-white transition-colors"
           href="https://discord.oraculi.io"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
