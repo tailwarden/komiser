@@ -86,7 +86,7 @@ function useInventory() {
               }
               return res;
             });
-            setSkipped(prev => prev + 50);
+            setSkipped(prev => prev + batchSize);
           }
         }
       });
@@ -122,7 +122,7 @@ function useInventory() {
                 }
                 return res;
               });
-              setSkipped(prev => prev + 50);
+              setSkipped(prev => prev + batchSize);
             }
           }
         });
@@ -149,13 +149,13 @@ function useInventory() {
               return res;
             });
 
-            if (res.length >= 50) {
+            if (res.length >= batchSize) {
               setShouldFetchMore(true);
             } else {
               setShouldFetchMore(false);
             }
 
-            setSkippedSearch(prev => prev + 50);
+            setSkippedSearch(prev => prev + batchSize);
           }
         });
     }
@@ -186,9 +186,9 @@ function useInventory() {
 
                 setSearchedInventory(res);
 
-                if (res.length >= 50) {
+                if (res.length >= batchSize) {
                   setShouldFetchMore(true);
-                  setSkippedSearch(prev => prev + 50);
+                  setSkippedSearch(prev => prev + batchSize);
                 }
               }
             });
@@ -214,7 +214,7 @@ function useInventory() {
             } else {
               setQuery('');
               setInventory(res);
-              setSkipped(50);
+              setSkipped(batchSize);
               setInventoryHasUpdate(false);
             }
           }
