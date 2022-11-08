@@ -22,3 +22,8 @@ type Tag struct {
 	Key   string `json:"key" bun:"key"`
 	Value string `json:"value" bun:"value"`
 }
+
+type BulkUpdateTag struct {
+	Tags      []Tag    `json:"tags"`
+	Resources []string `json:"resources"`
+}

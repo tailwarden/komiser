@@ -123,6 +123,7 @@ func startServer(port int) {
 	resourcesHandler := NewResourcesHandler(context.Background(), db)
 
 	r.HandleFunc("/resources", resourcesHandler.ListResourcesHandler)
+	r.HandleFunc("/resources/tags", resourcesHandler.ListResourcesHandler).Methods("POST")
 	r.HandleFunc("/resources/count", resourcesHandler.ResourcesCounterHandler)
 	r.HandleFunc("/resources/{id}/tags", resourcesHandler.UpdateTagsHandler).Methods("POST")
 	r.HandleFunc("/regions", resourcesHandler.RegionsCounterHandler)

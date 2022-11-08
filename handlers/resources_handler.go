@@ -122,6 +122,28 @@ func (handler *ResourcesHandler) CostCounterHandler(w http.ResponseWriter, r *ht
 	respondWithJSON(w, 200, output)
 }
 
+func (handler *ResourcesHandler) BulkUpdateTagsHandler(w http.ResponseWriter, r *http.Request) {
+	var input BulkUpdateTag
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	resource := Resource{Tags: input.Tags}
+
+	for _, resourceId := range input.Resources {
+		_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", resourceId).Exec(handler.ctx)
+		if err != nil {
+			respondWithError(w, http.StatusBadRequest, "Error while updating tags")
+			return
+		}
+	}
+
+	respondWithJSON(w, 200, "Tags has been successfuly updated")
+}
+
 func (handler *ResourcesHandler) UpdateTagsHandler(w http.ResponseWriter, r *http.Request) {
 	tags := make([]Tag, 0)
 
