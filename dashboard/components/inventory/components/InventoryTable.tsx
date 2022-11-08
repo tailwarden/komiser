@@ -4,6 +4,7 @@ import providers from '../../../utils/providerHelper';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
 import { InventoryItem } from '../hooks/useInventory';
 import InventorySearchBar from './InventorySearchBar';
+import InventorySearchNoResults from './InventorySearchNoResults';
 
 type InventoryTableProps = {
   error: boolean;
@@ -300,6 +301,11 @@ function InventoryTable({
 
             {/* Inventory search loading */}
             {query && !searchedInventory && <SkeletonInventory />}
+
+            {/* Inventory search no results */}
+            {query && searchedInventory && searchedInventory.length === 0 && (
+              <InventorySearchNoResults query={query} setQuery={setQuery} />
+            )}
           </div>
         </>
       )}
@@ -307,4 +313,4 @@ function InventoryTable({
   );
 }
 
-export default React.memo(InventoryTable);
+export default InventoryTable;

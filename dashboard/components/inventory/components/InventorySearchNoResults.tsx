@@ -7,10 +7,10 @@ type Props = {
 
 function InventorySearchNoResults({ query, setQuery }: Props) {
   return (
-    <div className="w-full bg-white dark:bg-purplin-700 dark:text-black-200 text-sm flex flex-wrap-reverse items-center justify-center gap-8 px-6 py-8 sm:py-20 rounded-b-lg">
+    <div className="w-full bg-white text-sm flex flex-wrap-reverse items-center justify-center gap-8 px-6 py-8 sm:py-20 rounded-b-lg">
       <picture className="flex-shrink-0">
         <img
-          src="/assets/img/branding/purplin/reading.svg"
+          src="/assets/img/purplin/reading.svg"
           className="w-32"
           alt="No results"
         />
