@@ -55,6 +55,7 @@ function useInventory() {
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
+  const batchSize: number = 50;
 
   // First fetch effect
   useEffect(() => {
@@ -72,21 +73,23 @@ function useInventory() {
       }
     });
 
-    settingsService.getInventoryList(`?limit=50&skip=${skipped}`).then(res => {
-      if (mounted) {
-        if (res === Error) {
-          setError(true);
-        } else {
-          setInventory(prev => {
-            if (prev) {
-              return [...prev, ...res];
-            }
-            return res;
-          });
-          setSkipped(prev => prev + 50);
+    settingsService
+      .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
+      .then(res => {
+        if (mounted) {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setInventory(prev => {
+              if (prev) {
+                return [...prev, ...res];
+              }
+              return res;
+            });
+            setSkipped(prev => prev + 50);
+          }
         }
-      }
-    });
+      });
 
     return () => {
       mounted = false;
@@ -107,7 +110,7 @@ function useInventory() {
       setError(false);
 
       settingsService
-        .getInventoryList(`?limit=50&skip=${skipped}`)
+        .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
         .then(res => {
           if (mounted) {
             if (res === Error) {
@@ -127,11 +130,12 @@ function useInventory() {
 
     // Fetching on searched list
     if (shouldFetchMore && isVisible && query) {
-      console.log('rodei do isvisible');
       setError(false);
 
       settingsService
-        .getInventoryList(`?limit=50&skip=${skippedSearch}&query=${query}`)
+        .getInventoryList(
+          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`
+        )
         .then(res => {
           if (mounted) {
             if (res === Error) {
@@ -146,7 +150,6 @@ function useInventory() {
             });
 
             if (res.length >= 50) {
-              console.log('cheguei aqui');
               setShouldFetchMore(true);
             } else {
               setShouldFetchMore(false);
@@ -174,7 +177,7 @@ function useInventory() {
       setTimeout(() => {
         if (mounted) {
           settingsService
-            .getInventoryList(`?limit=50&skip=0&query=${query}`)
+            .getInventoryList(`?limit=${batchSize}&skip=0&query=${query}`)
             .then(res => {
               if (mounted) {
                 if (res === Error) {
@@ -184,7 +187,6 @@ function useInventory() {
                 setSearchedInventory(res);
 
                 if (res.length >= 50) {
-                  console.log('cheguei aqui');
                   setShouldFetchMore(true);
                   setSkippedSearch(prev => prev + 50);
                 }
@@ -203,18 +205,20 @@ function useInventory() {
     let mounted = true;
 
     if (inventoryHasUpdate) {
-      settingsService.getInventoryList(`?limit=50&skip=0`).then(res => {
-        if (mounted) {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setQuery('');
-            setInventory(res);
-            setSkipped(50);
-            setInventoryHasUpdate(false);
+      settingsService
+        .getInventoryList(`?limit=${batchSize}&skip=0`)
+        .then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+            } else {
+              setQuery('');
+              setInventory(res);
+              setSkipped(50);
+              setInventoryHasUpdate(false);
+            }
           }
-        }
-      });
+        });
     }
 
     return () => {
