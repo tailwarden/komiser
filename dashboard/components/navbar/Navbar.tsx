@@ -1,16 +1,16 @@
 function Navbar() {
   return (
-    <nav className="sticky top-0 z-10 w-full bg-white py-4 px-24 flex items-center justify-between">
-      <picture>
+    <nav className="sticky top-0 z-10 w-full bg-white py-4 px-8 lg:px-24 flex items-center gap-10 justify-between">
+      <picture className="shrink-0">
         <img
           src="./assets/img/komiser-logo.svg"
           className="w-36"
           alt="Komiser logo"
         />
       </picture>
-      <div className="flex gap-10 text-sm font-medium text-black-900">
+      <div className="flex gap-4 lg:gap-10 text-sm font-medium text-black-900">
         <a
-          className="flex gap-2 items-center hover:text-secondary transition-colors"
+          className="hidden md:flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://docs.komiser.io/docs/intro"
           target="_blank"
           rel="noopener noreferrer"
@@ -42,7 +42,7 @@ function Navbar() {
           Docs
         </a>
         <a
-          className="flex gap-2 items-center hover:text-secondary transition-colors"
+          className="hidden md:flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://www.oraculi.io/changelog"
           target="_blank"
           rel="noopener noreferrer"
@@ -73,7 +73,7 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="flex gap-2 items-center hover:text-secondary transition-colors"
+          className="hidden md:flex gap-2 items-center hover:text-secondary transition-colors"
           href="https://tally.so/r/mZjY40"
           target="_blank"
           rel="noopener noreferrer"
