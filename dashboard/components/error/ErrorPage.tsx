@@ -18,17 +18,9 @@ function ErrorPage({ title, message, action }: ErrorPageProps) {
               alt="Purplin"
             />
           </picture>
-          <p className="font-medium text-black-900">
-            {title}
-          </p>
-          <p className="text-sm text-black-300 text-center">
-            {message}
-          </p>
-          {action && (
-            <>
-              {action}
-            </>
-          )}
+          <p className="font-medium text-black-900">{title}</p>
+          <p className="text-sm text-black-300 text-center">{message}</p>
+          {action && <>{action}</>}
         </div>
       </div>
     </div>

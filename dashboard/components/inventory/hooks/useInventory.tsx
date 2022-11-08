@@ -1,8 +1,8 @@
-import { ChangeEvent, RefObject, useEffect, useState } from "react";
-import settingsService from "../../../services/settingsService";
-import { Provider } from "../../../utils/providerHelper";
-import useToast from "../../toast/hooks/useToast";
-import useIsVisible from "./useOnScreen";
+import { useEffect, useRef, useState } from 'react';
+import settingsService from '../../../services/settingsService';
+import { Provider } from '../../../utils/providerHelper';
+import useToast from '../../toast/hooks/useToast';
+import useIsVisible from './useOnScreen';
 
 export type InventoryStats = {
   resources: number;
@@ -29,30 +29,33 @@ export type InventoryItem = {
   workspaceId: string;
 };
 
-export type Pages = "tags" | "delete";
+export type Pages = 'tags' | 'delete';
 
-function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
+function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
     InventoryStats | undefined
   >();
   const [inventory, setInventory] = useState<InventoryItem[] | undefined>();
   const [error, setError] = useState(false);
   const [skipped, setSkipped] = useState(0);
+  const [skippedSearch, setSkippedSearch] = useState(0);
   const [inventoryHasUpdate, setInventoryHasUpdate] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [searchedInventory, setSearchedInventory] = useState<
     InventoryItem[] | undefined
   >();
+  const [shouldFetchMore, setShouldFetchMore] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryItem>();
-  const [page, setPage] = useState<Pages>("tags");
+  const [page, setPage] = useState<Pages>('tags');
   const [tags, setTags] = useState<Tag[]>();
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
-
+  const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
+  const batchSize: number = 50;
 
   // First fetch effect
   useEffect(() => {
@@ -60,7 +63,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
 
     setError(false);
 
-    settingsService.getInventoryStats().then((res) => {
+    settingsService.getInventoryStats().then(res => {
       if (mounted) {
         if (res === Error) {
           setError(true);
@@ -71,19 +74,19 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     });
 
     settingsService
-      .getInventoryList(`?limit=50&skip=${skipped}`)
-      .then((res) => {
+      .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
+      .then(res => {
         if (mounted) {
           if (res === Error) {
             setError(true);
           } else {
-            setInventory((prev) => {
+            setInventory(prev => {
               if (prev) {
                 return [...prev, ...res];
               }
               return res;
             });
-            setSkipped((prev) => prev + 50);
+            setSkipped(prev => prev + batchSize);
           }
         }
       });
@@ -97,6 +100,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   useEffect(() => {
     let mounted = true;
 
+    // Fetching on unsearched list
     if (
       inventoryStats &&
       skipped < inventoryStats.resources &&
@@ -106,20 +110,52 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
       setError(false);
 
       settingsService
-        .getInventoryList(`?limit=50&skip=${skipped}`)
-        .then((res) => {
+        .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
+        .then(res => {
           if (mounted) {
             if (res === Error) {
               setError(true);
             } else {
-              setInventory((prev) => {
+              setInventory(prev => {
                 if (prev) {
                   return [...prev, ...res];
                 }
                 return res;
               });
-              setSkipped((prev) => prev + 50);
+              setSkipped(prev => prev + batchSize);
             }
+          }
+        });
+    }
+
+    // Fetching on searched list
+    if (shouldFetchMore && isVisible && query) {
+      setError(false);
+
+      settingsService
+        .getInventoryList(
+          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`
+        )
+        .then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+            }
+
+            setSearchedInventory(prev => {
+              if (prev) {
+                return [...prev, ...res];
+              }
+              return res;
+            });
+
+            if (res.length >= batchSize) {
+              setShouldFetchMore(true);
+            } else {
+              setShouldFetchMore(false);
+            }
+
+            setSkippedSearch(prev => prev + batchSize);
           }
         });
     }
@@ -128,27 +164,34 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
       mounted = false;
     };
   }, [isVisible]);
-  /* 
+
   // Search effect
   useEffect(() => {
     let mounted = true;
-
     setSearchedInventory(undefined);
+    setSkippedSearch(0);
+    setShouldFetchMore(false);
 
-    if (query && workspaceId) {
+    if (query) {
       setError(false);
-
       setTimeout(() => {
         if (mounted) {
-          settingsService.searchInventory(workspaceId, query).then((res) => {
-            if (mounted) {
-              if (res === Error) {
-                setError(true);
-              } else {
+          settingsService
+            .getInventoryList(`?limit=${batchSize}&skip=0&query=${query}`)
+            .then(res => {
+              if (mounted) {
+                if (res === Error) {
+                  setError(true);
+                }
+
                 setSearchedInventory(res);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                  setSkippedSearch(prev => prev + batchSize);
+                }
               }
-            }
-          });
+            });
         }
       }, 700);
     }
@@ -157,23 +200,21 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     };
   }, [query]);
 
-   */
-
   // Tags saved list refresh effect
   useEffect(() => {
     let mounted = true;
 
     if (inventoryHasUpdate) {
       settingsService
-        .getInventoryList(`?limit=50&skip=0`)
-        .then((res) => {
+        .getInventoryList(`?limit=${batchSize}&skip=0`)
+        .then(res => {
           if (mounted) {
             if (res === Error) {
               setError(true);
             } else {
-              setQuery("");
+              setQuery('');
               setInventory(res);
-              setSkipped(50);
+              setSkipped(batchSize);
               setInventoryHasUpdate(false);
             }
           }
@@ -188,22 +229,22 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   // Listen to ESC key on modal effect
   useEffect(() => {
     function escFunction(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener("keydown", escFunction, false);
+    document.addEventListener('keydown', escFunction, false);
 
     return () => {
-      document.removeEventListener("keydown", escFunction, false);
+      document.removeEventListener('keydown', escFunction, false);
     };
   }, []);
 
   // Functions to be exported
   function cleanModal() {
     setData(undefined);
-    setPage("tags");
+    setPage('tags');
   }
 
   function openModal(inventoryItem: InventoryItem) {
@@ -214,7 +255,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     if (inventoryItem.tags && inventoryItem.tags.length > 0) {
       setTags(inventoryItem.tags);
     } else {
-      setTags([{ key: "", value: "" }]);
+      setTags([{ key: '', value: '' }]);
     }
 
     setIsOpen(true);
@@ -229,11 +270,11 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
   }
 
   function handleChange(newData: Partial<Tag>, id?: number) {
-    if (tags && typeof id === "number") {
+    if (tags && typeof id === 'number') {
       const newValues: Tag[] = [...tags];
       newValues[id] = {
         ...newValues[id],
-        ...newData,
+        ...newData
       };
       setTags(newValues);
     }
@@ -241,11 +282,11 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
 
   function addNewTag() {
     if (tags) {
-      setTags((prev) => {
+      setTags(prev => {
         if (prev) {
-          return [...prev, { key: "", value: "" }];
+          return [...prev, { key: '', value: '' }];
         }
-        return [{ key: "", value: "" }];
+        return [{ key: '', value: '' }];
       });
     }
   }
@@ -257,7 +298,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     }
   }
 
-  function updateTags(action?: "delete") {
+  function updateTags(action?: 'delete') {
     if (tags && data) {
       const serviceId = data.id;
       let payload;
@@ -270,26 +311,26 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
         payload = JSON.stringify([]);
       }
 
-      settingsService.saveTags(serviceId, payload).then((res) => {
+      settingsService.saveTags(serviceId, payload).then(res => {
         if (res === Error) {
           setLoading(false);
           setDeleteLoading(false);
           setToast({
             hasError: true,
-            title: `Tags were not ${!action ? "saved" : "deleted"}!`,
+            title: `Tags were not ${!action ? 'saved' : 'deleted'}!`,
             message: `There was an error ${
-              !action ? "saving" : "deleting"
-            } the tags. Please try again later.`,
+              !action ? 'saving' : 'deleting'
+            } the tags. Please try again later.`
           });
         } else {
           setLoading(false);
           setDeleteLoading(false);
           setToast({
             hasError: false,
-            title: `Tags have been ${!action ? "saved" : "deleted"}!`,
-            message: `The tags have been ${!action ? "saved" : "deleted"} for ${
+            title: `Tags have been ${!action ? 'saved' : 'deleted'}!`,
+            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${
               data.provider
-            } ${data.service} ${data.name}`,
+            } ${data.service} ${data.name}`
           });
           setInventoryHasUpdate(true);
           closeModal();
@@ -320,6 +361,7 @@ function useInventory(reloadDiv: RefObject<HTMLDivElement>) {
     toast,
     dismissToast,
     deleteLoading,
+    reloadDiv
   };
 }
 

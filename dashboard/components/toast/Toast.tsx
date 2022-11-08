@@ -1,5 +1,5 @@
-import Button from "../button/Button";
-import { ToastProps } from "./hooks/useToast";
+import Button from '../button/Button';
+import { ToastProps } from './hooks/useToast';
 
 type ToastProp = ToastProps & {
   dismissToast: () => void;

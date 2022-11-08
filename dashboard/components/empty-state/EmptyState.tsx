@@ -40,13 +40,9 @@ function EmptyState({
   return (
     <div className="flex h-[calc(100vh-156px)] items-center justify-center">
       <div className="flex flex-col items-center justify-center max-w-sm bg-white p-12 pb-0 rounded-lg">
-        <p className="font-medium text-black-900">
-          {title}
-        </p>
+        <p className="font-medium text-black-900">{title}</p>
         <div className="mt-2"></div>
-        <p className="text-sm text-black-300 text-center">
-          {message}
-        </p>
+        <p className="text-sm text-black-300 text-center">{message}</p>
         <div className="mt-8"></div>
         {action && (
           <>

@@ -1,3 +1,19 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next", "next/core-web-vitals", "airbnb-base", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "react-hooks/exhaustive-deps": "off",
+    "prettier/prettier": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "no-unused-vars": "off"
+  }
 }

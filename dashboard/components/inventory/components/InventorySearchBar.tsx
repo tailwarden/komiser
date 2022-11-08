@@ -7,7 +7,7 @@ type InventorySearchBarProps = {
 function InventorySearchBar({
   query,
   setQuery,
-  error,
+  error
 }: InventorySearchBarProps) {
   return (
     <>
@@ -32,7 +32,7 @@ function InventorySearchBar({
             </svg>
           ) : (
             <svg
-              onClick={() => setQuery("")}
+              onClick={() => setQuery('')}
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -52,7 +52,7 @@ function InventorySearchBar({
 
           <input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={e => setQuery(e.target.value)}
             type="text"
             placeholder="Search by tags, service, name, region..."
             className="w-full py-4 pl-14 pr-6 text-sm bg-white text-black-900 placeholder:text-black-300 caret-secondary border-b border-black-150 focus:outline-none"

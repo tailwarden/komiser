@@ -1,16 +1,16 @@
-import providers from "../../../utils/providerHelper";
-import Button from "../../button/Button";
-import { InventoryItem, Pages, Tag } from "../hooks/useInventory";
-import TagWrapper from "./TagWrapper";
+import providers from '../../../utils/providerHelper';
+import Button from '../../button/Button';
+import { InventoryItem, Pages, Tag } from '../hooks/useInventory';
+import TagWrapper from './TagWrapper';
 
 type InventorySidePanelProps = {
   closeModal: () => void;
   data: InventoryItem;
   goTo: (page: Pages) => void;
   page: Pages;
-  updateTags: (action?: "delete" | undefined) => void;
+  updateTags: (action?: 'delete') => void;
   tags: Tag[] | [] | undefined;
-  handleChange: (newData: Partial<Tag>, id?: number | undefined) => void;
+  handleChange: (newData: Partial<Tag>, id?: number) => void;
   removeTag: (id: number) => void;
   addNewTag: () => void;
   loading: boolean;
@@ -28,7 +28,7 @@ function InventorySidePanel({
   removeTag,
   addNewTag,
   loading,
-  deleteLoading,
+  deleteLoading
 }: InventorySidePanelProps) {
   return (
     <>
@@ -71,11 +71,11 @@ function InventorySidePanel({
           <ul className="flex justify-between sm:justify-start -mb-[2px]">
             <li className="mr-2">
               <a
-                onClick={() => goTo("tags")}
+                onClick={() => goTo('tags')}
                 className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
                       ${
-                        (page === "tags" || page === "delete") &&
-                        `text-secondary border-secondary`
+                        (page === 'tags' || page === 'delete') &&
+                        `text-komiser-600 border-komiser-600 hover:text-komiser-600`
                       }`}
               >
                 Tags
@@ -88,9 +88,9 @@ function InventorySidePanel({
         <div className="mt-6"></div>
         <div className="p-6 bg-black-100 rounded-lg">
           <div className="flex flex-col gap-6">
-            {page === "tags" && (
+            {page === 'tags' && (
               <form
-                onSubmit={(e) => {
+                onSubmit={e => {
                   e.preventDefault();
 
                   updateTags();
@@ -159,7 +159,7 @@ function InventorySidePanel({
                       style="delete"
                       loading={deleteLoading}
                       onClick={() => {
-                        updateTags("delete");
+                        updateTags('delete');
                       }}
                     >
                       Delete all tags
@@ -171,12 +171,12 @@ function InventorySidePanel({
                     loading={loading}
                     disabled={
                       tags &&
-                      !tags.every((tag) => tag.key.trim() && tag.value.trim())
+                      !tags.every(tag => tag.key.trim() && tag.value.trim())
                     }
                   >
                     {data && data.tags && data.tags.length > 0
-                      ? "Save changes"
-                      : "Add tags"}
+                      ? 'Save changes'
+                      : 'Add tags'}
                   </Button>
                 </div>
               </form>
