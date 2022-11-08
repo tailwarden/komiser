@@ -56,8 +56,6 @@ function useInventory() {
   const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
 
-  console.log('shouldFetchMore:', shouldFetchMore, 'skipped:', skipped, 'skipped search:', skippedSearch)
-
   // First fetch effect
   useEffect(() => {
     let mounted = true;

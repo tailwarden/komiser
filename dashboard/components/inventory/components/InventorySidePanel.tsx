@@ -75,7 +75,7 @@ function InventorySidePanel({
                 className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
                       ${
                         (page === "tags" || page === "delete") &&
-                        `text-secondary border-secondary`
+                        `text-komiser-600 border-komiser-600 hover:text-komiser-600`
                       }`}
               >
                 Tags

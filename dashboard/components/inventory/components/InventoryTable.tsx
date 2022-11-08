@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import React from "react";
 import formatNumber from "../../../utils/formatNumber";
 import providers from "../../../utils/providerHelper";
 import SkeletonInventory from "../../skeleton/SkeletonInventory";
@@ -27,7 +27,7 @@ function InventoryTable({
       {inventory && Object.keys(inventory).length !== 0 && !error && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
-          <div className="pb-24 rounded-lg rounded-t-none overflow-x-auto">
+          <div className="pb-24 rounded-lg rounded-t-none">
             <table className="table-auto text-sm text-left bg-white text-gray-900 w-full">
               {!error && (
                 <thead>
@@ -307,4 +307,4 @@ function InventoryTable({
   );
 }
 
-export default InventoryTable;
+export default React.memo(InventoryTable);
