@@ -75,7 +75,7 @@ function InventoryTable({
                       >
                         <div className="peer w-full h-full"></div>
                         <p className="w-48 truncate ...">{item.name}</p>
-                        <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-white z-10 text-black-400 shadow-lg text-xs py-3 px-4">
+                        <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
                       </td>
@@ -202,7 +202,7 @@ function InventoryTable({
                       >
                         <div className="peer w-full h-full"></div>
                         <p className="w-48 truncate ...">{item.name}</p>
-                        <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-white z-10 text-black-400 shadow-lg text-xs py-3 px-4">
+                        <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
                       </td>

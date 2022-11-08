@@ -1,4 +1,5 @@
 import formatNumber from '../../../utils/formatNumber';
+import Tooltip from '../../tooltip/Tooltip';
 import { InventoryStats } from '../hooks/useInventory';
 
 type InventoryStatsCardsProps = {
@@ -14,7 +15,7 @@ function InventoryStatsCards({
     <>
       {inventoryStats && Object.keys(inventoryStats).length !== 0 && !error && (
         <div className="grid grid-col md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
+          <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
             <div className=" bg-komiser-100 p-4 rounded-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -40,12 +41,13 @@ function InventoryStatsCards({
                 ></path>
               </svg>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col peer">
               <p className="text-xl font-medium">{inventoryStats.resources}</p>
               <p className="text-sm text-black-300">Resources</p>
             </div>
+            <Tooltip>Number of active cloud services</Tooltip>
           </div>
-          <div className="flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
+          <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
             <div className=" bg-komiser-100 p-4 rounded-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -78,12 +80,15 @@ function InventoryStatsCards({
                 ></path>
               </svg>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col peer">
               <p className="text-xl font-medium">{inventoryStats.regions}</p>
               <p className="text-sm text-black-300">Regions</p>
             </div>
+            <Tooltip>
+              Number of regions where you have active cloud services
+            </Tooltip>
           </div>
-          <div className="flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
+          <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
             <div className=" bg-komiser-100 p-4 rounded-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,12 +114,13 @@ function InventoryStatsCards({
                 ></path>
               </svg>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col peer">
               <p className="text-xl font-medium">
                 ${formatNumber(inventoryStats.costs)}
               </p>
               <p className="text-sm text-black-300">Cost</p>
             </div>
+            <Tooltip>Up-to-date monthly cost</Tooltip>
           </div>
         </div>
       )}
