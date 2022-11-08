@@ -2,7 +2,11 @@ function Navbar() {
   return (
     <nav className="sticky top-0 z-10 w-full bg-white py-4 px-24 flex items-center justify-between">
       <picture>
-        <img src="./assets/img/komiser-logo.svg" className="w-36" />
+        <img
+          src="./assets/img/komiser-logo.svg"
+          className="w-36"
+          alt="Komiser logo"
+        />
       </picture>
       <div className="flex gap-10 text-sm font-medium text-black-900">
         <a
