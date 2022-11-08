@@ -1,4 +1,6 @@
-const BASE_URL = ``;
+import environment from "../environments/environment"
+
+const BASE_URL = environment.API_URL
 
 type Settings = {
   method: "GET" | "PUT" | "POST" | "DELETE" | undefined;
