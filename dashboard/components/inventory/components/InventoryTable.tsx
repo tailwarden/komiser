@@ -1,9 +1,9 @@
-import React from "react";
-import formatNumber from "../../../utils/formatNumber";
-import providers from "../../../utils/providerHelper";
-import SkeletonInventory from "../../skeleton/SkeletonInventory";
-import { InventoryItem } from "../hooks/useInventory";
-import InventorySearchBar from "./InventorySearchBar";
+import React from 'react';
+import formatNumber from '../../../utils/formatNumber';
+import providers from '../../../utils/providerHelper';
+import SkeletonInventory from '../../skeleton/SkeletonInventory';
+import { InventoryItem } from '../hooks/useInventory';
+import InventorySearchBar from './InventorySearchBar';
 
 type InventoryTableProps = {
   error: boolean;
@@ -20,7 +20,7 @@ function InventoryTable({
   searchedInventory,
   query,
   openModal,
-  setQuery,
+  setQuery
 }: InventoryTableProps) {
   return (
     <>
@@ -45,7 +45,7 @@ function InventoryTable({
               <tbody>
                 {/* Inventory table */}
                 {!query &&
-                  inventory.map((item) => (
+                  inventory.map(item => (
                     <tr
                       key={item.id}
                       className="bg-white hover:bg-black-100/50 border-b border-black-200/30 last:border-none cursor-pointer"
@@ -146,7 +146,7 @@ function InventoryTable({
                                       ></path>
                                     </svg>
                                     <span
-                                      onClick={(e) => {
+                                      onClick={e => {
                                         setQuery(tag.key);
                                       }}
                                       className="hover:text-secondary"
@@ -172,7 +172,7 @@ function InventoryTable({
                 {query &&
                   searchedInventory &&
                   Object.keys(searchedInventory).length !== 0 &&
-                  searchedInventory.map((item) => (
+                  searchedInventory.map(item => (
                     <tr
                       key={item.id}
                       className="bg-white hover:bg-black-100/50 border-b border-black-200/30 last:border-none cursor-pointer"
@@ -273,7 +273,7 @@ function InventoryTable({
                                       ></path>
                                     </svg>
                                     <span
-                                      onClick={(e) => {
+                                      onClick={e => {
                                         setQuery(tag.key);
                                       }}
                                       className="hover:text-secondary"

@@ -1,15 +1,15 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import Button from "../components/button/Button";
-import EmptyState from "../components/empty-state/EmptyState";
-import ErrorPage from "../components/error/ErrorPage";
-import InventorySidePanel from "../components/inventory/components/InventorySidePanel";
-import InventoryStatsCards from "../components/inventory/components/InventoryStatsCards";
-import InventoryTable from "../components/inventory/components/InventoryTable";
-import useInventory from "../components/inventory/hooks/useInventory";
-import SkeletonInventory from "../components/skeleton/SkeletonInventory";
-import SkeletonStats from "../components/skeleton/SkeletonStats";
-import Toast from "../components/toast/Toast";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import Button from '../components/button/Button';
+import EmptyState from '../components/empty-state/EmptyState';
+import ErrorPage from '../components/error/ErrorPage';
+import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
+import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
+import InventoryTable from '../components/inventory/components/InventoryTable';
+import useInventory from '../components/inventory/hooks/useInventory';
+import SkeletonInventory from '../components/skeleton/SkeletonInventory';
+import SkeletonStats from '../components/skeleton/SkeletonStats';
+import Toast from '../components/toast/Toast';
 
 export default function Inventory() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Inventory() {
     toast,
     dismissToast,
     deleteLoading,
-    reloadDiv,
+    reloadDiv
   } = useInventory();
 
   return (
@@ -75,7 +75,7 @@ export default function Inventory() {
           message="Check if your connected cloud accounts have active services running or if you have attached the proper permissions."
           action={() => {
             router.push(
-              "https://docs.komiser.io/docs/overview/introduction/getting-started/"
+              'https://docs.komiser.io/docs/overview/introduction/getting-started/'
             );
           }}
           actionLabel="Check our docs"

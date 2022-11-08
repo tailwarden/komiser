@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import settingsService from "../../../services/settingsService";
-import { Provider } from "../../../utils/providerHelper";
-import useToast from "../../toast/hooks/useToast";
-import useIsVisible from "./useOnScreen";
+import { useEffect, useRef, useState } from 'react';
+import settingsService from '../../../services/settingsService';
+import { Provider } from '../../../utils/providerHelper';
+import useToast from '../../toast/hooks/useToast';
+import useIsVisible from './useOnScreen';
 
 export type InventoryStats = {
   resources: number;
@@ -29,7 +29,7 @@ export type InventoryItem = {
   workspaceId: string;
 };
 
-export type Pages = "tags" | "delete";
+export type Pages = 'tags' | 'delete';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
@@ -40,14 +40,14 @@ function useInventory() {
   const [skipped, setSkipped] = useState(0);
   const [skippedSearch, setSkippedSearch] = useState(0);
   const [inventoryHasUpdate, setInventoryHasUpdate] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [searchedInventory, setSearchedInventory] = useState<
     InventoryItem[] | undefined
   >();
   const [shouldFetchMore, setShouldFetchMore] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryItem>();
-  const [page, setPage] = useState<Pages>("tags");
+  const [page, setPage] = useState<Pages>('tags');
   const [tags, setTags] = useState<Tag[]>();
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -62,7 +62,7 @@ function useInventory() {
 
     setError(false);
 
-    settingsService.getInventoryStats().then((res) => {
+    settingsService.getInventoryStats().then(res => {
       if (mounted) {
         if (res === Error) {
           setError(true);
@@ -72,23 +72,21 @@ function useInventory() {
       }
     });
 
-    settingsService
-      .getInventoryList(`?limit=50&skip=${skipped}`)
-      .then((res) => {
-        if (mounted) {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setInventory((prev) => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-            setSkipped((prev) => prev + 50);
-          }
+    settingsService.getInventoryList(`?limit=50&skip=${skipped}`).then(res => {
+      if (mounted) {
+        if (res === Error) {
+          setError(true);
+        } else {
+          setInventory(prev => {
+            if (prev) {
+              return [...prev, ...res];
+            }
+            return res;
+          });
+          setSkipped(prev => prev + 50);
         }
-      });
+      }
+    });
 
     return () => {
       mounted = false;
@@ -110,18 +108,18 @@ function useInventory() {
 
       settingsService
         .getInventoryList(`?limit=50&skip=${skipped}`)
-        .then((res) => {
+        .then(res => {
           if (mounted) {
             if (res === Error) {
               setError(true);
             } else {
-              setInventory((prev) => {
+              setInventory(prev => {
                 if (prev) {
                   return [...prev, ...res];
                 }
                 return res;
               });
-              setSkipped((prev) => prev + 50);
+              setSkipped(prev => prev + 50);
             }
           }
         });
@@ -129,18 +127,18 @@ function useInventory() {
 
     // Fetching on searched list
     if (shouldFetchMore && isVisible && query) {
-      console.log("rodei do isvisible");
+      console.log('rodei do isvisible');
       setError(false);
 
       settingsService
         .getInventoryList(`?limit=50&skip=${skippedSearch}&query=${query}`)
-        .then((res) => {
+        .then(res => {
           if (mounted) {
             if (res === Error) {
               setError(true);
             }
 
-            setSearchedInventory((prev) => {
+            setSearchedInventory(prev => {
               if (prev) {
                 return [...prev, ...res];
               }
@@ -148,13 +146,13 @@ function useInventory() {
             });
 
             if (res.length >= 50) {
-              console.log("cheguei aqui");
+              console.log('cheguei aqui');
               setShouldFetchMore(true);
             } else {
               setShouldFetchMore(false);
             }
 
-            setSkippedSearch((prev) => prev + 50);
+            setSkippedSearch(prev => prev + 50);
           }
         });
     }
@@ -168,7 +166,7 @@ function useInventory() {
   useEffect(() => {
     let mounted = true;
     setSearchedInventory(undefined);
-    setSkippedSearch(0)
+    setSkippedSearch(0);
     setShouldFetchMore(false);
 
     if (query) {
@@ -177,7 +175,7 @@ function useInventory() {
         if (mounted) {
           settingsService
             .getInventoryList(`?limit=50&skip=0&query=${query}`)
-            .then((res) => {
+            .then(res => {
               if (mounted) {
                 if (res === Error) {
                   setError(true);
@@ -186,9 +184,9 @@ function useInventory() {
                 setSearchedInventory(res);
 
                 if (res.length >= 50) {
-                  console.log("cheguei aqui");
+                  console.log('cheguei aqui');
                   setShouldFetchMore(true);
-                  setSkippedSearch((prev) => prev + 50);
+                  setSkippedSearch(prev => prev + 50);
                 }
               }
             });
@@ -205,12 +203,12 @@ function useInventory() {
     let mounted = true;
 
     if (inventoryHasUpdate) {
-      settingsService.getInventoryList(`?limit=50&skip=0`).then((res) => {
+      settingsService.getInventoryList(`?limit=50&skip=0`).then(res => {
         if (mounted) {
           if (res === Error) {
             setError(true);
           } else {
-            setQuery("");
+            setQuery('');
             setInventory(res);
             setSkipped(50);
             setInventoryHasUpdate(false);
@@ -227,22 +225,22 @@ function useInventory() {
   // Listen to ESC key on modal effect
   useEffect(() => {
     function escFunction(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener("keydown", escFunction, false);
+    document.addEventListener('keydown', escFunction, false);
 
     return () => {
-      document.removeEventListener("keydown", escFunction, false);
+      document.removeEventListener('keydown', escFunction, false);
     };
   }, []);
 
   // Functions to be exported
   function cleanModal() {
     setData(undefined);
-    setPage("tags");
+    setPage('tags');
   }
 
   function openModal(inventoryItem: InventoryItem) {
@@ -253,7 +251,7 @@ function useInventory() {
     if (inventoryItem.tags && inventoryItem.tags.length > 0) {
       setTags(inventoryItem.tags);
     } else {
-      setTags([{ key: "", value: "" }]);
+      setTags([{ key: '', value: '' }]);
     }
 
     setIsOpen(true);
@@ -268,11 +266,11 @@ function useInventory() {
   }
 
   function handleChange(newData: Partial<Tag>, id?: number) {
-    if (tags && typeof id === "number") {
+    if (tags && typeof id === 'number') {
       const newValues: Tag[] = [...tags];
       newValues[id] = {
         ...newValues[id],
-        ...newData,
+        ...newData
       };
       setTags(newValues);
     }
@@ -280,11 +278,11 @@ function useInventory() {
 
   function addNewTag() {
     if (tags) {
-      setTags((prev) => {
+      setTags(prev => {
         if (prev) {
-          return [...prev, { key: "", value: "" }];
+          return [...prev, { key: '', value: '' }];
         }
-        return [{ key: "", value: "" }];
+        return [{ key: '', value: '' }];
       });
     }
   }
@@ -296,7 +294,7 @@ function useInventory() {
     }
   }
 
-  function updateTags(action?: "delete") {
+  function updateTags(action?: 'delete') {
     if (tags && data) {
       const serviceId = data.id;
       let payload;
@@ -309,26 +307,26 @@ function useInventory() {
         payload = JSON.stringify([]);
       }
 
-      settingsService.saveTags(serviceId, payload).then((res) => {
+      settingsService.saveTags(serviceId, payload).then(res => {
         if (res === Error) {
           setLoading(false);
           setDeleteLoading(false);
           setToast({
             hasError: true,
-            title: `Tags were not ${!action ? "saved" : "deleted"}!`,
+            title: `Tags were not ${!action ? 'saved' : 'deleted'}!`,
             message: `There was an error ${
-              !action ? "saving" : "deleting"
-            } the tags. Please try again later.`,
+              !action ? 'saving' : 'deleting'
+            } the tags. Please try again later.`
           });
         } else {
           setLoading(false);
           setDeleteLoading(false);
           setToast({
             hasError: false,
-            title: `Tags have been ${!action ? "saved" : "deleted"}!`,
-            message: `The tags have been ${!action ? "saved" : "deleted"} for ${
+            title: `Tags have been ${!action ? 'saved' : 'deleted'}!`,
+            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${
               data.provider
-            } ${data.service} ${data.name}`,
+            } ${data.service} ${data.name}`
           });
           setInventoryHasUpdate(true);
           closeModal();
@@ -359,7 +357,7 @@ function useInventory() {
     toast,
     dismissToast,
     deleteLoading,
-    reloadDiv,
+    reloadDiv
   };
 }
 

@@ -1,6 +1,6 @@
 const environment = {
   production: true,
-  API_URL: '',
+  API_URL: ''
 };
 
 export default environment;

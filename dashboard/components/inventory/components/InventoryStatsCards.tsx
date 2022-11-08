@@ -1,5 +1,5 @@
-import formatNumber from "../../../utils/formatNumber";
-import { InventoryStats } from "../hooks/useInventory";
+import formatNumber from '../../../utils/formatNumber';
+import { InventoryStats } from '../hooks/useInventory';
 
 type InventoryStatsCardsProps = {
   inventoryStats: InventoryStats | undefined;
@@ -8,7 +8,7 @@ type InventoryStatsCardsProps = {
 
 function InventoryStatsCards({
   inventoryStats,
-  error,
+  error
 }: InventoryStatsCardsProps) {
   return (
     <>
