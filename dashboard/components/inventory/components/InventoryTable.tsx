@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
+import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
 import { InventoryItem } from '../hooks/useInventory';
 import InventorySearchBar from './InventorySearchBar';
@@ -13,6 +14,9 @@ type InventoryTableProps = {
   query: string;
   openModal: (item: InventoryItem) => void;
   setQuery: (query: string) => void;
+  bulkSelectCheckbox: boolean;
+  handleBulkSelection: (e: ChangeEvent<HTMLInputElement>) => void;
+  bulkItems: [] | string[];
 };
 
 function InventoryTable({
@@ -21,7 +25,10 @@ function InventoryTable({
   searchedInventory,
   query,
   openModal,
-  setQuery
+  setQuery,
+  bulkSelectCheckbox,
+  handleBulkSelection,
+  bulkItems
 }: InventoryTableProps) {
   return (
     <>
@@ -33,6 +40,14 @@ function InventoryTable({
               {!error && (
                 <thead>
                   <tr className="border-b border-black-200/30">
+                    <th className="py-4 pl-6">
+                      <div className="flex items-center">
+                        <Checkbox
+                          checked={bulkSelectCheckbox}
+                          onChange={handleBulkSelection}
+                        />
+                      </div>
+                    </th>
                     <th className="py-4 px-6">Cloud</th>
                     <th className="py-4 px-6">Service</th>
                     <th className="py-4 px-6">Name</th>

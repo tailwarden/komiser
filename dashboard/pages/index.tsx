@@ -35,7 +35,13 @@ export default function Inventory() {
     toast,
     dismissToast,
     deleteLoading,
-    reloadDiv
+    reloadDiv,
+    bulkItems,
+    onCheckboxChange,
+    handleBulkSelection,
+    bulkSelectCheckbox,
+    openBulkModal,
+    updateBulkTags
   } = useInventory();
 
   return (
@@ -102,6 +108,9 @@ export default function Inventory() {
         query={query}
         openModal={openModal}
         setQuery={setQuery}
+        bulkSelectCheckbox={bulkSelectCheckbox}
+        handleBulkSelection={handleBulkSelection}
+        bulkItems={bulkItems}
       />
 
       {/* Infite scroll trigger */}
