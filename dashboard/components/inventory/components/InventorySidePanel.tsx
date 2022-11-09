@@ -181,7 +181,7 @@ function InventorySidePanel({
                         (!data && bulkItems)) && (
                         <Button
                           size="lg"
-                          style="delete"
+                          style="delete-ghost"
                           loading={deleteLoading}
                           onClick={() => {
                             if (!data && bulkItems) {
@@ -191,7 +191,7 @@ function InventorySidePanel({
                             }
                           }}
                         >
-                          Delete all tags
+                          {deleteLoading ? 'Deleting...' : 'Delete all tags'}
                         </Button>
                       )}
                       <Button
@@ -214,7 +214,7 @@ function InventorySidePanel({
                 {page === 'delete' && (
                   <>
                     <div className="flex flex-col gap-6">
-                      <div className="flex items-center justify-center bg-error-100 dark:bg-error-900 text-error-600 h-12 w-12 mx-auto rounded-full">
+                      <div className="flex items-center justify-center bg-error-100 text-error-600 h-12 w-12 mx-auto rounded-full">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -232,25 +232,17 @@ function InventorySidePanel({
                         </svg>
                       </div>
                       <div className="flex flex-col items-center gap-6">
-                        <p className="text-black-900 font-medium dark:text-black-100 text-center">
+                        <p className="text-black-900 font-medium text-center">
                           Are you sure you want to delete all tags from{' '}
                           {formatNumber(bulkItems.length)}{' '}
                           {bulkItems.length > 1 ? 'items' : 'item'}?
                         </p>
-                        <p className="text-sm text-black-400 dark:text-black-300">
+                        <p className="text-sm text-black-400">
                           This is a permanent action, and it will also delete
                           previous tags you have added to these items.
                         </p>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <Button
-                          size="lg"
-                          style="delete"
-                          loading={deleteLoading}
-                          onClick={() => updateBulkTags('delete')}
-                        >
-                          {deleteLoading ? 'Deleting...' : 'Delete all tags'}
-                        </Button>
+                      <div className="flex items-center justify-end gap-6">
                         <Button
                           size="lg"
                           style="secondary"
@@ -259,6 +251,14 @@ function InventorySidePanel({
                           }}
                         >
                           Cancel
+                        </Button>
+                        <Button
+                          size="lg"
+                          style="delete"
+                          loading={deleteLoading}
+                          onClick={() => updateBulkTags('delete')}
+                        >
+                          {deleteLoading ? 'Deleting...' : 'Delete all tags'}
                         </Button>
                       </div>
                     </div>

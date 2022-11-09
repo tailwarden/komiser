@@ -363,7 +363,6 @@ function useInventory() {
         payload.tags = [];
       }
 
-      console.log(payload);
       const payloadJSON = JSON.stringify(payload);
 
       settingsService.bulkSaveTags(payloadJSON).then(res => {

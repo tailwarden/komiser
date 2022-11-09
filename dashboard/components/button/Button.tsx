@@ -3,7 +3,13 @@ import { ReactNode } from 'react';
 export type ButtonProps = {
   children: ReactNode;
   type?: 'button' | 'submit';
-  style?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'delete';
+  style?:
+    | 'primary'
+    | 'secondary'
+    | 'outline'
+    | 'ghost'
+    | 'delete'
+    | 'delete-ghost';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
@@ -47,7 +53,9 @@ function Button({
 
   const ghost = `${base} bg-transparent hover:bg-black-400/10 active:bg-black-400/20 text-black-900/60  disabled:bg-transparent disabled:opacity-50`;
 
-  const deleteStyle = `${base} bg-transparent text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
+  const deleteStyle = `${base} bg-error-600 text-white hover:bg-error-700 active:bg-error-600  disabled:bg-error-700 disabled:text-white/70`;
+
+  const deleteGhostStyle = `${base} bg-transparent text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
 
   function handleStyle() {
     let buttonStyle;
@@ -56,6 +64,7 @@ function Button({
     if (style === 'secondary') buttonStyle = secondary;
     if (style === 'outline') buttonStyle = outline;
     if (style === 'ghost') buttonStyle = ghost;
+    if (style === 'delete-ghost') buttonStyle = deleteGhostStyle;
     if (style === 'delete') buttonStyle = deleteStyle;
 
     return buttonStyle;

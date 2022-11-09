@@ -44,7 +44,7 @@ function InventoryTable({
       {inventory && Object.keys(inventory).length !== 0 && !error && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
-          <div className="pb-24 rounded-lg rounded-t-none">
+          <div className="pb-6 rounded-lg rounded-t-none">
             <table className="table-auto text-sm text-left bg-white text-gray-900 w-full">
               {!error && (
                 <thead className="sticky top-[73px] z-10 bg-white">
@@ -243,6 +243,7 @@ function InventoryTable({
               bulkItems={bulkItems}
               inventoryStats={inventoryStats}
               openBulkModal={openBulkModal}
+              query={query}
             />
           </div>
         </>
