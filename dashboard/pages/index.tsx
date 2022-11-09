@@ -111,6 +111,7 @@ export default function Inventory() {
         bulkSelectCheckbox={bulkSelectCheckbox}
         handleBulkSelection={handleBulkSelection}
         bulkItems={bulkItems}
+        onCheckboxChange={onCheckboxChange}
       />
 
       {/* Infite scroll trigger */}

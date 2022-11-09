@@ -1,7 +1,7 @@
 import providers from '../../../utils/providerHelper';
 import Button from '../../button/Button';
 import { InventoryItem, Pages, Tag } from '../hooks/useInventory';
-import TagWrapper from './TagWrapper';
+import InventoryTagWrapper from './InventoryTagWrapper';
 
 type InventorySidePanelProps = {
   closeModal: () => void;
@@ -100,7 +100,7 @@ function InventorySidePanel({
                 {tags &&
                   tags.map((tag, id) => (
                     <div key={id} className="flex gap-6">
-                      <TagWrapper
+                      <InventoryTagWrapper
                         tag={tag}
                         id={id}
                         handleChange={handleChange}

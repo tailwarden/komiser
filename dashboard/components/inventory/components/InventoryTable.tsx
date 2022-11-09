@@ -6,6 +6,7 @@ import SkeletonInventory from '../../skeleton/SkeletonInventory';
 import { InventoryItem } from '../hooks/useInventory';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
+import InventoryTableRow from './InventoryTableRow';
 
 type InventoryTableProps = {
   error: boolean;
@@ -17,6 +18,7 @@ type InventoryTableProps = {
   bulkSelectCheckbox: boolean;
   handleBulkSelection: (e: ChangeEvent<HTMLInputElement>) => void;
   bulkItems: [] | string[];
+  onCheckboxChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
 };
 
 function InventoryTable({
@@ -28,7 +30,8 @@ function InventoryTable({
   setQuery,
   bulkSelectCheckbox,
   handleBulkSelection,
-  bulkItems
+  bulkItems,
+  onCheckboxChange
 }: InventoryTableProps) {
   return (
     <>
@@ -48,7 +51,7 @@ function InventoryTable({
                         />
                       </div>
                     </th>
-                    <th className="py-4 px-6">Cloud</th>
+                    <th className="pl-4 pr-6">Cloud</th>
                     <th className="py-4 px-6">Service</th>
                     <th className="py-4 px-6">Name</th>
                     <th className="py-4 px-6">Region</th>
@@ -62,13 +65,27 @@ function InventoryTable({
                 {/* Inventory table */}
                 {!query &&
                   inventory.map(item => (
-                    <tr
+                    <InventoryTableRow
                       key={item.id}
-                      className="bg-white hover:bg-black-100/50 border-b border-black-200/30 last:border-none cursor-pointer"
+                      id={item.id}
+                      bulkItems={bulkItems}
                     >
+                      <td className="py-4 pl-6">
+                        <div className="flex items-center">
+                          <Checkbox
+                            checked={
+                              bulkItems &&
+                              !!bulkItems.find(
+                                currentId => currentId === item.id
+                              )
+                            }
+                            onChange={e => onCheckboxChange(e, item.id)}
+                          />
+                        </div>
+                      </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 min-w-[7rem]"
+                        className="py-4 pl-4 pr-6 min-w-[7rem] cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
                           <picture className="flex-shrink-0">
@@ -81,12 +98,15 @@ function InventoryTable({
                           <span>{item.provider}</span>
                         </div>
                       </td>
-                      <td onClick={() => openModal(item)} className="py-4 px-6">
+                      <td
+                        onClick={() => openModal(item)}
+                        className="py-4 px-6 cursor-pointer"
+                      >
                         <p className="w-12 xl:w-full">{item.service}</p>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 group relative"
+                        className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
                         <p className="w-48 truncate ...">{item.name}</p>
@@ -94,15 +114,21 @@ function InventoryTable({
                           {item.name}
                         </div>
                       </td>
-                      <td onClick={() => openModal(item)} className="py-4 px-6">
+                      <td
+                        onClick={() => openModal(item)}
+                        className="py-4 px-6 cursor-pointer"
+                      >
                         {item.region}
                       </td>
-                      <td onClick={() => openModal(item)} className="py-4 px-6">
+                      <td
+                        onClick={() => openModal(item)}
+                        className="py-4 px-6 cursor-pointer"
+                      >
                         {item.account}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap"
+                        className="py-4 px-6 whitespace-nowrap cursor-pointer"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -165,14 +191,14 @@ function InventoryTable({
                                       onClick={e => {
                                         setQuery(tag.key);
                                       }}
-                                      className="hover:text-secondary"
+                                      className="hover:text-secondary cursor-pointer"
                                     >
                                       {tag.key}:
                                     </span>
                                   </div>
                                   <span
                                     onClick={() => setQuery(tag.value)}
-                                    className="font-medium hover:text-secondary"
+                                    className="font-medium hover:text-secondary cursor-pointer"
                                   >
                                     {tag.value}
                                   </span>
@@ -182,20 +208,34 @@ function InventoryTable({
                           </div>
                         )}
                       </td>
-                    </tr>
+                    </InventoryTableRow>
                   ))}
 
                 {query &&
                   searchedInventory &&
                   Object.keys(searchedInventory).length !== 0 &&
                   searchedInventory.map(item => (
-                    <tr
+                    <InventoryTableRow
                       key={item.id}
-                      className="bg-white hover:bg-black-100/50 border-b border-black-200/30 last:border-none cursor-pointer"
+                      id={item.id}
+                      bulkItems={bulkItems}
                     >
+                      <td className="py-4 pl-6">
+                        <div className="flex items-center">
+                          <Checkbox
+                            checked={
+                              bulkItems &&
+                              !!bulkItems.find(
+                                currentId => currentId === item.id
+                              )
+                            }
+                            onChange={e => onCheckboxChange(e, item.id)}
+                          />
+                        </div>
+                      </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 min-w-[7rem]"
+                        className="py-4 pl-4 pr-6 min-w-[7rem] cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
                           <picture className="flex-shrink-0">
@@ -208,12 +248,15 @@ function InventoryTable({
                           <span>{item.provider}</span>
                         </div>
                       </td>
-                      <td onClick={() => openModal(item)} className="py-4 px-6">
+                      <td
+                        onClick={() => openModal(item)}
+                        className="py-4 px-6 cursor-pointer"
+                      >
                         <p className="w-12 xl:w-full">{item.service}</p>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 group relative"
+                        className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
                         <p className="w-48 truncate ...">{item.name}</p>
@@ -221,15 +264,21 @@ function InventoryTable({
                           {item.name}
                         </div>
                       </td>
-                      <td onClick={() => openModal(item)} className="py-4 px-6">
+                      <td
+                        onClick={() => openModal(item)}
+                        className="py-4 px-6 cursor-pointer"
+                      >
                         {item.region}
                       </td>
-                      <td onClick={() => openModal(item)} className="py-4 px-6">
+                      <td
+                        onClick={() => openModal(item)}
+                        className="py-4 px-6 cursor-pointer"
+                      >
                         {item.account}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap"
+                        className="py-4 px-6 whitespace-nowrap cursor-pointer"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -292,14 +341,14 @@ function InventoryTable({
                                       onClick={e => {
                                         setQuery(tag.key);
                                       }}
-                                      className="hover:text-secondary"
+                                      className="hover:text-secondary cursor-pointer"
                                     >
                                       {tag.key}:
                                     </span>
                                   </div>
                                   <span
                                     onClick={() => setQuery(tag.value)}
-                                    className="font-medium hover:text-secondary"
+                                    className="font-medium hover:text-secondary cursor-pointer"
                                   >
                                     {tag.value}
                                   </span>
@@ -309,7 +358,7 @@ function InventoryTable({
                           </div>
                         )}
                       </td>
-                    </tr>
+                    </InventoryTableRow>
                   ))}
               </tbody>
             </table>
