@@ -352,7 +352,6 @@ function useInventory() {
   function updateBulkTags(action?: 'delete') {
     if (!data && tags && bulkItems) {
       const payload = {
-        action: 'ADD_TAGS',
         resources: bulkItems,
         tags
       };
@@ -367,7 +366,7 @@ function useInventory() {
       console.log(payload);
       const payloadJSON = JSON.stringify(payload);
 
-      /* settingsService.bulkSaveTags(payloadJSON).then(res => {
+      settingsService.bulkSaveTags(payloadJSON).then(res => {
         if (res === Error) {
           setLoading(false);
           setDeleteLoading(false);
@@ -391,7 +390,7 @@ function useInventory() {
           setInventoryHasUpdate(true);
           closeModal();
         }
-      }); */
+      });
     }
   }
 
