@@ -47,8 +47,8 @@ function InventoryTable({
           <div className="pb-24 rounded-lg rounded-t-none">
             <table className="table-auto text-sm text-left bg-white text-gray-900 w-full">
               {!error && (
-                <thead>
-                  <tr className="border-b border-black-200/30">
+                <thead className="sticky top-[73px] z-10 bg-white">
+                  <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
                     <th className="py-4 pl-6">
                       <div className="flex items-center">
                         <Checkbox

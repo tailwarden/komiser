@@ -45,7 +45,7 @@ export default function Inventory() {
   } = useInventory();
 
   return (
-    <>
+    <div className="relative">
       <Head>
         <title>Inventory - Komiser</title>
         <meta name="description" content="Inventory - Komiser" />
@@ -136,6 +136,6 @@ export default function Inventory() {
         bulkItems={bulkItems}
         updateBulkTags={updateBulkTags}
       />
-    </>
+    </div>
   );
 }

@@ -55,7 +55,7 @@ function InventorySearchBar({
             onChange={e => setQuery(e.target.value)}
             type="text"
             placeholder="Search by tags, service, name, region..."
-            className="w-full py-4 pl-14 pr-6 text-sm bg-white text-black-900 placeholder:text-black-300 caret-secondary border-b border-black-150 focus:outline-none"
+            className="w-full py-4 pl-14 pr-6 text-sm bg-white text-black-900 placeholder:text-black-300 caret-secondary border-b border-black-200/30 focus:outline-none"
           />
         </div>
       )}
