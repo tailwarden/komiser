@@ -3,9 +3,10 @@ import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { InventoryItem } from '../hooks/useInventory';
+import { InventoryItem, InventoryStats } from '../hooks/useInventory';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
+import InventoryTableBulkActions from './InventoryTableBulkActions';
 import InventoryTableRow from './InventoryTableRow';
 import InventoryTableTags from './InventoryTableTags';
 
@@ -20,6 +21,8 @@ type InventoryTableProps = {
   handleBulkSelection: (e: ChangeEvent<HTMLInputElement>) => void;
   bulkItems: [] | string[];
   onCheckboxChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
+  inventoryStats: InventoryStats | undefined;
+  openBulkModal: (bulkItemsIds: string[]) => void;
 };
 
 function InventoryTable({
@@ -32,7 +35,9 @@ function InventoryTable({
   bulkSelectCheckbox,
   handleBulkSelection,
   bulkItems,
-  onCheckboxChange
+  onCheckboxChange,
+  inventoryStats,
+  openBulkModal
 }: InventoryTableProps) {
   return (
     <>
@@ -142,6 +147,7 @@ function InventoryTable({
                     </InventoryTableRow>
                   ))}
 
+                {/* Searched inventory table */}
                 {query &&
                   searchedInventory &&
                   Object.keys(searchedInventory).length !== 0 &&
@@ -231,6 +237,13 @@ function InventoryTable({
             {query && searchedInventory && searchedInventory.length === 0 && (
               <InventorySearchNoResults query={query} setQuery={setQuery} />
             )}
+
+            {/* Bulk actions sticky footer */}
+            <InventoryTableBulkActions
+              bulkItems={bulkItems}
+              inventoryStats={inventoryStats}
+              openBulkModal={openBulkModal}
+            />
           </div>
         </>
       )}

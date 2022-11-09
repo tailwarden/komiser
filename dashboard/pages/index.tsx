@@ -10,6 +10,7 @@ import useInventory from '../components/inventory/hooks/useInventory';
 import SkeletonInventory from '../components/skeleton/SkeletonInventory';
 import SkeletonStats from '../components/skeleton/SkeletonStats';
 import Toast from '../components/toast/Toast';
+import formatNumber from '../utils/formatNumber';
 
 export default function Inventory() {
   const router = useRouter();
@@ -112,10 +113,12 @@ export default function Inventory() {
         handleBulkSelection={handleBulkSelection}
         bulkItems={bulkItems}
         onCheckboxChange={onCheckboxChange}
+        inventoryStats={inventoryStats}
+        openBulkModal={openBulkModal}
       />
 
       {/* Infite scroll trigger */}
-      <div ref={reloadDiv}></div>
+      {/* <div ref={reloadDiv}></div> */}
 
       {/* Modal */}
       {isOpen && data && (
