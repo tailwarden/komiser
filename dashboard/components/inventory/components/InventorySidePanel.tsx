@@ -70,10 +70,10 @@ function InventorySidePanel({
                 <div className="flex flex-col gap-1 py-1">
                   <p className="font-medium text-black-900">
                     Managing tags for {formatNumber(bulkItems.length)}{' '}
-                    {bulkItems.length > 1 ? 'items' : 'item'}
+                    {bulkItems.length > 1 ? 'resources' : 'resource'}
                   </p>
                   <p className="text-xs text-black-300">
-                    All actions will overwrite previous tags for these items
+                    All actions will overwrite previous tags for these resources
                   </p>
                 </div>
               )}
@@ -235,11 +235,11 @@ function InventorySidePanel({
                         <p className="text-black-900 font-medium text-center">
                           Are you sure you want to delete all tags from{' '}
                           {formatNumber(bulkItems.length)}{' '}
-                          {bulkItems.length > 1 ? 'items' : 'item'}?
+                          {bulkItems.length > 1 ? 'resources' : 'resource'}?
                         </p>
                         <p className="text-sm text-black-400">
                           This is a permanent action, and it will also delete
-                          previous tags you have added to these items.
+                          previous tags you have added to these resources.
                         </p>
                       </div>
                       <div className="flex items-center justify-end gap-6">

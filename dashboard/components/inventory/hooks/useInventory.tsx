@@ -384,7 +384,7 @@ function useInventory() {
             title: `Tags have been ${!action ? 'saved' : 'deleted'}!`,
             message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${
               bulkItems.length
-            } ${bulkItems.length > 1 ? 'items' : 'item'}`
+            } ${bulkItems.length > 1 ? 'resources' : 'resource'}`
           });
           setInventoryHasUpdate(true);
           closeModal();

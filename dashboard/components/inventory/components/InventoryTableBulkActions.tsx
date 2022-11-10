@@ -20,7 +20,7 @@ function InventoryTableBulkActions({
       {bulkItems && bulkItems.length > 0 && (
         <div className="sticky flex items-center justify-between border-purplin-650 bottom-0 bg-gradient-to-r from-komiser-600 to-komiser-700 w-full py-4 px-6 text-sm">
           <p className="text-black-100">
-            {bulkItems.length} {bulkItems.length > 1 ? 'items' : 'item'}{' '}
+            {bulkItems.length} {bulkItems.length > 1 ? 'resources' : 'resource'}{' '}
             {inventoryStats &&
               !query &&
               `out of ${formatNumber(inventoryStats.resources)}`}{' '}
