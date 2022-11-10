@@ -57,7 +57,7 @@ function InventoryTable({
                         />
                       </div>
                     </th>
-                    <th className="pl-4 pr-6">Cloud</th>
+                    <th className="pl-2 pr-6">Cloud</th>
                     <th className="py-4 px-6">Service</th>
                     <th className="py-4 px-6">Name</th>
                     <th className="py-4 px-6">Region</th>
@@ -91,7 +91,7 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 pl-4 pr-6 min-w-[7rem] cursor-pointer"
+                        className="py-4 pl-2 pr-6 min-w-[7rem] cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
                           <picture className="flex-shrink-0">
@@ -115,7 +115,7 @@ function InventoryTable({
                         className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
-                        <p className="w-48 truncate ...">{item.name}</p>
+                        <p className="w-56 truncate ...">{item.name}</p>
                         <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
@@ -172,7 +172,7 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 pl-4 pr-6 min-w-[7rem] cursor-pointer"
+                        className="py-4 pl-2 pr-6 min-w-[7rem] cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
                           <picture className="flex-shrink-0">
@@ -196,7 +196,7 @@ function InventoryTable({
                         className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
-                        <p className="w-48 truncate ...">{item.name}</p>
+                        <p className="w-56 truncate ...">{item.name}</p>
                         <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>

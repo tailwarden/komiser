@@ -34,19 +34,20 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
             </svg>
             <span>{tags.length}</span>
           </div>
-          <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg right-6 top-11 z-10 bg-white py-3 px-4 shadow-lg">
+          <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg right-6 top-11 z-10 bg-black-900 py-3 px-4 shadow-lg">
             {tags.map((tag, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 text-xs border-t border-black-150 -mx-4 px-4 pt-2 first:pt-0 first:border-none"
+                className="flex items-center gap-2 text-xs border-t border-white/20 -mx-4 px-4 pt-2  text-black-200 first:pt-0 first:border-none"
               >
-                <div className="flex items-center gap-1 text-black-300">
+                <div className="flex items-center gap-1">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
                     height="14"
                     fill="none"
                     viewBox="0 0 24 24"
+                    className="text-black-400"
                   >
                     <path
                       stroke="currentColor"
@@ -66,14 +67,14 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                     onClick={e => {
                       setQuery(tag.key);
                     }}
-                    className="hover:text-secondary cursor-pointer"
+                    className="hover:text-primary cursor-pointer"
                   >
                     {tag.key}:
                   </span>
                 </div>
                 <span
                   onClick={() => setQuery(tag.value)}
-                  className="font-medium hover:text-secondary cursor-pointer"
+                  className="font-medium hover:text-primary cursor-pointer"
                 >
                   {tag.value}
                 </span>
