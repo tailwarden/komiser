@@ -35,11 +35,17 @@ export default function Inventory() {
     toast,
     dismissToast,
     deleteLoading,
-    reloadDiv
+    reloadDiv,
+    bulkItems,
+    onCheckboxChange,
+    handleBulkSelection,
+    bulkSelectCheckbox,
+    openBulkModal,
+    updateBulkTags
   } = useInventory();
 
   return (
-    <>
+    <div className="relative">
       <Head>
         <title>Inventory - Komiser</title>
         <meta name="description" content="Inventory - Komiser" />
@@ -102,27 +108,34 @@ export default function Inventory() {
         query={query}
         openModal={openModal}
         setQuery={setQuery}
+        bulkSelectCheckbox={bulkSelectCheckbox}
+        handleBulkSelection={handleBulkSelection}
+        bulkItems={bulkItems}
+        onCheckboxChange={onCheckboxChange}
+        inventoryStats={inventoryStats}
+        openBulkModal={openBulkModal}
       />
 
       {/* Infite scroll trigger */}
       <div ref={reloadDiv}></div>
 
       {/* Modal */}
-      {isOpen && data && (
-        <InventorySidePanel
-          closeModal={closeModal}
-          data={data}
-          goTo={goTo}
-          page={page}
-          updateTags={updateTags}
-          tags={tags}
-          handleChange={handleChange}
-          removeTag={removeTag}
-          addNewTag={addNewTag}
-          loading={loading}
-          deleteLoading={deleteLoading}
-        />
-      )}
-    </>
+      <InventorySidePanel
+        isOpen={isOpen}
+        closeModal={closeModal}
+        data={data!}
+        goTo={goTo}
+        page={page}
+        updateTags={updateTags}
+        tags={tags}
+        handleChange={handleChange}
+        removeTag={removeTag}
+        addNewTag={addNewTag}
+        loading={loading}
+        deleteLoading={deleteLoading}
+        bulkItems={bulkItems}
+        updateBulkTags={updateBulkTags}
+      />
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import settingsService from '../../../services/settingsService';
 import { Provider } from '../../../utils/providerHelper';
 import useToast from '../../toast/hooks/useToast';
@@ -51,6 +51,8 @@ function useInventory() {
   const [tags, setTags] = useState<Tag[]>();
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [bulkItems, setBulkItems] = useState<string[] | []>([]);
+  const [bulkSelectCheckbox, setBulkSelectCheckbox] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -171,6 +173,8 @@ function useInventory() {
     setSearchedInventory(undefined);
     setSkippedSearch(0);
     setShouldFetchMore(false);
+    setBulkItems([]);
+    setBulkSelectCheckbox(false);
 
     if (query) {
       setError(false);
@@ -261,6 +265,12 @@ function useInventory() {
     setIsOpen(true);
   }
 
+  function openBulkModal(bulkItemsIds: string[]) {
+    cleanModal();
+    setTags([{ key: '', value: '' }]);
+    setIsOpen(true);
+  }
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -339,6 +349,85 @@ function useInventory() {
     }
   }
 
+  function updateBulkTags(action?: 'delete') {
+    if (!data && tags && bulkItems) {
+      const payload = {
+        resources: bulkItems,
+        tags
+      };
+
+      if (!action) {
+        setLoading(true);
+      } else {
+        setDeleteLoading(true);
+        payload.tags = [];
+      }
+
+      const payloadJSON = JSON.stringify(payload);
+
+      settingsService.bulkSaveTags(payloadJSON).then(res => {
+        if (res === Error) {
+          setLoading(false);
+          setDeleteLoading(false);
+          setToast({
+            hasError: true,
+            title: `Tags were not ${!action ? 'saved' : 'deleted'}!`,
+            message: `There was an error ${
+              !action ? 'saving' : 'deleting'
+            } the tags. Please try again later.`
+          });
+        } else {
+          setLoading(false);
+          setDeleteLoading(false);
+          setToast({
+            hasError: false,
+            title: `Tags have been ${!action ? 'saved' : 'deleted'}!`,
+            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${
+              bulkItems.length
+            } ${bulkItems.length > 1 ? 'resources' : 'resource'}`
+          });
+          setInventoryHasUpdate(true);
+          closeModal();
+        }
+      });
+    }
+  }
+
+  function onCheckboxChange(e: ChangeEvent<HTMLInputElement>, id: string) {
+    if (e.target.checked) {
+      const newArray = [...bulkItems];
+      newArray.push(id);
+      setBulkItems(newArray);
+    } else {
+      const newArray = bulkItems.filter(currentId => currentId !== id);
+      setBulkItems(newArray);
+    }
+  }
+
+  function handleBulkSelection(e: ChangeEvent<HTMLInputElement>) {
+    if (inventory && e.target.checked && !query) {
+      const arrayOfIds = inventory.map(item => item.id);
+      setBulkItems(arrayOfIds);
+      setBulkSelectCheckbox(true);
+    }
+
+    if (inventory && !e.target.checked && !query) {
+      setBulkItems([]);
+      setBulkSelectCheckbox(false);
+    }
+
+    if (searchedInventory && e.target.checked && query) {
+      const arrayOfIds = searchedInventory.map(item => item.id);
+      setBulkItems(arrayOfIds);
+      setBulkSelectCheckbox(true);
+    }
+
+    if (searchedInventory && !e.target.checked && query) {
+      setBulkItems([]);
+      setBulkSelectCheckbox(false);
+    }
+  }
+
   return {
     inventoryStats,
     inventory,
@@ -361,7 +450,13 @@ function useInventory() {
     toast,
     dismissToast,
     deleteLoading,
-    reloadDiv
+    reloadDiv,
+    bulkItems,
+    onCheckboxChange,
+    handleBulkSelection,
+    bulkSelectCheckbox,
+    openBulkModal,
+    updateBulkTags
   };
 }
 

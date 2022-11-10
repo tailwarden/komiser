@@ -1,6 +1,6 @@
 function Navbar() {
   return (
-    <nav className="sticky top-0 z-10 w-full bg-white py-4 px-8 lg:px-24 flex items-center gap-10 justify-between">
+    <nav className="fixed top-0 z-20 w-full bg-white py-4 px-8 lg:px-24 flex items-center gap-10 justify-between border-b border-black-200/30">
       <picture className="shrink-0">
         <img
           src="./assets/img/komiser-logo.svg"

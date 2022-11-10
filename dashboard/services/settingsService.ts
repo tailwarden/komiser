@@ -99,6 +99,19 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async bulkSaveTags(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/tags`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

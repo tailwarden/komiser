@@ -2,13 +2,17 @@ import regex from '../../../utils/regex';
 import Input from '../../input/Input';
 import { Tag } from '../hooks/useInventory';
 
-type TagWrapperProps = {
+type InventoryTagWrapperProps = {
   tag: Tag;
   id: number;
   handleChange: (newData: Partial<Tag>, id?: number) => void;
 };
 
-function TagWrapper({ tag, id, handleChange }: TagWrapperProps) {
+function InventoryTagWrapper({
+  tag,
+  id,
+  handleChange
+}: InventoryTagWrapperProps) {
   return (
     <div className="flex-grow grid grid-cols-2 gap-6">
       <Input
@@ -35,4 +39,4 @@ function TagWrapper({ tag, id, handleChange }: TagWrapperProps) {
   );
 }
 
-export default TagWrapper;
+export default InventoryTagWrapper;
