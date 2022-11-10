@@ -4,28 +4,29 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
-	"github.com/gorilla/mux"
 	. "github.com/mlabouardy/komiser/models"
 	"github.com/uptrace/bun"
 )
 
-type ResourcesHandler struct {
+type ApiHandler struct {
 	db  *bun.DB
 	ctx context.Context
 }
 
-func NewResourcesHandler(ctx context.Context, db *bun.DB) *ResourcesHandler {
-	handler := ResourcesHandler{
+func NewApiHandler(ctx context.Context, db *bun.DB) *ApiHandler {
+	handler := ApiHandler{
 		db:  db,
 		ctx: ctx,
 	}
 	return &handler
 }
 
-func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ListResourcesHandler(w http.ResponseWriter, r *http.Request) {
 	resources := make([]Resource, 0)
 
 	limitRaw := r.URL.Query().Get("limit")
@@ -60,123 +61,73 @@ func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *
 	respondWithJSON(w, 200, resources)
 }
 
-func (handler *ResourcesHandler) StatsHandler(w http.ResponseWriter, r *http.Request) {
-	regions := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
+func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http.Request) {
+	var filters []Filter
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
-
-	resources := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &resources)
-
-	cost := struct {
-		Sum int `bun:"sum" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &cost)
-
-	output := struct {
-		Resources int `json:"resources"`
-		Regions   int `json:"regions"`
-		Costs     int `json:"costs"`
-	}{
-		Resources: resources.Count,
-		Regions:   regions.Count,
-		Costs:     cost.Sum,
-	}
-
-	respondWithJSON(w, 200, output)
-}
-
-func (handler *ResourcesHandler) RegionsCounterHandler(w http.ResponseWriter, r *http.Request) {
-	output := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &output)
-
-	respondWithJSON(w, 200, output)
-}
-
-func (handler *ResourcesHandler) ResourcesCounterHandler(w http.ResponseWriter, r *http.Request) {
-	output := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &output)
-
-	respondWithJSON(w, 200, output)
-}
-
-func (handler *ResourcesHandler) CostCounterHandler(w http.ResponseWriter, r *http.Request) {
-	output := struct {
-		Sum int `bun:"sum" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &output)
-
-	respondWithJSON(w, 200, output)
-}
-
-func (handler *ResourcesHandler) BulkUpdateTagsHandler(w http.ResponseWriter, r *http.Request) {
-	var input BulkUpdateTag
-
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := json.NewDecoder(r.Body).Decode(&filters)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	resource := Resource{Tags: input.Tags}
-
-	for _, resourceId := range input.Resources {
-		_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", resourceId).Exec(handler.ctx)
-		if err != nil {
-			respondWithError(w, http.StatusBadRequest, "Error while updating tags")
+	whereQueries := make([]string, 0)
+	for _, filter := range filters {
+		if filter.Field == "name" || filter.Field == "region" || filter.Field == "service" || filter.Field == "provider" || filter.Field == "account" {
+			switch filter.Operator {
+			case "IS":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("(%s IN (%s))", filter.Field, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "IS_NOT":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("(%s NOT IN (%s))", filter.Field, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "CONTAINS":
+				queries := make([]string, 0)
+				specialChar := "%"
+				for i := 0; i < len(filter.Values); i++ {
+					queries = append(queries, fmt.Sprintf("(%s LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " OR ")))
+			case "NOT_CONTAINS":
+				queries := make([]string, 0)
+				specialChar := "%"
+				for i := 0; i < len(filter.Values); i++ {
+					queries = append(queries, fmt.Sprintf("(%s NOT LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " AND ")))
+			case "IS_EMPTY":
+				whereQueries = append(whereQueries, "((coalesce(%s, '') = '')", filter.Field)
+			case "IS_NOT_EMPTY":
+				whereQueries = append(whereQueries, "((coalesce(%s, '') != '')", filter.Field)
+			default:
+				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				return
+			}
+		} else if strings.HasPrefix(filter.Field, "tag:") {
+			//key := strings.Replace(filter.Field, "tag:", "", -1)
+			log.Println("Tags filtering will be supported soon")
+		} else {
+			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
 			return
 		}
 	}
 
-	respondWithJSON(w, 200, "Tags has been successfuly updated")
-}
+	whereClause := strings.Join(whereQueries, " AND ")
 
-func (handler *ResourcesHandler) UpdateTagsHandler(w http.ResponseWriter, r *http.Request) {
-	tags := make([]Tag, 0)
-
-	vars := mux.Vars(r)
-	resourceId, ok := vars["id"]
-
-	if !ok {
-		respondWithError(w, http.StatusBadRequest, "Resource id is missing")
-		return
-	}
-
-	id, err := strconv.Atoi(resourceId)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Resource id should be an integer")
-		return
-	}
-
-	err = json.NewDecoder(r.Body).Decode(&tags)
+	resources := make([]Resource, 0)
+	err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s", whereClause)).Scan(handler.ctx, &resources)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	resource := Resource{Tags: tags}
-
-	_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", id).Exec(handler.ctx)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating tags")
-		return
-	}
-
-	respondWithJSON(w, 200, "Tags has been successfuly updated")
+	respondWithJSON(w, 200, resources)
 }
+
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJSON(w, code, map[string]string{"error": msg})
 }

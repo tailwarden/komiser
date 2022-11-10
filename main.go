@@ -120,9 +120,10 @@ func startServer(port int) {
 
 	r := mux.NewRouter()
 
-	resourcesHandler := NewResourcesHandler(context.Background(), db)
+	resourcesHandler := NewApiHandler(context.Background(), db)
 
 	r.HandleFunc("/resources", resourcesHandler.ListResourcesHandler)
+	r.HandleFunc("/resources/search", resourcesHandler.FilterResourcesHandler).Methods("POST")
 	r.HandleFunc("/resources/tags", resourcesHandler.BulkUpdateTagsHandler).Methods("POST")
 	r.HandleFunc("/resources/count", resourcesHandler.ResourcesCounterHandler)
 	r.HandleFunc("/resources/{id}/tags", resourcesHandler.UpdateTagsHandler).Methods("POST")

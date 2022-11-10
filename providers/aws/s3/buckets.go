@@ -13,7 +13,7 @@ import (
 
 func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	if client.AWSClient.Region != "us-east-1" {
+	if client.AWSClient.Region == "us-east-1" {
 		var config s3.ListBucketsInput
 		s3Client := s3.NewFromConfig(*client.AWSClient)
 		output, err := s3Client.ListBuckets(context.Background(), &config)
@@ -36,7 +36,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				}
 			}
 
-			resourceArn := fmt.Sprintf("arn:aws:s3:::%s", bucket.Name)
+			resourceArn := fmt.Sprintf("arn:aws:s3:::%s", *bucket.Name)
 
 			resources = append(resources, Resource{
 				Provider:   "AWS",
