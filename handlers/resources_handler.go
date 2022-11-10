@@ -51,10 +51,10 @@ func (handler *ResourcesHandler) ListResourcesHandler(w http.ResponseWriter, r *
 	}
 
 	if len(query) > 0 {
-		whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]') AND DATE(fetched_at) = CURRENT_DATE", query, query, query, query, query, query, query)
+		whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
 		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 	} else {
-		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE DATE(fetched_at) = CURRENT_DATE ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
+		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
 	}
 
 	respondWithJSON(w, 200, resources)
@@ -65,19 +65,19 @@ func (handler *ResourcesHandler) StatsHandler(w http.ResponseWriter, r *http.Req
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources WHERE DATE(fetched_at) = CURRENT_DATE) AS temp").Scan(handler.ctx, &regions)
+	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
 
 	resources := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources WHERE DATE(fetched_at) = CURRENT_DATE").Scan(handler.ctx, &resources)
+	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &resources)
 
 	cost := struct {
 		Sum int `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(count) FROM resources WHERE DATE(fetched_at) = CURRENT_DATE").Scan(handler.ctx, &cost)
+	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &cost)
 
 	output := struct {
 		Resources int `json:"resources"`
@@ -97,7 +97,7 @@ func (handler *ResourcesHandler) RegionsCounterHandler(w http.ResponseWriter, r 
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources WHERE DATE(fetched_at) = CURRENT_DATE) AS temp").Scan(handler.ctx, &output)
+	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &output)
 
 	respondWithJSON(w, 200, output)
 }
@@ -107,7 +107,7 @@ func (handler *ResourcesHandler) ResourcesCounterHandler(w http.ResponseWriter, 
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources WHERE DATE(fetched_at) = CURRENT_DATE").Scan(handler.ctx, &output)
+	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &output)
 
 	respondWithJSON(w, 200, output)
 }
@@ -117,7 +117,7 @@ func (handler *ResourcesHandler) CostCounterHandler(w http.ResponseWriter, r *ht
 		Sum int `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(count) FROM resources WHERE DATE(fetched_at) = CURRENT_DATE").Scan(handler.ctx, &output)
+	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &output)
 
 	respondWithJSON(w, 200, output)
 }

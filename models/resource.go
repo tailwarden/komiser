@@ -24,6 +24,6 @@ type Tag struct {
 }
 
 type BulkUpdateTag struct {
-	Tags      []Tag    `json:"tags"`
-	Resources []string `json:"resources"`
+	Tags      []Tag `json:"tags"`
+	Resources []int `json:"resources"`
 }
