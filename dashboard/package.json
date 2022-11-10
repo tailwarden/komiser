@@ -7,7 +7,7 @@
     "build": "next build && next export",
     "start": "next start -p 3002",
     "lint": "next lint",
-    "prepare": "cd .. && husky install dashboard/.husky"
+    "prepare": "husky install ."
   },
   "dependencies": {
     "@types/node": "18.11.9",
