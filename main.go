@@ -127,7 +127,10 @@ func startServer(port int) {
 	r.HandleFunc("/resources/tags", resourcesHandler.BulkUpdateTagsHandler).Methods("POST")
 	r.HandleFunc("/resources/count", resourcesHandler.ResourcesCounterHandler)
 	r.HandleFunc("/resources/{id}/tags", resourcesHandler.UpdateTagsHandler).Methods("POST")
-	r.HandleFunc("/regions", resourcesHandler.RegionsCounterHandler)
+	r.HandleFunc("/regions", resourcesHandler.ListRegionsHandler)
+	r.HandleFunc("/providers", resourcesHandler.ListProvidersHandler)
+	r.HandleFunc("/services", resourcesHandler.ListServicesHandler)
+	r.HandleFunc("/accounts", resourcesHandler.ListAccountsHandler)
 	r.HandleFunc("/costs", resourcesHandler.CostCounterHandler)
 	r.HandleFunc("/stats", resourcesHandler.StatsHandler)
 

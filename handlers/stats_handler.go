@@ -34,14 +34,76 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 	respondWithJSON(w, 200, output)
 }
 
-func (handler *ApiHandler) RegionsCounterHandler(w http.ResponseWriter, r *http.Request) {
-	output := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
+func (handler *ApiHandler) ListRegionsHandler(w http.ResponseWriter, r *http.Request) {
+	type Output struct {
+		Region string `bun:"region" json:"region"`
+	}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &output)
+	outputs := make([]Output, 0)
 
-	respondWithJSON(w, 200, output)
+	handler.db.NewRaw("SELECT DISTINCT(region) FROM resources").Scan(handler.ctx, &outputs)
+
+	regions := make([]string, 0)
+
+	for _, o := range outputs {
+		regions = append(regions, o.Region)
+	}
+
+	respondWithJSON(w, 200, regions)
+}
+
+func (handler *ApiHandler) ListProvidersHandler(w http.ResponseWriter, r *http.Request) {
+	type Output struct {
+		Provider string `bun:"provider" json:"provider"`
+	}
+
+	outputs := make([]Output, 0)
+
+	handler.db.NewRaw("SELECT DISTINCT(provider) FROM resources").Scan(handler.ctx, &outputs)
+
+	providers := make([]string, 0)
+
+	for _, o := range outputs {
+		providers = append(providers, o.Provider)
+	}
+
+	respondWithJSON(w, 200, providers)
+}
+
+func (handler *ApiHandler) ListServicesHandler(w http.ResponseWriter, r *http.Request) {
+	type Output struct {
+		Service string `bun:"service" json:"service"`
+	}
+
+	outputs := make([]Output, 0)
+
+	handler.db.NewRaw("SELECT DISTINCT(service) FROM resources").Scan(handler.ctx, &outputs)
+
+	services := make([]string, 0)
+
+	for _, o := range outputs {
+		services = append(services, o.Service)
+	}
+
+	respondWithJSON(w, 200, services)
+}
+
+func (handler *ApiHandler) ListAccountsHandler(w http.ResponseWriter, r *http.Request) {
+	type Output struct {
+		Account string `bun:"account" json:"account"`
+	}
+
+	outputs := make([]Output, 0)
+
+	handler.db.NewRaw("SELECT DISTINCT(account) FROM resources").Scan(handler.ctx, &outputs)
+
+	accounts := make([]string, 0)
+
+	for _, o := range outputs {
+		accounts = append(accounts, o.Account)
+	}
+
+	respondWithJSON(w, 200, accounts)
 }
 
 func (handler *ApiHandler) ResourcesCounterHandler(w http.ResponseWriter, r *http.Request) {
