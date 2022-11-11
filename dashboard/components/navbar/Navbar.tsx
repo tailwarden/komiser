@@ -4,7 +4,7 @@ function Navbar() {
       <picture className="shrink-0">
         <img
           src="./assets/img/komiser-logo.svg"
-          className="w-36"
+          className="w-28"
           alt="Komiser logo"
         />
       </picture>

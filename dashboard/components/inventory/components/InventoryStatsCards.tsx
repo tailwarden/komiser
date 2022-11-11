@@ -42,7 +42,9 @@ function InventoryStatsCards({
               </svg>
             </div>
             <div className="flex flex-col peer">
-              <p className="text-xl font-medium">{inventoryStats.resources}</p>
+              <p className="text-xl font-medium">
+                {formatNumber(inventoryStats.resources, 'full')}
+              </p>
               <p className="text-sm text-black-300">Resources</p>
             </div>
             <Tooltip>Number of active cloud services</Tooltip>
