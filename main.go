@@ -40,6 +40,7 @@ func setupSchema(uri string) {
 	db = bun.NewDB(sqldb, pgdialect.New())
 
 	db.NewCreateTable().Model((*Resource)(nil)).IfNotExists().Exec(context.Background())
+	db.NewCreateTable().Model((*View)(nil)).IfNotExists().Exec(context.Background())
 }
 
 func loadCloudAccounts(komiserConfig ConfigFile) {
@@ -120,19 +121,26 @@ func startServer(port int) {
 
 	r := mux.NewRouter()
 
-	resourcesHandler := NewApiHandler(context.Background(), db)
+	api := NewApiHandler(context.Background(), db)
 
-	r.HandleFunc("/resources", resourcesHandler.ListResourcesHandler)
-	r.HandleFunc("/resources/search", resourcesHandler.FilterResourcesHandler).Methods("POST")
-	r.HandleFunc("/resources/tags", resourcesHandler.BulkUpdateTagsHandler).Methods("POST")
-	r.HandleFunc("/resources/count", resourcesHandler.ResourcesCounterHandler)
-	r.HandleFunc("/resources/{id}/tags", resourcesHandler.UpdateTagsHandler).Methods("POST")
-	r.HandleFunc("/regions", resourcesHandler.ListRegionsHandler)
-	r.HandleFunc("/providers", resourcesHandler.ListProvidersHandler)
-	r.HandleFunc("/services", resourcesHandler.ListServicesHandler)
-	r.HandleFunc("/accounts", resourcesHandler.ListAccountsHandler)
-	r.HandleFunc("/costs", resourcesHandler.CostCounterHandler)
-	r.HandleFunc("/stats", resourcesHandler.StatsHandler)
+	r.HandleFunc("/resources", api.ListResourcesHandler)
+	r.HandleFunc("/resources/search", api.FilterResourcesHandler).Methods("POST")
+	r.HandleFunc("/resources/tags", api.BulkUpdateTagsHandler).Methods("POST")
+	r.HandleFunc("/resources/count", api.ResourcesCounterHandler)
+	r.HandleFunc("/resources/{id}/tags", api.UpdateTagsHandler).Methods("POST")
+
+	r.HandleFunc("/views", api.ListViewsHandler).Methods("GET")
+	r.HandleFunc("/views", api.NewViewHandler).Methods("POST")
+	r.HandleFunc("/views/{id}", api.GetViewHandler).Methods("GET")
+	r.HandleFunc("/views/{id}", api.UpdateViewHandler).Methods("PUT")
+	r.HandleFunc("/views/{id}", api.DeleteViewHandler).Methods("DELETE")
+
+	r.HandleFunc("/regions", api.ListRegionsHandler)
+	r.HandleFunc("/providers", api.ListProvidersHandler)
+	r.HandleFunc("/services", api.ListServicesHandler)
+	r.HandleFunc("/accounts", api.ListAccountsHandler)
+	r.HandleFunc("/costs", api.CostCounterHandler)
+	r.HandleFunc("/stats", api.StatsHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
