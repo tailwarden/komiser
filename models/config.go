@@ -1,6 +1,6 @@
 package models
 
-type ConfigFile struct {
+type Config struct {
 	AWS          []AWSConfig
 	DigitalOcean []DigitalOceanConfig
 	Oci          []OciConfig

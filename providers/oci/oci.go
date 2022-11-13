@@ -4,20 +4,20 @@ import (
 	"context"
 	"log"
 
-	. "github.com/mlabouardy/komiser/providers"
-	. "github.com/mlabouardy/komiser/providers/oci/compute"
+	"github.com/mlabouardy/komiser/providers"
+	"github.com/mlabouardy/komiser/providers/oci/compute"
 	"github.com/uptrace/bun"
 )
 
-func listOfSupportedServices() []FetchDataFunction {
-	return []FetchDataFunction{
-		Instances,
+func listOfSupportedServices() []providers.FetchDataFunction {
+	return []providers.FetchDataFunction{
+		compute.Instances,
 	}
 }
 
-func FetchOciData(ctx context.Context, client ProviderClient, db *bun.DB) {
-	for _, function := range listOfSupportedServices() {
-		resources, err := function(ctx, client)
+func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB) {
+	for _, fetchResources := range listOfSupportedServices() {
+		resources, err := fetchResources(ctx, client)
 		if err != nil {
 			log.Printf("[%s][OCI] %s", client.Name, err)
 		} else {

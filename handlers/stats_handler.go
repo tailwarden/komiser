@@ -125,3 +125,7 @@ func (handler *ApiHandler) CostCounterHandler(w http.ResponseWriter, r *http.Req
 
 	respondWithJSON(w, 200, output)
 }
+
+func (handler *ApiHandler) EnableTrackingHandler(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, 200, map[string]bool{"tracking": !handler.noTracking})
+}

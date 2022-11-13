@@ -14,14 +14,16 @@ import (
 )
 
 type ApiHandler struct {
-	db  *bun.DB
-	ctx context.Context
+	db         *bun.DB
+	ctx        context.Context
+	noTracking bool
 }
 
-func NewApiHandler(ctx context.Context, db *bun.DB) *ApiHandler {
+func NewApiHandler(ctx context.Context, noTracking bool, db *bun.DB) *ApiHandler {
 	handler := ApiHandler{
-		db:  db,
-		ctx: ctx,
+		db:         db,
+		ctx:        ctx,
+		noTracking: noTracking,
 	}
 	return &handler
 }

@@ -46,35 +46,31 @@ jobs:
          command: mv /tmp/dashboard/out .
       - run:
          name: Create assets
-         command: go-bindata-assetfs -o template.go out/...
-      - run:
-         name: Install gox
-         command: go install github.com/mitchellh/gox@latest
+         command: |
+            go-bindata-assetfs -o internal/api/v1/template.go out/...
+            sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
       - run:
          name: Build binary
-         no_output_timeout: 20m
          command: |
-            gox -osarch="linux/amd64"
-            gox -osarch="windows/amd64" 
-            gox -osarch="darwin/amd64"
+            make build
+            make package
       - run:
          name: Install AWS CLI
          command: |
           apt-get update
           apt-get install -y awscli
-          chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
+          chmod +x bin/komiser_windows_amd64.exe bin/komiser_darwin_amd64 bin/komiser_darwin_arm64 bin/komiser_linux_amd64
       - run:
           name: Push Linux binary
-          command: aws s3 cp komiser_linux_amd64 s3://komiser-releases/3.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp bin/komiser_linux_amd64 s3://komiser-releases/3.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Windows binary
-          command: aws s3 cp komiser_windows_amd64.exe s3://komiser-releases/3.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp bin/komiser_windows_amd64.exe s3://komiser-releases/3.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Mac OS X binary
-          command: aws s3 cp komiser_darwin_amd64 s3://komiser-releases/3.0.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-      - run:
-          name: Upload IAM policy
-          command: aws s3 cp policy.json s3://komiser-releases/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: |
+            aws s3 cp bin/komiser_darwin_amd64 s3://komiser-releases/3.0.0/osx/amd/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+            aws s3 cp bin/komiser_darwin_arm64 s3://komiser-releases/3.0.0/osx/arm/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
   build_docker:
     docker:

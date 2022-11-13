@@ -1,10 +1,11 @@
-package instances
+package ec2
 
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -76,6 +77,6 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		nextToken = *output.NextToken
 	}
-	log.Printf("[%s] Fetched %d AWS EC2 instances from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.Debugf("[%s] Fetched %d AWS EC2 instances from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

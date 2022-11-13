@@ -1,10 +1,11 @@
-package instances
+package s3
 
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	. "github.com/mlabouardy/komiser/models"
@@ -52,6 +53,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 		}
 	}
-	log.Printf("[%s] Fetched %d AWS S3 buckets from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.Debugf("[%s] Fetched %d AWS S3 buckets from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

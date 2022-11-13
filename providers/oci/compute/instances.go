@@ -1,16 +1,17 @@
-package droplets
+package compute
 
 import (
 	"context"
-	"log"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	"github.com/mlabouardy/komiser/providers"
 	"github.com/oracle/oci-go-sdk/core"
 )
 
-func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Instances(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	computeClient, err := core.NewComputeClientWithConfigurationProvider(client.OciClient)
 	if err != nil {
@@ -54,6 +55,6 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		})
 	}
 
-	log.Printf("[%s] Fetched %d DigitalOcean Droplets\n", client.Name, len(resources))
+	log.Debugf("[%s] Fetched %d DigitalOcean Droplets\n", client.Name, len(resources))
 	return resources, nil
 }

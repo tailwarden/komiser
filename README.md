@@ -45,8 +45,8 @@ brew install komiser
     - [Connect Komiser CLI to your AWS account.](#connect-komiser-cli-to-your-aws-account)
     - [Deploy Komiser to single account access EKS cluster (Helm chart)](#deploy-komiser-to-single-account-access-eks-cluster-helm-chart)
     - [Deploy Komiser to a multi account access EKS cluster (Helm chart)](#deploy-komiser-to-a-multi-account-access-eks-cluster-helm-chart)
-  - [Installtion on GCP](#installtion-on-gcp)
-  - [Instalation on Azure](#instalation-on-azure)
+  - [Installation on GCP](#installation-on-gcp)
+  - [Installation on Azure](#installation-on-azure)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
   - [Installation on OVH](#installation-on-ovh)
 - [Documentation](#documentation)
@@ -59,7 +59,7 @@ brew install komiser
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # What is Komiser?
-Komiser is an open source project created in 2017. Created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
+Komiser is an open source project created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
 * Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
 * Get a deep understanding of **how you spend** on the AWS, GCP, OVH, DigitalOcean and Azure.
@@ -85,11 +85,11 @@ Below are the available downloads for the latest version of Komiser (2.11.0). Pl
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
 * If you are would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#multiple-account-eks-helm-chart-installation).
 
-## Installtion on GCP 
+## Installation on GCP 
 
 Connect a local deployment of Komiser CLI to your [**GCP**](https://docs.komiser.io/docs/Cloud%20Providers/gcp) account.
 
-## Instalation on Azure
+## Installation on Azure
 
 Connect a local deployment of Komiser CLI to you [**Azure**](https://docs.komiser.io/docs/Cloud%20Providers/azure) account.
 

@@ -1,10 +1,11 @@
-package instances
+package ecs
 
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
@@ -13,7 +14,7 @@ import (
 	. "github.com/mlabouardy/komiser/providers"
 )
 
-func EcsClusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config ecs.ListClustersInput
 	ecsClient := ecs.NewFromConfig(*client.AWSClient)
@@ -53,6 +54,6 @@ func EcsClusters(ctx context.Context, client ProviderClient) ([]Resource, error)
 
 		config.NextToken = output.NextToken
 	}
-	log.Printf("[%s] Fetched %d AWS ECS clusters from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.Debugf("[%s] Fetched %d AWS ECS clusters from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

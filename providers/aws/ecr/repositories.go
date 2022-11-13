@@ -1,9 +1,10 @@
-package instances
+package ecr
 
 import (
 	"context"
-	"log"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
@@ -56,6 +57,6 @@ func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error
 
 		config.NextToken = output.NextToken
 	}
-	log.Printf("[%s] Fetched %d AWS ECR repositories from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.Debugf("[%s] Fetched %d AWS ECR repositories from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

@@ -4,20 +4,20 @@ import (
 	"context"
 	"log"
 
-	. "github.com/mlabouardy/komiser/providers"
-	. "github.com/mlabouardy/komiser/providers/digitalocean/droplets"
+	"github.com/mlabouardy/komiser/providers"
+	"github.com/mlabouardy/komiser/providers/digitalocean/droplets"
 	"github.com/uptrace/bun"
 )
 
-func listOfSupportedServices() []FetchDataFunction {
-	return []FetchDataFunction{
-		Droplets,
+func listOfSupportedServices() []providers.FetchDataFunction {
+	return []providers.FetchDataFunction{
+		droplets.Droplets,
 	}
 }
 
-func FetchDigitalOceanData(ctx context.Context, client ProviderClient, db *bun.DB) {
-	for _, function := range listOfSupportedServices() {
-		resources, err := function(ctx, client)
+func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB) {
+	for _, fetchResources := range listOfSupportedServices() {
+		resources, err := fetchResources(ctx, client)
 		if err != nil {
 			log.Printf("[%s][DigitalOcean] %s", client.Name, err)
 		} else {

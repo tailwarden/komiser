@@ -1,10 +1,11 @@
-package instances
+package dynamodb
 
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -58,6 +59,6 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			FetchedAt:  time.Now(),
 		})
 	}
-	log.Printf("[%s] Fetched %d AWS DynamoDB tables from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.Debugf("[%s] Fetched %d AWS DynamoDB tables from %s\n", client.Name, len(resources), client.AWSClient.Region)
 	return resources, nil
 }

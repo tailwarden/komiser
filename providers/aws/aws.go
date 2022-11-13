@@ -2,49 +2,55 @@ package aws
 
 import (
 	"context"
-	"log"
 
-	. "github.com/mlabouardy/komiser/providers"
-	. "github.com/mlabouardy/komiser/providers/aws/cloudfront"
-	. "github.com/mlabouardy/komiser/providers/aws/dynamodb"
-	. "github.com/mlabouardy/komiser/providers/aws/ec2"
-	. "github.com/mlabouardy/komiser/providers/aws/ecr"
-	. "github.com/mlabouardy/komiser/providers/aws/ecs"
-	. "github.com/mlabouardy/komiser/providers/aws/eks"
-	. "github.com/mlabouardy/komiser/providers/aws/iam"
-	. "github.com/mlabouardy/komiser/providers/aws/lambda"
-	. "github.com/mlabouardy/komiser/providers/aws/s3"
-	. "github.com/mlabouardy/komiser/providers/aws/sns"
-	. "github.com/mlabouardy/komiser/providers/aws/sqs"
+	log "github.com/sirupsen/logrus"
+
+	"github.com/mlabouardy/komiser/providers"
+	"github.com/mlabouardy/komiser/providers/aws/cloudfront"
+	"github.com/mlabouardy/komiser/providers/aws/dynamodb"
+	"github.com/mlabouardy/komiser/providers/aws/ec2"
+	"github.com/mlabouardy/komiser/providers/aws/ecr"
+	"github.com/mlabouardy/komiser/providers/aws/ecs"
+	"github.com/mlabouardy/komiser/providers/aws/eks"
+	"github.com/mlabouardy/komiser/providers/aws/iam"
+	"github.com/mlabouardy/komiser/providers/aws/lambda"
+	"github.com/mlabouardy/komiser/providers/aws/s3"
+	"github.com/mlabouardy/komiser/providers/aws/sns"
+	"github.com/mlabouardy/komiser/providers/aws/sqs"
 	"github.com/uptrace/bun"
 )
 
-func listOfSupportedServices() []FetchDataFunction {
-	return []FetchDataFunction{
-		Instances,
-		Functions,
-		Buckets,
-		SecurityGroups,
-		Roles,
-		KubernetesClusters,
-		Distributions,
-		Tables,
-		Tasks,
-		Services,
-		EcsClusters,
-		Repositories,
-		Topics,
-		Queues,
+func listOfSupportedServices() []providers.FetchDataFunction {
+	return []providers.FetchDataFunction{
+		ec2.Instances,
+		lambda.Functions,
+		s3.Buckets,
+		ec2.SecurityGroups,
+		iam.Roles,
+		eks.KubernetesClusters,
+		cloudfront.Distributions,
+		dynamodb.Tables,
+		ecs.Tasks,
+		ecs.Services,
+		ecs.Clusters,
+		ecr.Repositories,
+		sns.Topics,
+		sqs.Queues,
 	}
 }
 
-func FetchAwsData(ctx context.Context, client ProviderClient, db *bun.DB) {
-	for _, region := range getRegions() {
+func FetchResources(ctx context.Context, client providers.ProviderClient, regions []string, db *bun.DB) {
+	listOfSupportedRegions := getRegions()
+	if len(regions) > 0 {
+		listOfSupportedRegions = regions
+	}
+
+	for _, region := range listOfSupportedRegions {
 		client.AWSClient.Region = region
-		for _, function := range listOfSupportedServices() {
-			resources, err := function(ctx, client)
+		for _, fetchResources := range listOfSupportedServices() {
+			resources, err := fetchResources(ctx, client)
 			if err != nil {
-				log.Printf("[%s][AWS] %s", client.Name, err)
+				log.Warn("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
 					db.NewInsert().Model(&resource).Exec(context.Background())

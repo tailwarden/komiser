@@ -3,16 +3,17 @@ package droplets
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/digitalocean/godo"
 	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	"github.com/mlabouardy/komiser/providers"
 )
 
-func Droplets(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Droplets(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	droplets, _, _ := client.DigitalOceanClient.Droplets.List(ctx, &godo.ListOptions{})
 
@@ -46,6 +47,6 @@ func Droplets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		})
 	}
 
-	log.Printf("[%s] Fetched %d DigitalOcean Droplets\n", client.Name, len(resources))
+	log.Debugf("[%s] Fetched %d DigitalOcean Droplets\n", client.Name, len(resources))
 	return resources, nil
 }
