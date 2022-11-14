@@ -42,12 +42,12 @@ func Exec(port int, configPath string, noTracking bool, regions []string, cmd *c
 		return err
 	}
 
-	go func() error {
-		err = setupSchema(cfg)
-		if err != nil {
-			return err
-		}
+	err = setupSchema(cfg)
+	if err != nil {
+		return err
+	}
 
+	go func() error {
 		err = fetchResources(context.Background(), clients, regions)
 		if err != nil {
 			return err
@@ -85,6 +85,7 @@ func runServer(port int, noTracking bool) error {
 }
 
 func setupSchema(c *Config) error {
+	fmt.Println(c.Postgres.URI)
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
 	db = bun.NewDB(sqldb, pgdialect.New())
 
@@ -97,6 +98,8 @@ func setupSchema(c *Config) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("schema setup")
 
 	return nil
 }
