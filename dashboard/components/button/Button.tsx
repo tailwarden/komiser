@@ -13,6 +13,8 @@ export type ButtonProps = {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
+  align?: 'left';
+  gap?: 'md';
   onClick?: (e?: any) => void;
 };
 
@@ -23,10 +25,12 @@ function Button({
   size = 'md',
   disabled,
   loading,
+  align,
+  gap,
   onClick
 }: ButtonProps) {
   const xs = 'p-3';
-  const sm = 'h-[2.5rem] px-6';
+  const sm = 'h-[2.5rem] px-4';
   const md = 'h-[3rem] px-6';
   const lg = 'h-[3.75rem] px-6';
 
@@ -43,7 +47,9 @@ function Button({
 
   const base = `${handleSize()} ${
     size === 'lg' ? 'rounded' : 'rounded-lg'
-  } flex items-center justify-center gap-2  text-sm font-medium box-border w-full sm:w-auto disabled:cursor-not-allowed transition-all`;
+  } flex items-center ${align ? 'justify-start' : 'justify-center '} ${
+    gap ? 'gap-4' : 'gap-2'
+  }  text-sm font-medium box-border w-full sm:w-auto disabled:cursor-not-allowed transition-all`;
 
   const primary = `${base} bg-komiser-600 hover:bg-komiser-700 text-white active:bg-secondary disabled:bg-komiser-600/30`;
 
