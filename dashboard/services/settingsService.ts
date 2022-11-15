@@ -112,6 +112,55 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getProviders() {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/providers`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getAccounts() {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/accounts`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getRegions() {
+    try {
+      const res = await fetch(`${BASE_URL}/resources/regions`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getServices() {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/services`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 
