@@ -104,9 +104,9 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " AND ")))
 			case "IS_EMPTY":
-				whereQueries = append(whereQueries, "((coalesce(%s, '') = '')", filter.Field)
+				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') = ''))", filter.Field))
 			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, "((coalesce(%s, '') != '')", filter.Field)
+				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
@@ -121,6 +121,8 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 	}
 
 	whereClause := strings.Join(whereQueries, " AND ")
+
+	fmt.Println(whereClause)
 
 	resources := make([]Resource, 0)
 	err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s", whereClause)).Scan(handler.ctx, &resources)
