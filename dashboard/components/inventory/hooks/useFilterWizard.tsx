@@ -31,6 +31,7 @@ function useFilterWizard() {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
+  const [loading, setLoading] = useState(false);
 
   function resetData() {
     setStep(0);
@@ -81,14 +82,17 @@ function useFilterWizard() {
   }
 
   function filter() {
+    setLoading(true);
     const payload = [data];
     const payloadJson = JSON.stringify(payload);
 
     settingsService.getFilteredInventory(payloadJson).then(res => {
       if (res === Error) {
         console.log(res);
+        setLoading(false);
       } else {
         console.log(res);
+        setLoading(false);
       }
     });
   }
@@ -104,7 +108,8 @@ function useFilterWizard() {
     data,
     resetData,
     cleanValues,
-    filter
+    filter,
+    loading
   };
 }
 

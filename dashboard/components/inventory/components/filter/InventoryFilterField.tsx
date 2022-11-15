@@ -1,5 +1,5 @@
 import Button from '../../../button/Button';
-import inventoryFilterOptions from './InventoryFilterFieldOptions';
+import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterFieldProps = {
   handleField: (field: string) => void;
@@ -8,7 +8,7 @@ type InventoryFilterFieldProps = {
 function InventoryFilterField({ handleField }: InventoryFilterFieldProps) {
   return (
     <>
-      {inventoryFilterOptions.map((option, idx) => (
+      {inventoryFilterFieldOptions.map((option, idx) => (
         <Button
           key={idx}
           size="sm"

@@ -1,6 +1,8 @@
 import Button from '../../../button/Button';
 import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
-import inventoryFilterOptions from './InventoryFilterFieldOptions';
+import inventoryFilterFieldOptions, {
+  InventoryFilterFieldOptionsProps
+} from './InventoryFilterFieldOptions';
 
 type InventoryFilterSummaryProps = {
   data: InventoryFilterDataProps;
@@ -11,41 +13,70 @@ function InventoryFilterSummary({
   data,
   resetData
 }: InventoryFilterSummaryProps) {
-  const index = inventoryFilterOptions.findIndex(
+  const index = inventoryFilterFieldOptions.findIndex(
     option => option.value === data.field
   );
 
-  function getData(param: 'icon' | 'label') {
-    if (param === 'icon') return inventoryFilterOptions[index].icon;
-    if (param === 'label') return inventoryFilterOptions[index].label;
+  function getField(param: 'icon' | 'label') {
+    if (param === 'icon') return inventoryFilterFieldOptions[index].icon;
+    if (param === 'label') return inventoryFilterFieldOptions[index].label;
+    return param;
+  }
+
+  function getOperator(param: InventoryFilterDataProps['operator']) {
+    if (param === 'IS') return 'is';
+    if (param === 'IS_NOT') return 'is not';
+    if (param === 'CONTAINS') return 'contains';
+    if (param === 'NOT_CONTAINS') return 'does not contain';
+    if (param === 'IS_EMPTY') return 'is empty';
+    if (param === 'IS_NOT_EMPTY') return 'is not empty';
     return param;
   }
 
   return (
-    <div className="flex justify-between gap-4 bg-black-100 text-black-900 p-2 text-xs rounded mb-2">
-      <div className="flex items-center gap-1">
-        <div className="scale-75">{getData('icon')}</div>
-        <p>{getData('label')}</p>
-        <p>{data.operator}</p>
-        <p>{data.values?.map(value => value)}</p>
+    <div className="relative flex bg-black-100 text-black-900/70 p-2 pr-12 text-xs rounded mb-2 max-w-[calc(100vw-250px)] md:max-w-[calc(100vw-400px)] overflow-hidden">
+      <div className="absolute bottom-[.35rem] right-1 bg-black-100">
+        <Button size="xs" style="ghost" onClick={resetData}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
+            ></path>
+          </svg>
+        </Button>
       </div>
-      <Button size="xs" style="ghost" onClick={resetData}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
-          ></path>
-        </svg>
-      </Button>
+      <div className="flex items-center gap-1 whitespace-nowrap">
+        <div className="scale-75">{getField('icon')}</div>
+        <p>{getField('label')}</p>
+        {data.operator && (
+          <>
+            <span>:</span>
+            <span className="font-medium text-black-900">
+              {getOperator(data.operator)}
+            </span>
+          </>
+        )}
+        {data.values &&
+          data.values.length > 0 &&
+          data.values.map((value, idx) => (
+            <p key={idx}>
+              {idx === 0 && <span className="mr-1">:</span>}
+              <span>{value}</span>
+              {data.values.length > 1 && idx < data.values.length - 1 && (
+                <span className="ml-1 font-medium text-black-900">or</span>
+              )}
+            </p>
+          ))}
+      </div>
     </div>
   );
 }

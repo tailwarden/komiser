@@ -17,7 +17,8 @@ function InventoryFilter() {
     data,
     resetData,
     cleanValues,
-    filter
+    filter,
+    loading
   } = useFilterWizard();
 
   return (
@@ -56,71 +57,85 @@ function InventoryFilter() {
             onClick={toggle}
             className="hidden sm:block fixed inset-0 z-20 bg-transparent opacity-0 animate-fade-in"
           ></div>
-          <div className="absolute flex flex-col min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
-            <div className="flex gap-2 text-black-300">
-              <p
-                className={`cursor-pointer ${
-                  step === 0
-                    ? 'text-black-900 hover:text-black-900'
-                    : 'hover:text-black-400'
-                }`}
-                onClick={() => goTo(0)}
-              >
-                Fields
-              </p>
-              {step !== 0 && (
+          <div className="absolute inline-flex min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
+            <div className="flex flex-col w-full">
+              <div className="flex gap-2 text-black-300">
+                <p
+                  className={`cursor-pointer ${
+                    step === 0
+                      ? 'text-black-900 hover:text-black-900'
+                      : 'hover:text-black-400'
+                  }`}
+                  onClick={() => goTo(0)}
+                >
+                  Fields
+                </p>
+                {step !== 0 && (
+                  <>
+                    <p>&gt;</p>
+                    <p
+                      className={`cursor-pointer ${
+                        step === 1
+                          ? 'text-black-900 hover:text-black-900'
+                          : 'hover:text-black-400'
+                      }`}
+                      onClick={() => goTo(1)}
+                    >
+                      Operator
+                    </p>
+                    {step === 2 && (
+                      <>
+                        <p>&gt;</p>
+                        <p
+                          className={`cursor-pointer ${
+                            step === 2
+                              ? 'text-black-900 hover:text-black-900'
+                              : 'hover:text-black-400'
+                          }`}
+                          onClick={() => goTo(2)}
+                        >
+                          Value
+                        </p>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+              <div className="mt-2"></div>
+              {step !== 0 && data && data.field && (
+                <InventoryFilterSummary data={data} resetData={resetData} />
+              )}
+              {step === 0 && <InventoryFilterField handleField={handleField} />}
+              {step === 1 && (
+                <InventoryFilterOperator handleOperator={handleOperator} />
+              )}
+              {step === 2 && (
                 <>
-                  <p>&gt;</p>
-                  <p
-                    className={`cursor-pointer ${
-                      step === 1
-                        ? 'text-black-900 hover:text-black-900'
-                        : 'hover:text-black-400'
-                    }`}
-                    onClick={() => goTo(1)}
-                  >
-                    Operator
-                  </p>
-                  {step === 2 && (
-                    <>
-                      <p>&gt;</p>
-                      <p
-                        className={`cursor-pointer ${
-                          step === 2
-                            ? 'text-black-900 hover:text-black-900'
-                            : 'hover:text-black-400'
-                        }`}
-                        onClick={() => goTo(2)}
-                      >
-                        Value
-                      </p>
-                    </>
-                  )}
+                  <div className="max-h-[calc(100vh-23rem)] overflow-auto -mr-4 pb-2">
+                    <InventoryFilterValue
+                      data={data}
+                      handleValueCheck={handleValueCheck}
+                      cleanValues={cleanValues}
+                    />
+                  </div>
+                  <div className="border-t -mx-4 -mb-4 px-4 py-4">
+                    <Button
+                      onClick={filter}
+                      loading={loading}
+                      disabled={
+                        data &&
+                        data.operator !== 'IS_EMPTY' &&
+                        data.operator !== 'IS_NOT_EMPTY' &&
+                        data.values &&
+                        data.values.length === 0
+                      }
+                    >
+                      {loading ? 'Applying...' : 'Apply filter'}
+                    </Button>
+                  </div>
                 </>
               )}
             </div>
-            <div className="mt-2"></div>
-            {step !== 0 && data && data.field && (
-              <InventoryFilterSummary data={data} resetData={resetData} />
-            )}
-            {step === 0 && <InventoryFilterField handleField={handleField} />}
-            {step === 1 && (
-              <InventoryFilterOperator handleOperator={handleOperator} />
-            )}
-            {step === 2 && (
-              <>
-                <div className="max-h-[calc(100vh-23rem)] overflow-auto -mr-4 pb-2">
-                  <InventoryFilterValue
-                    data={data}
-                    handleValueCheck={handleValueCheck}
-                    cleanValues={cleanValues}
-                  />
-                </div>
-                <div className="border-t -mx-4 -mb-4 px-4 py-4">
-                  <Button onClick={filter}>Apply filter</Button>
-                </div>
-              </>
-            )}
           </div>
         </>
       )}

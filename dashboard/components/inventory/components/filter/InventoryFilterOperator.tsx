@@ -5,12 +5,12 @@ type InventoryFilterOperatorProps = {
   handleOperator: (operator: InventoryFilterDataProps['operator']) => void;
 };
 
-type Options = {
+export type InventoryFilterOperatorOptionsProps = {
   label: string;
   value: InventoryFilterDataProps['operator'];
 };
 
-export const options: Options[] = [
+const inventoryFilterOperatorOptions: InventoryFilterOperatorOptionsProps[] = [
   { label: 'is', value: 'IS' },
   { label: 'is not', value: 'IS_NOT' },
   { label: 'contains', value: 'CONTAINS' },
@@ -23,8 +23,8 @@ function InventoryFilterOperator({
   handleOperator
 }: InventoryFilterOperatorProps) {
   return (
-    <div className="flex flex-col w-64">
-      {options.map((option, idx) => (
+    <div className="flex flex-col">
+      {inventoryFilterOperatorOptions.map((option, idx) => (
         <Button
           key={idx}
           size="sm"

@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 
-type Options = {
+export type InventoryFilterFieldOptionsProps = {
   label: string;
   value: string;
   icon: ReactNode;
 };
 
-const inventoryFilterOptions: Options[] = [
+const inventoryFilterFieldOptions: InventoryFilterFieldOptionsProps[] = [
   {
     label: 'Cloud provider',
     value: 'provider',
@@ -181,4 +181,4 @@ const inventoryFilterOptions: Options[] = [
   }
 ];
 
-export default inventoryFilterOptions;
+export default inventoryFilterFieldOptions;

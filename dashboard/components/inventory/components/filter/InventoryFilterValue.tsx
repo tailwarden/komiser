@@ -84,7 +84,7 @@ function InventoryFilterValue({
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 w-80">
+    <div className="flex flex-col gap-2">
       {options &&
         options.length > 0 &&
         options.map((option, idx) => (
