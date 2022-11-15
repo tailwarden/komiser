@@ -1,40 +1,71 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 
-function useFilterWizard(steps: ReactNode[]) {
-  const [currentStep, setCurrentStep] = useState(0);
+export type InventoryFilterDataProps = {
+  field:
+    | 'provider'
+    | 'region'
+    | 'account'
+    | 'name'
+    | 'service'
+    | string
+    | undefined;
+  operator:
+    | 'IS'
+    | 'IS_NOT'
+    | 'CONTAINS'
+    | 'NOT_CONTAINS'
+    | 'EMPTY'
+    | 'NOT_EMPTY'
+    | undefined;
+  values: null | string[];
+};
 
-  function back() {
-    setCurrentStep(prev => {
-      if (prev === 0) {
-        return prev;
-      }
-      return prev - 1;
-    });
+const INITIAL_DATA = {
+  field: undefined,
+  operator: undefined,
+  values: null
+};
+
+function useFilterWizard() {
+  const [step, setStep] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
+
+  console.log(data);
+
+  function resetData() {
+    setStep(0);
+    setData(INITIAL_DATA);
   }
 
-  function next() {
-    setCurrentStep(prev => {
-      if (prev >= steps.length - 1) {
-        return prev;
-      }
-      return prev + 1;
-    });
+  function toggle() {
+    resetData();
+    setIsOpen(!isOpen);
   }
 
   function goTo(index: number) {
-    setCurrentStep(index);
+    setStep(index);
+  }
+
+  function handleField(field: string) {
+    setData(prev => ({ ...prev, field }));
+    setStep(1);
+  }
+
+  function handleOperator(operator: InventoryFilterDataProps['operator']) {
+    setData(prev => ({ ...prev, operator }));
+    setStep(2);
   }
 
   return {
-    step: steps[currentStep],
-    steps,
-    currentStep: currentStep + 1,
-    isFirstStep: currentStep === 0,
-    isFinishStep: currentStep === steps.length - 2,
-    isLastStap: currentStep === steps.length - 1,
-    back,
-    next,
-    goTo
+    toggle,
+    isOpen,
+    step,
+    goTo,
+    handleField,
+    handleOperator,
+    data,
+    resetData
   };
 }
 

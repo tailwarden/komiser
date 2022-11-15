@@ -1,12 +1,32 @@
 import Button from '../../../button/Button';
 import useFilterWizard from '../../hooks/useFilterWizard';
 import InventoryFilterField from './InventoryFilterField';
+import InventoryFilterOperator from './InventoryFilterOperator';
+import InventoryFilterSummary from './InventoryFilterSummary';
+import InventoryFilterValue from './InventoryFilterValue';
 
 function InventoryFilter() {
-  const { step, steps } = useFilterWizard([<InventoryFilterField key={0} />]);
+  const {
+    toggle,
+    isOpen,
+    step,
+    goTo,
+    handleField,
+    handleOperator,
+    data,
+    resetData
+  } = useFilterWizard();
+
   return (
     <div className="relative">
-      <Button style="ghost" size="sm">
+      <button
+        className={`flex items-center font-medium text-sm rounded-lg h-[2.5rem] px-3 gap-2 text-black-900/60 ${
+          isOpen
+            ? 'bg-black-400/10'
+            : 'bg-transparent hover:bg-black-400/10 active:bg-black-400/20'
+        }`}
+        onClick={toggle}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -24,8 +44,64 @@ function InventoryFilter() {
           ></path>
         </svg>
         Filter by
-      </Button>
-      {step}
+      </button>
+
+      {/* Dropdown */}
+      {isOpen && (
+        <>
+          <div
+            onClick={toggle}
+            className="hidden sm:block fixed inset-0 z-20 bg-transparent opacity-0 animate-fade-in"
+          ></div>
+          <div className="absolute flex flex-col min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
+            <div className="flex gap-2 text-black-400">
+              <p
+                className="cursor-pointer hover:text-black-900"
+                onClick={() => goTo(0)}
+              >
+                Fields
+              </p>
+              {step !== 0 && (
+                <>
+                  <p>&gt;</p>
+                  <p
+                    className="cursor-pointer hover:text-black-900"
+                    onClick={() => goTo(1)}
+                  >
+                    Operator
+                  </p>
+                  {step === 2 && (
+                    <>
+                      <p>&gt;</p>
+                      <p
+                        className="cursor-pointer hover:text-black-900"
+                        onClick={() => goTo(2)}
+                      >
+                        Value
+                      </p>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+            <div className="mt-2"></div>
+            {step !== 0 && data && data.field && (
+              <InventoryFilterSummary data={data} resetData={resetData} />
+            )}
+            {step === 0 && <InventoryFilterField handleField={handleField} />}
+            {step === 1 && (
+              <InventoryFilterOperator handleOperator={handleOperator} />
+            )}
+            {step === 2 && (
+              <>
+                <InventoryFilterValue />
+                <div className="mt-2"></div>
+                <Button>Apply filter</Button>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

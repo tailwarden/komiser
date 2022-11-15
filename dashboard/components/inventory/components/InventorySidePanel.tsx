@@ -123,7 +123,7 @@ function InventorySidePanel({
                   >
                     {tags &&
                       tags.map((tag, id) => (
-                        <div key={id} className="flex gap-6">
+                        <div key={id} className="flex items-center gap-6">
                           <InventoryTagWrapper
                             tag={tag}
                             id={id}
