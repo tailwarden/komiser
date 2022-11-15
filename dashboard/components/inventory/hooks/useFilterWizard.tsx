@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import settingsService from '../../../services/settingsService';
 
 export type InventoryFilterDataProps = {
   field:
@@ -14,16 +15,16 @@ export type InventoryFilterDataProps = {
     | 'IS_NOT'
     | 'CONTAINS'
     | 'NOT_CONTAINS'
-    | 'EMPTY'
-    | 'NOT_EMPTY'
+    | 'IS_EMPTY'
+    | 'IS_NOT_EMPTY'
     | undefined;
-  values: null | string[];
+  values: [] | string[];
 };
 
 const INITIAL_DATA = {
   field: undefined,
   operator: undefined,
-  values: null
+  values: []
 };
 
 function useFilterWizard() {
@@ -31,11 +32,9 @@ function useFilterWizard() {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
 
-  console.log(data);
-
   function resetData() {
     setStep(0);
-    setData(INITIAL_DATA);
+    setData({ ...INITIAL_DATA, values: [] });
   }
 
   function toggle() {
@@ -44,7 +43,15 @@ function useFilterWizard() {
   }
 
   function goTo(index: number) {
-    setStep(index);
+    if (index === 0) {
+      resetData();
+    } else {
+      setStep(index);
+    }
+  }
+
+  function cleanValues() {
+    setData({ ...data, values: [] });
   }
 
   function handleField(field: string) {
@@ -57,6 +64,35 @@ function useFilterWizard() {
     setStep(2);
   }
 
+  function handleValueCheck(
+    e: ChangeEvent<HTMLInputElement>,
+    newValue: string
+  ) {
+    const newValues: string[] = data.values;
+
+    if (e.currentTarget.checked) {
+      newValues.push(newValue);
+      setData(prev => ({ ...prev, values: newValues }));
+    } else {
+      const index = newValues.findIndex(value => value === newValue);
+      newValues.splice(index, 1);
+      setData(prev => ({ ...prev, values: newValues }));
+    }
+  }
+
+  function filter() {
+    const payload = [data];
+    const payloadJson = JSON.stringify(payload);
+
+    settingsService.getFilteredInventory(payloadJson).then(res => {
+      if (res === Error) {
+        console.log(res);
+      } else {
+        console.log(res);
+      }
+    });
+  }
+
   return {
     toggle,
     isOpen,
@@ -64,8 +100,11 @@ function useFilterWizard() {
     goTo,
     handleField,
     handleOperator,
+    handleValueCheck,
     data,
-    resetData
+    resetData,
+    cleanValues,
+    filter
   };
 }
 

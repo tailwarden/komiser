@@ -13,8 +13,11 @@ function InventoryFilter() {
     goTo,
     handleField,
     handleOperator,
+    handleValueCheck,
     data,
-    resetData
+    resetData,
+    cleanValues,
+    filter
   } = useFilterWizard();
 
   return (
@@ -54,9 +57,13 @@ function InventoryFilter() {
             className="hidden sm:block fixed inset-0 z-20 bg-transparent opacity-0 animate-fade-in"
           ></div>
           <div className="absolute flex flex-col min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
-            <div className="flex gap-2 text-black-400">
+            <div className="flex gap-2 text-black-300">
               <p
-                className="cursor-pointer hover:text-black-900"
+                className={`cursor-pointer ${
+                  step === 0
+                    ? 'text-black-900 hover:text-black-900'
+                    : 'hover:text-black-400'
+                }`}
                 onClick={() => goTo(0)}
               >
                 Fields
@@ -65,7 +72,11 @@ function InventoryFilter() {
                 <>
                   <p>&gt;</p>
                   <p
-                    className="cursor-pointer hover:text-black-900"
+                    className={`cursor-pointer ${
+                      step === 1
+                        ? 'text-black-900 hover:text-black-900'
+                        : 'hover:text-black-400'
+                    }`}
                     onClick={() => goTo(1)}
                   >
                     Operator
@@ -74,7 +85,11 @@ function InventoryFilter() {
                     <>
                       <p>&gt;</p>
                       <p
-                        className="cursor-pointer hover:text-black-900"
+                        className={`cursor-pointer ${
+                          step === 2
+                            ? 'text-black-900 hover:text-black-900'
+                            : 'hover:text-black-400'
+                        }`}
                         onClick={() => goTo(2)}
                       >
                         Value
@@ -94,9 +109,16 @@ function InventoryFilter() {
             )}
             {step === 2 && (
               <>
-                <InventoryFilterValue />
-                <div className="mt-2"></div>
-                <Button>Apply filter</Button>
+                <div className="max-h-[calc(100vh-23rem)] overflow-auto -mr-4 pb-2">
+                  <InventoryFilterValue
+                    data={data}
+                    handleValueCheck={handleValueCheck}
+                    cleanValues={cleanValues}
+                  />
+                </div>
+                <div className="border-t -mx-4 -mb-4 px-4 py-4">
+                  <Button onClick={filter}>Apply filter</Button>
+                </div>
               </>
             )}
           </div>

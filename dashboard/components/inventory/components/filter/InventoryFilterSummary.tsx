@@ -22,7 +22,7 @@ function InventoryFilterSummary({
   }
 
   return (
-    <div className="flex justify-between gap-4 bg-black-100 p-2 text-xs rounded mb-2">
+    <div className="flex justify-between gap-4 bg-black-100 text-black-900 p-2 text-xs rounded mb-2">
       <div className="flex items-center gap-1">
         <div className="scale-75">{getData('icon')}</div>
         <p>{getData('label')}</p>

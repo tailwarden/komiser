@@ -15,8 +15,8 @@ export const options: Options[] = [
   { label: 'is not', value: 'IS_NOT' },
   { label: 'contains', value: 'CONTAINS' },
   { label: 'does not contain', value: 'NOT_CONTAINS' },
-  { label: 'is empty', value: 'EMPTY' },
-  { label: 'is not empty', value: 'NOT_EMPTY' }
+  { label: 'is empty', value: 'IS_EMPTY' },
+  { label: 'is not empty', value: 'IS_NOT_EMPTY' }
 ];
 
 function InventoryFilterOperator({

@@ -116,10 +116,7 @@ const settingsService = {
 
   async getProviders() {
     try {
-      const res = await fetch(
-        `${BASE_URL}/resources/providers`,
-        settings('GET')
-      );
+      const res = await fetch(`${BASE_URL}/providers`, settings('GET'));
       const data = await res.json();
       return data;
     } catch (error) {
@@ -129,10 +126,7 @@ const settingsService = {
 
   async getAccounts() {
     try {
-      const res = await fetch(
-        `${BASE_URL}/resources/accounts`,
-        settings('GET')
-      );
+      const res = await fetch(`${BASE_URL}/accounts`, settings('GET'));
       const data = await res.json();
       return data;
     } catch (error) {
@@ -142,7 +136,7 @@ const settingsService = {
 
   async getRegions() {
     try {
-      const res = await fetch(`${BASE_URL}/resources/regions`, settings('GET'));
+      const res = await fetch(`${BASE_URL}/regions`, settings('GET'));
       const data = await res.json();
       return data;
     } catch (error) {
@@ -152,9 +146,19 @@ const settingsService = {
 
   async getServices() {
     try {
+      const res = await fetch(`${BASE_URL}/services`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getFilteredInventory(payload: string) {
+    try {
       const res = await fetch(
-        `${BASE_URL}/resources/services`,
-        settings('GET')
+        `${BASE_URL}/resources/search`,
+        settings('POST', payload)
       );
       const data = await res.json();
       return data;
