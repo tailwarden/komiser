@@ -1,22 +1,22 @@
-**Komiser is back 🎉 and we're looking for maintainers to work on the new [roadmap](https://oraculi.canny.io/), if you're interested, join us on our <a href="https://discord.oraculi.io">Discord</a> community**
+**Komiser is back 🎉 and we're looking for maintainers to work on the new [roadmap](https://tailwarden.canny.io/), if you're interested, join us on our <a href="https://discord.tailwarden.com">Discord</a> community**
 
 ---
 
-<h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme.banner.png" alt="Amp Logo"></h1>
+<h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-tw.png" alt="Amp Logo"></h1>
 
 <h4 align="center">
-    <a href="https://discord.oraculi.io">Discord</a> |
-    <a href="https://github.com/mlabouardy/komiser/discussions">Discussions</a> |
+    <a href="https://discord.tailwarden.com">Discord</a> |
+    <a href="https://github.com/tailwarden/komiser/discussions">Discussions</a> |
     <a href="https://komiser.io/">Site</a><br/><br/>
     <a href="https://docs.komiser.io/">Guide</a> |
     <a href="https://docs.komiser.io/docs/docs/how-to-komiser/alerts">How to Komiser</a> |
     <a href="https://docs.komiser.io/docs/intro">Docs</a><br/><br/>
     <a href="https://docs.komiser.io/docs/introduction/contribute">Contribute</a> | 
-    <a href="https://roadmap.oraculi.io">Roadmap</a><br/><br/>
+    <a href="https://roadmap.tailwarden.com">Roadmap</a><br/><br/>
 </h4>
 
-[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/mlabouardy/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
-[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/HelloOraculi/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/mlabouardy/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/mlabouardy/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.oraculi.io/)
+[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
+[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/HelloOraculi/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
 Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
 
@@ -29,7 +29,7 @@ Stay under budget by uncovering hidden costs, monitoring increases in spend, and
 The easiest way to get started with Komiser is to install the [Komiser CLI](https://docs.komiser.io/docs/overview/introduction/getting-started) by running the `Homebrew` commands below. Don't have Homebrew? Install it [here](https://docs.brew.sh/Installation).
 
 ```
-brew tap HelloOraculi/komiser
+brew tap tailwarden/komiser
 brew install komiser
 ```
 
@@ -103,7 +103,7 @@ Connect a local deployment of Komiser CLI to your [**OVH**](https://docs.komiser
 
 # Documentation
 
-Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io). The source repository for the documentation website is [helloOraculi/docs](https://github.com/helloOraculi/docs). 
+Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io). The source repository for the documentation website is [tailwarden/docs](https://github.com/tailwarden/docs). 
 
 We know that writing docs isn't usually at the top of too many peoples "What I like to do for fun" list, but if you feel so inclined, by all means, consider [contributing](https://docs.komiser.io/docs/introduction/contribute) to our documentation repository, we will be very grateful. It's built using [Docusaurus](https://docusaurus.io/). 
 
@@ -117,20 +117,20 @@ We know that writing docs isn't usually at the top of too many peoples "What I l
 
 # Bugs and feature requests
 
-Have a bug or a feature request? Please first read the issue guidelines and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/mlabouardy/komiser/issues/new).
+Have a bug or a feature request? Please first read the issue guidelines and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/tailwarden/komiser/issues).
 
 # Roadmap and Contributing
 
-We are very excited about what is in store in the coming weeks and months, take a look at the [public roadmap](https://oraculi.canny.io/) to stay on top of what's coming down the pipeline. 
+We are very excited about what is in store in the coming weeks and months, take a look at the [public roadmap](https://tailwarden.canny.io/) to stay on top of what's coming down the pipeline. 
 
-Komiser is written in `Golang` and is `Elv2 licensed` - contributions are always welcome whether that means providing feedback, be it through GitHub, through the `#feedback` channel on our [Discord server](https://discord.oraculi.io) or testing existing and new features. Feel free to check out our [contributor guidelines](./CONTRIBUTING.md) and consider becoming a **contributor** today. 
+Komiser is written in `Golang` and is `Elv2 licensed` - contributions are always welcome whether that means providing feedback, be it through GitHub, through the `#feedback` channel on our [Discord server](https://discord.tailwarden.com) or testing existing and new features. Feel free to check out our [contributor guidelines](./CONTRIBUTING.md) and consider becoming a **contributor** today. 
 
 # Users
 
-If you'd like to have your company represented and are using `Komiser` please give formal written permission below via a comment on this [thread](https://github.com/mlabouardy/komiser/issues/76) or via email to contact@oraculi.io.
+If you'd like to have your company represented and are using `Komiser` please give formal written permission below via a comment on this [thread](https://github.com/tailwarden/komiser/issues/76) or via email to contact@tailwarden.com.
 
 We will need a URL to a svg or png logo, a text title and a company URL.
 
 # Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/mlabouardy/komiser/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/tailwarden/komiser/tags). 
