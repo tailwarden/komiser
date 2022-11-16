@@ -1,12 +1,17 @@
 import Button from '../../../button/Button';
 import useFilterWizard from '../../hooks/useFilterWizard';
+import { InventoryItem } from '../../hooks/useInventory';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';
 import InventoryFilterOperator from './InventoryFilterOperator';
 import InventoryFilterSummary from './InventoryFilterSummary';
 import InventoryFilterValue from './InventoryFilterValue';
 
-function InventoryFilter() {
+type InventoryFilterProps = {
+  applyFilteredInventory: (inventory: InventoryItem[]) => void;
+};
+
+function InventoryFilter({ applyFilteredInventory }: InventoryFilterProps) {
   const {
     toggle,
     isOpen,
@@ -22,7 +27,7 @@ function InventoryFilter() {
     cleanValues,
     filter,
     loading
-  } = useFilterWizard();
+  } = useFilterWizard({ applyFilteredInventory });
 
   return (
     <div className="relative">

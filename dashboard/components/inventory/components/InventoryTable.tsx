@@ -41,7 +41,7 @@ function InventoryTable({
 }: InventoryTableProps) {
   return (
     <>
-      {inventory && Object.keys(inventory).length !== 0 && !error && (
+      {inventory && inventory.length > 0 && !error && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
           <div className="pb-6 rounded-lg rounded-t-none">
@@ -70,6 +70,7 @@ function InventoryTable({
               <tbody>
                 {/* Inventory table */}
                 {!query &&
+                  !searchedInventory &&
                   inventory.map(item => (
                     <InventoryTableRow
                       key={item.id}
@@ -148,9 +149,8 @@ function InventoryTable({
                   ))}
 
                 {/* Searched inventory table */}
-                {query &&
-                  searchedInventory &&
-                  Object.keys(searchedInventory).length !== 0 &&
+                {searchedInventory &&
+                  searchedInventory.length > 0 &&
                   searchedInventory.map(item => (
                     <InventoryTableRow
                       key={item.id}
@@ -234,7 +234,7 @@ function InventoryTable({
             {query && !searchedInventory && <SkeletonInventory />}
 
             {/* Inventory search no results */}
-            {query && searchedInventory && searchedInventory.length === 0 && (
+            {searchedInventory && searchedInventory.length === 0 && (
               <InventorySearchNoResults query={query} setQuery={setQuery} />
             )}
 

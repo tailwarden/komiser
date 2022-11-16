@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import settingsService from '../../../services/settingsService';
+import { InventoryItem } from './useInventory';
 
 export type InventoryFilterDataProps = {
   field:
@@ -29,7 +30,11 @@ const INITIAL_DATA = {
   values: []
 };
 
-function useFilterWizard() {
+type InventoryFilterProps = {
+  applyFilteredInventory: (inventory: InventoryItem[]) => void;
+};
+
+function useFilterWizard({ applyFilteredInventory }: InventoryFilterProps) {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
@@ -109,6 +114,7 @@ function useFilterWizard() {
         setLoading(false);
       } else {
         console.log(res);
+        applyFilteredInventory(res);
         setLoading(false);
       }
     });

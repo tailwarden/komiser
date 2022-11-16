@@ -416,22 +416,29 @@ function useInventory() {
       setBulkSelectCheckbox(false);
     }
 
-    if (searchedInventory && e.target.checked && query) {
+    if (searchedInventory && e.target.checked) {
       const arrayOfIds = searchedInventory.map(item => item.id);
       setBulkItems(arrayOfIds);
       setBulkSelectCheckbox(true);
     }
 
-    if (searchedInventory && !e.target.checked && query) {
+    if (searchedInventory && !e.target.checked) {
       setBulkItems([]);
       setBulkSelectCheckbox(false);
     }
+  }
+
+  function applyFilteredInventory(filteredInventory: InventoryItem[]) {
+    setQuery('');
+    setSearchedInventory(undefined);
+    setSearchedInventory(filteredInventory);
   }
 
   return {
     inventoryStats,
     inventory,
     searchedInventory,
+    applyFilteredInventory,
     error,
     query,
     setQuery,

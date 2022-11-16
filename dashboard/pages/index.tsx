@@ -18,6 +18,7 @@ export default function Inventory() {
     inventoryStats,
     inventory,
     searchedInventory,
+    applyFilteredInventory,
     error,
     query,
     setQuery,
@@ -55,7 +56,7 @@ export default function Inventory() {
 
       <div className="flex gap-6 items-center">
         <p className="text-xl font-medium text-black-900">Inventory</p>
-        <InventoryFilter />
+        <InventoryFilter applyFilteredInventory={applyFilteredInventory} />
       </div>
       <div className="mt-8"></div>
 
