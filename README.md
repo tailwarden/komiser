@@ -20,7 +20,7 @@
 
 Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
 
-*Cloud version is available in private beta test stage, sign in for free at [https://cloud.oraculi.io](https://cloud.oraculi.io)*
+*Cloud version is available in private beta test stage, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com)*
 
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiseree) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/mlabouardy/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
