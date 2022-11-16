@@ -86,6 +86,8 @@ function useFilterWizard() {
     const payload = [data];
     const payloadJson = JSON.stringify(payload);
 
+    console.log(payload);
+
     settingsService.getFilteredInventory(payloadJson).then(res => {
       if (res === Error) {
         console.log(res);
