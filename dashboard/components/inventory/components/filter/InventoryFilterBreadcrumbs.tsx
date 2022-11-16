@@ -8,7 +8,7 @@ function InventoryFilterBreadcrumbs({
   goTo
 }: InventoryFilterBreadcrumbsProps) {
   return (
-    <div className="flex gap-2 text-black-300">
+    <div className="flex gap-2 text-black-300 text-xs">
       <p
         className={`cursor-pointer ${
           step === 0

@@ -153,7 +153,7 @@ const inventoryFilterFieldOptions: InventoryFilterFieldOptionsProps[] = [
     )
   },
   {
-    label: 'Tags',
+    label: 'Tag',
     value: 'tag',
     icon: (
       <svg

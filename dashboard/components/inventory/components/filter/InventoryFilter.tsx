@@ -14,7 +14,9 @@ function InventoryFilter() {
     goTo,
     handleField,
     handleOperator,
+    handleTagKey,
     handleValueCheck,
+    handleValueInput,
     data,
     resetData,
     cleanValues,
@@ -76,22 +78,32 @@ function InventoryFilter() {
 
               {/* Filter steps - 2/3 filter operator */}
               {step === 1 && (
-                <InventoryFilterOperator handleOperator={handleOperator} />
+                <InventoryFilterOperator
+                  data={data}
+                  handleTagKey={handleTagKey}
+                  handleOperator={handleOperator}
+                />
               )}
 
               {/* Filter steps - 3/3 filter value */}
               {step === 2 && (
-                <>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    filter();
+                  }}
+                >
                   <div className="max-h-[calc(100vh-23rem)] overflow-auto -mr-4 pb-2">
                     <InventoryFilterValue
                       data={data}
                       handleValueCheck={handleValueCheck}
+                      handleValueInput={handleValueInput}
                       cleanValues={cleanValues}
                     />
                   </div>
                   <div className="border-t -mx-4 -mb-4 px-4 py-4">
                     <Button
-                      onClick={filter}
+                      type="submit"
                       loading={loading}
                       disabled={
                         data &&
@@ -104,7 +116,7 @@ function InventoryFilter() {
                       {loading ? 'Applying...' : 'Apply filter'}
                     </Button>
                   </div>
-                </>
+                </form>
               )}
             </div>
           </div>

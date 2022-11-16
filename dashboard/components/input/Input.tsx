@@ -9,7 +9,7 @@ export type InputProps = {
   label: string;
   regex: RegExp;
   error: string;
-  value?: string | number;
+  value?: string | number | string[];
   action: (newData: any, id?: number) => void;
 };
 

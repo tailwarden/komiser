@@ -1,8 +1,12 @@
+import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
+import Input from '../../../input/Input';
 import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
 
 type InventoryFilterOperatorProps = {
+  data: InventoryFilterDataProps;
   handleOperator: (operator: InventoryFilterDataProps['operator']) => void;
+  handleTagKey: (newValue: { tagKey: string }) => void;
 };
 
 export type InventoryFilterOperatorOptionsProps = {
@@ -20,10 +24,28 @@ const inventoryFilterOperatorOptions: InventoryFilterOperatorOptionsProps[] = [
 ];
 
 function InventoryFilterOperator({
-  handleOperator
+  data,
+  handleOperator,
+  handleTagKey
 }: InventoryFilterOperatorProps) {
   return (
     <div className="flex flex-col">
+      {/* If field is tag, ask for tag key */}
+      {data.field === 'tag' && (
+        <div className="pl-1 pt-2 pb-2">
+          <Input
+            type="text"
+            name="tagKey"
+            label="Tag key"
+            value={data.tagKey}
+            regex={regex.required}
+            error="Please provide a tag key"
+            action={handleTagKey}
+          />
+        </div>
+      )}
+
+      {/* Operators list */}
       {inventoryFilterOperatorOptions.map((option, idx) => (
         <Button
           key={idx}

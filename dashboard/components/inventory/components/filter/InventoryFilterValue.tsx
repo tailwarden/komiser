@@ -1,6 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
+import regex from '../../../../utils/regex';
 import Checkbox from '../../../checkbox/Checkbox';
+import Input from '../../../input/Input';
 import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
 
 type InventoryFilterValueProps = {
@@ -9,6 +11,7 @@ type InventoryFilterValueProps = {
     e: ChangeEvent<HTMLInputElement>,
     newValue: string
   ) => void;
+  handleValueInput: (newValue: { values: string }) => void;
   cleanValues: () => void;
 };
 
@@ -17,6 +20,7 @@ type Options = string[];
 function InventoryFilterValue({
   data,
   handleValueCheck,
+  handleValueInput,
   cleanValues
 }: InventoryFilterValueProps) {
   const [options, setOptions] = useState<Options | undefined>();
@@ -84,7 +88,8 @@ function InventoryFilterValue({
   }, []);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 min-w-[20rem]">
+      {/* Display multi-select */}
       {options &&
         options.length > 0 &&
         options.map((option, idx) => (
@@ -99,6 +104,23 @@ function InventoryFilterValue({
             </label>
           </div>
         ))}
+
+      {/* Display input for resource name and tag values */}
+      {!options &&
+        data.operator !== 'IS_EMPTY' &&
+        data.operator !== 'IS_NOT_EMPTY' && (
+          <div className="pl-1 pt-2 pr-4 pb-2">
+            <Input
+              type="text"
+              name="values"
+              label={data.field === 'tag' ? 'Tag value' : 'Resource name'}
+              value={data.values}
+              regex={regex.required}
+              error="Please provide a value"
+              action={handleValueInput}
+            />
+          </div>
+        )}
     </div>
   );
 }

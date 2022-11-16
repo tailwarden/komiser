@@ -18,12 +18,14 @@ export type InventoryFilterDataProps = {
     | 'IS_EMPTY'
     | 'IS_NOT_EMPTY'
     | undefined;
+  tagKey: string | undefined;
   values: [] | string[];
 };
 
 const INITIAL_DATA = {
   field: undefined,
   operator: undefined,
+  tagKey: '',
   values: []
 };
 
@@ -65,6 +67,10 @@ function useFilterWizard() {
     setStep(2);
   }
 
+  function handleTagKey(newValue: { tagKey: string }) {
+    setData(prev => ({ ...prev, tagKey: newValue.tagKey }));
+  }
+
   function handleValueCheck(
     e: ChangeEvent<HTMLInputElement>,
     newValue: string
@@ -81,12 +87,21 @@ function useFilterWizard() {
     }
   }
 
+  function handleValueInput(newValue: { values: string }) {
+    setData(prev => ({ ...prev, values: [newValue.values] }));
+  }
+
   function filter() {
     setLoading(true);
-    const payload = [data];
-    const payloadJson = JSON.stringify(payload);
+    const payload = { ...data };
 
+    if (payload.tagKey) {
+      payload.field = `tag:${payload.tagKey}`;
+    }
+
+    delete payload.tagKey;
     console.log(payload);
+    const payloadJson = JSON.stringify([payload]);
 
     settingsService.getFilteredInventory(payloadJson).then(res => {
       if (res === Error) {
@@ -106,7 +121,9 @@ function useFilterWizard() {
     goTo,
     handleField,
     handleOperator,
+    handleTagKey,
     handleValueCheck,
+    handleValueInput,
     data,
     resetData,
     cleanValues,

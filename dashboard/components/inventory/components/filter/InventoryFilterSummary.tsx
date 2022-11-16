@@ -1,8 +1,6 @@
 import Button from '../../../button/Button';
 import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
-import inventoryFilterFieldOptions, {
-  InventoryFilterFieldOptionsProps
-} from './InventoryFilterFieldOptions';
+import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterSummaryProps = {
   data: InventoryFilterDataProps;
@@ -57,6 +55,7 @@ function InventoryFilterSummary({
       <div className="flex items-center gap-1 whitespace-nowrap">
         <div className="scale-75">{getField('icon')}</div>
         <p>{getField('label')}</p>
+        {data.tagKey && <p>: {data.tagKey}</p>}
         {data.operator && (
           <>
             <span>:</span>
