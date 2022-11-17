@@ -42,7 +42,7 @@ func SecurityGroups(ctx context.Context, client ProviderClient) ([]Resource, err
 				})
 			}
 
-			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", client.AWSClient.Region, *accountId, sg.GroupId)
+			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", client.AWSClient.Region, *accountId, *sg.GroupId)
 
 			resources = append(resources, Resource{
 				Provider:   "AWS",
@@ -54,6 +54,7 @@ func SecurityGroups(ctx context.Context, client ProviderClient) ([]Resource, err
 				Name:       *sg.GroupName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
+				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/ec2/home?region=%s#SecurityGroup:groupId=%s", client.AWSClient.Region, client.AWSClient.Region, *sg.GroupId),
 			})
 		}
 		if aws.ToString(output.NextToken) == "" {

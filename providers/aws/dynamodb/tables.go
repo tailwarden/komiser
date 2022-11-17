@@ -57,6 +57,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Cost:       0,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/dynamodbv2/home?region=%s#table?initialTagKey=&name=%s", client.AWSClient.Region, client.AWSClient.Region, table),
 		})
 	}
 	log.Debugf("[%s] Fetched %d AWS DynamoDB tables from %s\n", client.Name, len(resources), client.AWSClient.Region)

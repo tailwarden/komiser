@@ -51,6 +51,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				},
 				FetchedAt: time.Now(),
 				Tags:      tags,
+				Link:      fmt.Sprintf("https://%s.console.aws.amazon.com/lambda/home?region=%s#/functions/%s", client.AWSClient.Region, client.AWSClient.Region, *o.FunctionName),
 			})
 		}
 

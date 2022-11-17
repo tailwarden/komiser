@@ -2,6 +2,7 @@ package sns
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -49,6 +50,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/topic/%s", client.AWSClient.Region, client.AWSClient.Region, *topic.TopicArn),
 			})
 		}
 

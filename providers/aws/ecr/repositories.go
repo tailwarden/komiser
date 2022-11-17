@@ -2,6 +2,7 @@ package ecr
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -48,6 +49,7 @@ func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecr/repositories/%s", client.AWSClient.Region, *repository.RepositoryName),
 			})
 		}
 

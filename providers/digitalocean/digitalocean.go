@@ -22,7 +22,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 			log.Printf("[%s][DigitalOcean] %s", client.Name, err)
 		} else {
 			for _, resource := range resources {
-				db.NewInsert().Model(&resource).Exec(context.Background())
+				db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("link = EXCLUDED.link").Exec(context.Background())
 			}
 		}
 	}

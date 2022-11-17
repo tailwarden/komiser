@@ -2,6 +2,7 @@ package sqs
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -49,6 +50,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sqs/v2/home?region=%s#/queues/%s", client.AWSClient.Region, client.AWSClient.Region, queue),
 			})
 		}
 

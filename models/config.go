@@ -11,6 +11,7 @@ type AWSConfig struct {
 	Name    string
 	Profile string
 	Source  string
+	Path    string
 }
 
 type DigitalOceanConfig struct {

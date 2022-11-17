@@ -45,6 +45,7 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Name:       cluster,
 				Cost:       0,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecs/home?#/clusters/%s", client.AWSClient.Region, cluster),
 			})
 		}
 

@@ -50,6 +50,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				CreatedAt:  *bucket.CreationDate,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://s3.console.aws.amazon.com/s3/buckets/%s", *bucket.Name),
 			})
 		}
 	}

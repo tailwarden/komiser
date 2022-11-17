@@ -2,6 +2,7 @@ package iam
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -42,6 +43,7 @@ func Roles(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			CreatedAt:  *o.CreateDate,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/roles/details/%s", client.AWSClient.Region, client.AWSClient.Region, *o.RoleName),
 		})
 
 		if aws.ToString(output.Marker) == "" {

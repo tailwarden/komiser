@@ -61,14 +61,27 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 	if len(config.AWS) > 0 {
 		for _, account := range config.AWS {
 			if account.Source == "CREDENTIALS_FILE" {
-				cfg, err := awsConfig.LoadDefaultConfig(context.Background(), awsConfig.WithSharedConfigProfile(account.Profile))
-				if err != nil {
-					return nil, nil, err
+				if len(account.Path) > 0 {
+					cfg, err := awsConfig.LoadDefaultConfig(context.Background(), awsConfig.WithSharedConfigProfile(account.Profile), awsConfig.WithSharedCredentialsFiles(
+						[]string{account.Path},
+					))
+					if err != nil {
+						return nil, nil, err
+					}
+					clients = append(clients, providers.ProviderClient{
+						AWSClient: &cfg,
+						Name:      account.Name,
+					})
+				} else {
+					cfg, err := awsConfig.LoadDefaultConfig(context.Background(), awsConfig.WithSharedConfigProfile(account.Profile))
+					if err != nil {
+						return nil, nil, err
+					}
+					clients = append(clients, providers.ProviderClient{
+						AWSClient: &cfg,
+						Name:      account.Name,
+					})
 				}
-				clients = append(clients, providers.ProviderClient{
-					AWSClient: &cfg,
-					Name:      account.Name,
-				})
 			} else if account.Source == "ENVIRONMENT_VARIABLES" {
 				cfg, err := awsConfig.LoadDefaultConfig(context.Background())
 				if err != nil {

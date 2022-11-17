@@ -1,6 +1,8 @@
 package handlers
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) {
 	regions := struct {

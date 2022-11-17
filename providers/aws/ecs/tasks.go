@@ -45,6 +45,7 @@ func Tasks(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Name:       task,
 				Cost:       0,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecs/home?#/clusters/tasks/%s", client.AWSClient.Region, task),
 			})
 		}
 

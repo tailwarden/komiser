@@ -104,11 +104,17 @@ func setupSchema(c *Config) error {
 func fetchResources(ctx context.Context, clients []ProviderClient, regions []string) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			aws.FetchResources(ctx, client, regions, db)
+			go func(ctx context.Context, client ProviderClient, regions []string) {
+				aws.FetchResources(ctx, client, regions, db)
+			}(ctx, client, regions)
 		} else if client.DigitalOceanClient != nil {
-			do.FetchResources(ctx, client, db)
+			go func(ctx context.Context, client ProviderClient) {
+				do.FetchResources(ctx, client, db)
+			}(ctx, client)
 		} else if client.OciClient != nil {
-			oci.FetchResources(ctx, client, db)
+			go func(ctx context.Context, client ProviderClient) {
+				oci.FetchResources(ctx, client, db)
+			}(ctx, client)
 		}
 	}
 	return nil

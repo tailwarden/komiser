@@ -2,6 +2,7 @@ package cloudfront
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -48,6 +49,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudfront/v3/home?region=%s#/distributions/%s", client.AWSClient.Region, client.AWSClient.Region, *distribution.Id),
 			})
 		}
 

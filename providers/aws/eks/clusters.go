@@ -60,6 +60,7 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, cluster),
 			})
 		}
 

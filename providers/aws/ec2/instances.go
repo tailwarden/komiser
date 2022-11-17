@@ -67,6 +67,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 						"instanceType": fmt.Sprintf("%s", instance.InstanceType),
 						"state":        fmt.Sprintf("%s", instance.State.Name),
 					},
+					Link: fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.InstanceId),
 				})
 			}
 		}

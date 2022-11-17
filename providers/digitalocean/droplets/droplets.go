@@ -38,12 +38,13 @@ func Droplets(ctx context.Context, client providers.ProviderClient) ([]Resource,
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Droplet",
-			ResourceId: fmt.Sprint("%d", droplet.ID),
+			ResourceId: fmt.Sprintf("%d", droplet.ID),
 			Region:     droplet.Region.Name,
 			Name:       droplet.Name,
 			Cost:       0,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
+			Link:       fmt.Sprintf("https://cloud.digitalocean.com/droplets/%d/graphs", droplet.ID),
 		})
 	}
 
