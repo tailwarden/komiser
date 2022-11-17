@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
 import settingsService from '../../../services/settingsService';
 import { InventoryItem } from './useInventory';
@@ -39,6 +40,7 @@ function useFilterWizard({ applyFilteredInventory }: InventoryFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   function resetData() {
     setStep(0);
@@ -109,13 +111,22 @@ function useFilterWizard({ applyFilteredInventory }: InventoryFilterProps) {
     const payloadJson = JSON.stringify([payload]);
 
     settingsService.getFilteredInventory(payloadJson).then(res => {
-      if (res === Error) {
-        console.log(res);
+      if (res.error) {
+        console.log(res, 'error');
         setLoading(false);
       } else {
-        console.log(res);
+        console.log(res, 'success');
         applyFilteredInventory(res);
         setLoading(false);
+        router.push(
+          `/?field=${payload.field}&operator=${payload.operator}${
+            payload.values.length > 0
+              ? `&values=${payload.values.map(value => value)}`
+              : ''
+          }`,
+          undefined,
+          { shallow: true }
+        );
       }
     });
   }
