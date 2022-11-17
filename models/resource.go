@@ -16,6 +16,8 @@ type Resource struct {
 	Cost       float64           `json:"cost"`
 	Metadata   map[string]string `json:"metadata"`
 	Tags       []Tag             `json:"tags" bun:"tags"`
+	Link       string            `json:"link" bson:"link"`
+	Value      string            //to be deprecated
 }
 
 type Tag struct {

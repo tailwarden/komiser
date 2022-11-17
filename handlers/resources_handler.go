@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -57,7 +56,6 @@ func (handler *ApiHandler) ListResourcesHandler(w http.ResponseWriter, r *http.R
 		whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
 		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 	} else {
-		fmt.Println(handler.db)
 		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
 	}
 
@@ -73,6 +71,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		return
 	}
 
+	filterWithTags := false
 	whereQueries := make([]string, 0)
 	for _, filter := range filters {
 		if filter.Field == "name" || filter.Field == "region" || filter.Field == "service" || filter.Field == "provider" || filter.Field == "account" {
@@ -112,8 +111,31 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
-			//key := strings.Replace(filter.Field, "tag:", "", -1)
-			log.Println("Tags filtering will be supported soon")
+			filterWithTags = true
+			key := strings.ReplaceAll(filter.Field, "tag:", "")
+			switch filter.Operator {
+			case "CONTAINS":
+			case "IS":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' IN (%s)))", key, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "NOT_CONTAINS":
+			case "IS_NOT":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "IS_EMPTY":
+				whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
+			case "IS_NOT_EMPTY":
+				whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
+			default:
+				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				return
+			}
 		} else {
 			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
 			return
@@ -122,14 +144,17 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 
 	whereClause := strings.Join(whereQueries, " AND ")
 
-	fmt.Println(whereClause)
-
 	resources := make([]Resource, 0)
-	err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s", whereClause)).Scan(handler.ctx, &resources)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+	if filterWithTags {
+		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s", whereClause)).Scan(handler.ctx, &resources)
+	} else {
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s", whereClause)).Scan(handler.ctx, &resources)
+		if err != nil {
+			respondWithError(w, http.StatusBadRequest, err.Error())
+			return
+		}
 	}
+
 	respondWithJSON(w, 200, resources)
 }
 

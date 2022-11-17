@@ -85,7 +85,6 @@ func runServer(port int, noTracking bool) error {
 }
 
 func setupSchema(c *Config) error {
-	fmt.Println(c.Postgres.URI)
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
 	db = bun.NewDB(sqldb, pgdialect.New())
 
@@ -98,8 +97,6 @@ func setupSchema(c *Config) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("schema setup")
 
 	return nil
 }
@@ -118,7 +115,7 @@ func fetchResources(ctx context.Context, clients []ProviderClient, regions []str
 }
 
 func checkUpgrade() {
-	url := "https://api.github.com/repos/HelloOraculi/komiser/releases/latest"
+	url := "https://api.github.com/repos/tailwarden/komiser/releases/latest"
 	type GHRelease struct {
 		Version string `json:"tag_name"`
 	}
@@ -147,8 +144,8 @@ func checkUpgrade() {
 			log.Warnf("Failed to parse version: %s", err)
 		} else {
 			if v1.LessThan(v2) {
-				log.Warnf("Newer Helm Dashboard version is available: %s", target.Version)
-				log.Warnf("Upgrade instructions: https://github.com/HelloOraculi/komiser")
+				log.Warnf("Newer Komiser version is available: %s", target.Version)
+				log.Warnf("Upgrade instructions: https://github.com/tailwarden/komiser")
 			}
 		}
 	}
