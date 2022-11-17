@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
 import settingsService from '../../../services/settingsService';
+import { ToastProps } from '../../toast/hooks/useToast';
 import { InventoryItem } from './useInventory';
 
 export type InventoryFilterDataProps = {
@@ -33,9 +34,13 @@ const INITIAL_DATA = {
 
 type InventoryFilterProps = {
   applyFilteredInventory: (inventory: InventoryItem[]) => void;
+  setToast: (toast: ToastProps) => void;
 };
 
-function useFilterWizard({ applyFilteredInventory }: InventoryFilterProps) {
+function useFilterWizard({
+  applyFilteredInventory,
+  setToast
+}: InventoryFilterProps) {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
@@ -112,12 +117,19 @@ function useFilterWizard({ applyFilteredInventory }: InventoryFilterProps) {
 
     settingsService.getFilteredInventory(payloadJson).then(res => {
       if (res.error) {
-        console.log(res, 'error');
+        setToast({
+          hasError: true,
+          title: `Filter could not be applied!`,
+          message: `Please refresh the page and try again.`
+        });
         setLoading(false);
       } else {
-        console.log(res, 'success');
+        setToast({
+          hasError: false,
+          title: `Filter applied!`,
+          message: `The filter selection was successfully applied.`
+        });
         applyFilteredInventory(res);
-        setLoading(false);
         router.push(
           `/?field=${payload.field}&operator=${payload.operator}${
             payload.values.length > 0
@@ -127,6 +139,8 @@ function useFilterWizard({ applyFilteredInventory }: InventoryFilterProps) {
           undefined,
           { shallow: true }
         );
+        setLoading(false);
+        toggle();
       }
     });
   }

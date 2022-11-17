@@ -1,4 +1,5 @@
 import Button from '../../../button/Button';
+import { ToastProps } from '../../../toast/hooks/useToast';
 import useFilterWizard from '../../hooks/useFilterWizard';
 import { InventoryItem } from '../../hooks/useInventory';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
@@ -9,9 +10,13 @@ import InventoryFilterValue from './InventoryFilterValue';
 
 type InventoryFilterProps = {
   applyFilteredInventory: (inventory: InventoryItem[]) => void;
+  setToast: (toast: ToastProps) => void;
 };
 
-function InventoryFilter({ applyFilteredInventory }: InventoryFilterProps) {
+function InventoryFilter({
+  applyFilteredInventory,
+  setToast
+}: InventoryFilterProps) {
   const {
     toggle,
     isOpen,
@@ -27,7 +32,7 @@ function InventoryFilter({ applyFilteredInventory }: InventoryFilterProps) {
     cleanValues,
     filter,
     loading
-  } = useFilterWizard({ applyFilteredInventory });
+  } = useFilterWizard({ applyFilteredInventory, setToast });
 
   return (
     <div className="relative">

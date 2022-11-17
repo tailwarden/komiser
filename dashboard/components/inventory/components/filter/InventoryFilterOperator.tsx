@@ -41,6 +41,7 @@ function InventoryFilterOperator({
             regex={regex.required}
             error="Please provide a tag key"
             action={handleTagKey}
+            autofocus={true}
           />
         </div>
       )}
@@ -53,6 +54,7 @@ function InventoryFilterOperator({
           style="ghost"
           align="left"
           gap="md"
+          disabled={data.field === 'tag' && !data.tagKey}
           onClick={() => handleOperator(option.value)}
         >
           {option.label}

@@ -35,6 +35,7 @@ export default function Inventory() {
     loading,
     updateTags,
     toast,
+    setToast,
     dismissToast,
     deleteLoading,
     reloadDiv,
@@ -56,7 +57,10 @@ export default function Inventory() {
 
       <div className="flex gap-6 items-center">
         <p className="text-xl font-medium text-black-900">Inventory</p>
-        <InventoryFilter applyFilteredInventory={applyFilteredInventory} />
+        <InventoryFilter
+          applyFilteredInventory={applyFilteredInventory}
+          setToast={setToast}
+        />
       </div>
       <div className="mt-8"></div>
 

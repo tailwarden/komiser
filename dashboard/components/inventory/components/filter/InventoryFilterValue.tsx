@@ -118,6 +118,7 @@ function InventoryFilterValue({
               regex={regex.required}
               error="Please provide a value"
               action={handleValueInput}
+              autofocus={true}
             />
           </div>
         )}

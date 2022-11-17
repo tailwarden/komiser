@@ -455,6 +455,7 @@ function useInventory() {
     loading,
     updateTags,
     toast,
+    setToast,
     dismissToast,
     deleteLoading,
     reloadDiv,
