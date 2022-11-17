@@ -154,10 +154,23 @@ const settingsService = {
     }
   },
 
-  async getFilteredInventory(payload: string) {
+  async getFilteredInventory(urlParams: string, payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/resources/search`,
+        `${BASE_URL}/resources/search${urlParams}`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getFilteredInventoryStats(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/stats/search`,
         settings('POST', payload)
       );
       const data = await res.json();

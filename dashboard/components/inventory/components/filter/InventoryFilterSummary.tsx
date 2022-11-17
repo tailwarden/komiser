@@ -1,13 +1,15 @@
 import Button from '../../../button/Button';
-import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
+import { InventoryFilterDataProps } from '../../hooks/useInventory';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterSummaryProps = {
+  bg?: 'white';
   data: InventoryFilterDataProps;
   resetData: () => void;
 };
 
 function InventoryFilterSummary({
+  bg,
   data,
   resetData
 }: InventoryFilterSummaryProps) {
@@ -32,8 +34,16 @@ function InventoryFilterSummary({
   }
 
   return (
-    <div className="relative flex bg-black-100 text-black-900/70 p-2 pr-12 text-xs rounded mb-2 max-w-[calc(100vw-250px)] md:max-w-[calc(100vw-400px)] overflow-hidden">
-      <div className="absolute bottom-[.35rem] right-1 bg-black-100">
+    <div
+      className={`${
+        bg ? 'bg-white' : 'bg-black-100'
+      } relative flex text-black-900/70 p-2 pr-12 text-xs rounded max-w-[calc(100vw-250px)] md:max-w-[calc(100vw-400px)] overflow-hidden`}
+    >
+      <div
+        className={`absolute bottom-[.35rem] right-1 ${
+          bg ? 'bg-white' : 'bg-black-100'
+        }`}
+      >
         <Button size="xs" style="ghost" onClick={resetData}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

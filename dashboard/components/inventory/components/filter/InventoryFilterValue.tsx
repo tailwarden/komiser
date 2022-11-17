@@ -3,7 +3,7 @@ import settingsService from '../../../../services/settingsService';
 import regex from '../../../../utils/regex';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
-import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
+import { InventoryFilterDataProps } from '../../hooks/useInventory';
 
 type InventoryFilterValueProps = {
   data: InventoryFilterDataProps;
@@ -24,7 +24,6 @@ function InventoryFilterValue({
   cleanValues
 }: InventoryFilterValueProps) {
   const [options, setOptions] = useState<Options | undefined>();
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -37,7 +36,7 @@ function InventoryFilterValue({
         settingsService.getProviders().then(res => {
           if (mounted) {
             if (res === Error) {
-              setError(true);
+              console.log(res);
             } else {
               setOptions(res);
             }
@@ -49,7 +48,7 @@ function InventoryFilterValue({
         settingsService.getAccounts().then(res => {
           if (mounted) {
             if (res === Error) {
-              setError(true);
+              console.log(res);
             } else {
               setOptions(res);
             }
@@ -61,7 +60,7 @@ function InventoryFilterValue({
         settingsService.getRegions().then(res => {
           if (mounted) {
             if (res === Error) {
-              setError(true);
+              console.log(res);
             } else {
               setOptions(res);
             }
@@ -73,7 +72,7 @@ function InventoryFilterValue({
         settingsService.getServices().then(res => {
           if (mounted) {
             if (res === Error) {
-              setError(true);
+              console.log(res);
             } else {
               setOptions(res);
             }

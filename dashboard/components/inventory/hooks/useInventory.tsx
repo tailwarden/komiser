@@ -1,8 +1,30 @@
+import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import settingsService from '../../../services/settingsService';
 import { Provider } from '../../../utils/providerHelper';
 import useToast from '../../toast/hooks/useToast';
 import useIsVisible from './useOnScreen';
+
+export type InventoryFilterDataProps = {
+  field:
+    | 'provider'
+    | 'region'
+    | 'account'
+    | 'name'
+    | 'service'
+    | string
+    | undefined;
+  operator:
+    | 'IS'
+    | 'IS_NOT'
+    | 'CONTAINS'
+    | 'NOT_CONTAINS'
+    | 'IS_EMPTY'
+    | 'IS_NOT_EMPTY'
+    | undefined;
+  tagKey: string | undefined;
+  values: [] | string[];
+};
 
 export type InventoryStats = {
   resources: number;
@@ -56,50 +78,132 @@ function useInventory() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [bulkItems, setBulkItems] = useState<string[] | []>([]);
   const [bulkSelectCheckbox, setBulkSelectCheckbox] = useState(false);
+  const [activeFilters, setActiveFilters] =
+    useState<InventoryFilterDataProps>();
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
   const batchSize: number = 50;
+  const router = useRouter();
 
-  // First fetch effect
+  function resetStates() {
+    setSkipped(0);
+    setSkippedSearch(0);
+    setInventory(undefined);
+    setInventoryStats(undefined);
+    setSearchedInventory(undefined);
+    setActiveFilters(undefined);
+    setBulkItems([]);
+    setBulkSelectCheckbox(false);
+    setQuery('');
+  }
+
+  // Fetch the correct inventory list based on URL params
   useEffect(() => {
     let mounted = true;
+    resetStates();
 
-    setError(false);
-
-    settingsService.getInventoryStats().then(res => {
-      if (mounted) {
-        if (res === Error) {
-          setError(true);
-        } else {
-          setInventoryStats(res);
-        }
-      }
-    });
-
-    settingsService
-      .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
-      .then(res => {
+    if (router.query && Object.keys(router.query).length === 0) {
+      settingsService.getInventoryStats().then(res => {
         if (mounted) {
           if (res === Error) {
             setError(true);
           } else {
-            setInventory(prev => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-            setSkipped(prev => prev + batchSize);
+            setInventoryStats(res);
           }
         }
       });
 
+      settingsService
+        .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
+        .then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+            } else {
+              setInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+              setSkipped(prev => prev + batchSize);
+            }
+          }
+        });
+    }
+
+    if (router.query.field) {
+      const formatValue =
+        router.query.values && (router.query.values as string).split(',');
+      const isTagFilter =
+        router.query.field && router.query.field.includes('tag');
+
+      const filterProps: any = {
+        field: isTagFilter ? 'tag' : router.query.field,
+        operator: router.query.operator,
+        values: formatValue,
+        tagKey: isTagFilter ? router.query.field!.slice(4) : ''
+      };
+
+      const payload = [
+        {
+          field: router.query.field,
+          operator: router.query.operator,
+          values: formatValue
+        }
+      ];
+
+      const payloadJson = JSON.stringify(payload);
+
+      settingsService.getFilteredInventoryStats(payloadJson).then(res => {
+        if (mounted) {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setInventoryStats(res);
+          }
+        }
+      });
+
+      settingsService
+        .getFilteredInventory(
+          `?limit=${batchSize}&skip=${skippedSearch}`,
+          payloadJson
+        )
+        .then(res => {
+          if (mounted) {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setLoading(false);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+              setActiveFilters(filterProps);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+            }
+          }
+        });
+    }
+
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [router.query]);
 
   // Infinite scrolling fetch effect
   useEffect(() => {
@@ -110,7 +214,8 @@ function useInventory() {
       inventoryStats &&
       skipped < inventoryStats.resources &&
       isVisible &&
-      !query
+      !query &&
+      !activeFilters
     ) {
       setError(false);
 
@@ -165,6 +270,77 @@ function useInventory() {
         });
     }
 
+    // Fetching on filtered list
+    if (shouldFetchMore && isVisible && activeFilters) {
+      setError(false);
+      const formatValue =
+        router.query.values && (router.query.values as string).split(',');
+      const isTagFilter =
+        router.query.field && router.query.field.includes('tag');
+
+      const filterProps: any = {
+        field: isTagFilter ? 'tag' : router.query.field,
+        operator: router.query.operator,
+        values: formatValue,
+        tagKey: isTagFilter ? router.query.field!.slice(4) : ''
+      };
+
+      const payload = [
+        {
+          field: router.query.field,
+          operator: router.query.operator,
+          values: formatValue
+        }
+      ];
+
+      const payloadJson = JSON.stringify(payload);
+
+      settingsService.getFilteredInventoryStats(payloadJson).then(res => {
+        if (mounted) {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setInventoryStats(res);
+          }
+        }
+      });
+
+      settingsService
+        .getFilteredInventory(
+          `?limit=${batchSize}&skip=${skippedSearch}`,
+          payloadJson
+        )
+        .then(res => {
+          if (mounted) {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setLoading(false);
+            } else {
+              setQuery('');
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+              setActiveFilters(filterProps);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+
+              setSkippedSearch(prev => prev + batchSize);
+            }
+          }
+        });
+    }
+
     return () => {
       mounted = false;
     };
@@ -173,11 +349,14 @@ function useInventory() {
   // Search effect
   useEffect(() => {
     let mounted = true;
-    setSearchedInventory(undefined);
-    setSkippedSearch(0);
-    setShouldFetchMore(false);
-    setBulkItems([]);
-    setBulkSelectCheckbox(false);
+
+    if (!query) {
+      setSearchedInventory(undefined);
+      setSkippedSearch(0);
+      setShouldFetchMore(false);
+      setBulkItems([]);
+      setBulkSelectCheckbox(false);
+    }
 
     if (query) {
       setError(false);
@@ -431,7 +610,9 @@ function useInventory() {
     }
   }
 
-  function applyFilteredInventory(filteredInventory: InventoryItem[]) {
+  function applyFilteredInventory(
+    filteredInventory: InventoryItem[] | undefined
+  ) {
     setQuery('');
     setSearchedInventory(undefined);
     setSearchedInventory(filteredInventory);
@@ -467,7 +648,9 @@ function useInventory() {
     handleBulkSelection,
     bulkSelectCheckbox,
     openBulkModal,
-    updateBulkTags
+    updateBulkTags,
+    router,
+    activeFilters
   };
 }
 

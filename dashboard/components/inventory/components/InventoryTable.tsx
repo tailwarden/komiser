@@ -1,9 +1,14 @@
+import { NextRouter } from 'next/router';
 import React, { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { InventoryItem, InventoryStats } from '../hooks/useInventory';
+import {
+  InventoryFilterDataProps,
+  InventoryItem,
+  InventoryStats
+} from '../hooks/useInventory';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
 import InventoryTableBulkActions from './InventoryTableBulkActions';
@@ -23,6 +28,8 @@ type InventoryTableProps = {
   onCheckboxChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
   inventoryStats: InventoryStats | undefined;
   openBulkModal: (bulkItemsIds: string[]) => void;
+  activeFilters: InventoryFilterDataProps | undefined;
+  router: NextRouter;
 };
 
 function InventoryTable({
@@ -37,11 +44,14 @@ function InventoryTable({
   bulkItems,
   onCheckboxChange,
   inventoryStats,
-  openBulkModal
+  openBulkModal,
+  activeFilters,
+  router
 }: InventoryTableProps) {
   return (
     <>
-      {inventory && inventory.length > 0 && !error && (
+      {((!error && inventory && inventory.length > 0) ||
+        (!error && searchedInventory && searchedInventory.length > 0)) && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
           <div className="pb-6 rounded-lg rounded-t-none">
@@ -71,6 +81,8 @@ function InventoryTable({
                 {/* Inventory table */}
                 {!query &&
                   !searchedInventory &&
+                  inventory &&
+                  inventory.length > 0 &&
                   inventory.map(item => (
                     <InventoryTableRow
                       key={item.id}
@@ -231,11 +243,15 @@ function InventoryTable({
             </table>
 
             {/* Inventory search loading */}
-            {query && !searchedInventory && <SkeletonInventory />}
+            {!searchedInventory && <SkeletonInventory />}
 
             {/* Inventory search no results */}
             {searchedInventory && searchedInventory.length === 0 && (
-              <InventorySearchNoResults query={query} setQuery={setQuery} />
+              <InventorySearchNoResults
+                query={query}
+                setQuery={setQuery}
+                router={router}
+              />
             )}
 
             {/* Bulk actions sticky footer */}

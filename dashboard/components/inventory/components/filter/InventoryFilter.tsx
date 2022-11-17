@@ -1,7 +1,11 @@
+import { NextRouter } from 'next/router';
 import Button from '../../../button/Button';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import useFilterWizard from '../../hooks/useFilterWizard';
-import { InventoryItem } from '../../hooks/useInventory';
+import {
+  InventoryFilterDataProps,
+  InventoryItem
+} from '../../hooks/useInventory';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';
 import InventoryFilterOperator from './InventoryFilterOperator';
@@ -9,14 +13,11 @@ import InventoryFilterSummary from './InventoryFilterSummary';
 import InventoryFilterValue from './InventoryFilterValue';
 
 type InventoryFilterProps = {
-  applyFilteredInventory: (inventory: InventoryItem[]) => void;
-  setToast: (toast: ToastProps) => void;
+  router: NextRouter;
+  activeFilters: InventoryFilterDataProps | undefined;
 };
 
-function InventoryFilter({
-  applyFilteredInventory,
-  setToast
-}: InventoryFilterProps) {
+function InventoryFilter({ router, activeFilters }: InventoryFilterProps) {
   const {
     toggle,
     isOpen,
@@ -30,12 +31,22 @@ function InventoryFilter({
     data,
     resetData,
     cleanValues,
-    filter,
-    loading
-  } = useFilterWizard({ applyFilteredInventory, setToast });
+    filter
+  } = useFilterWizard({ router });
 
   return (
-    <div className="relative">
+    <div>
+      {/* Active filters list */}
+      {Object.keys(router.query).length > 0 && activeFilters && (
+        <div className="flex items-center gap-4 bg-white py-2 px-6 rounded-lg absolute left-0 right-0 top-[64px]">
+          <span className="text-sm text-black-400">Filters:</span>
+          <InventoryFilterSummary
+            data={activeFilters}
+            resetData={() => router.push('/')}
+          />
+        </div>
+      )}
+
       {/* Dropdown button toggle */}
       <button
         className={`flex items-center font-medium text-sm rounded-lg h-[2.5rem] px-3 gap-2 text-black-900/60 ${
@@ -72,7 +83,8 @@ function InventoryFilter({
             onClick={toggle}
             className="hidden sm:block fixed inset-0 z-20 bg-transparent opacity-0 animate-fade-in"
           ></div>
-          <div className="absolute inline-flex min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
+          <div className="absolute inline-flex min-w-[16rem] right-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
+            {/* <div className="absolute inline-flex min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]"> */}
             <div className="flex flex-col w-full">
               {/* Filter breadcrumbs */}
               <InventoryFilterBreadcrumbs step={step} goTo={goTo} />
@@ -82,6 +94,7 @@ function InventoryFilter({
               {step !== 0 && data && data.field && (
                 <InventoryFilterSummary data={data} resetData={resetData} />
               )}
+              <div className="mt-2"></div>
 
               {/* Filter steps - 1/3 filter field */}
               {step === 0 && <InventoryFilterField handleField={handleField} />}
@@ -114,7 +127,6 @@ function InventoryFilter({
                   <div className="border-t -mx-4 -mb-4 px-4 py-4">
                     <Button
                       type="submit"
-                      loading={loading}
                       disabled={
                         data &&
                         data.operator !== 'IS_EMPTY' &&
@@ -123,7 +135,7 @@ function InventoryFilter({
                         data.values.length === 0
                       }
                     >
-                      {loading ? 'Applying...' : 'Apply filter'}
+                      Apply filter
                     </Button>
                   </div>
                 </form>

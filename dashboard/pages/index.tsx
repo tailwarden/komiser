@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import Button from '../components/button/Button';
 import EmptyState from '../components/empty-state/EmptyState';
 import ErrorPage from '../components/error/ErrorPage';
@@ -13,12 +12,10 @@ import SkeletonStats from '../components/skeleton/SkeletonStats';
 import Toast from '../components/toast/Toast';
 
 export default function Inventory() {
-  const router = useRouter();
   const {
     inventoryStats,
     inventory,
     searchedInventory,
-    applyFilteredInventory,
     error,
     query,
     setQuery,
@@ -44,7 +41,9 @@ export default function Inventory() {
     handleBulkSelection,
     bulkSelectCheckbox,
     openBulkModal,
-    updateBulkTags
+    updateBulkTags,
+    router,
+    activeFilters
   } = useInventory();
 
   return (
@@ -55,14 +54,11 @@ export default function Inventory() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex gap-6 items-center">
-        <p className="text-xl font-medium text-black-900">Inventory</p>
-        <InventoryFilter
-          applyFilteredInventory={applyFilteredInventory}
-          setToast={setToast}
-        />
+      <div className="flex items-center justify-between">
+        <p className="text-lg font-medium text-black-900">Inventory</p>
+        <InventoryFilter router={router} activeFilters={activeFilters} />
       </div>
-      <div className="mt-8"></div>
+      <div className="mt-4"></div>
 
       {/* Toast */}
       {toast && <Toast {...toast} dismissToast={dismissToast} />}
@@ -101,13 +97,17 @@ export default function Inventory() {
       {/* Inventory stats loading */}
       {!inventoryStats && !error && <SkeletonStats />}
 
+      {activeFilters && <div className="mt-[104px]"></div>}
+
       {/* Inventory stats */}
       <InventoryStatsCards inventoryStats={inventoryStats} error={error} />
 
       <div className="mt-8"></div>
 
       {/* Inventory list loading */}
-      {!query && !inventory && !error && <SkeletonInventory />}
+      {!inventory && !error && !query && !activeFilters && (
+        <SkeletonInventory />
+      )}
 
       {/* Inventory list */}
       <InventoryTable
@@ -123,6 +123,8 @@ export default function Inventory() {
         onCheckboxChange={onCheckboxChange}
         inventoryStats={inventoryStats}
         openBulkModal={openBulkModal}
+        activeFilters={activeFilters}
+        router={router}
       />
 
       {/* Infite scroll trigger */}

@@ -1,7 +1,7 @@
 import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import { InventoryFilterDataProps } from '../../hooks/useFilterWizard';
+import { InventoryFilterDataProps } from '../../hooks/useInventory';
 
 type InventoryFilterOperatorProps = {
   data: InventoryFilterDataProps;

@@ -1,29 +1,6 @@
-import { useRouter } from 'next/router';
+import { NextRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
-import settingsService from '../../../services/settingsService';
-import { ToastProps } from '../../toast/hooks/useToast';
-import { InventoryItem } from './useInventory';
-
-export type InventoryFilterDataProps = {
-  field:
-    | 'provider'
-    | 'region'
-    | 'account'
-    | 'name'
-    | 'service'
-    | string
-    | undefined;
-  operator:
-    | 'IS'
-    | 'IS_NOT'
-    | 'CONTAINS'
-    | 'NOT_CONTAINS'
-    | 'IS_EMPTY'
-    | 'IS_NOT_EMPTY'
-    | undefined;
-  tagKey: string | undefined;
-  values: [] | string[];
-};
+import { InventoryFilterDataProps } from './useInventory';
 
 const INITIAL_DATA = {
   field: undefined,
@@ -33,19 +10,13 @@ const INITIAL_DATA = {
 };
 
 type InventoryFilterProps = {
-  applyFilteredInventory: (inventory: InventoryItem[]) => void;
-  setToast: (toast: ToastProps) => void;
+  router: NextRouter;
 };
 
-function useFilterWizard({
-  applyFilteredInventory,
-  setToast
-}: InventoryFilterProps) {
+function useFilterWizard({ router }: InventoryFilterProps) {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   function resetData() {
     setStep(0);
@@ -104,45 +75,18 @@ function useFilterWizard({
   }
 
   function filter() {
-    setLoading(true);
-    const payload = { ...data };
-
-    if (payload.tagKey) {
-      payload.field = `tag:${payload.tagKey}`;
-    }
-
-    delete payload.tagKey;
-    console.log(payload);
-    const payloadJson = JSON.stringify([payload]);
-
-    settingsService.getFilteredInventory(payloadJson).then(res => {
-      if (res.error) {
-        setToast({
-          hasError: true,
-          title: `Filter could not be applied!`,
-          message: `Please refresh the page and try again.`
-        });
-        setLoading(false);
-      } else {
-        setToast({
-          hasError: false,
-          title: `Filter applied!`,
-          message: `The filter selection was successfully applied.`
-        });
-        applyFilteredInventory(res);
-        router.push(
-          `/?field=${payload.field}&operator=${payload.operator}${
-            payload.values.length > 0
-              ? `&values=${payload.values.map(value => value)}`
-              : ''
-          }`,
-          undefined,
-          { shallow: true }
-        );
-        setLoading(false);
-        toggle();
-      }
-    });
+    router.push(
+      `/?field=${
+        data.field === 'tag' ? `tag:${data.tagKey}` : data.field
+      }&operator=${data.operator}${
+        data.values.length > 0
+          ? `&values=${data.values.map(value => value)}`
+          : ''
+      }`,
+      undefined,
+      { shallow: true }
+    );
+    toggle();
   }
 
   return {
@@ -159,7 +103,7 @@ function useFilterWizard({
     resetData,
     cleanValues,
     filter,
-    loading
+    router
   };
 }
 
