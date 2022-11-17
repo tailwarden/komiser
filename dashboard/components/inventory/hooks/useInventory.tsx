@@ -19,16 +19,19 @@ export type Tag = {
 export type InventoryItem = {
   account: string;
   accountId: string;
-  provider: Provider;
   cost: number;
+  createdAt: string;
+  fetchedAt: string;
   id: string;
+  link: string;
+  metadata: null;
   name: string;
+  provider: Provider;
   region: string;
+  resourceId: string;
   service: string;
   tags: Tag[] | [] | null;
-  workspaceId: string;
 };
-
 export type Pages = 'tags' | 'delete';
 
 function useInventory() {

@@ -62,7 +62,31 @@ function InventorySidePanel({
                     <p className="font-medium text-black-900 w-48 truncate ...">
                       {data.service}
                     </p>
-                    <p className="text-xs text-black-300">{data.name}</p>
+                    <p className="flex items-center gap-2 text-xs text-black-300">
+                      {data.name}
+                      <a
+                        target="_blank"
+                        href={data.link}
+                        rel="noreferrer"
+                        className="hover:text-secondary"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M13 11l8.2-8.2M22 6.8V2h-4.8M11 2H9C4 2 2 4 2 9v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2"
+                          ></path>
+                        </svg>
+                      </a>
+                    </p>
                   </div>
                 </div>
               )}
@@ -78,7 +102,7 @@ function InventorySidePanel({
                 </div>
               )}
 
-              <div className="flex gap-4 flex-shrink-0">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <Button style="secondary" onClick={closeModal}>
                   Close
                 </Button>
