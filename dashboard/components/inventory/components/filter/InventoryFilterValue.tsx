@@ -3,6 +3,7 @@ import settingsService from '../../../../services/settingsService';
 import regex from '../../../../utils/regex';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
+import { ToastProps } from '../../../toast/hooks/useToast';
 import { InventoryFilterDataProps } from '../../hooks/useInventory';
 
 type InventoryFilterValueProps = {
@@ -13,6 +14,7 @@ type InventoryFilterValueProps = {
   ) => void;
   handleValueInput: (newValue: { values: string }) => void;
   cleanValues: () => void;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
 type Options = string[];
@@ -21,7 +23,8 @@ function InventoryFilterValue({
   data,
   handleValueCheck,
   handleValueInput,
-  cleanValues
+  cleanValues,
+  setToast
 }: InventoryFilterValueProps) {
   const [options, setOptions] = useState<Options | undefined>();
 
@@ -36,7 +39,11 @@ function InventoryFilterValue({
         settingsService.getProviders().then(res => {
           if (mounted) {
             if (res === Error) {
-              console.log(res);
+              setToast({
+                hasError: true,
+                title: `There was an error when fetching the cloud providers`,
+                message: `Please refresh the page and try again.`
+              });
             } else {
               setOptions(res);
             }
@@ -48,7 +55,11 @@ function InventoryFilterValue({
         settingsService.getAccounts().then(res => {
           if (mounted) {
             if (res === Error) {
-              console.log(res);
+              setToast({
+                hasError: true,
+                title: `There was an error when fetching the cloud accounts`,
+                message: `Please refresh the page and try again.`
+              });
             } else {
               setOptions(res);
             }
@@ -60,7 +71,11 @@ function InventoryFilterValue({
         settingsService.getRegions().then(res => {
           if (mounted) {
             if (res === Error) {
-              console.log(res);
+              setToast({
+                hasError: true,
+                title: `There was an error when fetching the cloud regions`,
+                message: `Please refresh the page and try again.`
+              });
             } else {
               setOptions(res);
             }
@@ -72,7 +87,11 @@ function InventoryFilterValue({
         settingsService.getServices().then(res => {
           if (mounted) {
             if (res === Error) {
-              console.log(res);
+              setToast({
+                hasError: true,
+                title: `There was an error when fetching the cloud services`,
+                message: `Please refresh the page and try again.`
+              });
             } else {
               setOptions(res);
             }

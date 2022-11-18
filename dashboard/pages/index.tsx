@@ -43,7 +43,8 @@ export default function Inventory() {
     openBulkModal,
     updateBulkTags,
     router,
-    activeFilters
+    activeFilters,
+    setSkippedSearch
   } = useInventory();
 
   return (
@@ -56,7 +57,12 @@ export default function Inventory() {
 
       <div className="flex items-center justify-between">
         <p className="text-lg font-medium text-black-900">Inventory</p>
-        <InventoryFilter router={router} activeFilters={activeFilters} />
+        <InventoryFilter
+          router={router}
+          activeFilters={activeFilters}
+          setSkippedSearch={setSkippedSearch}
+          setToast={setToast}
+        />
       </div>
       <div className="mt-4"></div>
 

@@ -89,7 +89,6 @@ function useInventory() {
 
   function resetStates() {
     setSkipped(0);
-    setSkippedSearch(0);
     setInventory(undefined);
     setInventoryStats(undefined);
     setSearchedInventory(undefined);
@@ -189,6 +188,7 @@ function useInventory() {
                 return res;
               });
               setActiveFilters(filterProps);
+              setSkippedSearch(prev => prev + batchSize);
 
               if (res.length >= batchSize) {
                 setShouldFetchMore(true);
@@ -610,19 +610,10 @@ function useInventory() {
     }
   }
 
-  function applyFilteredInventory(
-    filteredInventory: InventoryItem[] | undefined
-  ) {
-    setQuery('');
-    setSearchedInventory(undefined);
-    setSearchedInventory(filteredInventory);
-  }
-
   return {
     inventoryStats,
     inventory,
     searchedInventory,
-    applyFilteredInventory,
     error,
     query,
     setQuery,
@@ -650,7 +641,8 @@ function useInventory() {
     openBulkModal,
     updateBulkTags,
     router,
-    activeFilters
+    activeFilters,
+    setSkippedSearch
   };
 }
 

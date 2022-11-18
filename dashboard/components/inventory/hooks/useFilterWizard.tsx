@@ -11,9 +11,10 @@ const INITIAL_DATA = {
 
 type InventoryFilterProps = {
   router: NextRouter;
+  setSkippedSearch: (number: number) => void;
 };
 
-function useFilterWizard({ router }: InventoryFilterProps) {
+function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
@@ -86,6 +87,7 @@ function useFilterWizard({ router }: InventoryFilterProps) {
       undefined,
       { shallow: true }
     );
+    setSkippedSearch(0);
     toggle();
   }
 

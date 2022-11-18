@@ -2,10 +2,7 @@ import { NextRouter } from 'next/router';
 import Button from '../../../button/Button';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import useFilterWizard from '../../hooks/useFilterWizard';
-import {
-  InventoryFilterDataProps,
-  InventoryItem
-} from '../../hooks/useInventory';
+import { InventoryFilterDataProps } from '../../hooks/useInventory';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';
 import InventoryFilterOperator from './InventoryFilterOperator';
@@ -15,9 +12,16 @@ import InventoryFilterValue from './InventoryFilterValue';
 type InventoryFilterProps = {
   router: NextRouter;
   activeFilters: InventoryFilterDataProps | undefined;
+  setSkippedSearch: (number: number) => void;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
-function InventoryFilter({ router, activeFilters }: InventoryFilterProps) {
+function InventoryFilter({
+  router,
+  activeFilters,
+  setSkippedSearch,
+  setToast
+}: InventoryFilterProps) {
   const {
     toggle,
     isOpen,
@@ -32,7 +36,7 @@ function InventoryFilter({ router, activeFilters }: InventoryFilterProps) {
     resetData,
     cleanValues,
     filter
-  } = useFilterWizard({ router });
+  } = useFilterWizard({ router, setSkippedSearch });
 
   return (
     <div>
@@ -122,6 +126,7 @@ function InventoryFilter({ router, activeFilters }: InventoryFilterProps) {
                       handleValueCheck={handleValueCheck}
                       handleValueInput={handleValueInput}
                       cleanValues={cleanValues}
+                      setToast={setToast}
                     />
                   </div>
                   <div className="border-t -mx-4 -mb-4 px-4 py-4">
