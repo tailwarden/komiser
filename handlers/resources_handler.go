@@ -65,7 +65,29 @@ func (handler *ApiHandler) ListResourcesHandler(w http.ResponseWriter, r *http.R
 func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http.Request) {
 	var filters []Filter
 
-	err := json.NewDecoder(r.Body).Decode(&filters)
+	limitRaw := r.URL.Query().Get("limit")
+	skipRaw := r.URL.Query().Get("skip")
+	query := r.URL.Query().Get("query")
+
+	var limit int64
+	var skip int64
+	limit = 0
+	skip = 0
+	l, err := strconv.ParseInt(limitRaw, 10, 64)
+	if err != nil {
+		limit = 0
+	} else {
+		limit = l
+	}
+
+	s, err := strconv.ParseInt(skipRaw, 10, 64)
+	if err != nil {
+		skip = 0
+	} else {
+		skip = s
+	}
+
+	err = json.NewDecoder(r.Body).Decode(&filters)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
@@ -142,13 +164,18 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		}
 	}
 
+	if len(query) > 0 {
+		clause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
+		whereQueries = append(whereQueries, clause)
+	}
+
 	whereClause := strings.Join(whereQueries, " AND ")
 
 	resources := make([]Resource, 0)
 	if filterWithTags {
-		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s", whereClause)).Scan(handler.ctx, &resources)
+		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 	} else {
-		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s", whereClause)).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 		if err != nil {
 			respondWithError(w, http.StatusBadRequest, err.Error())
 			return
