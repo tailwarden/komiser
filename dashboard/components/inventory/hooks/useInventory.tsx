@@ -350,13 +350,11 @@ function useInventory() {
   useEffect(() => {
     let mounted = true;
 
-    if (!query) {
-      setSearchedInventory(undefined);
-      setSkippedSearch(0);
-      setShouldFetchMore(false);
-      setBulkItems([]);
-      setBulkSelectCheckbox(false);
-    }
+    setSearchedInventory(undefined);
+    setSkippedSearch(0);
+    setShouldFetchMore(false);
+    setBulkItems([]);
+    setBulkSelectCheckbox(false);
 
     if (query) {
       setError(false);
@@ -391,20 +389,25 @@ function useInventory() {
     let mounted = true;
 
     if (inventoryHasUpdate) {
-      settingsService
-        .getInventoryList(`?limit=${batchSize}&skip=0`)
-        .then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-            } else {
-              setQuery('');
-              setInventory(res);
-              setSkipped(batchSize);
-              setInventoryHasUpdate(false);
+      if (Object.keys(router.query).length === 0) {
+        settingsService
+          .getInventoryList(`?limit=${batchSize}&skip=0`)
+          .then(res => {
+            if (mounted) {
+              if (res === Error) {
+                setError(true);
+              } else {
+                setQuery('');
+                setInventory(res);
+                setSkipped(batchSize);
+                setInventoryHasUpdate(false);
+              }
             }
-          }
-        });
+          });
+      } else {
+        setSkippedSearch(0);
+        router.push(router.asPath, undefined, { shallow: true });
+      }
     }
 
     return () => {
@@ -447,7 +450,7 @@ function useInventory() {
     setIsOpen(true);
   }
 
-  function openBulkModal(bulkItemsIds: string[]) {
+  function openBulkModal() {
     cleanModal();
     setTags([{ key: '', value: '' }]);
     setIsOpen(true);
@@ -524,6 +527,7 @@ function useInventory() {
               data.provider
             } ${data.service} ${data.name}`
           });
+          setSkipped(0);
           setInventoryHasUpdate(true);
           closeModal();
         }

@@ -51,7 +51,8 @@ function InventoryTable({
   return (
     <>
       {((!error && inventory && inventory.length > 0) ||
-        (!error && searchedInventory && searchedInventory.length > 0)) && (
+        (!error && searchedInventory) ||
+        (!error && query)) && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
           <div className="pb-6 rounded-lg rounded-t-none">
@@ -243,7 +244,7 @@ function InventoryTable({
             </table>
 
             {/* Inventory search loading */}
-            {!searchedInventory && <SkeletonInventory />}
+            {(!searchedInventory || !query) && <SkeletonInventory />}
 
             {/* Inventory search no results */}
             {searchedInventory && searchedInventory.length === 0 && (
