@@ -22,11 +22,11 @@ jobs:
       - persist_to_workspace:
           root: dashboard
           paths:
-            - dist
+            - out
   build_cli:
     docker:
-      - image: golang:1.18.3
-    working_directory: /go/src/github.com/mlabouardy/komiser
+      - image: golang:1.19.3
+    working_directory: /go/src/github.com/tailwarden/komiser
     resource_class: large
     steps:
       - checkout
@@ -39,42 +39,38 @@ jobs:
       - run:
           name: Install go-bin-data
           command: |
-           go install github.com/go-bindata/go-bindata/...
-           go install github.com/elazarl/go-bindata-assetfs/...
+           go install -a -v github.com/go-bindata/go-bindata/...@latest
+           go install -v github.com/elazarl/go-bindata-assetfs/...
       - run:
          name: Fix path
-         command: mv /tmp/dashboard/dist .
+         command: mv /tmp/dashboard/out .
       - run:
          name: Create assets
-         command: go-bindata-assetfs -o template.go dist/...
-      - run:
-         name: Install gox
-         command: go install github.com/mitchellh/gox@latest
+         command: |
+            go-bindata-assetfs -o internal/api/v1/template.go out/...
+            sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
       - run:
          name: Build binary
-         no_output_timeout: 20m
          command: |
-            gox -osarch="linux/amd64"
-            gox -osarch="windows/amd64" 
-            gox -osarch="darwin/amd64"
+            make build
+            make package
       - run:
          name: Install AWS CLI
          command: |
           apt-get update
           apt-get install -y awscli
-          chmod +x komiser_windows_amd64.exe komiser_darwin_amd64 komiser_linux_amd64
+          chmod +x bin/komiser_windows_amd64.exe bin/komiser_darwin_amd64 bin/komiser_darwin_arm64 bin/komiser_linux_amd64
       - run:
           name: Push Linux binary
-          command: aws s3 cp komiser_linux_amd64 s3://komiser-releases/2.11.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp bin/komiser_linux_amd64 s3://komiser-releases/3.0.0/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Windows binary
-          command: aws s3 cp komiser_windows_amd64.exe s3://komiser-releases/2.11.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp bin/komiser_windows_amd64.exe s3://komiser-releases/3.0.0/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Mac OS X binary
-          command: aws s3 cp komiser_darwin_amd64 s3://komiser-releases/2.11.0/osx/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-      - run:
-          name: Upload IAM policy
-          command: aws s3 cp policy.json s3://komiser-releases/policy.json --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: |
+            aws s3 cp bin/komiser_darwin_amd64 s3://komiser-releases/3.0.0/osx/amd/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+            aws s3 cp bin/komiser_darwin_arm64 s3://komiser-releases/3.0.0/osx/arm/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
   build_docker:
     docker:
@@ -85,37 +81,43 @@ jobs:
         - setup_remote_docker
         - run:
             name: Build Komiser Docker Image
-            command: docker build -t mlabouardy/komiser:latest .
+            command: docker build -t tailwarden/komiser:latest .
         - deploy:
             name: Push Komiser to DockerHub
             command: |
               docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-              docker tag mlabouardy/komiser:latest mlabouardy/komiser:${CIRCLE_SHA1}
-              docker tag mlabouardy/komiser:latest mlabouardy/komiser:2.11.0
-              docker push mlabouardy/komiser:latest
-              docker push mlabouardy/komiser:2.11.0
-              docker push mlabouardy/komiser:${CIRCLE_SHA1}
+              docker tag tailwarden/komiser:latest tailwarden/komiser:${CIRCLE_SHA1}
+              docker tag tailwarden/komiser:latest tailwarden/komiser:3.0.0
+              docker push tailwarden/komiser:latest
+              docker push tailwarden/komiser:3.0.0
+              docker push tailwarden/komiser:${CIRCLE_SHA1}
       
 workflows:
     version: 2
     build_and_deploy:
         jobs:
-            - build_frontend
+            - build_frontend:
                 filters:
                     branches:
-                    only:
-                        - master
+                        only:
+                            - master
+                            - v3.0.0
+                            - v3.0.0-beta
             - build_cli:
                 requires:
                     - build_frontend
                 filters:
                     branches:
-                    only:
-                        - master
+                        only:
+                            - master
+                            - v3.0.0
+                            - v3.0.0-beta
             - build_docker:
                 requires:
                     - build_cli
                 filters:
                     branches:
-                    only:
-                        - master
+                        only:
+                            - master
+                            - v3.0.0
+                            - v3.0.0-beta

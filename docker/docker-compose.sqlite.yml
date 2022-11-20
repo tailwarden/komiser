@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  komiser:
+    build: ../
+    restart: always
+    platform: linux/amd64
+    volumes:
+      - ./komiser.db:/usr/bin/komiser.db
+    ports:
+      - 3000:3000

@@ -1,9 +1,7 @@
-FROM alpine:3.15
-MAINTAINER mlabouardy <mohamed@labouardy.com>
+FROM --platform=linux/amd64 alpine:3.16
+MAINTAINER mlabouardy <mohamed@tailwarden.com>
 
-ENV VERSION 2.11.0
-ENV PORT 3000
-ENV DURATION 30
+ENV VERSION 3.0.0
 
 RUN apk update && apk add curl
 RUN curl -L https://cli.komiser.io/$VERSION/linux/komiser -o /usr/bin/komiser && \

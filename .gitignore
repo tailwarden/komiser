@@ -4,3 +4,9 @@ dist
 komiser
 tmp
 credentials
+main
+config.toml
+_
+out
+bin
+*.db

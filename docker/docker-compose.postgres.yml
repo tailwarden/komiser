@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  komiser:
+    build: ../
+    restart: always
+    platform: linux/amd64
+    volumes:
+      - ./config.toml:/usr/bin/config.toml
+    ports:
+      - 3000:3000
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
