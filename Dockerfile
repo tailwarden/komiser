@@ -1,5 +1,5 @@
-FROM alpine:3.15
-MAINTAINER mlabouardy <mohamed@labouardy.com>
+FROM --platform=linux/amd64 alpine:3.16
+MAINTAINER mlabouardy <mohamed@tailwarden.com>
 
 ENV VERSION 3.0.0
 
