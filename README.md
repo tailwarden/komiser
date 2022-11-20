@@ -1,4 +1,4 @@
-**Komiser is back 🎉 and we're looking for maintainers to work on the new [roadmap](https://tailwarden.canny.io/), if you're interested, join us on our <a href="https://discord.tailwarden.com">Discord</a> community**
+**Komiser is back 🎉 and we're looking for maintainers to work on the new [roadmap](https://roadmap.tailwarden.com/), if you're interested, join us on our <a href="https://discord.tailwarden.com">Discord</a> community**
 
 ---
 
@@ -16,13 +16,13 @@
 </h4>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
-[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/HelloOraculi/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/mlabouardy/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
+[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/HelloOraculi/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
 Stay under budget by uncovering hidden costs, monitoring increases in spend, and making impactful changes based on custom recommendations.
 
-*Cloud version is available in private beta test stage, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com)*
+*Cloud version is available in private beta, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com)*
 
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiseree) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/mlabouardy/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiseree) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/tailwarden/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
 ## Komiser CLI, try it out!
 ---
@@ -59,7 +59,7 @@ brew install komiser
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # What is Komiser?
-Komiser is an open source project created in 2017. Created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
+Komiser is an open source project created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
 * Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
 * Get a deep understanding of **how you spend** on the AWS, GCP, OVH, DigitalOcean and Azure.
