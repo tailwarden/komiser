@@ -70,6 +70,12 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 
 		config.NextToken = output.NextToken
 	}
-	log.Debugf("[%s] Fetched %d AWS EKS clusters from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "EKS",
+		"resources": len(resources),
+	}).Debugf("Fetched resources")
 	return resources, nil
 }

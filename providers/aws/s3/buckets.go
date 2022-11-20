@@ -54,6 +54,12 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 		}
 	}
-	log.Debugf("[%s] Fetched %d AWS S3 buckets from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "S3",
+		"resources": len(resources),
+	}).Debugf("Fetched resources")
 	return resources, nil
 }

@@ -58,6 +58,12 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 		}
 		config.Marker = output.DistributionList.Marker
 	}
-	log.Debugf("[%s] Fetched %d AWS Cloudfront distributions from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "CloudFront",
+		"resources": len(resources),
+	}).Debugf("Fetched resources")
 	return resources, nil
 }

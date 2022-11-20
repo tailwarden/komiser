@@ -60,6 +60,12 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		config.NextToken = output.NextToken
 	}
-	log.Debugf("[%s] Fetched %d AWS SQS queues from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "SQS",
+		"resources": len(resources),
+	}).Debugf("Fetched resources")
 	return resources, nil
 }

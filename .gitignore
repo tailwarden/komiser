@@ -9,3 +9,4 @@ config.toml
 _
 out
 bin
+*.db

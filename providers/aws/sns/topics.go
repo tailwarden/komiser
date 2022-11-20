@@ -60,6 +60,12 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		config.NextToken = output.NextToken
 	}
-	log.Debugf("[%s] Fetched %d AWS SNS topics from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "SNS",
+		"resources": len(resources),
+	}).Debugf("Fetched resources")
 	return resources, nil
 }

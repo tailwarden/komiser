@@ -52,6 +52,12 @@ func Roles(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		config.Marker = output.Marker
 	}
-	log.Debugf("[%s] Fetched %d AWS IAM roles from %s\n", client.Name, len(resources), client.AWSClient.Region)
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "IAM Role",
+		"resources": len(resources),
+	}).Debugf("Fetched resources")
 	return resources, nil
 }

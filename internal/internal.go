@@ -12,20 +12,22 @@ import (
 
 	"github.com/hashicorp/go-version"
 	log "github.com/sirupsen/logrus"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/dialect/sqlitedialect"
+	"github.com/uptrace/bun/driver/pgdriver"
+	"github.com/uptrace/bun/driver/sqliteshim"
 
 	"github.com/gorilla/handlers"
 	v1 "github.com/mlabouardy/komiser/internal/api/v1"
 	"github.com/mlabouardy/komiser/internal/config"
-	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	"github.com/mlabouardy/komiser/models"
+	"github.com/mlabouardy/komiser/providers"
 	"github.com/mlabouardy/komiser/providers/aws"
 	do "github.com/mlabouardy/komiser/providers/digitalocean"
 	oci "github.com/mlabouardy/komiser/providers/oci"
 	"github.com/rs/cors"
 	"github.com/spf13/cobra"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/driver/pgdriver"
 )
 
 var Version = "Unknown"
@@ -84,16 +86,34 @@ func runServer(port int, noTracking bool) error {
 	return nil
 }
 
-func setupSchema(c *Config) error {
-	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
-	db = bun.NewDB(sqldb, pgdialect.New())
+func setupSchema(c *models.Config) error {
+	var sqldb *sql.DB
+	var err error
 
-	_, err := db.NewCreateTable().Model((*Resource)(nil)).IfNotExists().Exec(context.Background())
+	if len(c.SQLite.File) > 0 {
+		sqldb, err = sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", c.SQLite.File))
+		if err != nil {
+			return err
+		}
+		sqldb.SetMaxIdleConns(1000)
+		sqldb.SetConnMaxLifetime(0)
+
+		db = bun.NewDB(sqldb, sqlitedialect.New())
+
+		log.Println("Data will be stored in SQLite")
+	} else {
+		sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
+		db = bun.NewDB(sqldb, pgdialect.New())
+
+		log.Println("Data will be stored in PostgreSQL")
+	}
+
+	_, err = db.NewCreateTable().Model((*models.Resource)(nil)).IfNotExists().Exec(context.Background())
 	if err != nil {
 		return err
 	}
 
-	_, err = db.NewCreateTable().Model((*View)(nil)).IfNotExists().Exec(context.Background())
+	_, err = db.NewCreateTable().Model((*models.View)(nil)).IfNotExists().Exec(context.Background())
 	if err != nil {
 		return err
 	}
@@ -101,18 +121,18 @@ func setupSchema(c *Config) error {
 	return nil
 }
 
-func fetchResources(ctx context.Context, clients []ProviderClient, regions []string) error {
+func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			go func(ctx context.Context, client ProviderClient, regions []string) {
+			go func(ctx context.Context, client providers.ProviderClient, regions []string) {
 				aws.FetchResources(ctx, client, regions, db)
 			}(ctx, client, regions)
 		} else if client.DigitalOceanClient != nil {
-			go func(ctx context.Context, client ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient) {
 				do.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.OciClient != nil {
-			go func(ctx context.Context, client ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient) {
 				oci.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}

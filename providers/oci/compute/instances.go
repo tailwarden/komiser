@@ -55,6 +55,11 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]Resource
 		})
 	}
 
-	log.Debugf("[%s] Fetched %d DigitalOcean Droplets\n", client.Name, len(resources))
+	log.WithFields(log.Fields{
+		"provider":  "OCI",
+		"account":   client.Name,
+		"service":   "Compute VM",
+		"resources": len(resources),
+	}).Debug("Fetched resources")
 	return resources, nil
 }

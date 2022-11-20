@@ -18,7 +18,7 @@ var startCmd = &cobra.Command{
 			return err
 		}
 		if file == "" {
-			return errors.New("you must specify a manifest with '--config path/url'")
+			return errors.New("you must specify a config file with '--config PATH'")
 		}
 
 		regions, err := cmd.Flags().GetStringArray("regions")
@@ -52,15 +52,20 @@ func init() {
 	rootCmd.AddCommand(startCmd)
 	startCmd.PersistentFlags().Int("port", 3000, `Port to start server on, default:"3000".`)
 	startCmd.PersistentFlags().StringArray("regions", []string{}, "Restrict Komiser inspection to list of regions.")
-	startCmd.PersistentFlags().String("config", "", "Path to configuration file.")
+	startCmd.PersistentFlags().String("config", "config.toml", "Path to configuration file.")
 	startCmd.PersistentFlags().Bool("verbose", true, "Show verbose debug information.")
 	startCmd.PersistentFlags().Bool("no-tracking", false, "Disable user analytics.")
 }
 
 func setupLogging(verbose bool) {
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp: true,
+		ForceColors:   true,
+	})
+
 	if verbose {
 		log.SetLevel(log.DebugLevel)
-		log.Debugf("Debug logging is enabled")
+		log.Info("Debug logging is enabled")
 	} else {
 		log.SetLevel(log.InfoLevel)
 	}
