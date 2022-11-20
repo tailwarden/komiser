@@ -26,7 +26,7 @@ jobs:
   build_cli:
     docker:
       - image: golang:1.19.3
-    working_directory: /go/src/github.com/HelloOraculi/komiser
+    working_directory: /go/src/github.com/tailwarden/komiser
     resource_class: large
     steps:
       - checkout
@@ -81,16 +81,16 @@ jobs:
         - setup_remote_docker
         - run:
             name: Build Komiser Docker Image
-            command: docker build -t mlabouardy/komiser:latest .
+            command: docker build -t tailwarden/komiser:latest .
         - deploy:
             name: Push Komiser to DockerHub
             command: |
               docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-              docker tag mlabouardy/komiser:latest mlabouardy/komiser:${CIRCLE_SHA1}
-              docker tag mlabouardy/komiser:latest mlabouardy/komiser:3.0.0
-              docker push mlabouardy/komiser:latest
-              docker push mlabouardy/komiser:3.0.0
-              docker push mlabouardy/komiser:${CIRCLE_SHA1}
+              docker tag tailwarden/komiser:latest tailwarden/komiser:${CIRCLE_SHA1}
+              docker tag tailwarden/komiser:latest tailwarden/komiser:3.0.0
+              docker push tailwarden/komiser:latest
+              docker push tailwarden/komiser:3.0.0
+              docker push tailwarden/komiser:${CIRCLE_SHA1}
       
 workflows:
     version: 2
