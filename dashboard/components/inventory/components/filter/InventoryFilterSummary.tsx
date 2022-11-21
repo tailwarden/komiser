@@ -32,8 +32,12 @@ function InventoryFilterSummary({
     if (param === 'IS_NOT') return 'is not';
     if (param === 'CONTAINS') return 'contains';
     if (param === 'NOT_CONTAINS') return 'does not contain';
-    if (param === 'IS_EMPTY') return 'is empty';
-    if (param === 'IS_NOT_EMPTY') return 'is not empty';
+    if (param === 'IS_EMPTY' && data.field !== 'tags') return 'is empty';
+    if (param === 'IS_EMPTY' && data.field === 'tags') return 'which are empty';
+    if (param === 'IS_NOT_EMPTY' && data.field !== 'tags')
+      return 'is not empty';
+    if (param === 'IS_NOT_EMPTY' && data.field === 'tags')
+      return 'which are not empty';
     return param;
   }
 

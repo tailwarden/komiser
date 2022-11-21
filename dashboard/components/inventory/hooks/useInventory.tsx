@@ -263,7 +263,7 @@ function useInventory() {
       skipped < inventoryStats.resources &&
       isVisible &&
       !query &&
-      !displayedFilters
+      !filters
     ) {
       setError(false);
 
@@ -384,6 +384,10 @@ function useInventory() {
     setShouldFetchMore(false);
     setBulkItems([]);
     setBulkSelectCheckbox(false);
+
+    if (!filters && !query) {
+      setSearchedInventory(undefined);
+    }
 
     if (!filters && query) {
       setSearchedLoading(true);
@@ -691,8 +695,8 @@ function useInventory() {
     const url = updatedFilters
       .map(
         filter =>
-          `${filter.field}:${filter.operator}${
-            filter.values ? `:${filter.values}` : ''
+          `${filter.field}${`:${filter.operator}`}${
+            filter.values.length > 0 ? `:${filter.values}` : ''
           }`
       )
       .join('&');

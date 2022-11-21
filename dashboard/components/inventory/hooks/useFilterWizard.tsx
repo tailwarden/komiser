@@ -90,7 +90,7 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
       router.push(
         `${router.asPath}&${
           data.field === 'tag' ? `tag:${data.tagKey}` : data.field
-        }:${data.operator}${
+        }${`:${data.operator}`}${
           data.values.length > 0 ? `:${data.values.map(value => value)}` : ''
         }`
       );

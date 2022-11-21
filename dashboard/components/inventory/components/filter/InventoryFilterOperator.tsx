@@ -23,6 +23,12 @@ const inventoryFilterOperatorOptions: InventoryFilterOperatorOptionsProps[] = [
   { label: 'is not empty', value: 'IS_NOT_EMPTY' }
 ];
 
+const inventoryFilterOperatorAllTagsOptions: InventoryFilterOperatorOptionsProps[] =
+  [
+    { label: 'which are empty', value: 'IS_EMPTY' },
+    { label: 'which are not empty', value: 'IS_NOT_EMPTY' }
+  ];
+
 function InventoryFilterOperator({
   data,
   handleOperator,
@@ -47,19 +53,33 @@ function InventoryFilterOperator({
       )}
 
       {/* Operators list */}
-      {inventoryFilterOperatorOptions.map((option, idx) => (
-        <Button
-          key={idx}
-          size="sm"
-          style="ghost"
-          align="left"
-          gap="md"
-          disabled={data.field === 'tag' && !data.tagKey}
-          onClick={() => handleOperator(option.value)}
-        >
-          {option.label}
-        </Button>
-      ))}
+      {data.field !== 'tags' &&
+        inventoryFilterOperatorOptions.map((option, idx) => (
+          <Button
+            key={idx}
+            size="sm"
+            style="ghost"
+            align="left"
+            gap="md"
+            disabled={data.field === 'tag' && !data.tagKey}
+            onClick={() => handleOperator(option.value)}
+          >
+            {option.label}
+          </Button>
+        ))}
+      {data.field === 'tags' &&
+        inventoryFilterOperatorAllTagsOptions.map((option, idx) => (
+          <Button
+            key={idx}
+            size="sm"
+            style="ghost"
+            align="left"
+            gap="md"
+            onClick={() => handleOperator(option.value)}
+          >
+            {option.label}
+          </Button>
+        ))}
     </div>
   );
 }

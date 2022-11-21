@@ -32,7 +32,13 @@ function InventorySearchNoResults({ query, setQuery, router }: Props) {
         </div>
         <Button
           style="outline"
-          onClick={query ? () => setQuery('') : () => router.push('/')}
+          onClick={
+            query
+              ? () => {
+                  setQuery('');
+                }
+              : () => router.push('/')
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

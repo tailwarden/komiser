@@ -153,7 +153,42 @@ const inventoryFilterFieldOptions: InventoryFilterFieldOptionsProps[] = [
     )
   },
   {
-    label: 'Tag',
+    label: 'All tags',
+    value: 'tags',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M4.405 15.526l4.53 4.53a4.78 4.78 0 006.75 0l4.39-4.39a4.78 4.78 0 000-6.75l-4.54-4.52a4.75 4.75 0 00-3.6-1.39l-5 .24c-2 .09-3.59 1.68-3.69 3.67l-.24 5c-.06 1.35.45 2.66 1.4 3.61z"
+        ></path>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth="2"
+          d="M9.735 12.226a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+        ></path>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeMiterlimit="10"
+          strokeWidth="2"
+          d="M13.235 17.226l4-4"
+        ></path>
+      </svg>
+    )
+  },
+  {
+    label: 'Specific tag',
     value: 'tag',
     icon: (
       <svg
