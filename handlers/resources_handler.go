@@ -158,6 +158,17 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
 			}
+		} else if filter.Field == "tags" {
+			switch filter.Operator {
+			case "IS_EMPTY":
+				whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+			case "IS_NOT_EMPTY":
+				whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+
+			default:
+				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				return
+			}
 		} else {
 			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
 			return
