@@ -76,17 +76,25 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
   }
 
   function filter() {
-    router.push(
-      `/?field=${
-        data.field === 'tag' ? `tag:${data.tagKey}` : data.field
-      }&operator=${data.operator}${
-        data.values.length > 0
-          ? `&values=${data.values.map(value => value)}`
-          : ''
-      }`,
-      undefined,
-      { shallow: true }
-    );
+    if (router.asPath === '/') {
+      router.push(
+        `/?${data.field === 'tag' ? `tag:${data.tagKey}` : data.field}:${
+          data.operator
+        }${
+          data.values.length > 0 ? `:${data.values.map(value => value)}` : ''
+        }`,
+        undefined,
+        { shallow: true }
+      );
+    } else {
+      router.push(
+        `${router.asPath}&${
+          data.field === 'tag' ? `tag:${data.tagKey}` : data.field
+        }:${data.operator}${
+          data.values.length > 0 ? `:${data.values.map(value => value)}` : ''
+        }`
+      );
+    }
     setSkippedSearch(0);
     toggle();
   }

@@ -11,16 +11,18 @@ import InventoryFilterValue from './InventoryFilterValue';
 
 type InventoryFilterProps = {
   router: NextRouter;
-  activeFilters: InventoryFilterDataProps | undefined;
+  displayedFilters: InventoryFilterDataProps[] | undefined;
   setSkippedSearch: (number: number) => void;
   setToast: (toast: ToastProps | undefined) => void;
+  deleteFilter: (idx: number) => void;
 };
 
 function InventoryFilter({
   router,
-  activeFilters,
+  displayedFilters,
   setSkippedSearch,
-  setToast
+  setToast,
+  deleteFilter
 }: InventoryFilterProps) {
   const {
     toggle,
@@ -41,15 +43,21 @@ function InventoryFilter({
   return (
     <div>
       {/* Active filters list */}
-      {Object.keys(router.query).length > 0 && activeFilters && (
-        <div className="flex items-center gap-4 bg-white py-2 px-6 rounded-lg absolute left-0 right-0 top-[64px]">
-          <span className="text-sm text-black-400">Filters:</span>
-          <InventoryFilterSummary
-            data={activeFilters}
-            resetData={() => router.push('/')}
-          />
-        </div>
-      )}
+      {Object.keys(router.query).length > 0 &&
+        displayedFilters &&
+        displayedFilters.length > 0 && (
+          <div className="flex items-center gap-4 bg-white py-2 px-6 rounded-lg absolute left-0 right-0 top-[64px]">
+            <span className="text-sm text-black-400">Filters:</span>
+            {displayedFilters.map((activeFilter, idx) => (
+              <InventoryFilterSummary
+                key={idx}
+                id={idx}
+                data={activeFilter}
+                deleteFilter={deleteFilter}
+              />
+            ))}
+          </div>
+        )}
 
       {/* Dropdown button toggle */}
       <button

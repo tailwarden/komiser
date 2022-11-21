@@ -28,7 +28,7 @@ type InventoryTableProps = {
   onCheckboxChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
   inventoryStats: InventoryStats | undefined;
   openBulkModal: (bulkItemsIds: string[]) => void;
-  activeFilters: InventoryFilterDataProps | undefined;
+  displayedFilters: InventoryFilterDataProps[] | undefined;
   router: NextRouter;
 };
 
@@ -45,7 +45,7 @@ function InventoryTable({
   onCheckboxChange,
   inventoryStats,
   openBulkModal,
-  activeFilters,
+  displayedFilters,
   router
 }: InventoryTableProps) {
   return (

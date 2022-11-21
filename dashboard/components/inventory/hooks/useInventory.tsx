@@ -21,8 +21,9 @@ export type InventoryFilterDataProps = {
     | 'NOT_CONTAINS'
     | 'IS_EMPTY'
     | 'IS_NOT_EMPTY'
+    | string
     | undefined;
-  tagKey: string | undefined;
+  tagKey?: string;
   values: [] | string[];
 };
 
@@ -78,8 +79,9 @@ function useInventory() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [bulkItems, setBulkItems] = useState<string[] | []>([]);
   const [bulkSelectCheckbox, setBulkSelectCheckbox] = useState(false);
-  const [activeFilters, setActiveFilters] =
-    useState<InventoryFilterDataProps>();
+  const [displayedFilters, setDisplayedFilters] =
+    useState<InventoryFilterDataProps[]>();
+  const [filters, setFilters] = useState<InventoryFilterDataProps[]>();
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -92,10 +94,63 @@ function useInventory() {
     setInventory(undefined);
     setInventoryStats(undefined);
     setSearchedInventory(undefined);
-    setActiveFilters(undefined);
+    setDisplayedFilters(undefined);
     setBulkItems([]);
     setBulkSelectCheckbox(false);
     setQuery('');
+  }
+
+  // Parse URL params into payload
+  function parseParams(param: string, type: 'fetch' | 'display') {
+    const formatString = param.split(':');
+    let filter;
+
+    if (formatString[0] === 'tag' && type === 'fetch') {
+      filter = {
+        field: `${formatString[0]}:${formatString[1]}`,
+        operator: formatString[2],
+        values:
+          formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
+            ? []
+            : formatString[3].split(',')
+      };
+    }
+
+    if (formatString[0] !== 'tag' && type === 'fetch') {
+      filter = {
+        field: formatString[0],
+        operator: formatString[1],
+        values:
+          formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
+            ? []
+            : formatString[2].split(',')
+      };
+    }
+
+    if (formatString[0] === 'tag' && type === 'display') {
+      filter = {
+        field: formatString[0],
+        tagKey: formatString[1],
+        operator: formatString[2],
+        values:
+          formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
+            ? []
+            : formatString[3].split(',')
+      };
+    }
+
+    if (formatString[0] !== 'tag' && type === 'display') {
+      filter = {
+        field: formatString[0],
+        operator: formatString[1],
+        values:
+          formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
+            ? []
+            : formatString[2].split(',')
+      };
+    }
+
+    return filter as InventoryFilterDataProps;
   }
 
   // Fetch the correct inventory list based on URL params
@@ -133,28 +188,15 @@ function useInventory() {
         });
     }
 
-    if (router.query.field) {
-      const formatValue =
-        router.query.values && (router.query.values as string).split(',');
-      const isTagFilter =
-        router.query.field && router.query.field.includes('tag');
+    if (router.query && Object.keys(router.query).length > 0) {
+      const newFilters: InventoryFilterDataProps[] = Object.keys(
+        router.query
+      ).map(param => parseParams(param, 'fetch'));
+      const newFiltersToDisplay: InventoryFilterDataProps[] = Object.keys(
+        router.query
+      ).map(param => parseParams(param, 'display'));
 
-      const filterProps: any = {
-        field: isTagFilter ? 'tag' : router.query.field,
-        operator: router.query.operator,
-        values: formatValue,
-        tagKey: isTagFilter ? router.query.field!.slice(4) : ''
-      };
-
-      const payload = [
-        {
-          field: router.query.field,
-          operator: router.query.operator,
-          values: formatValue
-        }
-      ];
-
-      const payloadJson = JSON.stringify(payload);
+      const payloadJson = JSON.stringify(newFilters);
 
       settingsService.getFilteredInventoryStats(payloadJson).then(res => {
         if (mounted) {
@@ -187,7 +229,8 @@ function useInventory() {
                 }
                 return res;
               });
-              setActiveFilters(filterProps);
+              setFilters(newFilters);
+              setDisplayedFilters(newFiltersToDisplay);
               setSkippedSearch(prev => prev + batchSize);
 
               if (res.length >= batchSize) {
@@ -215,7 +258,7 @@ function useInventory() {
       skipped < inventoryStats.resources &&
       isVisible &&
       !query &&
-      !activeFilters
+      !displayedFilters
     ) {
       setError(false);
 
@@ -271,7 +314,7 @@ function useInventory() {
     }
 
     // Fetching on filtered list
-    if (shouldFetchMore && isVisible && activeFilters) {
+    if (shouldFetchMore && isVisible && displayedFilters) {
       setError(false);
       const formatValue =
         router.query.values && (router.query.values as string).split(',');
@@ -327,7 +370,7 @@ function useInventory() {
                 }
                 return res;
               });
-              setActiveFilters(filterProps);
+              setDisplayedFilters(filterProps);
 
               if (res.length >= batchSize) {
                 setShouldFetchMore(true);
@@ -614,6 +657,20 @@ function useInventory() {
     }
   }
 
+  function deleteFilter(idx: number) {
+    const updatedFilters: InventoryFilterDataProps[] = [...filters!];
+    updatedFilters.splice(idx, 1);
+    const url = updatedFilters
+      .map(
+        filter =>
+          `${filter.field}:${filter.operator}${
+            filter.values ? `:${filter.values}` : ''
+          }`
+      )
+      .join('&');
+    router.push(url ? `/?${url}` : '', undefined, { shallow: true });
+  }
+
   return {
     inventoryStats,
     inventory,
@@ -645,8 +702,9 @@ function useInventory() {
     openBulkModal,
     updateBulkTags,
     router,
-    activeFilters,
-    setSkippedSearch
+    displayedFilters,
+    setSkippedSearch,
+    deleteFilter
   };
 }
 

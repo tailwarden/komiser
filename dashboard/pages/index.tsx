@@ -43,8 +43,9 @@ export default function Inventory() {
     openBulkModal,
     updateBulkTags,
     router,
-    activeFilters,
-    setSkippedSearch
+    displayedFilters,
+    setSkippedSearch,
+    deleteFilter
   } = useInventory();
 
   return (
@@ -59,9 +60,10 @@ export default function Inventory() {
         <p className="text-lg font-medium text-black-900">Inventory</p>
         <InventoryFilter
           router={router}
-          activeFilters={activeFilters}
+          displayedFilters={displayedFilters}
           setSkippedSearch={setSkippedSearch}
           setToast={setToast}
+          deleteFilter={deleteFilter}
         />
       </div>
       <div className="mt-4"></div>
@@ -103,7 +105,7 @@ export default function Inventory() {
       {/* Inventory stats loading */}
       {!inventoryStats && !error && <SkeletonStats />}
 
-      {activeFilters && <div className="mt-[104px]"></div>}
+      {displayedFilters && <div className="mt-[104px]"></div>}
 
       {/* Inventory stats */}
       <InventoryStatsCards inventoryStats={inventoryStats} error={error} />
@@ -111,7 +113,7 @@ export default function Inventory() {
       <div className="mt-8"></div>
 
       {/* Inventory list loading */}
-      {!inventory && !error && !query && !activeFilters && (
+      {!inventory && !error && !query && !displayedFilters && (
         <SkeletonInventory />
       )}
 
@@ -129,7 +131,7 @@ export default function Inventory() {
         onCheckboxChange={onCheckboxChange}
         inventoryStats={inventoryStats}
         openBulkModal={openBulkModal}
-        activeFilters={activeFilters}
+        displayedFilters={displayedFilters}
         router={router}
       />
 

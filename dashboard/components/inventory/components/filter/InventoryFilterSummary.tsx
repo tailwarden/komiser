@@ -3,14 +3,18 @@ import { InventoryFilterDataProps } from '../../hooks/useInventory';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterSummaryProps = {
+  id?: number;
   bg?: 'white';
   data: InventoryFilterDataProps;
-  resetData: () => void;
+  deleteFilter?: (idx: number) => void;
+  resetData?: () => void;
 };
 
 function InventoryFilterSummary({
+  id,
   bg,
   data,
+  deleteFilter,
   resetData
 }: InventoryFilterSummaryProps) {
   const index = inventoryFilterFieldOptions.findIndex(
@@ -44,7 +48,17 @@ function InventoryFilterSummary({
           bg ? 'bg-white' : 'bg-black-100'
         }`}
       >
-        <Button size="xs" style="ghost" onClick={resetData}>
+        <Button
+          size="xs"
+          style="ghost"
+          onClick={() => {
+            if (deleteFilter) {
+              deleteFilter(id!);
+            } else {
+              resetData!();
+            }
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
