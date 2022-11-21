@@ -3,6 +3,7 @@ import Button from '../components/button/Button';
 import EmptyState from '../components/empty-state/EmptyState';
 import ErrorPage from '../components/error/ErrorPage';
 import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
+import InventoryFilterSummary from '../components/inventory/components/filter/InventoryFilterSummary';
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
@@ -60,13 +61,13 @@ export default function Inventory() {
 
       <div className="flex items-center justify-between">
         <p className="text-lg font-medium text-black-900">Inventory</p>
-        <InventoryFilter
-          router={router}
-          displayedFilters={displayedFilters}
-          setSkippedSearch={setSkippedSearch}
-          setToast={setToast}
-          deleteFilter={deleteFilter}
-        />
+        {!error && inventory && inventory.length > 0 && (
+          <InventoryFilter
+            router={router}
+            setSkippedSearch={setSkippedSearch}
+            setToast={setToast}
+          />
+        )}
       </div>
       <div className="mt-4"></div>
 
@@ -104,12 +105,25 @@ export default function Inventory() {
         />
       )}
 
+      {/* Active filters list */}
+      {Object.keys(router.query).length > 0 &&
+        displayedFilters &&
+        displayedFilters.length > 0 && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 bg-white py-2 px-6 rounded-lg mb-8">
+            <div className="text-sm text-black-400 h-full">Filters:</div>
+            {displayedFilters.map((activeFilter, idx) => (
+              <InventoryFilterSummary
+                key={idx}
+                id={idx}
+                data={activeFilter}
+                deleteFilter={deleteFilter}
+              />
+            ))}
+          </div>
+        )}
+
       {/* Inventory stats loading */}
       {!inventoryStats && !error && !statsLoading && <SkeletonStats />}
-
-      {Object.keys(router.query).length > 0 && (
-        <div className="mt-[104px]"></div>
-      )}
 
       {/* Inventory stats */}
       <InventoryStatsCards inventoryStats={inventoryStats} error={error} />

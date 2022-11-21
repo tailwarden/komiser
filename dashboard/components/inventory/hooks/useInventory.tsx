@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import settingsService from '../../../services/settingsService';
 import { Provider } from '../../../utils/providerHelper';
 import useToast from '../../toast/hooks/useToast';
-import useIsVisible from './useOnScreen';
+import useIsVisible from './useIsVisible';
 
 export type InventoryFilterDataProps = {
   field:
@@ -91,7 +91,7 @@ function useInventory() {
   const batchSize: number = 50;
   const router = useRouter();
 
-  // Parse URL params into payload
+  // Parse URL params
   function parseParams(param: string, type: 'fetch' | 'display') {
     const formatString = param.split(':');
     let filter;
@@ -259,6 +259,8 @@ function useInventory() {
 
     // Fetching on unsearched list
     if (
+      inventory &&
+      inventory.length > 0 &&
       inventoryStats &&
       skipped < inventoryStats.resources &&
       isVisible &&

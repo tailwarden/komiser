@@ -15,6 +15,7 @@ export type ButtonProps = {
   loading?: boolean;
   align?: 'left';
   gap?: 'md';
+  transition?: boolean;
   onClick?: (e?: any) => void;
 };
 
@@ -27,6 +28,7 @@ function Button({
   loading,
   align,
   gap,
+  transition = true,
   onClick
 }: ButtonProps) {
   const xs = 'p-1';
@@ -49,7 +51,9 @@ function Button({
     size === 'lg' ? 'rounded' : 'rounded-lg'
   } flex items-center ${align ? 'justify-start' : 'justify-center '} ${
     gap ? 'gap-3' : 'gap-2'
-  }  text-sm font-medium box-border w-full sm:w-auto disabled:cursor-not-allowed transition-all`;
+  }  text-sm font-medium box-border w-full sm:w-auto disabled:cursor-not-allowed ${
+    transition ? 'transition-colors' : ''
+  }`;
 
   const primary = `${base} bg-komiser-600 hover:bg-komiser-700 text-white active:bg-secondary disabled:bg-komiser-600/30`;
 

@@ -62,6 +62,7 @@ function InventoryFilterOperator({
             align="left"
             gap="md"
             disabled={data.field === 'tag' && !data.tagKey}
+            transition={false}
             onClick={() => handleOperator(option.value)}
           >
             {option.label}
@@ -75,6 +76,7 @@ function InventoryFilterOperator({
             style="ghost"
             align="left"
             gap="md"
+            transition={false}
             onClick={() => handleOperator(option.value)}
           >
             {option.label}

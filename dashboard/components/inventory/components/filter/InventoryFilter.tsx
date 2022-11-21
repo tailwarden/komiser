@@ -1,8 +1,8 @@
 import { NextRouter } from 'next/router';
 import Button from '../../../button/Button';
+import Dropdown from '../../../dropdown/Dropdown';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import useFilterWizard from '../../hooks/useFilterWizard';
-import { InventoryFilterDataProps } from '../../hooks/useInventory';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';
 import InventoryFilterOperator from './InventoryFilterOperator';
@@ -11,18 +11,14 @@ import InventoryFilterValue from './InventoryFilterValue';
 
 type InventoryFilterProps = {
   router: NextRouter;
-  displayedFilters: InventoryFilterDataProps[] | undefined;
   setSkippedSearch: (number: number) => void;
   setToast: (toast: ToastProps | undefined) => void;
-  deleteFilter: (idx: number) => void;
 };
 
 function InventoryFilter({
   router,
-  displayedFilters,
   setSkippedSearch,
-  setToast,
-  deleteFilter
+  setToast
 }: InventoryFilterProps) {
   const {
     toggle,
@@ -42,32 +38,8 @@ function InventoryFilter({
 
   return (
     <div>
-      {/* Active filters list */}
-      {Object.keys(router.query).length > 0 &&
-        displayedFilters &&
-        displayedFilters.length > 0 && (
-          <div className="flex flex-wrap items-center gap-4 bg-white py-2 px-6 rounded-lg absolute left-0 right-0 top-[64px]">
-            <span className="text-sm text-black-400">Filters:</span>
-            {displayedFilters.map((activeFilter, idx) => (
-              <InventoryFilterSummary
-                key={idx}
-                id={idx}
-                data={activeFilter}
-                deleteFilter={deleteFilter}
-              />
-            ))}
-          </div>
-        )}
-
       {/* Dropdown button toggle */}
-      <button
-        className={`flex items-center font-medium text-sm rounded-lg h-[2.5rem] px-3 gap-2 text-black-900/60 ${
-          isOpen
-            ? 'bg-black-400/10'
-            : 'bg-transparent hover:bg-black-400/10 active:bg-black-400/20'
-        }`}
-        onClick={toggle}
-      >
+      <Dropdown isOpen={isOpen} toggle={toggle}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -85,9 +57,9 @@ function InventoryFilter({
           ></path>
         </svg>
         Filter by
-      </button>
+      </Dropdown>
 
-      {/* Dropdown */}
+      {/* Dropdown open */}
       {isOpen && (
         <>
           {/* Dropdown transparent backdrop */}

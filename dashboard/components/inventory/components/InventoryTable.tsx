@@ -68,7 +68,7 @@ function InventoryTable({
                     <th className="py-4 px-6">Name</th>
                     <th className="py-4 px-6">Region</th>
                     <th className="py-4 px-6">Account</th>
-                    <th className="py-4 px-6">Cost</th>
+                    <th className="py-4 px-6 text-right">Cost</th>
                     <th className="py-4 px-6">Tags</th>
                   </tr>
                 </thead>
@@ -124,7 +124,9 @@ function InventoryTable({
                         className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
-                        <p className="w-56 truncate ...">{item.name}</p>
+                        <p className="w-56 2xl:w-96 truncate ...">
+                          {item.name}
+                        </p>
                         <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
@@ -143,7 +145,7 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap cursor-pointer"
+                        className="py-4 px-6 whitespace-nowrap cursor-pointer text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -205,7 +207,9 @@ function InventoryTable({
                         className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
-                        <p className="w-56 truncate ...">{item.name}</p>
+                        <p className="w-56 xl:w-72 2xl:w-96 truncate ...">
+                          {item.name}
+                        </p>
                         <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
@@ -224,7 +228,7 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap cursor-pointer"
+                        className="py-4 px-6 whitespace-nowrap cursor-pointer text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>

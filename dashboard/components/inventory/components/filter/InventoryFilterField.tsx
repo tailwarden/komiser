@@ -15,6 +15,7 @@ function InventoryFilterField({ handleField }: InventoryFilterFieldProps) {
           style="ghost"
           align="left"
           gap="md"
+          transition={false}
           onClick={() => handleField(option.value)}
         >
           {option.icon}
