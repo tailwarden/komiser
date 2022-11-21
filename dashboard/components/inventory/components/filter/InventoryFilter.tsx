@@ -46,7 +46,7 @@ function InventoryFilter({
       {Object.keys(router.query).length > 0 &&
         displayedFilters &&
         displayedFilters.length > 0 && (
-          <div className="flex items-center gap-4 bg-white py-2 px-6 rounded-lg absolute left-0 right-0 top-[64px]">
+          <div className="flex flex-wrap items-center gap-4 bg-white py-2 px-6 rounded-lg absolute left-0 right-0 top-[64px]">
             <span className="text-sm text-black-400">Filters:</span>
             {displayedFilters.map((activeFilter, idx) => (
               <InventoryFilterSummary

@@ -82,23 +82,14 @@ function useInventory() {
   const [displayedFilters, setDisplayedFilters] =
     useState<InventoryFilterDataProps[]>();
   const [filters, setFilters] = useState<InventoryFilterDataProps[]>();
+  const [searchedLoading, setSearchedLoading] = useState(false);
+  const [statsLoading, setStatsLoading] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
   const batchSize: number = 50;
   const router = useRouter();
-
-  function resetStates() {
-    setSkipped(0);
-    setInventory(undefined);
-    setInventoryStats(undefined);
-    setSearchedInventory(undefined);
-    setDisplayedFilters(undefined);
-    setBulkItems([]);
-    setBulkSelectCheckbox(false);
-    setQuery('');
-  }
 
   // Parse URL params into payload
   function parseParams(param: string, type: 'fetch' | 'display') {
@@ -153,12 +144,24 @@ function useInventory() {
     return filter as InventoryFilterDataProps;
   }
 
+  function resetStates() {
+    setSkipped(0);
+    setSkippedSearch(0);
+    setBulkItems([]);
+    setBulkSelectCheckbox(false);
+    setQuery('');
+  }
+
   // Fetch the correct inventory list based on URL params
   useEffect(() => {
     let mounted = true;
     resetStates();
 
     if (router.query && Object.keys(router.query).length === 0) {
+      setDisplayedFilters(undefined);
+      setSearchedInventory(undefined);
+      setFilters(undefined);
+
       settingsService.getInventoryStats().then(res => {
         if (mounted) {
           if (res === Error) {
@@ -176,12 +179,7 @@ function useInventory() {
             if (res === Error) {
               setError(true);
             } else {
-              setInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
+              setInventory(res);
               setSkipped(prev => prev + batchSize);
             }
           }
@@ -189,6 +187,17 @@ function useInventory() {
     }
 
     if (router.query && Object.keys(router.query).length > 0) {
+      if (Object.keys(router.query)[0].split(':').length <= 1) {
+        setTimeout(() => router.push('/'), 5000);
+        return setToast({
+          hasError: true,
+          title: `Invalid URL params`,
+          message: `There was an error processing the page. Redirecting back to home...`
+        });
+      }
+      setSearchedLoading(true);
+      setStatsLoading(true);
+
       const newFilters: InventoryFilterDataProps[] = Object.keys(
         router.query
       ).map(param => parseParams(param, 'fetch'));
@@ -202,17 +211,16 @@ function useInventory() {
         if (mounted) {
           if (res === Error) {
             setError(true);
+            setStatsLoading(false);
           } else {
             setInventoryStats(res);
+            setStatsLoading(false);
           }
         }
       });
 
       settingsService
-        .getFilteredInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}`,
-          payloadJson
-        )
+        .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
         .then(res => {
           if (mounted) {
             if (res.error) {
@@ -221,17 +229,14 @@ function useInventory() {
                 title: `Filter could not be applied!`,
                 message: `Please refresh the page and try again.`
               });
-              setLoading(false);
+              setError(true);
+              setSearchedLoading(false);
             } else {
-              setSearchedInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
+              setSearchedInventory(res);
               setFilters(newFilters);
               setDisplayedFilters(newFiltersToDisplay);
               setSkippedSearch(prev => prev + batchSize);
+              setSearchedLoading(false);
 
               if (res.length >= batchSize) {
                 setShouldFetchMore(true);
@@ -314,29 +319,9 @@ function useInventory() {
     }
 
     // Fetching on filtered list
-    if (shouldFetchMore && isVisible && displayedFilters) {
+    if (shouldFetchMore && isVisible && filters) {
       setError(false);
-      const formatValue =
-        router.query.values && (router.query.values as string).split(',');
-      const isTagFilter =
-        router.query.field && router.query.field.includes('tag');
-
-      const filterProps: any = {
-        field: isTagFilter ? 'tag' : router.query.field,
-        operator: router.query.operator,
-        values: formatValue,
-        tagKey: isTagFilter ? router.query.field!.slice(4) : ''
-      };
-
-      const payload = [
-        {
-          field: router.query.field,
-          operator: router.query.operator,
-          values: formatValue
-        }
-      ];
-
-      const payloadJson = JSON.stringify(payload);
+      const payloadJson = JSON.stringify(filters);
 
       settingsService.getFilteredInventoryStats(payloadJson).then(res => {
         if (mounted) {
@@ -370,7 +355,6 @@ function useInventory() {
                 }
                 return res;
               });
-              setDisplayedFilters(filterProps);
 
               if (res.length >= batchSize) {
                 setShouldFetchMore(true);
@@ -389,33 +373,76 @@ function useInventory() {
     };
   }, [isVisible]);
 
-  // Search effect
+  // Search effect behavior
+  // If there's a filtered list, search should only bring back results from the list
+  // If not, search should get from all inventory
+  // A filter can overwrite a search, but not the opposite
   useEffect(() => {
     let mounted = true;
 
-    setSearchedInventory(undefined);
     setSkippedSearch(0);
     setShouldFetchMore(false);
     setBulkItems([]);
     setBulkSelectCheckbox(false);
 
-    if (query) {
+    if (!filters && query) {
+      setSearchedLoading(true);
       setError(false);
       setTimeout(() => {
         if (mounted) {
           settingsService
-            .getInventoryList(`?limit=${batchSize}&skip=0&query=${query}`)
+            .getInventoryList(
+              `?limit=${batchSize}&skip=0${query && `&query=${query}`}`
+            )
             .then(res => {
               if (mounted) {
                 if (res === Error) {
                   setError(true);
+                  setSearchedLoading(false);
                 }
-
                 setSearchedInventory(res);
+                setSearchedLoading(false);
 
                 if (res.length >= batchSize) {
                   setShouldFetchMore(true);
                   setSkippedSearch(prev => prev + batchSize);
+                }
+              }
+            });
+        }
+      }, 700);
+    }
+
+    if (filters && filters.length > 0) {
+      const payloadJson = JSON.stringify(filters);
+      setSearchedLoading(true);
+      setTimeout(() => {
+        if (mounted) {
+          settingsService
+            .getFilteredInventory(
+              `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
+              payloadJson
+            )
+            .then(res => {
+              if (mounted) {
+                if (res.error) {
+                  setToast({
+                    hasError: true,
+                    title: `Filter could not be applied!`,
+                    message: `Please refresh the page and try again.`
+                  });
+                  setError(true);
+                  setSearchedLoading(false);
+                } else {
+                  setSearchedInventory(res);
+                  setSkippedSearch(prev => prev + batchSize);
+                  setSearchedLoading(false);
+
+                  if (res.length >= batchSize) {
+                    setShouldFetchMore(true);
+                  } else {
+                    setShouldFetchMore(false);
+                  }
                 }
               }
             });
@@ -449,6 +476,7 @@ function useInventory() {
           });
       } else {
         setSkippedSearch(0);
+        setInventoryHasUpdate(false);
         router.push(router.asPath, undefined, { shallow: true });
       }
     }
@@ -704,7 +732,9 @@ function useInventory() {
     router,
     displayedFilters,
     setSkippedSearch,
-    deleteFilter
+    deleteFilter,
+    searchedLoading,
+    statsLoading
   };
 }
 

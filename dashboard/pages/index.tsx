@@ -45,7 +45,9 @@ export default function Inventory() {
     router,
     displayedFilters,
     setSkippedSearch,
-    deleteFilter
+    deleteFilter,
+    searchedLoading,
+    statsLoading
   } = useInventory();
 
   return (
@@ -103,9 +105,11 @@ export default function Inventory() {
       )}
 
       {/* Inventory stats loading */}
-      {!inventoryStats && !error && <SkeletonStats />}
+      {!inventoryStats && !error && !statsLoading && <SkeletonStats />}
 
-      {displayedFilters && <div className="mt-[104px]"></div>}
+      {Object.keys(router.query).length > 0 && (
+        <div className="mt-[104px]"></div>
+      )}
 
       {/* Inventory stats */}
       <InventoryStatsCards inventoryStats={inventoryStats} error={error} />
@@ -131,8 +135,8 @@ export default function Inventory() {
         onCheckboxChange={onCheckboxChange}
         inventoryStats={inventoryStats}
         openBulkModal={openBulkModal}
-        displayedFilters={displayedFilters}
         router={router}
+        searchedLoading={searchedLoading}
       />
 
       {/* Infite scroll trigger */}

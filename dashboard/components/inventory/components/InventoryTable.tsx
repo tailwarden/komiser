@@ -4,11 +4,7 @@ import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import {
-  InventoryFilterDataProps,
-  InventoryItem,
-  InventoryStats
-} from '../hooks/useInventory';
+import { InventoryItem, InventoryStats } from '../hooks/useInventory';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
 import InventoryTableBulkActions from './InventoryTableBulkActions';
@@ -28,8 +24,8 @@ type InventoryTableProps = {
   onCheckboxChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
   inventoryStats: InventoryStats | undefined;
   openBulkModal: (bulkItemsIds: string[]) => void;
-  displayedFilters: InventoryFilterDataProps[] | undefined;
   router: NextRouter;
+  searchedLoading: boolean;
 };
 
 function InventoryTable({
@@ -45,14 +41,13 @@ function InventoryTable({
   onCheckboxChange,
   inventoryStats,
   openBulkModal,
-  displayedFilters,
-  router
+  router,
+  searchedLoading
 }: InventoryTableProps) {
   return (
     <>
       {((!error && inventory && inventory.length > 0) ||
-        (!error && searchedInventory) ||
-        (!error && query)) && (
+        (!error && searchedInventory)) && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
           <div className="pb-6 rounded-lg rounded-t-none">
@@ -162,7 +157,8 @@ function InventoryTable({
                   ))}
 
                 {/* Searched inventory table */}
-                {searchedInventory &&
+                {!searchedLoading &&
+                  searchedInventory &&
                   searchedInventory.length > 0 &&
                   searchedInventory.map(item => (
                     <InventoryTableRow
@@ -244,7 +240,7 @@ function InventoryTable({
             </table>
 
             {/* Inventory search loading */}
-            {(!searchedInventory || !query) && <SkeletonInventory />}
+            {searchedLoading && <SkeletonInventory />}
 
             {/* Inventory search no results */}
             {searchedInventory && searchedInventory.length === 0 && (
