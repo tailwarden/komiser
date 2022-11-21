@@ -53,6 +53,6 @@ func Droplets(ctx context.Context, client providers.ProviderClient) ([]models.Re
 		"account":   client.Name,
 		"service":   "Droplet",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

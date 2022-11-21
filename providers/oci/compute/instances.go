@@ -60,6 +60,6 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]Resource
 		"account":   client.Name,
 		"service":   "Compute VM",
 		"resources": len(resources),
-	}).Debug("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

@@ -12,6 +12,8 @@ import (
 func Endpoints(ctx context.Context, noTracking bool, db *bun.DB) *mux.Router {
 	r := mux.NewRouter()
 
+	r.Use(loggingMiddleware)
+
 	api := handlers.NewApiHandler(ctx, noTracking, db)
 
 	r.HandleFunc("/resources", api.ListResourcesHandler)
@@ -38,4 +40,10 @@ func Endpoints(ctx context.Context, noTracking bool, db *bun.DB) *mux.Router {
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
 	return r
+}
+
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r)
+	})
 }

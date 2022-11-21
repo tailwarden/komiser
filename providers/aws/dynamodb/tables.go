@@ -66,6 +66,6 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"region":    client.AWSClient.Region,
 		"service":   "DynamoDB",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

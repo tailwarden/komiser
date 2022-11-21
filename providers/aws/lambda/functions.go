@@ -67,6 +67,6 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"region":    client.AWSClient.Region,
 		"service":   "Lambda",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

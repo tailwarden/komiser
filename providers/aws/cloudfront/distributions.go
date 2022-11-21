@@ -64,6 +64,6 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 		"region":    client.AWSClient.Region,
 		"service":   "CloudFront",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

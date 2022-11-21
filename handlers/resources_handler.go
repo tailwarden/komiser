@@ -184,7 +184,8 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 
 	resources := make([]Resource, 0)
 	if filterWithTags {
-		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+		fmt.Println(err)
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 		if err != nil {

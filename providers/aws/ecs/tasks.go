@@ -61,6 +61,6 @@ func Tasks(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"region":    client.AWSClient.Region,
 		"service":   "ECS Task",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

@@ -66,6 +66,6 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"region":    client.AWSClient.Region,
 		"service":   "SNS",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

@@ -76,6 +76,6 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 		"region":    client.AWSClient.Region,
 		"service":   "EKS",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }

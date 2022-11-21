@@ -69,6 +69,6 @@ func SecurityGroups(ctx context.Context, client ProviderClient) ([]Resource, err
 		"region":    client.AWSClient.Region,
 		"service":   "Security Group",
 		"resources": len(resources),
-	}).Debugf("Fetched resources")
+	}).Info("Fetched resources")
 	return resources, nil
 }
