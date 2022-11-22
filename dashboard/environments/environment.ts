@@ -1,6 +1,6 @@
 const environment = {
   production: false,
-  API_URL: 'http://localhost:3000',
+  API_URL: '',
   GA_TRACKING_ID: 'G-9HF3HT6S6W'
 };
 
