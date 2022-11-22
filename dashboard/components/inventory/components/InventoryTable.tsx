@@ -1,3 +1,4 @@
+import { NextRouter } from 'next/router';
 import React, { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
@@ -23,6 +24,8 @@ type InventoryTableProps = {
   onCheckboxChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
   inventoryStats: InventoryStats | undefined;
   openBulkModal: (bulkItemsIds: string[]) => void;
+  router: NextRouter;
+  searchedLoading: boolean;
 };
 
 function InventoryTable({
@@ -37,11 +40,14 @@ function InventoryTable({
   bulkItems,
   onCheckboxChange,
   inventoryStats,
-  openBulkModal
+  openBulkModal,
+  router,
+  searchedLoading
 }: InventoryTableProps) {
   return (
     <>
-      {inventory && Object.keys(inventory).length !== 0 && !error && (
+      {((!error && inventory && inventory.length > 0) ||
+        (!error && searchedInventory)) && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
           <div className="pb-6 rounded-lg rounded-t-none">
@@ -62,7 +68,7 @@ function InventoryTable({
                     <th className="py-4 px-6">Name</th>
                     <th className="py-4 px-6">Region</th>
                     <th className="py-4 px-6">Account</th>
-                    <th className="py-4 px-6">Cost</th>
+                    <th className="py-4 px-6 text-right">Cost</th>
                     <th className="py-4 px-6">Tags</th>
                   </tr>
                 </thead>
@@ -70,6 +76,9 @@ function InventoryTable({
               <tbody>
                 {/* Inventory table */}
                 {!query &&
+                  !searchedInventory &&
+                  inventory &&
+                  inventory.length > 0 &&
                   inventory.map(item => (
                     <InventoryTableRow
                       key={item.id}
@@ -115,7 +124,9 @@ function InventoryTable({
                         className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
-                        <p className="w-56 truncate ...">{item.name}</p>
+                        <p className="w-56 2xl:w-96 truncate ...">
+                          {item.name}
+                        </p>
                         <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
@@ -134,7 +145,7 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap cursor-pointer"
+                        className="py-4 px-6 whitespace-nowrap cursor-pointer text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -148,9 +159,9 @@ function InventoryTable({
                   ))}
 
                 {/* Searched inventory table */}
-                {query &&
+                {!searchedLoading &&
                   searchedInventory &&
-                  Object.keys(searchedInventory).length !== 0 &&
+                  searchedInventory.length > 0 &&
                   searchedInventory.map(item => (
                     <InventoryTableRow
                       key={item.id}
@@ -196,7 +207,9 @@ function InventoryTable({
                         className="py-4 px-6 group relative cursor-pointer"
                       >
                         <div className="peer w-full h-full"></div>
-                        <p className="w-56 truncate ...">{item.name}</p>
+                        <p className="w-56 xl:w-72 2xl:w-96 truncate ...">
+                          {item.name}
+                        </p>
                         <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
                           {item.name}
                         </div>
@@ -215,7 +228,7 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap cursor-pointer"
+                        className="py-4 px-6 whitespace-nowrap cursor-pointer text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -231,12 +244,18 @@ function InventoryTable({
             </table>
 
             {/* Inventory search loading */}
-            {query && !searchedInventory && <SkeletonInventory />}
+            {searchedLoading && <SkeletonInventory />}
 
             {/* Inventory search no results */}
-            {query && searchedInventory && searchedInventory.length === 0 && (
-              <InventorySearchNoResults query={query} setQuery={setQuery} />
-            )}
+            {searchedInventory &&
+              searchedInventory.length === 0 &&
+              !searchedLoading && (
+                <InventorySearchNoResults
+                  query={query}
+                  setQuery={setQuery}
+                  router={router}
+                />
+              )}
 
             {/* Bulk actions sticky footer */}
             <InventoryTableBulkActions

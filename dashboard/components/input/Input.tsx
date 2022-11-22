@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 export type InputEvent = ChangeEvent<HTMLInputElement>;
 
@@ -9,7 +9,8 @@ export type InputProps = {
   label: string;
   regex: RegExp;
   error: string;
-  value?: string | number;
+  value?: string | number | string[];
+  autofocus?: boolean;
   action: (newData: any, id?: number) => void;
 };
 
@@ -21,9 +22,17 @@ function Input({
   regex,
   error,
   value,
+  autofocus,
   action
 }: InputProps) {
   const [isValid, setIsValid] = useState<boolean | undefined>(undefined);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autofocus) {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   function handleBlur(e: InputEvent): void {
     const trimmedValue = e.target.value.trim();
@@ -57,6 +66,7 @@ function Input({
             }
           }}
           value={value}
+          ref={inputRef}
           autoComplete="off"
           data-lpignore="true"
           data-form-type="other"

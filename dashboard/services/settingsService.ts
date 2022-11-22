@@ -112,6 +112,72 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getProviders() {
+    try {
+      const res = await fetch(`${BASE_URL}/providers`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getAccounts() {
+    try {
+      const res = await fetch(`${BASE_URL}/accounts`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getRegions() {
+    try {
+      const res = await fetch(`${BASE_URL}/regions`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getServices() {
+    try {
+      const res = await fetch(`${BASE_URL}/services`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getFilteredInventory(urlParams: string, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/search${urlParams}`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getFilteredInventoryStats(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/stats/search`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

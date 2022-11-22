@@ -51,6 +51,9 @@ module.exports = {
           'sans-serif'
         ]
       },
+      transitionProperty: {
+        width: 'width'
+      },
       keyframes: {
         'fade-in': {
           '0%': {

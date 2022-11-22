@@ -10,11 +10,11 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
     <>
       {tags && tags.length > 0 && (
         <div className="relative group">
-          <div className="flex items-center gap-1 py-4 px-6">
+          <div className="relative flex items-center gap-1 py-4 px-6">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="24"
+              height="24"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -32,7 +32,9 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                 d="M9.5 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
               ></path>
             </svg>
-            <span>{tags.length}</span>
+            <span className="absolute top-3 left-[2.375rem] flex items-center justify-center bg-komiser-200 rounded-full h-4 w-4 text-[10px] text-black-900 font-bold">
+              {tags.length}
+            </span>
           </div>
           <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg right-6 top-11 z-10 bg-black-900 py-3 px-4 shadow-lg">
             {tags.map((tag, index) => (
