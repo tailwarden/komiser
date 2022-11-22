@@ -247,13 +247,15 @@ function InventoryTable({
             {searchedLoading && <SkeletonInventory />}
 
             {/* Inventory search no results */}
-            {searchedInventory && searchedInventory.length === 0 && (
-              <InventorySearchNoResults
-                query={query}
-                setQuery={setQuery}
-                router={router}
-              />
-            )}
+            {searchedInventory &&
+              searchedInventory.length === 0 &&
+              !searchedLoading && (
+                <InventorySearchNoResults
+                  query={query}
+                  setQuery={setQuery}
+                  router={router}
+                />
+              )}
 
             {/* Bulk actions sticky footer */}
             <InventoryTableBulkActions
