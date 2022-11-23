@@ -68,6 +68,8 @@ func Exec(port int, configPath string, noTracking bool, regions []string, cmd *c
 }
 
 func runServer(port int, noTracking bool) error {
+	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
+
 	r := v1.Endpoints(context.Background(), noTracking, db)
 
 	cors := cors.New(cors.Options{
