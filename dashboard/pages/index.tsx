@@ -61,6 +61,8 @@ export default function Inventory() {
 
       <div className="flex items-center justify-between">
         <p className="text-lg font-medium text-black-900">Inventory</p>
+
+        {/* Filter by dropdown */}
         {!error &&
           ((inventory && inventory.length > 0) ||
             (searchedInventory && searchedInventory.length > 0)) && (
