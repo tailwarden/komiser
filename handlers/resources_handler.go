@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	log "github.com/sirupsen/logrus"
+
 	. "github.com/mlabouardy/komiser/models"
 	"github.com/uptrace/bun"
 )
@@ -184,8 +186,11 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 
 	resources := make([]Resource, 0)
 	if filterWithTags {
-		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
-		fmt.Println(err)
+		query := fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+		log.Info("resources")
+		log.Info(query)
+		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
+		fmt.Println("ok:", err)
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 		if err != nil {
