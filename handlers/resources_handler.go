@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	. "github.com/mlabouardy/komiser/models"
-	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
 )
@@ -144,6 +143,9 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
 				}
 				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' IN (%s)))", key, strings.Join(filter.Values, ","))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') IN (%s)))", key, strings.Join(filter.Values, ","))
+				}
 				whereQueries = append(whereQueries, query)
 			case "NOT_CONTAINS":
 			case "IS_NOT":
@@ -151,11 +153,22 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
 				}
 				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				}
 				whereQueries = append(whereQueries, query)
 			case "IS_EMPTY":
-				whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') = ''))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
+				}
 			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') != ''))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
+				}
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
@@ -194,10 +207,12 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 	resources := make([]Resource, 0)
 	if filterWithTags {
 		query := fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+		if handler.db.Dialect().Name() == dialect.SQLite {
+			query = fmt.Sprintf("SELECT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
+		}
 		handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
-		log.Info(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip))
 		if err != nil {
 			respondWithError(w, http.StatusBadRequest, err.Error())
 			return
