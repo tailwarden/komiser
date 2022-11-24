@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 
@@ -42,6 +43,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 func FetchResources(ctx context.Context, client providers.ProviderClient, regions []string, db *bun.DB) {
 	listOfSupportedRegions := getRegions()
 	if len(regions) > 0 {
+		log.Infof("Komiser will fetch resources from the following regions: %s", strings.Join(regions, ","))
 		listOfSupportedRegions = regions
 	}
 
