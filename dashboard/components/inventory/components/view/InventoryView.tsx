@@ -92,16 +92,19 @@ function InventoryView({
               error="Please provide a name"
               value={view.name}
               action={handleChange}
+              autofocus={true}
             />
 
-            <Button
-              size="lg"
-              type="submit"
-              loading={loading}
-              disabled={!view.name}
-            >
-              Save as a view {inventoryStats?.resources}
-            </Button>
+            <div className="ml-auto">
+              <Button
+                size="lg"
+                type="submit"
+                loading={loading}
+                disabled={!view.name}
+              >
+                Save as a view {inventoryStats?.resources}
+              </Button>
+            </div>
           </form>
         </SidepanelPage>
       </Sidepanel>

@@ -50,8 +50,11 @@ export default function Inventory() {
     setSkippedSearch,
     deleteFilter,
     searchedLoading,
-    statsLoading
+    statsLoading,
+    views
   } = useInventory();
+
+  console.log(router);
 
   return (
     <div className="relative">
@@ -61,10 +64,41 @@ export default function Inventory() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex items-center justify-between">
-        <p className="text-lg font-medium text-black-900">Inventory</p>
+      <div className="flex items-center justify-between gap-8">
+        {views && views.length > 0 && (
+          <div className="text-sm font-medium text-center border-b-2 border-black-150 text-black-300">
+            <ul className="flex justify-between sm:justify-start -mb-[2px]">
+              <li className="mr-2">
+                <a
+                  onClick={() => router.push('/')}
+                  className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
+                     ${
+                       router.asPath === '/' &&
+                       `text-komiser-600 border-komiser-600 hover:text-komiser-600`
+                     }`}
+                >
+                  Inventory
+                </a>
+              </li>
+              {views.map((view, idx) => (
+                <li key={idx} className="mr-2">
+                  <a
+                    onClick={() => router.push(`/?view=${view.name}`)}
+                    className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
+                     ${
+                       router.asPath === `/?view=${view.name}` &&
+                       `text-komiser-600 border-komiser-600 hover:text-komiser-600`
+                     }`}
+                  >
+                    {view.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-shrink-0">
           {/* Save/update views button */}
           {filters && filters.length > 0 && (
             <InventoryView
@@ -87,7 +121,7 @@ export default function Inventory() {
             )}
         </div>
       </div>
-      <div className="mt-4"></div>
+      <div className="mt-8"></div>
 
       {/* Toast */}
       {toast && <Toast {...toast} dismissToast={dismissToast} />}

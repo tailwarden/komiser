@@ -182,7 +182,7 @@ const settingsService = {
 
   async getViews() {
     try {
-      const res = await fetch(`${BASE_URL}/resources/views`, settings('GET'));
+      const res = await fetch(`${BASE_URL}/views`, settings('GET'));
       const data = await res.json();
       return data;
     } catch (error) {
@@ -192,10 +192,7 @@ const settingsService = {
 
   async saveView(payload: string) {
     try {
-      const res = await fetch(
-        `${BASE_URL}/resources/views`,
-        settings('POST', payload)
-      );
+      const res = await fetch(`${BASE_URL}/views`, settings('POST', payload));
       const data = await res.json();
       return data;
     } catch (error) {
@@ -206,7 +203,7 @@ const settingsService = {
   async updateView(id: string, payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/resources/views/${id}`,
+        `${BASE_URL}/views/${id}`,
         settings('PUT', payload)
       );
       const data = await res.json();
@@ -219,7 +216,7 @@ const settingsService = {
   async deleteView(id: string, payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/resources/views/${id}`,
+        `${BASE_URL}/views/${id}`,
         settings('DELETE', payload)
       );
       const data = await res.json();

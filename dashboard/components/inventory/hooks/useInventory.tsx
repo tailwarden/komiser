@@ -57,6 +57,12 @@ export type InventoryItem = {
 };
 export type Pages = 'tags' | 'delete';
 
+export type ViewProps = {
+  name: string;
+  filters: InventoryFilterDataProps[];
+  exclude: string[];
+};
+
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
     InventoryStats | undefined
@@ -84,6 +90,7 @@ function useInventory() {
   const [filters, setFilters] = useState<InventoryFilterDataProps[]>();
   const [searchedLoading, setSearchedLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
+  const [views, setViews] = useState<ViewProps[]>();
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -186,8 +193,15 @@ function useInventory() {
         });
     }
 
+    if (router.query.view) {
+      return console.log(router);
+    }
+
     if (router.query && Object.keys(router.query).length > 0) {
-      if (Object.keys(router.query)[0].split(':').length <= 1) {
+      if (
+        Object.keys(router.query)[0].split(':').length <= 1 &&
+        !router.query.view
+      ) {
         setTimeout(() => router.push('/'), 5000);
         return setToast({
           hasError: true,
@@ -492,6 +506,21 @@ function useInventory() {
     };
   }, [inventoryHasUpdate]);
 
+  // Getting all the views
+  useEffect(() => {
+    settingsService.getViews().then(res => {
+      if (res === Error) {
+        setToast({
+          hasError: true,
+          title: `The custom views couldn't be loaded.`,
+          message: `There was a problem fetching the views. Please try again.`
+        });
+      } else {
+        setViews(res);
+      }
+    });
+  }, []);
+
   // Functions to be exported
   function cleanModal() {
     setData(undefined);
@@ -726,7 +755,8 @@ function useInventory() {
     setSkippedSearch,
     deleteFilter,
     searchedLoading,
-    statsLoading
+    statsLoading,
+    views
   };
 }
 
