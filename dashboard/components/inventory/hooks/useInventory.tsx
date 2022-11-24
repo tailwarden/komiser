@@ -492,21 +492,6 @@ function useInventory() {
     };
   }, [inventoryHasUpdate]);
 
-  // Listen to ESC key on modal effect
-  useEffect(() => {
-    function escFunction(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener('keydown', escFunction, false);
-
-    return () => {
-      document.removeEventListener('keydown', escFunction, false);
-    };
-  }, []);
-
   // Functions to be exported
   function cleanModal() {
     setData(undefined);
@@ -736,6 +721,7 @@ function useInventory() {
     openBulkModal,
     updateBulkTags,
     router,
+    filters,
     displayedFilters,
     setSkippedSearch,
     deleteFilter,

@@ -45,6 +45,7 @@ export default function Inventory() {
     openBulkModal,
     updateBulkTags,
     router,
+    filters,
     displayedFilters,
     setSkippedSearch,
     deleteFilter,
@@ -65,7 +66,12 @@ export default function Inventory() {
 
         <div className="flex items-center gap-4">
           {/* Save/update views button */}
-          {displayedFilters && displayedFilters.length > 0 && <InventoryView />}
+          {filters && filters.length > 0 && (
+            <InventoryView
+              filters={filters}
+              displayedFilters={displayedFilters!}
+            />
+          )}
 
           {/* Filter by dropdown */}
           {!error &&

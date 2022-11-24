@@ -1,13 +1,22 @@
+import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
-import InventorySidePanel from '../InventorySidePanel';
+import Input from '../../../input/Input';
+import Sidepanel from '../../../sidepanel/Sidepanel';
+import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
+import { InventoryFilterDataProps } from '../../hooks/useInventory';
+import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import useViews from './hooks/useViews';
 
-function InventoryView() {
-  const { isOpen } = useViews();
+type InventoryViewProps = {
+  filters: InventoryFilterDataProps[];
+  displayedFilters: InventoryFilterDataProps[];
+};
+function InventoryView({ filters, displayedFilters }: InventoryViewProps) {
+  const { isOpen, openModal, closeModal, view, handleChange } = useViews();
   return (
     <>
       {/* Save as a view button */}
-      <Button size="sm">
+      <Button size="sm" onClick={() => openModal(filters)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -32,6 +41,31 @@ function InventoryView() {
         </svg>
         Save as a view
       </Button>
+
+      {/* Sidepanel */}
+      <Sidepanel isOpen={isOpen} closeModal={closeModal}>
+        <SidepanelHeader
+          title="Save as a view"
+          subtitle="Review the data below"
+          closeModal={closeModal}
+        />
+        <div className="flex items-center gap-4">
+          {displayedFilters?.length > 0 &&
+            displayedFilters.map((data, idx) => (
+              <InventoryFilterSummary key={idx} data={data} />
+            ))}
+        </div>
+        <Input
+          name="name"
+          label="View name"
+          type="text"
+          regex={regex.required}
+          error="Please provide a name"
+          value={view.name}
+          action={handleChange}
+        />
+        <Button size="lg">Save as a view</Button>
+      </Sidepanel>
     </>
   );
 }

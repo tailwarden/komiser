@@ -63,7 +63,7 @@ function InventorySidePanel({
                     target="_blank"
                     href={data.link}
                     rel="noreferrer"
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,6 @@ function InventorySidePanel({
         </div>
 
         {/* Tabs */}
-        <div className="mt-4"></div>
         <div className="text-sm font-medium text-center border-b-2 border-black-150 text-black-300">
           <ul className="flex justify-between sm:justify-start -mb-[2px]">
             <li className="mr-2">
@@ -124,7 +123,6 @@ function InventorySidePanel({
         </div>
 
         {/* Tags form */}
-        <div className="mt-6"></div>
         <div className="p-6 bg-black-100 rounded-lg">
           <div className="flex flex-col gap-6">
             {page === 'tags' && (
