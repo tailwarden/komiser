@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	. "github.com/mlabouardy/komiser/models"
-	log "github.com/sirupsen/logrus"
 )
 
 func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) {
@@ -140,8 +139,6 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		}{}
 
 		query := fmt.Sprintf("FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s", whereClause)
-		log.Info("stats")
-		log.Info(fmt.Sprintf("SELECT SUM(count) %s", query))
 		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
 
 		resources := struct {
