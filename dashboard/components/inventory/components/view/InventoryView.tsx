@@ -1,3 +1,4 @@
+import { NextRouter } from 'next/router';
 import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
@@ -18,12 +19,14 @@ type InventoryViewProps = {
   displayedFilters: InventoryFilterDataProps[];
   setToast: (toast: ToastProps | undefined) => void;
   inventoryStats: InventoryStats;
+  router: NextRouter;
 };
 function InventoryView({
   filters,
   displayedFilters,
   setToast,
-  inventoryStats
+  inventoryStats,
+  router
 }: InventoryViewProps) {
   const {
     isOpen,
@@ -63,7 +66,7 @@ function InventoryView({
             d="M22 5.11v11.36c0 1.45-1.04 2.06-2.31 1.36L16 15.77V8.99c0-1.71-1.4-3.11-3.11-3.11H8v-.77C8 3.4 9.4 2 11.11 2h7.78C20.6 2 22 3.4 22 5.11zM7 12h4M9 14v-4"
           ></path>
         </svg>
-        Save as a view
+        {router.query.view ? 'Manage view' : 'Save as a view'}
       </Button>
 
       {/* Sidepanel */}

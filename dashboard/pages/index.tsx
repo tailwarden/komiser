@@ -54,8 +54,6 @@ export default function Inventory() {
     views
   } = useInventory();
 
-  console.log(router);
-
   return (
     <div className="relative">
       <Head>
@@ -86,7 +84,8 @@ export default function Inventory() {
                     onClick={() => router.push(`/?view=${view.name}`)}
                     className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
                      ${
-                       router.asPath === `/?view=${view.name}` &&
+                       router.asPath.replaceAll('%20', ' ') ===
+                         `/?view=${view.name}` &&
                        `text-komiser-600 border-komiser-600 hover:text-komiser-600`
                      }`}
                   >
@@ -100,12 +99,13 @@ export default function Inventory() {
 
         <div className="flex items-center gap-4 flex-shrink-0">
           {/* Save/update views button */}
-          {filters && filters.length > 0 && (
+          {((filters && filters.length > 0) || router.query.view) && (
             <InventoryView
-              filters={filters}
+              filters={filters!}
               displayedFilters={displayedFilters!}
               setToast={setToast}
               inventoryStats={inventoryStats!}
+              router={router}
             />
           )}
 
@@ -219,9 +219,11 @@ export default function Inventory() {
       <div className="mt-8"></div>
 
       {/* Inventory list loading */}
-      {!inventory && !error && !query && !displayedFilters && (
-        <SkeletonInventory />
-      )}
+      {!inventory &&
+        !error &&
+        !query &&
+        !displayedFilters &&
+        !router.query.view && <SkeletonInventory />}
 
       {/* Inventory list */}
       <InventoryTable

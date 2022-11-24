@@ -164,7 +164,12 @@ function useInventory() {
     let mounted = true;
     resetStates();
 
-    if (router.query && Object.keys(router.query).length === 0) {
+    // Fetch base inventory
+    if (
+      router.query &&
+      Object.keys(router.query).length === 0 &&
+      !router.query.view
+    ) {
       setDisplayedFilters(undefined);
       setSearchedInventory(undefined);
       setFilters(undefined);
@@ -193,11 +198,60 @@ function useInventory() {
         });
     }
 
-    if (router.query.view) {
-      return console.log(router);
+    // Fetch from a custom view
+    if (router.query.view && views && views.length > 0) {
+      setSearchedLoading(true);
+      setStatsLoading(true);
+
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      const payloadJson = JSON.stringify(filterFound?.filters);
+
+      settingsService.getFilteredInventoryStats(payloadJson).then(res => {
+        if (mounted) {
+          if (res === Error) {
+            setError(true);
+            setStatsLoading(false);
+          } else {
+            setInventoryStats(res);
+            setStatsLoading(false);
+          }
+        }
+      });
+
+      settingsService
+        .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+        .then(res => {
+          if (mounted) {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+              setSearchedLoading(false);
+            } else {
+              setSearchedInventory(res);
+              setSkippedSearch(prev => prev + batchSize);
+              setSearchedLoading(false);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+            }
+          }
+        });
     }
 
-    if (router.query && Object.keys(router.query).length > 0) {
+    // Fetch from filters
+    if (
+      router.query &&
+      Object.keys(router.query).length > 0 &&
+      !router.query.view
+    ) {
       if (
         Object.keys(router.query)[0].split(':').length <= 1 &&
         !router.query.view
@@ -265,7 +319,7 @@ function useInventory() {
     return () => {
       mounted = false;
     };
-  }, [router.query]);
+  }, [router.query, views]);
 
   // Infinite scrolling fetch effect
   useEffect(() => {
