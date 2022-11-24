@@ -2,7 +2,7 @@ import { NextRouter } from 'next/router';
 import Button from '../../../button/Button';
 import Dropdown from '../../../dropdown/Dropdown';
 import { ToastProps } from '../../../toast/hooks/useToast';
-import useFilterWizard from '../../hooks/useFilterWizard';
+import useFilterWizard from './hooks/useFilterWizard';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';
 import InventoryFilterOperator from './InventoryFilterOperator';
@@ -42,8 +42,8 @@ function InventoryFilter({
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           fill="none"
           viewBox="0 0 24 24"
         >

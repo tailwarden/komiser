@@ -7,6 +7,7 @@ import InventoryFilterSummary from '../components/inventory/components/filter/In
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
+import InventoryView from '../components/inventory/components/view/InventoryView';
 import useInventory from '../components/inventory/hooks/useInventory';
 import SkeletonInventory from '../components/skeleton/SkeletonInventory';
 import SkeletonStats from '../components/skeleton/SkeletonStats';
@@ -62,16 +63,21 @@ export default function Inventory() {
       <div className="flex items-center justify-between">
         <p className="text-lg font-medium text-black-900">Inventory</p>
 
-        {/* Filter by dropdown */}
-        {!error &&
-          ((inventory && inventory.length > 0) ||
-            (searchedInventory && searchedInventory.length > 0)) && (
-            <InventoryFilter
-              router={router}
-              setSkippedSearch={setSkippedSearch}
-              setToast={setToast}
-            />
-          )}
+        <div className="flex items-center gap-4">
+          {/* Save/update views button */}
+          {displayedFilters && displayedFilters.length > 0 && <InventoryView />}
+
+          {/* Filter by dropdown */}
+          {!error &&
+            ((inventory && inventory.length > 0) ||
+              (searchedInventory && searchedInventory.length > 0)) && (
+              <InventoryFilter
+                router={router}
+                setSkippedSearch={setSkippedSearch}
+                setToast={setToast}
+              />
+            )}
+        </div>
       </div>
       <div className="mt-4"></div>
 
