@@ -19,10 +19,13 @@ const INITIAL_VIEW: ViewProps = {
   exclude: []
 };
 
+type Pages = 'view' | 'excluded' | 'delete';
+
 function useViews({ setToast }: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState<Pages>('view');
 
   useEffect(() => {
     settingsService.getViews().then(res => {
@@ -39,6 +42,7 @@ function useViews({ setToast }: useViewsProps) {
   }
 
   function openModal(filters: InventoryFilterDataProps[]) {
+    setView(INITIAL_VIEW);
     populateView(filters);
     setIsOpen(true);
   }
@@ -49,6 +53,10 @@ function useViews({ setToast }: useViewsProps) {
 
   function handleChange(newData: { name: string }) {
     setView(prev => ({ ...prev, name: newData.name }));
+  }
+
+  function goTo(newPage: Pages) {
+    setPage(newPage);
   }
 
   function saveView(e: FormEvent<HTMLFormElement>) {
@@ -83,7 +91,9 @@ function useViews({ setToast }: useViewsProps) {
     view,
     handleChange,
     saveView,
-    loading
+    loading,
+    page,
+    goTo
   };
 }
 

@@ -3,8 +3,13 @@ import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
+import SidepanelPage from '../../../sidepanel/SidepanelPage';
+import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
-import { InventoryFilterDataProps } from '../../hooks/useInventory';
+import {
+  InventoryFilterDataProps,
+  InventoryStats
+} from '../../hooks/useInventory';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import useViews from './hooks/useViews';
 
@@ -12,11 +17,13 @@ type InventoryViewProps = {
   filters: InventoryFilterDataProps[];
   displayedFilters: InventoryFilterDataProps[];
   setToast: (toast: ToastProps | undefined) => void;
+  inventoryStats: InventoryStats;
 };
 function InventoryView({
   filters,
   displayedFilters,
-  setToast
+  setToast,
+  inventoryStats
 }: InventoryViewProps) {
   const {
     isOpen,
@@ -25,8 +32,11 @@ function InventoryView({
     view,
     handleChange,
     saveView,
-    loading
+    loading,
+    page,
+    goTo
   } = useViews({ setToast });
+
   return (
     <>
       {/* Save as a view button */}
@@ -60,34 +70,40 @@ function InventoryView({
       <Sidepanel isOpen={isOpen} closeModal={closeModal}>
         <SidepanelHeader
           title="Save as a view"
-          subtitle="Review the data below"
+          subtitle={`${inventoryStats?.resources} ${
+            inventoryStats?.resources > 1 ? 'resources' : 'resource'
+          } will be added to this view`}
           closeModal={closeModal}
         />
-        <div className="flex items-center gap-4">
-          {displayedFilters?.length > 0 &&
-            displayedFilters.map((data, idx) => (
-              <InventoryFilterSummary key={idx} data={data} />
-            ))}
-        </div>
-        <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
-          <Input
-            name="name"
-            label="View name"
-            type="text"
-            regex={regex.required}
-            error="Please provide a name"
-            value={view.name}
-            action={handleChange}
-          />
-          <Button
-            size="lg"
-            type="submit"
-            loading={loading}
-            disabled={!view.name}
-          >
-            Save as a view
-          </Button>
-        </form>
+        <SidepanelTabs goTo={goTo} page={page} tabs={['View']} />
+        <SidepanelPage page={page} param="view">
+          <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              {displayedFilters?.length > 0 &&
+                displayedFilters.map((data, idx) => (
+                  <InventoryFilterSummary key={idx} data={data} />
+                ))}
+            </div>
+            <Input
+              name="name"
+              label="Choose a view name"
+              type="text"
+              regex={regex.required}
+              error="Please provide a name"
+              value={view.name}
+              action={handleChange}
+            />
+
+            <Button
+              size="lg"
+              type="submit"
+              loading={loading}
+              disabled={!view.name}
+            >
+              Save as a view {inventoryStats?.resources}
+            </Button>
+          </form>
+        </SidepanelPage>
       </Sidepanel>
     </>
   );

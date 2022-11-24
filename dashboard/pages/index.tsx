@@ -71,6 +71,7 @@ export default function Inventory() {
               filters={filters}
               displayedFilters={displayedFilters!}
               setToast={setToast}
+              inventoryStats={inventoryStats!}
             />
           )}
 

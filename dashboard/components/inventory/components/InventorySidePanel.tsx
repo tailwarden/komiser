@@ -2,6 +2,7 @@ import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
+import SidepanelTabs from '../../sidepanel/SidepanelTabs';
 import { InventoryItem, Pages, Tag } from '../hooks/useInventory';
 import InventoryTagWrapper from './InventoryTagWrapper';
 
@@ -105,22 +106,7 @@ function InventorySidePanel({
         </div>
 
         {/* Tabs */}
-        <div className="text-sm font-medium text-center border-b-2 border-black-150 text-black-300">
-          <ul className="flex justify-between sm:justify-start -mb-[2px]">
-            <li className="mr-2">
-              <a
-                onClick={() => goTo('tags')}
-                className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
-                      ${
-                        (page === 'tags' || page === 'delete') &&
-                        `text-komiser-600 border-komiser-600 hover:text-komiser-600`
-                      }`}
-              >
-                Tags
-              </a>
-            </li>
-          </ul>
-        </div>
+        <SidepanelTabs goTo={goTo} page={page} tabs={['Tags']} />
 
         {/* Tags form */}
         <div className="p-6 bg-black-100 rounded-lg">

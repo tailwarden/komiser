@@ -6,6 +6,7 @@ export type ButtonProps = {
   style?:
     | 'primary'
     | 'secondary'
+    | 'bulk'
     | 'outline'
     | 'ghost'
     | 'delete'
@@ -59,6 +60,8 @@ function Button({
 
   const secondary = `${base} bg-black-100 hover:bg-black-200/50 active:bg-black-100 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
 
+  const bulk = `${base} bg-white hover:bg-komiser-200 active:bg-komiser-300 text-secondary  disabled:bg-white disabled:opacity-50`;
+
   const outline = `${base} bg-transparent text-primary border-2 border-primary hover:bg-komiser-100 active:border-primary active:text-primary disabled:bg-transparent disabled:opacity-50`;
 
   const ghost = `${base} bg-transparent hover:bg-black-400/10 active:bg-black-400/20 text-black-900/60  disabled:bg-transparent disabled:opacity-50`;
@@ -72,6 +75,7 @@ function Button({
 
     if (style === 'primary') buttonStyle = primary;
     if (style === 'secondary') buttonStyle = secondary;
+    if (style === 'bulk') buttonStyle = bulk;
     if (style === 'outline') buttonStyle = outline;
     if (style === 'ghost') buttonStyle = ghost;
     if (style === 'delete-ghost') buttonStyle = deleteGhostStyle;
