@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	. "github.com/mlabouardy/komiser/models"
+	log "github.com/sirupsen/logrus"
+	"github.com/uptrace/bun/dialect"
 )
 
 func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) {
@@ -14,19 +16,19 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
 
 	resources := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &resources)
+	handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
 
 	cost := struct {
 		Sum int `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &cost)
+	handler.db.NewRaw("SELECT SUM(count) as sum FROM resources").Scan(handler.ctx, &cost)
 
 	output := struct {
 		Resources int `json:"resources"`
@@ -118,9 +120,17 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
 			case "IS_EMPTY":
-				whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) = 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				}
 			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) != 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+				}
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
@@ -167,22 +177,26 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 	} else {
 		query := fmt.Sprintf("FROM resources WHERE %s", whereClause)
 
+		log.Info(query)
+
 		regions := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
 
 		resources := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) %s", query)).Scan(handler.ctx, &resources)
+		log.Info(fmt.Sprintf("SELECT COUNT(*) %s", query))
+
+		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
 
 		cost := struct {
 			Sum int `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) %s", query)).Scan(handler.ctx, &cost)
+		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) as sum %s", query)).Scan(handler.ctx, &cost)
 
 		output := struct {
 			Resources int `json:"resources"`

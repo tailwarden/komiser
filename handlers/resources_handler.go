@@ -9,7 +9,9 @@ import (
 	"strings"
 
 	. "github.com/mlabouardy/komiser/models"
+	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect"
 )
 
 type ApiHandler struct {
@@ -161,10 +163,17 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
 			case "IS_EMPTY":
-				whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) = 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				}
 			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
-
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) != 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+				}
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
@@ -188,6 +197,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+		log.Info(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip))
 		if err != nil {
 			respondWithError(w, http.StatusBadRequest, err.Error())
 			return
