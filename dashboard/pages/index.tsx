@@ -70,6 +70,7 @@ export default function Inventory() {
             <InventoryView
               filters={filters}
               displayedFilters={displayedFilters!}
+              setToast={setToast}
             />
           )}
 

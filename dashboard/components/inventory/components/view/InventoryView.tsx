@@ -3,6 +3,7 @@ import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
+import { ToastProps } from '../../../toast/hooks/useToast';
 import { InventoryFilterDataProps } from '../../hooks/useInventory';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import useViews from './hooks/useViews';
@@ -10,9 +11,22 @@ import useViews from './hooks/useViews';
 type InventoryViewProps = {
   filters: InventoryFilterDataProps[];
   displayedFilters: InventoryFilterDataProps[];
+  setToast: (toast: ToastProps | undefined) => void;
 };
-function InventoryView({ filters, displayedFilters }: InventoryViewProps) {
-  const { isOpen, openModal, closeModal, view, handleChange } = useViews();
+function InventoryView({
+  filters,
+  displayedFilters,
+  setToast
+}: InventoryViewProps) {
+  const {
+    isOpen,
+    openModal,
+    closeModal,
+    view,
+    handleChange,
+    saveView,
+    loading
+  } = useViews({ setToast });
   return (
     <>
       {/* Save as a view button */}
@@ -55,16 +69,25 @@ function InventoryView({ filters, displayedFilters }: InventoryViewProps) {
               <InventoryFilterSummary key={idx} data={data} />
             ))}
         </div>
-        <Input
-          name="name"
-          label="View name"
-          type="text"
-          regex={regex.required}
-          error="Please provide a name"
-          value={view.name}
-          action={handleChange}
-        />
-        <Button size="lg">Save as a view</Button>
+        <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
+          <Input
+            name="name"
+            label="View name"
+            type="text"
+            regex={regex.required}
+            error="Please provide a name"
+            value={view.name}
+            action={handleChange}
+          />
+          <Button
+            size="lg"
+            type="submit"
+            loading={loading}
+            disabled={!view.name}
+          >
+            Save as a view
+          </Button>
+        </form>
       </Sidepanel>
     </>
   );
