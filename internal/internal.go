@@ -77,6 +77,7 @@ func runServer(port int, noTracking bool) error {
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders: []string{"profile", "X-Requested-With", "Content-Type", "Authorization"},
 	})
+
 	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
 	if err != nil {

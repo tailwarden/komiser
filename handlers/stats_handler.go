@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	. "github.com/mlabouardy/komiser/models"
+	"github.com/uptrace/bun/dialect"
 )
 
 func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) {
@@ -14,19 +15,19 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
 
 	resources := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &resources)
+	handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
 
 	cost := struct {
 		Sum int `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &cost)
+	handler.db.NewRaw("SELECT SUM(count) as sum FROM resources").Scan(handler.ctx, &cost)
 
 	output := struct {
 		Resources int `json:"resources"`
@@ -99,6 +100,9 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
 				}
 				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' IN (%s)))", key, strings.Join(filter.Values, ","))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') IN (%s)))", key, strings.Join(filter.Values, ","))
+				}
 				whereQueries = append(whereQueries, query)
 			case "NOT_CONTAINS":
 			case "IS_NOT":
@@ -106,11 +110,22 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
 				}
 				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				}
 				whereQueries = append(whereQueries, query)
 			case "IS_EMPTY":
-				whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') = ''))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
+				}
 			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') != ''))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
+				}
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
@@ -118,9 +133,17 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
 			case "IS_EMPTY":
-				whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) = 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				}
 			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) != 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+				}
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
@@ -139,19 +162,23 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		}{}
 
 		query := fmt.Sprintf("FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s", whereClause)
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		if handler.db.Dialect().Name() == dialect.SQLite {
+			query = fmt.Sprintf("FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s", whereClause)
+		}
+
+		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
 
 		resources := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) %s", query)).Scan(handler.ctx, &resources)
+		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
 
 		cost := struct {
 			Sum int `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) %s", query)).Scan(handler.ctx, &cost)
+		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) as sum %s", query)).Scan(handler.ctx, &cost)
 
 		output := struct {
 			Resources int `json:"resources"`
@@ -170,19 +197,19 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		regions := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
 
 		resources := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) %s", query)).Scan(handler.ctx, &resources)
+		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
 
 		cost := struct {
 			Sum int `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) %s", query)).Scan(handler.ctx, &cost)
+		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) as sum %s", query)).Scan(handler.ctx, &cost)
 
 		output := struct {
 			Resources int `json:"resources"`
