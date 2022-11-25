@@ -38,6 +38,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		sns.Topics,
 		sqs.Queues,
 		ec2.Vpcs,
+		ec2.Subnets,
 	}
 }
 
