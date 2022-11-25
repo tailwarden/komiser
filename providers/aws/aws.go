@@ -37,6 +37,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ecr.Repositories,
 		sns.Topics,
 		sqs.Queues,
+		ec2.Vpcs,
 	}
 }
 
