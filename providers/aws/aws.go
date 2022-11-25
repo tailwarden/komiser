@@ -14,6 +14,7 @@ import (
 	"github.com/mlabouardy/komiser/providers/aws/ecs"
 	"github.com/mlabouardy/komiser/providers/aws/eks"
 	"github.com/mlabouardy/komiser/providers/aws/iam"
+	"github.com/mlabouardy/komiser/providers/aws/kms"
 	"github.com/mlabouardy/komiser/providers/aws/lambda"
 	"github.com/mlabouardy/komiser/providers/aws/s3"
 	"github.com/mlabouardy/komiser/providers/aws/sns"
@@ -41,6 +42,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Subnets,
 		ec2.Acls,
 		ec2.Volumes,
+		kms.Keys,
 	}
 }
 
