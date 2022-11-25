@@ -58,6 +58,7 @@ export type InventoryItem = {
 export type Pages = 'tags' | 'delete';
 
 export type ViewProps = {
+  id?: string;
   name: string;
   filters: InventoryFilterDataProps[];
   exclude: string[];
@@ -157,6 +158,8 @@ function useInventory() {
     setBulkItems([]);
     setBulkSelectCheckbox(false);
     setQuery('');
+    setFilters(undefined);
+    setDisplayedFilters(undefined);
   }
 
   // Fetch the correct inventory list based on URL params
@@ -204,7 +207,6 @@ function useInventory() {
       setStatsLoading(true);
 
       const filterFound = views.find(view => view.name === router.query.view);
-
       const payloadJson = JSON.stringify(filterFound?.filters);
 
       settingsService.getFilteredInventoryStats(payloadJson).then(res => {

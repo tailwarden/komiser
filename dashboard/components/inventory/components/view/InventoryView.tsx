@@ -9,7 +9,8 @@ import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   InventoryFilterDataProps,
-  InventoryStats
+  InventoryStats,
+  ViewProps
 } from '../../hooks/useInventory';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import useViews from './hooks/useViews';
@@ -20,13 +21,15 @@ type InventoryViewProps = {
   setToast: (toast: ToastProps | undefined) => void;
   inventoryStats: InventoryStats;
   router: NextRouter;
+  views: ViewProps[] | undefined;
 };
 function InventoryView({
   filters,
   displayedFilters,
   setToast,
   inventoryStats,
-  router
+  router,
+  views
 }: InventoryViewProps) {
   const {
     isOpen,
@@ -37,8 +40,9 @@ function InventoryView({
     saveView,
     loading,
     page,
-    goTo
-  } = useViews({ setToast });
+    goTo,
+    deleteView
+  } = useViews({ setToast, views, router });
 
   return (
     <>
@@ -72,10 +76,17 @@ function InventoryView({
       {/* Sidepanel */}
       <Sidepanel isOpen={isOpen} closeModal={closeModal}>
         <SidepanelHeader
-          title="Save as a view"
+          title={
+            router.query.view ? router.query.view.toString() : 'Save as a view'
+          }
           subtitle={`${inventoryStats?.resources} ${
-            inventoryStats?.resources > 1 ? 'resources' : 'resource'
-          } will be added to this view`}
+            inventoryStats?.resources === 1 ? 'resource' : 'resources'
+          } ${
+            router.query.view
+              ? 'are part of this view'
+              : 'will be added to this view'
+          }`}
+          deleteAction={router.query.view ? deleteView : undefined}
           closeModal={closeModal}
         />
         <SidepanelTabs goTo={goTo} page={page} tabs={['View']} />
@@ -89,7 +100,7 @@ function InventoryView({
             </div>
             <Input
               name="name"
-              label="Choose a view name"
+              label={router.query.view ? 'View name' : 'Choose a view name'}
               type="text"
               regex={regex.required}
               error="Please provide a name"
@@ -105,7 +116,8 @@ function InventoryView({
                 loading={loading}
                 disabled={!view.name}
               >
-                Save as a view {inventoryStats?.resources}
+                {router.query.view ? 'Update view' : 'Save as a view'}{' '}
+                {inventoryStats?.resources}
               </Button>
             </div>
           </form>
