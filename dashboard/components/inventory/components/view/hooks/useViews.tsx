@@ -114,11 +114,9 @@ function useViews({ setToast, views, router }: useViewsProps) {
   function deleteView() {
     if (view) {
       setLoading(true);
-      const payload = view;
-      const payloadJson = JSON.stringify(payload);
       const { id } = view;
 
-      settingsService.deleteView(id!, payloadJson).then(res => {
+      settingsService.deleteView(id!).then(res => {
         if (res === Error) {
           setLoading(false);
           setToast({

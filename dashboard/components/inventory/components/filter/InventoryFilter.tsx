@@ -109,7 +109,7 @@ function InventoryFilter({
                       setToast={setToast}
                     />
                   </div>
-                  <div className="border-t -mx-4 -mb-4 px-4 py-4">
+                  <div className="flex justify-end border-t -mx-4 -mb-4 px-4 py-4">
                     <Button
                       type="submit"
                       disabled={

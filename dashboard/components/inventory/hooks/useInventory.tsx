@@ -58,7 +58,7 @@ export type InventoryItem = {
 export type Pages = 'tags' | 'delete';
 
 export type ViewProps = {
-  id?: string;
+  id?: number;
   name: string;
   filters: InventoryFilterDataProps[];
   exclude: string[];
@@ -203,10 +203,14 @@ function useInventory() {
 
     // Fetch from a custom view
     if (router.query.view && views && views.length > 0) {
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      if (!filterFound) {
+        router.push('/');
+      }
+
       setSearchedLoading(true);
       setStatsLoading(true);
-
-      const filterFound = views.find(view => view.name === router.query.view);
       const payloadJson = JSON.stringify(filterFound?.filters);
 
       settingsService.getFilteredInventoryStats(payloadJson).then(res => {

@@ -200,7 +200,7 @@ const settingsService = {
     }
   },
 
-  async updateView(id: string, payload: string) {
+  async updateView(id: number, payload: string) {
     try {
       const res = await fetch(
         `${BASE_URL}/views/${id}`,
@@ -213,12 +213,9 @@ const settingsService = {
     }
   },
 
-  async deleteView(id: string, payload: string) {
+  async deleteView(id: number) {
     try {
-      const res = await fetch(
-        `${BASE_URL}/views/${id}`,
-        settings('DELETE', payload)
-      );
+      const res = await fetch(`${BASE_URL}/views/${id}`, settings('DELETE'));
       const data = await res.json();
       return data;
     } catch (error) {
