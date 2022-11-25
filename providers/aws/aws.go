@@ -14,7 +14,9 @@ import (
 	"github.com/mlabouardy/komiser/providers/aws/ecs"
 	"github.com/mlabouardy/komiser/providers/aws/eks"
 	"github.com/mlabouardy/komiser/providers/aws/iam"
+	"github.com/mlabouardy/komiser/providers/aws/kms"
 	"github.com/mlabouardy/komiser/providers/aws/lambda"
+	"github.com/mlabouardy/komiser/providers/aws/rds"
 	"github.com/mlabouardy/komiser/providers/aws/s3"
 	"github.com/mlabouardy/komiser/providers/aws/sns"
 	"github.com/mlabouardy/komiser/providers/aws/sqs"
@@ -37,6 +39,12 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ecr.Repositories,
 		sns.Topics,
 		sqs.Queues,
+		ec2.Vpcs,
+		ec2.Subnets,
+		ec2.Acls,
+		ec2.Volumes,
+		kms.Keys,
+		rds.Clusters,
 	}
 }
 
