@@ -117,6 +117,17 @@
                 "ec2:DescribeSpotFleetInstances"
             ],
             "Resource": "*"
+        },
+        {
+            "Sid": "8",
+            "Effect": "Allow",
+            "Action": [
+                "sns:ListTagsForResource",
+                "s3:GetBucketTagging",
+                "lambda:ListTags",
+                "kms:ListResourceTags"
+            ],
+            "Resource": "*"
         }
     ]
 }
