@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
 	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun/dialect/pgdialect"
@@ -49,13 +50,17 @@ func Exec(port int, configPath string, noTracking bool, regions []string, cmd *c
 		return err
 	}
 
-	go func() error {
+	cron := gocron.NewScheduler(time.UTC)
+
+	cron.Every(1).Hours().Do(func() {
+		log.Info("Fetching resources workflow has started")
 		err = fetchResources(context.Background(), clients, regions)
 		if err != nil {
-			return err
+			log.Fatal(err)
 		}
-		return nil
-	}()
+	})
+
+	cron.StartAsync()
 
 	go checkUpgrade()
 
@@ -74,7 +79,7 @@ func runServer(port int, noTracking bool) error {
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
 		AllowedHeaders: []string{"profile", "X-Requested-With", "Content-Type", "Authorization"},
 	})
 
