@@ -100,9 +100,30 @@ function useInventory() {
   const router = useRouter();
 
   // Parse URL params
-  function parseParams(param: string, type: 'fetch' | 'display') {
-    const formatString = param.split(':');
+  function parseParams(
+    param: string | InventoryFilterDataProps,
+    type: 'fetch' | 'display',
+    view?: boolean
+  ) {
+    let formatString;
     let filter;
+
+    if (!view) {
+      formatString = (param as string).split(':');
+    } else {
+      formatString = Object.values(param);
+      formatString = [...formatString.slice(0, 2), formatString[2]!.toString()];
+    }
+
+    if (formatString[0]!.includes('tag:')) {
+      const tag = (formatString[0] as string).split(':');
+      formatString = [
+        tag[0],
+        tag[1],
+        formatString[1],
+        formatString[2]?.toString()
+      ];
+    }
 
     if (formatString[0] === 'tag' && type === 'fetch') {
       filter = {
@@ -111,7 +132,7 @@ function useInventory() {
         values:
           formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[3].split(',')
+            : (formatString[3] as string).split(',')
       };
     }
 
@@ -122,7 +143,7 @@ function useInventory() {
         values:
           formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[2].split(',')
+            : (formatString[2] as string).split(',')
       };
     }
 
@@ -134,7 +155,7 @@ function useInventory() {
         values:
           formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[3].split(',')
+            : (formatString[3] as string).split(',')
       };
     }
 
@@ -145,7 +166,7 @@ function useInventory() {
         values:
           formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[2].split(',')
+            : (formatString[2] as string).split(',')
       };
     }
 
@@ -240,6 +261,12 @@ function useInventory() {
                 setSearchedInventory(res);
                 setSkippedSearch(prev => prev + batchSize);
                 setSearchedLoading(false);
+                const newFiltersToDisplay: InventoryFilterDataProps[] =
+                  filterFound.filters.map(filter =>
+                    parseParams(filter, 'display', true)
+                  );
+
+                setDisplayedFilters(newFiltersToDisplay);
 
                 if (res.length >= batchSize) {
                   setShouldFetchMore(true);
@@ -274,10 +301,10 @@ function useInventory() {
 
       const newFilters: InventoryFilterDataProps[] = Object.keys(
         router.query
-      ).map(param => parseParams(param, 'fetch'));
+      ).map(param => parseParams(param as string, 'fetch'));
       const newFiltersToDisplay: InventoryFilterDataProps[] = Object.keys(
         router.query
-      ).map(param => parseParams(param, 'display'));
+      ).map(param => parseParams(param as string, 'display'));
 
       const payloadJson = JSON.stringify(newFilters);
 

@@ -43,8 +43,8 @@ function InventoryFilterSummary({
 
   return (
     <div
-      className={`${
-        bg ? 'bg-white' : 'bg-black-100'
+      className={`${bg ? 'bg-white' : 'bg-black-100'} ${
+        deleteFilter || resetData ? 'pr-12' : 'pr-4'
       } relative flex text-black-900/70 p-2 pr-12 text-xs rounded max-w-[calc(100vw-250px)] md:max-w-[calc(100vw-400px)] overflow-hidden`}
     >
       {(deleteFilter || resetData) && (
