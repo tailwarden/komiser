@@ -4,6 +4,7 @@ type Config struct {
 	AWS          []AWSConfig          `toml:"aws"`
 	DigitalOcean []DigitalOceanConfig `toml:"digitalocean"`
 	Oci          []OciConfig          `toml:"oci"`
+	Civo         []CivoConfig         `toml:"civo"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 }
@@ -16,6 +17,11 @@ type AWSConfig struct {
 }
 
 type DigitalOceanConfig struct {
+	Name  string `toml:"name"`
+	Token string `toml:"token"`
+}
+
+type CivoConfig struct {
 	Name  string `toml:"name"`
 	Token string `toml:"token"`
 }
