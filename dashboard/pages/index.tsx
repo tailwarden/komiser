@@ -52,7 +52,8 @@ export default function Inventory() {
     deleteFilter,
     searchedLoading,
     statsLoading,
-    views
+    views,
+    getViews
   } = useInventory();
 
   return (
@@ -77,6 +78,7 @@ export default function Inventory() {
               inventoryStats={inventoryStats!}
               router={router}
               views={views}
+              getViews={getViews}
             />
           )}
 

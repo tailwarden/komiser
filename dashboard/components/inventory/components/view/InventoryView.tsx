@@ -22,6 +22,7 @@ type InventoryViewProps = {
   inventoryStats: InventoryStats;
   router: NextRouter;
   views: ViewProps[] | undefined;
+  getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
 };
 function InventoryView({
   filters,
@@ -29,7 +30,8 @@ function InventoryView({
   setToast,
   inventoryStats,
   router,
-  views
+  views,
+  getViews
 }: InventoryViewProps) {
   const {
     isOpen,
@@ -42,7 +44,7 @@ function InventoryView({
     page,
     goTo,
     deleteView
-  } = useViews({ setToast, views, router });
+  } = useViews({ setToast, views, router, getViews });
 
   return (
     <>

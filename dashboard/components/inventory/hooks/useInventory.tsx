@@ -202,54 +202,54 @@ function useInventory() {
     }
 
     // Fetch from a custom view
-    if (router.query.view && views && views.length > 0) {
+    if (router.query.view && views) {
       const filterFound = views.find(view => view.name === router.query.view);
 
       if (!filterFound) {
         router.push('/');
-      }
+      } else {
+        setSearchedLoading(true);
+        setStatsLoading(true);
+        const payloadJson = JSON.stringify(filterFound?.filters);
 
-      setSearchedLoading(true);
-      setStatsLoading(true);
-      const payloadJson = JSON.stringify(filterFound?.filters);
-
-      settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-        if (mounted) {
-          if (res === Error) {
-            setError(true);
-            setStatsLoading(false);
-          } else {
-            setInventoryStats(res);
-            setStatsLoading(false);
-          }
-        }
-      });
-
-      settingsService
-        .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
-        .then(res => {
+        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
           if (mounted) {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
+            if (res === Error) {
               setError(true);
-              setSearchedLoading(false);
+              setStatsLoading(false);
             } else {
-              setSearchedInventory(res);
-              setSkippedSearch(prev => prev + batchSize);
-              setSearchedLoading(false);
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
-              }
+              setInventoryStats(res);
+              setStatsLoading(false);
             }
           }
         });
+
+        settingsService
+          .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+          .then(res => {
+            if (mounted) {
+              if (res.error) {
+                setToast({
+                  hasError: true,
+                  title: `Filter could not be applied!`,
+                  message: `Please refresh the page and try again.`
+                });
+                setError(true);
+                setSearchedLoading(false);
+              } else {
+                setSearchedInventory(res);
+                setSkippedSearch(prev => prev + batchSize);
+                setSearchedLoading(false);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                } else {
+                  setShouldFetchMore(false);
+                }
+              }
+            }
+          });
+      }
     }
 
     // Fetch from filters
@@ -339,7 +339,8 @@ function useInventory() {
       skipped < inventoryStats.resources &&
       isVisible &&
       !query &&
-      !filters
+      !filters &&
+      !router.query.view
     ) {
       setError(false);
 
@@ -439,6 +440,51 @@ function useInventory() {
               }
 
               setSkippedSearch(prev => prev + batchSize);
+            }
+          }
+        });
+    }
+
+    // Fetching on a view list
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      views &&
+      views.length > 0 &&
+      router.query.view
+    ) {
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      const payloadJson = JSON.stringify(filterFound?.filters);
+
+      settingsService
+        .getFilteredInventory(
+          `?limit=${batchSize}&skip=${skippedSearch}`,
+          payloadJson
+        )
+        .then(res => {
+          if (mounted) {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+              setSkippedSearch(prev => prev + batchSize);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
             }
           }
         });
@@ -566,8 +612,7 @@ function useInventory() {
     };
   }, [inventoryHasUpdate]);
 
-  // Getting all the views
-  useEffect(() => {
+  function getViews(edit?: boolean, viewName?: string) {
     settingsService.getViews().then(res => {
       if (res === Error) {
         setToast({
@@ -577,8 +622,16 @@ function useInventory() {
         });
       } else {
         setViews(res);
+        if (edit && viewName) {
+          router.push(`/?view=${viewName}`, undefined, { shallow: true });
+        }
       }
     });
+  }
+
+  // Getting all the views
+  useEffect(() => {
+    getViews();
   }, []);
 
   // Functions to be exported
@@ -724,6 +777,7 @@ function useInventory() {
             } ${bulkItems.length > 1 ? 'resources' : 'resource'}`
           });
           setInventoryHasUpdate(true);
+          setBulkItems([]);
           closeModal();
         }
       });
@@ -816,7 +870,8 @@ function useInventory() {
     deleteFilter,
     searchedLoading,
     statsLoading,
-    views
+    views,
+    getViews
   };
 }
 

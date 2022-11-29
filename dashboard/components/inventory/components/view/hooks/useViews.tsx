@@ -11,6 +11,7 @@ type useViewsProps = {
   setToast: (toast: ToastProps | undefined) => void;
   views: ViewProps[] | undefined;
   router: NextRouter;
+  getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
 };
 
 const INITIAL_VIEW: ViewProps = {
@@ -21,7 +22,7 @@ const INITIAL_VIEW: ViewProps = {
 
 type Pages = 'view' | 'excluded' | 'delete';
 
-function useViews({ setToast, views, router }: useViewsProps) {
+function useViews({ setToast, views, router, getViews }: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
   const [loading, setLoading] = useState(false);
@@ -80,6 +81,7 @@ function useViews({ setToast, views, router }: useViewsProps) {
             });
           } else {
             setLoading(false);
+            getViews(true, view.name);
             setToast({
               hasError: false,
               title: `${view.name} has been created.`,
@@ -99,6 +101,7 @@ function useViews({ setToast, views, router }: useViewsProps) {
             });
           } else {
             setLoading(false);
+            getViews(true, view.name);
             setToast({
               hasError: false,
               title: `${view.name} has been created.`,
@@ -125,6 +128,7 @@ function useViews({ setToast, views, router }: useViewsProps) {
             message: `There was an error deleting this custom view. Please refer to the logs and try again!`
           });
         } else {
+          getViews();
           setLoading(false);
           setToast({
             hasError: false,
@@ -132,6 +136,7 @@ function useViews({ setToast, views, router }: useViewsProps) {
             message: `The custom view has been successfully deleted.`
           });
           closeModal();
+          router.push('/');
         }
       });
     }
