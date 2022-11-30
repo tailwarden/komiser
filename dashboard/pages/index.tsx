@@ -10,6 +10,7 @@ import InventoryTable from '../components/inventory/components/InventoryTable';
 import InventoryViewsTabs from '../components/inventory/components/InventoryViewsTabs';
 import InventoryView from '../components/inventory/components/view/InventoryView';
 import useInventory from '../components/inventory/hooks/useInventory';
+import SkeletonFilters from '../components/skeleton/SkeletonFilters';
 import SkeletonInventory from '../components/skeleton/SkeletonInventory';
 import SkeletonStats from '../components/skeleton/SkeletonStats';
 import Toast from '../components/toast/Toast';
@@ -63,7 +64,6 @@ export default function Inventory() {
         <meta name="description" content="Inventory - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <div className="flex items-center justify-between gap-8">
         {/* Inventory views */}
         <InventoryViewsTabs views={views} router={router} />
@@ -131,12 +131,17 @@ export default function Inventory() {
         />
       )}
 
+      {/* Filters skeleton */}
+      {Object.keys(router.query).length > 0 && !displayedFilters && (
+        <SkeletonFilters />
+      )}
+
       {/* Active filters list */}
       {Object.keys(router.query).length > 0 &&
         displayedFilters &&
         displayedFilters.length > 0 && (
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 bg-white py-2 px-6 rounded-lg mb-8">
-            <div className="text-sm text-black-400 h-full">Filters:</div>
+            <div className="text-sm text-black-400 h-full">Filters</div>
             {displayedFilters.map((activeFilter, idx) => (
               <InventoryFilterSummary
                 key={idx}
@@ -185,7 +190,6 @@ export default function Inventory() {
             )}
           </div>
         )}
-
       {/* Inventory stats loading */}
       {!inventoryStats && !error && !statsLoading && <SkeletonStats />}
 
@@ -193,7 +197,6 @@ export default function Inventory() {
       <InventoryStatsCards inventoryStats={inventoryStats} error={error} />
 
       <div className="mt-8"></div>
-
       {/* Inventory list loading */}
       {!inventory &&
         !error &&
