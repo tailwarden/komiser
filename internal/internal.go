@@ -24,6 +24,7 @@ import (
 	"github.com/mlabouardy/komiser/models"
 	"github.com/mlabouardy/komiser/providers"
 	"github.com/mlabouardy/komiser/providers/aws"
+	civo "github.com/mlabouardy/komiser/providers/civo"
 	do "github.com/mlabouardy/komiser/providers/digitalocean"
 	oci "github.com/mlabouardy/komiser/providers/oci"
 	"github.com/rs/cors"
@@ -142,6 +143,10 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.OciClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
 				oci.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.CivoClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				civo.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}
