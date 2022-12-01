@@ -5,13 +5,15 @@ type SidepanelHeaderProps = {
   subtitle: string;
   closeModal: () => void;
   deleteAction?: () => void;
+  deleteLabel?: string;
 };
 
 function SidepanelHeader({
   title,
   subtitle,
   closeModal,
-  deleteAction
+  deleteAction,
+  deleteLabel
 }: SidepanelHeaderProps) {
   return (
     <div className="flex flex-wrap-reverse sm:flex-nowrap items-center justify-between gap-6">
@@ -29,7 +31,7 @@ function SidepanelHeader({
       <div className="flex items-center gap-4 flex-shrink-0">
         {deleteAction && (
           <Button style="delete-ghost" onClick={deleteAction}>
-            Delete
+            {deleteLabel || 'Delete'}
           </Button>
         )}
 

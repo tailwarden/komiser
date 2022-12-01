@@ -89,6 +89,7 @@ function InventoryView({
               : 'will be added to this view'
           }`}
           deleteAction={router.query.view ? deleteView : undefined}
+          deleteLabel="Delete view"
           closeModal={closeModal}
         />
         <SidepanelTabs goTo={goTo} page={page} tabs={['View']} />

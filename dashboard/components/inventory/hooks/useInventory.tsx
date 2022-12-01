@@ -381,7 +381,7 @@ function useInventory() {
   useEffect(() => {
     let mounted = true;
 
-    // Fetching on unsearched list
+    // Infinite scrolling fetch on normal list
     if (
       inventory &&
       inventory.length > 0 &&
@@ -413,8 +413,13 @@ function useInventory() {
         });
     }
 
-    // Fetching on searched list
-    if (shouldFetchMore && isVisible && query) {
+    // Infinite scrolling fetch on searched normal inventory
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      Object.keys(router.query).length === 0
+    ) {
       setError(false);
 
       settingsService
@@ -445,21 +450,63 @@ function useInventory() {
         });
     }
 
-    // Fetching on filtered list
-    if (shouldFetchMore && isVisible && filters) {
-      setError(false);
-      const payloadJson = JSON.stringify(filters);
+    // Infinite scrolling fetch on searched filtered list or custom view
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      Object.keys(router.query).length > 0
+    ) {
+      let payloadJson = '';
 
-      settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-        if (mounted) {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setInventoryStats(res);
+      if (!router.query.view && filters && filters.length > 0) {
+        payloadJson = JSON.stringify(filters);
+      }
+
+      if (router.query.view && views && views.length > 0) {
+        const filterFound = views.find(view => view.name === router.query.view);
+        payloadJson = JSON.stringify(filterFound?.filters);
+      }
+
+      settingsService
+        .getFilteredInventory(
+          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`,
+          payloadJson
+        )
+        .then(res => {
+          if (mounted) {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setLoading(false);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+
+              setSkippedSearch(prev => prev + batchSize);
+            }
           }
-        }
-      });
+        });
+    }
 
+    // Infinite scrolling fetch on filtered list
+    if (shouldFetchMore && isVisible && filters && !query) {
+      setError(false);
+
+      const payloadJson = JSON.stringify(filters);
       settingsService
         .getFilteredInventory(
           `?limit=${batchSize}&skip=${skippedSearch}`,
@@ -495,13 +542,14 @@ function useInventory() {
         });
     }
 
-    // Fetching on a view list
+    // Infinite scrolling fetch on custom view
     if (
       shouldFetchMore &&
       isVisible &&
       views &&
       views.length > 0 &&
-      router.query.view
+      router.query.view &&
+      !query
     ) {
       const filterFound = views.find(view => view.name === router.query.view);
 
