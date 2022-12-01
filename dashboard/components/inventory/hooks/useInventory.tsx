@@ -559,11 +559,11 @@ function useInventory() {
     setBulkItems([]);
     setBulkSelectCheckbox(false);
 
-    if (!filters && !query) {
+    if (!filters && !query && !router.query.view) {
       setSearchedInventory(undefined);
     }
 
-    if (!filters && query) {
+    if (!filters && query && !router.query.view) {
       setSearchedLoading(true);
       setError(false);
       setTimeout(() => {
@@ -591,7 +591,7 @@ function useInventory() {
       }, 700);
     }
 
-    if (filters && filters.length > 0) {
+    if (filters && filters.length > 0 && !router.query.view) {
       const payloadJson = JSON.stringify(filters);
       setSearchedLoading(true);
       setTimeout(() => {
@@ -626,6 +626,46 @@ function useInventory() {
             });
         }
       }, 700);
+    }
+    if (router.query.view && views && views.length > 0) {
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound.filters);
+        setSearchedLoading(true);
+        setTimeout(() => {
+          if (mounted) {
+            settingsService
+              .getFilteredInventory(
+                `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
+                payloadJson
+              )
+              .then(res => {
+                if (mounted) {
+                  if (res.error) {
+                    setToast({
+                      hasError: true,
+                      title: `Filter could not be applied!`,
+                      message: `Please refresh the page and try again.`
+                    });
+                    setError(true);
+                    setSearchedLoading(false);
+                  } else {
+                    setSearchedInventory(res);
+                    setSkippedSearch(prev => prev + batchSize);
+                    setSearchedLoading(false);
+
+                    if (res.length >= batchSize) {
+                      setShouldFetchMore(true);
+                    } else {
+                      setShouldFetchMore(false);
+                    }
+                  }
+                }
+              });
+          }
+        }, 700);
+      }
     }
     return () => {
       mounted = false;
