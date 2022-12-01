@@ -17,6 +17,7 @@ function InventoryStatsCards({
     <>
       {!statsLoading &&
         inventoryStats &&
+        inventoryStats.resources !== 0 &&
         Object.keys(inventoryStats).length !== 0 &&
         !error && (
           <div className="grid grid-col md:grid-cols-2 lg:grid-cols-3 gap-8">
