@@ -32,7 +32,7 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                 d="M9.5 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
               ></path>
             </svg>
-            <span className="absolute top-3 left-[2.375rem] flex items-center justify-center bg-komiser-200 rounded-full h-4 w-4 text-[10px] text-black-900 font-bold">
+            <span className="absolute top-3 left-[2.375rem] flex items-center justify-center bg-white rounded-full h-4 w-4 text-[10px] text-black-900 font-bold">
               {tags.length}
             </span>
           </div>
