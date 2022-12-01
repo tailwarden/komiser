@@ -20,7 +20,7 @@ function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
                          `text-komiser-600 border-komiser-600 hover:text-komiser-600`
                        }`}
             >
-              Inventory
+              All resources
             </a>
           </li>
           {views &&
