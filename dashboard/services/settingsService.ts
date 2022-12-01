@@ -178,6 +178,49 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getViews() {
+    try {
+      const res = await fetch(`${BASE_URL}/views`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async saveView(payload: string) {
+    try {
+      const res = await fetch(`${BASE_URL}/views`, settings('POST', payload));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async updateView(id: number, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/views/${id}`,
+        settings('PUT', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async deleteView(id: number) {
+    try {
+      const res = await fetch(`${BASE_URL}/views/${id}`, settings('DELETE'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

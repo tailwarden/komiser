@@ -57,6 +57,13 @@ export type InventoryItem = {
 };
 export type Pages = 'tags' | 'delete';
 
+export type ViewProps = {
+  id?: number;
+  name: string;
+  filters: InventoryFilterDataProps[];
+  exclude: string[];
+};
+
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
     InventoryStats | undefined
@@ -84,6 +91,7 @@ function useInventory() {
   const [filters, setFilters] = useState<InventoryFilterDataProps[]>();
   const [searchedLoading, setSearchedLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
+  const [views, setViews] = useState<ViewProps[]>();
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -92,9 +100,30 @@ function useInventory() {
   const router = useRouter();
 
   // Parse URL params
-  function parseParams(param: string, type: 'fetch' | 'display') {
-    const formatString = param.split(':');
+  function parseParams(
+    param: string | InventoryFilterDataProps,
+    type: 'fetch' | 'display',
+    view?: boolean
+  ) {
+    let formatString;
     let filter;
+
+    if (!view) {
+      formatString = (param as string).split(':');
+    } else {
+      formatString = Object.values(param);
+      formatString = [...formatString.slice(0, 2), formatString[2]!.toString()];
+    }
+
+    if (formatString[0]!.includes('tag:')) {
+      const tag = (formatString[0] as string).split(':');
+      formatString = [
+        tag[0],
+        tag[1],
+        formatString[1],
+        formatString[2]?.toString()
+      ];
+    }
 
     if (formatString[0] === 'tag' && type === 'fetch') {
       filter = {
@@ -103,7 +132,7 @@ function useInventory() {
         values:
           formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[3].split(',')
+            : (formatString[3] as string).split(',')
       };
     }
 
@@ -114,7 +143,7 @@ function useInventory() {
         values:
           formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[2].split(',')
+            : (formatString[2] as string).split(',')
       };
     }
 
@@ -126,7 +155,7 @@ function useInventory() {
         values:
           formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[3].split(',')
+            : (formatString[3] as string).split(',')
       };
     }
 
@@ -137,7 +166,7 @@ function useInventory() {
         values:
           formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
             ? []
-            : formatString[2].split(',')
+            : (formatString[2] as string).split(',')
       };
     }
 
@@ -150,14 +179,45 @@ function useInventory() {
     setBulkItems([]);
     setBulkSelectCheckbox(false);
     setQuery('');
+    setFilters(undefined);
+    setDisplayedFilters(undefined);
+    setShouldFetchMore(false);
   }
+
+  function getViews(edit?: boolean, viewName?: string) {
+    settingsService.getViews().then(res => {
+      if (res === Error) {
+        setToast({
+          hasError: true,
+          title: `The custom views couldn't be loaded.`,
+          message: `There was a problem fetching the views. Please try again.`
+        });
+      } else {
+        setViews(res);
+        if (edit && viewName) {
+          router.push(`/?view=${viewName}`, undefined, { shallow: true });
+        }
+      }
+    });
+  }
+
+  // Getting all the views
+  useEffect(() => {
+    getViews();
+  }, []);
 
   // Fetch the correct inventory list based on URL params
   useEffect(() => {
     let mounted = true;
     resetStates();
 
-    if (router.query && Object.keys(router.query).length === 0) {
+    // Fetch base inventory
+    if (
+      router.query &&
+      Object.keys(router.query).length === 0 &&
+      !router.query.view
+    ) {
+      setStatsLoading(true);
       setDisplayedFilters(undefined);
       setSearchedInventory(undefined);
       setFilters(undefined);
@@ -166,8 +226,10 @@ function useInventory() {
         if (mounted) {
           if (res === Error) {
             setError(true);
+            setStatsLoading(false);
           } else {
             setInventoryStats(res);
+            setStatsLoading(false);
           }
         }
       });
@@ -186,8 +248,70 @@ function useInventory() {
         });
     }
 
-    if (router.query && Object.keys(router.query).length > 0) {
-      if (Object.keys(router.query)[0].split(':').length <= 1) {
+    // Fetch from a custom view
+    if (router.query.view && views && views.length > 0) {
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      if (filterFound) {
+        setSearchedLoading(true);
+        setStatsLoading(true);
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+              setStatsLoading(false);
+            } else {
+              setInventoryStats(res);
+              setStatsLoading(false);
+            }
+          }
+        });
+
+        settingsService
+          .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+          .then(res => {
+            if (mounted) {
+              if (res.error) {
+                setToast({
+                  hasError: true,
+                  title: `Filter could not be applied!`,
+                  message: `Please refresh the page and try again.`
+                });
+                setError(true);
+                setSearchedLoading(false);
+              } else {
+                setSearchedInventory(res);
+                setSkippedSearch(prev => prev + batchSize);
+                setSearchedLoading(false);
+                const newFiltersToDisplay: InventoryFilterDataProps[] =
+                  filterFound!.filters.map(filter =>
+                    parseParams(filter, 'display', true)
+                  );
+                setDisplayedFilters(newFiltersToDisplay);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                } else {
+                  setShouldFetchMore(false);
+                }
+              }
+            }
+          });
+      }
+    }
+
+    // Fetch from filters
+    if (
+      router.query &&
+      Object.keys(router.query).length > 0 &&
+      !router.query.view
+    ) {
+      if (
+        Object.keys(router.query)[0].split(':').length <= 1 &&
+        !router.query.view
+      ) {
         setTimeout(() => router.push('/'), 5000);
         return setToast({
           hasError: true,
@@ -200,10 +324,10 @@ function useInventory() {
 
       const newFilters: InventoryFilterDataProps[] = Object.keys(
         router.query
-      ).map(param => parseParams(param, 'fetch'));
+      ).map(param => parseParams(param as string, 'fetch'));
       const newFiltersToDisplay: InventoryFilterDataProps[] = Object.keys(
         router.query
-      ).map(param => parseParams(param, 'display'));
+      ).map(param => parseParams(param as string, 'display'));
 
       const payloadJson = JSON.stringify(newFilters);
 
@@ -251,13 +375,13 @@ function useInventory() {
     return () => {
       mounted = false;
     };
-  }, [router.query]);
+  }, [router.query, views]);
 
   // Infinite scrolling fetch effect
   useEffect(() => {
     let mounted = true;
 
-    // Fetching on unsearched list
+    // Infinite scrolling fetch on normal list
     if (
       inventory &&
       inventory.length > 0 &&
@@ -265,7 +389,8 @@ function useInventory() {
       skipped < inventoryStats.resources &&
       isVisible &&
       !query &&
-      !filters
+      !filters &&
+      !router.query.view
     ) {
       setError(false);
 
@@ -288,8 +413,13 @@ function useInventory() {
         });
     }
 
-    // Fetching on searched list
-    if (shouldFetchMore && isVisible && query) {
+    // Infinite scrolling fetch on searched normal inventory
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      Object.keys(router.query).length === 0
+    ) {
       setError(false);
 
       settingsService
@@ -320,21 +450,63 @@ function useInventory() {
         });
     }
 
-    // Fetching on filtered list
-    if (shouldFetchMore && isVisible && filters) {
-      setError(false);
-      const payloadJson = JSON.stringify(filters);
+    // Infinite scrolling fetch on searched filtered list or custom view
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      Object.keys(router.query).length > 0
+    ) {
+      let payloadJson = '';
 
-      settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-        if (mounted) {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setInventoryStats(res);
+      if (!router.query.view && filters && filters.length > 0) {
+        payloadJson = JSON.stringify(filters);
+      }
+
+      if (router.query.view && views && views.length > 0) {
+        const filterFound = views.find(view => view.name === router.query.view);
+        payloadJson = JSON.stringify(filterFound?.filters);
+      }
+
+      settingsService
+        .getFilteredInventory(
+          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`,
+          payloadJson
+        )
+        .then(res => {
+          if (mounted) {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setLoading(false);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+
+              setSkippedSearch(prev => prev + batchSize);
+            }
           }
-        }
-      });
+        });
+    }
 
+    // Infinite scrolling fetch on filtered list
+    if (shouldFetchMore && isVisible && filters && !query) {
+      setError(false);
+
+      const payloadJson = JSON.stringify(filters);
       settingsService
         .getFilteredInventory(
           `?limit=${batchSize}&skip=${skippedSearch}`,
@@ -370,6 +542,54 @@ function useInventory() {
         });
     }
 
+    // Infinite scrolling fetch on custom view
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      views &&
+      views.length > 0 &&
+      router.query.view &&
+      !query
+    ) {
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService
+          .getFilteredInventory(
+            `?limit=${batchSize}&skip=${skippedSearch}`,
+            payloadJson
+          )
+          .then(res => {
+            if (mounted) {
+              if (res.error) {
+                setToast({
+                  hasError: true,
+                  title: `Filter could not be applied!`,
+                  message: `Please refresh the page and try again.`
+                });
+                setError(true);
+              } else {
+                setSearchedInventory(prev => {
+                  if (prev) {
+                    return [...prev, ...res];
+                  }
+                  return res;
+                });
+                setSkippedSearch(prev => prev + batchSize);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                } else {
+                  setShouldFetchMore(false);
+                }
+              }
+            }
+          });
+      }
+    }
+
     return () => {
       mounted = false;
     };
@@ -387,11 +607,11 @@ function useInventory() {
     setBulkItems([]);
     setBulkSelectCheckbox(false);
 
-    if (!filters && !query) {
+    if (!filters && !query && !router.query.view) {
       setSearchedInventory(undefined);
     }
 
-    if (!filters && query) {
+    if (!filters && query && !router.query.view) {
       setSearchedLoading(true);
       setError(false);
       setTimeout(() => {
@@ -419,7 +639,7 @@ function useInventory() {
       }, 700);
     }
 
-    if (filters && filters.length > 0) {
+    if (filters && filters.length > 0 && !router.query.view) {
       const payloadJson = JSON.stringify(filters);
       setSearchedLoading(true);
       setTimeout(() => {
@@ -454,6 +674,46 @@ function useInventory() {
             });
         }
       }, 700);
+    }
+    if (router.query.view && views && views.length > 0) {
+      const filterFound = views.find(view => view.name === router.query.view);
+
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound.filters);
+        setSearchedLoading(true);
+        setTimeout(() => {
+          if (mounted) {
+            settingsService
+              .getFilteredInventory(
+                `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
+                payloadJson
+              )
+              .then(res => {
+                if (mounted) {
+                  if (res.error) {
+                    setToast({
+                      hasError: true,
+                      title: `Filter could not be applied!`,
+                      message: `Please refresh the page and try again.`
+                    });
+                    setError(true);
+                    setSearchedLoading(false);
+                  } else {
+                    setSearchedInventory(res);
+                    setSkippedSearch(prev => prev + batchSize);
+                    setSearchedLoading(false);
+
+                    if (res.length >= batchSize) {
+                      setShouldFetchMore(true);
+                    } else {
+                      setShouldFetchMore(false);
+                    }
+                  }
+                }
+              });
+          }
+        }, 700);
+      }
     }
     return () => {
       mounted = false;
@@ -491,21 +751,6 @@ function useInventory() {
       mounted = false;
     };
   }, [inventoryHasUpdate]);
-
-  // Listen to ESC key on modal effect
-  useEffect(() => {
-    function escFunction(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener('keydown', escFunction, false);
-
-    return () => {
-      document.removeEventListener('keydown', escFunction, false);
-    };
-  }, []);
 
   // Functions to be exported
   function cleanModal() {
@@ -650,6 +895,7 @@ function useInventory() {
             } ${bulkItems.length > 1 ? 'resources' : 'resource'}`
           });
           setInventoryHasUpdate(true);
+          setBulkItems([]);
           closeModal();
         }
       });
@@ -736,11 +982,14 @@ function useInventory() {
     openBulkModal,
     updateBulkTags,
     router,
+    filters,
     displayedFilters,
     setSkippedSearch,
     deleteFilter,
     searchedLoading,
-    statsLoading
+    statsLoading,
+    views,
+    getViews
   };
 }
 

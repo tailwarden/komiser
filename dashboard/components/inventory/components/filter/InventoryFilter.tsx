@@ -2,7 +2,7 @@ import { NextRouter } from 'next/router';
 import Button from '../../../button/Button';
 import Dropdown from '../../../dropdown/Dropdown';
 import { ToastProps } from '../../../toast/hooks/useToast';
-import useFilterWizard from '../../hooks/useFilterWizard';
+import useFilterWizard from './hooks/useFilterWizard';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';
 import InventoryFilterOperator from './InventoryFilterOperator';
@@ -37,13 +37,13 @@ function InventoryFilter({
   } = useFilterWizard({ router, setSkippedSearch });
 
   return (
-    <div>
+    <div className="relative">
       {/* Dropdown button toggle */}
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -68,7 +68,6 @@ function InventoryFilter({
             className="hidden sm:block fixed inset-0 z-20 bg-transparent opacity-0 animate-fade-in"
           ></div>
           <div className="absolute inline-flex min-w-[16rem] right-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
-            {/* <div className="absolute inline-flex min-w-[16rem] left-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]"> */}
             <div className="flex flex-col w-full">
               {/* Filter breadcrumbs */}
               <InventoryFilterBreadcrumbs step={step} goTo={goTo} />
@@ -109,7 +108,7 @@ function InventoryFilter({
                       setToast={setToast}
                     />
                   </div>
-                  <div className="border-t -mx-4 -mb-4 px-4 py-4">
+                  <div className="flex justify-end border-t -mx-4 -mb-4 px-4 py-4">
                     <Button
                       type="submit"
                       disabled={

@@ -6,6 +6,7 @@ export type ButtonProps = {
   style?:
     | 'primary'
     | 'secondary'
+    | 'bulk'
     | 'outline'
     | 'ghost'
     | 'delete'
@@ -55,23 +56,26 @@ function Button({
     transition ? 'transition-colors' : ''
   }`;
 
-  const primary = `${base} bg-komiser-600 hover:bg-komiser-700 text-white active:bg-secondary disabled:bg-komiser-600/30`;
+  const primary = `${base} bg-gradient-to-br from-primary bg-secondary hover:bg-primary active:from-secondary active:bg-secondary text-white disabled:from-primary disabled:bg-secondary disabled:opacity-50`;
 
   const secondary = `${base} bg-black-100 hover:bg-black-200/50 active:bg-black-100 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
 
-  const outline = `${base} bg-transparent text-secondary border-2 border-secondary hover:bg-komiser-100 active:border-secondary active:text-secondary disabled:bg-transparent disabled:opacity-50`;
+  const bulk = `${base} bg-white hover:bg-komiser-200 active:bg-komiser-300 text-secondary  disabled:bg-white disabled:opacity-50`;
+
+  const outline = `${base} bg-transparent text-primary border-2 border-primary hover:bg-komiser-100 active:border-primary active:text-primary disabled:bg-transparent disabled:opacity-50`;
 
   const ghost = `${base} bg-transparent hover:bg-black-400/10 active:bg-black-400/20 text-black-900/60  disabled:bg-transparent disabled:opacity-50`;
 
   const deleteStyle = `${base} bg-error-600 text-white hover:bg-error-700 active:bg-error-600  disabled:bg-error-700 disabled:text-white/70`;
 
-  const deleteGhostStyle = `${base} bg-transparent text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
+  const deleteGhostStyle = `${base} bg-error-100 text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
 
   function handleStyle() {
     let buttonStyle;
 
     if (style === 'primary') buttonStyle = primary;
     if (style === 'secondary') buttonStyle = secondary;
+    if (style === 'bulk') buttonStyle = bulk;
     if (style === 'outline') buttonStyle = outline;
     if (style === 'ghost') buttonStyle = ghost;
     if (style === 'delete-ghost') buttonStyle = deleteGhostStyle;
