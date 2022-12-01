@@ -191,10 +191,14 @@ export default function Inventory() {
           </div>
         )}
       {/* Inventory stats loading */}
-      {!inventoryStats && !error && !statsLoading && <SkeletonStats />}
+      {!error && statsLoading && <SkeletonStats />}
 
       {/* Inventory stats */}
-      <InventoryStatsCards inventoryStats={inventoryStats} error={error} />
+      <InventoryStatsCards
+        inventoryStats={inventoryStats}
+        error={error}
+        statsLoading={statsLoading}
+      />
 
       <div className="mt-8"></div>
       {/* Inventory list loading */}

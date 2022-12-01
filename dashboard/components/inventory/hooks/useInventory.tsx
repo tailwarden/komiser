@@ -183,6 +183,28 @@ function useInventory() {
     setDisplayedFilters(undefined);
   }
 
+  function getViews(edit?: boolean, viewName?: string) {
+    settingsService.getViews().then(res => {
+      if (res === Error) {
+        setToast({
+          hasError: true,
+          title: `The custom views couldn't be loaded.`,
+          message: `There was a problem fetching the views. Please try again.`
+        });
+      } else {
+        setViews(res);
+        if (edit && viewName) {
+          router.push(`/?view=${viewName}`, undefined, { shallow: true });
+        }
+      }
+    });
+  }
+
+  // Getting all the views
+  useEffect(() => {
+    getViews();
+  }, []);
+
   // Fetch the correct inventory list based on URL params
   useEffect(() => {
     let mounted = true;
@@ -194,6 +216,7 @@ function useInventory() {
       Object.keys(router.query).length === 0 &&
       !router.query.view
     ) {
+      setStatsLoading(true);
       setDisplayedFilters(undefined);
       setSearchedInventory(undefined);
       setFilters(undefined);
@@ -202,8 +225,10 @@ function useInventory() {
         if (mounted) {
           if (res === Error) {
             setError(true);
+            setStatsLoading(false);
           } else {
             setInventoryStats(res);
+            setStatsLoading(false);
           }
         }
       });
@@ -223,12 +248,10 @@ function useInventory() {
     }
 
     // Fetch from a custom view
-    if (router.query.view && views) {
+    if (router.query.view && views && views.length > 0) {
       const filterFound = views.find(view => view.name === router.query.view);
 
-      if (!filterFound) {
-        router.push('/');
-      } else {
+      if (filterFound) {
         setSearchedLoading(true);
         setStatsLoading(true);
         const payloadJson = JSON.stringify(filterFound?.filters);
@@ -262,10 +285,9 @@ function useInventory() {
                 setSkippedSearch(prev => prev + batchSize);
                 setSearchedLoading(false);
                 const newFiltersToDisplay: InventoryFilterDataProps[] =
-                  filterFound.filters.map(filter =>
+                  filterFound!.filters.map(filter =>
                     parseParams(filter, 'display', true)
                   );
-
                 setDisplayedFilters(newFiltersToDisplay);
 
                 if (res.length >= batchSize) {
@@ -638,28 +660,6 @@ function useInventory() {
       mounted = false;
     };
   }, [inventoryHasUpdate]);
-
-  function getViews(edit?: boolean, viewName?: string) {
-    settingsService.getViews().then(res => {
-      if (res === Error) {
-        setToast({
-          hasError: true,
-          title: `The custom views couldn't be loaded.`,
-          message: `There was a problem fetching the views. Please try again.`
-        });
-      } else {
-        setViews(res);
-        if (edit && viewName) {
-          router.push(`/?view=${viewName}`, undefined, { shallow: true });
-        }
-      }
-    });
-  }
-
-  // Getting all the views
-  useEffect(() => {
-    getViews();
-  }, []);
 
   // Functions to be exported
   function cleanModal() {
