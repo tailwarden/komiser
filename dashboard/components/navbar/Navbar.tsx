@@ -43,7 +43,7 @@ function Navbar() {
         </a>
         <a
           className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
-          href="https://www.oraculi.io/changelog"
+          href="https://www.tailwarden.com/changelog"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -105,7 +105,7 @@ function Navbar() {
         </a>
         <a
           className="flex gap-2 items-center bg-[#5865F2] hover:bg-[#4f5be2] py-2 px-4 rounded-lg text-white transition-colors"
-          href="https://discord.oraculi.io"
+          href="https://discord.tailwarden.com"
           target="_blank"
           rel="noopener noreferrer"
         >
