@@ -68,7 +68,7 @@ function Button({
 
   const deleteStyle = `${base} bg-error-600 text-white hover:bg-error-700 active:bg-error-600  disabled:bg-error-700 disabled:text-white/70`;
 
-  const deleteGhostStyle = `${base} bg-transparent text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
+  const deleteGhostStyle = `${base} bg-error-100 text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
 
   function handleStyle() {
     let buttonStyle;

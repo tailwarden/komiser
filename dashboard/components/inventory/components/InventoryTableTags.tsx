@@ -69,14 +69,14 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                     onClick={e => {
                       setQuery(tag.key);
                     }}
-                    className="hover:text-primary cursor-pointer"
+                    className="hover:text-komiser-500 cursor-pointer"
                   >
                     {tag.key}:
                   </span>
                 </div>
                 <span
                   onClick={() => setQuery(tag.value)}
-                  className="font-medium hover:text-primary cursor-pointer"
+                  className="font-medium hover:text-komiser-500 cursor-pointer"
                 >
                   {tag.value}
                 </span>

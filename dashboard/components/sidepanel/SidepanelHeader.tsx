@@ -28,7 +28,7 @@ function SidepanelHeader({
 
       <div className="flex items-center gap-4 flex-shrink-0">
         {deleteAction && (
-          <Button style="delete" onClick={deleteAction}>
+          <Button style="delete-ghost" onClick={deleteAction}>
             Delete
           </Button>
         )}
