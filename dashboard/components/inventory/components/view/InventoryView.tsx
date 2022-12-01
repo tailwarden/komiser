@@ -119,7 +119,9 @@ function InventoryView({
                 disabled={!view.name}
               >
                 {router.query.view ? 'Update view' : 'Save as a view'}{' '}
-                {inventoryStats?.resources}
+                <span className="flex items-center justify-center bg-black-900/20 text-xs py-1 px-2 rounded-lg">
+                  {inventoryStats?.resources}
+                </span>
               </Button>
             </div>
           </form>
