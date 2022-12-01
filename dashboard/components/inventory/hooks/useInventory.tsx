@@ -181,6 +181,7 @@ function useInventory() {
     setQuery('');
     setFilters(undefined);
     setDisplayedFilters(undefined);
+    setShouldFetchMore(false);
   }
 
   function getViews(edit?: boolean, viewName?: string) {
@@ -504,39 +505,41 @@ function useInventory() {
     ) {
       const filterFound = views.find(view => view.name === router.query.view);
 
-      const payloadJson = JSON.stringify(filterFound?.filters);
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound?.filters);
 
-      settingsService
-        .getFilteredInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}`,
-          payloadJson
-        )
-        .then(res => {
-          if (mounted) {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setError(true);
-            } else {
-              setSearchedInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
-              setSkippedSearch(prev => prev + batchSize);
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
+        settingsService
+          .getFilteredInventory(
+            `?limit=${batchSize}&skip=${skippedSearch}`,
+            payloadJson
+          )
+          .then(res => {
+            if (mounted) {
+              if (res.error) {
+                setToast({
+                  hasError: true,
+                  title: `Filter could not be applied!`,
+                  message: `Please refresh the page and try again.`
+                });
+                setError(true);
               } else {
-                setShouldFetchMore(false);
+                setSearchedInventory(prev => {
+                  if (prev) {
+                    return [...prev, ...res];
+                  }
+                  return res;
+                });
+                setSkippedSearch(prev => prev + batchSize);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                } else {
+                  setShouldFetchMore(false);
+                }
               }
             }
-          }
-        });
+          });
+      }
     }
 
     return () => {
