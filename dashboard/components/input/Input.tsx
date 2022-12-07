@@ -52,7 +52,7 @@ function Input({
         <input
           type={type}
           name={name}
-          className={`w-full pt-[1.75rem] pb-[0.75rem] px-4 text-sm bg-white text-black-900 rounded caret-secondary outline outline-black-200 focus:outline-secondary focus:outline-2 peer ${
+          className={`w-full pt-[1.75rem] pb-[0.75rem] px-4 text-sm bg-white text-black-900 rounded caret-primary outline outline-black-200 focus:outline-primary focus:outline-2 peer ${
             isValid === false && `outline-error-600 focus:outline-error-600`
           }`}
           placeholder=" "

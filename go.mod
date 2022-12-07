@@ -50,7 +50,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kms v1.18.18 // indirect
 	github.com/aws/aws-sdk-go-v2/service/rds v1.30.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.12 // indirect
-	github.com/aws/smithy-go v1.13.5 // indirect
+	github.com/aws/smithy-go v1.13.4 // indirect
+	github.com/civo/civogo v0.3.17 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/go-co-op/gocron v1.18.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect

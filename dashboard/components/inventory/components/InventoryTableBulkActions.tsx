@@ -27,9 +27,13 @@ function InventoryTableBulkActions({
             selected
           </p>
           <div className="flex gap-4">
-            <Button size="lg" onClick={() => openBulkModal(bulkItems)}>
+            <Button
+              size="lg"
+              style="bulk"
+              onClick={() => openBulkModal(bulkItems)}
+            >
               Bulk manage tags
-              <span className="flex items-center justify-center bg-black-900/10 text-xs py-1 px-2 rounded-lg">
+              <span className="flex items-center justify-center bg-primary/10 text-xs py-1 px-2 rounded-lg">
                 {formatNumber(bulkItems.length)}
               </span>
             </Button>

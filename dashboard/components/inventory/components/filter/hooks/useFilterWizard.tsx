@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
-import { InventoryFilterDataProps } from './useInventory';
+import { InventoryFilterDataProps } from '../../../hooks/useInventory';
 
 const INITIAL_DATA = {
   field: undefined,

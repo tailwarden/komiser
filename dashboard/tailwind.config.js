@@ -8,16 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#33CCCC',
-        secondary: '#009999',
+        primary: '#008484',
+        secondary: '#065555',
         komiser: {
           100: '#F5FDFD',
           200: '#CCF2F2',
           300: '#99E5E5',
           400: '#66D9D9',
           500: '#33CCCC',
-          600: '#009999',
-          700: '#007D7D'
+          600: '#008484',
+          700: '#065555'
         },
         warning: {
           100: '#FFF5DA',

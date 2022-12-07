@@ -11,6 +11,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
 	. "github.com/mlabouardy/komiser/models"
 	"github.com/mlabouardy/komiser/providers"
@@ -97,9 +98,9 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 
 	if len(config.DigitalOcean) > 0 {
 		for _, account := range config.DigitalOcean {
-			digitalOceanClient := godo.NewFromToken(account.Token)
+			client := godo.NewFromToken(account.Token)
 			clients = append(clients, providers.ProviderClient{
-				DigitalOceanClient: digitalOceanClient,
+				DigitalOceanClient: client,
 				Name:               account.Name,
 			})
 		}
@@ -108,14 +109,26 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 	if len(config.Oci) > 0 {
 		for _, account := range config.Oci {
 			if account.Source == "CREDENTIALS_FILE" {
-				configProvider := common.DefaultConfigProvider()
+				client := common.DefaultConfigProvider()
 				clients = append(clients, providers.ProviderClient{
-					OciClient: configProvider,
+					OciClient: client,
 					Name:      account.Name,
 				})
 			}
 		}
+	}
 
+	if len(config.Civo) > 0 {
+		for _, account := range config.Civo {
+			client, err := civogo.NewClient(account.Token, "LON1")
+			if err != nil {
+				log.Fatal(err)
+			}
+			clients = append(clients, providers.ProviderClient{
+				CivoClient: client,
+				Name:       account.Name,
+			})
+		}
 	}
 
 	return config, clients, nil

@@ -10,7 +10,7 @@ function Navbar() {
       </picture>
       <div className="flex gap-4 lg:gap-10 text-sm font-medium text-black-900">
         <a
-          className="hidden md:flex gap-2 items-center hover:text-secondary transition-colors"
+          className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
           href="https://docs.komiser.io/docs/intro"
           target="_blank"
           rel="noopener noreferrer"
@@ -42,8 +42,8 @@ function Navbar() {
           Docs
         </a>
         <a
-          className="hidden md:flex gap-2 items-center hover:text-secondary transition-colors"
-          href="https://www.oraculi.io/changelog"
+          className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
+          href="https://www.tailwarden.com/changelog"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -73,7 +73,7 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="hidden md:flex gap-2 items-center hover:text-secondary transition-colors"
+          className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
           href="https://tally.so/r/mZjY40"
           target="_blank"
           rel="noopener noreferrer"
@@ -105,7 +105,7 @@ function Navbar() {
         </a>
         <a
           className="flex gap-2 items-center bg-[#5865F2] hover:bg-[#4f5be2] py-2 px-4 rounded-lg text-white transition-colors"
-          href="https://discord.oraculi.io"
+          href="https://discord.tailwarden.com"
           target="_blank"
           rel="noopener noreferrer"
         >
