@@ -13,6 +13,7 @@ import (
 	"github.com/mlabouardy/komiser/providers/aws/ecr"
 	"github.com/mlabouardy/komiser/providers/aws/ecs"
 	"github.com/mlabouardy/komiser/providers/aws/eks"
+	"github.com/mlabouardy/komiser/providers/aws/elb"
 	"github.com/mlabouardy/komiser/providers/aws/iam"
 	"github.com/mlabouardy/komiser/providers/aws/kms"
 	"github.com/mlabouardy/komiser/providers/aws/lambda"
@@ -45,6 +46,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Volumes,
 		kms.Keys,
 		rds.Clusters,
+		elb.LoadBalancers,
 	}
 }
 

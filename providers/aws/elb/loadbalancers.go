@@ -1,4 +1,4 @@
-package elasticloadbalancing
+package elb
 
 import (
 	"context"
@@ -34,33 +34,35 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 		}
 
 		for _, loadbalancer := range output.LoadBalancerDescriptions {
-			resourceArn := fmt.Sprintf("arn:aws:elasticloadbalancing:%s:%s/:loadbalancer/app/%s/%s", client.AWSClient.Region, client.AWSClient.Region, *accountId, *loadbalancer.LoadBalancerName)
+			resourceArn := fmt.Sprintf("arn:aws:elasticloadbalancing:%s:%s:loadbalancer/app/%s", client.AWSClient.Region, *accountId, *loadbalancer.LoadBalancerName)
 			outputTags, err := elbClient.DescribeTags(ctx, &elasticloadbalancing.DescribeTagsInput{
 				LoadBalancerNames: config.LoadBalancerNames,
 			})
 
 			tags := make([]Tag, 0)
-
 			if err == nil {
-				for _, tag := range outputTags.TagDescriptions {
-					tags = append(tags, Tag{
-						Key:   *tag.Key,
-						Value: *tag.Value,
-					})
+				for _, tagDescription := range outputTags.TagDescriptions {
+					for _, tag := range tagDescription.Tags {
+						tags = append(tags, Tag{
+							Key:   *tag.Key,
+							Value: *tag.Value,
+						})
+					}
 				}
 			}
 
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "LoadBalancer",
+				Service:    "ELB",
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
 				Name:       *loadbalancer.LoadBalancerName,
 				Cost:       0,
 				Tags:       tags,
+				CreatedAt:  *loadbalancer.CreatedTime,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#/LoadBalancer:loadBalancerArn=%s", client.AWSClient.Region, client.AWSClient.Region, *&resourceArn),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#/LoadBalancer:loadBalancerArn=%s", client.AWSClient.Region, client.AWSClient.Region, resourceArn),
 			})
 		}
 
