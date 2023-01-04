@@ -1,5 +1,9 @@
-FROM --platform=linux/amd64 alpine:3.16
+FROM --platform=$BUILDPLATFORM alpine:3.16
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
 MAINTAINER mlabouardy <mohamed@tailwarden.com>
+
+RUN echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
 
 ENV VERSION 3.0.0
 

@@ -82,16 +82,16 @@ jobs:
         - setup_remote_docker
         - run:
             name: Build Komiser Docker Image
-            command: docker build -t tailwarden/komiser:latest .
+            command: docker buildx build --platform linux/amd64,linux/arm64 -t tailwarden/komiser:latest .
         - deploy:
             name: Push Komiser to DockerHub
             command: |
               docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
               docker tag tailwarden/komiser:latest tailwarden/komiser:${CIRCLE_SHA1}
               docker tag tailwarden/komiser:latest tailwarden/komiser:3.0.0
-              docker push tailwarden/komiser:latest
-              docker push tailwarden/komiser:3.0.0
-              docker push tailwarden/komiser:${CIRCLE_SHA1}
+              docker buildx push --platform linux/amd64,linux/arm64 tailwarden/komiser:latest
+              docker buildx push --platform linux/amd64,linux/arm64 tailwarden/komiser:3.0.0
+              docker buildx push --platform linux/amd64,linux/arm64 tailwarden/komiser:${CIRCLE_SHA1}
       
 workflows:
     version: 2
