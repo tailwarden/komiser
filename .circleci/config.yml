@@ -75,7 +75,7 @@ jobs:
 
   build_docker:
     docker:
-       - image: docker:20.10.6
+       - image: docker:20.10.17
     resource_class: large
     steps:
         - checkout
