@@ -82,7 +82,9 @@ jobs:
         - setup_remote_docker
         - run:
             name: Build Komiser Docker Image
-            command: docker buildx build --platform linux/amd64,linux/arm64 -t tailwarden/komiser:latest .
+            command: |
+                docker buildx create --use
+                docker buildx build --platform linux/amd64,linux/arm64 -t tailwarden/komiser:latest .
         - deploy:
             name: Push Komiser to DockerHub
             command: |
