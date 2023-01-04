@@ -83,7 +83,8 @@ jobs:
         - run:
             name: Build Komiser Docker Image
             command: |
-                docker buildx create --use
+                docker context create tls-env
+                docker buildx create tls-env --use
                 docker buildx build --platform linux/amd64,linux/arm64 -t tailwarden/komiser:latest .
         - deploy:
             name: Push Komiser to DockerHub
