@@ -26,11 +26,14 @@ import (
 
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
-		ec2.Instances,
 		lambda.Functions,
-		s3.Buckets,
+		ec2.Acls,
+		ec2.Subnets,
 		ec2.SecurityGroups,
 		iam.Roles,
+		sqs.Queues,
+		s3.Buckets,
+		ec2.Instances,
 		eks.KubernetesClusters,
 		cloudfront.Distributions,
 		dynamodb.Tables,
@@ -39,10 +42,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ecs.Clusters,
 		ecr.Repositories,
 		sns.Topics,
-		sqs.Queues,
 		ec2.Vpcs,
-		ec2.Subnets,
-		ec2.Acls,
 		ec2.Volumes,
 		kms.Keys,
 		rds.Clusters,
@@ -65,7 +65,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 				log.Warn("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("link = EXCLUDED.link").Exec(context.Background())
+					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("link = EXCLUDED.link, cost = EXCLUDED.cost").Exec(context.Background())
 				}
 			}
 		}

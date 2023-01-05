@@ -3,18 +3,27 @@ package sqs
 import (
 	"context"
 	"fmt"
+	"path"
 	"time"
 
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	. "github.com/mlabouardy/komiser/models"
 	. "github.com/mlabouardy/komiser/providers"
 )
 
+func BeginningOfMonth(date time.Time) time.Time {
+	return date.AddDate(0, 0, -date.Day()+1)
+}
+
 func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
+	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+
 	var config sqs.ListQueuesInput
 	sqsClient := sqs.NewFromConfig(*client.AWSClient)
 
@@ -25,6 +34,92 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, queue := range output.QueueUrls {
+			queueName := path.Base(queue)
+
+			metricsNbOfMessagesSentOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("NumberOfMessagesSent"),
+				Namespace:  aws.String("AWS/SQS"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("QueueName"),
+						Value: aws.String(queueName),
+					},
+				},
+				Period: aws.Int32(3600),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", queueName)
+			}
+
+			nbOfMessagesSent := 0.0
+			if len(metricsNbOfMessagesSentOutput.Datapoints) > 0 {
+				nbOfMessagesSent = *metricsNbOfMessagesSentOutput.Datapoints[0].Sum
+			}
+
+			metricsNbOfMessagesReceivedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("NumberOfMessagesReceived"),
+				Namespace:  aws.String("AWS/SQS"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("QueueName"),
+						Value: aws.String(queueName),
+					},
+				},
+				Period: aws.Int32(3600),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", queueName)
+			}
+
+			nbOfMessagesReceived := 0.0
+			if len(metricsNbOfMessagesReceivedOutput.Datapoints) > 0 {
+				nbOfMessagesReceived = *metricsNbOfMessagesReceivedOutput.Datapoints[0].Sum
+			}
+
+			metricsNbOfMessagesDeletedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("NumberOfMessagesDeleted"),
+				Namespace:  aws.String("AWS/SQS"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("QueueName"),
+						Value: aws.String(queueName),
+					},
+				},
+				Period: aws.Int32(3600),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", queueName)
+			}
+
+			nbOfMessagesDeleted := 0.0
+			if len(metricsNbOfMessagesDeletedOutput.Datapoints) > 0 {
+				nbOfMessagesDeleted = *metricsNbOfMessagesDeletedOutput.Datapoints[0].Sum
+			}
+
+			monthlyCost := 0.0
+
+			if (nbOfMessagesSent + nbOfMessagesReceived + nbOfMessagesDeleted) > 1000000 {
+				monthlyCost = ((nbOfMessagesSent + nbOfMessagesReceived + nbOfMessagesDeleted) - 1000000) * 0.40
+			}
+
 			outputTags, err := sqsClient.ListQueueTags(ctx, &sqs.ListQueueTagsInput{
 				QueueUrl: &queue,
 			})
@@ -46,8 +141,8 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Service:    "SQS",
 				ResourceId: queue,
 				Region:     client.AWSClient.Region,
-				Name:       queue,
-				Cost:       0,
+				Name:       queueName,
+				Cost:       monthlyCost,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sqs/v2/home?region=%s#/queues/%s", client.AWSClient.Region, client.AWSClient.Region, queue),

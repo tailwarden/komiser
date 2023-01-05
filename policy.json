@@ -125,7 +125,8 @@
                 "sns:ListTagsForResource",
                 "s3:GetBucketTagging",
                 "lambda:ListTags",
-                "kms:ListResourceTags"
+                "kms:ListResourceTags",
+                "pricing:GetProducts"
             ],
             "Resource": "*"
         }

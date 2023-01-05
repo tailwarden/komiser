@@ -46,7 +46,7 @@ func Keys(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Service:    "KMS",
 				Region:     client.AWSClient.Region,
 				ResourceId: *key.KeyArn,
-				Cost:       0,
+				Cost:       1,
 				Name:       *key.KeyId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,

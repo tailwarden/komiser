@@ -7,22 +7,78 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	. "github.com/mlabouardy/komiser/models"
 	. "github.com/mlabouardy/komiser/providers"
 )
+
+func BeginningOfMonth(date time.Time) time.Time {
+	return date.AddDate(0, 0, -date.Day()+1)
+}
+
+func ConvertBytesToTerabytes(bytes int64) float64 {
+	return float64(bytes) / 1000000000000
+}
 
 func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	if client.AWSClient.Region == "us-east-1" {
 		var config s3.ListBucketsInput
 		s3Client := s3.NewFromConfig(*client.AWSClient)
+		cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 		output, err := s3Client.ListBuckets(context.Background(), &config)
 		if err != nil {
 			return resources, err
 		}
 
 		for _, bucket := range output.Buckets {
+
+			metricsBucketSizebytesOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("BucketSizeBytes"),
+				Namespace:  aws.String("AWS/S3"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("BucketName"),
+						Value: bucket.Name,
+					},
+					types.Dimension{
+						Name:  aws.String("StorageType"),
+						Value: aws.String("StandardStorage"),
+					},
+				},
+				Unit:   types.StandardUnitBytes,
+				Period: aws.Int32(3600),
+				Statistics: []types.Statistic{
+					types.StatisticAverage,
+				},
+			})
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", *bucket.Name)
+			}
+
+			bucketSize := 0.0
+			if len(metricsBucketSizebytesOutput.Datapoints) > 0 {
+				bucketSize = *metricsBucketSizebytesOutput.Datapoints[0].Average
+			}
+
+			sizeInTB := ConvertBytesToTerabytes(int64(bucketSize))
+			monthlyCost := 0.0
+
+			if sizeInTB <= 50 {
+				monthlyCost = (sizeInTB / 1000) * 0.023
+			} else if sizeInTB <= 450 {
+				monthlyCost = (sizeInTB / 1000) * 0.022
+			} else {
+				monthlyCost = (sizeInTB / 1000) * 0.021
+			}
+
+			fmt.Println(*bucket.Name, " - ", bucketSize)
+
 			tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
 				Bucket: bucket.Name,
 			})
@@ -46,7 +102,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:     client.AWSClient.Region,
 				ResourceId: resourceArn,
 				Name:       *bucket.Name,
-				Cost:       0,
+				Cost:       monthlyCost,
 				CreatedAt:  *bucket.CreationDate,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
