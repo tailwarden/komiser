@@ -54,7 +54,7 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 	}
 
 	if len(config.SQLite.File) == 0 && config.Postgres.URI == "" {
-		return nil, nil, errors.New("postgres URI is missing")
+		return nil, nil, errors.New("postgres URI or sqlite file is missing")
 	}
 
 	clients := make([]providers.ProviderClient, 0)
