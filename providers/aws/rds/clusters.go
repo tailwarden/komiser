@@ -33,6 +33,13 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				})
 			}
 
+			var _clusterName string
+			if cluster.DatabaseName == nil {
+				_clusterName = *cluster.DBClusterIdentifier
+			} else {
+				_clusterName = *cluster.DatabaseName
+			}
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -40,7 +47,7 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:     client.AWSClient.Region,
 				ResourceId: *cluster.DBClusterArn,
 				Cost:       0,
-				Name:       *cluster.DatabaseName,
+				Name:       _clusterName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *cluster.DBClusterIdentifier),
