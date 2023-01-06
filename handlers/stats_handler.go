@@ -24,15 +24,15 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 	handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
 
 	cost := struct {
-		Sum int `bun:"sum" json:"total"`
+		Sum float64 `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(count) as sum FROM resources").Scan(handler.ctx, &cost)
+	handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
 
 	output := struct {
-		Resources int `json:"resources"`
-		Regions   int `json:"regions"`
-		Costs     int `json:"costs"`
+		Resources int     `json:"resources"`
+		Regions   int     `json:"regions"`
+		Costs     float64 `json:"costs"`
 	}{
 		Resources: resources.Count,
 		Regions:   regions.Count,
@@ -175,15 +175,15 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
 
 		cost := struct {
-			Sum int `bun:"sum" json:"total"`
+			Sum float64 `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) as sum %s", query)).Scan(handler.ctx, &cost)
+		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(handler.ctx, &cost)
 
 		output := struct {
-			Resources int `json:"resources"`
-			Regions   int `json:"regions"`
-			Costs     int `json:"costs"`
+			Resources int     `json:"resources"`
+			Regions   int     `json:"regions"`
+			Costs     float64 `json:"costs"`
 		}{
 			Resources: resources.Count,
 			Regions:   regions.Count,
@@ -206,15 +206,15 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
 
 		cost := struct {
-			Sum int `bun:"sum" json:"total"`
+			Sum float64 `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(count) as sum %s", query)).Scan(handler.ctx, &cost)
+		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(handler.ctx, &cost)
 
 		output := struct {
-			Resources int `json:"resources"`
-			Regions   int `json:"regions"`
-			Costs     int `json:"costs"`
+			Resources int     `json:"resources"`
+			Regions   int     `json:"regions"`
+			Costs     float64 `json:"costs"`
 		}{
 			Resources: resources.Count,
 			Regions:   regions.Count,
@@ -309,10 +309,10 @@ func (handler *ApiHandler) ResourcesCounterHandler(w http.ResponseWriter, r *htt
 
 func (handler *ApiHandler) CostCounterHandler(w http.ResponseWriter, r *http.Request) {
 	output := struct {
-		Sum int `bun:"sum" json:"total"`
+		Sum float64 `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(count) FROM resources").Scan(handler.ctx, &output)
+	handler.db.NewRaw("SELECT SUM(cost) FROM resources").Scan(handler.ctx, &output)
 
 	respondWithJSON(w, 200, output)
 }
