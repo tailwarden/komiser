@@ -12,6 +12,7 @@ import (
 	"github.com/mlabouardy/komiser/providers/aws/ec2"
 	"github.com/mlabouardy/komiser/providers/aws/ecr"
 	"github.com/mlabouardy/komiser/providers/aws/ecs"
+	"github.com/mlabouardy/komiser/providers/aws/efs"
 	"github.com/mlabouardy/komiser/providers/aws/eks"
 	"github.com/mlabouardy/komiser/providers/aws/elb"
 	"github.com/mlabouardy/komiser/providers/aws/iam"
@@ -47,6 +48,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		rds.Clusters,
 		elb.LoadBalancers,
+		efs.ElasticFileStorage,
 	}
 }
 

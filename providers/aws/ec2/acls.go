@@ -24,7 +24,7 @@ func Acls(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	if err != nil {
 		return resources, err
 	}
-
+	// comment
 	accountId := stsOutput.Account
 
 	for {
