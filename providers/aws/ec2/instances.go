@@ -156,7 +156,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 				hourlyCost := 0.0
 
-				if len(pricingOutput.PriceList) > 0 {
+				if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
 					b, _ := json.Marshal(pricingOutput.PriceList[0])
 					s, _ := strconv.Unquote(string(b))
 

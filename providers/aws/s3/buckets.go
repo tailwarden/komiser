@@ -77,8 +77,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				monthlyCost = (sizeInTB / 1000) * 0.021
 			}
 
-			fmt.Println(*bucket.Name, " - ", bucketSize)
-
 			tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
 				Bucket: bucket.Name,
 			})
