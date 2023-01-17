@@ -20,13 +20,15 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 
 	for _, volume := range volumes {
 
+		monthlyCost := float64(volume.SizeGigabytes) * 0.10
+
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
 			Service:    "Volume",
 			Region:     client.CivoClient.Region,
 			ResourceId: volume.ID,
-			Cost:       0,
+			Cost:       monthlyCost,
 			Name:       volume.Name,
 			FetchedAt:  time.Now(),
 			CreatedAt:  volume.CreatedAt,
