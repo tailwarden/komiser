@@ -42,7 +42,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			Provider:   "Civo",
 			Account:    client.Name,
 			Service:    "Compute",
-			Region:     resource.Region,
+			Region:     client.CivoClient.Region,
 			ResourceId: resource.ID,
 			Cost:       0,
 			Name:       resource.Hostname,
