@@ -38,13 +38,31 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			}
 		}
 
+		monthlyCost := 0.0
+		for _, instance := range cluster.Instances {
+			hourlyPrice := float64(instance.RAMMegabytes/1024) * 0.007440
+
+			currentTime := time.Now()
+			currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
+			var duration time.Duration
+			if instance.CreatedAt.Before(currentMonth) {
+				duration = currentTime.Sub(currentMonth)
+			} else {
+				duration = currentTime.Sub(instance.CreatedAt)
+			}
+
+			instanceMonthlyCost := hourlyPrice * float64(duration.Hours())
+
+			monthlyCost += instanceMonthlyCost
+		}
+
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
 			Service:    "Kubernetes",
 			Region:     client.CivoClient.Region,
 			ResourceId: cluster.ID,
-			Cost:       0,
+			Cost:       monthlyCost,
 			Name:       cluster.Name,
 			Tags:       tags,
 			FetchedAt:  time.Now(),

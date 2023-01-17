@@ -38,7 +38,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			}
 		}
 
-		hourlyPrice := getInstancePrice(int(resource.RAMMegabytes/1024), resource.CPUCores)
+		hourlyPrice := float64(resource.RAMMegabytes/1024) * 0.007440
 
 		currentTime := time.Now()
 		currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
@@ -74,50 +74,4 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
-}
-
-func getInstancePrice(ramSize int, cpuCores int) float64 {
-	hourlyRate := 0.0
-	if ramSize <= 2 {
-		if cpuCores <= 1 {
-			hourlyRate = 0.01
-		} else if cpuCores <= 2 {
-			hourlyRate = 0.02
-		} else {
-			hourlyRate = 0.04
-		}
-	} else if ramSize <= 4 {
-		if cpuCores <= 1 {
-			hourlyRate = 0.02
-		} else if cpuCores <= 2 {
-			hourlyRate = 0.04
-		} else {
-			hourlyRate = 0.08
-		}
-	} else if ramSize <= 8 {
-		if cpuCores <= 1 {
-			hourlyRate = 0.04
-		} else if cpuCores <= 2 {
-			hourlyRate = 0.08
-		} else {
-			hourlyRate = 0.16
-		}
-	} else if ramSize <= 16 {
-		if cpuCores <= 1 {
-			hourlyRate = 0.08
-		} else if cpuCores <= 2 {
-			hourlyRate = 0.16
-		} else {
-			hourlyRate = 0.32
-		}
-	} else {
-		if cpuCores <= 1 {
-			hourlyRate = 0.16
-		} else if cpuCores <= 2 {
-			hourlyRate = 0.32
-		} else {
-			hourlyRate = 0.64
-		}
-	}
-	return hourlyRate
 }
