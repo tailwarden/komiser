@@ -34,7 +34,7 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 		}
 
 		for _, filesystem := range output.FileSystems {
-			resourceArn := fmt.Sprintf("arn:aws:efs:%s:%s:file-systems/%s", client.AWSClient.Region, *accountId, filesystem)
+			resourceArn := fmt.Sprintf("arn:aws:efs:%s:%s:file-systems/%s", client.AWSClient.Region, *accountId, *filesystem.Name)
 			outputTags, err := efsClient.ListTagsForResource(ctx, &efs.ListTagsForResourceInput{
 				ResourceId: &resourceArn,
 			})
@@ -60,7 +60,7 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, filesystem),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, *filesystem.Name),
 			})
 		}
 
