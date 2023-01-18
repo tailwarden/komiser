@@ -49,6 +49,10 @@ const providers = {
       img = '/assets/img/providers/azure.svg';
     }
 
+    if (arg.toLowerCase() === 'civo') {
+      img = '/assets/img/providers/civo.jpeg';
+    }
+
     return img;
   }
 };

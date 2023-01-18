@@ -38,13 +38,26 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			}
 		}
 
+		hourlyPrice := float64(resource.RAMMegabytes/1024) * 0.007440
+
+		currentTime := time.Now()
+		currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
+		var duration time.Duration
+		if resource.CreatedAt.Before(currentMonth) {
+			duration = currentTime.Sub(currentMonth)
+		} else {
+			duration = currentTime.Sub(resource.CreatedAt)
+		}
+
+		monthlyCost := hourlyPrice * float64(duration.Hours())
+
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
 			Service:    "Compute",
-			Region:     resource.Region,
+			Region:     client.CivoClient.Region,
 			ResourceId: resource.ID,
-			Cost:       0,
+			Cost:       monthlyCost,
 			Name:       resource.Hostname,
 			FetchedAt:  time.Now(),
 			CreatedAt:  resource.CreatedAt,
