@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	. "github.com/mlabouardy/komiser/models"
+	. "github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun/dialect"
 )
 

@@ -10,8 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	. "github.com/tailwarden/komiser/models"
+	. "github.com/tailwarden/komiser/providers"
 )
 
 func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {

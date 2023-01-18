@@ -6,21 +6,22 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/mlabouardy/komiser/providers"
-	"github.com/mlabouardy/komiser/providers/aws/cloudfront"
-	"github.com/mlabouardy/komiser/providers/aws/dynamodb"
-	"github.com/mlabouardy/komiser/providers/aws/ec2"
-	"github.com/mlabouardy/komiser/providers/aws/ecr"
-	"github.com/mlabouardy/komiser/providers/aws/ecs"
-	"github.com/mlabouardy/komiser/providers/aws/eks"
-	"github.com/mlabouardy/komiser/providers/aws/elb"
-	"github.com/mlabouardy/komiser/providers/aws/iam"
-	"github.com/mlabouardy/komiser/providers/aws/kms"
-	"github.com/mlabouardy/komiser/providers/aws/lambda"
-	"github.com/mlabouardy/komiser/providers/aws/rds"
-	"github.com/mlabouardy/komiser/providers/aws/s3"
-	"github.com/mlabouardy/komiser/providers/aws/sns"
-	"github.com/mlabouardy/komiser/providers/aws/sqs"
+	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/aws/cloudfront"
+	"github.com/tailwarden/komiser/providers/aws/dynamodb"
+	"github.com/tailwarden/komiser/providers/aws/ec2"
+	"github.com/tailwarden/komiser/providers/aws/ecr"
+	"github.com/tailwarden/komiser/providers/aws/ecs"
+	"github.com/tailwarden/komiser/providers/aws/efs"
+	"github.com/tailwarden/komiser/providers/aws/eks"
+	"github.com/tailwarden/komiser/providers/aws/elb"
+	"github.com/tailwarden/komiser/providers/aws/iam"
+	"github.com/tailwarden/komiser/providers/aws/kms"
+	"github.com/tailwarden/komiser/providers/aws/lambda"
+	"github.com/tailwarden/komiser/providers/aws/rds"
+	"github.com/tailwarden/komiser/providers/aws/s3"
+	"github.com/tailwarden/komiser/providers/aws/sns"
+	"github.com/tailwarden/komiser/providers/aws/sqs"
 	"github.com/uptrace/bun"
 )
 
@@ -47,6 +48,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		rds.Clusters,
 		elb.LoadBalancers,
+		efs.ElasticFileStorage,
 	}
 }
 

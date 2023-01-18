@@ -13,9 +13,9 @@ import (
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
-	. "github.com/mlabouardy/komiser/models"
-	"github.com/mlabouardy/komiser/providers"
 	"github.com/oracle/oci-go-sdk/common"
+	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 )
 
 func loadConfigFromFile(path string) (*Config, error) {

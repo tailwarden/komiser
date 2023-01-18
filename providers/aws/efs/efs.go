@@ -1,4 +1,4 @@
-package eks
+package efs
 
 import (
 	"context"
@@ -8,16 +8,16 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/eks"
+	"github.com/aws/aws-sdk-go-v2/service/efs"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	var config eks.ListClustersInput
-	eksClient := eks.NewFromConfig(*client.AWSClient)
+	var config efs.DescribeFileSystemsInput
+	efsClient := efs.NewFromConfig(*client.AWSClient)
 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
 	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
@@ -28,24 +28,24 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 	accountId := stsOutput.Account
 
 	for {
-		output, err := eksClient.ListClusters(ctx, &config)
+		output, err := efsClient.DescribeFileSystems(ctx, &config)
 		if err != nil {
 			return resources, err
 		}
 
-		for _, cluster := range output.Clusters {
-			resourceArn := fmt.Sprintf("arn:aws:eks:%s:%s:cluster/%s", client.AWSClient.Region, *accountId, cluster)
-			outputTags, err := eksClient.ListTagsForResource(ctx, &eks.ListTagsForResourceInput{
-				ResourceArn: &resourceArn,
+		for _, filesystem := range output.FileSystems {
+			resourceArn := fmt.Sprintf("arn:aws:efs:%s:%s:file-systems/%s", client.AWSClient.Region, *accountId, *filesystem.Name)
+			outputTags, err := efsClient.ListTagsForResource(ctx, &efs.ListTagsForResourceInput{
+				ResourceId: &resourceArn,
 			})
 
 			tags := make([]Tag, 0)
 
 			if err == nil {
-				for key, value := range outputTags.Tags {
+				for _, tag := range outputTags.Tags {
 					tags = append(tags, Tag{
-						Key:   key,
-						Value: value,
+						Key:   *tag.Key,
+						Value: *tag.Value,
 					})
 				}
 			}
@@ -53,28 +53,28 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "EKS",
+				Service:    "EFS",
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
-				Name:       cluster,
+				Name:       *filesystem.Name,
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, cluster),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, *filesystem.Name),
 			})
 		}
 
-		if aws.ToString(output.NextToken) == "" {
+		if aws.ToString(output.NextMarker) == "" {
 			break
 		}
 
-		config.NextToken = output.NextToken
+		config.Marker = output.NextMarker
 	}
 	log.WithFields(log.Fields{
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "EKS",
+		"service":   "EFS",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil

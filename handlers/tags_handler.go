@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	. "github.com/mlabouardy/komiser/models"
+	. "github.com/tailwarden/komiser/models"
 )
 
 func (handler *ApiHandler) BulkUpdateTagsHandler(w http.ResponseWriter, r *http.Request) {

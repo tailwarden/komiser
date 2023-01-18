@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/mlabouardy/komiser/handlers"
+	"github.com/tailwarden/komiser/handlers"
 	"github.com/uptrace/bun"
 )
 

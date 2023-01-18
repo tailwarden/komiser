@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mlabouardy/komiser/cmd"
+	"github.com/tailwarden/komiser/cmd"
 )
 
 func main() {

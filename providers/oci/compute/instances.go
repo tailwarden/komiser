@@ -6,9 +6,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	. "github.com/mlabouardy/komiser/models"
-	"github.com/mlabouardy/komiser/providers"
 	"github.com/oracle/oci-go-sdk/core"
+	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 )
 
 func Instances(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
