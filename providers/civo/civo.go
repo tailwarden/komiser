@@ -5,11 +5,11 @@ import (
 	"log"
 
 	"github.com/civo/civogo"
-	"github.com/mlabouardy/komiser/providers"
-	"github.com/mlabouardy/komiser/providers/civo/compute"
-	"github.com/mlabouardy/komiser/providers/civo/kubernetes"
-	"github.com/mlabouardy/komiser/providers/civo/network"
-	"github.com/mlabouardy/komiser/providers/civo/storage"
+	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/civo/compute"
+	"github.com/tailwarden/komiser/providers/civo/kubernetes"
+	"github.com/tailwarden/komiser/providers/civo/network"
+	"github.com/tailwarden/komiser/providers/civo/storage"
 	"github.com/uptrace/bun"
 )
 

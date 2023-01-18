@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	. "github.com/mlabouardy/komiser/models"
+	. "github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
 )

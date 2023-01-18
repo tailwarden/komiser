@@ -31,7 +31,7 @@ import (
 	"context"
 	"log"
 
-	. "github.com/mlabouardy/komiser/providers"
+	. "github.com/tailwarden/komiser/providers"
 	"github.com/uptrace/bun"
 )
 
@@ -71,8 +71,8 @@ import (
 	"log"
 	"time"
 
-	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	. "github.com/tailwarden/komiser/models"
+	. "github.com/tailwarden/komiser/providers"
 )
 
 func MyServiceResources(ctx context.Context, client ProviderClient) ([]Resource, error) {

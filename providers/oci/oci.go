@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/mlabouardy/komiser/providers"
-	"github.com/mlabouardy/komiser/providers/oci/compute"
+	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/oci/compute"
 	"github.com/uptrace/bun"
 )
 

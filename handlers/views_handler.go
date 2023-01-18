@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	. "github.com/mlabouardy/komiser/models"
+	. "github.com/tailwarden/komiser/models"
 )
 
 func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request) {

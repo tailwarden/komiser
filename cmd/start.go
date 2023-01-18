@@ -3,9 +3,9 @@ package cmd
 import (
 	"errors"
 
-	"github.com/mlabouardy/komiser/internal"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/tailwarden/komiser/internal"
 )
 
 var startCmd = &cobra.Command{

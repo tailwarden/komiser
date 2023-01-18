@@ -5,9 +5,9 @@ COMMIT := $(shell git rev-parse --short HEAD)
 
 EXECUTABLE=komiser
 
-GO_LD_FLAGS += -X github.com/mlabouardy/komiser/internal.Version=$(VERSION)
-GO_LD_FLAGS += -X github.com/mlabouardy/komiser/internal.Buildtime=$(BUILDTIME)
-GO_LD_FLAGS += -X github.com/mlabouardy/komiser/internal.Commit=$(COMMIT)
+GO_LD_FLAGS += -X github.com/tailwarden/komiser/internal.Version=$(VERSION)
+GO_LD_FLAGS += -X github.com/tailwarden/komiser/internal.Buildtime=$(BUILDTIME)
+GO_LD_FLAGS += -X github.com/tailwarden/komiser/internal.Commit=$(COMMIT)
 GO_FLAGS = -ldflags "$(GO_LD_FLAGS)"
 
 build: ## Build for the current platform

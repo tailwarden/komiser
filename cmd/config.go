@@ -4,9 +4,9 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/mlabouardy/komiser/models"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/tailwarden/komiser/models"
 )
 
 var configCmd = &cobra.Command{

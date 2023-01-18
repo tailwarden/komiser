@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/mlabouardy/komiser/internal"
 	"github.com/spf13/cobra"
+	"github.com/tailwarden/komiser/internal"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

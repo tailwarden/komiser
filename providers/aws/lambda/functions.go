@@ -11,8 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
-	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	. "github.com/tailwarden/komiser/models"
+	. "github.com/tailwarden/komiser/providers"
 )
 
 func BeginningOfMonth(date time.Time) time.Time {

@@ -9,8 +9,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	. "github.com/tailwarden/komiser/models"
+	. "github.com/tailwarden/komiser/providers"
 )
 
 func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
