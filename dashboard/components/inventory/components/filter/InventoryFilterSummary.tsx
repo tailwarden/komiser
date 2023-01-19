@@ -110,7 +110,9 @@ function InventoryFilterSummary({
               </span>
               {data.values.length > 1 && idx < data.values.length - 1 && (
                 <span className="ml-1 font-medium text-black-900">
-                  {data.field === 'cost' ? 'and' : 'or'}
+                  {data.field === 'cost' && data.operator === 'BETWEEN'
+                    ? 'and'
+                    : 'or'}
                 </span>
               )}
             </p>
