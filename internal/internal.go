@@ -28,6 +28,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws"
 	civo "github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
+	k8s "github.com/tailwarden/komiser/providers/k8s"
 	oci "github.com/tailwarden/komiser/providers/oci"
 	"github.com/uptrace/bun"
 )
@@ -147,6 +148,10 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.CivoClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
 				civo.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.K8sClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				k8s.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}

@@ -53,6 +53,10 @@ const providers = {
       img = '/assets/img/providers/civo.jpeg';
     }
 
+    if (arg.toLowerCase() === 'kubernetes') {
+      img = '/assets/img/providers/kubernetes.png';
+    }
+
     return img;
   }
 };

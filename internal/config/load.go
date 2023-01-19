@@ -16,6 +16,8 @@ import (
 	"github.com/oracle/oci-go-sdk/common"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 func loadConfigFromFile(path string) (*Config, error) {
@@ -127,6 +129,27 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				CivoClient: client,
 				Name:       account.Name,
+			})
+		}
+	}
+
+	if len(config.Kubernetes) > 0 {
+		for _, account := range config.Kubernetes {
+			kubeConfig, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+				&clientcmd.ClientConfigLoadingRules{ExplicitPath: account.Path},
+				&clientcmd.ConfigOverrides{}).ClientConfig()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			client, err := kubernetes.NewForConfig(kubeConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			clients = append(clients, providers.ProviderClient{
+				K8sClient: client,
+				Name:      account.Name,
 			})
 		}
 	}
