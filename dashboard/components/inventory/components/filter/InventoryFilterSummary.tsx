@@ -38,6 +38,10 @@ function InventoryFilterSummary({
       return 'is not empty';
     if (param === 'IS_NOT_EMPTY' && data.field === 'tags')
       return 'which are not empty';
+    if (param === 'EQUAL') return 'is equal to';
+    if (param === 'BETWEEN') return 'is between';
+    if (param === 'GREATER_THAN') return 'is greater than';
+    if (param === 'LESS_THAN') return 'is less than';
     return param;
   }
 
