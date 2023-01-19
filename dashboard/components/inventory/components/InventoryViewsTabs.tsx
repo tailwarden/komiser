@@ -13,7 +13,9 @@ function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
         <ul className="flex flex-wrap justify-between sm:justify-start -mb-[2px]">
           <li>
             <a
-              onClick={() => router.push('/')}
+              onClick={() => {
+                if (router.asPath !== '/') router.push('/');
+              }}
               className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
                        ${
                          !router.query.view &&
@@ -28,7 +30,14 @@ function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
             views.map((view, idx) => (
               <li key={idx}>
                 <a
-                  onClick={() => router.push(`/?view=${view.name}`)}
+                  onClick={() => {
+                    if (
+                      router.asPath.replaceAll('%20', ' ') !==
+                      `/?view=${view.name}`
+                    ) {
+                      router.push(`/?view=${view.name}`);
+                    }
+                  }}
                   className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer whitespace-nowrap
                        ${
                          router.asPath.replaceAll('%20', ' ') ===
