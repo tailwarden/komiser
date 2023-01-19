@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	. "github.com/tailwarden/komiser/models"
@@ -144,6 +145,40 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 				} else {
 					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
 				}
+			default:
+				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				return
+			}
+		} else if filter.Field == "cost" {
+			switch filter.Operator {
+			case "EQUAL":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
+			case "BETWEEN":
+				min, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				max, err := strconv.ParseFloat(filter.Values[1], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
+			case "GREATER_THAN":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
+			case "LESS_THAN":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
