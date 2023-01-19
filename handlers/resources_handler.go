@@ -191,6 +191,40 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
 			}
+		} else if filter.Field == "cost" {
+			switch filter.Operator {
+			case "EQUAL":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
+			case "BETWEEN":
+				min, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				max, err := strconv.ParseFloat(filter.Values[1], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
+			case "GREATER_THAN":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
+			case "LESS_THAN":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
+			default:
+				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				return
+			}
 		} else {
 			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
 			return
