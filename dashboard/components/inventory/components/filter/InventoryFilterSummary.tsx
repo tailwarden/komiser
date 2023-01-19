@@ -104,7 +104,10 @@ function InventoryFilterSummary({
           data.values.map((value, idx) => (
             <p key={idx}>
               {idx === 0 && <span className="mr-1">:</span>}
-              <span>{value}</span>
+              <span>
+                {data.field === 'cost' && '$'}
+                {value}
+              </span>
               {data.values.length > 1 && idx < data.values.length - 1 && (
                 <span className="ml-1 font-medium text-black-900">or</span>
               )}

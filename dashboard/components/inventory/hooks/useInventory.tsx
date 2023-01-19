@@ -12,6 +12,9 @@ export type InventoryFilterDataProps = {
     | 'account'
     | 'name'
     | 'service'
+    | 'cost'
+    | 'tags'
+    | 'tag'
     | string
     | undefined;
   operator:

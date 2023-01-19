@@ -125,6 +125,7 @@ function InventoryFilterValue({
 
       {/* Display input for resource name and tag values */}
       {!options &&
+        data.field !== 'cost' &&
         data.operator !== 'IS_EMPTY' &&
         data.operator !== 'IS_NOT_EMPTY' && (
           <div className="pl-1 pt-2 pr-4 pb-2">
@@ -140,6 +141,24 @@ function InventoryFilterValue({
             />
           </div>
         )}
+
+      {/* Display input for cost */}
+      {!options && data.field === 'cost' && (
+        <div className="pl-1 pt-2 pr-4 pb-2">
+          <Input
+            type="number"
+            name="values"
+            label="Value"
+            value={data.values}
+            regex={regex.required}
+            error="Value must be higher than 0."
+            action={handleValueInput}
+            autofocus={true}
+            min={0}
+            positiveNumberOnly={true}
+          />
+        </div>
+      )}
     </div>
   );
 }
