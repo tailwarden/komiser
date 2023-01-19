@@ -5,6 +5,7 @@ import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import { InventoryFilterDataProps } from '../../hooks/useInventory';
+import { CostBetween } from './hooks/useFilterWizard';
 
 type InventoryFilterValueProps = {
   data: InventoryFilterDataProps;
@@ -15,6 +16,8 @@ type InventoryFilterValueProps = {
   handleValueInput: (newValue: { values: string }) => void;
   cleanValues: () => void;
   setToast: (toast: ToastProps | undefined) => void;
+  costBetween: CostBetween;
+  handleCostBetween: (newValue: Partial<CostBetween>) => void;
 };
 
 type Options = string[];
@@ -24,7 +27,9 @@ function InventoryFilterValue({
   handleValueCheck,
   handleValueInput,
   cleanValues,
-  setToast
+  setToast,
+  costBetween,
+  handleCostBetween
 }: InventoryFilterValueProps) {
   const [options, setOptions] = useState<Options | undefined>();
 
@@ -142,8 +147,8 @@ function InventoryFilterValue({
           </div>
         )}
 
-      {/* Display input for cost */}
-      {!options && data.field === 'cost' && (
+      {/* Display input for cost when is equal, greater or less than */}
+      {!options && data.field === 'cost' && data.operator !== 'BETWEEN' && (
         <div className="pl-1 pt-2 pr-4 pb-2">
           <Input
             type="number"
@@ -157,6 +162,37 @@ function InventoryFilterValue({
             min={0}
             positiveNumberOnly={true}
           />
+        </div>
+      )}
+
+      {/* Display input for cost when is between */}
+      {!options && data.field === 'cost' && data.operator === 'BETWEEN' && (
+        <div className="pl-1 pt-2 pr-4 pb-2">
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              type="number"
+              name="min"
+              label="Min value"
+              value={costBetween.min}
+              regex={regex.required}
+              error="Value must be higher than 0."
+              action={handleCostBetween}
+              autofocus={true}
+              min={0}
+              positiveNumberOnly={true}
+            />
+            <Input
+              type="number"
+              name="max"
+              label="Max value"
+              value={costBetween.max}
+              regex={regex.required}
+              error="Value must be higher than 0."
+              action={handleCostBetween}
+              min={0}
+              positiveNumberOnly={true}
+            />
+          </div>
         </div>
       )}
     </div>

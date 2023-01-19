@@ -30,6 +30,8 @@ function InventoryFilter({
     handleTagKey,
     handleValueCheck,
     handleValueInput,
+    costBetween,
+    handleCostBetween,
     data,
     resetData,
     cleanValues,
@@ -106,6 +108,8 @@ function InventoryFilter({
                       handleValueInput={handleValueInput}
                       cleanValues={cleanValues}
                       setToast={setToast}
+                      costBetween={costBetween}
+                      handleCostBetween={handleCostBetween}
                     />
                   </div>
                   <div className="flex justify-end border-t -mx-4 -mb-4 px-4 py-4">
