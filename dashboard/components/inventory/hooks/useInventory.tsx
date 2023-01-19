@@ -126,37 +126,74 @@ function useInventory() {
     }
 
     if (formatString[0] === 'tag' && type === 'fetch') {
-      filter = {
-        field: `${formatString[0]}:${formatString[1]}`,
-        operator: formatString[2],
-        values:
-          formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[3] as string).split(',')
-      };
+      if (formatString.length > 3) {
+        const key = formatString.slice(1, formatString.length - 2).join(':');
+        filter = {
+          field: `${formatString[0]}:${key}`,
+          operator: formatString[formatString.length - 2],
+          values:
+            formatString[formatString.length - 2] === 'IS_EMPTY' || formatString[formatString.length - 2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[formatString.length - 1] as string).split(',')
+        };
+      } else {
+        filter = {
+          field: `${formatString[0]}:${formatString[1]}`,
+          operator: formatString[2],
+          values:
+            formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[3] as string).split(',')
+        };
+      }
     }
 
     if (formatString[0] !== 'tag' && type === 'fetch') {
-      filter = {
-        field: formatString[0],
-        operator: formatString[1],
-        values:
-          formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[2] as string).split(',')
-      };
+      if (formatString.length > 3) {
+        const key = formatString.slice(1, formatString.length - 2).join(':');
+        filter = {
+          field: `${formatString[0]}:${key}`,
+          operator: formatString[formatString.length - 2],
+          values:
+            formatString[formatString.length - 2] === 'IS_EMPTY' || formatString[formatString.length - 2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[formatString.length - 1] as string).split(',')
+        };
+      } else {
+        filter = {
+          field: formatString[0],
+          operator: formatString[1],
+          values:
+            formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[2] as string).split(',')
+        };
+      }
     }
 
     if (formatString[0] === 'tag' && type === 'display') {
-      filter = {
-        field: formatString[0],
-        tagKey: formatString[1],
-        operator: formatString[2],
-        values:
-          formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[3] as string).split(',')
-      };
+      if (formatString.length > 3) {
+        const key = formatString.slice(1, formatString.length - 2).join(':');
+        filter = {
+          field: `${formatString[0]}`,
+          tagKey: key,
+          operator: formatString[formatString.length - 2],
+          values:
+            formatString[formatString.length - 2] === 'IS_EMPTY' || formatString[formatString.length - 2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[formatString.length - 1] as string).split(',')
+        };
+      } else {
+        filter = {
+          field: formatString[0],
+          tagKey: formatString[1],
+          operator: formatString[2],
+          values:
+            formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[3] as string).split(',')
+        };
+      }
     }
 
     if (formatString[0] !== 'tag' && type === 'display') {
@@ -835,9 +872,8 @@ function useInventory() {
           setToast({
             hasError: true,
             title: `Tags were not ${!action ? 'saved' : 'deleted'}!`,
-            message: `There was an error ${
-              !action ? 'saving' : 'deleting'
-            } the tags. Please try again later.`
+            message: `There was an error ${!action ? 'saving' : 'deleting'
+              } the tags. Please try again later.`
           });
         } else {
           setLoading(false);
@@ -845,9 +881,7 @@ function useInventory() {
           setToast({
             hasError: false,
             title: `Tags have been ${!action ? 'saved' : 'deleted'}!`,
-            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${
-              data.provider
-            } ${data.service} ${data.name}`
+            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${data.provider} ${data.service} ${data.name}`
           });
           setSkipped(0);
           setInventoryHasUpdate(true);
@@ -880,9 +914,7 @@ function useInventory() {
           setToast({
             hasError: true,
             title: `Tags were not ${!action ? 'saved' : 'deleted'}!`,
-            message: `There was an error ${
-              !action ? 'saving' : 'deleting'
-            } the tags. Please try again later.`
+            message: `There was an error ${!action ? 'saving' : 'deleting'} the tags. Please try again later.`
           });
         } else {
           setLoading(false);
@@ -890,9 +922,7 @@ function useInventory() {
           setToast({
             hasError: false,
             title: `Tags have been ${!action ? 'saved' : 'deleted'}!`,
-            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${
-              bulkItems.length
-            } ${bulkItems.length > 1 ? 'resources' : 'resource'}`
+            message: `The tags have been ${!action ? 'saved' : 'deleted'} for ${bulkItems.length} ${bulkItems.length > 1 ? 'resources' : 'resource'}`
           });
           setInventoryHasUpdate(true);
           setBulkItems([]);
@@ -943,8 +973,7 @@ function useInventory() {
     const url = updatedFilters
       .map(
         filter =>
-          `${filter.field}${`:${filter.operator}`}${
-            filter.values.length > 0 ? `:${filter.values}` : ''
+          `${filter.field}${`:${filter.operator}`}${filter.values.length > 0 ? `:${filter.values}` : ''
           }`
       )
       .join('&');
