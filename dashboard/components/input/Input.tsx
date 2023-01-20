@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 export type InputEvent = ChangeEvent<HTMLInputElement>;
 
@@ -11,6 +11,8 @@ export type InputProps = {
   error: string;
   value?: string | number | string[];
   autofocus?: boolean;
+  min?: number;
+  positiveNumberOnly?: boolean;
   action: (newData: any, id?: number) => void;
 };
 
@@ -23,6 +25,8 @@ function Input({
   error,
   value,
   autofocus,
+  min,
+  positiveNumberOnly,
   action
 }: InputProps) {
   const [isValid, setIsValid] = useState<boolean | undefined>(undefined);
@@ -46,6 +50,15 @@ function Input({
     setIsValid(undefined);
   }
 
+  function handleKeyDown(e: KeyboardEvent) {
+    if (positiveNumberOnly) {
+      const invalidChars = ['-', '+', 'e'];
+      if (invalidChars.includes(e.key)) {
+        e.preventDefault();
+      }
+    }
+  }
+
   return (
     <div>
       <div className="relative">
@@ -65,8 +78,10 @@ function Input({
               action({ [name]: e.target.value });
             }
           }}
+          onKeyDown={e => handleKeyDown(e)}
           value={value}
           ref={inputRef}
+          min={min}
           autoComplete="off"
           data-lpignore="true"
           data-form-type="other"
