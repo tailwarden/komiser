@@ -78,9 +78,7 @@ function InventoryView({
       {/* Sidepanel */}
       <Sidepanel isOpen={isOpen} closeModal={closeModal}>
         <SidepanelHeader
-          title={
-            router.query.view ? router.query.view.toString() : 'Save as a view'
-          }
+          title={router.query.view ? view.name : 'Save as a view'}
           subtitle={`${inventoryStats?.resources} ${
             inventoryStats?.resources === 1 ? 'resource' : 'resources'
           } ${
@@ -110,7 +108,6 @@ function InventoryView({
               value={view.name}
               action={handleChange}
               autofocus={true}
-              restrictURLParams={true}
             />
 
             <div className="ml-auto">

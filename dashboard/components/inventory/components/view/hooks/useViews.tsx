@@ -15,6 +15,7 @@ type useViewsProps = {
 };
 
 const INITIAL_VIEW: ViewProps = {
+  id: 0,
   name: '',
   filters: [],
   exclude: []
@@ -34,7 +35,7 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
 
   function findView(currentViews: ViewProps[]) {
     return currentViews.find(
-      currentView => currentView.name === router.query.view
+      currentView => currentView.id.toString() === router.query.view
     );
   }
 
@@ -81,7 +82,7 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
             });
           } else {
             setLoading(false);
-            getViews(true, view.name);
+            getViews(true, view.id.toString());
             setToast({
               hasError: false,
               title: `${view.name} has been created.`,
@@ -101,13 +102,14 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
             });
           } else {
             setLoading(false);
-            getViews(true, view.name);
+            getViews();
             setToast({
               hasError: false,
               title: `${view.name} has been created.`,
               message: `The custom view will now be accessible from the top navigation.`
             });
             closeModal();
+            router.push('/');
           }
         });
       }

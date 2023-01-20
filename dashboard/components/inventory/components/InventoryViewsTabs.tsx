@@ -31,17 +31,13 @@ function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
               <li key={idx}>
                 <a
                   onClick={() => {
-                    if (
-                      router.asPath.replaceAll('%20', ' ') !==
-                      `/?view=${view.name}`
-                    ) {
-                      router.push(`/?view=${view.name}`);
+                    if (router.query.view !== view.id.toString()) {
+                      router.push(`/?view=${view.id}`);
                     }
                   }}
                   className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer whitespace-nowrap
                        ${
-                         router.asPath.replaceAll('%20', ' ') ===
-                           `/?view=${view.name}` &&
+                         router.query.view === view.id.toString() &&
                          `text-komiser-600 border-komiser-600 hover:text-komiser-600`
                        }`}
                 >

@@ -61,7 +61,7 @@ export type InventoryItem = {
 export type Pages = 'tags' | 'delete';
 
 export type ViewProps = {
-  id?: number;
+  id: number;
   name: string;
   filters: InventoryFilterDataProps[];
   exclude: string[];
@@ -235,7 +235,7 @@ function useInventory() {
     setShouldFetchMore(false);
   }
 
-  function getViews(edit?: boolean, viewName?: string) {
+  function getViews(edit?: boolean, viewId?: string) {
     settingsService.getViews().then(res => {
       if (res === Error) {
         setToast({
@@ -244,9 +244,11 @@ function useInventory() {
           message: `There was a problem fetching the views. Please try again.`
         });
       } else {
-        setViews(res);
-        if (edit && viewName) {
-          router.push(`/?view=${viewName}`, undefined, { shallow: true });
+        const sortViewsById: ViewProps[] = res;
+        sortViewsById.sort((a, b) => a.id - b.id);
+        setViews(sortViewsById);
+        if (edit && viewId) {
+          router.push(`/?view=${viewId}`, undefined, { shallow: true });
         }
       }
     });
@@ -301,7 +303,9 @@ function useInventory() {
 
     // Fetch from a custom view
     if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(view => view.name === router.query.view);
+      const filterFound = views.find(
+        view => view.id.toString() === router.query.view
+      );
 
       if (filterFound) {
         setSearchedLoading(true);
@@ -515,7 +519,9 @@ function useInventory() {
       }
 
       if (router.query.view && views && views.length > 0) {
-        const filterFound = views.find(view => view.name === router.query.view);
+        const filterFound = views.find(
+          view => view.id.toString() === router.query.view
+        );
         payloadJson = JSON.stringify(filterFound?.filters);
       }
 
@@ -602,7 +608,9 @@ function useInventory() {
       router.query.view &&
       !query
     ) {
-      const filterFound = views.find(view => view.name === router.query.view);
+      const filterFound = views.find(
+        view => view.id.toString() === router.query.view
+      );
 
       if (filterFound) {
         const payloadJson = JSON.stringify(filterFound?.filters);
@@ -727,7 +735,9 @@ function useInventory() {
       }, 700);
     }
     if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(view => view.name === router.query.view);
+      const filterFound = views.find(
+        view => view.id.toString() === router.query.view
+      );
 
       if (filterFound) {
         const payloadJson = JSON.stringify(filterFound.filters);
