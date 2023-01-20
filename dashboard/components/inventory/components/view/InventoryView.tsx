@@ -110,6 +110,7 @@ function InventoryView({
               value={view.name}
               action={handleChange}
               autofocus={true}
+              restrictURLParams={true}
             />
 
             <div className="ml-auto">

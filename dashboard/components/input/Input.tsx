@@ -13,6 +13,7 @@ export type InputProps = {
   autofocus?: boolean;
   min?: number;
   positiveNumberOnly?: boolean;
+  restrictURLParams?: boolean;
   action: (newData: any, id?: number) => void;
 };
 
@@ -27,6 +28,7 @@ function Input({
   autofocus,
   min,
   positiveNumberOnly,
+  restrictURLParams,
   action
 }: InputProps) {
   const [isValid, setIsValid] = useState<boolean | undefined>(undefined);
@@ -51,9 +53,18 @@ function Input({
   }
 
   function handleKeyDown(e: KeyboardEvent) {
-    const invalidChars = ['-', '+', 'e'];
-    if (invalidChars.includes(e.key)) {
-      e.preventDefault();
+    if (positiveNumberOnly) {
+      const invalidChars = ['-', '+', 'e'];
+      if (invalidChars.includes(e.key)) {
+        e.preventDefault();
+      }
+    }
+
+    if (restrictURLParams) {
+      const invalidChars = ['#', '"', '=', '&', '+', '*'];
+      if (invalidChars.includes(e.key)) {
+        e.preventDefault();
+      }
     }
   }
 
@@ -76,11 +87,7 @@ function Input({
               action({ [name]: e.target.value });
             }
           }}
-          onKeyDown={e => {
-            if (positiveNumberOnly) {
-              handleKeyDown(e);
-            }
-          }}
+          onKeyDown={e => handleKeyDown(e)}
           value={value}
           ref={inputRef}
           min={min}
