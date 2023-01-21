@@ -95,7 +95,7 @@ Connect a local deployment of Komiser CLI to your [**Azure**](https://docs.komis
 
 ## Installation on Digital Ocean
 
-Connect a local deployment of Komiser CLI to you r[**Digital Ocean**](https://docs.komiser.io/docs/Cloud%20Providers/digital-ocean) account.
+Connect a local deployment of Komiser CLI to you [**Digital Ocean**](https://docs.komiser.io/docs/Cloud%20Providers/digital-ocean) account.
 
 ## Installation on OVH
 
