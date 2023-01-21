@@ -1,4 +1,4 @@
-package aws
+package k8s
 
 import (
 	"context"
