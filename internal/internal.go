@@ -41,7 +41,7 @@ var Os = runtime.GOOS
 var Arch = runtime.GOARCH
 var db *bun.DB
 
-func Exec(port int, configPath string, noTracking bool, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, noTracking bool, regions []string, cmd *cobra.Command) error {
 	cfg, clients, err := config.Load(configPath)
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func Exec(port int, configPath string, noTracking bool, regions []string, cmd *c
 
 	go checkUpgrade()
 
-	err = runServer(port, noTracking)
+	err = runServer(address, port, noTracking)
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func Exec(port int, configPath string, noTracking bool, regions []string, cmd *c
 	return nil
 }
 
-func runServer(port int, noTracking bool) error {
+func runServer(address string, port int, noTracking bool) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
 	r := v1.Endpoints(context.Background(), noTracking, db)
@@ -86,11 +86,11 @@ func runServer(port int, noTracking bool) error {
 	})
 
 	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedRouter)
+	err := http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), loggedRouter)
 	if err != nil {
 		return err
 	} else {
-		log.Info("Server started on port %d", port)
+		log.Info("Server started on %s:%d", address, port)
 	}
 
 	return nil
