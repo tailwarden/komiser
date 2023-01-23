@@ -29,6 +29,26 @@ const inventoryFilterOperatorAllTagsOptions: InventoryFilterOperatorOptionsProps
     { label: 'which are not empty', value: 'IS_NOT_EMPTY' }
   ];
 
+const inventoryFilterOperatorCostOptions: InventoryFilterOperatorOptionsProps[] =
+  [
+    {
+      label: 'is equal to',
+      value: 'EQUAL'
+    },
+    {
+      label: 'is between',
+      value: 'BETWEEN'
+    },
+    {
+      label: 'is greater than',
+      value: 'GREATER_THAN'
+    },
+    {
+      label: 'is less than',
+      value: 'LESS_THAN'
+    }
+  ];
+
 function InventoryFilterOperator({
   data,
   handleOperator,
@@ -52,8 +72,9 @@ function InventoryFilterOperator({
         </div>
       )}
 
-      {/* Operators list */}
+      {/* Operators list which are not tags or cost */}
       {data.field !== 'tags' &&
+        data.field !== 'cost' &&
         inventoryFilterOperatorOptions.map((option, idx) => (
           <Button
             key={idx}
@@ -68,8 +89,26 @@ function InventoryFilterOperator({
             {option.label}
           </Button>
         ))}
+
+      {/* Operators list for tags */}
       {data.field === 'tags' &&
         inventoryFilterOperatorAllTagsOptions.map((option, idx) => (
+          <Button
+            key={idx}
+            size="sm"
+            style="ghost"
+            align="left"
+            gap="md"
+            transition={false}
+            onClick={() => handleOperator(option.value)}
+          >
+            {option.label}
+          </Button>
+        ))}
+
+      {/* Operators list for cost */}
+      {data.field === 'cost' &&
+        inventoryFilterOperatorCostOptions.map((option, idx) => (
           <Button
             key={idx}
             size="sm"

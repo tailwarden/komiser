@@ -12,6 +12,9 @@ export type InventoryFilterDataProps = {
     | 'account'
     | 'name'
     | 'service'
+    | 'cost'
+    | 'tags'
+    | 'tag'
     | string
     | undefined;
   operator:
@@ -58,7 +61,7 @@ export type InventoryItem = {
 export type Pages = 'tags' | 'delete';
 
 export type ViewProps = {
-  id?: number;
+  id: number;
   name: string;
   filters: InventoryFilterDataProps[];
   exclude: string[];
@@ -126,14 +129,37 @@ function useInventory() {
     }
 
     if (formatString[0] === 'tag' && type === 'fetch') {
-      filter = {
-        field: `${formatString[0]}:${formatString[1]}`,
-        operator: formatString[2],
-        values:
-          formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[3] as string).split(',')
-      };
+      if (formatString.length > 2) {
+        if (
+          formatString.indexOf('IS_EMPTY') !== -1 ||
+          formatString.indexOf('IS_NOT_EMPTY') !== -1
+        ) {
+          const key = formatString.slice(1, formatString.length - 1).join(':');
+
+          filter = {
+            field: `${formatString[0]}:${key}`,
+            operator: formatString[formatString.length - 1],
+            values: []
+          };
+        } else {
+          const key = formatString.slice(1, formatString.length - 2).join(':');
+
+          filter = {
+            field: `${formatString[0]}:${key}`,
+            operator: formatString[formatString.length - 2],
+            values: (formatString[formatString.length - 1] as string).split(',')
+          };
+        }
+      } else {
+        filter = {
+          field: `${formatString[0]}:${formatString[1]}`,
+          operator: formatString[2],
+          values:
+            formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[3] as string).split(',')
+        };
+      }
     }
 
     if (formatString[0] !== 'tag' && type === 'fetch') {
@@ -148,15 +174,40 @@ function useInventory() {
     }
 
     if (formatString[0] === 'tag' && type === 'display') {
-      filter = {
-        field: formatString[0],
-        tagKey: formatString[1],
-        operator: formatString[2],
-        values:
-          formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[3] as string).split(',')
-      };
+      if (formatString.length > 2) {
+        if (
+          formatString.indexOf('IS_EMPTY') !== -1 ||
+          formatString.indexOf('IS_NOT_EMPTY') !== -1
+        ) {
+          const key = formatString.slice(1, formatString.length - 1).join(':');
+
+          filter = {
+            field: formatString[0],
+            tagKey: key,
+            operator: formatString[formatString.length - 1],
+            values: []
+          };
+        } else {
+          const key = formatString.slice(1, formatString.length - 2).join(':');
+
+          filter = {
+            field: formatString[0],
+            tagKey: key,
+            operator: formatString[formatString.length - 2],
+            values: (formatString[formatString.length - 1] as string).split(',')
+          };
+        }
+      } else {
+        filter = {
+          field: formatString[0],
+          tagKey: formatString[1],
+          operator: formatString[2],
+          values:
+            formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
+              ? []
+              : (formatString[3] as string).split(',')
+        };
+      }
     }
 
     if (formatString[0] !== 'tag' && type === 'display') {
@@ -184,7 +235,7 @@ function useInventory() {
     setShouldFetchMore(false);
   }
 
-  function getViews(edit?: boolean, viewName?: string) {
+  function getViews(edit?: boolean, viewId?: string) {
     settingsService.getViews().then(res => {
       if (res === Error) {
         setToast({
@@ -193,9 +244,11 @@ function useInventory() {
           message: `There was a problem fetching the views. Please try again.`
         });
       } else {
-        setViews(res);
-        if (edit && viewName) {
-          router.push(`/?view=${viewName}`, undefined, { shallow: true });
+        const sortViewsById: ViewProps[] = res;
+        sortViewsById.sort((a, b) => a.id - b.id);
+        setViews(sortViewsById);
+        if (edit && viewId) {
+          router.push(`/?view=${viewId}`, undefined, { shallow: true });
         }
       }
     });
@@ -250,7 +303,9 @@ function useInventory() {
 
     // Fetch from a custom view
     if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(view => view.name === router.query.view);
+      const filterFound = views.find(
+        view => view.id.toString() === router.query.view
+      );
 
       if (filterFound) {
         setSearchedLoading(true);
@@ -464,7 +519,9 @@ function useInventory() {
       }
 
       if (router.query.view && views && views.length > 0) {
-        const filterFound = views.find(view => view.name === router.query.view);
+        const filterFound = views.find(
+          view => view.id.toString() === router.query.view
+        );
         payloadJson = JSON.stringify(filterFound?.filters);
       }
 
@@ -551,7 +608,9 @@ function useInventory() {
       router.query.view &&
       !query
     ) {
-      const filterFound = views.find(view => view.name === router.query.view);
+      const filterFound = views.find(
+        view => view.id.toString() === router.query.view
+      );
 
       if (filterFound) {
         const payloadJson = JSON.stringify(filterFound?.filters);
@@ -676,7 +735,9 @@ function useInventory() {
       }, 700);
     }
     if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(view => view.name === router.query.view);
+      const filterFound = views.find(
+        view => view.id.toString() === router.query.view
+      );
 
       if (filterFound) {
         const payloadJson = JSON.stringify(filterFound.filters);

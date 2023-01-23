@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { InventoryFilterDataProps } from '../../../hooks/useInventory';
 
 const INITIAL_DATA = {
@@ -9,18 +9,44 @@ const INITIAL_DATA = {
   values: []
 };
 
+const INITIAL_COST_BETWEEN = {
+  min: '',
+  max: ''
+};
+
+const INITIAL_INLINE_ERROR = { hasError: false, message: '' };
+
 type InventoryFilterProps = {
   router: NextRouter;
   setSkippedSearch: (number: number) => void;
+};
+
+export type CostBetween = {
+  min: string;
+  max: string;
 };
 
 function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
+  const [costBetween, setCostBetween] =
+    useState<CostBetween>(INITIAL_COST_BETWEEN);
+  const [inlineError, setInlineError] = useState(INITIAL_INLINE_ERROR);
+
+  useEffect(() => {
+    if (costBetween.min || costBetween.max) {
+      setData(prev => ({
+        ...prev,
+        values: [costBetween.min, costBetween.max]
+      }));
+    }
+  }, [costBetween]);
 
   function resetData() {
     setStep(0);
+    setCostBetween(INITIAL_COST_BETWEEN);
+    setInlineError(INITIAL_INLINE_ERROR);
     setData({ ...INITIAL_DATA, values: [] });
   }
 
@@ -75,7 +101,39 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
     setData(prev => ({ ...prev, values: [newValue.values] }));
   }
 
+  function handleCostBetween(newValue: Partial<CostBetween>) {
+    setCostBetween(prev => ({ ...prev, ...newValue }));
+  }
+
   function filter() {
+    setInlineError(INITIAL_INLINE_ERROR);
+
+    if (data.operator === 'BETWEEN') {
+      if (!data.values[0] || !data.values[1]) {
+        setInlineError({
+          hasError: true,
+          message: 'Please provide a min and max value.'
+        });
+        return null;
+      }
+
+      if (Number(data.values[0]) > Number(data.values[1])) {
+        setInlineError({
+          hasError: true,
+          message: 'Max number needs to be higher than min number.'
+        });
+        return null;
+      }
+
+      if (Number(data.values[0]) === Number(data.values[1])) {
+        setInlineError({
+          hasError: true,
+          message: 'Min and max values can not be the same.'
+        });
+        return null;
+      }
+    }
+
     if (router.asPath === '/') {
       router.push(
         `/?${data.field === 'tag' ? `tag:${data.tagKey}` : data.field}:${
@@ -97,6 +155,8 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
     }
     setSkippedSearch(0);
     toggle();
+
+    return null;
   }
 
   return {
@@ -109,11 +169,13 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
     handleTagKey,
     handleValueCheck,
     handleValueInput,
+    costBetween,
+    handleCostBetween,
+    inlineError,
     data,
     resetData,
     cleanValues,
-    filter,
-    router
+    filter
   };
 }
 

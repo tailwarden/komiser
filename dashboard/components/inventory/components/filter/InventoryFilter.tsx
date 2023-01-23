@@ -30,6 +30,9 @@ function InventoryFilter({
     handleTagKey,
     handleValueCheck,
     handleValueInput,
+    costBetween,
+    handleCostBetween,
+    inlineError,
     data,
     resetData,
     cleanValues,
@@ -106,8 +109,15 @@ function InventoryFilter({
                       handleValueInput={handleValueInput}
                       cleanValues={cleanValues}
                       setToast={setToast}
+                      costBetween={costBetween}
+                      handleCostBetween={handleCostBetween}
                     />
                   </div>
+                  {inlineError.hasError && (
+                    <p className="text-error-600 text-xs pb-4 font-medium">
+                      {inlineError.message}
+                    </p>
+                  )}
                   <div className="flex justify-end border-t -mx-4 -mb-4 px-4 py-4">
                     <Button
                       type="submit"

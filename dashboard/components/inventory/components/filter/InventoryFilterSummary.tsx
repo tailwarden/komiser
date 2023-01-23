@@ -38,6 +38,10 @@ function InventoryFilterSummary({
       return 'is not empty';
     if (param === 'IS_NOT_EMPTY' && data.field === 'tags')
       return 'which are not empty';
+    if (param === 'EQUAL') return 'is equal to';
+    if (param === 'BETWEEN') return 'is between';
+    if (param === 'GREATER_THAN') return 'is greater than';
+    if (param === 'LESS_THAN') return 'is less than';
     return param;
   }
 
@@ -100,9 +104,16 @@ function InventoryFilterSummary({
           data.values.map((value, idx) => (
             <p key={idx}>
               {idx === 0 && <span className="mr-1">:</span>}
-              <span>{value}</span>
+              <span>
+                {data.field === 'cost' && '$'}
+                {value}
+              </span>
               {data.values.length > 1 && idx < data.values.length - 1 && (
-                <span className="ml-1 font-medium text-black-900">or</span>
+                <span className="ml-1 font-medium text-black-900">
+                  {data.field === 'cost' && data.operator === 'BETWEEN'
+                    ? 'and'
+                    : 'or'}
+                </span>
               )}
             </p>
           ))}
