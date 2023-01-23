@@ -14,6 +14,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		droplets.Droplets,
 		network.Firewalls,
+		network.LoadBalancers,
 		network.Vpcs,
 	}
 }
