@@ -62,8 +62,10 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			bucketSize := 0.0
-			if len(metricsBucketSizebytesOutput.Datapoints) > 0 {
-				bucketSize = *metricsBucketSizebytesOutput.Datapoints[0].Average
+			if metricsBucketSizebytesOutput != nil && len(metricsBucketSizebytesOutput.Datapoints) > 0 {
+				if err != nil {
+					bucketSize = *metricsBucketSizebytesOutput.Datapoints[0].Average
+				}
 			}
 
 			sizeInTB := ConvertBytesToTerabytes(int64(bucketSize))
