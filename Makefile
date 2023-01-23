@@ -10,13 +10,20 @@ GO_LD_FLAGS += -X github.com/tailwarden/komiser/internal.Buildtime=$(BUILDTIME)
 GO_LD_FLAGS += -X github.com/tailwarden/komiser/internal.Commit=$(COMMIT)
 GO_FLAGS = -ldflags "$(GO_LD_FLAGS)"
 
-build: ## Build for the current platform
+.PHONY: build package test version help
+
+# Default target.
+all: build
+
+## build: Build for the current platform.
+build:
 	go build -o bin/$(EXECUTABLE) $(GO_FLAGS) .
 	@echo built: bin/$(EXECUTABLE)
 	@echo version: $(VERSION)
 	@echo commit: $(COMMIT)
 
-package: ## Build for all platforms
+## package: Build for all supported platforms.
+package:
 	env GOOS=windows GOARCH=amd64 go build -o bin/$(EXECUTABLE)_windows_amd64.exe $(GO_FLAGS) .
 	env GOOS=linux GOARCH=amd64 go build -o bin/$(EXECUTABLE)_linux_amd64 $(GO_FLAGS) .
 	env GOOS=darwin GOARCH=amd64 go build -o bin/$(EXECUTABLE)_darwin_amd64 $(GO_FLAGS) .
@@ -25,12 +32,22 @@ package: ## Build for all platforms
 	@echo version: $(VERSION)
 	@echo commit: $(COMMIT)
 
-test: ## Run tests
+## test: Run tests.
+test:
 	go test -v ./...
 
+## version: Show version.
 version:
 	@echo version: $(VERSION)
+	@echo commit: $(COMMIT)
 
-clean: ## Remove previous builds and clear test cache
+## clean: Remove previous builds and clear test cache.
+clean:
 	rm -f bin/$(EXECUTABLE)*
 	go clean -testcache
+
+## help: Show this message.
+help: Makefile
+	@echo $(EXECUTABLE) $(VERSION)
+	@echo "Available targets:"
+	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
