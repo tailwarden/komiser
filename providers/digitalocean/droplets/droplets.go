@@ -13,9 +13,14 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
+const createdLayout = "2006-01-02T15:04:05Z" // 2020-07-21T18:37:44Z
+
 func Droplets(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
-	droplets, _, _ := client.DigitalOceanClient.Droplets.List(ctx, &godo.ListOptions{})
+	droplets, _, err := client.DigitalOceanClient.Droplets.List(ctx, &godo.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
 
 	for _, droplet := range droplets {
 		tags := make([]models.Tag, 0)
@@ -34,6 +39,25 @@ func Droplets(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			}
 		}
 
+		hourlyPrice := droplet.Size.PriceHourly
+
+		currentTime := time.Now()
+		currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
+
+		created, err := time.Parse(createdLayout, droplet.Created)
+		if err != nil {
+			return nil, err
+		}
+
+		var duration time.Duration
+		if created.Before(currentMonth) {
+			duration = currentTime.Sub(currentMonth)
+		} else {
+			duration = currentTime.Sub(created)
+		}
+
+		monthlyCost := hourlyPrice * float64(duration.Hours())
+
 		resources = append(resources, models.Resource{
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
@@ -41,7 +65,7 @@ func Droplets(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			ResourceId: fmt.Sprintf("%d", droplet.ID),
 			Region:     droplet.Region.Name,
 			Name:       droplet.Name,
-			Cost:       0,
+			Cost:       monthlyCost,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://cloud.digitalocean.com/droplets/%d/graphs", droplet.ID),
