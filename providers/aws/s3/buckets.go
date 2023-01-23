@@ -63,7 +63,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 			bucketSize := 0.0
 			if metricsBucketSizebytesOutput != nil && len(metricsBucketSizebytesOutput.Datapoints) > 0 {
-				if err != nil {
 					bucketSize = *metricsBucketSizebytesOutput.Datapoints[0].Average
 				}
 			}

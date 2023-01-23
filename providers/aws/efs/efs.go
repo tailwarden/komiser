@@ -34,34 +34,37 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 		}
 
 		for _, filesystem := range output.FileSystems {
-			resourceArn := fmt.Sprintf("arn:aws:efs:%s:%s:file-systems/%s", client.AWSClient.Region, *accountId, *filesystem.Name)
-			outputTags, err := efsClient.ListTagsForResource(ctx, &efs.ListTagsForResourceInput{
-				ResourceId: &resourceArn,
-			})
+			if filesystem.Name != nil {
 
-			tags := make([]Tag, 0)
+				resourceArn := fmt.Sprintf("arn:aws:efs:%s:%s:file-systems/%s", client.AWSClient.Region, *accountId, *filesystem.Name)
+				outputTags, err := efsClient.ListTagsForResource(ctx, &efs.ListTagsForResourceInput{
+					ResourceId: &resourceArn,
+				})
 
-			if err == nil {
-				for _, tag := range outputTags.Tags {
-					tags = append(tags, Tag{
-						Key:   *tag.Key,
-						Value: *tag.Value,
-					})
+				tags := make([]Tag, 0)
+
+				if err == nil {
+					for _, tag := range outputTags.Tags {
+						tags = append(tags, Tag{
+							Key:   *tag.Key,
+							Value: *tag.Value,
+						})
+					}
 				}
-			}
 
-			resources = append(resources, Resource{
-				Provider:   "AWS",
-				Account:    client.Name,
-				Service:    "EFS",
-				ResourceId: resourceArn,
-				Region:     client.AWSClient.Region,
-				Name:       *filesystem.Name,
-				Cost:       0,
-				Tags:       tags,
-				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, *filesystem.Name),
-			})
+				resources = append(resources, Resource{
+					Provider:   "AWS",
+					Account:    client.Name,
+					Service:    "EFS",
+					ResourceId: resourceArn,
+					Region:     client.AWSClient.Region,
+					Name:       *filesystem.Name,
+					Cost:       0,
+					Tags:       tags,
+					FetchedAt:  time.Now(),
+					Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, *filesystem.Name),
+				})
+			}
 		}
 
 		if aws.ToString(output.NextMarker) == "" {
