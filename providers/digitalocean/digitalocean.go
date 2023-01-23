@@ -6,12 +6,14 @@ import (
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/digitalocean/droplets"
+	"github.com/tailwarden/komiser/providers/digitalocean/network"
 	"github.com/uptrace/bun"
 )
 
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		droplets.Droplets,
+		network.Firewalls,
 	}
 }
 
