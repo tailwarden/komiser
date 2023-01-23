@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
@@ -49,6 +50,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		rds.Clusters,
 		elb.LoadBalancers,
 		efs.ElasticFileStorage,
+		apigateway.Apis,
 	}
 }
 
