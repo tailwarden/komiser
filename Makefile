@@ -1,5 +1,5 @@
 # Build all
-VERSION := $(shell git rev-parse --abbrev-ref HEAD)
+VERSION ?= $(shell git rev-parse --abbrev-ref HEAD)
 BUILDTIME := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
 COMMIT := $(shell git rev-parse --short HEAD)
 
