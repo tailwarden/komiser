@@ -244,6 +244,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		if handler.db.Dialect().Name() == dialect.SQLite {
 			query = fmt.Sprintf("SELECT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
 		}
+
 		handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
