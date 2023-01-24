@@ -38,9 +38,35 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			}
 		}
 
+		for _, pool := range cluster.Pools {
+			fmt.Println(pool.Size)
+			fmt.Println("----")
+
+		}
+
 		monthlyCost := 0.0
 		for _, instance := range cluster.Instances {
-			hourlyPrice := float64(instance.RAMMegabytes/1024) * 0.007440
+			hourlyPrice := 0.0
+
+			for _, pool := range cluster.Pools {
+				for _, poolInstance := range pool.Instances {
+					if poolInstance.ID == instance.ID {
+						if strings.Contains(pool.Size, "g4s") {
+							// general purpose
+							hourlyPrice = float64(instance.RAMMegabytes/1024) * 0.007440
+						} else if strings.Contains(pool.Size, "g4p") {
+							// performance purpose
+							hourlyPrice = float64(instance.RAMMegabytes/1024) * 0.119048
+						} else if strings.Contains(pool.Size, "g4c") {
+							// CPU optimized
+							hourlyPrice = float64(instance.RAMMegabytes/1024) * 0.190476
+						} else if strings.Contains(pool.Size, "g4r") {
+							// CPU optimized
+							hourlyPrice = float64(instance.RAMMegabytes/1024) * 0.107143
+						}
+					}
+				}
+			}
 
 			currentTime := time.Now()
 			currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
