@@ -53,7 +53,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			invocations := 0.0
-			if len(metricsInvocationsOutput.Datapoints) > 0 {
+			if metricsInvocationsOutput != nil && len(metricsInvocationsOutput.Datapoints) > 0 {
 				invocations = *metricsInvocationsOutput.Datapoints[0].Sum
 			}
 
