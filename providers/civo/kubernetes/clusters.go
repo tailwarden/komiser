@@ -38,12 +38,6 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			}
 		}
 
-		for _, pool := range cluster.Pools {
-			fmt.Println(pool.Size)
-			fmt.Println("----")
-
-		}
-
 		monthlyCost := 0.0
 		for _, instance := range cluster.Instances {
 			hourlyPrice := 0.0
