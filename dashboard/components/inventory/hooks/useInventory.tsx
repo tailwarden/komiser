@@ -67,6 +67,24 @@ export type ViewProps = {
   exclude: string[];
 };
 
+export type HiddenResource = {
+  id: number;
+  resourceId: string;
+  provider: string;
+  account: string;
+  accountId: string;
+  service: string;
+  region: string;
+  name: string;
+  createdAt: string;
+  fetchedAt: string;
+  cost: number;
+  metadata: null;
+  tags: Tag[] | [] | null;
+  link: string;
+  Value: string;
+};
+
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
     InventoryStats | undefined
@@ -95,6 +113,7 @@ function useInventory() {
   const [searchedLoading, setSearchedLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
   const [views, setViews] = useState<ViewProps[]>();
+  const [hiddenResources, setHiddenResources] = useState<HiddenResource[]>();
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -303,14 +322,23 @@ function useInventory() {
 
     // Fetch from a custom view
     if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(
-        view => view.id.toString() === router.query.view
-      );
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
 
       if (filterFound) {
         setSearchedLoading(true);
         setStatsLoading(true);
         const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService.getHiddenResourcesFromView(id as string).then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+            } else {
+              setHiddenResources(res);
+            }
+          }
+        });
 
         settingsService.getFilteredInventoryStats(payloadJson).then(res => {
           if (mounted) {
@@ -1050,7 +1078,8 @@ function useInventory() {
     searchedLoading,
     statsLoading,
     views,
-    getViews
+    getViews,
+    hiddenResources
   };
 }
 

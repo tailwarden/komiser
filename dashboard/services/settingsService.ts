@@ -190,6 +190,19 @@ const settingsService = {
     }
   },
 
+  async getHiddenResourcesFromView(viewId: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/views/${viewId}/hidden/resources`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async saveView(payload: string) {
     try {
       const res = await fetch(`${BASE_URL}/views`, settings('POST', payload));

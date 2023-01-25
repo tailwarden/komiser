@@ -54,7 +54,8 @@ export default function Inventory() {
     searchedLoading,
     statsLoading,
     views,
-    getViews
+    getViews,
+    hiddenResources
   } = useInventory();
 
   return (
@@ -191,13 +192,16 @@ export default function Inventory() {
           </div>
         )}
       {/* Inventory stats loading */}
-      {!error && statsLoading && <SkeletonStats />}
+      {!error && statsLoading && (
+        <SkeletonStats NumOfCards={router.query.view ? 4 : 3} />
+      )}
 
       {/* Inventory stats */}
       <InventoryStatsCards
         inventoryStats={inventoryStats}
         error={error}
         statsLoading={statsLoading}
+        hiddenResources={hiddenResources}
       />
 
       <div className="mt-8"></div>
