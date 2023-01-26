@@ -3,6 +3,7 @@ import formatNumber from '../../../../utils/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
 import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
+import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
 import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
@@ -48,8 +49,14 @@ function InventoryView({
     loading,
     page,
     goTo,
-    deleteView
-  } = useViews({ setToast, views, router, getViews });
+    deleteView,
+    bulkItems,
+    bulkSelectCheckbox,
+    onCheckboxChange,
+    handleBulkSelection,
+    unhideLoading,
+    unhideResources
+  } = useViews({ setToast, views, router, getViews, hiddenResources });
 
   return (
     <>
@@ -81,7 +88,7 @@ function InventoryView({
       </Button>
 
       {/* Sidepanel */}
-      <Sidepanel isOpen={isOpen} closeModal={closeModal}>
+      <Sidepanel isOpen={isOpen} closeModal={closeModal} noScroll={true}>
         <SidepanelHeader
           title={router.query.view ? view.name : 'Save as a view'}
           subtitle={`${inventoryStats?.resources} ${
@@ -136,63 +143,90 @@ function InventoryView({
         </SidepanelPage>
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
-            <div className="w-[560px] overflow-scroll">
-              <table className="table-auto text-xs text-left bg-white text-gray-900">
-                <thead className="top-[73px] z-10 bg-white">
-                  <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
-                    <th className="py-4 px-2">
-                      <div className="flex items-center">
-                        {/* <Checkbox
-                          checked={bulkSelectCheckbox}
-                          onChange={handleBulkSelection}
-                        /> */}
-                      </div>
-                    </th>
-                    <th className="py-4 px-2">Cloud</th>
-                    <th className="py-4 px-2">Service</th>
-                    <th className="py-4 px-2">Name</th>
-                    <th className="py-4 px-2">Region</th>
-                    <th className="py-4 px-2">Account</th>
-                    <th className="py-4 px-2 text-right">Cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {hiddenResources.map(item => (
-                    <tr
-                      key={item.id}
-                      className="bg-white hover:bg-black-100 border-black-200/30 border-b last:border-none"
-                    >
-                      <td className="py-4 px-2"></td>
-                      <td className="py-4 pl-2 pr-6">
-                        <div className="flex items-center gap-2">
-                          <picture className="flex-shrink-0">
-                            <img
-                              src={providers.providerImg(
-                                item.provider as Provider
-                              )}
-                              className="w-6 h-6 rounded-full"
-                              alt={item.provider}
-                            />
-                          </picture>
-                          <span>{item.provider}</span>
+            <>
+              <div className="h-[calc(100vh-300px)] overflow-scroll">
+                <table className="table-auto w-full text-xs text-left bg-white text-gray-900">
+                  <thead className="bg-white">
+                    <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
+                      <th className="py-4 px-2">
+                        <div className="flex items-center">
+                          <Checkbox
+                            checked={bulkSelectCheckbox}
+                            onChange={handleBulkSelection}
+                          />
                         </div>
-                      </td>
-                      <td className="py-4 px-2">{item.service}</td>
-                      <td className="py-4 px-2">
-                        <p className="w-24 truncate ...">{item.name}</p>
-                      </td>
-                      <td className="py-4 px-2">
-                        <p className="w-24 truncate ...">{item.region}</p>
-                      </td>
-                      <td className="py-4 px-2">
-                        <p className="w-24 truncate ...">{item.account}</p>
-                      </td>
-                      <td className="py-4 px-2">${formatNumber(item.cost)}</td>
+                      </th>
+                      <th className="py-4 px-2">Cloud</th>
+                      <th className="py-4 px-2">Service</th>
+                      <th className="py-4 px-2">Name</th>
+                      <th className="py-4 px-2">Region</th>
+                      <th className="py-4 px-2">Account</th>
+                      <th className="py-4 px-2 text-right">Cost</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {hiddenResources.map(item => (
+                      <tr
+                        key={item.id}
+                        className="bg-white hover:bg-black-100 border-black-200/30 border-b last:border-none"
+                      >
+                        <td className="py-4 px-2">
+                          <Checkbox
+                            checked={
+                              bulkItems &&
+                              !!bulkItems.find(
+                                currentId => currentId === item.id
+                              )
+                            }
+                            onChange={e => onCheckboxChange(e, item.id)}
+                          />
+                        </td>
+                        <td className="py-4 pl-2 pr-6">
+                          <div className="flex items-center gap-2">
+                            <picture className="flex-shrink-0">
+                              <img
+                                src={providers.providerImg(
+                                  item.provider as Provider
+                                )}
+                                className="w-6 h-6 rounded-full"
+                                alt={item.provider}
+                              />
+                            </picture>
+                            <span>{item.provider}</span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-2">{item.service}</td>
+                        <td className="py-4 px-2">
+                          <p className="w-24 truncate ...">{item.name}</p>
+                        </td>
+                        <td className="py-4 px-2">
+                          <p className="w-24 truncate ...">{item.region}</p>
+                        </td>
+                        <td className="py-4 px-2">
+                          <p className="w-24 truncate ...">{item.account}</p>
+                        </td>
+                        <td className="py-4 px-2 text-right">
+                          ${formatNumber(item.cost)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  size="lg"
+                  disabled={bulkItems && bulkItems.length === 0}
+                  loading={unhideLoading}
+                  onClick={unhideResources}
+                >
+                  Unhide resources{' '}
+                  <span className="flex items-center justify-center bg-white/10 text-xs py-1 px-2 rounded-lg">
+                    {formatNumber(bulkItems.length)}
+                  </span>
+                </Button>
+              </div>
+            </>
           )}
 
           {hiddenResources && hiddenResources.length === 0 && (

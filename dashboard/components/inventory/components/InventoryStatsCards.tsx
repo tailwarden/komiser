@@ -178,7 +178,9 @@ function InventoryStatsCards({
                   </p>
                   <p className="text-sm text-black-300">Hidden resources</p>
                 </div>
-                <Tooltip>Up-to-date monthly cost</Tooltip>
+                <Tooltip>
+                  Resources that will be hidden from the inventory
+                </Tooltip>
               </div>
             )}
           </div>
