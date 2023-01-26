@@ -2,7 +2,7 @@
 
 ---
 
-<h1 align="center"><img src="https://cdn.komiser.io/images/readme-komiser-header.png" alt="Amp Logo"></h1>
+<h1 align="center"><img src="https://cdn.komiser.io/images/readme-komiser-header.png?version=latest" alt="Amp Logo"></h1>
 
 <h4 align="center">
     <a href="https://discord.tailwarden.com">Discord</a> |
@@ -64,7 +64,7 @@ Komiser is an open source project created to **analyse** and **manage cloud cost
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
 * Get a deep understanding of **how you spend** on the AWS, Civo, OVH, DigitalOcean and OCI.
 
-<h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-wireframe.png" alt="Amp Logo"></h1>
+<h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-wireframe.png?version=latest" alt="Amp Logo"></h1>
 
 ## Who is using it?
 Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE in mind. We understand that tackling cost savings, security improvements and resource usage analyse efforts can be hard, sometimes just knowing where to start, can be the most challenging part at times. Komiser is here to help those cloud practitioners see their cloud resources and accounts much more clearly. Only with clear insight can timely and efficient actions take place.
