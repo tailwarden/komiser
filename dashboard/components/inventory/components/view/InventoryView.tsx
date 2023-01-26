@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { NextRouter } from 'next/router';
 import formatNumber from '../../../../utils/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
@@ -239,7 +240,25 @@ function InventoryView({
           )}
 
           {hiddenResources && hiddenResources.length === 0 && (
-            <p>There are no hidden resources</p>
+            <div className="p-6 bg-black-100 rounded-lg">
+              <div className="flex flex-col gap-6 items-center">
+                <Image
+                  src="/assets/img/purplin/dashboard.svg"
+                  alt="Purplin"
+                  width={150}
+                  height={100}
+                />
+                <div className="flex flex-col gap-2 px-24 items-center justify-center text-center">
+                  <p className="text-black-900 font-semibold">
+                    No hidden resources in this view
+                  </p>
+                  <p className="text-sm text-black-400">
+                    To hide a resource from this view, select and hide them on
+                    the inventory table.
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
         </SidepanelPage>
       </Sidepanel>
