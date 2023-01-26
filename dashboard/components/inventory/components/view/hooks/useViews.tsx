@@ -14,6 +14,7 @@ type useViewsProps = {
   router: NextRouter;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
   hiddenResources: HiddenResource[] | undefined;
+  setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
 };
 
 const INITIAL_VIEW: ViewProps = {
@@ -30,7 +31,8 @@ function useViews({
   views,
   router,
   getViews,
-  hiddenResources
+  hiddenResources,
+  setHideOrUnhideHasUpdate
 }: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
@@ -207,18 +209,19 @@ function useViews({
         setUnhideLoading(false);
         setToast({
           hasError: true,
-          title: 'Resources could not be hided.',
+          title: 'Resources could not be unhid.',
           message:
-            'There was an error hiding the resources. Please refer to the logs and try again.'
+            'There was an error unhiding the resources. Please refer to the logs and try again.'
         });
       } else {
         setUnhideLoading(false);
         setToast({
           hasError: false,
-          title: 'Resources are now hidden.',
-          message:
-            'The resources were successfully hidden. They can be unhided from the custom view management.'
+          title: 'Resources are now unhidden.',
+          message: 'The resources were successfully unhidden.'
         });
+        setHideOrUnhideHasUpdate(true);
+        closeModal();
       }
     });
   }

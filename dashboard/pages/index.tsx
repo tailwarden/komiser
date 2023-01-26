@@ -57,7 +57,8 @@ export default function Inventory() {
     getViews,
     hiddenResources,
     hideResourceFromCustomView,
-    hideResourcesLoading
+    hideResourcesLoading,
+    setHideOrUnhideHasUpdate
   } = useInventory();
 
   return (
@@ -83,6 +84,7 @@ export default function Inventory() {
               views={views}
               getViews={getViews}
               hiddenResources={hiddenResources}
+              setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
             />
           )}
 

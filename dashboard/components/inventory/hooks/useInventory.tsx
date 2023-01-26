@@ -115,6 +115,7 @@ function useInventory() {
   const [views, setViews] = useState<ViewProps[]>();
   const [hiddenResources, setHiddenResources] = useState<HiddenResource[]>();
   const [hideResourcesLoading, setHideResourcesLoading] = useState(false);
+  const [hideOrUnhideHasUpdate, setHideOrUnhideHasUpdate] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -273,6 +274,69 @@ function useInventory() {
       }
     });
   }
+
+  // When a resource is hid or unhid, fetch inventory & hidden resources from server
+  useEffect(() => {
+    if (hideOrUnhideHasUpdate && views) {
+      resetStates();
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
+
+      if (filterFound) {
+        setSearchedLoading(true);
+        setStatsLoading(true);
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService.getHiddenResourcesFromView(id as string).then(res => {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setHiddenResources(res);
+          }
+        });
+
+        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
+          if (res === Error) {
+            setError(true);
+            setStatsLoading(false);
+          } else {
+            setInventoryStats(res);
+            setStatsLoading(false);
+          }
+        });
+
+        settingsService
+          .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+          .then(res => {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+              setSearchedLoading(false);
+            } else {
+              setSearchedInventory(res);
+              setSkippedSearch(prev => prev + batchSize);
+              setSearchedLoading(false);
+              const newFiltersToDisplay: InventoryFilterDataProps[] =
+                filterFound!.filters.map(filter =>
+                  parseParams(filter, 'display', true)
+                );
+              setDisplayedFilters(newFiltersToDisplay);
+              setHideOrUnhideHasUpdate(false);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+            }
+          });
+      }
+    }
+  }, [hideOrUnhideHasUpdate]);
 
   // Getting all the views
   useEffect(() => {
@@ -1030,10 +1094,16 @@ function useInventory() {
   function hideResourceFromCustomView() {
     if (!router.query.view || bulkItems.length === 0) return;
 
+    const currentHiddenResources: number[] = hiddenResources!.map(
+      resource => resource.id
+    );
+
+    const newHiddenResources = [...currentHiddenResources, ...bulkItems];
+
     setHideResourcesLoading(true);
 
     const viewId = router.query.view.toString();
-    const newPayload = { id: Number(viewId), exclude: bulkItems };
+    const newPayload = { id: Number(viewId), exclude: newHiddenResources };
     const payload = JSON.stringify(newPayload);
 
     settingsService.hideResourceFromView(viewId, payload).then(res => {
@@ -1041,7 +1111,7 @@ function useInventory() {
         setHideResourcesLoading(false);
         setToast({
           hasError: true,
-          title: 'Resources could not be hided.',
+          title: 'Resources could not be hid.',
           message:
             'There was an error hiding the resources. Please refer to the logs and try again.'
         });
@@ -1051,8 +1121,9 @@ function useInventory() {
           hasError: false,
           title: 'Resources are now hidden.',
           message:
-            'The resources were successfully hidden. They can be unhided from the custom view management.'
+            'The resources were successfully hidden. They can be unhid from the custom view management.'
         });
+        setHideOrUnhideHasUpdate(true);
       }
     });
   }
@@ -1112,7 +1183,8 @@ function useInventory() {
     getViews,
     hiddenResources,
     hideResourceFromCustomView,
-    hideResourcesLoading
+    hideResourcesLoading,
+    setHideOrUnhideHasUpdate
   };
 }
 

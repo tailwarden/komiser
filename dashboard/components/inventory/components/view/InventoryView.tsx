@@ -28,6 +28,7 @@ type InventoryViewProps = {
   views: ViewProps[] | undefined;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
   hiddenResources: HiddenResource[] | undefined;
+  setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
 };
 function InventoryView({
   filters,
@@ -37,7 +38,8 @@ function InventoryView({
   router,
   views,
   getViews,
-  hiddenResources
+  hiddenResources,
+  setHideOrUnhideHasUpdate
 }: InventoryViewProps) {
   const {
     isOpen,
@@ -56,7 +58,14 @@ function InventoryView({
     handleBulkSelection,
     unhideLoading,
     unhideResources
-  } = useViews({ setToast, views, router, getViews, hiddenResources });
+  } = useViews({
+    setToast,
+    views,
+    router,
+    getViews,
+    hiddenResources,
+    setHideOrUnhideHasUpdate
+  });
 
   return (
     <>
@@ -144,7 +153,7 @@ function InventoryView({
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
             <>
-              <div className="h-[calc(100vh-300px)] overflow-scroll">
+              <div className="max-h-[calc(100vh-300px)] overflow-scroll">
                 <table className="table-auto w-full text-xs text-left bg-white text-gray-900">
                   <thead className="bg-white">
                     <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
