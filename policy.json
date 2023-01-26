@@ -126,7 +126,10 @@
                 "s3:GetBucketTagging",
                 "lambda:ListTags",
                 "kms:ListResourceTags",
-                "pricing:GetProducts"
+                "pricing:GetProducts",
+                "ecr:DescribeRepositories",
+                "elasticfilesystem:DescribeFileSystems",
+                "rds:DescribeDBClusters"
             ],
             "Resource": "*"
         }
