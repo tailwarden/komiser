@@ -8,13 +8,17 @@ type InventoryTableBulkActionsProps = {
   inventoryStats: InventoryStats | undefined;
   openBulkModal: (bulkItemsIds: string[]) => void;
   query: string;
+  hideResourceFromCustomView: () => void;
+  hideResourcesLoading: boolean;
 };
 
 function InventoryTableBulkActions({
   bulkItems,
   inventoryStats,
   openBulkModal,
-  query
+  query,
+  hideResourceFromCustomView,
+  hideResourcesLoading
 }: InventoryTableBulkActionsProps) {
   const router = useRouter();
   return (
@@ -44,7 +48,8 @@ function InventoryTableBulkActions({
               <Button
                 size="lg"
                 style="bulk-outline"
-                onClick={() => openBulkModal(bulkItems)}
+                onClick={hideResourceFromCustomView}
+                loading={hideResourcesLoading}
               >
                 Hide from view
                 <span className="flex items-center justify-center bg-white/10 text-xs py-1 px-2 rounded-lg">

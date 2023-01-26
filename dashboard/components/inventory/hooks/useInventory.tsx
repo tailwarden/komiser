@@ -114,6 +114,7 @@ function useInventory() {
   const [statsLoading, setStatsLoading] = useState(false);
   const [views, setViews] = useState<ViewProps[]>();
   const [hiddenResources, setHiddenResources] = useState<HiddenResource[]>();
+  const [hideResourcesLoading, setHideResourcesLoading] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -1026,6 +1027,36 @@ function useInventory() {
     }
   }
 
+  function hideResourceFromCustomView() {
+    if (!router.query.view || bulkItems.length === 0) return;
+
+    setHideResourcesLoading(true);
+
+    const viewId = router.query.view.toString();
+    const newPayload = { id: Number(viewId), exclude: bulkItems };
+    const payload = JSON.stringify(newPayload);
+
+    settingsService.hideResourceFromView(viewId, payload).then(res => {
+      if (res === Error) {
+        setHideResourcesLoading(false);
+        setToast({
+          hasError: true,
+          title: 'Resources could not be hided.',
+          message:
+            'There was an error hiding the resources. Please refer to the logs and try again.'
+        });
+      } else {
+        setHideResourcesLoading(false);
+        setToast({
+          hasError: false,
+          title: 'Resources are now hidden.',
+          message:
+            'The resources were successfully hidden. They can be unhided from the custom view management.'
+        });
+      }
+    });
+  }
+
   function deleteFilter(idx: number) {
     const updatedFilters: InventoryFilterDataProps[] = [...filters!];
     updatedFilters.splice(idx, 1);
@@ -1079,7 +1110,9 @@ function useInventory() {
     statsLoading,
     views,
     getViews,
-    hiddenResources
+    hiddenResources,
+    hideResourceFromCustomView,
+    hideResourcesLoading
   };
 }
 

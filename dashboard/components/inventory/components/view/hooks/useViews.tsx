@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
@@ -21,15 +21,13 @@ const INITIAL_VIEW: ViewProps = {
   exclude: []
 };
 
-type Pages = 'view' | 'excluded' | 'delete';
+type Pages = 'view' | 'excluded' | 'delete' | 'hiddenResources';
 
 function useViews({ setToast, views, router, getViews }: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState<Pages>('view');
-  const [resourcesToHide, setResourcesToHide] = useState<number[]>([]);
-  const [hideLoading, setHideLoading] = useState(false);
 
   function findView(currentViews: ViewProps[]) {
     return currentViews.find(
@@ -37,17 +35,11 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
     );
   }
 
-  useEffect(() => {
-    if (router.query.view && views) {
-      console.log(findView(views));
-    }
-  }, [router.query.view]);
-
   function populateView(newFilters: InventoryFilterDataProps[]) {
     setView(prev => ({ ...prev, filters: newFilters }));
   }
 
-  function openModal(filters: InventoryFilterDataProps[]) {
+  function openModal(filters: InventoryFilterDataProps[], openPage?: Pages) {
     if (!router.query.view) {
       setView(INITIAL_VIEW);
       populateView(filters);
@@ -55,6 +47,11 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
       const viewToBeManaged = findView(views!);
       setView(viewToBeManaged!);
     }
+
+    if (openPage) {
+      setPage(openPage);
+    }
+
     setIsOpen(true);
   }
 

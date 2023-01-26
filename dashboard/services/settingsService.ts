@@ -203,6 +203,32 @@ const settingsService = {
     }
   },
 
+  async hideResourceFromView(viewId: string, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/views/${viewId}/resources/hide`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async unhideResourceFromView(viewId: string, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/views/${viewId}/resources/unhide`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async saveView(payload: string) {
     try {
       const res = await fetch(`${BASE_URL}/views`, settings('POST', payload));

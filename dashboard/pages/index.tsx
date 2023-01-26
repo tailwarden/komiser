@@ -55,7 +55,9 @@ export default function Inventory() {
     statsLoading,
     views,
     getViews,
-    hiddenResources
+    hiddenResources,
+    hideResourceFromCustomView,
+    hideResourcesLoading
   } = useInventory();
 
   return (
@@ -228,6 +230,8 @@ export default function Inventory() {
         openBulkModal={openBulkModal}
         router={router}
         searchedLoading={searchedLoading}
+        hideResourceFromCustomView={hideResourceFromCustomView}
+        hideResourcesLoading={hideResourcesLoading}
       />
 
       {/* Infite scroll trigger */}
