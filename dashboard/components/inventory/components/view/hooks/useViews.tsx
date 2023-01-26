@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
@@ -28,15 +28,23 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
   const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState<Pages>('view');
-
-  function populateView(newFilters: InventoryFilterDataProps[]) {
-    setView(prev => ({ ...prev, filters: newFilters }));
-  }
+  const [resourcesToHide, setResourcesToHide] = useState<number[]>([]);
+  const [hideLoading, setHideLoading] = useState(false);
 
   function findView(currentViews: ViewProps[]) {
     return currentViews.find(
       currentView => currentView.id.toString() === router.query.view
     );
+  }
+
+  useEffect(() => {
+    if (router.query.view && views) {
+      console.log(findView(views));
+    }
+  }, [router.query.view]);
+
+  function populateView(newFilters: InventoryFilterDataProps[]) {
+    setView(prev => ({ ...prev, filters: newFilters }));
   }
 
   function openModal(filters: InventoryFilterDataProps[]) {
@@ -77,16 +85,16 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
             setLoading(false);
             setToast({
               hasError: true,
-              title: `${view.name} could not be created.`,
-              message: `There was an error creating this custom view. Please refer to the logs and try again!`
+              title: `${view.name} could not be saved.`,
+              message: `There was an error saving this custom view. Please refer to the logs and try again!`
             });
           } else {
             setLoading(false);
             getViews(true, view.id.toString());
             setToast({
               hasError: false,
-              title: `${view.name} has been created.`,
-              message: `The custom view will now be accessible from the top navigation.`
+              title: `${view.name} has been saved.`,
+              message: `The custom view has been successfully saved.`
             });
             closeModal();
           }
