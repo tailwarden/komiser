@@ -1,0 +1,11 @@
+release:
+  github:
+    owner: tailwarden
+    name: komiser
+  disable: true
+
+brews:
+  - tap:
+      owner: tailwarden
+      name: homebrew-komiser
+    homepage: https://github.com/tailwarden/homebrew-komiser
