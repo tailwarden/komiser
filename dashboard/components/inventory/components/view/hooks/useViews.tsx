@@ -21,7 +21,7 @@ const INITIAL_VIEW: ViewProps = {
   exclude: []
 };
 
-type Pages = 'view' | 'excluded' | 'delete' | 'hiddenResources';
+type Pages = 'view' | 'excluded' | 'delete' | 'hidden resources';
 
 function useViews({ setToast, views, router, getViews }: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +40,8 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
   }
 
   function openModal(filters: InventoryFilterDataProps[], openPage?: Pages) {
+    setPage('view');
+
     if (!router.query.view) {
       setView(INITIAL_VIEW);
       populateView(filters);

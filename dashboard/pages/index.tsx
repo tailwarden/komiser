@@ -82,6 +82,7 @@ export default function Inventory() {
               router={router}
               views={views}
               getViews={getViews}
+              hiddenResources={hiddenResources}
             />
           )}
 

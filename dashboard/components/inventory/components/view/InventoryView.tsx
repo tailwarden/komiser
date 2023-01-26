@@ -1,4 +1,6 @@
 import { NextRouter } from 'next/router';
+import formatNumber from '../../../../utils/formatNumber';
+import providers, { Provider } from '../../../../utils/providerHelper';
 import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
@@ -8,6 +10,7 @@ import SidepanelPage from '../../../sidepanel/SidepanelPage';
 import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
+  HiddenResource,
   InventoryFilterDataProps,
   InventoryStats,
   ViewProps
@@ -23,6 +26,7 @@ type InventoryViewProps = {
   router: NextRouter;
   views: ViewProps[] | undefined;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
+  hiddenResources: HiddenResource[] | undefined;
 };
 function InventoryView({
   filters,
@@ -31,7 +35,8 @@ function InventoryView({
   inventoryStats,
   router,
   views,
-  getViews
+  getViews,
+  hiddenResources
 }: InventoryViewProps) {
   const {
     isOpen,
@@ -90,7 +95,11 @@ function InventoryView({
           deleteLabel="Delete view"
           closeModal={closeModal}
         />
-        <SidepanelTabs goTo={goTo} page={page} tabs={['View']} />
+        <SidepanelTabs
+          goTo={goTo}
+          page={page}
+          tabs={router.query.view ? ['View', 'Hidden Resources'] : ['View']}
+        />
         <SidepanelPage page={page} param="view">
           <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
@@ -124,6 +133,71 @@ function InventoryView({
               </Button>
             </div>
           </form>
+        </SidepanelPage>
+        <SidepanelPage page={page} param="hidden resources">
+          {hiddenResources && hiddenResources.length > 0 && (
+            <div className="w-[560px] overflow-scroll">
+              <table className="table-auto text-xs text-left bg-white text-gray-900">
+                <thead className="top-[73px] z-10 bg-white">
+                  <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
+                    <th className="py-4 px-2">
+                      <div className="flex items-center">
+                        {/* <Checkbox
+                          checked={bulkSelectCheckbox}
+                          onChange={handleBulkSelection}
+                        /> */}
+                      </div>
+                    </th>
+                    <th className="py-4 px-2">Cloud</th>
+                    <th className="py-4 px-2">Service</th>
+                    <th className="py-4 px-2">Name</th>
+                    <th className="py-4 px-2">Region</th>
+                    <th className="py-4 px-2">Account</th>
+                    <th className="py-4 px-2 text-right">Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hiddenResources.map(item => (
+                    <tr
+                      key={item.id}
+                      className="bg-white hover:bg-black-100 border-black-200/30 border-b last:border-none"
+                    >
+                      <td className="py-4 px-2"></td>
+                      <td className="py-4 pl-2 pr-6">
+                        <div className="flex items-center gap-2">
+                          <picture className="flex-shrink-0">
+                            <img
+                              src={providers.providerImg(
+                                item.provider as Provider
+                              )}
+                              className="w-6 h-6 rounded-full"
+                              alt={item.provider}
+                            />
+                          </picture>
+                          <span>{item.provider}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-2">{item.service}</td>
+                      <td className="py-4 px-2">
+                        <p className="w-24 truncate ...">{item.name}</p>
+                      </td>
+                      <td className="py-4 px-2">
+                        <p className="w-24 truncate ...">{item.region}</p>
+                      </td>
+                      <td className="py-4 px-2">
+                        <p className="w-24 truncate ...">{item.account}</p>
+                      </td>
+                      <td className="py-4 px-2">${formatNumber(item.cost)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {hiddenResources && hiddenResources.length === 0 && (
+            <p>There are no hidden resources</p>
+          )}
         </SidepanelPage>
       </Sidepanel>
     </>
