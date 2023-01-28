@@ -1,4 +1,4 @@
-export type Provider = 'aws' | 'gcp' | 'ovh' | 'digitalocean' | 'azure';
+export type Provider = 'aws' | 'gcp' | 'ovh' | 'digitalocean' | 'azure' | 'tencent';
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -22,6 +22,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'azure') {
       label = 'Azure';
+    }
+
+    if (arg.toLowerCase() === 'tencent') {
+        label = 'Tencent';
     }
 
     return label;
@@ -59,6 +63,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'linode') {
       img = '/assets/img/providers/linode.png';
+    }
+
+    if (arg.toLowerCase() === 'tencent') {
+      img = '/assets/img/providers/tencent.jpeg';
     }
 
     return img;

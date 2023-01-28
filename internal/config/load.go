@@ -18,6 +18,10 @@ import (
 	"github.com/oracle/oci-go-sdk/common"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
+	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"golang.org/x/oauth2"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -170,6 +174,23 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				LinodeClient: &client,
 				Name:         account.Name,
+			})
+		}
+	}
+
+	if len(config.Tencent) > 0 {
+		for _, account := range config.Tencent {
+			credential := tccommon.NewCredential(account.SecretID, account.SecretKey)
+			cpf := profile.NewClientProfile()
+			cpf.Language = "en-US"
+			client, err := tccvm.NewClient(credential, regions.Frankfurt, cpf)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			clients = append(clients, providers.ProviderClient{
+				TencentClient: client,
+				Name:          account.Name,
 			})
 		}
 	}

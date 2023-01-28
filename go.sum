@@ -253,6 +253,10 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.582 h1:Td+y4Y5xkPq5pa7DgMK09ycp5lPnx2UZ7GMLMvhW7Ns=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.582/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.582 h1:I9ihQehFbwNzVA23auWISoKc57BcyZSdsXznEoQLb94=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.582/go.mod h1:/7YpVraLcpUgtut8u/unyJ7qiiEpyyt+/Xf4lB5bll4=
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc h1:9lRDQMhESg+zvGYmW5DyG0UqvY96Bu5QYsTLvCHdrgo=
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc/go.mod h1:bciPuU6GHm1iF1pBvUfxfsH0Wmnc2VbpgvbI9ZWuIRs=
 github.com/uptrace/bun v1.1.8 h1:slxuaP4LYWFbPRUmTtQhfJN+6eX/6ar2HDKYTcI50SA=
