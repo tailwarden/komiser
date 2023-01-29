@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -13,9 +14,11 @@ import (
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
+	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"golang.org/x/oauth2"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -150,6 +153,23 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				K8sClient: client,
 				Name:      account.Name,
+			})
+		}
+	}
+
+	if len(config.Linode) > 0 {
+		for _, account := range config.Linode {
+			tokenSource := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: account.Token})
+			oauth2Client := &http.Client{
+				Transport: &oauth2.Transport{
+					Source: tokenSource,
+				},
+			}
+			client := linodego.NewClient(oauth2Client)
+
+			clients = append(clients, providers.ProviderClient{
+				LinodeClient: &client,
+				Name:         account.Name,
 			})
 		}
 	}

@@ -57,6 +57,10 @@ const providers = {
       img = '/assets/img/providers/kubernetes.png';
     }
 
+    if (arg.toLowerCase() === 'linode') {
+      img = '/assets/img/providers/linode.png';
+    }
+
     return img;
   }
 };

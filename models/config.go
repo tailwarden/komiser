@@ -6,6 +6,7 @@ type Config struct {
 	Oci          []OciConfig          `toml:"oci"`
 	Civo         []CivoConfig         `toml:"civo"`
 	Kubernetes   []KubernetesConfig   `toml:"k8s"`
+	Linode       []LinodeConfig       `toml:"linode"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 }
@@ -26,6 +27,11 @@ type KubernetesConfig struct {
 	Name     string   `toml:"name"`
 	Path     string   `toml:"path"`
 	Contexts []string `toml:"contexts"`
+}
+
+type LinodeConfig struct {
+	Name  string `toml:"name"`
+	Token string `toml:"token"`
 }
 
 type CivoConfig struct {

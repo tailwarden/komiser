@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
+	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
 	. "github.com/tailwarden/komiser/models"
 	"k8s.io/client-go/kubernetes"
@@ -19,5 +20,6 @@ type ProviderClient struct {
 	OciClient          common.ConfigurationProvider
 	CivoClient         *civogo.Client
 	K8sClient          *kubernetes.Clientset
+	LinodeClient       *linodego.Client
 	Name               string
 }
