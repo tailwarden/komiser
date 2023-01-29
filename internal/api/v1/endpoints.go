@@ -25,6 +25,7 @@ func Endpoints(ctx context.Context, noTracking bool, db *bun.DB) *mux.Router {
 	r.HandleFunc("/views/{id}", api.GetViewHandler).Methods("GET")
 	r.HandleFunc("/views/{id}", api.UpdateViewHandler).Methods("PUT")
 	r.HandleFunc("/views/{id}", api.DeleteViewHandler).Methods("DELETE")
+	r.HandleFunc("/views/{id}/resources", api.GetViewResourcesHandler).Methods("POST")
 	r.HandleFunc("/views/{id}/resources/hide", api.HideResourcesFromViewHandler).Methods("POST")
 	r.HandleFunc("/views/{id}/resources/unhide", api.UnhideResourcesFromViewHandler).Methods("POST")
 	r.HandleFunc("/views/{id}/hidden/resources", api.ListHiddenResourcesHandler).Methods("GET")
