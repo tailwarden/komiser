@@ -69,7 +69,6 @@ func (handler *ApiHandler) UpdateViewHandler(w http.ResponseWriter, r *http.Requ
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("name", "filters", "exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		fmt.Println(err)
 		respondWithError(w, http.StatusBadRequest, "Error while updating view")
 		return
 	}
@@ -104,7 +103,6 @@ func (handler *ApiHandler) HideResourcesFromViewHandler(w http.ResponseWriter, r
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		fmt.Println(err)
 		respondWithError(w, http.StatusBadRequest, "Error while updating view")
 		return
 	}
@@ -125,7 +123,6 @@ func (handler *ApiHandler) UnhideResourcesFromViewHandler(w http.ResponseWriter,
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		fmt.Println(err)
 		respondWithError(w, http.StatusBadRequest, "Error while updating view")
 		return
 	}
@@ -339,6 +336,7 @@ func (handler *ApiHandler) GetViewResourcesHandler(w http.ResponseWriter, r *htt
 	}
 
 	whereClause := strings.Join(whereQueries, " AND ")
+}
 
 	resources := make([]Resource, 0)
 	if filterWithTags {
@@ -355,7 +353,6 @@ func (handler *ApiHandler) GetViewResourcesHandler(w http.ResponseWriter, r *htt
 			}
 		}
 
-		fmt.Println(query)
 		handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 	} else {
 		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
