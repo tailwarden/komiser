@@ -15,6 +15,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/ecs"
 	"github.com/tailwarden/komiser/providers/aws/efs"
 	"github.com/tailwarden/komiser/providers/aws/eks"
+	"github.com/tailwarden/komiser/providers/aws/elasticache"
 	"github.com/tailwarden/komiser/providers/aws/elb"
 	"github.com/tailwarden/komiser/providers/aws/iam"
 	"github.com/tailwarden/komiser/providers/aws/kms"
@@ -51,6 +52,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		elb.LoadBalancers,
 		efs.ElasticFileStorage,
 		apigateway.Apis,
+		elasticache.Clusters,
 	}
 }
 
