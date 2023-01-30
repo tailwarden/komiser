@@ -6,12 +6,15 @@ import (
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/linode/compute"
+	"github.com/tailwarden/komiser/providers/linode/storage"
 	"github.com/uptrace/bun"
 )
 
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		compute.Linodes,
+		storage.Volumes,
+		storage.Databases,
 	}
 }
 
