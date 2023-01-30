@@ -9,6 +9,7 @@ import (
 	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
 	. "github.com/tailwarden/komiser/models"
+	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -21,5 +22,6 @@ type ProviderClient struct {
 	CivoClient         *civogo.Client
 	K8sClient          *kubernetes.Clientset
 	LinodeClient       *linodego.Client
+	TencentClient      *tccvm.Client
 	Name               string
 }

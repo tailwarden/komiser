@@ -31,6 +31,7 @@ import (
 	k8s "github.com/tailwarden/komiser/providers/k8s"
 	linode "github.com/tailwarden/komiser/providers/linode"
 	oci "github.com/tailwarden/komiser/providers/oci"
+	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/uptrace/bun"
 )
 
@@ -157,6 +158,10 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.LinodeClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
 				linode.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.TencentClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				tencent.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}

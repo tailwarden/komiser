@@ -7,6 +7,7 @@ type Config struct {
 	Civo         []CivoConfig         `toml:"civo"`
 	Kubernetes   []KubernetesConfig   `toml:"k8s"`
 	Linode       []LinodeConfig       `toml:"linode"`
+	Tencent      []TencentConfig      `toml:"tencent"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 }
@@ -51,4 +52,11 @@ type OciConfig struct {
 	Name    string `toml:"name"`
 	Profile string `toml:"profile"`
 	Source  string `toml:"source"`
+}
+
+// TencentConfig holds the configuration for Tencent cloud.
+type TencentConfig struct {
+	Name      string `toml:"name"`
+	SecretID  string `toml:"secret_id"`
+	SecretKey string `toml:"secret_key"`
 }
