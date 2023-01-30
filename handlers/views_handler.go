@@ -336,7 +336,6 @@ func (handler *ApiHandler) GetViewResourcesHandler(w http.ResponseWriter, r *htt
 	}
 
 	whereClause := strings.Join(whereQueries, " AND ")
-}
 
 	resources := make([]Resource, 0)
 	if filterWithTags {
