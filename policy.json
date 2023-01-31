@@ -129,7 +129,8 @@
                 "pricing:GetProducts",
                 "ecr:DescribeRepositories",
                 "elasticfilesystem:DescribeFileSystems",
-                "rds:DescribeDBClusters"
+                "rds:DescribeDBClusters",
+                "elasticache:ListTagsForResource"
             ],
             "Resource": "*"
         }
