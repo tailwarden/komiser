@@ -390,6 +390,8 @@ function useInventory() {
       const id = router.query.view;
       const filterFound = views.find(view => view.id.toString() === id);
 
+      console.log(filterFound);
+
       if (filterFound) {
         setSearchedLoading(true);
         setStatsLoading(true);
@@ -418,7 +420,11 @@ function useInventory() {
         });
 
         settingsService
-          .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=0`,
+            payloadJson
+          )
           .then(res => {
             if (mounted) {
               if (res.error) {
