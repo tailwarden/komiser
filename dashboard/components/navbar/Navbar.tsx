@@ -1,6 +1,6 @@
 function Navbar() {
   return (
-    <nav className="fixed top-0 z-30 w-full bg-white py-4 px-8 lg:px-24 flex items-center gap-10 justify-between border-b border-black-200/30">
+    <nav className="fixed top-0 z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white py-4 px-8 lg:px-24">
       <picture className="shrink-0">
         <img
           src="./assets/img/komiser-logo.svg"
@@ -8,9 +8,9 @@ function Navbar() {
           alt="Komiser logo"
         />
       </picture>
-      <div className="flex gap-4 lg:gap-10 text-sm font-medium text-black-900">
+      <div className="flex gap-4 text-sm font-medium text-black-900 lg:gap-10">
         <a
-          className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
+          className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
           href="https://docs.komiser.io/docs/intro"
           target="_blank"
           rel="noopener noreferrer"
@@ -42,7 +42,7 @@ function Navbar() {
           Docs
         </a>
         <a
-          className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
+          className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
           href="https://www.tailwarden.com/changelog"
           target="_blank"
           rel="noopener noreferrer"
@@ -73,7 +73,7 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="hidden md:flex gap-2 items-center hover:text-primary transition-colors"
+          className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
           href="https://tally.so/r/mZjY40"
           target="_blank"
           rel="noopener noreferrer"
@@ -104,7 +104,7 @@ function Navbar() {
           Leave feedback
         </a>
         <a
-          className="flex gap-2 items-center bg-[#5865F2] hover:bg-[#4f5be2] py-2 px-4 rounded-lg text-white transition-colors"
+          className="flex items-center gap-2 rounded-lg bg-[#5865F2] py-2 px-4 text-white transition-colors hover:bg-[#4f5be2]"
           href="https://discord.tailwarden.com"
           target="_blank"
           rel="noopener noreferrer"

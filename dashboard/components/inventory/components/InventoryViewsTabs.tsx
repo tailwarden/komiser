@@ -9,17 +9,17 @@ type InventoryViewsTabsProps = {
 function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
   return (
     <>
-      <div className="text-sm font-medium text-center text-black-300">
-        <ul className="flex flex-wrap justify-between sm:justify-start -mb-[2px]">
+      <div className="text-center text-sm font-medium text-black-300">
+        <ul className="-mb-[2px] flex flex-wrap justify-between sm:justify-start">
           <li>
             <a
               onClick={() => {
                 if (router.asPath !== '/') router.push('/');
               }}
-              className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer 
+              className={`inline-block cursor-pointer select-none rounded-t-lg border-b-2 border-transparent py-4 px-2 hover:text-komiser-700 sm:p-4 
                        ${
                          !router.query.view &&
-                         `text-komiser-600 border-komiser-600 hover:text-komiser-600`
+                         `border-komiser-600 text-komiser-600 hover:text-komiser-600`
                        }`}
             >
               All resources
@@ -35,10 +35,10 @@ function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
                       router.push(`/?view=${view.id}`);
                     }
                   }}
-                  className={`select-none inline-block py-4 px-2 sm:p-4 rounded-t-lg border-b-2 border-transparent hover:text-komiser-700 cursor-pointer whitespace-nowrap
+                  className={`inline-block cursor-pointer select-none whitespace-nowrap rounded-t-lg border-b-2 border-transparent py-4 px-2 hover:text-komiser-700 sm:p-4
                        ${
                          router.query.view === view.id.toString() &&
-                         `text-komiser-600 border-komiser-600 hover:text-komiser-600`
+                         `border-komiser-600 text-komiser-600 hover:text-komiser-600`
                        }`}
                 >
                   {view.name}

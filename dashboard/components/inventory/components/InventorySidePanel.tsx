@@ -43,19 +43,19 @@ function InventorySidePanel({
     <>
       <Sidepanel isOpen={isOpen} closeModal={closeModal}>
         {/* Modal headers */}
-        <div className="flex flex-wrap-reverse sm:flex-nowrap items-center justify-between gap-6">
+        <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
           {data && (
-            <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
               <picture className="flex-shrink-0">
                 <img
                   src={providers.providerImg(data.provider)}
-                  className="w-8 h-8 rounded-full"
+                  className="h-8 w-8 rounded-full"
                   alt={data.provider}
                 />
               </picture>
 
               <div className="flex flex-col gap-1 py-1">
-                <p className="font-medium text-black-900 w-48 truncate ...">
+                <p className="... w-48 truncate font-medium text-black-900">
                   {data.service}
                 </p>
                 <p className="flex items-center gap-2 text-xs text-black-300">
@@ -98,7 +98,7 @@ function InventorySidePanel({
             </div>
           )}
 
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex flex-shrink-0 items-center gap-2">
             <Button style="secondary" onClick={closeModal}>
               Close
             </Button>
@@ -109,7 +109,7 @@ function InventorySidePanel({
         <SidepanelTabs goTo={goTo} page={page} tabs={['Tags']} />
 
         {/* Tags form */}
-        <div className="p-6 bg-black-100 rounded-lg">
+        <div className="rounded-lg bg-black-100 p-6">
           <div className="flex flex-col gap-6">
             {page === 'tags' && (
               <form
@@ -159,7 +159,7 @@ function InventorySidePanel({
                   ))}
                 <div
                   onClick={addNewTag}
-                  className="flex items-center justify-center gap-2 py-3 bg-white hover:bg-komiser-700/10 rounded-lg text-black-900/50 text-sm transition-colors cursor-pointer"
+                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-white py-3 text-sm text-black-900/50 transition-colors hover:bg-komiser-700/10"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +217,7 @@ function InventorySidePanel({
             {page === 'delete' && (
               <>
                 <div className="flex flex-col gap-6">
-                  <div className="flex items-center justify-center bg-error-100 text-error-600 h-12 w-12 mx-auto rounded-full">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-error-100 text-error-600">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -235,7 +235,7 @@ function InventorySidePanel({
                     </svg>
                   </div>
                   <div className="flex flex-col items-center gap-6">
-                    <p className="text-black-900 font-medium text-center">
+                    <p className="text-center font-medium text-black-900">
                       Are you sure you want to delete all tags from{' '}
                       {formatNumber(bulkItems.length)}{' '}
                       {bulkItems.length > 1 ? 'resources' : 'resource'}?

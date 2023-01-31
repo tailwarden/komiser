@@ -9,12 +9,12 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
   return (
     <>
       <div
-        className={`fixed overflow-hidden opacity-0 flex items-center justify-between max-w-2xl z-40 py-4 px-6 bottom-4 left-4 right-4 sm:left-8 rounded-lg shadow-2xl text-black-900 animate-fade-in-up ${
+        className={`fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg py-4 px-6 text-black-900 opacity-0 shadow-2xl sm:left-8 ${
           hasError ? `bg-error-100 ` : `bg-success-100 `
         }`}
       >
         <div
-          className={`absolute h-1 bottom-0 left-0 animate-width-to-fit ${
+          className={`absolute bottom-0 left-0 h-1 animate-width-to-fit ${
             hasError ? `bg-error-600/60 ` : `bg-success-600/60 `
           }`}
         ></div>

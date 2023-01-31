@@ -6,7 +6,7 @@ type TooltipProps = {
 
 function Tooltip({ children }: TooltipProps) {
   return (
-    <div className="hidden absolute opacity-0 animate-fade-in-up top-24 left-6 max-w-[calc(100%-48px)] peer-hover:flex items-center py-2 px-4 rounded-lg bg-black-900 text-black-200 text-xs font-medium z-20">
+    <div className="absolute top-24 left-6 z-20 hidden max-w-[calc(100%-48px)] animate-fade-in-up items-center rounded-lg bg-black-900 py-2 px-4 text-xs font-medium text-black-200 opacity-0 peer-hover:flex">
       {children}
     </div>
   );

@@ -25,12 +25,12 @@ function InventoryStatsCards({
         Object.keys(inventoryStats).length !== 0 &&
         !error && (
           <div
-            className={`grid grid-col md:grid-cols-2 ${
+            className={`grid-col grid md:grid-cols-2 ${
               router.query.view ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
             } gap-8`}
           >
-            <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
-              <div className=" bg-komiser-100 p-4 rounded-lg">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+              <div className=" rounded-lg bg-komiser-100 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -55,7 +55,7 @@ function InventoryStatsCards({
                   ></path>
                 </svg>
               </div>
-              <div className="flex flex-col peer">
+              <div className="peer flex flex-col">
                 <p className="text-xl font-medium">
                   {formatNumber(inventoryStats.resources, 'full')}
                 </p>
@@ -63,8 +63,8 @@ function InventoryStatsCards({
               </div>
               <Tooltip>Number of active cloud services</Tooltip>
             </div>
-            <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
-              <div className=" bg-komiser-100 p-4 rounded-lg">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+              <div className=" rounded-lg bg-komiser-100 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -96,7 +96,7 @@ function InventoryStatsCards({
                   ></path>
                 </svg>
               </div>
-              <div className="flex flex-col peer">
+              <div className="peer flex flex-col">
                 <p className="text-xl font-medium">{inventoryStats.regions}</p>
                 <p className="text-sm text-black-300">Regions</p>
               </div>
@@ -104,8 +104,8 @@ function InventoryStatsCards({
                 Number of regions where you have active cloud services
               </Tooltip>
             </div>
-            <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
-              <div className=" bg-komiser-100 p-4 rounded-lg">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+              <div className=" rounded-lg bg-komiser-100 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -130,7 +130,7 @@ function InventoryStatsCards({
                   ></path>
                 </svg>
               </div>
-              <div className="flex flex-col peer">
+              <div className="peer flex flex-col">
                 <p className="text-xl font-medium">
                   ${formatNumber(inventoryStats.costs)}
                 </p>
@@ -139,8 +139,8 @@ function InventoryStatsCards({
               <Tooltip>Up-to-date monthly cost</Tooltip>
             </div>
             {router.query.view && hiddenResources && (
-              <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
-                <div className=" bg-komiser-100 p-4 rounded-lg">
+              <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+                <div className=" rounded-lg bg-komiser-100 p-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -172,7 +172,7 @@ function InventoryStatsCards({
                     ></path>
                   </svg>
                 </div>
-                <div className="flex flex-col peer">
+                <div className="peer flex flex-col">
                   <p className="text-xl font-medium">
                     {formatNumber(hiddenResources.length)}
                   </p>

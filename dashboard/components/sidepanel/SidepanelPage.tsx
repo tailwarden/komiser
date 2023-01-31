@@ -16,7 +16,7 @@ function SidepanelPage({
   return (
     <>
       {page === param && (
-        <div className={container ? 'p-6 bg-black-100 rounded-lg' : ''}>
+        <div className={container ? 'rounded-lg bg-black-100 p-6' : ''}>
           <div className="flex flex-col gap-6">{children}</div>
         </div>
       )}

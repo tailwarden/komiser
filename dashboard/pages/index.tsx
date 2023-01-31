@@ -72,7 +72,7 @@ export default function Inventory() {
         {/* Inventory views */}
         <InventoryViewsTabs views={views} router={router} />
 
-        <div className="flex items-center gap-4 flex-shrink-0">
+        <div className="flex flex-shrink-0 items-center gap-4">
           {/* Save/update views button */}
           {((filters && filters.length > 0) || router.query.view) && (
             <InventoryView
@@ -146,8 +146,8 @@ export default function Inventory() {
       {Object.keys(router.query).length > 0 &&
         displayedFilters &&
         displayedFilters.length > 0 && (
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 bg-white py-2 px-6 rounded-lg mb-8">
-            <div className="text-sm text-black-400 h-full">Filters</div>
+          <div className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white py-2 px-6">
+            <div className="h-full text-sm text-black-400">Filters</div>
             {displayedFilters.map((activeFilter, idx) => (
               <InventoryFilterSummary
                 key={idx}

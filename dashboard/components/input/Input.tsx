@@ -65,7 +65,7 @@ function Input({
         <input
           type={type}
           name={name}
-          className={`w-full pt-[1.75rem] pb-[0.75rem] px-4 text-sm bg-white text-black-900 rounded caret-primary outline outline-black-200 focus:outline-primary focus:outline-2 peer ${
+          className={`peer w-full rounded bg-white px-4 pt-[1.75rem] pb-[0.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${
             isValid === false && `outline-error-600 focus:outline-error-600`
           }`}
           placeholder=" "
@@ -86,12 +86,12 @@ function Input({
           data-lpignore="true"
           data-form-type="other"
         />
-        <span className="absolute select-none scale-75 left-4 bottom-[1.925rem] pointer-events-none text-black-300 font-normal peer-focus:scale-75 peer-focus:bottom-[1.925rem] peer-placeholder-shown:scale-[87.5%] peer-placeholder-shown:left-4 peer-placeholder-shown:bottom-[1.15rem] origin-left transition-all">
+        <span className="pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75 select-none font-normal text-black-300 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
           {label}
         </span>
       </div>
       {isValid === false && (
-        <p className="mt-2 text-error-600 text-xs">{error}</p>
+        <p className="mt-2 text-xs text-error-600">{error}</p>
       )}
     </div>
   );

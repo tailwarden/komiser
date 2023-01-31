@@ -111,7 +111,7 @@ function InventoryFilterValue({
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 min-w-[20rem]">
+    <div className="flex min-w-[20rem] flex-col gap-2">
       {/* Display multi-select */}
       {options &&
         options.length > 0 &&

@@ -14,7 +14,7 @@ function InventoryTagWrapper({
   handleChange
 }: InventoryTagWrapperProps) {
   return (
-    <div className="flex-grow grid grid-cols-2 gap-6">
+    <div className="grid flex-grow grid-cols-2 gap-6">
       <Input
         id={id}
         name="key"

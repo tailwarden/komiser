@@ -9,7 +9,7 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
   return (
     <>
       {tags && tags.length > 0 && (
-        <div className="relative group">
+        <div className="group relative">
           <div className="relative flex items-center gap-1 py-4 px-6">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,15 +32,15 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                 d="M9.5 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
               ></path>
             </svg>
-            <span className="absolute top-3 left-[2.375rem] flex items-center justify-center bg-white rounded-full h-4 w-4 text-[10px] text-black-900 font-bold">
+            <span className="absolute top-3 left-[2.375rem] flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black-900">
               {tags.length}
             </span>
           </div>
-          <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg right-6 top-11 z-10 bg-black-900 py-3 px-4 shadow-lg">
+          <div className="absolute right-6 top-11 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 shadow-lg group-hover:flex">
             {tags.map((tag, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 text-xs border-t border-white/20 -mx-4 px-4 pt-2  text-black-200 first:pt-0 first:border-none"
+                className="-mx-4 flex items-center gap-2 border-t border-white/20 px-4 pt-2 text-xs  text-black-200 first:border-none first:pt-0"
               >
                 <div className="flex items-center gap-1">
                   <svg
@@ -69,14 +69,14 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                     onClick={e => {
                       setQuery(tag.key);
                     }}
-                    className="hover:text-komiser-500 cursor-pointer"
+                    className="cursor-pointer hover:text-komiser-500"
                   >
                     {tag.key}:
                   </span>
                 </div>
                 <span
                   onClick={() => setQuery(tag.value)}
-                  className="font-medium hover:text-komiser-500 cursor-pointer"
+                  className="cursor-pointer font-medium hover:text-komiser-500"
                 >
                   {tag.value}
                 </span>

@@ -12,7 +12,7 @@ function InventorySearchBar({
   return (
     <>
       {!error && (
-        <div className="relative rounded-lg rounded-b-none overflow-hidden">
+        <div className="relative overflow-hidden rounded-lg rounded-b-none">
           {!query ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +55,7 @@ function InventorySearchBar({
             onChange={e => setQuery(e.target.value)}
             type="text"
             placeholder="Search by tags, service, name, region..."
-            className="w-full py-4 pl-14 pr-6 text-sm bg-white text-black-900 placeholder:text-black-300 caret-secondary border-b border-black-200/30 focus:outline-none"
+            className="w-full border-b border-black-200/30 bg-white py-4 pl-14 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
           />
         </div>
       )}
