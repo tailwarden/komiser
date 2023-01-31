@@ -390,8 +390,6 @@ function useInventory() {
       const id = router.query.view;
       const filterFound = views.find(view => view.id.toString() === id);
 
-      console.log(filterFound);
-
       if (filterFound) {
         setSearchedLoading(true);
         setStatsLoading(true);
@@ -604,24 +602,18 @@ function useInventory() {
         });
     }
 
-    // Infinite scrolling fetch on searched filtered list or custom view
+    // Infinite scrolling fetch on searched filtered list
     if (
       shouldFetchMore &&
       isVisible &&
       query &&
-      Object.keys(router.query).length > 0
+      Object.keys(router.query).length > 0 &&
+      !views
     ) {
       let payloadJson = '';
 
       if (!router.query.view && filters && filters.length > 0) {
         payloadJson = JSON.stringify(filters);
-      }
-
-      if (router.query.view && views && views.length > 0) {
-        const filterFound = views.find(
-          view => view.id.toString() === router.query.view
-        );
-        payloadJson = JSON.stringify(filterFound?.filters);
       }
 
       settingsService
@@ -656,6 +648,56 @@ function useInventory() {
             }
           }
         });
+    }
+
+    // Infinite scrolling fetch on searched custom view list
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      router.query.view &&
+      views &&
+      views.length > 0
+    ) {
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
+
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=${skippedSearch}`,
+            payloadJson
+          )
+          .then(res => {
+            if (mounted) {
+              if (res.error) {
+                setToast({
+                  hasError: true,
+                  title: `Filter could not be applied!`,
+                  message: `Please refresh the page and try again.`
+                });
+                setError(true);
+              } else {
+                setSearchedInventory(prev => {
+                  if (prev) {
+                    return [...prev, ...res];
+                  }
+                  return res;
+                });
+                setSkippedSearch(prev => prev + batchSize);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                } else {
+                  setShouldFetchMore(false);
+                }
+              }
+            }
+          });
+      }
     }
 
     // Infinite scrolling fetch on filtered list
@@ -707,15 +749,15 @@ function useInventory() {
       router.query.view &&
       !query
     ) {
-      const filterFound = views.find(
-        view => view.id.toString() === router.query.view
-      );
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
 
       if (filterFound) {
         const payloadJson = JSON.stringify(filterFound?.filters);
 
         settingsService
-          .getFilteredInventory(
+          .getCustomViewInventory(
+            id as string,
             `?limit=${batchSize}&skip=${skippedSearch}`,
             payloadJson
           )
