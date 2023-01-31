@@ -284,7 +284,6 @@ function useInventory() {
 
       if (filterFound) {
         setSearchedLoading(true);
-        setStatsLoading(true);
         const payloadJson = JSON.stringify(filterFound?.filters);
 
         settingsService.getHiddenResourcesFromView(id as string).then(res => {
@@ -295,18 +294,12 @@ function useInventory() {
           }
         });
 
-        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-          if (res === Error) {
-            setError(true);
-            setStatsLoading(false);
-          } else {
-            setInventoryStats(res);
-            setStatsLoading(false);
-          }
-        });
-
         settingsService
-          .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=0`,
+            payloadJson
+          )
           .then(res => {
             if (res.error) {
               setToast({
