@@ -54,7 +54,11 @@ export default function Inventory() {
     searchedLoading,
     statsLoading,
     views,
-    getViews
+    getViews,
+    hiddenResources,
+    hideResourceFromCustomView,
+    hideResourcesLoading,
+    setHideOrUnhideHasUpdate
   } = useInventory();
 
   return (
@@ -79,6 +83,8 @@ export default function Inventory() {
               router={router}
               views={views}
               getViews={getViews}
+              hiddenResources={hiddenResources}
+              setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
             />
           )}
 
@@ -191,13 +197,16 @@ export default function Inventory() {
           </div>
         )}
       {/* Inventory stats loading */}
-      {!error && statsLoading && <SkeletonStats />}
+      {!error && statsLoading && (
+        <SkeletonStats NumOfCards={router.query.view ? 4 : 3} />
+      )}
 
       {/* Inventory stats */}
       <InventoryStatsCards
         inventoryStats={inventoryStats}
         error={error}
         statsLoading={statsLoading}
+        hiddenResources={hiddenResources}
       />
 
       <div className="mt-8"></div>
@@ -224,6 +233,8 @@ export default function Inventory() {
         openBulkModal={openBulkModal}
         router={router}
         searchedLoading={searchedLoading}
+        hideResourceFromCustomView={hideResourceFromCustomView}
+        hideResourcesLoading={hideResourcesLoading}
       />
 
       {/* Infite scroll trigger */}

@@ -1,8 +1,9 @@
 import { NextRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
+  HiddenResource,
   InventoryFilterDataProps,
   ViewProps
 } from '../../../hooks/useInventory';
@@ -12,6 +13,8 @@ type useViewsProps = {
   views: ViewProps[] | undefined;
   router: NextRouter;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
+  hiddenResources: HiddenResource[] | undefined;
+  setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
 };
 
 const INITIAL_VIEW: ViewProps = {
@@ -21,17 +24,23 @@ const INITIAL_VIEW: ViewProps = {
   exclude: []
 };
 
-type Pages = 'view' | 'excluded' | 'delete';
+type Pages = 'view' | 'excluded' | 'delete' | 'hidden resources';
 
-function useViews({ setToast, views, router, getViews }: useViewsProps) {
+function useViews({
+  setToast,
+  views,
+  router,
+  getViews,
+  hiddenResources,
+  setHideOrUnhideHasUpdate
+}: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState<Pages>('view');
-
-  function populateView(newFilters: InventoryFilterDataProps[]) {
-    setView(prev => ({ ...prev, filters: newFilters }));
-  }
+  const [bulkItems, setBulkItems] = useState<number[] | []>([]);
+  const [bulkSelectCheckbox, setBulkSelectCheckbox] = useState(false);
+  const [unhideLoading, setUnhideLoading] = useState(false);
 
   function findView(currentViews: ViewProps[]) {
     return currentViews.find(
@@ -39,7 +48,15 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
     );
   }
 
-  function openModal(filters: InventoryFilterDataProps[]) {
+  function populateView(newFilters: InventoryFilterDataProps[]) {
+    setView(prev => ({ ...prev, filters: newFilters }));
+  }
+
+  function openModal(filters: InventoryFilterDataProps[], openPage?: Pages) {
+    setPage('view');
+    setBulkItems([]);
+    setBulkSelectCheckbox(false);
+
     if (!router.query.view) {
       setView(INITIAL_VIEW);
       populateView(filters);
@@ -47,6 +64,11 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
       const viewToBeManaged = findView(views!);
       setView(viewToBeManaged!);
     }
+
+    if (openPage) {
+      setPage(openPage);
+    }
+
     setIsOpen(true);
   }
 
@@ -77,16 +99,16 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
             setLoading(false);
             setToast({
               hasError: true,
-              title: `${view.name} could not be created.`,
-              message: `There was an error creating this custom view. Please refer to the logs and try again!`
+              title: `${view.name} could not be saved.`,
+              message: `There was an error saving this custom view. Please refer to the logs and try again!`
             });
           } else {
             setLoading(false);
             getViews(true, view.id.toString());
             setToast({
               hasError: false,
-              title: `${view.name} has been created.`,
-              message: `The custom view will now be accessible from the top navigation.`
+              title: `${view.name} has been saved.`,
+              message: `The custom view has been successfully saved.`
             });
             closeModal();
           }
@@ -144,6 +166,66 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
     }
   }
 
+  function onCheckboxChange(e: ChangeEvent<HTMLInputElement>, id: number) {
+    if (e.target.checked) {
+      const newArray = [...bulkItems];
+      newArray.push(id);
+      setBulkItems(newArray);
+    } else {
+      const newArray = bulkItems.filter(currentId => currentId !== id);
+      setBulkItems(newArray);
+    }
+  }
+
+  function handleBulkSelection(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.checked && hiddenResources) {
+      const arrayOfIds = hiddenResources.map(item => item.id);
+      setBulkItems(arrayOfIds);
+      setBulkSelectCheckbox(true);
+    } else {
+      setBulkItems([]);
+      setBulkSelectCheckbox(false);
+    }
+  }
+
+  function unhideResources() {
+    if (!router.query.view || bulkItems.length === 0) return;
+
+    const hiddenResourcesIds: number[] = hiddenResources!.map(
+      resource => resource.id
+    );
+    const checkboxIds: number[] = bulkItems;
+
+    const idsToExclude = hiddenResourcesIds!.filter(
+      id => checkboxIds.indexOf(id) === -1
+    );
+
+    const viewId = router.query.view.toString();
+    const newPayload = { id: Number(viewId), exclude: idsToExclude };
+    const payload = JSON.stringify(newPayload);
+
+    settingsService.unhideResourceFromView(viewId, payload).then(res => {
+      if (res === Error) {
+        setUnhideLoading(false);
+        setToast({
+          hasError: true,
+          title: 'Resources could not be unhid.',
+          message:
+            'There was an error unhiding the resources. Please refer to the logs and try again.'
+        });
+      } else {
+        setUnhideLoading(false);
+        setToast({
+          hasError: false,
+          title: 'Resources are now unhidden.',
+          message: 'The resources were successfully unhidden.'
+        });
+        setHideOrUnhideHasUpdate(true);
+        closeModal();
+      }
+    });
+  }
+
   return {
     isOpen,
     openModal,
@@ -154,7 +236,13 @@ function useViews({ setToast, views, router, getViews }: useViewsProps) {
     loading,
     page,
     goTo,
-    deleteView
+    deleteView,
+    bulkItems,
+    bulkSelectCheckbox,
+    onCheckboxChange,
+    handleBulkSelection,
+    unhideLoading,
+    unhideResources
   };
 }
 

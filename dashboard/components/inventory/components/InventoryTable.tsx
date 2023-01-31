@@ -26,6 +26,8 @@ type InventoryTableProps = {
   openBulkModal: (bulkItemsIds: string[]) => void;
   router: NextRouter;
   searchedLoading: boolean;
+  hideResourceFromCustomView: () => void;
+  hideResourcesLoading: boolean;
 };
 
 function InventoryTable({
@@ -42,7 +44,9 @@ function InventoryTable({
   inventoryStats,
   openBulkModal,
   router,
-  searchedLoading
+  searchedLoading,
+  hideResourceFromCustomView,
+  hideResourcesLoading
 }: InventoryTableProps) {
   return (
     <>
@@ -263,6 +267,8 @@ function InventoryTable({
               inventoryStats={inventoryStats}
               openBulkModal={openBulkModal}
               query={query}
+              hideResourceFromCustomView={hideResourceFromCustomView}
+              hideResourcesLoading={hideResourcesLoading}
             />
           </div>
         </>

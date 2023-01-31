@@ -1,8 +1,16 @@
-function SkeletonStats() {
-  const cards: number[] = Array.from(Array(3).keys());
+type SkeletonStatsProps = {
+  NumOfCards: number;
+};
+
+function SkeletonStats({ NumOfCards = 3 }) {
+  const cards: number[] = Array.from(Array(NumOfCards).keys());
 
   return (
-    <div className="grid grid-col md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      className={`grid grid-col md:grid-cols-2 gap-8 ${
+        NumOfCards === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+      }`}
+    >
       {cards.map(card => (
         <div
           key={card}

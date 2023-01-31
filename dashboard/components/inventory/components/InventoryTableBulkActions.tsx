@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import formatNumber from '../../../utils/formatNumber';
 import Button from '../../button/Button';
 import { InventoryStats } from '../hooks/useInventory';
@@ -7,14 +8,19 @@ type InventoryTableBulkActionsProps = {
   inventoryStats: InventoryStats | undefined;
   openBulkModal: (bulkItemsIds: string[]) => void;
   query: string;
+  hideResourceFromCustomView: () => void;
+  hideResourcesLoading: boolean;
 };
 
 function InventoryTableBulkActions({
   bulkItems,
   inventoryStats,
   openBulkModal,
-  query
+  query,
+  hideResourceFromCustomView,
+  hideResourcesLoading
 }: InventoryTableBulkActionsProps) {
+  const router = useRouter();
   return (
     <>
       {bulkItems && bulkItems.length > 0 && (
@@ -32,11 +38,25 @@ function InventoryTableBulkActions({
               style="bulk"
               onClick={() => openBulkModal(bulkItems)}
             >
-              Bulk manage tags
+              Manage tags
               <span className="flex items-center justify-center bg-primary/10 text-xs py-1 px-2 rounded-lg">
                 {formatNumber(bulkItems.length)}
               </span>
             </Button>
+
+            {router.query.view && (
+              <Button
+                size="lg"
+                style="bulk-outline"
+                onClick={hideResourceFromCustomView}
+                loading={hideResourcesLoading}
+              >
+                Hide from view
+                <span className="flex items-center justify-center bg-white/10 text-xs py-1 px-2 rounded-lg">
+                  {formatNumber(bulkItems.length)}
+                </span>
+              </Button>
+            )}
           </div>
         </div>
       )}

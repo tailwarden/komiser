@@ -67,6 +67,24 @@ export type ViewProps = {
   exclude: string[];
 };
 
+export type HiddenResource = {
+  id: number;
+  resourceId: string;
+  provider: string;
+  account: string;
+  accountId: string;
+  service: string;
+  region: string;
+  name: string;
+  createdAt: string;
+  fetchedAt: string;
+  cost: number;
+  metadata: null;
+  tags: Tag[] | [] | null;
+  link: string;
+  Value: string;
+};
+
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<
     InventoryStats | undefined
@@ -95,6 +113,9 @@ function useInventory() {
   const [searchedLoading, setSearchedLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
   const [views, setViews] = useState<ViewProps[]>();
+  const [hiddenResources, setHiddenResources] = useState<HiddenResource[]>();
+  const [hideResourcesLoading, setHideResourcesLoading] = useState(false);
+  const [hideOrUnhideHasUpdate, setHideOrUnhideHasUpdate] = useState(false);
 
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
@@ -254,6 +275,62 @@ function useInventory() {
     });
   }
 
+  // When a resource is hid or unhid, fetch inventory & hidden resources from server
+  useEffect(() => {
+    if (hideOrUnhideHasUpdate && views) {
+      resetStates();
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
+
+      if (filterFound) {
+        setSearchedLoading(true);
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService.getHiddenResourcesFromView(id as string).then(res => {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setHiddenResources(res);
+          }
+        });
+
+        settingsService
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=0`,
+            payloadJson
+          )
+          .then(res => {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+              setSearchedLoading(false);
+            } else {
+              setSearchedInventory(res);
+              setSkippedSearch(prev => prev + batchSize);
+              setSearchedLoading(false);
+              const newFiltersToDisplay: InventoryFilterDataProps[] =
+                filterFound!.filters.map(filter =>
+                  parseParams(filter, 'display', true)
+                );
+              setDisplayedFilters(newFiltersToDisplay);
+              setHideOrUnhideHasUpdate(false);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+            }
+          });
+      }
+    }
+  }, [hideOrUnhideHasUpdate]);
+
   // Getting all the views
   useEffect(() => {
     getViews();
@@ -303,14 +380,23 @@ function useInventory() {
 
     // Fetch from a custom view
     if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(
-        view => view.id.toString() === router.query.view
-      );
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
 
       if (filterFound) {
         setSearchedLoading(true);
         setStatsLoading(true);
         const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService.getHiddenResourcesFromView(id as string).then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+            } else {
+              setHiddenResources(res);
+            }
+          }
+        });
 
         settingsService.getFilteredInventoryStats(payloadJson).then(res => {
           if (mounted) {
@@ -325,7 +411,11 @@ function useInventory() {
         });
 
         settingsService
-          .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=0`,
+            payloadJson
+          )
           .then(res => {
             if (mounted) {
               if (res.error) {
@@ -505,24 +595,18 @@ function useInventory() {
         });
     }
 
-    // Infinite scrolling fetch on searched filtered list or custom view
+    // Infinite scrolling fetch on searched filtered list
     if (
       shouldFetchMore &&
       isVisible &&
       query &&
-      Object.keys(router.query).length > 0
+      Object.keys(router.query).length > 0 &&
+      !views
     ) {
       let payloadJson = '';
 
       if (!router.query.view && filters && filters.length > 0) {
         payloadJson = JSON.stringify(filters);
-      }
-
-      if (router.query.view && views && views.length > 0) {
-        const filterFound = views.find(
-          view => view.id.toString() === router.query.view
-        );
-        payloadJson = JSON.stringify(filterFound?.filters);
       }
 
       settingsService
@@ -557,6 +641,56 @@ function useInventory() {
             }
           }
         });
+    }
+
+    // Infinite scrolling fetch on searched custom view list
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      router.query.view &&
+      views &&
+      views.length > 0
+    ) {
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
+
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=${skippedSearch}`,
+            payloadJson
+          )
+          .then(res => {
+            if (mounted) {
+              if (res.error) {
+                setToast({
+                  hasError: true,
+                  title: `Filter could not be applied!`,
+                  message: `Please refresh the page and try again.`
+                });
+                setError(true);
+              } else {
+                setSearchedInventory(prev => {
+                  if (prev) {
+                    return [...prev, ...res];
+                  }
+                  return res;
+                });
+                setSkippedSearch(prev => prev + batchSize);
+
+                if (res.length >= batchSize) {
+                  setShouldFetchMore(true);
+                } else {
+                  setShouldFetchMore(false);
+                }
+              }
+            }
+          });
+      }
     }
 
     // Infinite scrolling fetch on filtered list
@@ -608,15 +742,15 @@ function useInventory() {
       router.query.view &&
       !query
     ) {
-      const filterFound = views.find(
-        view => view.id.toString() === router.query.view
-      );
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
 
       if (filterFound) {
         const payloadJson = JSON.stringify(filterFound?.filters);
 
         settingsService
-          .getFilteredInventory(
+          .getCustomViewInventory(
+            id as string,
             `?limit=${batchSize}&skip=${skippedSearch}`,
             payloadJson
           )
@@ -998,6 +1132,43 @@ function useInventory() {
     }
   }
 
+  function hideResourceFromCustomView() {
+    if (!router.query.view || bulkItems.length === 0) return;
+
+    const currentHiddenResources: number[] = hiddenResources!.map(
+      resource => resource.id
+    );
+
+    const newHiddenResources = [...currentHiddenResources, ...bulkItems];
+
+    setHideResourcesLoading(true);
+
+    const viewId = router.query.view.toString();
+    const newPayload = { id: Number(viewId), exclude: newHiddenResources };
+    const payload = JSON.stringify(newPayload);
+
+    settingsService.hideResourceFromView(viewId, payload).then(res => {
+      if (res === Error) {
+        setHideResourcesLoading(false);
+        setToast({
+          hasError: true,
+          title: 'Resources could not be hid.',
+          message:
+            'There was an error hiding the resources. Please refer to the logs and try again.'
+        });
+      } else {
+        setHideResourcesLoading(false);
+        setToast({
+          hasError: false,
+          title: 'Resources are now hidden.',
+          message:
+            'The resources were successfully hidden. They can be unhid from the custom view management.'
+        });
+        setHideOrUnhideHasUpdate(true);
+      }
+    });
+  }
+
   function deleteFilter(idx: number) {
     const updatedFilters: InventoryFilterDataProps[] = [...filters!];
     updatedFilters.splice(idx, 1);
@@ -1050,7 +1221,11 @@ function useInventory() {
     searchedLoading,
     statsLoading,
     views,
-    getViews
+    getViews,
+    hiddenResources,
+    hideResourceFromCustomView,
+    hideResourcesLoading,
+    setHideOrUnhideHasUpdate
   };
 }
 

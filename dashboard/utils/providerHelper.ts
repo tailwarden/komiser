@@ -1,4 +1,10 @@
-export type Provider = 'aws' | 'gcp' | 'ovh' | 'digitalocean' | 'azure' | 'tencent';
+export type Provider =
+  | 'aws'
+  | 'gcp'
+  | 'ovh'
+  | 'digitalocean'
+  | 'azure'
+  | 'tencent';
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -25,7 +31,7 @@ const providers = {
     }
 
     if (arg.toLowerCase() === 'tencent') {
-        label = 'Tencent';
+      label = 'Tencent';
     }
 
     return label;

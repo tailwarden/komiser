@@ -1,18 +1,22 @@
+import { useRouter } from 'next/router';
 import formatNumber from '../../../utils/formatNumber';
 import Tooltip from '../../tooltip/Tooltip';
-import { InventoryStats } from '../hooks/useInventory';
+import { HiddenResource, InventoryStats } from '../hooks/useInventory';
 
 type InventoryStatsCardsProps = {
   inventoryStats: InventoryStats | undefined;
   error: boolean;
   statsLoading: boolean;
+  hiddenResources: HiddenResource[] | undefined;
 };
 
 function InventoryStatsCards({
   inventoryStats,
   error,
-  statsLoading
+  statsLoading,
+  hiddenResources
 }: InventoryStatsCardsProps) {
+  const router = useRouter();
   return (
     <>
       {!statsLoading &&
@@ -20,7 +24,11 @@ function InventoryStatsCards({
         inventoryStats.resources !== 0 &&
         Object.keys(inventoryStats).length !== 0 &&
         !error && (
-          <div className="grid grid-col md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div
+            className={`grid grid-col md:grid-cols-2 ${
+              router.query.view ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+            } gap-8`}
+          >
             <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
               <div className=" bg-komiser-100 p-4 rounded-lg">
                 <svg
@@ -130,6 +138,51 @@ function InventoryStatsCards({
               </div>
               <Tooltip>Up-to-date monthly cost</Tooltip>
             </div>
+            {router.query.view && hiddenResources && (
+              <div className="relative flex items-center gap-4 py-8 px-6 bg-white  text-black-900  rounded-lg w-full transition-colors">
+                <div className=" bg-komiser-100 p-4 rounded-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="flex-shrink-0"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15.03 9.47l-5.06 5.06a3.576 3.576 0 115.06-5.06z"
+                    ></path>
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M18.32 5.77c-1.75-1.32-3.75-2.04-5.82-2.04-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19.79 1.24 1.71 2.31 2.71 3.17"
+                    ></path>
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8.92 19.53c1.14.48 2.35.74 3.58.74 3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-.33-.52-.69-1.01-1.06-1.47M16.01 12.7a3.565 3.565 0 01-2.82 2.82M9.97 14.53L2.5 22M22.5 2l-7.47 7.47"
+                    ></path>
+                  </svg>
+                </div>
+                <div className="flex flex-col peer">
+                  <p className="text-xl font-medium">
+                    {formatNumber(hiddenResources.length)}
+                  </p>
+                  <p className="text-sm text-black-300">Hidden resources</p>
+                </div>
+                <Tooltip>
+                  Resources that will be hidden from the inventory
+                </Tooltip>
+              </div>
+            )}
           </div>
         )}
     </>
