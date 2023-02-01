@@ -58,7 +58,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			nbOfMessagesSent := 0.0
-			if len(metricsNbOfMessagesSentOutput.Datapoints) > 0 {
+			if metricsNbOfMessagesSentOutput != nil && len(metricsNbOfMessagesSentOutput.Datapoints) > 0 {
 				nbOfMessagesSent = *metricsNbOfMessagesSentOutput.Datapoints[0].Sum
 			}
 
@@ -110,7 +110,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			nbOfMessagesDeleted := 0.0
-			if len(metricsNbOfMessagesDeletedOutput.Datapoints) > 0 {
+			if metricsNbOfMessagesDeletedOutput != nil && len(metricsNbOfMessagesDeletedOutput.Datapoints) > 0 {
 				nbOfMessagesDeleted = *metricsNbOfMessagesDeletedOutput.Datapoints[0].Sum
 			}
 
