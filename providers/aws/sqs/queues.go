@@ -84,7 +84,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			nbOfMessagesReceived := 0.0
-			if len(metricsNbOfMessagesReceivedOutput.Datapoints) > 0 {
+			if metricsNbOfMessagesReceivedOutput != nil && len(metricsNbOfMessagesReceivedOutput.Datapoints) > 0 {
 				nbOfMessagesReceived = *metricsNbOfMessagesReceivedOutput.Datapoints[0].Sum
 			}
 
