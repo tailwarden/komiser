@@ -9,7 +9,7 @@ function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar />
-      <main className="relative mt-[73px] min-h-[calc(100vh-73px)] bg-black-100 py-8 px-8 lg:px-24">
+      <main className="relative mt-[73px] min-h-screen bg-black-100 p-8 2xl:px-24">
         {children}
       </main>
     </>
