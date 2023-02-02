@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { NextRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { ViewProps } from '../hooks/useInventory';
@@ -15,39 +14,44 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
       {views && views.length > 0 && (
         <>
           <nav className="fixed top-0 left-0 bottom-0 z-20 mt-[73px] flex w-[18rem] flex-col gap-4 bg-white p-8">
-            <Link href="/">
-              <div
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium
+            <button
+              onClick={() => {
+                if (!router.query.view) return;
+                router.push('/');
+              }}
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
-                router.asPath === '/'
+                !router.query.view
                   ? 'border-l-2 border-primary bg-komiser-150 text-primary'
                   : 'text-black-400 transition-colors hover:bg-komiser-100'
               }
             `}
-              >
-                <div className={router.asPath === '/' ? 'ml-[-2px]' : ''}>
-                  <p className="w-[192px] truncate">All resources</p>
-                </div>
+            >
+              <div className={!router.query.view ? 'ml-[-2px]' : ''}>
+                <p className="w-[192px] truncate">All resources</p>
               </div>
-            </Link>
-            {views.map(item => {
-              const isActive = router.query.view === item.id.toString();
+            </button>
+            {views.map(view => {
+              const isActive = router.query.view === view.id.toString();
               return (
-                <Link key={item.id} href={`/?view=${item.id}`} passHref>
-                  <div
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium
+                <button
+                  key={view.id}
+                  onClick={() => {
+                    if (isActive) return;
+                    router.push(`/?view=${view.id}`);
+                  }}
+                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium
               ${
                 isActive
                   ? 'border-l-2 border-primary bg-komiser-150 text-primary'
                   : 'text-black-400 transition-colors hover:bg-komiser-100'
               }
             `}
-                  >
-                    <div className={isActive ? 'ml-[-2px]' : ''}>
-                      <p className="w-[192px] truncate">{item.name}</p>
-                    </div>
+                >
+                  <div className={isActive ? 'ml-[-2px]' : ''}>
+                    <p className="w-[192px] truncate">{view.name}</p>
                   </div>
-                </Link>
+                </button>
               );
             })}
           </nav>
