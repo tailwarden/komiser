@@ -71,7 +71,7 @@ export default function Inventory() {
       </Head>
 
       <InventoryLayout views={views} router={router}>
-        <div className="flex items-center justify-between gap-8">
+        <div className="flex min-h-[40px] items-center justify-between gap-8">
           {/* Inventory views */}
           <InventoryViewsHeader views={views} router={router} />
 
