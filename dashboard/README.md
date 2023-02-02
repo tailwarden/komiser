@@ -5,12 +5,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
+# From the Komiser root folder start the Komiser server, run:
+go run *.go start --config /path/to/config.toml
+
+# In a different terminal tab in the dashboard folder, run:
+NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3002](http://localhost:3002) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
