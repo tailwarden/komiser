@@ -12,6 +12,7 @@ module.exports = {
         secondary: '#065555',
         komiser: {
           100: '#F5FDFD',
+          150: '#DFF5F5',
           200: '#CCF2F2',
           300: '#99E5E5',
           400: '#66D9D9',
@@ -38,7 +39,7 @@ module.exports = {
           200: '#CFD7D7',
           300: '#95A3A3',
           400: '#697372',
-          900: '#0C1717'
+          900: '#070011'
         }
       },
       fontFamily: {

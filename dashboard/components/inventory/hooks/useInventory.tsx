@@ -86,18 +86,14 @@ export type HiddenResource = {
 };
 
 function useInventory() {
-  const [inventoryStats, setInventoryStats] = useState<
-    InventoryStats | undefined
-  >();
-  const [inventory, setInventory] = useState<InventoryItem[] | undefined>();
+  const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
+  const [inventory, setInventory] = useState<InventoryItem[]>();
   const [error, setError] = useState(false);
   const [skipped, setSkipped] = useState(0);
   const [skippedSearch, setSkippedSearch] = useState(0);
   const [inventoryHasUpdate, setInventoryHasUpdate] = useState(false);
   const [query, setQuery] = useState('');
-  const [searchedInventory, setSearchedInventory] = useState<
-    InventoryItem[] | undefined
-  >();
+  const [searchedInventory, setSearchedInventory] = useState<InventoryItem[]>();
   const [shouldFetchMore, setShouldFetchMore] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryItem>();

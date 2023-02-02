@@ -64,12 +64,13 @@ export default function Inventory() {
 
   return (
     <div className="relative">
-      <InventoryLayout>
-        <Head>
-          <title>Inventory - Komiser</title>
-          <meta name="description" content="Inventory - Komiser" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+      <Head>
+        <title>Inventory - Komiser</title>
+        <meta name="description" content="Inventory - Komiser" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <InventoryLayout views={views} router={router}>
         <div className="flex items-center justify-between gap-8">
           {/* Inventory views */}
           <InventoryViewsTabs views={views} router={router} />
