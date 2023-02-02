@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { ViewProps } from '../hooks/useInventory';
 
 type InventoryLayoutProps = {
@@ -9,6 +9,15 @@ type InventoryLayoutProps = {
 };
 
 function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
+  const [query, setQuery] = useState('');
+  let newView = views;
+
+  if (query && views && views.length > 0) {
+    newView = views.filter(view =>
+      view.name.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
   return (
     <>
       {views && views.length > 0 && (
@@ -31,29 +40,36 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
                 <p className="w-[192px] truncate">All resources</p>
               </div>
             </button>
-            {views.map(view => {
-              const isActive = router.query.view === view.id.toString();
-              return (
-                <button
-                  key={view.id}
-                  onClick={() => {
-                    if (isActive) return;
-                    router.push(`/?view=${view.id}`);
-                  }}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium
+            <input
+              placeholder="Search"
+              onChange={e => setQuery(e.target.value)}
+            />
+            {newView &&
+              newView.length > 0 &&
+              newView.map(view => {
+                const isActive = router.query.view === view.id.toString();
+                return (
+                  <button
+                    key={view.id}
+                    onClick={() => {
+                      if (isActive) return;
+                      router.push(`/?view=${view.id}`);
+                    }}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium
               ${
                 isActive
                   ? 'border-l-2 border-primary bg-komiser-150 text-primary'
                   : 'text-black-400 transition-colors hover:bg-komiser-100'
               }
             `}
-                >
-                  <div className={isActive ? 'ml-[-2px]' : ''}>
-                    <p className="w-[188px] truncate">{view.name}</p>
-                  </div>
-                </button>
-              );
-            })}
+                  >
+                    <div className={isActive ? 'ml-[-2px]' : ''}>
+                      <p className="w-[188px] truncate">{view.name}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            {newView && newView.length === 0 && <p>No results doidão</p>}
           </nav>
           <main className="ml-[17rem]">{children}</main>
         </>
