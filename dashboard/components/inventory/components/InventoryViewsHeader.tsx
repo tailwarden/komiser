@@ -1,12 +1,12 @@
 import { NextRouter } from 'next/router';
 import { ViewProps } from '../hooks/useInventory';
 
-type InventoryViewsTabsProps = {
+type InventoryViewsHeaderProps = {
   views: ViewProps[] | undefined;
   router: NextRouter;
 };
 
-function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
+function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
   return (
     <>
       <div className="text-center text-sm font-medium text-black-300">
@@ -51,4 +51,4 @@ function InventoryViewsTabs({ views, router }: InventoryViewsTabsProps) {
   );
 }
 
-export default InventoryViewsTabs;
+export default InventoryViewsHeader;
