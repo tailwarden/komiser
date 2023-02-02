@@ -104,7 +104,7 @@ export default function Inventory() {
               )}
           </div>
         </div>
-        <div className="mt-8"></div>
+        <div className="mt-6"></div>
 
         {/* Toast */}
         {toast && <Toast {...toast} dismissToast={dismissToast} />}
@@ -149,7 +149,7 @@ export default function Inventory() {
         {Object.keys(router.query).length > 0 &&
           displayedFilters &&
           displayedFilters.length > 0 && (
-            <div className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white py-2 px-6">
+            <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white py-2 px-6">
               <div className="h-full text-sm text-black-400">Filters</div>
               {displayedFilters.map((activeFilter, idx) => (
                 <InventoryFilterSummary
@@ -216,7 +216,7 @@ export default function Inventory() {
           hiddenResources={hiddenResources}
         />
 
-        <div className="mt-8"></div>
+        <div className="mt-6"></div>
         {/* Inventory list loading */}
         {!inventory &&
           !error &&

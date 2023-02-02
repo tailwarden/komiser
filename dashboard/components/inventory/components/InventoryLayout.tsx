@@ -13,7 +13,7 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
     <>
       {views && views.length > 0 && (
         <>
-          <nav className="fixed top-0 left-0 bottom-0 z-20 mt-[73px] flex w-[18rem] flex-col gap-4 bg-white p-8">
+          <nav className="fixed top-0 left-0 bottom-0 z-20 mt-[73px] flex w-[17rem] flex-col gap-4 bg-white p-6">
             <button
               onClick={() => {
                 if (!router.query.view) return;
@@ -49,13 +49,13 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
             `}
                 >
                   <div className={isActive ? 'ml-[-2px]' : ''}>
-                    <p className="w-[192px] truncate">{view.name}</p>
+                    <p className="w-[188px] truncate">{view.name}</p>
                   </div>
                 </button>
               );
             })}
           </nav>
-          <main className="ml-[18rem]">{children}</main>
+          <main className="ml-[17rem]">{children}</main>
         </>
       )}
     </>
