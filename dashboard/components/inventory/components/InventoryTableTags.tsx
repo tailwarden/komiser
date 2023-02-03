@@ -3,9 +3,16 @@ import { Tag } from '../hooks/useInventory';
 type InventoryTableTagsProps = {
   tags: [] | Tag[] | null;
   setQuery: (query: string) => void;
+  id: string;
+  bulkItems: [] | string[];
 };
 
-function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
+function InventoryTableTags({
+  tags,
+  setQuery,
+  id,
+  bulkItems
+}: InventoryTableTagsProps) {
   return (
     <>
       {tags && tags.length > 0 && (
@@ -32,7 +39,13 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                 d="M9.5 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
               ></path>
             </svg>
-            <span className="absolute top-3 left-[2.375rem] flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black-900">
+            <span
+              className={`text-black-900" absolute top-3 left-[2.375rem] flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold ${
+                bulkItems && bulkItems.find(currentId => currentId === id)
+                  ? 'bg-komiser-120'
+                  : ''
+              }`}
+            >
               {tags.length}
             </span>
           </div>
@@ -40,7 +53,7 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
             {tags.map((tag, index) => (
               <div
                 key={index}
-                className="-mx-4 flex items-center gap-2 border-t border-white/20 px-4 pt-2 text-xs  text-black-200 first:border-none first:pt-0"
+                className="-mx-4 flex items-center gap-2 border-t border-white/20 px-4 pt-2 text-xs text-black-200 first:border-none first:pt-0"
               >
                 <div className="flex items-center gap-1">
                   <svg

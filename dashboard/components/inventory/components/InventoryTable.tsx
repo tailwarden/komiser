@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
@@ -157,6 +157,8 @@ function InventoryTable({
                         <InventoryTableTags
                           tags={item.tags}
                           setQuery={setQuery}
+                          id={item.id}
+                          bulkItems={bulkItems}
                         />
                       </td>
                     </InventoryTableRow>
@@ -240,6 +242,8 @@ function InventoryTable({
                         <InventoryTableTags
                           tags={item.tags}
                           setQuery={setQuery}
+                          id={item.id}
+                          bulkItems={bulkItems}
                         />
                       </td>
                     </InventoryTableRow>
