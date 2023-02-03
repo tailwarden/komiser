@@ -211,7 +211,7 @@ function InventoryTable({
                         className="group relative cursor-pointer py-4 px-6"
                       >
                         <div className="peer h-full w-full"></div>
-                        <p className="... w-56 truncate xl:w-72 2xl:w-96">
+                        <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
                         <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 text-xs text-black-200 shadow-lg group-hover:flex">

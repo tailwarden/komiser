@@ -1,22 +1,59 @@
 import { NextRouter } from 'next/router';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Button from '../../button/Button';
-import { ViewProps } from '../hooks/useInventory';
+import Modal from '../../modal/Modal';
+import { ToastProps } from '../../toast/hooks/useToast';
+import { InventoryFilterDataProps, ViewProps } from '../hooks/useInventory';
+import { ViewsPages } from './view/hooks/useViews';
 
 type InventoryViewsHeaderProps = {
+  openModal: (
+    filters?: InventoryFilterDataProps[],
+    openPage?: ViewsPages | undefined
+  ) => void;
   views: ViewProps[] | undefined;
   router: NextRouter;
+  saveView: (
+    e: FormEvent<HTMLFormElement>,
+    duplicate?: boolean | undefined,
+    viewToBeDuplicated?: ViewProps | undefined
+  ) => void;
+  loading: boolean;
+  deleteLoading: boolean;
+  deleteView: (
+    dropdown?: boolean | undefined,
+    viewToBeDeleted?: ViewProps | undefined
+  ) => void;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
-function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
-  const [isOpen, setIsOpen] = useState(false);
+function InventoryViewsHeader({
+  openModal,
+  views,
+  router,
+  saveView,
+  loading,
+  deleteView,
+  deleteLoading,
+  setToast
+}: InventoryViewsHeaderProps) {
+  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  function closeModal() {
-    setIsOpen(false);
+  function closeDropdown() {
+    setDropdownIsOpen(false);
   }
 
-  function openModal() {
-    setIsOpen(true);
+  function openDropdown() {
+    setDropdownIsOpen(true);
+  }
+
+  function closeDoubleConfirmationModal() {
+    setModalIsOpen(false);
+  }
+
+  function openDoubleConfirmationModal() {
+    setModalIsOpen(true);
   }
 
   const currentView = views?.find(
@@ -25,11 +62,11 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
 
   return (
     <div className="relative">
-      <p className="flex items-center gap-2 text-lg font-medium text-black-900">
-        {currentView ? (
+      <div className="flex items-center gap-2 text-lg font-medium text-black-900">
+        {currentView && (
           <>
             <span>{currentView.name}</span>
-            <Button style="ghost" size="xs" onClick={openModal}>
+            <Button style="ghost" size="xs" onClick={openDropdown}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -48,16 +85,13 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
               </svg>
             </Button>
           </>
-        ) : (
-          <span className="font-size">All resources</span>
         )}
-      </p>
+      </div>
 
-      {isOpen && (
+      {dropdownIsOpen && (
         <>
-          {/* Dropdown transparent backdrop */}
           <div
-            onClick={closeModal}
+            onClick={closeDropdown}
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
           <div className="absolute left-0 top-10 z-[21] inline-flex w-[16rem] rounded-lg bg-white p-4 text-sm shadow-xl">
@@ -68,6 +102,10 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
                 align="left"
                 gap="md"
                 transition={false}
+                onClick={() => {
+                  closeDropdown();
+                  openModal();
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -100,6 +138,11 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
                 align="left"
                 gap="md"
                 transition={false}
+                onClick={e => {
+                  closeDropdown();
+                  saveView(e, true, currentView);
+                }}
+                loading={loading}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -131,6 +174,14 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
                 align="left"
                 gap="md"
                 transition={false}
+                onClick={() => {
+                  navigator.clipboard.writeText(document.URL);
+                  setToast({
+                    hasError: false,
+                    title: 'Link copied!',
+                    message: `${document.URL} has been copied to your clipboard.`
+                  });
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -156,13 +207,17 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
                 </svg>
                 Copy view link
               </Button>
-              <span className="m-2 -mx-4 border border-black-200/30"></span>
+              <span className="m-2 -mx-4 border-b border-black-200/40"></span>
               <Button
                 style="ghost"
                 size="sm"
                 align="left"
                 gap="md"
                 transition={false}
+                onClick={() => {
+                  closeDropdown();
+                  openDoubleConfirmationModal();
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -185,6 +240,59 @@ function InventoryViewsHeader({ views, router }: InventoryViewsHeaderProps) {
           </div>
         </>
       )}
+
+      <Modal isOpen={modalIsOpen} closeModal={closeDoubleConfirmationModal}>
+        <div className="flex w-full flex-col gap-6 rounded-lg">
+          <div className="flex flex-col gap-6">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-error-100 text-error-600">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10zM12 8v5M11.995 16h.009"
+                ></path>
+              </svg>
+            </div>
+            <div className="flex flex-col items-center gap-6">
+              <p className="text-center font-medium text-black-900">
+                Are you sure you want to delete this view?
+              </p>
+              <p className="text-sm text-black-400">
+                This is a permanent action.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-end gap-6">
+            <Button
+              type="button"
+              size="lg"
+              style="ghost"
+              onClick={closeDoubleConfirmationModal}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              size="lg"
+              style="delete"
+              onClick={() => {
+                deleteView(true, currentView);
+              }}
+              loading={deleteLoading}
+            >
+              {deleteLoading ? 'Deleting...' : 'Delete view'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

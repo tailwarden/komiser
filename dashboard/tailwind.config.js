@@ -74,10 +74,30 @@ module.exports = {
             transform: 'translateY(0)'
           }
         },
+        'fade-in-down-short': {
+          '0%': {
+            opacity: 0.5,
+            transform: 'translateY(-5%)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
         'fade-in-up': {
           '0%': {
             opacity: 0.5,
             transform: 'translateY(15%)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
+        'fade-in-up-short': {
+          '0%': {
+            opacity: 0.5,
+            transform: 'translateY(5%)'
           },
           '100%': {
             opacity: 1,
@@ -101,14 +121,32 @@ module.exports = {
           '100%': {
             width: '100%'
           }
+        },
+        'wide-pulse': {
+          '0%': {
+            transform: 'scale(1, 1)',
+            opacity: 0
+          },
+
+          '50%': {
+            opacity: 0.35
+          },
+
+          '100%': {
+            transform: 'scale(2.25, 2.25)',
+            opacity: 0
+          }
         }
       },
       animation: {
         'fade-in': 'fade-in 250ms ease forwards',
         'fade-in-up': 'fade-in-up 250ms ease forwards',
+        'fade-in-up-short': 'fade-in-up-short 250ms ease forwards',
         'fade-in-down': 'fade-in-down 250ms ease forwards',
+        'fade-in-down-short': 'fade-in-down-short 250ms ease forwards',
         'fade-in-left': 'fade-in-left 250ms ease forwards',
-        'width-to-fit': 'width-to-fit 5000ms ease-in forwards'
+        'width-to-fit': 'width-to-fit 5000ms ease-in forwards',
+        'wide-pulse': 'wide-pulse 2000ms ease-in infinite'
       }
     }
   },

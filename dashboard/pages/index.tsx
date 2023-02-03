@@ -8,7 +8,6 @@ import InventoryLayout from '../components/inventory/components/InventoryLayout'
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
-import InventoryViewsHeader from '../components/inventory/components/InventoryViewsHeader';
 import InventoryView from '../components/inventory/components/view/InventoryView';
 import useInventory from '../components/inventory/hooks/useInventory';
 import SkeletonFilters from '../components/skeleton/SkeletonFilters';
@@ -73,8 +72,11 @@ export default function Inventory() {
       <InventoryLayout views={views} router={router}>
         <div className="flex min-h-[40px] items-center justify-between gap-8">
           {/* Inventory views */}
-          <InventoryViewsHeader views={views} router={router} />
-
+          {!router.query.view && (
+            <p className="flex items-center gap-2 text-lg font-medium text-black-900">
+              All Resources
+            </p>
+          )}
           <div className="flex flex-shrink-0 items-center gap-4">
             {/* Save/update views button */}
             {((filters && filters.length > 0) || router.query.view) && (
