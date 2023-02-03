@@ -53,9 +53,9 @@ function InventoryFilterSummary({
     >
       {(deleteFilter || resetData) && (
         <div
-          className={`absolute bottom-[.35rem] right-1 ${
-            bg ? 'bg-white' : 'bg-black-100'
-          }`}
+          className={`absolute bottom-[.35rem] ${
+            deleteFilter ? 'right-1' : 'right-0'
+          } ${bg ? 'bg-white' : 'bg-black-100'}`}
         >
           <Button
             size="xs"

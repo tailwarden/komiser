@@ -70,7 +70,7 @@ function InventoryFilter({
             onClick={toggle}
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
-          <div className="absolute right-0 top-12 z-[21] inline-flex min-w-[16rem] rounded-lg bg-white p-4 text-sm shadow-xl">
+          <div className="absolute right-0 top-12 z-[21] inline-flex min-w-[16rem] max-w-[21rem] rounded-lg bg-white p-4 text-sm shadow-xl">
             <div className="flex w-full flex-col">
               {/* Filter breadcrumbs */}
               <InventoryFilterBreadcrumbs step={step} goTo={goTo} />

@@ -76,6 +76,7 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
                     height="16"
                     fill="none"
                     viewBox="0 0 24 24"
+                    className="hover:bg-black-100"
                   >
                     <path
                       stroke="currentColor"
@@ -117,7 +118,7 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
         )}
         {query && newView && newView.length === 0 && (
           <div className="flex items-center text-xs text-black-400">
-            There are no custom views with this name.
+            There are no views with this name.
           </div>
         )}
       </nav>
