@@ -13,6 +13,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		core.Pods,
 		core.Services,
+		core.Deployments,
 	}
 }
 
