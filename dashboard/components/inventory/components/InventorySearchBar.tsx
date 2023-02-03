@@ -26,7 +26,7 @@ function InventorySearchBar({
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 d="M11.5 21a9.5 9.5 0 100-19 9.5 9.5 0 000 19zM22 22l-2-2"
               ></path>
             </svg>
@@ -44,7 +44,7 @@ function InventorySearchBar({
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
               ></path>
             </svg>

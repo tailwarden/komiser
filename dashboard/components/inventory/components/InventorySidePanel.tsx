@@ -77,7 +77,7 @@ function InventorySidePanel({
                         stroke="currentColor"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth="2"
+                        strokeWidth="1.5"
                         d="M13 11l8.2-8.2M22 6.8V2h-4.8M11 2H9C4 2 2 4 2 9v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2"
                       ></path>
                     </svg>
@@ -149,7 +149,7 @@ function InventorySidePanel({
                               stroke="currentColor"
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              strokeWidth="2"
+                              strokeWidth="1.5"
                               d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
                             ></path>
                           </svg>
@@ -229,7 +229,7 @@ function InventorySidePanel({
                         stroke="currentColor"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth="2"
+                        strokeWidth="1.5"
                         d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10zM12 8v5M11.995 16h.009"
                       ></path>
                     </svg>

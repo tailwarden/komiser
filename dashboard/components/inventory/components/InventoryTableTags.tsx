@@ -22,13 +22,13 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 d="M4.17 15.3l4.53 4.53a4.78 4.78 0 006.75 0l4.39-4.39a4.78 4.78 0 000-6.75L15.3 4.17a4.75 4.75 0 00-3.6-1.39l-5 .24c-2 .09-3.59 1.68-3.69 3.67l-.24 5c-.06 1.35.45 2.66 1.4 3.61z"
               ></path>
               <path
                 stroke="currentColor"
                 strokeLinecap="round"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 d="M9.5 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
               ></path>
             </svg>
@@ -55,13 +55,13 @@ function InventoryTableTags({ tags, setQuery }: InventoryTableTagsProps) {
                       stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="2"
+                      strokeWidth="1.5"
                       d="M4.17 15.3l4.53 4.53a4.78 4.78 0 006.75 0l4.39-4.39a4.78 4.78 0 000-6.75L15.3 4.17a4.75 4.75 0 00-3.6-1.39l-5 .24c-2 .09-3.59 1.68-3.69 3.67l-.24 5c-.06 1.35.45 2.66 1.4 3.61z"
                     ></path>
                     <path
                       stroke="currentColor"
                       strokeLinecap="round"
-                      strokeWidth="2"
+                      strokeWidth="1.5"
                       d="M9.5 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
                     ></path>
                   </svg>

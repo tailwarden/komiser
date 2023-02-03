@@ -82,7 +82,7 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
                       stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="2"
+                      strokeWidth="1.5"
                       d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
                     ></path>
                   </svg>

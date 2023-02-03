@@ -27,7 +27,7 @@ function Navbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeMiterlimit="10"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M21 7v10c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V7c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5z"
             ></path>
             <path
@@ -35,7 +35,7 @@ function Navbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeMiterlimit="10"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M14.5 4.5v2c0 1.1.9 2 2 2h2M10 13l-2 2 2 2M14 13l2 2-2 2"
             ></path>
           </svg>
@@ -59,14 +59,14 @@ function Navbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeMiterlimit="10"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M8 2v3M16 2v3M7 11h8M7 15h5M15 22H9c-5 0-6-2.06-6-6.18V9.65c0-4.7 1.67-5.96 5-6.15h8c3.33.18 5 1.45 5 6.15V16"
             ></path>
             <path
               stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M21 16l-6 6v-3c0-2 1-3 3-3h3z"
             ></path>
           </svg>
@@ -89,7 +89,7 @@ function Navbar() {
               stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M11 2.75H9c-5 0-7 2-7 7v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2"
             ></path>
             <path
@@ -97,7 +97,7 @@ function Navbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeMiterlimit="10"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M16.04 3.77l-7.88 7.88c-.3.3-.6.89-.66 1.32l-.43 3.01c-.16 1.09.61 1.85 1.7 1.7l3.01-.43c.42-.06 1.01-.36 1.32-.66l7.88-7.88c1.36-1.36 2-2.94 0-4.94-2-2-3.58-1.36-4.94 0zM14.91 4.9a7.144 7.144 0 004.94 4.94"
             ></path>
           </svg>
