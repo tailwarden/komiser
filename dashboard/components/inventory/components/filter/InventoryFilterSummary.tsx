@@ -49,13 +49,13 @@ function InventoryFilterSummary({
     <div
       className={`${bg ? 'bg-white' : 'bg-black-100'} ${
         deleteFilter || resetData ? 'pr-12' : 'pr-4'
-      } relative flex text-black-900/70 p-2 pr-12 text-xs rounded max-w-[calc(100vw-250px)] md:max-w-[calc(100vw-400px)] overflow-hidden`}
+      } relative flex max-w-[calc(100vw-250px)] overflow-hidden rounded p-2 pr-12 text-xs text-black-900/70 md:max-w-[calc(100vw-400px)]`}
     >
       {(deleteFilter || resetData) && (
         <div
-          className={`absolute bottom-[.35rem] right-1 ${
-            bg ? 'bg-white' : 'bg-black-100'
-          }`}
+          className={`absolute bottom-[.35rem] ${
+            deleteFilter ? 'right-1' : 'right-0'
+          } ${bg ? 'bg-white' : 'bg-black-100'}`}
         >
           <Button
             size="xs"
@@ -79,7 +79,7 @@ function InventoryFilterSummary({
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
               ></path>
             </svg>

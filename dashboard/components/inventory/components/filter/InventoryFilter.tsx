@@ -55,7 +55,7 @@ function InventoryFilter({
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeMiterlimit="10"
-            strokeWidth="2"
+            strokeWidth="1.5"
             d="M5.4 2.1h13.2c1.1 0 2 .9 2 2v2.2c0 .8-.5 1.8-1 2.3l-4.3 3.8c-.6.5-1 1.5-1 2.3V19c0 .6-.4 1.4-.9 1.7l-1.4.9c-1.3.8-3.1-.1-3.1-1.7v-5.3c0-.7-.4-1.6-.8-2.1l-3.8-4c-.5-.5-.9-1.4-.9-2V4.2c0-1.2.9-2.1 2-2.1zM10.93 2.1L6 10"
           ></path>
         </svg>
@@ -68,10 +68,10 @@ function InventoryFilter({
           {/* Dropdown transparent backdrop */}
           <div
             onClick={toggle}
-            className="hidden sm:block fixed inset-0 z-20 bg-transparent opacity-0 animate-fade-in"
+            className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
-          <div className="absolute inline-flex min-w-[16rem] right-0 top-12 bg-white p-4 shadow-xl text-sm rounded-lg z-[21]">
-            <div className="flex flex-col w-full">
+          <div className="absolute right-0 top-12 z-[21] inline-flex min-w-[16rem] max-w-[21rem] rounded-lg bg-white p-4 text-sm shadow-xl">
+            <div className="flex w-full flex-col">
               {/* Filter breadcrumbs */}
               <InventoryFilterBreadcrumbs step={step} goTo={goTo} />
               <div className="mt-2"></div>
@@ -102,7 +102,7 @@ function InventoryFilter({
                     filter();
                   }}
                 >
-                  <div className="max-h-[calc(100vh-23rem)] overflow-auto -mr-4 pb-2">
+                  <div className="-mr-4 max-h-[calc(100vh-23rem)] overflow-auto pb-2">
                     <InventoryFilterValue
                       data={data}
                       handleValueCheck={handleValueCheck}
@@ -114,11 +114,11 @@ function InventoryFilter({
                     />
                   </div>
                   {inlineError.hasError && (
-                    <p className="text-error-600 text-xs pb-4 font-medium">
+                    <p className="pb-4 text-xs font-medium text-error-600">
                       {inlineError.message}
                     </p>
                   )}
-                  <div className="flex justify-end border-t -mx-4 -mb-4 px-4 py-4">
+                  <div className="-mx-4 -mb-4 flex justify-end border-t px-4 py-4">
                     <Button
                       type="submit"
                       disabled={

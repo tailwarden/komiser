@@ -203,10 +203,10 @@ const settingsService = {
     }
   },
 
-  async getHiddenResourcesFromView(viewId: string) {
+  async getHiddenResourcesFromView(id: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/views/${viewId}/hidden/resources`,
+        `${BASE_URL}/views/${id}/hidden/resources`,
         settings('GET')
       );
       const data = await res.json();
@@ -216,10 +216,10 @@ const settingsService = {
     }
   },
 
-  async hideResourceFromView(viewId: string, payload: string) {
+  async hideResourceFromView(id: string, payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/views/${viewId}/resources/hide`,
+        `${BASE_URL}/views/${id}/resources/hide`,
         settings('POST', payload)
       );
       const data = await res.json();
@@ -229,10 +229,10 @@ const settingsService = {
     }
   },
 
-  async unhideResourceFromView(viewId: string, payload: string) {
+  async unhideResourceFromView(id: string, payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/views/${viewId}/resources/unhide`,
+        `${BASE_URL}/views/${id}/resources/unhide`,
         settings('POST', payload)
       );
       const data = await res.json();
@@ -252,7 +252,7 @@ const settingsService = {
     }
   },
 
-  async updateView(id: number, payload: string) {
+  async updateView(id: string, payload: string) {
     try {
       const res = await fetch(
         `${BASE_URL}/views/${id}`,
@@ -265,7 +265,7 @@ const settingsService = {
     }
   },
 
-  async deleteView(id: number) {
+  async deleteView(id: string) {
     try {
       const res = await fetch(`${BASE_URL}/views/${id}`, settings('DELETE'));
       const data = await res.json();
