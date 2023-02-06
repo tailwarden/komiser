@@ -18,7 +18,7 @@
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
 [![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/tailwarden/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
-Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, OCI, DigitalOcean, Kubernetes and CIVO), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
+Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, OCI, DigitalOcean, Kubernetes and CIVO, Linode and Tencent), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
 
 *Cloud version is available in private beta, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)*
 
@@ -26,7 +26,7 @@ Komiser is an open-source cloud-agnostic resource manager. It integrates with mu
 
 ## Komiser CLI, try it out! 🚀
 ---
-The easiest way to get started with Komiser is to install the [Komiser CLI](https://docs.komiser.io/docs/overview/introduction/getting-started) by running the `Homebrew` commands below. Don't have Homebrew? Install it [here](https://docs.brew.sh/Installation).
+The easiest way to get started with Komiser is to install the [Komiser CLI](https://docs.komiser.io/docs/overview/introduction/getting-started?utm_source=github&utm_medium=social) by running the `Homebrew` commands below. Don't have Homebrew? Install it [here](https://docs.brew.sh/Installation).
 
 ```
 brew tap tailwarden/komiser
@@ -79,33 +79,29 @@ Below are the available downloads for the latest version of Komiser (3.0.0). Ple
 ## Installation on AWS
 
 ### Connect Komiser CLI to your AWS account. 
-* Connect a [local deployment](https://docs.komiser.io/docs/Cloud%20Providers/aws#local-komiser-cli-single-account?utm_source=github&utm_medium=social) of Komiser CLI to you AWS account
+* Connect a [local deployment](https://docs.komiser.io/docs/cloud-providers/aws#local-komiser-cli-single-account?utm_source=github&utm_medium=social) of Komiser CLI to you AWS account
 
 ### Deploy Komiser to single account access EKS cluster (Helm chart)
-* If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#eks-installation-single-account?utm_source=github&utm_medium=social). 
+* If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/cloud-providers/aws#eks-installation-single-account?utm_source=github&utm_medium=social). 
 
 Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&t=45s)
 
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
-* If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/Cloud%20Providers/aws#multiple-account-eks-helm-chart-installation?utm_source=github&utm_medium=social).
+* If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/cloud-providers/aws#multiple-account-eks-helm-chart-installation?utm_source=github&utm_medium=social).
 
 ## Installation on Civo
 
-Connect a local deployment of Komiser CLI to your [**Civo**](https://docs.komiser.io/docs/Cloud%20Providers/civo?utm_source=github&utm_medium=social) account. 
+Connect a local deployment of Komiser CLI to your [**Civo**](https://docs.komiser.io/docs/cloud-providers/civo?utm_source=github&utm_medium=social) account. 
 
 Watch the installation [video here](https://www.youtube.com/watch?v=NBbEpoW-kVs)
 
 ## Installation on OCI
 
-Connect a local deployment of Komiser CLI to your [**OCI**](https://docs.komiser.io/docs/Cloud%20Providers/oci?utm_source=github&utm_medium=social) account.
+Connect a local deployment of Komiser CLI to your [**OCI**](https://docs.komiser.io/docs/cloud-providers/oci?utm_source=github&utm_medium=social) account.
 
 ## Installation on Digital Ocean
 
-Connect a local deployment of Komiser CLI to you [**Digital Ocean**](https://docs.komiser.io/docs/Cloud%20Providers/digital-ocean?utm_source=github&utm_medium=social) account.
-
-## Installation on OVH
-
-Connect a local deployment of Komiser CLI to your [**OVH**](https://docs.komiser.io/docs/Cloud%20Providers/ovh?utm_source=github&utm_medium=social) account
+Connect a local deployment of Komiser CLI to you [**Digital Ocean**](https://docs.komiser.io/docs/cloud-providers/digital-ocean?utm_source=github&utm_medium=social) account.
 
 # Documentation 📖
 
