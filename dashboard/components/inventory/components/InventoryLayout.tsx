@@ -1,5 +1,6 @@
 import { NextRouter } from 'next/router';
 import { ReactNode, useState } from 'react';
+import useBanner from '../../banner/hooks/useBanner';
 import { ViewProps } from '../hooks/useInventory';
 
 type InventoryLayoutProps = {
@@ -10,6 +11,8 @@ type InventoryLayoutProps = {
 
 function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
   const [query, setQuery] = useState('');
+  const { displayBanner } = useBanner();
+
   let newView = views;
 
   if (query && views && views.length > 0) {
@@ -20,7 +23,11 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 bottom-0 z-20 mt-[73px] flex w-[17rem] flex-col gap-4 bg-white p-6">
+      <nav
+        className={`fixed ${
+          displayBanner ? 'mt-[145px]' : 'mt-[73px]'
+        } left-0 bottom-0 top-0 z-20 flex w-[17rem] flex-col gap-4 bg-white p-6`}
+      >
         <button
           onClick={() => {
             if (!router.query.view) return;
