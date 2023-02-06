@@ -103,7 +103,7 @@ A few important things to note when adding functions that call the cloud provide
 * Install Go dependencies:
 
 ```
-go download
+go mod download
 ```
 
 * Switch to dashboard folder and install npm dependencies:
