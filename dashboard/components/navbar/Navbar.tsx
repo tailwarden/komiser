@@ -1,8 +1,8 @@
-type NavbarProps = {
-  displayBanner: boolean;
-};
+import { useContext } from 'react';
+import LayoutContext from '../layout/context/LayoutContext';
 
-function Navbar({ displayBanner }: NavbarProps) {
+function Navbar() {
+  const { displayBanner } = useContext(LayoutContext);
   return (
     <nav
       className={`fixed ${

@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
-import { ReactNode, useState } from 'react';
-import useBanner from '../../banner/hooks/useBanner';
+import { ReactNode, useContext, useState } from 'react';
+import LayoutContext from '../../layout/context/LayoutContext';
 import { ViewProps } from '../hooks/useInventory';
 
 type InventoryLayoutProps = {
@@ -11,7 +11,7 @@ type InventoryLayoutProps = {
 
 function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
   const [query, setQuery] = useState('');
-  const { displayBanner } = useBanner();
+  const { displayBanner } = useContext(LayoutContext);
 
   let newView = views;
 

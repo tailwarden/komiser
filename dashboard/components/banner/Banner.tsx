@@ -1,12 +1,15 @@
+import { useContext } from 'react';
+import formatNumber from '../../utils/formatNumber';
 import Button from '../button/Button';
+import LayoutContext from '../layout/context/LayoutContext';
 
 type BannerProps = {
-  displayBanner: boolean;
-  dismissBanner: () => void;
   githubStars: number | undefined;
 };
 
-function Banner({ displayBanner, dismissBanner, githubStars }: BannerProps) {
+function Banner({ githubStars }: BannerProps) {
+  const { displayBanner, dismissBanner } = useContext(LayoutContext);
+
   return (
     <div
       className={`${
@@ -16,10 +19,16 @@ function Banner({ displayBanner, dismissBanner, githubStars }: BannerProps) {
       <span className="text-sm font-medium text-white">
         Support Komiser by giving us a star on GitHub.
       </span>
-      <Button style="bulk-outline">Star Komiser {githubStars}</Button>
+
+      {githubStars && (
+        <Button style="bulk-outline">
+          Star Komiser {formatNumber(githubStars)}
+        </Button>
+      )}
+
       <button
         onClick={dismissBanner}
-        className="absolute right-2 cursor-pointer rounded-lg p-3 text-white transition-colors hover:bg-white/10 active:bg-black-900/10"
+        className="absolute right-8 cursor-pointer rounded-lg p-3 text-white transition-colors hover:bg-white/10 active:bg-black-900/10"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

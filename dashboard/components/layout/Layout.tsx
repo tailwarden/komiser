@@ -1,23 +1,25 @@
 import { ReactNode } from 'react';
 import Banner from '../banner/Banner';
-import useBanner from '../banner/hooks/useBanner';
+import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
 import Navbar from '../navbar/Navbar';
+import LayoutContext from './context/LayoutContext';
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 function Layout({ children }: LayoutProps) {
-  const { displayBanner, dismissBanner, githubStars } = useBanner();
+  const { displayBanner, dismissBanner, githubStars } = useGithubStarBanner();
+
+  // If there is no display banner flag in the localStorage, create one:
+  if (typeof window !== 'undefined' && !localStorage.displayGithubStarBanner) {
+    localStorage.displayGithubStarBanner = 'true';
+  }
 
   return (
-    <>
-      <Banner
-        displayBanner={displayBanner}
-        githubStars={githubStars}
-        dismissBanner={dismissBanner}
-      />
-      <Navbar displayBanner={displayBanner} />
+    <LayoutContext.Provider value={{ displayBanner, dismissBanner }}>
+      <Banner githubStars={githubStars} />
+      <Navbar />
       <main
         className={`relative ${
           displayBanner ? 'mt-[145px]' : 'mt-[73px]'
@@ -25,7 +27,7 @@ function Layout({ children }: LayoutProps) {
       >
         {children}
       </main>
-    </>
+    </LayoutContext.Provider>
   );
 }
 

@@ -13,20 +13,20 @@ async function getKomiserGithubStars() {
   }
 }
 
-function useBanner() {
+function useGithubStarBanner() {
   const [displayBanner, setDisplayBanner] = useState(false);
   const [githubStars, setGithubStars] = useState<number>();
 
   function checkLocalStorageForBannerStatus() {
     if (typeof window !== 'undefined') {
-      return localStorage.displayBanner;
+      return localStorage.displayGithubStarBanner;
     }
     return null;
   }
 
   function dismissBanner() {
     setDisplayBanner(false);
-    localStorage.displayBanner = 'false';
+    localStorage.displayGithubStarBanner = 'false';
   }
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function useBanner() {
     }
   }, []);
 
-  return { displayBanner, dismissBanner, githubStars };
+  return { displayBanner, setDisplayBanner, dismissBanner, githubStars };
 }
 
-export default useBanner;
+export default useGithubStarBanner;
