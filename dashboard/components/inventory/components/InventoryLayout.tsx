@@ -89,31 +89,33 @@ function InventoryLayout({ children, views, router }: InventoryLayoutProps) {
                 )}
               </div>
             </div>
-            {newView &&
-              newView.length > 0 &&
-              newView.map(view => {
-                const isActive = router.query.view === view.id.toString();
-                return (
-                  <button
-                    key={view.id}
-                    onClick={() => {
-                      if (isActive) return;
-                      router.push(`/?view=${view.id}`);
-                    }}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
+            <div className="-mx-4 flex flex-col gap-4 overflow-auto px-4">
+              {newView &&
+                newView.length > 0 &&
+                newView.map(view => {
+                  const isActive = router.query.view === view.id.toString();
+                  return (
+                    <button
+                      key={view.id}
+                      onClick={() => {
+                        if (isActive) return;
+                        router.push(`/?view=${view.id}`);
+                      }}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 isActive
                   ? 'border-l-2 border-primary bg-komiser-150 text-primary'
                   : 'text-black-400 transition-colors hover:bg-komiser-100'
               }
             `}
-                  >
-                    <div className={isActive ? 'ml-[-2px]' : ''}>
-                      <p className="w-[188px] truncate">{view.name}</p>
-                    </div>
-                  </button>
-                );
-              })}
+                    >
+                      <div className={isActive ? 'ml-[-2px]' : ''}>
+                        <p className="w-[188px] truncate">{view.name}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+            </div>
           </>
         )}
         {query && newView && newView.length === 0 && (
