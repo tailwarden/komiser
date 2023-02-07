@@ -6,7 +6,6 @@ import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
-import Modal from '../../../modal/Modal';
 import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
 import SidepanelPage from '../../../sidepanel/SidepanelPage';
@@ -14,21 +13,21 @@ import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   HiddenResource,
-  InventoryFilterDataProps,
+  InventoryFilterData,
   InventoryStats,
-  ViewProps
+  View
 } from '../../hooks/useInventory';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import InventoryViewsHeader from '../InventoryViewsHeader';
 import useViews from './hooks/useViews';
 
 type InventoryViewProps = {
-  filters: InventoryFilterDataProps[];
-  displayedFilters: InventoryFilterDataProps[];
+  filters: InventoryFilterData[];
+  displayedFilters: InventoryFilterData[];
   setToast: (toast: ToastProps | undefined) => void;
   inventoryStats: InventoryStats;
   router: NextRouter;
-  views: ViewProps[] | undefined;
+  views: View[] | undefined;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
   hiddenResources: HiddenResource[] | undefined;
   setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;

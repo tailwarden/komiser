@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { InventoryFilterDataProps } from '../../../hooks/useInventory';
+import { InventoryFilterData } from '../../../hooks/useInventory';
 
 const INITIAL_DATA = {
   field: undefined,
@@ -29,7 +29,7 @@ export type CostBetween = {
 function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
   const [step, setStep] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<InventoryFilterDataProps>(INITIAL_DATA);
+  const [data, setData] = useState<InventoryFilterData>(INITIAL_DATA);
   const [costBetween, setCostBetween] =
     useState<CostBetween>(INITIAL_COST_BETWEEN);
   const [inlineError, setInlineError] = useState(INITIAL_INLINE_ERROR);
@@ -72,7 +72,7 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
     setStep(1);
   }
 
-  function handleOperator(operator: InventoryFilterDataProps['operator']) {
+  function handleOperator(operator: InventoryFilterData['operator']) {
     setData(prev => ({ ...prev, operator }));
     setStep(2);
   }

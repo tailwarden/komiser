@@ -3,26 +3,26 @@ import { FormEvent, useState } from 'react';
 import Button from '../../button/Button';
 import Modal from '../../modal/Modal';
 import { ToastProps } from '../../toast/hooks/useToast';
-import { InventoryFilterDataProps, ViewProps } from '../hooks/useInventory';
+import { InventoryFilterData, View } from '../hooks/useInventory';
 import { ViewsPages } from './view/hooks/useViews';
 
 type InventoryViewsHeaderProps = {
   openModal: (
-    filters?: InventoryFilterDataProps[],
+    filters?: InventoryFilterData[],
     openPage?: ViewsPages | undefined
   ) => void;
-  views: ViewProps[] | undefined;
+  views: View[] | undefined;
   router: NextRouter;
   saveView: (
     e: FormEvent<HTMLFormElement>,
     duplicate?: boolean | undefined,
-    viewToBeDuplicated?: ViewProps | undefined
+    viewToBeDuplicated?: View | undefined
   ) => void;
   loading: boolean;
   deleteLoading: boolean;
   deleteView: (
     dropdown?: boolean | undefined,
-    viewToBeDeleted?: ViewProps | undefined
+    viewToBeDeleted?: View | undefined
   ) => void;
   setToast: (toast: ToastProps | undefined) => void;
 };

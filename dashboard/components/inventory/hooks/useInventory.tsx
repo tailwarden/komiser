@@ -5,7 +5,7 @@ import { Provider } from '../../../utils/providerHelper';
 import useToast from '../../toast/hooks/useToast';
 import useIsVisible from './useIsVisible';
 
-export type InventoryFilterDataProps = {
+export type InventoryFilterData = {
   field:
     | 'provider'
     | 'region'
@@ -60,10 +60,10 @@ export type InventoryItem = {
 };
 export type Pages = 'tags' | 'delete';
 
-export type ViewProps = {
+export type View = {
   id: number;
   name: string;
-  filters: InventoryFilterDataProps[];
+  filters: InventoryFilterData[];
   exclude: string[];
 };
 
@@ -104,11 +104,11 @@ function useInventory() {
   const [bulkItems, setBulkItems] = useState<string[] | []>([]);
   const [bulkSelectCheckbox, setBulkSelectCheckbox] = useState(false);
   const [displayedFilters, setDisplayedFilters] =
-    useState<InventoryFilterDataProps[]>();
-  const [filters, setFilters] = useState<InventoryFilterDataProps[]>();
+    useState<InventoryFilterData[]>();
+  const [filters, setFilters] = useState<InventoryFilterData[]>();
   const [searchedLoading, setSearchedLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
-  const [views, setViews] = useState<ViewProps[]>();
+  const [views, setViews] = useState<View[]>();
   const [hiddenResources, setHiddenResources] = useState<HiddenResource[]>();
   const [hideResourcesLoading, setHideResourcesLoading] = useState(false);
   const [hideOrUnhideHasUpdate, setHideOrUnhideHasUpdate] = useState(false);
@@ -119,9 +119,32 @@ function useInventory() {
   const batchSize: number = 50;
   const router = useRouter();
 
-  // Parse URL params
-  function parseParams(
-    param: string | InventoryFilterDataProps,
+  /** Reset most of the UI states:
+   * - skipped (used to skip results in the data fetch call)
+   * - skippedSearch (same, but used to skip results in the searched data fetch call)
+   * - bulkItems (array used to nest all resource item ids selected)
+   * - bulkSelectionCheckbox (boolean that handles all checkboxes checked/unchecked toggle)
+   * - query (search value)
+   * - filters (array used to nest all filters)
+   * - displayedFilters (same, but used to nest all filters that compose the UI)
+   * - shouldFetchMore (boolean that indicates whether or not the infinite scroll fetch should be triggered)
+   */
+  function resetStates() {
+    setSkipped(0);
+    setSkippedSearch(0);
+    setBulkItems([]);
+    setBulkSelectCheckbox(false);
+    setQuery('');
+    setFilters(undefined);
+    setDisplayedFilters(undefined);
+    setShouldFetchMore(false);
+  }
+
+  /** Parse the URL Params.
+   * - Argument of type 'fetch' will output the object to fetch an inventory list and stats based on filters.
+   * - Argument of type 'display' will output the object to populate the InventoryFilterSummary component */
+  function parseURLParams(
+    param: string | InventoryFilterData,
     type: 'fetch' | 'display',
     view?: boolean
   ) {
@@ -238,20 +261,12 @@ function useInventory() {
       };
     }
 
-    return filter as InventoryFilterDataProps;
+    return filter as InventoryFilterData;
   }
 
-  function resetStates() {
-    setSkipped(0);
-    setSkippedSearch(0);
-    setBulkItems([]);
-    setBulkSelectCheckbox(false);
-    setQuery('');
-    setFilters(undefined);
-    setDisplayedFilters(undefined);
-    setShouldFetchMore(false);
-  }
-
+  /** Fetch all the custom views.
+   * - Views will be stored in the state: views.
+   */
   function getViews(edit?: boolean, viewId?: string) {
     settingsService.getViews().then(res => {
       if (res === Error) {
@@ -261,7 +276,7 @@ function useInventory() {
           message: `There was a problem fetching the views. Please try again.`
         });
       } else {
-        const sortViewsById: ViewProps[] = res;
+        const sortViewsById: View[] = res;
         sortViewsById.sort((a, b) => a.id - b.id);
         setViews(sortViewsById);
         if (edit && viewId) {
@@ -271,73 +286,11 @@ function useInventory() {
     });
   }
 
-  // When a resource is hid or unhid, fetch inventory & hidden resources from server
-  useEffect(() => {
-    if (hideOrUnhideHasUpdate && views) {
-      resetStates();
-      const id = router.query.view;
-      const filterFound = views.find(view => view.id.toString() === id);
-
-      if (filterFound) {
-        setSearchedLoading(true);
-        const payloadJson = JSON.stringify(filterFound?.filters);
-
-        settingsService.getHiddenResourcesFromView(id as string).then(res => {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setHiddenResources(res);
-          }
-        });
-
-        settingsService
-          .getCustomViewInventory(
-            id as string,
-            `?limit=${batchSize}&skip=0`,
-            payloadJson
-          )
-          .then(res => {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setError(true);
-              setSearchedLoading(false);
-            } else {
-              setSearchedInventory(res);
-              setSkippedSearch(prev => prev + batchSize);
-              setSearchedLoading(false);
-              const newFiltersToDisplay: InventoryFilterDataProps[] =
-                filterFound!.filters.map(filter =>
-                  parseParams(filter, 'display', true)
-                );
-              setDisplayedFilters(newFiltersToDisplay);
-              setHideOrUnhideHasUpdate(false);
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
-              }
-            }
-          });
-      }
-    }
-  }, [hideOrUnhideHasUpdate]);
-
-  // Getting all the views
-  useEffect(() => {
-    getViews();
-  }, []);
-
-  // Fetch the correct inventory list based on URL params
-  useEffect(() => {
-    let mounted = true;
-    resetStates();
-
-    // Fetch base inventory
+  /** Fetch base inventory and top stats for All Resources.
+   * - Inventory list will be stored in the state: inventory
+   * - Inventory top stats will be stored in the state: inventoryStats
+   */
+  function getInventoryListAndStats() {
     if (
       router.query &&
       Object.keys(router.query).length === 0 &&
@@ -349,101 +302,32 @@ function useInventory() {
       setFilters(undefined);
 
       settingsService.getInventoryStats().then(res => {
-        if (mounted) {
-          if (res === Error) {
-            setError(true);
-            setStatsLoading(false);
-          } else {
-            setInventoryStats(res);
-            setStatsLoading(false);
-          }
+        if (res === Error) {
+          setError(true);
+          setStatsLoading(false);
+        } else {
+          setInventoryStats(res);
+          setStatsLoading(false);
         }
       });
 
       settingsService
         .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
         .then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-            } else {
-              setInventory(res);
-              setSkipped(prev => prev + batchSize);
-            }
+          if (res === Error) {
+            setError(true);
+          } else {
+            setInventory(res);
+            setSkipped(prev => prev + batchSize);
           }
         });
     }
+  }
 
-    // Fetch from a custom view
-    if (router.query.view && views && views.length > 0) {
-      const id = router.query.view;
-      const filterFound = views.find(view => view.id.toString() === id);
-
-      if (filterFound) {
-        setSearchedLoading(true);
-        setStatsLoading(true);
-        const payloadJson = JSON.stringify(filterFound?.filters);
-
-        settingsService.getHiddenResourcesFromView(id as string).then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-            } else {
-              setHiddenResources(res);
-            }
-          }
-        });
-
-        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-              setStatsLoading(false);
-            } else {
-              setInventoryStats(res);
-              setStatsLoading(false);
-            }
-          }
-        });
-
-        settingsService
-          .getCustomViewInventory(
-            id as string,
-            `?limit=${batchSize}&skip=0`,
-            payloadJson
-          )
-          .then(res => {
-            if (mounted) {
-              if (res.error) {
-                setToast({
-                  hasError: true,
-                  title: `Filter could not be applied!`,
-                  message: `Please refresh the page and try again.`
-                });
-                setError(true);
-                setSearchedLoading(false);
-              } else {
-                setSearchedInventory(res);
-                setSkippedSearch(prev => prev + batchSize);
-                setSearchedLoading(false);
-                const newFiltersToDisplay: InventoryFilterDataProps[] =
-                  filterFound!.filters.map(filter =>
-                    parseParams(filter, 'display', true)
-                  );
-                setDisplayedFilters(newFiltersToDisplay);
-
-                if (res.length >= batchSize) {
-                  setShouldFetchMore(true);
-                } else {
-                  setShouldFetchMore(false);
-                }
-              }
-            }
-          });
-      }
-    }
-
-    // Fetch from filters
+  /** Fetch inventory from a filter.
+   * - Inventory list will be stored in the state: searchedInventory
+   */
+  function getInventoryListFromAFilter() {
     if (
       router.query &&
       Object.keys(router.query).length > 0 &&
@@ -463,17 +347,77 @@ function useInventory() {
       setSearchedLoading(true);
       setStatsLoading(true);
 
-      const newFilters: InventoryFilterDataProps[] = Object.keys(
+      const newFilters: InventoryFilterData[] = Object.keys(router.query).map(
+        param => parseURLParams(param as string, 'fetch')
+      );
+      const newFiltersToDisplay: InventoryFilterData[] = Object.keys(
         router.query
-      ).map(param => parseParams(param as string, 'fetch'));
-      const newFiltersToDisplay: InventoryFilterDataProps[] = Object.keys(
-        router.query
-      ).map(param => parseParams(param as string, 'display'));
+      ).map(param => parseURLParams(param as string, 'display'));
 
       const payloadJson = JSON.stringify(newFilters);
 
       settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-        if (mounted) {
+        if (res === Error) {
+          setError(true);
+          setStatsLoading(false);
+        } else {
+          setInventoryStats(res);
+          setStatsLoading(false);
+        }
+      });
+
+      settingsService
+        .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+        .then(res => {
+          if (res.error) {
+            setToast({
+              hasError: true,
+              title: `Filter could not be applied!`,
+              message: `Please refresh the page and try again.`
+            });
+            setError(true);
+            setSearchedLoading(false);
+          } else {
+            setSearchedInventory(res);
+            setFilters(newFilters);
+            setDisplayedFilters(newFiltersToDisplay);
+            setSkippedSearch(prev => prev + batchSize);
+            setSearchedLoading(false);
+
+            if (res.length >= batchSize) {
+              setShouldFetchMore(true);
+            } else {
+              setShouldFetchMore(false);
+            }
+          }
+        });
+    }
+    return null;
+  }
+
+  /** Fetch inventory, top stats and hidden resources for a given custom view.
+   * - Inventory list will be stored in the state: searchedInventory
+   * - Inventory top stats will be stored in the state: inventoryStats
+   */
+  function getCustomViewInventoryListAndStats() {
+    if (router.query.view && views && views.length > 0) {
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
+
+      if (filterFound) {
+        setSearchedLoading(true);
+        setStatsLoading(true);
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService.getHiddenResourcesFromView(id as string).then(res => {
+          if (res === Error) {
+            setError(true);
+          } else {
+            setHiddenResources(res);
+          }
+        });
+
+        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
           if (res === Error) {
             setError(true);
             setStatsLoading(false);
@@ -481,13 +425,15 @@ function useInventory() {
             setInventoryStats(res);
             setStatsLoading(false);
           }
-        }
-      });
+        });
 
-      settingsService
-        .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
-        .then(res => {
-          if (mounted) {
+        settingsService
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=0`,
+            payloadJson
+          )
+          .then(res => {
             if (res.error) {
               setToast({
                 hasError: true,
@@ -498,10 +444,14 @@ function useInventory() {
               setSearchedLoading(false);
             } else {
               setSearchedInventory(res);
-              setFilters(newFilters);
-              setDisplayedFilters(newFiltersToDisplay);
               setSkippedSearch(prev => prev + batchSize);
               setSearchedLoading(false);
+              const newFiltersToDisplay: InventoryFilterData[] =
+                filterFound!.filters.map(filter =>
+                  parseURLParams(filter, 'display', true)
+                );
+              setDisplayedFilters(newFiltersToDisplay);
+              setHideOrUnhideHasUpdate(false);
 
               if (res.length >= batchSize) {
                 setShouldFetchMore(true);
@@ -509,20 +459,39 @@ function useInventory() {
                 setShouldFetchMore(false);
               }
             }
-          }
+          });
+      } else {
+        setTimeout(() => router.push('/'), 5000);
+        return setToast({
+          hasError: true,
+          title: `Invalid view`,
+          message: `We couldn't find this view. Redirecting back to home...`
         });
+      }
     }
+    return null;
+  }
 
-    return () => {
-      mounted = false;
-    };
-  }, [router.query, views]);
-
-  // Infinite scrolling fetch effect
+  /** Whenever the page changes or views is updated, fetch the custom views, reset UI states and fetch the inventory based on the URL params */
   useEffect(() => {
-    let mounted = true;
+    if (!views) {
+      getViews();
+    }
+    resetStates();
+    getInventoryListAndStats();
+    getCustomViewInventoryListAndStats();
+    getInventoryListFromAFilter();
+  }, [router.query]);
 
-    // Infinite scrolling fetch on normal list
+  /** When a resource is hid or unhid, reset the states and call getCustomViewInventoryListAndStats. */
+  useEffect(() => {
+    if (hideOrUnhideHasUpdate) {
+      resetStates();
+      getCustomViewInventoryListAndStats();
+    }
+  }, [hideOrUnhideHasUpdate]);
+
+  function infiniteScrollInventoryList() {
     if (
       inventory &&
       inventory.length > 0 &&
@@ -538,23 +507,22 @@ function useInventory() {
       settingsService
         .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
         .then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-            } else {
-              setInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
-              setSkipped(prev => prev + batchSize);
-            }
+          if (res === Error) {
+            setError(true);
+          } else {
+            setInventory(prev => {
+              if (prev) {
+                return [...prev, ...res];
+              }
+              return res;
+            });
+            setSkipped(prev => prev + batchSize);
           }
         });
     }
+  }
 
-    // Infinite scrolling fetch on searched normal inventory
+  function infiniteScrollSearchedList() {
     if (
       shouldFetchMore &&
       isVisible &&
@@ -568,28 +536,35 @@ function useInventory() {
           `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`
         )
         .then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setError(true);
-            }
-
-            setSearchedInventory(prev => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-
-            if (res.length >= batchSize) {
-              setShouldFetchMore(true);
-            } else {
-              setShouldFetchMore(false);
-            }
-
-            setSkippedSearch(prev => prev + batchSize);
+          if (res === Error) {
+            setError(true);
           }
+
+          setSearchedInventory(prev => {
+            if (prev) {
+              return [...prev, ...res];
+            }
+            return res;
+          });
+
+          if (res.length >= batchSize) {
+            setShouldFetchMore(true);
+          } else {
+            setShouldFetchMore(false);
+          }
+
+          setSkippedSearch(prev => prev + batchSize);
         });
     }
+  }
+
+  /** Infinite scrolling handler. Identifies which inventory should be fetched on scroll. */
+  useEffect(() => {
+    // Infinite scrolling on inventory list
+    infiniteScrollInventoryList();
+
+    // Infinite scrolling on searched inventory list
+    infiniteScrollSearchedList();
 
     // Infinite scrolling fetch on searched filtered list
     if (
@@ -611,30 +586,28 @@ function useInventory() {
           payloadJson
         )
         .then(res => {
-          if (mounted) {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setLoading(false);
-            } else {
-              setSearchedInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
+          if (res.error) {
+            setToast({
+              hasError: true,
+              title: `Filter could not be applied!`,
+              message: `Please refresh the page and try again.`
+            });
+            setLoading(false);
+          } else {
+            setSearchedInventory(prev => {
+              if (prev) {
+                return [...prev, ...res];
               }
+              return res;
+            });
 
-              setSkippedSearch(prev => prev + batchSize);
+            if (res.length >= batchSize) {
+              setShouldFetchMore(true);
+            } else {
+              setShouldFetchMore(false);
             }
+
+            setSkippedSearch(prev => prev + batchSize);
           }
         });
     }
@@ -661,28 +634,26 @@ function useInventory() {
             payloadJson
           )
           .then(res => {
-            if (mounted) {
-              if (res.error) {
-                setToast({
-                  hasError: true,
-                  title: `Filter could not be applied!`,
-                  message: `Please refresh the page and try again.`
-                });
-                setError(true);
-              } else {
-                setSearchedInventory(prev => {
-                  if (prev) {
-                    return [...prev, ...res];
-                  }
-                  return res;
-                });
-                setSkippedSearch(prev => prev + batchSize);
-
-                if (res.length >= batchSize) {
-                  setShouldFetchMore(true);
-                } else {
-                  setShouldFetchMore(false);
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
                 }
+                return res;
+              });
+              setSkippedSearch(prev => prev + batchSize);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
               }
             }
           });
@@ -700,31 +671,29 @@ function useInventory() {
           payloadJson
         )
         .then(res => {
-          if (mounted) {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setLoading(false);
-            } else {
-              setQuery('');
-              setSearchedInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
+          if (res.error) {
+            setToast({
+              hasError: true,
+              title: `Filter could not be applied!`,
+              message: `Please refresh the page and try again.`
+            });
+            setLoading(false);
+          } else {
+            setQuery('');
+            setSearchedInventory(prev => {
+              if (prev) {
+                return [...prev, ...res];
               }
+              return res;
+            });
 
-              setSkippedSearch(prev => prev + batchSize);
+            if (res.length >= batchSize) {
+              setShouldFetchMore(true);
+            } else {
+              setShouldFetchMore(false);
             }
+
+            setSkippedSearch(prev => prev + batchSize);
           }
         });
     }
@@ -751,37 +720,31 @@ function useInventory() {
             payloadJson
           )
           .then(res => {
-            if (mounted) {
-              if (res.error) {
-                setToast({
-                  hasError: true,
-                  title: `Filter could not be applied!`,
-                  message: `Please refresh the page and try again.`
-                });
-                setError(true);
-              } else {
-                setSearchedInventory(prev => {
-                  if (prev) {
-                    return [...prev, ...res];
-                  }
-                  return res;
-                });
-                setSkippedSearch(prev => prev + batchSize);
-
-                if (res.length >= batchSize) {
-                  setShouldFetchMore(true);
-                } else {
-                  setShouldFetchMore(false);
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
                 }
+                return res;
+              });
+              setSkippedSearch(prev => prev + batchSize);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
               }
             }
           });
       }
     }
-
-    return () => {
-      mounted = false;
-    };
   }, [isVisible]);
 
   // Search effect behavior
@@ -1166,7 +1129,7 @@ function useInventory() {
   }
 
   function deleteFilter(idx: number) {
-    const updatedFilters: InventoryFilterDataProps[] = [...filters!];
+    const updatedFilters: InventoryFilterData[] = [...filters!];
     updatedFilters.splice(idx, 1);
     const url = updatedFilters
       .map(
