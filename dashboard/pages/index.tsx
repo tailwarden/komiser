@@ -69,7 +69,13 @@ export default function Inventory() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <InventoryLayout views={views} router={router}>
+      <InventoryLayout
+        views={views}
+        router={router}
+        error={error}
+        inventory={inventory}
+        searchedInventory={searchedInventory}
+      >
         <div className="flex min-h-[40px] items-center justify-between gap-8">
           {/* Inventory views */}
           {!router.query.view && (
