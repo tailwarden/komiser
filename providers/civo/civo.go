@@ -21,6 +21,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kubernetes.Clusters,
 		network.Firewalls,
 		network.Networks,
+		network.LoadBalancers,
 	}
 }
 
