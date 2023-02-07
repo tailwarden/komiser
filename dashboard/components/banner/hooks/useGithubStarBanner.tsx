@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 async function getKomiserGithubStars() {
@@ -16,6 +17,7 @@ async function getKomiserGithubStars() {
 function useGithubStarBanner() {
   const [displayBanner, setDisplayBanner] = useState(false);
   const [githubStars, setGithubStars] = useState<number>();
+  const router = useRouter();
 
   function checkLocalStorageForBannerStatus() {
     if (typeof window !== 'undefined') {
@@ -32,7 +34,7 @@ function useGithubStarBanner() {
   useEffect(() => {
     const shouldDisplayBanner = checkLocalStorageForBannerStatus();
 
-    if (shouldDisplayBanner !== 'false') {
+    if (shouldDisplayBanner !== 'false' && router.query.view) {
       getKomiserGithubStars().then(res => {
         if (!res.stargazers_count) {
           setGithubStars(undefined);
@@ -43,9 +45,13 @@ function useGithubStarBanner() {
         }
       });
     }
-  }, []);
+  }, [router.query.view]);
 
-  return { displayBanner, setDisplayBanner, dismissBanner, githubStars };
+  return {
+    displayBanner,
+    dismissBanner,
+    githubStars
+  };
 }
 
 export default useGithubStarBanner;

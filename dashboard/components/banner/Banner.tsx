@@ -15,7 +15,7 @@ function Banner({ githubStars }: BannerProps) {
     <div
       className={`${
         displayBanner ? 'fixed' : 'hidden'
-      } top-0 z-10 flex w-full items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3`}
+      } top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3 opacity-0`}
     >
       <span className="text-sm font-medium text-white">
         Support Komiser by giving us a star on GitHub.
