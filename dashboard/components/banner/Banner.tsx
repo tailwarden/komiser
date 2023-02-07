@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useContext } from 'react';
 import formatNumber from '../../utils/formatNumber';
 import Button from '../button/Button';
@@ -21,9 +22,24 @@ function Banner({ githubStars }: BannerProps) {
       </span>
 
       {githubStars && (
-        <Button style="bulk-outline">
-          Star Komiser {formatNumber(githubStars)}
-        </Button>
+        <a
+          href="https://github.com/tailwarden/komiser"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Button style="bulk-outline" size="md">
+            <Image
+              src="./assets/img/others/github-white.svg"
+              width="18"
+              height="16"
+              alt="Github logo"
+            />
+            <span>Star Komiser</span>
+            <div className="ml-2 -mr-6 flex h-full w-12 items-center justify-center border-l border-white/10 bg-white/10">
+              {formatNumber(githubStars)}
+            </div>
+          </Button>
+        </a>
       )}
 
       <button
