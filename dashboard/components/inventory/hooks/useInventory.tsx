@@ -447,7 +447,7 @@ function useInventory() {
               setSkippedSearch(prev => prev + batchSize);
               setSearchedLoading(false);
               const newFiltersToDisplay: InventoryFilterData[] =
-                filterFound!.filters.map(filter =>
+                filterFound.filters.map(filter =>
                   parseURLParams(filter, 'display', true)
                 );
               setDisplayedFilters(newFiltersToDisplay);
@@ -481,7 +481,7 @@ function useInventory() {
     getInventoryListAndStats();
     getCustomViewInventoryListAndStats();
     getInventoryListFromAFilter();
-  }, [router.query]);
+  }, [router.query, views]);
 
   /** When a resource is hid or unhid, reset the states and call getCustomViewInventoryListAndStats. */
   useEffect(() => {
@@ -758,10 +758,10 @@ function useInventory() {
     infiniteScrollSearchedCustomViewList();
   }, [isVisible]);
 
-  // Search effect behavior
-  // If there's a filtered list, search should only bring back results from the list
-  // If not, search should get from all inventory
-  // A filter can overwrite a search, but not the opposite
+  /** Search effect behavior:
+   * - If there's a filtered list, search should only bring back results from the list
+   * - If not, search should get from all inventory
+   * - A filter can overwrite a search, but not the opposite */
   useEffect(() => {
     let mounted = true;
 
@@ -838,6 +838,7 @@ function useInventory() {
         }
       }, 700);
     }
+
     if (router.query.view && views && views.length > 0) {
       const filterFound = views.find(
         view => view.id.toString() === router.query.view
@@ -885,7 +886,10 @@ function useInventory() {
     };
   }, [query]);
 
-  // Tags saved list refresh effect
+  /** Refresh list when tags are saved.
+   * - If it's on all resources, refetch the inventory list
+   * - If it's on a custom view, quick reload the current url
+   */
   useEffect(() => {
     let mounted = true;
 
@@ -917,12 +921,21 @@ function useInventory() {
     };
   }, [inventoryHasUpdate]);
 
-  // Functions to be exported
+  /** Clean the modal:
+   * - Sets the state data to undefined
+   * - Sets the page to 'tags'
+   */
   function cleanModal() {
     setData(undefined);
     setPage('tags');
   }
 
+  /** Opens the modal, as well as:
+   * - Calls cleanModal first
+   * - Sets the data to the inventory item passed as argument
+   * - If the inventory item has tags, set the tags state to them.
+   * - If the inventory item has no tags, set the tags state to an array with an object inside containing empty key and value
+   */
   function openModal(inventoryItem: InventoryItem) {
     cleanModal();
     setData(inventoryItem);
@@ -936,20 +949,27 @@ function useInventory() {
     setIsOpen(true);
   }
 
+  /** Opens the modal for bulk operations, as well as:
+   * - Calls cleanModal first
+   * - Set the tags state to an array with an object inside containing empty key and value
+   */
   function openBulkModal() {
     cleanModal();
     setTags([{ key: '', value: '' }]);
     setIsOpen(true);
   }
 
+  /** Close the modal by setting the isOpen to false */
   function closeModal() {
     setIsOpen(false);
   }
 
+  /** Handles the page change inside the modal */
   function goTo(newPage: Pages) {
     setPage(newPage);
   }
 
+  /** Handles the change for the key and value inputs inside the modal */
   function handleChange(newData: Partial<Tag>, id?: number) {
     if (tags && typeof id === 'number') {
       const newValues: Tag[] = [...tags];
@@ -961,6 +981,7 @@ function useInventory() {
     }
   }
 
+  /** Creates another key and value object inside the tags array */
   function addNewTag() {
     if (tags) {
       setTags(prev => {
@@ -972,6 +993,7 @@ function useInventory() {
     }
   }
 
+  /** Removes the current key and value object from the tags array, but only if there is at least another key and value object in the tags array */
   function removeTag(id: number) {
     if (tags) {
       const newValues: Tag[] = [...tags.slice(0, id), ...tags.slice(id + 1)];
@@ -979,6 +1001,7 @@ function useInventory() {
     }
   }
 
+  /** Handles the tags saving/updating/deleting operations */
   function updateTags(action?: 'delete') {
     if (tags && data) {
       const serviceId = data.id;
@@ -1021,6 +1044,7 @@ function useInventory() {
     }
   }
 
+  /** Handles the bulk tags saving/deleting operations */
   function updateBulkTags(action?: 'delete') {
     if (!data && tags && bulkItems) {
       const payload = {
@@ -1066,6 +1090,7 @@ function useInventory() {
     }
   }
 
+  /** Handles the checkbox change for bulk actions, when ticking the checkbox resource by resource */
   function onCheckboxChange(e: ChangeEvent<HTMLInputElement>, id: string) {
     if (e.target.checked) {
       const newArray = [...bulkItems];
@@ -1077,6 +1102,7 @@ function useInventory() {
     }
   }
 
+  /** Handles the checkbox change for all resources */
   function handleBulkSelection(e: ChangeEvent<HTMLInputElement>) {
     if (inventory && e.target.checked && !query) {
       const arrayOfIds = inventory.map(item => item.id);
@@ -1101,6 +1127,7 @@ function useInventory() {
     }
   }
 
+  /** Handles the add hide resource operation from the bulk actions bottom bar */
   function hideResourceFromCustomView() {
     if (!router.query.view || bulkItems.length === 0) return;
 
@@ -1138,6 +1165,7 @@ function useInventory() {
     });
   }
 
+  /** Handles the filter removal from the InventorySummary and also the URL params */
   function deleteFilter(idx: number) {
     const updatedFilters: InventoryFilterData[] = [...filters!];
     updatedFilters.splice(idx, 1);
