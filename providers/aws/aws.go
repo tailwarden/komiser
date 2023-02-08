@@ -9,6 +9,7 @@ import (
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
+	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
 	"github.com/tailwarden/komiser/providers/aws/ecr"
@@ -53,6 +54,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		efs.ElasticFileStorage,
 		apigateway.Apis,
 		elasticache.Clusters,
+		cloudwatch.Alarms,
 	}
 }
 
