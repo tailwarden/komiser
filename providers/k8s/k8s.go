@@ -14,6 +14,11 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		core.Pods,
 		core.Services,
 		core.Deployments,
+		core.Ingress,
+		core.PersistentVolumes,
+		core.PersistentVolumeClaims,
+		core.ServiceAccounts,
+		core.Deployments,
 	}
 }
 
