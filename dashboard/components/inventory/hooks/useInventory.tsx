@@ -491,6 +491,7 @@ function useInventory() {
     }
   }, [hideOrUnhideHasUpdate]);
 
+  /** Load the next 50 results when the user scrolls the inventory list to the end */
   function infiniteScrollInventoryList() {
     if (
       inventory &&
@@ -522,6 +523,47 @@ function useInventory() {
     }
   }
 
+  /** Load the next 50 results when the user scrolls a filtered inventory list to the end */
+  function infiniteScrollFilteredList() {
+    if (shouldFetchMore && isVisible && filters && !query) {
+      setError(false);
+
+      const payloadJson = JSON.stringify(filters);
+      settingsService
+        .getFilteredInventory(
+          `?limit=${batchSize}&skip=${skippedSearch}`,
+          payloadJson
+        )
+        .then(res => {
+          if (res.error) {
+            setToast({
+              hasError: true,
+              title: `Filter could not be applied!`,
+              message: `Please refresh the page and try again.`
+            });
+            setLoading(false);
+          } else {
+            setQuery('');
+            setSearchedInventory(prev => {
+              if (prev) {
+                return [...prev, ...res];
+              }
+              return res;
+            });
+
+            if (res.length >= batchSize) {
+              setShouldFetchMore(true);
+            } else {
+              setShouldFetchMore(false);
+            }
+
+            setSkippedSearch(prev => prev + batchSize);
+          }
+        });
+    }
+  }
+
+  /** Load the next 50 results when the user scrolls a searched inventory list to the end */
   function infiniteScrollSearchedList() {
     if (
       shouldFetchMore &&
@@ -558,21 +600,14 @@ function useInventory() {
     }
   }
 
-  /** Infinite scrolling handler. Identifies which inventory should be fetched on scroll. */
-  useEffect(() => {
-    // Infinite scrolling on inventory list
-    infiniteScrollInventoryList();
-
-    // Infinite scrolling on searched inventory list
-    infiniteScrollSearchedList();
-
-    // Infinite scrolling fetch on searched filtered list
+  /** Load the next 50 results when the user scrolls a searched and filtered inventory list to the end */
+  function infiniteScrollSearchedAndFilteredList() {
     if (
       shouldFetchMore &&
       isVisible &&
       query &&
       Object.keys(router.query).length > 0 &&
-      !views
+      !router.query.view
     ) {
       let payloadJson = '';
 
@@ -611,94 +646,10 @@ function useInventory() {
           }
         });
     }
+  }
 
-    // Infinite scrolling fetch on searched custom view list
-    if (
-      shouldFetchMore &&
-      isVisible &&
-      query &&
-      router.query.view &&
-      views &&
-      views.length > 0
-    ) {
-      const id = router.query.view;
-      const filterFound = views.find(view => view.id.toString() === id);
-
-      if (filterFound) {
-        const payloadJson = JSON.stringify(filterFound?.filters);
-
-        settingsService
-          .getCustomViewInventory(
-            id as string,
-            `?limit=${batchSize}&skip=${skippedSearch}`,
-            payloadJson
-          )
-          .then(res => {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setError(true);
-            } else {
-              setSearchedInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
-              setSkippedSearch(prev => prev + batchSize);
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
-              }
-            }
-          });
-      }
-    }
-
-    // Infinite scrolling fetch on filtered list
-    if (shouldFetchMore && isVisible && filters && !query) {
-      setError(false);
-
-      const payloadJson = JSON.stringify(filters);
-      settingsService
-        .getFilteredInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}`,
-          payloadJson
-        )
-        .then(res => {
-          if (res.error) {
-            setToast({
-              hasError: true,
-              title: `Filter could not be applied!`,
-              message: `Please refresh the page and try again.`
-            });
-            setLoading(false);
-          } else {
-            setQuery('');
-            setSearchedInventory(prev => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-
-            if (res.length >= batchSize) {
-              setShouldFetchMore(true);
-            } else {
-              setShouldFetchMore(false);
-            }
-
-            setSkippedSearch(prev => prev + batchSize);
-          }
-        });
-    }
-
-    // Infinite scrolling fetch on custom view
+  /** Load the next 50 results when the user scrolls a custom view list to the end */
+  function infiniteScrollCustomViewList() {
     if (
       shouldFetchMore &&
       isVisible &&
@@ -745,6 +696,66 @@ function useInventory() {
           });
       }
     }
+  }
+
+  /** Load the next 50 results when the user scrolls a searched custom view list to the end */
+  function infiniteScrollSearchedCustomViewList() {
+    if (
+      shouldFetchMore &&
+      isVisible &&
+      query &&
+      router.query.view &&
+      views &&
+      views.length > 0
+    ) {
+      const id = router.query.view;
+      const filterFound = views.find(view => view.id.toString() === id);
+
+      if (filterFound) {
+        const payloadJson = JSON.stringify(filterFound?.filters);
+
+        settingsService
+          .getCustomViewInventory(
+            id as string,
+            `?limit=${batchSize}&skip=${skippedSearch}`,
+            payloadJson
+          )
+          .then(res => {
+            if (res.error) {
+              setToast({
+                hasError: true,
+                title: `Filter could not be applied!`,
+                message: `Please refresh the page and try again.`
+              });
+              setError(true);
+            } else {
+              setSearchedInventory(prev => {
+                if (prev) {
+                  return [...prev, ...res];
+                }
+                return res;
+              });
+              setSkippedSearch(prev => prev + batchSize);
+
+              if (res.length >= batchSize) {
+                setShouldFetchMore(true);
+              } else {
+                setShouldFetchMore(false);
+              }
+            }
+          });
+      }
+    }
+  }
+
+  /** Infinite scrolling handler. Identifies which inventory should be fetched on scroll. */
+  useEffect(() => {
+    infiniteScrollInventoryList();
+    infiniteScrollFilteredList();
+    infiniteScrollSearchedList();
+    infiniteScrollSearchedAndFilteredList();
+    infiniteScrollCustomViewList();
+    infiniteScrollSearchedCustomViewList();
   }, [isVisible]);
 
   // Search effect behavior
@@ -914,7 +925,6 @@ function useInventory() {
 
   function openModal(inventoryItem: InventoryItem) {
     cleanModal();
-
     setData(inventoryItem);
 
     if (inventoryItem.tags && inventoryItem.tags.length > 0) {
