@@ -39,6 +39,7 @@ func ServiceAccounts(ctx context.Context, client providers.ProviderClient) ([]Re
 				Service:    "ServiceAccount",
 				ResourceId: fmt.Sprintf("%s", sa.UID),
 				Name:       sa.Name,
+				Region:     sa.Namespace,
 				Cost:       0,
 				CreatedAt:  sa.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
