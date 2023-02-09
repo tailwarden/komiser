@@ -67,6 +67,7 @@ export default function Inventory() {
   const hasNoInventory =
     (!error && inventoryStats && Object.keys(inventoryStats).length === 0) ||
     (!error && inventory && inventory.length === 0);
+
   const isNotCustomView = !router.query.view;
 
   const hasFilterOrCustomView =
@@ -108,14 +109,13 @@ export default function Inventory() {
         searchedInventory={searchedInventory}
       >
         <div className="flex min-h-[40px] items-center justify-between gap-8">
-          {/* Inventory views */}
           {isNotCustomView && (
             <p className="flex items-center gap-2 text-lg font-medium text-black-900">
               All Resources
             </p>
           )}
           <div className="flex flex-shrink-0 items-center gap-4">
-            {/* Custom view saving or updating components */}
+            {/* Custom view header and view management sidepanel */}
             {hasFilterOrCustomView && (
               <InventoryView
                 filters={filters}
@@ -130,7 +130,7 @@ export default function Inventory() {
               />
             )}
 
-            {/* Filter by dropdown */}
+            {/* Filter component */}
             {displayFilterIfIsNotCustomView && (
               <InventoryFilter
                 router={router}
@@ -142,38 +142,10 @@ export default function Inventory() {
         </div>
         <div className="mt-6"></div>
 
-        {/* Error state */}
-        {hasErrorAndNoInventory && (
-          <ErrorPage
-            title="Network request error"
-            message="There was an error fetching the inventory resources. Check out the server logs for more info and try again."
-            action={
-              <Button size="lg" style="outline" onClick={() => router.reload()}>
-                Refresh the page
-              </Button>
-            }
-          />
-        )}
-
-        {/* Empty state */}
-        {hasNoInventory && (
-          <EmptyState
-            title="No inventory available"
-            message="Check if your connected cloud accounts have active services running or if you have attached the proper permissions."
-            action={() => {
-              router.push(
-                'https://docs.komiser.io/docs/overview/introduction/getting-started/'
-              );
-            }}
-            actionLabel="Check our docs"
-            mascotPose="greetings"
-          />
-        )}
-
-        {/* Filters skeleton */}
+        {/* Active filters skeleton */}
         {loadingFilters && <SkeletonFilters />}
 
-        {/* Active filters list */}
+        {/* Active filters */}
         {hasFilters && (
           <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white py-2 px-6">
             <div className="h-full text-sm text-black-400">Filters</div>
@@ -225,6 +197,7 @@ export default function Inventory() {
             )}
           </div>
         )}
+
         {/* Inventory stats loading */}
         {!error && statsLoading && (
           <SkeletonStats NumOfCards={router.query.view ? 4 : 3} />
@@ -282,6 +255,34 @@ export default function Inventory() {
           bulkItems={bulkItems}
           updateBulkTags={updateBulkTags}
         />
+
+        {/* Error state */}
+        {hasErrorAndNoInventory && (
+          <ErrorPage
+            title="Network request error"
+            message="There was an error fetching the inventory resources. Check out the server logs for more info and try again."
+            action={
+              <Button size="lg" style="outline" onClick={() => router.reload()}>
+                Refresh the page
+              </Button>
+            }
+          />
+        )}
+
+        {/* Empty state */}
+        {hasNoInventory && (
+          <EmptyState
+            title="No inventory available"
+            message="Check if your connected cloud accounts have active services running or if you have attached the proper permissions."
+            action={() => {
+              router.push(
+                'https://docs.komiser.io/docs/overview/introduction/getting-started/'
+              );
+            }}
+            actionLabel="Check our docs"
+            mascotPose="greetings"
+          />
+        )}
       </InventoryLayout>
     </div>
   );

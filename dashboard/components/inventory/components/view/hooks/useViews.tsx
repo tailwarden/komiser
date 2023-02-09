@@ -12,7 +12,11 @@ type useViewsProps = {
   setToast: (toast: ToastProps | undefined) => void;
   views: View[] | undefined;
   router: NextRouter;
-  getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
+  getViews: (
+    edit?: boolean | undefined,
+    viewName?: string | undefined,
+    redirect?: boolean | undefined
+  ) => void;
   hiddenResources: HiddenResource[] | undefined;
   setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
 };
@@ -92,7 +96,7 @@ function useViews({
   ) {
     e.preventDefault();
 
-    if (view && !duplicate && e) {
+    if (view && !duplicate) {
       setLoading(true);
       const payload = view;
       const payloadJson = JSON.stringify(payload);
@@ -129,14 +133,13 @@ function useViews({
             });
           } else {
             setLoading(false);
-            getViews();
+            getViews(false, undefined, true);
             setToast({
               hasError: false,
               title: `${view.name} has been created.`,
               message: `The custom view will now be accessible from the side navigation.`
             });
             closeModal();
-            router.push('/');
           }
         });
       }
@@ -158,7 +161,7 @@ function useViews({
           });
         } else {
           setLoading(false);
-          getViews();
+          getViews(false, undefined, true);
           setToast({
             hasError: false,
             title: `${view.name} has been duplicated.`,

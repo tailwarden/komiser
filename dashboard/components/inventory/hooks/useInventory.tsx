@@ -267,7 +267,7 @@ function useInventory() {
   /** Fetch all the custom views.
    * - Views will be stored in the state: views.
    */
-  function getViews(edit?: boolean, viewId?: string) {
+  function getViews(edit?: boolean, viewId?: string, redirect?: boolean) {
     settingsService.getViews().then(res => {
       if (res === Error) {
         setToast({
@@ -281,6 +281,13 @@ function useInventory() {
         setViews(sortViewsById);
         if (edit && viewId) {
           router.push(`/?view=${viewId}`, undefined, { shallow: true });
+        }
+
+        if (redirect) {
+          const idFromNewCustomView = res[res.length - 1].id;
+          router.push(`/?view=${idFromNewCustomView}`, undefined, {
+            shallow: true
+          });
         }
       }
     });
