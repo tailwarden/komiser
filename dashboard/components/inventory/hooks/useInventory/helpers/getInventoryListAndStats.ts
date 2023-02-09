@@ -20,7 +20,6 @@ type getInventoryListAndStatsProps = {
   ) => void;
   setInventoryStats: (inventoryStats: InventoryStats | undefined) => void;
   batchSize: number;
-  skipped: number;
   setInventory: (inventory: InventoryItem[] | undefined) => void;
   setSkipped: (value: SetStateAction<number>) => void;
 };
@@ -38,7 +37,6 @@ function getInventoryListAndStats({
   setSearchedInventory,
   setInventoryStats,
   batchSize,
-  skipped,
   setInventory,
   setSkipped
 }: getInventoryListAndStatsProps) {
@@ -62,16 +60,14 @@ function getInventoryListAndStats({
       }
     });
 
-    settingsService
-      .getInventory(`?limit=${batchSize}&skip=${skipped}`)
-      .then(res => {
-        if (res === Error) {
-          setError(true);
-        } else {
-          setInventory(res);
-          setSkipped(prev => prev + batchSize);
-        }
-      });
+    settingsService.getInventory(`?limit=${batchSize}&skip=0`).then(res => {
+      if (res === Error) {
+        setError(true);
+      } else {
+        setInventory(res);
+        setSkipped(prev => prev + batchSize);
+      }
+    });
   }
 }
 

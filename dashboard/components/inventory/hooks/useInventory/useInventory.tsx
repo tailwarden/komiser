@@ -15,6 +15,7 @@ import {
 import getInventoryListAndStats from './helpers/getInventoryListAndStats';
 import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
 import parseURLParams from './helpers/parseURLParams';
+import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -100,83 +101,6 @@ function useInventory() {
     });
   }
 
-  /** Fetch inventory, top stats and hidden resources for a given custom view.
-   * - Inventory list will be stored in the state: searchedInventory
-   * - Inventory top stats will be stored in the state: inventoryStats
-   */
-  function getCustomViewInventoryListAndStats() {
-    if (router.query.view && views && views.length > 0) {
-      const id = router.query.view;
-      const filterFound = views.find(view => view.id.toString() === id);
-
-      if (filterFound) {
-        setSearchedLoading(true);
-        setStatsLoading(true);
-        const payloadJson = JSON.stringify(filterFound?.filters);
-
-        settingsService.getHiddenResourcesFromView(id as string).then(res => {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setHiddenResources(res);
-          }
-        });
-
-        settingsService.getFilteredInventoryStats(payloadJson).then(res => {
-          if (res === Error) {
-            setError(true);
-            setStatsLoading(false);
-          } else {
-            setInventoryStats(res);
-            setStatsLoading(false);
-          }
-        });
-
-        settingsService
-          .getCustomViewInventory(
-            id as string,
-            `?limit=${batchSize}&skip=0`,
-            payloadJson
-          )
-          .then(res => {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setError(true);
-              setSearchedLoading(false);
-            } else {
-              setSearchedInventory(res);
-              setSkippedSearch(prev => prev + batchSize);
-              setSearchedLoading(false);
-              const newFiltersToDisplay: InventoryFilterData[] =
-                filterFound.filters.map(filter =>
-                  parseURLParams(filter, 'display', true)
-                );
-              setDisplayedFilters(newFiltersToDisplay);
-              setHideOrUnhideHasUpdate(false);
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
-              }
-            }
-          });
-      } else {
-        setTimeout(() => router.push('/'), 5000);
-        return setToast({
-          hasError: true,
-          title: `Invalid view`,
-          message: `We couldn't find this view. Redirecting back to home...`
-        });
-      }
-    }
-    return null;
-  }
-
   /** Whenever the page changes or views is updated, fetch the custom views, reset UI states and fetch the inventory based on the URL params */
   useEffect(() => {
     resetStates();
@@ -185,7 +109,7 @@ function useInventory() {
       getViews();
     }
 
-    if (views && !shouldFetchMore) {
+    if (views) {
       getInventoryListAndStats({
         router,
         setStatsLoading,
@@ -195,7 +119,6 @@ function useInventory() {
         setSearchedInventory,
         setInventoryStats,
         batchSize,
-        skipped,
         setInventory,
         setSkipped
       });
@@ -213,7 +136,22 @@ function useInventory() {
         setSkippedSearch,
         setShouldFetchMore
       });
-      getCustomViewInventoryListAndStats();
+      getCustomViewInventoryListAndStats({
+        router,
+        views,
+        setSearchedLoading,
+        setStatsLoading,
+        setToast,
+        setError,
+        setHiddenResources,
+        setInventoryStats,
+        batchSize,
+        setSearchedInventory,
+        setDisplayedFilters,
+        setSkippedSearch,
+        setHideOrUnhideHasUpdate,
+        setShouldFetchMore
+      });
     }
   }, [router.query, views]);
 
@@ -221,7 +159,22 @@ function useInventory() {
   useEffect(() => {
     if (hideOrUnhideHasUpdate) {
       resetStates();
-      getCustomViewInventoryListAndStats();
+      getCustomViewInventoryListAndStats({
+        router,
+        views,
+        setSearchedLoading,
+        setStatsLoading,
+        setToast,
+        setError,
+        setHiddenResources,
+        setInventoryStats,
+        batchSize,
+        setSearchedInventory,
+        setDisplayedFilters,
+        setSkippedSearch,
+        setHideOrUnhideHasUpdate,
+        setShouldFetchMore
+      });
     }
   }, [hideOrUnhideHasUpdate]);
 
