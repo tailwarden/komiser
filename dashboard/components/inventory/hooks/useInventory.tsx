@@ -1187,6 +1187,36 @@ function useInventory() {
     router.push(url ? `/?${url}` : '', undefined, { shallow: true });
   }
 
+  /** Conditional helpers */
+  const hasErrorAndNoInventory =
+    (error && !inventoryStats) || (error && !inventory);
+
+  const hasNoInventory =
+    (!error && inventoryStats && Object.keys(inventoryStats).length === 0) ||
+    (!error && inventory && inventory.length === 0);
+
+  const isNotCustomView = !router.query.view;
+
+  const hasFilterOrCustomView =
+    (filters && filters.length > 0) || router.query.view;
+
+  const displayFilterIfIsNotCustomView =
+    !error &&
+    !router.query.view &&
+    ((inventory && inventory.length > 0) ||
+      (searchedInventory && searchedInventory.length > 0));
+
+  const loadingFilters =
+    Object.keys(router.query).length > 0 && !displayedFilters;
+
+  const hasFilters =
+    Object.keys(router.query).length > 0 &&
+    displayedFilters &&
+    displayedFilters.length > 0;
+
+  const loadingInventory =
+    !inventory && !error && !query && !displayedFilters && !router.query.view;
+
   return {
     inventoryStats,
     inventory,
@@ -1229,7 +1259,15 @@ function useInventory() {
     hiddenResources,
     hideResourceFromCustomView,
     hideResourcesLoading,
-    setHideOrUnhideHasUpdate
+    setHideOrUnhideHasUpdate,
+    hasErrorAndNoInventory,
+    hasNoInventory,
+    isNotCustomView,
+    hasFilterOrCustomView,
+    displayFilterIfIsNotCustomView,
+    loadingFilters,
+    hasFilters,
+    loadingInventory
   };
 }
 

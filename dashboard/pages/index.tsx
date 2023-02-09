@@ -58,37 +58,16 @@ export default function Inventory() {
     hiddenResources,
     hideResourceFromCustomView,
     hideResourcesLoading,
-    setHideOrUnhideHasUpdate
+    setHideOrUnhideHasUpdate,
+    hasErrorAndNoInventory,
+    hasNoInventory,
+    isNotCustomView,
+    hasFilterOrCustomView,
+    displayFilterIfIsNotCustomView,
+    loadingFilters,
+    hasFilters,
+    loadingInventory
   } = useInventory();
-
-  const hasErrorAndNoInventory =
-    (error && !inventoryStats) || (error && !inventory);
-
-  const hasNoInventory =
-    (!error && inventoryStats && Object.keys(inventoryStats).length === 0) ||
-    (!error && inventory && inventory.length === 0);
-
-  const isNotCustomView = !router.query.view;
-
-  const hasFilterOrCustomView =
-    (filters && filters.length > 0) || router.query.view;
-
-  const displayFilterIfIsNotCustomView =
-    !error &&
-    !router.query.view &&
-    ((inventory && inventory.length > 0) ||
-      (searchedInventory && searchedInventory.length > 0));
-
-  const loadingFilters =
-    Object.keys(router.query).length > 0 && !displayedFilters;
-
-  const hasFilters =
-    Object.keys(router.query).length > 0 &&
-    displayedFilters &&
-    displayedFilters.length > 0;
-
-  const loadingInventory =
-    !inventory && !error && !query && !displayedFilters && !router.query.view;
 
   return (
     <div className="relative">
@@ -149,14 +128,15 @@ export default function Inventory() {
         {hasFilters && (
           <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white py-2 px-6">
             <div className="h-full text-sm text-black-400">Filters</div>
-            {displayedFilters.map((activeFilter, idx) => (
-              <InventoryFilterSummary
-                key={idx}
-                id={idx}
-                data={activeFilter}
-                deleteFilter={isNotCustomView ? deleteFilter : undefined}
-              />
-            ))}
+            {displayedFilters &&
+              displayedFilters.map((activeFilter, idx) => (
+                <InventoryFilterSummary
+                  key={idx}
+                  id={idx}
+                  data={activeFilter}
+                  deleteFilter={isNotCustomView ? deleteFilter : undefined}
+                />
+              ))}
             {isNotCustomView && (
               <Button size="sm" style="ghost" onClick={() => router.push('/')}>
                 <svg

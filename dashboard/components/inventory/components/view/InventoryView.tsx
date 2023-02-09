@@ -170,7 +170,7 @@ function InventoryView({
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
             <>
-              <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
+              <div className="max-h-[calc(100vh-300px)] overflow-y-auto overflow-x-hidden">
                 <table className="w-full table-auto bg-white text-left text-xs text-gray-900">
                   <thead className="bg-white">
                     <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
@@ -194,7 +194,12 @@ function InventoryView({
                     {hiddenResources.map(item => (
                       <tr
                         key={item.id}
-                        className="border-b border-black-200/30 bg-white last:border-none hover:bg-black-100"
+                        className={`border-b border-black-200/30 last:border-none ${
+                          bulkItems &&
+                          bulkItems.find(currentId => currentId === item.id)
+                            ? 'border-black-200/70 bg-komiser-120'
+                            : 'border-black-200/30 bg-white hover:bg-black-100/50'
+                        } border-b last:border-none`}
                       >
                         <td className="py-4 px-2">
                           <Checkbox
