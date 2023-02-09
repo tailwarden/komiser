@@ -258,6 +258,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 			handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
 		}
 		respondWithJSON(w, 200, resources)
+		return
 	}
 
 	if filterWithTags {
