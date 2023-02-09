@@ -12,6 +12,7 @@ import {
   Tag,
   View
 } from './types/useInventoryTypes';
+import getInventoryListAndStats from './utils/getInventoryListAndStats';
 import parseURLParams from './utils/parseURLParams';
 
 function useInventory() {
@@ -96,44 +97,6 @@ function useInventory() {
         }
       }
     });
-  }
-
-  /** Fetch base inventory and top stats for All Resources.
-   * - Inventory list will be stored in the state: inventory
-   * - Inventory top stats will be stored in the state: inventoryStats
-   */
-  function getInventoryListAndStats() {
-    if (
-      router.query &&
-      Object.keys(router.query).length === 0 &&
-      !router.query.view
-    ) {
-      setStatsLoading(true);
-      setDisplayedFilters(undefined);
-      setSearchedInventory(undefined);
-      setFilters(undefined);
-
-      settingsService.getInventoryStats().then(res => {
-        if (res === Error) {
-          setError(true);
-          setStatsLoading(false);
-        } else {
-          setInventoryStats(res);
-          setStatsLoading(false);
-        }
-      });
-
-      settingsService
-        .getInventory(`?limit=${batchSize}&skip=${skipped}`)
-        .then(res => {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setInventory(res);
-            setSkipped(prev => prev + batchSize);
-          }
-        });
-    }
   }
 
   /** Fetch inventory from a filter.
@@ -286,13 +249,29 @@ function useInventory() {
 
   /** Whenever the page changes or views is updated, fetch the custom views, reset UI states and fetch the inventory based on the URL params */
   useEffect(() => {
+    resetStates();
+
     if (!views) {
       getViews();
     }
-    resetStates();
-    getInventoryListAndStats();
-    getCustomViewInventoryListAndStats();
-    getInventoryListFromAFilter();
+
+    if (views && !shouldFetchMore) {
+      getInventoryListAndStats({
+        router,
+        setStatsLoading,
+        setDisplayedFilters,
+        setFilters,
+        setError,
+        setSearchedInventory,
+        setInventoryStats,
+        batchSize,
+        skipped,
+        setInventory,
+        setSkipped
+      });
+      getCustomViewInventoryListAndStats();
+      getInventoryListFromAFilter();
+    }
   }, [router.query, views]);
 
   /** When a resource is hid or unhid, reset the states and call getCustomViewInventoryListAndStats. */
