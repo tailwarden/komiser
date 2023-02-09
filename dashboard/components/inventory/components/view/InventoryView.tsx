@@ -22,10 +22,10 @@ import InventoryViewsHeader from '../InventoryViewsHeader';
 import useViews from './hooks/useViews';
 
 type InventoryViewProps = {
-  filters: InventoryFilterData[];
-  displayedFilters: InventoryFilterData[];
+  filters: InventoryFilterData[] | undefined;
+  displayedFilters: InventoryFilterData[] | undefined;
   setToast: (toast: ToastProps | undefined) => void;
-  inventoryStats: InventoryStats;
+  inventoryStats: InventoryStats | undefined;
   router: NextRouter;
   views: View[] | undefined;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
@@ -135,7 +135,8 @@ function InventoryView({
         <SidepanelPage page={page} param="view">
           <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              {displayedFilters?.length > 0 &&
+              {displayedFilters &&
+                displayedFilters.length > 0 &&
                 displayedFilters.map((data, idx) => (
                   <InventoryFilterSummary key={idx} data={data} />
                 ))}
@@ -169,7 +170,7 @@ function InventoryView({
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
             <>
-              <div className="max-h-[calc(100vh-300px)] overflow-scroll">
+              <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
                 <table className="w-full table-auto bg-white text-left text-xs text-gray-900">
                   <thead className="bg-white">
                     <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">

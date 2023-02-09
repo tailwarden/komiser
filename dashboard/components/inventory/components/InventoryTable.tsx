@@ -13,8 +13,8 @@ import InventoryTableTags from './InventoryTableTags';
 
 type InventoryTableProps = {
   error: boolean;
-  inventory: InventoryItem[] | [];
-  searchedInventory: InventoryItem[] | [];
+  inventory: InventoryItem[] | [] | undefined;
+  searchedInventory: InventoryItem[] | [] | undefined;
   query: string;
   openModal: (item: InventoryItem) => void;
   setQuery: (query: string) => void;

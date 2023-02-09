@@ -8,7 +8,7 @@ import InventoryTagWrapper from './InventoryTagWrapper';
 
 type InventorySidePanelProps = {
   closeModal: () => void;
-  data: InventoryItem;
+  data: InventoryItem | undefined;
   goTo: (page: Pages) => void;
   page: Pages;
   updateTags: (action?: 'delete') => void;
