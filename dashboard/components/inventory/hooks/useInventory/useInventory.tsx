@@ -1,89 +1,18 @@
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import settingsService from '../../../services/settingsService';
-import { Provider } from '../../../utils/providerHelper';
-import useToast from '../../toast/hooks/useToast';
-import useIsVisible from './useIsVisible';
-
-export type InventoryFilterData = {
-  field:
-    | 'provider'
-    | 'region'
-    | 'account'
-    | 'name'
-    | 'service'
-    | 'cost'
-    | 'tags'
-    | 'tag'
-    | string
-    | undefined;
-  operator:
-    | 'IS'
-    | 'IS_NOT'
-    | 'CONTAINS'
-    | 'NOT_CONTAINS'
-    | 'IS_EMPTY'
-    | 'IS_NOT_EMPTY'
-    | string
-    | undefined;
-  tagKey?: string;
-  values: [] | string[];
-};
-
-export type InventoryStats = {
-  resources: number;
-  costs: number;
-  savings: number;
-  regions: number;
-};
-
-export type Tag = {
-  key: string;
-  value: string;
-};
-
-export type InventoryItem = {
-  account: string;
-  accountId: string;
-  cost: number;
-  createdAt: string;
-  fetchedAt: string;
-  id: string;
-  link: string;
-  metadata: null;
-  name: string;
-  provider: Provider;
-  region: string;
-  resourceId: string;
-  service: string;
-  tags: Tag[] | [] | null;
-};
-export type Pages = 'tags' | 'delete';
-
-export type View = {
-  id: number;
-  name: string;
-  filters: InventoryFilterData[];
-  exclude: string[];
-};
-
-export type HiddenResource = {
-  id: number;
-  resourceId: string;
-  provider: string;
-  account: string;
-  accountId: string;
-  service: string;
-  region: string;
-  name: string;
-  createdAt: string;
-  fetchedAt: string;
-  cost: number;
-  metadata: null;
-  tags: Tag[] | [] | null;
-  link: string;
-  Value: string;
-};
+import settingsService from '../../../../services/settingsService';
+import useToast from '../../../toast/hooks/useToast';
+import useIsVisible from '../useIsVisible';
+import {
+  HiddenResource,
+  InventoryFilterData,
+  InventoryItem,
+  InventoryStats,
+  Pages,
+  Tag,
+  View
+} from './types/useInventoryTypes';
+import parseURLParams from './utils/parseURLParams';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -138,130 +67,6 @@ function useInventory() {
     setFilters(undefined);
     setDisplayedFilters(undefined);
     setShouldFetchMore(false);
-  }
-
-  /** Parse the URL Params.
-   * - Argument of type 'fetch' will output the object to fetch an inventory list and stats based on filters.
-   * - Argument of type 'display' will output the object to populate the InventoryFilterSummary component */
-  function parseURLParams(
-    param: string | InventoryFilterData,
-    type: 'fetch' | 'display',
-    view?: boolean
-  ) {
-    let formatString;
-    let filter;
-
-    if (!view) {
-      formatString = (param as string).split(':');
-    } else {
-      formatString = Object.values(param);
-      formatString = [...formatString.slice(0, 2), formatString[2]!.toString()];
-    }
-
-    if (formatString[0]!.includes('tag:')) {
-      const tag = (formatString[0] as string).split(':');
-      formatString = [
-        tag[0],
-        tag[1],
-        formatString[1],
-        formatString[2]?.toString()
-      ];
-    }
-
-    if (formatString[0] === 'tag' && type === 'fetch') {
-      if (formatString.length > 2) {
-        if (
-          formatString.indexOf('IS_EMPTY') !== -1 ||
-          formatString.indexOf('IS_NOT_EMPTY') !== -1
-        ) {
-          const key = formatString.slice(1, formatString.length - 1).join(':');
-
-          filter = {
-            field: `${formatString[0]}:${key}`,
-            operator: formatString[formatString.length - 1],
-            values: []
-          };
-        } else {
-          const key = formatString.slice(1, formatString.length - 2).join(':');
-
-          filter = {
-            field: `${formatString[0]}:${key}`,
-            operator: formatString[formatString.length - 2],
-            values: (formatString[formatString.length - 1] as string).split(',')
-          };
-        }
-      } else {
-        filter = {
-          field: `${formatString[0]}:${formatString[1]}`,
-          operator: formatString[2],
-          values:
-            formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
-              ? []
-              : (formatString[3] as string).split(',')
-        };
-      }
-    }
-
-    if (formatString[0] !== 'tag' && type === 'fetch') {
-      filter = {
-        field: formatString[0],
-        operator: formatString[1],
-        values:
-          formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[2] as string).split(',')
-      };
-    }
-
-    if (formatString[0] === 'tag' && type === 'display') {
-      if (formatString.length > 2) {
-        if (
-          formatString.indexOf('IS_EMPTY') !== -1 ||
-          formatString.indexOf('IS_NOT_EMPTY') !== -1
-        ) {
-          const key = formatString.slice(1, formatString.length - 1).join(':');
-
-          filter = {
-            field: formatString[0],
-            tagKey: key,
-            operator: formatString[formatString.length - 1],
-            values: []
-          };
-        } else {
-          const key = formatString.slice(1, formatString.length - 2).join(':');
-
-          filter = {
-            field: formatString[0],
-            tagKey: key,
-            operator: formatString[formatString.length - 2],
-            values: (formatString[formatString.length - 1] as string).split(',')
-          };
-        }
-      } else {
-        filter = {
-          field: formatString[0],
-          tagKey: formatString[1],
-          operator: formatString[2],
-          values:
-            formatString[2] === 'IS_EMPTY' || formatString[2] === 'IS_NOT_EMPTY'
-              ? []
-              : (formatString[3] as string).split(',')
-        };
-      }
-    }
-
-    if (formatString[0] !== 'tag' && type === 'display') {
-      filter = {
-        field: formatString[0],
-        operator: formatString[1],
-        values:
-          formatString[1] === 'IS_EMPTY' || formatString[1] === 'IS_NOT_EMPTY'
-            ? []
-            : (formatString[2] as string).split(',')
-      };
-    }
-
-    return filter as InventoryFilterData;
   }
 
   /** Fetch all the custom views.
@@ -319,7 +124,7 @@ function useInventory() {
       });
 
       settingsService
-        .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
+        .getInventory(`?limit=${batchSize}&skip=${skipped}`)
         .then(res => {
           if (res === Error) {
             setError(true);
@@ -374,7 +179,7 @@ function useInventory() {
       });
 
       settingsService
-        .getFilteredInventory(`?limit=${batchSize}&skip=0`, payloadJson)
+        .getInventory(`?limit=${batchSize}&skip=0`, payloadJson)
         .then(res => {
           if (res.error) {
             setToast({
@@ -537,10 +342,7 @@ function useInventory() {
 
       const payloadJson = JSON.stringify(filters);
       settingsService
-        .getFilteredInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}`,
-          payloadJson
-        )
+        .getInventory(`?limit=${batchSize}&skip=${skippedSearch}`, payloadJson)
         .then(res => {
           if (res.error) {
             setToast({
@@ -623,7 +425,7 @@ function useInventory() {
       }
 
       settingsService
-        .getFilteredInventory(
+        .getInventory(
           `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`,
           payloadJson
         )
@@ -815,7 +617,7 @@ function useInventory() {
       setTimeout(() => {
         if (mounted) {
           settingsService
-            .getFilteredInventory(
+            .getInventory(
               `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
               payloadJson
             )
@@ -857,7 +659,7 @@ function useInventory() {
         setTimeout(() => {
           if (mounted) {
             settingsService
-              .getFilteredInventory(
+              .getInventory(
                 `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
                 payloadJson
               )

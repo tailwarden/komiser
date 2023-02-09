@@ -9,7 +9,7 @@ import InventorySidePanel from '../components/inventory/components/InventorySide
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
 import InventoryView from '../components/inventory/components/view/InventoryView';
-import useInventory from '../components/inventory/hooks/useInventory';
+import useInventory from '../components/inventory/hooks/useInventory/useInventory';
 import SkeletonFilters from '../components/skeleton/SkeletonFilters';
 import SkeletonInventory from '../components/skeleton/SkeletonInventory';
 import SkeletonStats from '../components/skeleton/SkeletonStats';

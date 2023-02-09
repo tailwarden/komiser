@@ -16,7 +16,7 @@ import {
   InventoryFilterData,
   InventoryStats,
   View
-} from '../../hooks/useInventory';
+} from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import InventoryViewsHeader from '../InventoryViewsHeader';
 import useViews from './hooks/useViews';

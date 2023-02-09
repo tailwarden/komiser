@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import formatNumber from '../../../utils/formatNumber';
 import Button from '../../button/Button';
-import { InventoryStats } from '../hooks/useInventory';
+import { InventoryStats } from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryTableBulkActionsProps = {
   bulkItems: [] | string[];

@@ -1,7 +1,10 @@
 import { NextRouter } from 'next/router';
 import { ReactNode, useContext, useState } from 'react';
 import LayoutContext from '../../layout/context/LayoutContext';
-import { InventoryItem, View } from '../hooks/useInventory';
+import {
+  InventoryItem,
+  View
+} from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryLayoutProps = {
   children: ReactNode;

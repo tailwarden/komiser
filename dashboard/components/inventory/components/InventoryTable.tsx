@@ -4,7 +4,10 @@ import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { InventoryItem, InventoryStats } from '../hooks/useInventory';
+import {
+  InventoryItem,
+  InventoryStats
+} from '../hooks/useInventory/types/useInventoryTypes';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
 import InventoryTableBulkActions from './InventoryTableBulkActions';

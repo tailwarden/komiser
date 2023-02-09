@@ -1,5 +1,5 @@
 import Button from '../../../button/Button';
-import { InventoryFilterData } from '../../hooks/useInventory';
+import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterSummaryProps = {

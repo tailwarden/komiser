@@ -1,4 +1,4 @@
-import { Tag } from '../hooks/useInventory';
+import { Tag } from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryTableTagsProps = {
   tags: [] | Tag[] | null;

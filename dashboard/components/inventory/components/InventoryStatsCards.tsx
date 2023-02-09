@@ -1,7 +1,10 @@
 import { useRouter } from 'next/router';
 import formatNumber from '../../../utils/formatNumber';
 import Tooltip from '../../tooltip/Tooltip';
-import { HiddenResource, InventoryStats } from '../hooks/useInventory';
+import {
+  HiddenResource,
+  InventoryStats
+} from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryStatsCardsProps = {
   inventoryStats: InventoryStats | undefined;

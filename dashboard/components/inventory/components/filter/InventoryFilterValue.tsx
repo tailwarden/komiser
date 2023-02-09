@@ -4,7 +4,7 @@ import regex from '../../../../utils/regex';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
 import { ToastProps } from '../../../toast/hooks/useToast';
-import { InventoryFilterData } from '../../hooks/useInventory';
+import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import { CostBetween } from './hooks/useFilterWizard';
 
 type InventoryFilterValueProps = {

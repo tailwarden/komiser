@@ -6,7 +6,7 @@ import {
   HiddenResource,
   InventoryFilterData,
   View
-} from '../../../hooks/useInventory';
+} from '../../../hooks/useInventory/types/useInventoryTypes';
 
 type useViewsProps = {
   setToast: (toast: ToastProps | undefined) => void;

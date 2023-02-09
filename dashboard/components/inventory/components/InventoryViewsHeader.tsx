@@ -3,7 +3,10 @@ import { FormEvent, useState } from 'react';
 import Button from '../../button/Button';
 import Modal from '../../modal/Modal';
 import { ToastProps } from '../../toast/hooks/useToast';
-import { InventoryFilterData, View } from '../hooks/useInventory';
+import {
+  InventoryFilterData,
+  View
+} from '../hooks/useInventory/types/useInventoryTypes';
 import { ViewsPages } from './view/hooks/useViews';
 
 type InventoryViewsHeaderProps = {
