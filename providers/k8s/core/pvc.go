@@ -39,7 +39,7 @@ func PersistentVolumeClaims(ctx context.Context, client providers.ProviderClient
 				Service:    "PersistentVolumeClaim",
 				ResourceId: fmt.Sprintf("%s", pvc.UID),
 				Name:       pvc.Name,
-				Region:     "Unknown",
+				Region:     pvc.Namespace,
 				Cost:       0,
 				CreatedAt:  pvc.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),

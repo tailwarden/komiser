@@ -38,6 +38,7 @@ func Deployments(ctx context.Context, client providers.ProviderClient) ([]Resour
 				Service:    "Deployment",
 				ResourceId: fmt.Sprintf("%s", deploy.UID),
 				Name:       deploy.Name,
+				Region:     deploy.Namespace,
 				Cost:       0,
 				CreatedAt:  deploy.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),

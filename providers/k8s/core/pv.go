@@ -39,7 +39,7 @@ func PersistentVolumes(ctx context.Context, client providers.ProviderClient) ([]
 				Service:    "PersistentVolume",
 				ResourceId: fmt.Sprintf("%s", pv.UID),
 				Name:       pv.Name,
-				Region:     "Unknown",
+				Region:     pv.Namespace,
 				Cost:       0,
 				CreatedAt:  pv.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
