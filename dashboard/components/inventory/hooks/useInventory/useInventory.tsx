@@ -16,6 +16,7 @@ import getInventoryListAndStats from './helpers/getInventoryListAndStats';
 import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
 import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
 import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
+import infiniteScrollFilteredList from './helpers/infiniteScrollFilteredList';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -178,43 +179,6 @@ function useInventory() {
       });
     }
   }, [hideOrUnhideHasUpdate]);
-
-  /** Load the next 50 results when the user scrolls a filtered inventory list to the end */
-  function infiniteScrollFilteredList() {
-    if (shouldFetchMore && isVisible && filters && !query) {
-      setError(false);
-
-      const payloadJson = JSON.stringify(filters);
-      settingsService
-        .getInventory(`?limit=${batchSize}&skip=${skippedSearch}`, payloadJson)
-        .then(res => {
-          if (res.error) {
-            setToast({
-              hasError: true,
-              title: `Filter could not be applied!`,
-              message: `Please refresh the page and try again.`
-            });
-            setLoading(false);
-          } else {
-            setQuery('');
-            setSearchedInventory(prev => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-
-            if (res.length >= batchSize) {
-              setShouldFetchMore(true);
-            } else {
-              setShouldFetchMore(false);
-            }
-
-            setSkippedSearch(prev => prev + batchSize);
-          }
-        });
-    }
-  }
 
   /** Load the next 50 results when the user scrolls a searched inventory list to the end */
   function infiniteScrollSearchedList() {
@@ -416,7 +380,22 @@ function useInventory() {
       setInventory,
       setSkipped
     });
-    infiniteScrollFilteredList();
+
+    infiniteScrollFilteredList({
+      shouldFetchMore,
+      isVisible,
+      filters,
+      query,
+      setError,
+      batchSize,
+      skippedSearch,
+      setToast,
+      setQuery,
+      setSearchedInventory,
+      setShouldFetchMore,
+      setSkippedSearch
+    });
+
     infiniteScrollSearchedList();
     infiniteScrollSearchedAndFilteredList();
     infiniteScrollCustomViewList();
