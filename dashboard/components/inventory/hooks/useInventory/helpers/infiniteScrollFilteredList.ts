@@ -8,7 +8,6 @@ type InfiniteScrollFilteredListProps = {
   isVisible: boolean;
   filters: InventoryFilterData[] | undefined;
   query: string;
-  setError: (value: SetStateAction<boolean>) => void;
   batchSize: number;
   skippedSearch: number;
   setToast: (value: SetStateAction<ToastProps | undefined>) => void;
@@ -26,7 +25,6 @@ function infiniteScrollFilteredList({
   isVisible,
   filters,
   query,
-  setError,
   batchSize,
   skippedSearch,
   setToast,
@@ -36,8 +34,6 @@ function infiniteScrollFilteredList({
   setSkippedSearch
 }: InfiniteScrollFilteredListProps) {
   if (shouldFetchMore && isVisible && filters && !query) {
-    setError(false);
-
     const payloadJson = JSON.stringify(filters);
     settingsService
       .getInventory(`?limit=${batchSize}&skip=${skippedSearch}`, payloadJson)

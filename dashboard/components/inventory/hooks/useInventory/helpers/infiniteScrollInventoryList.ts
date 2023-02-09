@@ -1,6 +1,7 @@
 import { NextRouter } from 'next/router';
 import { SetStateAction } from 'react';
 import settingsService from '../../../../../services/settingsService';
+import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
   InventoryFilterData,
   InventoryItem,
@@ -15,8 +16,8 @@ type InfiniteScrollInventoryListProps = {
   query: string;
   filters: InventoryFilterData[] | undefined;
   router: NextRouter;
-  setError: (error: boolean) => void;
   batchSize: number;
+  setToast: (value: SetStateAction<ToastProps | undefined>) => void;
   setInventory: (value: SetStateAction<InventoryItem[] | undefined>) => void;
   setSkipped: (value: SetStateAction<number>) => void;
 };
@@ -30,8 +31,8 @@ function infiniteScrollInventoryList({
   query,
   filters,
   router,
-  setError,
   batchSize,
+  setToast,
   setInventory,
   setSkipped
 }: InfiniteScrollInventoryListProps) {
@@ -45,13 +46,15 @@ function infiniteScrollInventoryList({
     !filters &&
     !router.query.view
   ) {
-    setError(false);
-
     settingsService
       .getInventory(`?limit=${batchSize}&skip=${skipped}`)
       .then(res => {
         if (res === Error) {
-          setError(true);
+          setToast({
+            hasError: true,
+            title: `There was an error fetching more resources!`,
+            message: `Please refresh the page and try again.`
+          });
         } else {
           setInventory(prev => {
             if (prev) {

@@ -17,6 +17,7 @@ import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
 import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
 import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
 import infiniteScrollFilteredList from './helpers/infiniteScrollFilteredList';
+import infiniteScrollSearchedList from './helpers/infiniteScrollSearchedList';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -180,43 +181,6 @@ function useInventory() {
     }
   }, [hideOrUnhideHasUpdate]);
 
-  /** Load the next 50 results when the user scrolls a searched inventory list to the end */
-  function infiniteScrollSearchedList() {
-    if (
-      shouldFetchMore &&
-      isVisible &&
-      query &&
-      Object.keys(router.query).length === 0
-    ) {
-      setError(false);
-
-      settingsService
-        .getInventoryList(
-          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`
-        )
-        .then(res => {
-          if (res === Error) {
-            setError(true);
-          }
-
-          setSearchedInventory(prev => {
-            if (prev) {
-              return [...prev, ...res];
-            }
-            return res;
-          });
-
-          if (res.length >= batchSize) {
-            setShouldFetchMore(true);
-          } else {
-            setShouldFetchMore(false);
-          }
-
-          setSkippedSearch(prev => prev + batchSize);
-        });
-    }
-  }
-
   /** Load the next 50 results when the user scrolls a searched and filtered inventory list to the end */
   function infiniteScrollSearchedAndFilteredList() {
     if (
@@ -375,8 +339,8 @@ function useInventory() {
       query,
       filters,
       router,
-      setError,
       batchSize,
+      setToast,
       setInventory,
       setSkipped
     });
@@ -386,7 +350,6 @@ function useInventory() {
       isVisible,
       filters,
       query,
-      setError,
       batchSize,
       skippedSearch,
       setToast,
@@ -396,7 +359,19 @@ function useInventory() {
       setSkippedSearch
     });
 
-    infiniteScrollSearchedList();
+    infiniteScrollSearchedList({
+      shouldFetchMore,
+      isVisible,
+      query,
+      router,
+      batchSize,
+      skippedSearch,
+      setToast,
+      setSearchedInventory,
+      setShouldFetchMore,
+      setSkippedSearch
+    });
+
     infiniteScrollSearchedAndFilteredList();
     infiniteScrollCustomViewList();
     infiniteScrollSearchedCustomViewList();
