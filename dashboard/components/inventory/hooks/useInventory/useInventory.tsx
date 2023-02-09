@@ -14,8 +14,8 @@ import {
 } from './types/useInventoryTypes';
 import getInventoryListAndStats from './helpers/getInventoryListAndStats';
 import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
-import parseURLParams from './helpers/parseURLParams';
 import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
+import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -87,6 +87,7 @@ function useInventory() {
         const sortViewsById: View[] = res;
         sortViewsById.sort((a, b) => a.id - b.id);
         setViews(sortViewsById);
+
         if (edit && viewId) {
           router.push(`/?view=${viewId}`, undefined, { shallow: true });
         }
@@ -177,38 +178,6 @@ function useInventory() {
       });
     }
   }, [hideOrUnhideHasUpdate]);
-
-  /** Load the next 50 results when the user scrolls the inventory list to the end */
-  function infiniteScrollInventoryList() {
-    if (
-      inventory &&
-      inventory.length > 0 &&
-      inventoryStats &&
-      skipped < inventoryStats.resources &&
-      isVisible &&
-      !query &&
-      !filters &&
-      !router.query.view
-    ) {
-      setError(false);
-
-      settingsService
-        .getInventoryList(`?limit=${batchSize}&skip=${skipped}`)
-        .then(res => {
-          if (res === Error) {
-            setError(true);
-          } else {
-            setInventory(prev => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-            setSkipped(prev => prev + batchSize);
-          }
-        });
-    }
-  }
 
   /** Load the next 50 results when the user scrolls a filtered inventory list to the end */
   function infiniteScrollFilteredList() {
@@ -434,7 +403,19 @@ function useInventory() {
 
   /** Infinite scrolling handler. Identifies which inventory should be fetched on scroll. */
   useEffect(() => {
-    infiniteScrollInventoryList();
+    infiniteScrollInventoryList({
+      inventory,
+      inventoryStats,
+      skipped,
+      isVisible,
+      query,
+      filters,
+      router,
+      setError,
+      batchSize,
+      setInventory,
+      setSkipped
+    });
     infiniteScrollFilteredList();
     infiniteScrollSearchedList();
     infiniteScrollSearchedAndFilteredList();
