@@ -18,6 +18,7 @@ import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventory
 import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
 import infiniteScrollFilteredList from './helpers/infiniteScrollFilteredList';
 import infiniteScrollSearchedList from './helpers/infiniteScrollSearchedList';
+import infiniteScrollSearchedAndFilteredList from './helpers/infiniteScrollSearchedAndFilteredList';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -125,6 +126,7 @@ function useInventory() {
         setInventory,
         setSkipped
       });
+
       getInventoryListFromAFilter({
         router,
         setSearchedLoading,
@@ -139,6 +141,7 @@ function useInventory() {
         setSkippedSearch,
         setShouldFetchMore
       });
+
       getCustomViewInventoryListAndStats({
         router,
         views,
@@ -180,54 +183,6 @@ function useInventory() {
       });
     }
   }, [hideOrUnhideHasUpdate]);
-
-  /** Load the next 50 results when the user scrolls a searched and filtered inventory list to the end */
-  function infiniteScrollSearchedAndFilteredList() {
-    if (
-      shouldFetchMore &&
-      isVisible &&
-      query &&
-      Object.keys(router.query).length > 0 &&
-      !router.query.view
-    ) {
-      let payloadJson = '';
-
-      if (!router.query.view && filters && filters.length > 0) {
-        payloadJson = JSON.stringify(filters);
-      }
-
-      settingsService
-        .getInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`,
-          payloadJson
-        )
-        .then(res => {
-          if (res.error) {
-            setToast({
-              hasError: true,
-              title: `Filter could not be applied!`,
-              message: `Please refresh the page and try again.`
-            });
-            setLoading(false);
-          } else {
-            setSearchedInventory(prev => {
-              if (prev) {
-                return [...prev, ...res];
-              }
-              return res;
-            });
-
-            if (res.length >= batchSize) {
-              setShouldFetchMore(true);
-            } else {
-              setShouldFetchMore(false);
-            }
-
-            setSkippedSearch(prev => prev + batchSize);
-          }
-        });
-    }
-  }
 
   /** Load the next 50 results when the user scrolls a custom view list to the end */
   function infiniteScrollCustomViewList() {
@@ -372,7 +327,20 @@ function useInventory() {
       setSkippedSearch
     });
 
-    infiniteScrollSearchedAndFilteredList();
+    infiniteScrollSearchedAndFilteredList({
+      shouldFetchMore,
+      isVisible,
+      filters,
+      query,
+      router,
+      batchSize,
+      skippedSearch,
+      setToast,
+      setSearchedInventory,
+      setShouldFetchMore,
+      setSkippedSearch
+    });
+
     infiniteScrollCustomViewList();
     infiniteScrollSearchedCustomViewList();
   }, [isVisible]);
