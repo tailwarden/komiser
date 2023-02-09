@@ -249,6 +249,17 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 	whereClause := strings.Join(whereQueries, " AND ")
 
 	resources := make([]Resource, 0)
+
+	if len(filters) == 0 {
+		if len(query) > 0 {
+			whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
+			handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+		} else {
+			handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
+		}
+		respondWithJSON(w, 200, resources)
+	}
+
 	if filterWithTags {
 		query := fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
 		if len(view.Exclude) > 0 {
