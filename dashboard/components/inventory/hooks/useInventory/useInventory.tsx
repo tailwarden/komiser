@@ -12,9 +12,9 @@ import {
   Tag,
   View
 } from './types/useInventoryTypes';
-import getInventoryListAndStats from './utils/getInventoryListAndStats';
-import getInventoryListFromAFilter from './utils/getInventoryListFromAFilter';
-import parseURLParams from './utils/parseURLParams';
+import getInventoryListAndStats from './helpers/getInventoryListAndStats';
+import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
+import parseURLParams from './helpers/parseURLParams';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
