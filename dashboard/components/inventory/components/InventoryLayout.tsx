@@ -37,9 +37,12 @@ function InventoryLayout({
     (inventory && inventory.length > 0) ||
     (searchedInventory && searchedInventory.length > 0);
 
+  const displaySidebar =
+    !error && (hasInventory || (views && views.length > 0));
+
   return (
     <>
-      {!error && hasInventory && (
+      {displaySidebar && (
         <nav
           className={`fixed ${
             displayBanner ? 'mt-[145px]' : 'mt-[73px]'
@@ -149,9 +152,7 @@ function InventoryLayout({
           )}
         </nav>
       )}
-      <main className={!error && hasInventory ? 'ml-[17rem]' : ''}>
-        {children}
-      </main>
+      <main className={displaySidebar ? 'ml-[17rem]' : ''}>{children}</main>
     </>
   );
 }

@@ -82,7 +82,7 @@ function getCustomViewInventoryListAndStats({
       });
 
       settingsService
-        .getInventory(`?limit=${batchSize}&skip=0&id=${id}`, payloadJson)
+        .getInventory(`?limit=${batchSize}&skip=0&view=${id}`, payloadJson)
         .then(res => {
           if (res.error) {
             setToast({
