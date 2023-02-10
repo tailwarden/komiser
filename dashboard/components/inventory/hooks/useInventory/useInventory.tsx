@@ -88,6 +88,7 @@ function useInventory() {
           title: `The custom views couldn't be loaded.`,
           message: `There was a problem fetching the views. Please try again.`
         });
+        setError(true);
       } else {
         const sortViewsById: View[] = res;
         sortViewsById.sort((a, b) => a.id - b.id);
@@ -162,29 +163,6 @@ function useInventory() {
       });
     }
   }, [router.query, views]);
-
-  /** When a resource is hid or unhid, reset the states and call getCustomViewInventoryListAndStats. */
-  useEffect(() => {
-    if (hideOrUnhideHasUpdate) {
-      resetStates();
-      getCustomViewInventoryListAndStats({
-        router,
-        views,
-        setSearchedLoading,
-        setStatsLoading,
-        setToast,
-        setError,
-        setHiddenResources,
-        setInventoryStats,
-        batchSize,
-        setSearchedInventory,
-        setDisplayedFilters,
-        setSkippedSearch,
-        setHideOrUnhideHasUpdate,
-        setShouldFetchMore
-      });
-    }
-  }, [hideOrUnhideHasUpdate]);
 
   /** Infinite scrolling handler. Identifies which inventory should be fetched on scroll. */
   useEffect(() => {
@@ -294,7 +272,7 @@ function useInventory() {
       setTimeout(() => {
         if (mounted) {
           settingsService
-            .getInventoryList(
+            .getInventory(
               `?limit=${batchSize}&skip=0${query && `&query=${query}`}`
             )
             .then(res => {
@@ -400,6 +378,29 @@ function useInventory() {
     };
   }, [query]);
 
+  /** When a resource is hid or unhid, reset the states and call getCustomViewInventoryListAndStats. */
+  useEffect(() => {
+    if (hideOrUnhideHasUpdate) {
+      resetStates();
+      getCustomViewInventoryListAndStats({
+        router,
+        views,
+        setSearchedLoading,
+        setStatsLoading,
+        setToast,
+        setError,
+        setHiddenResources,
+        setInventoryStats,
+        batchSize,
+        setSearchedInventory,
+        setDisplayedFilters,
+        setSkippedSearch,
+        setHideOrUnhideHasUpdate,
+        setShouldFetchMore
+      });
+    }
+  }, [hideOrUnhideHasUpdate]);
+
   /** Refresh list when tags are saved.
    * - If it's on all resources, refetch the inventory list
    * - If it's on a custom view, quick reload the current url
@@ -409,20 +410,23 @@ function useInventory() {
 
     if (inventoryHasUpdate) {
       if (Object.keys(router.query).length === 0) {
-        settingsService
-          .getInventoryList(`?limit=${batchSize}&skip=0`)
-          .then(res => {
-            if (mounted) {
-              if (res === Error) {
-                setError(true);
-              } else {
-                setQuery('');
-                setInventory(res);
-                setSkipped(batchSize);
-                setInventoryHasUpdate(false);
-              }
+        settingsService.getInventory(`?limit=${batchSize}&skip=0`).then(res => {
+          if (mounted) {
+            if (res === Error) {
+              setError(true);
+              setToast({
+                hasError: true,
+                title: `There was an error re-fetching the resources!`,
+                message: `Please refresh the page and try again.`
+              });
+            } else {
+              setQuery('');
+              setInventory(res);
+              setSkipped(batchSize);
+              setInventoryHasUpdate(false);
             }
-          });
+          }
+        });
       } else {
         setSkippedSearch(0);
         setInventoryHasUpdate(false);
@@ -714,7 +718,7 @@ function useInventory() {
       (searchedInventory && searchedInventory.length > 0));
 
   const loadingFilters =
-    Object.keys(router.query).length > 0 && !displayedFilters;
+    Object.keys(router.query).length > 0 && !displayedFilters && !error;
 
   const hasFilters =
     Object.keys(router.query).length > 0 &&

@@ -20,6 +20,7 @@ function InventoryStatsCards({
   hiddenResources
 }: InventoryStatsCardsProps) {
   const router = useRouter();
+
   return (
     <>
       {!statsLoading &&
