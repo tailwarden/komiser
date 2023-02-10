@@ -48,7 +48,8 @@ brew install komiser
   - [Installation on Civo](#installation-on-civo)
   - [Installation on OCI](#installation-on-oci)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
-  - [Installation on OVH](#installation-on-ovh)
+  - [Installation on Linode](#installation-on-linode)
+  - [Installation on Tencent](#installation-on-tencent-cloud)
 - [Documentation](#documentation)
   - [Jump right in:](#jump-right-in)
 - [Bugs and feature requests](#bugs-and-feature-requests)
@@ -84,16 +85,14 @@ Below are the available downloads for the latest version of Komiser (3.0.0). Ple
 ### Deploy Komiser to single account access EKS cluster (Helm chart)
 * If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/cloud-providers/aws#eks-installation-single-account?utm_source=github&utm_medium=social). 
 
-Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&t=45s)
+Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&t)
 
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
 * If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/cloud-providers/aws#multiple-account-eks-helm-chart-installation?utm_source=github&utm_medium=social).
 
 ## Installation on Civo
 
-Connect a local deployment of Komiser CLI to your [**Civo**](https://docs.komiser.io/docs/cloud-providers/civo?utm_source=github&utm_medium=social) account. 
-
-Watch the installation [video here](https://www.youtube.com/watch?v=NBbEpoW-kVs)
+Connect a local deployment of Komiser CLI to your [**Civo**](https://docs.komiser.io/docs/cloud-providers/civo?utm_source=github&utm_medium=social) account.
 
 ## Installation on OCI
 
@@ -102,6 +101,16 @@ Connect a local deployment of Komiser CLI to your [**OCI**](https://docs.komiser
 ## Installation on Digital Ocean
 
 Connect a local deployment of Komiser CLI to you [**Digital Ocean**](https://docs.komiser.io/docs/cloud-providers/digital-ocean?utm_source=github&utm_medium=social) account.
+
+## Installation on Linode
+
+Connect a local deployment of Komiser CLI to you [**Linode**](https://docs.komiser.io/docs/cloud-providers/linode?utm_source=github&utm_medium=social) account.
+
+## Installation on Tencent Cloud
+
+Connect a local deployment of Komiser CLI to you [**Tencent**](https://docs.komiser.io/docs/cloud-providers/tencent?utm_source=github&utm_medium=social) account.
+
+Watch the installation [video here](https://www.youtube.com/watch?v=NBbEpoW-kVs)
 
 # Documentation 📖
 
