@@ -13,6 +13,7 @@ import useInventory from '../components/inventory/hooks/useInventory/useInventor
 import SkeletonFilters from '../components/skeleton/SkeletonFilters';
 import SkeletonInventory from '../components/skeleton/SkeletonInventory';
 import SkeletonStats from '../components/skeleton/SkeletonStats';
+import VerticalSpacing from '../components/spacing/VerticalSpacing';
 import Toast from '../components/toast/Toast';
 
 export default function Inventory() {
@@ -119,8 +120,8 @@ export default function Inventory() {
             )}
           </div>
         </div>
-        
-        <div className="mt-6"></div>
+
+        <VerticalSpacing />
 
         {/* Active filters skeleton */}
         {loadingFilters && <SkeletonFilters />}
@@ -136,7 +137,7 @@ export default function Inventory() {
 
         {/* Inventory stats skeleton */}
         {!error && statsLoading && (
-          <SkeletonStats NumOfCards={router.query.view ? 4 : 3} />
+          <SkeletonStats NumOfCards={isNotCustomView ? 3 : 4} />
         )}
 
         {/* Inventory stats */}
@@ -147,7 +148,7 @@ export default function Inventory() {
           hiddenResources={hiddenResources}
         />
 
-        <div className="mt-6"></div>
+        <VerticalSpacing />
 
         {/* Inventory list skeleton */}
         {loadingInventory && <SkeletonInventory />}
