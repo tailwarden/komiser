@@ -156,7 +156,7 @@ function useViews({
           setLoading(false);
           setToast({
             hasError: true,
-            title: `${view.name} could not be duplicated.`,
+            title: `${viewToBeDuplicated.name} could not be duplicated.`,
             message: `There was an error duplicating this custom view. Please refer to the logs and try again!`
           });
         } else {
@@ -164,7 +164,7 @@ function useViews({
           getViews(false, undefined, true);
           setToast({
             hasError: false,
-            title: `${view.name} has been duplicated.`,
+            title: `${viewToBeDuplicated.name} has been duplicated.`,
             message: `The custom view will now be accessible from the side navigation.`
           });
           closeModal();

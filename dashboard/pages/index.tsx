@@ -111,6 +111,7 @@ export default function Inventory() {
             />
           )}
         </InventoryHeader>
+
         <VerticalSpacing />
 
         {/* Active filters skeleton */}
