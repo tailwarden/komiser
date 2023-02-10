@@ -9,14 +9,26 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudfront"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
+
+func BeginningOfMonth(date time.Time) time.Time {
+	return date.AddDate(0, 0, -date.Day()+1)
+}
 
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config cloudfront.ListDistributionsInput
 	cloudfrontClient := cloudfront.NewFromConfig(*client.AWSClient)
+
+	tempRegion := client.AWSClient.Region
+	client.AWSClient.Region = "us-east-1"
+	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = tempRegion
+
 	for {
 		output, err := cloudfrontClient.ListDistributions(ctx, &config)
 		if err != nil {
@@ -24,6 +36,95 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 		}
 
 		for _, distribution := range output.DistributionList.Items {
+			metricsBytesDownloadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("BytesDownloaded"),
+				Namespace:  aws.String("AWS/CloudFront"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("DistributionId"),
+						Value: distribution.Id,
+					},
+				},
+				Period: aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", *distribution.Id)
+			}
+
+			bytesDownloaded := 0.0
+			if metricsBytesDownloadedOutput != nil && len(metricsBytesDownloadedOutput.Datapoints) > 0 {
+				bytesDownloaded = *metricsBytesDownloadedOutput.Datapoints[0].Sum
+			}
+
+			metricsBytesUploadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("BytesUploaded"),
+				Namespace:  aws.String("AWS/CloudFront"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("DistributionId"),
+						Value: distribution.Id,
+					},
+				},
+				Period: aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", *distribution.Id)
+			}
+
+			bytesUploaded := 0.0
+			if metricsBytesUploadedOutput != nil && len(metricsBytesUploadedOutput.Datapoints) > 0 {
+				bytesUploaded = *metricsBytesUploadedOutput.Datapoints[0].Sum
+			}
+
+			metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("Requests"),
+				Namespace:  aws.String("AWS/CloudFront"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("DistributionId"),
+						Value: distribution.Id,
+					},
+				},
+				Period: aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", *distribution.Id)
+			}
+
+			requests := 0.0
+			if metricsRequestsOutput != nil && len(metricsRequestsOutput.Datapoints) > 0 {
+				requests = *metricsRequestsOutput.Datapoints[0].Sum
+			}
+
+			// calculate region data transfer out to internet
+			dataTransferToInternet := (bytesUploaded / 1000000000) * 0.085
+
+			// calculate region data transfer out to origin
+			dataTransferToOrigin := (bytesDownloaded / 1000000000) * 0.02
+
+			// calculate requests cost
+			requestsCost := requests * 0.000001
+
+			monthlyCost := dataTransferToInternet + dataTransferToOrigin + requestsCost
+
 			outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
 				Resource: distribution.ARN,
 			})
@@ -46,7 +147,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				ResourceId: *distribution.ARN,
 				Region:     client.AWSClient.Region,
 				Name:       *distribution.DomainName,
-				Cost:       0,
+				Cost:       monthlyCost,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudfront/v3/home?region=%s#/distributions/%s", client.AWSClient.Region, client.AWSClient.Region, *distribution.Id),
