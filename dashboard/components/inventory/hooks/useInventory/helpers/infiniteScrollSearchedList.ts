@@ -39,9 +39,7 @@ function infiniteScrollSearchedList({
     Object.keys(router.query).length === 0
   ) {
     settingsService
-      .getInventoryList(
-        `?limit=${batchSize}&skip=${skippedSearch}&query=${query}`
-      )
+      .getInventory(`?limit=${batchSize}&skip=${skippedSearch}&query=${query}`)
       .then(res => {
         if (res === Error) {
           setToast({

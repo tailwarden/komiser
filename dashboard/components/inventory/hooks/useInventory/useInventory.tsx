@@ -262,46 +262,104 @@ function useInventory() {
     setBulkItems([]);
     setBulkSelectCheckbox(false);
 
-    if (!filters && !query && !router.query.view) {
-      setSearchedInventory(undefined);
+    let payload: any;
+    let payloadJson: string;
+    let id: string;
+
+    // If this is the all resources and search value is empty, fetch again the inventory list
+    if (views && !query && !router.query.view && !filters) {
+      getInventoryListAndStats({
+        router,
+        setStatsLoading,
+        setDisplayedFilters,
+        setFilters,
+        setError,
+        setSearchedInventory,
+        setInventoryStats,
+        batchSize,
+        setInventory,
+        setSkipped
+      });
     }
 
-    if (!filters && query && !router.query.view) {
-      setSearchedLoading(true);
-      setError(false);
-      setTimeout(() => {
-        if (mounted) {
-          settingsService
-            .getInventory(
-              `?limit=${batchSize}&skip=0${query && `&query=${query}`}`
-            )
-            .then(res => {
-              if (mounted) {
-                if (res === Error) {
-                  setError(true);
-                  setSearchedLoading(false);
-                }
-                setSearchedInventory(res);
-                setSearchedLoading(false);
+    // If this is the all resources filtered and search value is empty, fetch again the filtered inventory list
+    if (
+      views &&
+      !query &&
+      !router.query.view &&
+      filters &&
+      filters.length > 0
+    ) {
+      getInventoryListFromAFilter({
+        router,
+        setSearchedLoading,
+        setStatsLoading,
+        setToast,
+        setError,
+        setInventoryStats,
+        batchSize,
+        setSearchedInventory,
+        setFilters,
+        setDisplayedFilters,
+        setSkippedSearch,
+        setShouldFetchMore
+      });
+    }
 
-                if (res.length >= batchSize) {
-                  setShouldFetchMore(true);
-                  setSkippedSearch(prev => prev + batchSize);
-                }
-              }
-            });
+    // If this is a custom view and search value is empty, fetch again the custom view list
+    if (views && !query && router.query.view) {
+      getCustomViewInventoryListAndStats({
+        router,
+        views,
+        setSearchedLoading,
+        setStatsLoading,
+        setToast,
+        setError,
+        setHiddenResources,
+        setInventoryStats,
+        batchSize,
+        setSearchedInventory,
+        setDisplayedFilters,
+        setSkippedSearch,
+        setHideOrUnhideHasUpdate,
+        setShouldFetchMore
+      });
+    }
+
+    // When query has a value, handle the payload based on the URL params
+    if (query) {
+      setSearchedLoading(true);
+
+      // All resources search payload handler
+      if (!filters && query && !router.query.view) {
+        payload = [];
+      }
+
+      // All resources + filter search payload handler
+      if (filters && filters.length > 0 && !router.query.view) {
+        payload = filters;
+      }
+
+      // Custom view search payload handler
+      if (router.query.view && views && views.length > 0) {
+        id = router.query.view.toString();
+        const filterFound = views.find(
+          view => view.id.toString() === router.query.view
+        );
+
+        if (filterFound) {
+          payload = filterFound.filters;
         }
-      }, 700);
-    }
+      }
 
-    if (filters && filters.length > 0 && !router.query.view) {
-      const payloadJson = JSON.stringify(filters);
-      setSearchedLoading(true);
       setTimeout(() => {
+        payloadJson = JSON.stringify(payload);
         if (mounted) {
           settingsService
             .getInventory(
-              `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
+              `?limit=${batchSize}&skip=0&query=${query}${
+                id ? `&id=${id}` : ''
+              }`,
               payloadJson
             )
             .then(res => {
@@ -309,8 +367,8 @@ function useInventory() {
                 if (res.error) {
                   setToast({
                     hasError: true,
-                    title: `Filter could not be applied!`,
-                    message: `Please refresh the page and try again.`
+                    title: `Search error`,
+                    message: `There was an error searching for ${query}. Please refer to the logs and try again.`
                   });
                   setError(true);
                   setSearchedLoading(false);
@@ -331,48 +389,6 @@ function useInventory() {
       }, 700);
     }
 
-    if (router.query.view && views && views.length > 0) {
-      const filterFound = views.find(
-        view => view.id.toString() === router.query.view
-      );
-
-      if (filterFound) {
-        const payloadJson = JSON.stringify(filterFound.filters);
-        setSearchedLoading(true);
-        setTimeout(() => {
-          if (mounted) {
-            settingsService
-              .getInventory(
-                `?limit=${batchSize}&skip=0${query && `&query=${query}`}`,
-                payloadJson
-              )
-              .then(res => {
-                if (mounted) {
-                  if (res.error) {
-                    setToast({
-                      hasError: true,
-                      title: `Filter could not be applied!`,
-                      message: `Please refresh the page and try again.`
-                    });
-                    setError(true);
-                    setSearchedLoading(false);
-                  } else {
-                    setSearchedInventory(res);
-                    setSkippedSearch(prev => prev + batchSize);
-                    setSearchedLoading(false);
-
-                    if (res.length >= batchSize) {
-                      setShouldFetchMore(true);
-                    } else {
-                      setShouldFetchMore(false);
-                    }
-                  }
-                }
-              });
-          }
-        }, 700);
-      }
-    }
     return () => {
       mounted = false;
     };
