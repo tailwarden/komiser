@@ -1,9 +1,9 @@
-package compute
+package storage
 
 import (
 	"context"
 	"fmt"
-	"strings"
+	// "strings"
 	"time"
 
 	"github.com/linode/linodego"
@@ -14,50 +14,51 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
+func Buckets(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 
-	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
+	buckets, err := client.LinodeClient.ListObjectStorageBuckets(ctx, &linodego.ListOptions{})
 	if err != nil {
 		return resources, err
 	}
 
-	for _, instance := range instances {
-		tags := make([]Tag, 0)
-		for _, tag := range instance.Tags {
-			if strings.Contains(tag, ":") {
-				parts := strings.Split(tag, ":")
-				tags = append(tags, models.Tag{
-					Key:   parts[0],
-					Value: parts[1],
-				})
-			} else {
-				tags = append(tags, models.Tag{
-					Key:   tag,
-					Value: tag,
-				})
-			}
-		}
+	for _, bucket := range buckets {
+		// tags := make([]Tag, 0)
+		// for _, tag := range bucket.Tags {
+		// 	if strings.Contains(tag, ":") {
+		// 		parts := strings.Split(tag, ":")
+		// 		tags = append(tags, models.Tag{
+		// 			Key:   parts[0],
+		// 			Value: parts[1],
+		// 		})
+		// 	} else {
+		// 		tags = append(tags, models.Tag{
+		// 			Key:   tag,
+		// 			Value: tag,
+		// 		})
+		// 	}
+		// }
 
 		resources = append(resources, models.Resource{
 			Provider:   "Linode",
 			Account:    client.Name,
-			Service:    "Linode",
-			Region:     instance.Region,
-			ResourceId: fmt.Sprintf("%s", instance.ID),
+			Service:    "Bucket",
+			// Region:     bucket.Region,
+			// ResourceId: fmt.Sprintf("%s", bucket.ID),
+			// Hostname:   fmt.Sprintf("%s", bucket.Hostname),
 			Cost:       0,
-			Name:       instance.Label,
+			Name:       bucket.Label,
 			FetchedAt:  time.Now(),
-			CreatedAt:  *instance.Created,
-			Tags:       tags,
-			Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", instance.ID),
+			CreatedAt:  *bucket.Created,
+			// Tags:       tags,
+			Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", bucket.Hostname),
 		})
 	}
 
 	log.WithFields(log.Fields{
 		"provider":  "Linode",
 		"account":   client.Name,
-		"service":   "Linode",
+		"service":   "Bucket",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
