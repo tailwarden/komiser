@@ -75,6 +75,7 @@ github.com/aws/aws-sdk-go-v2/service/pricing v1.17.5 h1:89yKwg+Kn3jgjcpxzmbZYH0O
 github.com/aws/aws-sdk-go-v2/service/pricing v1.17.5/go.mod h1:1YtXjD073MNbQvowCxfSsdhGUCJQOt04FVDcs8uYCmI=
 github.com/aws/aws-sdk-go-v2/service/rds v1.30.1 h1:/B3GswjV+ScqZSZnhs3NMLwvVFXb1/aQL/elQwo0CMM=
 github.com/aws/aws-sdk-go-v2/service/rds v1.30.1/go.mod h1:wPFe1Cj3nZWmNWKKdkXw961l1dJheTZQ5JjPImqbMuI=
+github.com/aws/aws-sdk-go-v2/service/route53 v1.25.2 h1:MNL6bLDcwOGL9j+ANiejLYn/cBSku1m+pLWXri/FFF4=
 github.com/aws/aws-sdk-go-v2/service/route53 v1.25.2/go.mod h1:4SAHuLdh4v7pA2F6HdhUUgiLUDA6J89KWr7xAYCDiyc=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1 h1:OKQIQ0QhEBmGr2LfT952meIZz3ujrPYnxH+dO/5ldnI=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1/go.mod h1:NffjpNsMUFXp6Ok/PahrktAncoekWrywvmIK83Q2raE=
