@@ -59,15 +59,17 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 			})
 
 			monthlyCost := 0.0
+			createdAt := time.Now()
 			if err == nil {
 				startOfMonth := BeginningOfMonth(time.Now())
 				hourlyUsage := 0
 				if (*outputDescribe.Cluster.CreatedAt).Before(startOfMonth) {
 					hourlyUsage = int(time.Now().Sub(startOfMonth).Hours())
 				} else {
-					hourlyUsage = int(time.Now().Sub(*outputDescribe.Cluster.CreatedAt).Hours())
+					hourlyUsage = int(time.Now().Sub().Hours())
 				}
 				monthlyCost = float64(hourlyUsage) * 0.10
+				createdAt = *outputDescribe.Cluster.CreatedAt
 			}
 
 			resources = append(resources, Resource{
@@ -79,7 +81,7 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 				Name:       cluster,
 				Cost:       monthlyCost,
 				Tags:       tags,
-				CreatedAt:  *outputDescribe.Cluster.CreatedAt,
+				CreatedAt:  createdAt,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, cluster),
 			})
