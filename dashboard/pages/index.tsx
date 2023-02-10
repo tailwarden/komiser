@@ -78,6 +78,7 @@ export default function Inventory() {
         <meta name="description" content="Inventory - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       {/* Wraps the inventory page and handles the custom views sidebar */}
       <InventoryLayout
         views={views}

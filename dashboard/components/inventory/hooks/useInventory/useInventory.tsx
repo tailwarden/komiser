@@ -20,6 +20,7 @@ import infiniteScrollFilteredList from './helpers/infiniteScrollFilteredList';
 import infiniteScrollSearchedList from './helpers/infiniteScrollSearchedList';
 import infiniteScrollSearchedAndFilteredList from './helpers/infiniteScrollSearchedAndFilteredList';
 import infiniteScrollCustomViewList from './helpers/infiniteScrollCustomViewList';
+import infiniteScrollSearchedCustomViewList from './helpers/infiniteScrollSearchedCustomViewList';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -185,56 +186,6 @@ function useInventory() {
     }
   }, [hideOrUnhideHasUpdate]);
 
-  /** Load the next 50 results when the user scrolls a searched custom view list to the end */
-  function infiniteScrollSearchedCustomViewList() {
-    if (
-      shouldFetchMore &&
-      isVisible &&
-      query &&
-      router.query.view &&
-      views &&
-      views.length > 0
-    ) {
-      const id = router.query.view;
-      const filterFound = views.find(view => view.id.toString() === id);
-
-      if (filterFound) {
-        const payloadJson = JSON.stringify(filterFound?.filters);
-
-        settingsService
-          .getCustomViewInventory(
-            id as string,
-            `?limit=${batchSize}&skip=${skippedSearch}`,
-            payloadJson
-          )
-          .then(res => {
-            if (res.error) {
-              setToast({
-                hasError: true,
-                title: `Filter could not be applied!`,
-                message: `Please refresh the page and try again.`
-              });
-              setError(true);
-            } else {
-              setSearchedInventory(prev => {
-                if (prev) {
-                  return [...prev, ...res];
-                }
-                return res;
-              });
-              setSkippedSearch(prev => prev + batchSize);
-
-              if (res.length >= batchSize) {
-                setShouldFetchMore(true);
-              } else {
-                setShouldFetchMore(false);
-              }
-            }
-          });
-      }
-    }
-  }
-
   /** Infinite scrolling handler. Identifies which inventory should be fetched on scroll. */
   useEffect(() => {
     infiniteScrollInventoryList({
@@ -306,7 +257,19 @@ function useInventory() {
       setSkippedSearch
     });
 
-    infiniteScrollSearchedCustomViewList();
+    infiniteScrollSearchedCustomViewList({
+      router,
+      shouldFetchMore,
+      isVisible,
+      views,
+      query,
+      batchSize,
+      skippedSearch,
+      setToast,
+      setSearchedInventory,
+      setShouldFetchMore,
+      setSkippedSearch
+    });
   }, [isVisible]);
 
   /** Search effect behavior:

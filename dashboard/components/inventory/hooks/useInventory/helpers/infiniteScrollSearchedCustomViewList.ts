@@ -4,7 +4,7 @@ import settingsService from '../../../../../services/settingsService';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 import { InventoryItem, View } from '../types/useInventoryTypes';
 
-type InfiniteScrollCustomViewListProps = {
+type InfiniteScrollSearchedCustomViewListProps = {
   router: NextRouter;
   shouldFetchMore: boolean;
   isVisible: boolean;
@@ -20,8 +20,8 @@ type InfiniteScrollCustomViewListProps = {
   setSkippedSearch: (value: SetStateAction<number>) => void;
 };
 
-/** Load the next 50 results when the user scrolls a custom view inventory list to the end */
-function infiniteScrollCustomViewList({
+/** Load the next 50 results when the user scrolls a searched custom view list to the end */
+function infiniteScrollSearchedCustomViewList({
   router,
   shouldFetchMore,
   isVisible,
@@ -33,14 +33,14 @@ function infiniteScrollCustomViewList({
   setSearchedInventory,
   setShouldFetchMore,
   setSkippedSearch
-}: InfiniteScrollCustomViewListProps) {
+}: InfiniteScrollSearchedCustomViewListProps) {
   if (
     shouldFetchMore &&
     isVisible &&
-    views &&
-    views.length > 0 &&
+    query &&
     router.query.view &&
-    !query
+    views &&
+    views.length > 0
   ) {
     const id = router.query.view;
     const filterFound = views.find(view => view.id.toString() === id);
@@ -50,7 +50,7 @@ function infiniteScrollCustomViewList({
 
       settingsService
         .getInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}&id=${id}`,
+          `?limit=${batchSize}&skip=${skippedSearch}&query=${query}&id=${id}`,
           payloadJson
         )
         .then(res => {
@@ -80,4 +80,4 @@ function infiniteScrollCustomViewList({
   }
 }
 
-export default infiniteScrollCustomViewList;
+export default infiniteScrollSearchedCustomViewList;
