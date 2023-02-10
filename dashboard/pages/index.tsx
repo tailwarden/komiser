@@ -4,6 +4,7 @@ import EmptyState from '../components/empty-state/EmptyState';
 import ErrorPage from '../components/error/ErrorPage';
 import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
 import InventoryActiveFilters from '../components/inventory/components/InventoryActiveFilters';
+import InventoryHeader from '../components/inventory/components/InventoryHeader';
 import InventoryLayout from '../components/inventory/components/InventoryLayout';
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
@@ -77,10 +78,7 @@ export default function Inventory() {
         <meta name="description" content="Inventory - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
-
+      {/* Wraps the inventory page and handles the custom views sidebar */}
       <InventoryLayout
         views={views}
         router={router}
@@ -88,39 +86,31 @@ export default function Inventory() {
         inventory={inventory}
         searchedInventory={searchedInventory}
       >
-        <div className="flex min-h-[40px] items-center justify-between gap-8">
-          {isNotCustomView && (
-            <p className="flex items-center gap-2 text-lg font-medium text-black-900">
-              All Resources
-            </p>
+        <InventoryHeader isNotCustomView={isNotCustomView}>
+          {/* Custom view header and view management sidepanel */}
+          {hasFilterOrCustomView && (
+            <InventoryView
+              filters={filters}
+              displayedFilters={displayedFilters}
+              setToast={setToast}
+              inventoryStats={inventoryStats}
+              router={router}
+              views={views}
+              getViews={getViews}
+              hiddenResources={hiddenResources}
+              setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
+            />
           )}
-          <div className="flex flex-shrink-0 items-center gap-4">
-            {/* Custom view header and view management sidepanel */}
-            {hasFilterOrCustomView && (
-              <InventoryView
-                filters={filters}
-                displayedFilters={displayedFilters}
-                setToast={setToast}
-                inventoryStats={inventoryStats}
-                router={router}
-                views={views}
-                getViews={getViews}
-                hiddenResources={hiddenResources}
-                setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
-              />
-            )}
 
-            {/* Filter component */}
-            {displayFilterIfIsNotCustomView && (
-              <InventoryFilter
-                router={router}
-                setSkippedSearch={setSkippedSearch}
-                setToast={setToast}
-              />
-            )}
-          </div>
-        </div>
-
+          {/* Filter component */}
+          {displayFilterIfIsNotCustomView && (
+            <InventoryFilter
+              router={router}
+              setSkippedSearch={setSkippedSearch}
+              setToast={setToast}
+            />
+          )}
+        </InventoryHeader>
         <VerticalSpacing />
 
         {/* Active filters skeleton */}
@@ -222,6 +212,9 @@ export default function Inventory() {
           />
         )}
       </InventoryLayout>
+
+      {/* Toast component */}
+      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }
