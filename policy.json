@@ -5,17 +5,15 @@
             "Sid": "1",
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeRegions",
-                "ec2:DescribeInstances",
-                "ec2:DescribeVolumes",
-                "ec2:DescribeVpcs",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeNatGateways",
-                "ec2:DescribeRouteTables",
-                "ec2:DescribeSnapshots",
-                "ec2:DescribeNetworkAcls",
-                "ec2:DescribeKeyPairs",
-                "ec2:DescribeInternetGateways"
+                "ec2:Describe*",
+                "elasticloadbalancing:Describe*",
+                "autoscaling:Describe*",
+                "s3:Describe*",
+                "ecs:List*",
+                "ce:GetCostAndUsage",
+                "ce:GetCostForecast",
+                "apigateway:GET",
+                "dynamodb:Describe*"
             ],
             "Resource": "*"
         },
@@ -23,14 +21,16 @@
             "Sid": "2",
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeAddresses",
-                "ec2:DescribeSnapshots",
-                "ec2:DescribeSubnets",
-                "elasticloadbalancing:DescribeLoadBalancers",
-                "autoscaling:DescribeAutoScalingGroups",
-                "ce:GetCostAndUsage",
-                "s3:ListAllMyBuckets",
-                "apigateway:GET"
+                "lambda:List*",
+                "dynamodb:List*",
+                "cloudfront:List*",
+                "iam:List*",
+                "ecs:Describe*",
+                "glacier:List*",
+                "sqs:List*",
+                "route53:List*",
+                "sns:List*",
+                "s3:Get*"
             ],
             "Resource": "*"
         },
@@ -38,15 +38,17 @@
             "Sid": "3",
             "Effect": "Allow",
             "Action": [
-                "lambda:ListFunctions",
-                "dynamodb:ListTables",
-                "dynamodb:DescribeTable",
-                "rds:DescribeDBInstances",
-                "cloudwatch:DescribeAlarms",
-                "cloudfront:ListDistributions",
-                "ecs:ListServices",
-                "ecs:ListTasks",
-                "ecs:ListClusters"
+                "acm:List*",
+                "mq:List*",
+                "cloudwatch:Get*",
+                "cloudtrail:LookupEvents",
+                "datapipeline:List*",
+                "eks:List*",
+                "elasticache:Describe*",
+                "es:List*",
+                "logs:Describe*",
+                "rds:Describe*",
+                "cloudwatch:Describe*"
             ],
             "Resource": "*"
         },
@@ -54,15 +56,16 @@
             "Sid": "4",
             "Effect": "Allow",
             "Action": [
-                "sqs:ListQueues",
-                "route53:ListHostedZones",
-                "sns:ListTopics",
-                "iam:ListGroups",
-                "iam:ListRoles",
-                "iam:ListPolicies",
-                "iam:ListUsers",
-                "s3:GetBucketLocation",
-                "apigateway:GET"
+                "glue:Get*",
+                "organizations:Describe*",
+                "iam:Get*",
+                "kinesis:List*",
+                "kms:List*",
+                "redshift:Describe*",
+                "tag:Get*",
+                "route53:List*",
+                "support:Describe*",
+                "swf:List*"
             ],
             "Resource": "*"
         },
@@ -70,67 +73,16 @@
             "Sid": "5",
             "Effect": "Allow",
             "Action": [
-                "acm:ListCertificates",
-                "mq:ListBrokers",
-                "cloudwatch:GetMetricStatistics",
-                "cloudtrail:LookupEvents",
-                "ce:GetCostAndUsage",
-                "ce:GetCostForecast",
-                "datapipeline:ListPipelines",
-                "ec2:DescribeReservedInstances",
-                "ec2:DescribeSpotFleetRequests",
-                "ec2:DescribeScheduledInstances",
-                "eks:ListClusters",
-                "elasticache:DescribeCacheClusters",
-                "es:ListDomainNames",
-                "logs:DescribeLogGroups"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "6",
-            "Effect": "Allow",
-            "Action": [
-                "glue:GetCrawlers",
-                "glue:GetJobs",
-                "organizations:DescribeOrganization",
-                "iam:GetUser",
-                "kinesis:ListStreams",
-                "kinesis:ListShards",
-                "kms:ListKeys",
-                "redshift:DescribeClusters",
-                "tag:GetResources",
-                "route53:ListResourceRecordSets",
-                "support:DescribeCases",
-                "swf:ListDomains"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "7",
-            "Effect": "Allow",
-            "Action": [
-                "ecs:DescribeServices",
-                "ecs:DescribeTasks",
-                "ecs:DescribeClusters",
-                "glacier:ListVaults",
-                "ec2:DescribeSpotFleetInstances"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "8",
-            "Effect": "Allow",
-            "Action": [
-                "sns:ListTagsForResource",
-                "s3:GetBucketTagging",
-                "lambda:ListTags",
-                "kms:ListResourceTags",
+                "sns:List*",
+                "s3:Get*",
+                "lambda:List*",
+                "kms:List*",
                 "pricing:GetProducts",
-                "ecr:DescribeRepositories",
-                "elasticfilesystem:DescribeFileSystems",
-                "rds:DescribeDBClusters",
-                "elasticache:ListTagsForResource"
+                "ecr:Describe*",
+                "elasticfilesystem:Describe*",
+                "rds:Describe*",
+                "elasticache:List*",
+                "eks:Describe*"
             ],
             "Resource": "*"
         }
