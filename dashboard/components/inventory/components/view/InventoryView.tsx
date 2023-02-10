@@ -13,20 +13,21 @@ import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   HiddenResource,
-  InventoryFilterDataProps,
+  InventoryFilterData,
   InventoryStats,
-  ViewProps
-} from '../../hooks/useInventory';
+  View
+} from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
+import InventoryViewsHeader from '../InventoryViewsHeader';
 import useViews from './hooks/useViews';
 
 type InventoryViewProps = {
-  filters: InventoryFilterDataProps[];
-  displayedFilters: InventoryFilterDataProps[];
+  filters: InventoryFilterData[] | undefined;
+  displayedFilters: InventoryFilterData[] | undefined;
   setToast: (toast: ToastProps | undefined) => void;
-  inventoryStats: InventoryStats;
+  inventoryStats: InventoryStats | undefined;
   router: NextRouter;
-  views: ViewProps[] | undefined;
+  views: View[] | undefined;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
   hiddenResources: HiddenResource[] | undefined;
   setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
@@ -58,7 +59,8 @@ function InventoryView({
     onCheckboxChange,
     handleBulkSelection,
     unhideLoading,
-    unhideResources
+    unhideResources,
+    deleteLoading
   } = useViews({
     setToast,
     views,
@@ -70,32 +72,45 @@ function InventoryView({
 
   return (
     <>
+      <InventoryViewsHeader
+        openModal={openModal}
+        views={views}
+        router={router}
+        saveView={saveView}
+        setToast={setToast}
+        loading={loading}
+        deleteView={deleteView}
+        deleteLoading={deleteLoading}
+      />
+
       {/* Save as a view button */}
-      <Button size="sm" onClick={() => openModal(filters)}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M16 8.99v11.36c0 1.45-1.04 2.06-2.31 1.36l-3.93-2.19c-.42-.23-1.1-.23-1.52 0l-3.93 2.19c-1.27.7-2.31.09-2.31-1.36V8.99c0-1.71 1.4-3.11 3.11-3.11h7.78c1.71 0 3.11 1.4 3.11 3.11z"
-          ></path>
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M22 5.11v11.36c0 1.45-1.04 2.06-2.31 1.36L16 15.77V8.99c0-1.71-1.4-3.11-3.11-3.11H8v-.77C8 3.4 9.4 2 11.11 2h7.78C20.6 2 22 3.4 22 5.11zM7 12h4M9 14v-4"
-          ></path>
-        </svg>
-        {router.query.view ? 'Manage view' : 'Save as a view'}
-      </Button>
+      {!router.query.view && (
+        <Button size="sm" onClick={() => openModal(filters)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+              d="M16 8.99v11.36c0 1.45-1.04 2.06-2.31 1.36l-3.93-2.19c-.42-.23-1.1-.23-1.52 0l-3.93 2.19c-1.27.7-2.31.09-2.31-1.36V8.99c0-1.71 1.4-3.11 3.11-3.11h7.78c1.71 0 3.11 1.4 3.11 3.11z"
+            ></path>
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+              d="M22 5.11v11.36c0 1.45-1.04 2.06-2.31 1.36L16 15.77V8.99c0-1.71-1.4-3.11-3.11-3.11H8v-.77C8 3.4 9.4 2 11.11 2h7.78C20.6 2 22 3.4 22 5.11zM7 12h4M9 14v-4"
+            ></path>
+          </svg>
+          Save as a view
+        </Button>
+      )}
 
       {/* Sidepanel */}
       <Sidepanel isOpen={isOpen} closeModal={closeModal} noScroll={true}>
@@ -120,7 +135,8 @@ function InventoryView({
         <SidepanelPage page={page} param="view">
           <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              {displayedFilters?.length > 0 &&
+              {displayedFilters &&
+                displayedFilters.length > 0 &&
                 displayedFilters.map((data, idx) => (
                   <InventoryFilterSummary key={idx} data={data} />
                 ))}
@@ -144,7 +160,7 @@ function InventoryView({
                 disabled={!view.name}
               >
                 {router.query.view ? 'Update view' : 'Save as a view'}{' '}
-                <span className="flex items-center justify-center bg-black-900/20 text-xs py-1 px-2 rounded-lg">
+                <span className="flex items-center justify-center rounded-lg bg-black-900/20 py-1 px-2 text-xs">
                   {inventoryStats?.resources}
                 </span>
               </Button>
@@ -154,8 +170,8 @@ function InventoryView({
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
             <>
-              <div className="max-h-[calc(100vh-300px)] overflow-scroll">
-                <table className="table-auto w-full text-xs text-left bg-white text-gray-900">
+              <div className="max-h-[calc(100vh-300px)] overflow-y-auto overflow-x-hidden">
+                <table className="w-full table-auto bg-white text-left text-xs text-gray-900">
                   <thead className="bg-white">
                     <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
                       <th className="py-4 px-2">
@@ -178,7 +194,12 @@ function InventoryView({
                     {hiddenResources.map(item => (
                       <tr
                         key={item.id}
-                        className="bg-white hover:bg-black-100 border-black-200/30 border-b last:border-none"
+                        className={`border-b border-black-200/30 last:border-none ${
+                          bulkItems &&
+                          bulkItems.find(currentId => currentId === item.id)
+                            ? 'border-black-200/70 bg-komiser-120'
+                            : 'border-black-200/30 bg-white hover:bg-black-100/50'
+                        } border-b last:border-none`}
                       >
                         <td className="py-4 px-2">
                           <Checkbox
@@ -198,7 +219,7 @@ function InventoryView({
                                 src={providers.providerImg(
                                   item.provider as Provider
                                 )}
-                                className="w-6 h-6 rounded-full"
+                                className="h-6 w-6 rounded-full"
                                 alt={item.provider}
                               />
                             </picture>
@@ -207,13 +228,13 @@ function InventoryView({
                         </td>
                         <td className="py-4 px-2">{item.service}</td>
                         <td className="py-4 px-2">
-                          <p className="w-24 truncate ...">{item.name}</p>
+                          <p className="... w-24 truncate">{item.name}</p>
                         </td>
                         <td className="py-4 px-2">
-                          <p className="w-24 truncate ...">{item.region}</p>
+                          <p className="... w-24 truncate">{item.region}</p>
                         </td>
                         <td className="py-4 px-2">
-                          <p className="w-24 truncate ...">{item.account}</p>
+                          <p className="... w-24 truncate">{item.account}</p>
                         </td>
                         <td className="py-4 px-2 text-right">
                           ${formatNumber(item.cost)}
@@ -231,7 +252,7 @@ function InventoryView({
                   onClick={unhideResources}
                 >
                   Unhide resources{' '}
-                  <span className="flex items-center justify-center bg-white/10 text-xs py-1 px-2 rounded-lg">
+                  <span className="flex items-center justify-center rounded-lg bg-white/10 py-1 px-2 text-xs">
                     {formatNumber(bulkItems.length)}
                   </span>
                 </Button>
@@ -240,16 +261,16 @@ function InventoryView({
           )}
 
           {hiddenResources && hiddenResources.length === 0 && (
-            <div className="p-6 bg-black-100 rounded-lg">
-              <div className="flex flex-col gap-6 items-center">
+            <div className="rounded-lg bg-black-100 p-6">
+              <div className="flex flex-col items-center gap-6">
                 <Image
                   src="/assets/img/purplin/dashboard.svg"
                   alt="Purplin"
                   width={150}
                   height={100}
                 />
-                <div className="flex flex-col gap-2 px-24 items-center justify-center text-center">
-                  <p className="text-black-900 font-semibold">
+                <div className="flex flex-col items-center justify-center gap-2 px-24 text-center">
+                  <p className="font-semibold text-black-900">
                     No hidden resources in this view
                   </p>
                   <p className="text-sm text-black-400">

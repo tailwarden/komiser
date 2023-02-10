@@ -52,6 +52,8 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 					}
 				}
 
+				monthlyCost := float64(filesystem.SizeInBytes.Value/1000000000) * 0.30
+
 				resources = append(resources, Resource{
 					Provider:   "AWS",
 					Account:    client.Name,
@@ -59,7 +61,7 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 					ResourceId: resourceArn,
 					Region:     client.AWSClient.Region,
 					Name:       *filesystem.Name,
-					Cost:       0,
+					Cost:       monthlyCost,
 					Tags:       tags,
 					FetchedAt:  time.Now(),
 					Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, *filesystem.Name),

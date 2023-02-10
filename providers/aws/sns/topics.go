@@ -3,20 +3,38 @@ package sns
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
+
+func BeginningOfMonth(date time.Time) time.Time {
+	return date.AddDate(0, 0, -date.Day()+1)
+}
 
 func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config sns.ListTopicsInput
 	snsClient := sns.NewFromConfig(*client.AWSClient)
+
+	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+
+	stsClient := sts.NewFromConfig(*client.AWSClient)
+	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	if err != nil {
+		return resources, err
+	}
+
+	accountId := stsOutput.Account
 
 	for {
 		output, err := snsClient.ListTopics(context.Background(), &config)
@@ -40,6 +58,37 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				}
 			}
 
+			resourceArnPrefix := fmt.Sprintf("arn:aws:sns:%s:%s:", client.AWSClient.Region, *accountId)
+			topicName := strings.Replace(*topic.TopicArn, resourceArnPrefix, "", -1)
+
+			metricsMessagesPublishedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("NumberOfMessagesPublished"),
+				Namespace:  aws.String("AWS/SNS"),
+				Dimensions: []types.Dimension{
+					types.Dimension{
+						Name:  aws.String("TopicName"),
+						Value: &topicName,
+					},
+				},
+				Period: aws.Int32(3600),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warn("Couldn't fetch invocations metric for %s", *topic.TopicArn)
+			}
+
+			requests := 0.0
+			if metricsMessagesPublishedOutput != nil && len(metricsMessagesPublishedOutput.Datapoints) > 0 {
+				requests = *metricsMessagesPublishedOutput.Datapoints[0].Sum
+			}
+
+			monthlyCost := (requests / 1000000) * 0.0000005
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -47,7 +96,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				ResourceId: *topic.TopicArn,
 				Region:     client.AWSClient.Region,
 				Name:       *topic.TopicArn,
-				Cost:       0,
+				Cost:       monthlyCost,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/topic/%s", client.AWSClient.Region, client.AWSClient.Region, *topic.TopicArn),

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import formatNumber from '../../../utils/formatNumber';
 import Button from '../../button/Button';
-import { InventoryStats } from '../hooks/useInventory';
+import { InventoryStats } from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryTableBulkActionsProps = {
   bulkItems: [] | string[];
@@ -24,7 +24,7 @@ function InventoryTableBulkActions({
   return (
     <>
       {bulkItems && bulkItems.length > 0 && (
-        <div className="sticky flex items-center justify-between border-purplin-650 bottom-0 bg-gradient-to-r from-komiser-600 to-komiser-700 w-full py-4 px-6 text-sm">
+        <div className="border-purplin-650 sticky bottom-0 flex w-full items-center justify-between bg-gradient-to-r from-komiser-600 to-komiser-700 py-4 px-6 text-sm">
           <p className="text-black-100">
             {bulkItems.length} {bulkItems.length > 1 ? 'resources' : 'resource'}{' '}
             {inventoryStats &&
@@ -39,7 +39,7 @@ function InventoryTableBulkActions({
               onClick={() => openBulkModal(bulkItems)}
             >
               Manage tags
-              <span className="flex items-center justify-center bg-primary/10 text-xs py-1 px-2 rounded-lg">
+              <span className="flex items-center justify-center rounded-lg bg-primary/10 py-1 px-2 text-xs">
                 {formatNumber(bulkItems.length)}
               </span>
             </Button>
@@ -52,7 +52,7 @@ function InventoryTableBulkActions({
                 loading={hideResourcesLoading}
               >
                 Hide from view
-                <span className="flex items-center justify-center bg-white/10 text-xs py-1 px-2 rounded-lg">
+                <span className="flex items-center justify-center rounded-lg bg-white/10 py-1 px-2 text-xs">
                   {formatNumber(bulkItems.length)}
                 </span>
               </Button>

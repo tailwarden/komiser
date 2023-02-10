@@ -14,6 +14,10 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
+func BeginningOfMonth(date time.Time) time.Time {
+	return date.AddDate(0, 0, -date.Day()+1)
+}
+
 func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config elasticloadbalancing.DescribeLoadBalancersInput
@@ -51,6 +55,15 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 				}
 			}
 
+			startOfMonth := BeginningOfMonth(time.Now())
+			hourlyUsage := 0
+			if (*loadbalancer.CreatedTime).Before(startOfMonth) {
+				hourlyUsage = int(time.Now().Sub(startOfMonth).Hours())
+			} else {
+				hourlyUsage = int(time.Now().Sub(*loadbalancer.CreatedTime).Hours())
+			}
+			monthlyCost := float64(hourlyUsage) * 0.0225
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -58,7 +71,7 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
 				Name:       *loadbalancer.LoadBalancerName,
-				Cost:       0,
+				Cost:       monthlyCost,
 				Tags:       tags,
 				CreatedAt:  *loadbalancer.CreatedTime,
 				FetchedAt:  time.Now(),

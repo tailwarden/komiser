@@ -1,6 +1,6 @@
 {
   "name": "komiser-dashboard",
-  "version": "0.1.0",
+  "version": "3.0.2",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3002",
@@ -29,7 +29,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
     "postcss": "^8.4.18",
-    "prettier": "2.7.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.2.2",
     "tailwindcss": "^3.2.1"
   }
 }

@@ -29,10 +29,10 @@ function Sidepanel({ isOpen, closeModal, children, noScroll }: SidepanelProps) {
         <>
           <div
             onClick={closeModal}
-            className="hidden sm:block fixed inset-0 z-30 bg-black-900/10 opacity-0 animate-fade-in"
+            className="fixed inset-0 z-30 hidden animate-fade-in bg-black-900/10 opacity-0 sm:block"
           ></div>
           <div
-            className={`fixed overflow-auto inset-0 z-30 sm:top-4 sm:bottom-4 sm:right-4 sm:left-auto w-full sm:w-[38rem] p-6 sm:rounded-lg shadow-2xl opacity-0 animate-fade-in-up sm:animate-fade-in-left bg-white flex flex-col gap-4 ${
+            className={`fixed inset-0 z-30 flex w-full animate-fade-in-up flex-col gap-4 overflow-auto bg-white p-6 opacity-0 shadow-2xl sm:top-4 sm:bottom-4 sm:right-4 sm:left-auto sm:w-[38rem] sm:animate-fade-in-left sm:rounded-lg ${
               noScroll ? 'overflow-hidden' : 'overflow-auto'
             }`}
           >
