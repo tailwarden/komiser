@@ -66,7 +66,7 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 				if (*outputDescribe.Cluster.CreatedAt).Before(startOfMonth) {
 					hourlyUsage = int(time.Now().Sub(startOfMonth).Hours())
 				} else {
-					hourlyUsage = int(time.Now().Sub().Hours())
+					hourlyUsage = int(time.Now().Sub(*outputDescribe.Cluster.CreatedAt).Hours())
 				}
 				monthlyCost = float64(hourlyUsage) * 0.10
 				createdAt = *outputDescribe.Cluster.CreatedAt
