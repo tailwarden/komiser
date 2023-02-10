@@ -4,7 +4,10 @@ import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { InventoryItem, InventoryStats } from '../hooks/useInventory';
+import {
+  InventoryItem,
+  InventoryStats
+} from '../hooks/useInventory/types/useInventoryTypes';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
 import InventoryTableBulkActions from './InventoryTableBulkActions';
@@ -13,8 +16,8 @@ import InventoryTableTags from './InventoryTableTags';
 
 type InventoryTableProps = {
   error: boolean;
-  inventory: InventoryItem[] | [];
-  searchedInventory: InventoryItem[] | [];
+  inventory: InventoryItem[] | [] | undefined;
+  searchedInventory: InventoryItem[] | [] | undefined;
   query: string;
   openModal: (item: InventoryItem) => void;
   setQuery: (query: string) => void;

@@ -6,7 +6,6 @@ import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
-import Modal from '../../../modal/Modal';
 import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
 import SidepanelPage from '../../../sidepanel/SidepanelPage';
@@ -14,21 +13,21 @@ import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   HiddenResource,
-  InventoryFilterDataProps,
+  InventoryFilterData,
   InventoryStats,
-  ViewProps
-} from '../../hooks/useInventory';
+  View
+} from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import InventoryViewsHeader from '../InventoryViewsHeader';
 import useViews from './hooks/useViews';
 
 type InventoryViewProps = {
-  filters: InventoryFilterDataProps[];
-  displayedFilters: InventoryFilterDataProps[];
+  filters: InventoryFilterData[] | undefined;
+  displayedFilters: InventoryFilterData[] | undefined;
   setToast: (toast: ToastProps | undefined) => void;
-  inventoryStats: InventoryStats;
+  inventoryStats: InventoryStats | undefined;
   router: NextRouter;
-  views: ViewProps[] | undefined;
+  views: View[] | undefined;
   getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
   hiddenResources: HiddenResource[] | undefined;
   setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
@@ -136,7 +135,8 @@ function InventoryView({
         <SidepanelPage page={page} param="view">
           <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              {displayedFilters?.length > 0 &&
+              {displayedFilters &&
+                displayedFilters.length > 0 &&
                 displayedFilters.map((data, idx) => (
                   <InventoryFilterSummary key={idx} data={data} />
                 ))}
@@ -170,7 +170,7 @@ function InventoryView({
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
             <>
-              <div className="max-h-[calc(100vh-300px)] overflow-scroll">
+              <div className="max-h-[calc(100vh-300px)] overflow-y-auto overflow-x-hidden">
                 <table className="w-full table-auto bg-white text-left text-xs text-gray-900">
                   <thead className="bg-white">
                     <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
@@ -194,7 +194,12 @@ function InventoryView({
                     {hiddenResources.map(item => (
                       <tr
                         key={item.id}
-                        className="border-b border-black-200/30 bg-white last:border-none hover:bg-black-100"
+                        className={`border-b border-black-200/30 last:border-none ${
+                          bulkItems &&
+                          bulkItems.find(currentId => currentId === item.id)
+                            ? 'border-black-200/70 bg-komiser-120'
+                            : 'border-black-200/30 bg-white hover:bg-black-100/50'
+                        } border-b last:border-none`}
                       >
                         <td className="py-4 px-2">
                           <Checkbox

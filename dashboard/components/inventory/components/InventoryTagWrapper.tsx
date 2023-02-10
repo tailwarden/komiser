@@ -1,6 +1,6 @@
 import regex from '../../../utils/regex';
 import Input from '../../input/Input';
-import { Tag } from '../hooks/useInventory';
+import { Tag } from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryTagWrapperProps = {
   tag: Tag;

@@ -1,11 +1,11 @@
 import Button from '../../../button/Button';
-import { InventoryFilterDataProps } from '../../hooks/useInventory';
+import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterSummaryProps = {
   id?: number;
   bg?: 'white';
-  data: InventoryFilterDataProps;
+  data: InventoryFilterData;
   deleteFilter?: (idx: number) => void;
   resetData?: () => void;
 };
@@ -27,7 +27,7 @@ function InventoryFilterSummary({
     return param;
   }
 
-  function getOperator(param: InventoryFilterDataProps['operator']) {
+  function getOperator(param: InventoryFilterData['operator']) {
     if (param === 'IS') return 'is';
     if (param === 'IS_NOT') return 'is not';
     if (param === 'CONTAINS') return 'contains';

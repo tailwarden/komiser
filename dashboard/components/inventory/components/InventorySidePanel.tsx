@@ -3,12 +3,16 @@ import providers from '../../../utils/providerHelper';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
 import SidepanelTabs from '../../sidepanel/SidepanelTabs';
-import { InventoryItem, Pages, Tag } from '../hooks/useInventory';
+import {
+  InventoryItem,
+  Pages,
+  Tag
+} from '../hooks/useInventory/types/useInventoryTypes';
 import InventoryTagWrapper from './InventoryTagWrapper';
 
 type InventorySidePanelProps = {
   closeModal: () => void;
-  data: InventoryItem;
+  data: InventoryItem | undefined;
   goTo: (page: Pages) => void;
   page: Pages;
   updateTags: (action?: 'delete') => void;

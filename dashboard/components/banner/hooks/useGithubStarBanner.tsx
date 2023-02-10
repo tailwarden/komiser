@@ -20,10 +20,11 @@ function useGithubStarBanner() {
   const router = useRouter();
 
   function checkLocalStorageForBannerStatus() {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && localStorage.displayGithubStarBanner) {
       return localStorage.displayGithubStarBanner;
     }
-    return null;
+    localStorage.displayGithubStarBanner = 'true';
+    return localStorage.displayGithubStarBanner;
   }
 
   function dismissBanner() {

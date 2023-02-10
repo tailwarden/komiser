@@ -4,11 +4,11 @@ import regex from '../../../../utils/regex';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
 import { ToastProps } from '../../../toast/hooks/useToast';
-import { InventoryFilterDataProps } from '../../hooks/useInventory';
+import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import { CostBetween } from './hooks/useFilterWizard';
 
 type InventoryFilterValueProps = {
-  data: InventoryFilterDataProps;
+  data: InventoryFilterData;
   handleValueCheck: (
     e: ChangeEvent<HTMLInputElement>,
     newValue: string
@@ -111,7 +111,7 @@ function InventoryFilterValue({
   }, []);
 
   return (
-    <div className="flex min-w-[20rem] flex-col gap-2">
+    <div className="flex min-w-[19.05rem] flex-col gap-2">
       {/* Display multi-select */}
       {options &&
         options.length > 0 &&

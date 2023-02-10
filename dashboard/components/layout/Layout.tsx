@@ -11,11 +11,6 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
   const { displayBanner, dismissBanner, githubStars } = useGithubStarBanner();
 
-  // If there is no display banner flag in the localStorage, create one:
-  if (typeof window !== 'undefined' && !localStorage.displayGithubStarBanner) {
-    localStorage.displayGithubStarBanner = 'true';
-  }
-
   return (
     <LayoutContext.Provider value={{ displayBanner, dismissBanner }}>
       <Banner githubStars={githubStars} />
