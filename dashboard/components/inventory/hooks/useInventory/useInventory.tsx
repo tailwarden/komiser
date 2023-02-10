@@ -358,7 +358,7 @@ function useInventory() {
           settingsService
             .getInventory(
               `?limit=${batchSize}&skip=0&query=${query}${
-                id ? `&id=${id}` : ''
+                id ? `&view=${id}` : ''
               }`,
               payloadJson
             )
