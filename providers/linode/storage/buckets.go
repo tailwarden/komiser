@@ -3,7 +3,7 @@ package storage
 import (
 	"context"
 	"fmt"
-	// "strings"
+	"strings"
 	"time"
 
 	"github.com/linode/linodego"
@@ -23,35 +23,20 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 	}
 
 	for _, bucket := range buckets {
-		// tags := make([]Tag, 0)
-		// for _, tag := range bucket.Tags {
-		// 	if strings.Contains(tag, ":") {
-		// 		parts := strings.Split(tag, ":")
-		// 		tags = append(tags, models.Tag{
-		// 			Key:   parts[0],
-		// 			Value: parts[1],
-		// 		})
-		// 	} else {
-		// 		tags = append(tags, models.Tag{
-		// 			Key:   tag,
-		// 			Value: tag,
-		// 		})
-		// 	}
-		// }
+		region := strings.Split(bucket.Hostname, ".")[1]
 
 		resources = append(resources, models.Resource{
 			Provider:   "Linode",
 			Account:    client.Name,
 			Service:    "Bucket",
-			// Region:     bucket.Region,
-			// ResourceId: fmt.Sprintf("%s", bucket.ID),
-			// Hostname:   fmt.Sprintf("%s", bucket.Hostname),
+			Region:     region,
+			ResourceId: fmt.Sprintf("%s", bucket.Hostname),
 			Cost:       0,
 			Name:       bucket.Label,
 			FetchedAt:  time.Now(),
 			CreatedAt:  *bucket.Created,
-			// Tags:       tags,
-			Link:       fmt.Sprintf("https://cloud.linode.com/object-storage/buckets/us-southeast-1/%s",  bucket.Label),
+			Link:       fmt.Sprintf("https://cloud.linode.com/object-storage" +
+									"/buckets/%s/%s", region, bucket.Label),
 		})
 	}
 
