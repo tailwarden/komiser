@@ -8,6 +8,9 @@ function Dashboard() {
         <meta name="description" content="Dashboard - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <p className="flex items-center gap-2 text-lg font-medium text-black-900">
+        Dashboard overview
+      </p>
     </div>
   );
 }
