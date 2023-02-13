@@ -51,7 +51,7 @@ function InventoryLayout({
           <button
             onClick={() => {
               if (!router.query.view) return;
-              router.push('/');
+              router.push(router.pathname);
             }}
             className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
@@ -126,7 +126,7 @@ function InventoryLayout({
                         key={view.id}
                         onClick={() => {
                           if (isActive) return;
-                          router.push(`/?view=${view.id}`);
+                          router.push(`?view=${view.id}`);
                         }}
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${

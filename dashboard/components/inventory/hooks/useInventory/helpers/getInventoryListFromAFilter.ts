@@ -54,7 +54,7 @@ function getInventoryListFromAFilter({
       Object.keys(router.query)[0].split(':').length <= 1 &&
       !router.query.view
     ) {
-      setTimeout(() => router.push('/'), 5000);
+      setTimeout(() => router.push(router.pathname), 5000);
       return setToast({
         hasError: true,
         title: `Invalid URL params`,
