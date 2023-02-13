@@ -13,6 +13,7 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		compute.Linodes,
+		compute.LKEClusters,
 		storage.Volumes,
 		storage.Databases,
 	}
