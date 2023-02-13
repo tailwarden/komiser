@@ -18,6 +18,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		storage.Databases,
 		storage.Buckets,
 		networking.NodeBalancers,
+		networking.Firewalls,
 	}
 }
 
