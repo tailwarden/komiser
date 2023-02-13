@@ -2,6 +2,7 @@ package linode
 
 import (
 	"context"
+	"github.com/tailwarden/komiser/providers/linode/networking"
 	"log"
 
 	"github.com/tailwarden/komiser/providers"
@@ -15,6 +16,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.Linodes,
 		storage.Volumes,
 		storage.Databases,
+		networking.NodeBalancers,
 	}
 }
 
