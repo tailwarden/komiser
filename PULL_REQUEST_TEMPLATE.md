@@ -24,9 +24,9 @@
 
 ## Checklist
 
-- [ ] Code follows the code style and formatting guidelines
+- [ ] Code follows the <a href="https://github.com/tailwarden/komiser/blob/master/CONTRIBUTING.md">contributing</a> guidelines
 - [ ] Changes have been thoroughly tested
-- [ ] Documentation has been updated, if necessary
+- [ ] <a href="https://github.com/tailwarden/docs.komiser.io">Documentation</a> has been updated, if necessary
 - [ ] Any dependencies have been added to the project, if necessary
 
 ## Reviewers
