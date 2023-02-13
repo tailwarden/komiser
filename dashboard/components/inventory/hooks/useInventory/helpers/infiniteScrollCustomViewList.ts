@@ -50,7 +50,7 @@ function infiniteScrollCustomViewList({
 
       settingsService
         .getInventory(
-          `?limit=${batchSize}&skip=${skippedSearch}&id=${id}`,
+          `?limit=${batchSize}&skip=${skippedSearch}&view=${id}`,
           payloadJson
         )
         .then(res => {
