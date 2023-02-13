@@ -15,6 +15,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.Linodes,
 		storage.Volumes,
 		storage.Databases,
+		storage.Buckets,
 	}
 }
 
