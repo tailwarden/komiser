@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import DashboardLayout from '../components/dashboard/components/DashboardLayout';
-import DashboardTopStats from '../components/dashboard/components/DashboardTopStats';
+import DashboardTopStats from '../components/dashboard/components/top-stats/DashboardTopStats';
 
 function Dashboard() {
   return (
