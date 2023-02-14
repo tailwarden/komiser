@@ -41,8 +41,9 @@ function InventoryLayout({
     (inventory && inventory.length === 0) ||
     (searchedInventory && searchedInventory.length === 0);
 
-  const dontDisplaySidebar =
-    error || hasNoInventory || (views && views.length === 0);
+  const hasNoViews = views && views.length === 0;
+
+  const dontDisplaySidebar = (error && hasNoInventory) || hasNoViews;
 
   return (
     <>
