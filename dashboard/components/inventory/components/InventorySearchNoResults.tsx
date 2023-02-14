@@ -37,7 +37,7 @@ function InventorySearchNoResults({ query, setQuery, router }: Props) {
               ? () => {
                   setQuery('');
                 }
-              : () => router.push('/')
+              : () => router.push(router.pathname)
           }
         >
           <svg

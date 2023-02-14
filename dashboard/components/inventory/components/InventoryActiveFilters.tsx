@@ -33,7 +33,11 @@ function InventoryActiveFilters({
               />
             ))}
           {isNotCustomView && (
-            <Button size="sm" style="ghost" onClick={() => router.push('/')}>
+            <Button
+              size="sm"
+              style="ghost"
+              onClick={() => router.push(router.pathname)}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

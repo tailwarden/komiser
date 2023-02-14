@@ -3,6 +3,15 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
 import useToast from '../../../toast/hooks/useToast';
 import useIsVisible from '../useIsVisible/useIsVisible';
+import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
+import getInventoryListAndStats from './helpers/getInventoryListAndStats';
+import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
+import infiniteScrollCustomViewList from './helpers/infiniteScrollCustomViewList';
+import infiniteScrollFilteredList from './helpers/infiniteScrollFilteredList';
+import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
+import infiniteScrollSearchedAndFilteredList from './helpers/infiniteScrollSearchedAndFilteredList';
+import infiniteScrollSearchedCustomViewList from './helpers/infiniteScrollSearchedCustomViewList';
+import infiniteScrollSearchedList from './helpers/infiniteScrollSearchedList';
 import {
   HiddenResource,
   InventoryFilterData,
@@ -12,15 +21,6 @@ import {
   Tag,
   View
 } from './types/useInventoryTypes';
-import getInventoryListAndStats from './helpers/getInventoryListAndStats';
-import getInventoryListFromAFilter from './helpers/getInventoryListFromAFilter';
-import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
-import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
-import infiniteScrollFilteredList from './helpers/infiniteScrollFilteredList';
-import infiniteScrollSearchedList from './helpers/infiniteScrollSearchedList';
-import infiniteScrollSearchedAndFilteredList from './helpers/infiniteScrollSearchedAndFilteredList';
-import infiniteScrollCustomViewList from './helpers/infiniteScrollCustomViewList';
-import infiniteScrollSearchedCustomViewList from './helpers/infiniteScrollSearchedCustomViewList';
 
 function useInventory() {
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
@@ -95,12 +95,12 @@ function useInventory() {
         setViews(sortViewsById);
 
         if (edit && viewId) {
-          router.push(`/?view=${viewId}`, undefined, { shallow: true });
+          router.push(`?view=${viewId}`, undefined, { shallow: true });
         }
 
         if (redirect) {
           const idFromNewCustomView = res[res.length - 1].id;
-          router.push(`/?view=${idFromNewCustomView}`, undefined, {
+          router.push(`?view=${idFromNewCustomView}`, undefined, {
             shallow: true
           });
         }
@@ -711,7 +711,7 @@ function useInventory() {
           }`
       )
       .join('&');
-    router.push(url ? `/?${url}` : '', undefined, { shallow: true });
+    router.push(url ? `?${url}` : '', undefined, { shallow: true });
   }
 
   /** Conditional helpers */

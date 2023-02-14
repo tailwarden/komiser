@@ -168,7 +168,6 @@ function useViews({
             message: `The custom view will now be accessible from the side navigation.`
           });
           closeModal();
-          router.push('/');
         }
       });
     }
@@ -196,7 +195,7 @@ function useViews({
             message: `The custom view has been successfully deleted.`
           });
           closeModal();
-          router.push('/');
+          router.push(router.pathname);
         }
       });
     }
@@ -221,7 +220,7 @@ function useViews({
             title: `${viewToBeDeleted.name} has been deleted.`,
             message: `The custom view has been successfully deleted.`
           });
-          router.push('/');
+          router.push(router.pathname);
         }
       });
     }

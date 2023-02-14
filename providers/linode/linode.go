@@ -16,6 +16,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.LKEClusters,
 		storage.Volumes,
 		storage.Databases,
+		storage.Buckets,
 	}
 }
 

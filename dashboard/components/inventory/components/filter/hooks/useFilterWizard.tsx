@@ -134,9 +134,9 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
       }
     }
 
-    if (router.asPath === '/') {
+    if (router.asPath === '/inventory') {
       router.push(
-        `/?${data.field === 'tag' ? `tag:${data.tagKey}` : data.field}:${
+        `?${data.field === 'tag' ? `tag:${data.tagKey}` : data.field}:${
           data.operator
         }${
           data.values.length > 0 ? `:${data.values.map(value => value)}` : ''

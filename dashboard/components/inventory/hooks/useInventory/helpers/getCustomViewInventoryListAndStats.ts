@@ -111,7 +111,7 @@ function getCustomViewInventoryListAndStats({
           }
         });
     } else {
-      setTimeout(() => router.push('/'), 5000);
+      setTimeout(() => router.push(router.pathname), 5000);
       return setToast({
         hasError: true,
         title: `Invalid view`,
