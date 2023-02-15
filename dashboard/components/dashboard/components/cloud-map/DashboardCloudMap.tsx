@@ -1,8 +1,8 @@
 import DashboardCloudMapChart from './DashboardCloudMapChart';
 import DashboardCloudMapSkeleton from './DashboardCloudMapSkeleton';
 import DashboardCloudMapTooltip from './DashboardCloudMapTooltip';
-import useCloudMapTooltip from './useCloudMapTooltip';
-import useCloudMap from './useCloudMap';
+import useCloudMap from './hooks/useCloudMap';
+import useCloudMapTooltip from './hooks/useCloudMapTooltip';
 
 function DashboardCloudMap() {
   const { loading, data, error, fetch } = useCloudMap();

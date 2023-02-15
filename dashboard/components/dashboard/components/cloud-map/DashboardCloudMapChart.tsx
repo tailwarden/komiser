@@ -5,8 +5,8 @@ import {
   Geography,
   Marker
 } from 'react-simple-maps';
-import { Regions } from './useCloudMap';
-import { CloudMapTooltip } from './useCloudMapTooltip';
+import { Regions } from './hooks/useCloudMap';
+import { CloudMapTooltip } from './hooks/useCloudMapTooltip';
 
 type DashboardCloudMapChartProps = {
   regions: Regions | undefined;

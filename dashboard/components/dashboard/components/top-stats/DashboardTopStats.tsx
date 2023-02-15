@@ -1,7 +1,7 @@
 import Button from '../../../button/Button';
 import Card from '../../../card/Card';
 import CardSkeleton from '../../../card/CardSkeleton';
-import useDashboardTopStats from './useDashboardTopStats';
+import useDashboardTopStats from './hooks/useDashboardTopStats';
 
 function DashboardTopStats() {
   const { loading, data, error, fetch } = useDashboardTopStats();

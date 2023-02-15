@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import mockDataForDashboard from '../../utils/mockDataForDashboard';
+import mockDataForDashboard from '../../../utils/mockDataForDashboard';
 
 export type Regions = {
   name: string;
