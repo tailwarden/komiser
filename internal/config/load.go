@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/BurntSushi/toml"
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/civo/civogo"
@@ -191,6 +192,25 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				TencentClient: client,
 				Name:          account.Name,
+			})
+		}
+	}
+
+	if len(config.Azure) > 0 {
+		for _, account := range config.Azure {
+			creds, err := azidentity.NewClientSecretCredential(account.TenantId, account.ClientId, account.ClientSecret, &azidentity.ClientSecretCredentialOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			client := providers.AzureClient{
+				Credentials:    creds,
+				SubscriptionId: account.SubscriptionId,
+			}
+
+			clients = append(clients, providers.ProviderClient{
+				AzureClient: &client,
+				Name:        account.Name,
 			})
 		}
 	}
