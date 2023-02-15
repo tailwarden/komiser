@@ -19,6 +19,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		iam.Policies,
 		oracledatabase.AutonomousDatabases,
 		storage.Buckets,
+		storage.BlockVolumes,
 		developerservices.Applications,
 	}
 }
