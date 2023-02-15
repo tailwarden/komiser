@@ -70,11 +70,11 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			monthlyCost := 0.0
 
 			if sizeInTB <= 50 {
-				monthlyCost = (sizeInTB / 1000) * 0.023
+				monthlyCost = (sizeInTB * 1000) * 0.023
 			} else if sizeInTB <= 450 {
-				monthlyCost = (sizeInTB / 1000) * 0.022
+				monthlyCost = (sizeInTB * 1000) * 0.022
 			} else {
-				monthlyCost = (sizeInTB / 1000) * 0.021
+				monthlyCost = (sizeInTB * 1000) * 0.021
 			}
 
 			tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
