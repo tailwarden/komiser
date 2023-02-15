@@ -2,6 +2,7 @@ import Head from 'next/head';
 import DashboardCloudMap from '../components/dashboard/components/cloud-map/DashboardCloudMap';
 import DashboardLayout from '../components/dashboard/components/DashboardLayout';
 import DashboardTopStats from '../components/dashboard/components/top-stats/DashboardTopStats';
+import Grid from '../components/grid/Grid';
 
 function Dashboard() {
   return (
@@ -13,9 +14,9 @@ function Dashboard() {
       </Head>
       <DashboardLayout>
         <DashboardTopStats />
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <Grid>
           <DashboardCloudMap />
-        </div>
+        </Grid>
       </DashboardLayout>
     </>
   );
