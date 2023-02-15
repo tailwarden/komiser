@@ -4,7 +4,8 @@ export type Provider =
   | 'ovh'
   | 'digitalocean'
   | 'azure'
-  | 'tencent';
+  | 'tencent'
+  | 'oci';
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -32,6 +33,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'tencent') {
       label = 'Tencent';
+    }
+
+    if (arg.toLowerCase() === 'oci') {
+      label = 'OCI';
     }
 
     return label;
@@ -73,6 +78,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'tencent') {
       img = '/assets/img/providers/tencent.jpeg';
+    }
+
+    if (arg.toLowerCase() === 'oci') {
+      img = '/assets/img/providers/oci.png';
     }
 
     return img;
