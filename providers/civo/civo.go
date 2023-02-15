@@ -19,6 +19,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		storage.Volumes,
 		storage.ObjectStores,
 		storage.Databases,
+		storage.DiskImages,
 		kubernetes.Clusters,
 		network.Firewalls,
 		network.Networks,
