@@ -86,7 +86,7 @@ jobs:
                 docker context create tls-env
                 docker buildx create tls-env --use
                 docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-                docker buildx build --push --platform linux/amd64,linux/arm64 -t tailwarden/komiser:latest -t tailwarden/komiser:${CIRCLE_SHA1} -t tailwarden/komiser:3.0.2 .
+                docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY -t tailwarden/komiser:latest -t tailwarden/komiser:${CIRCLE_SHA1} -t tailwarden/komiser:3.0.2 .
 
 workflows:
     version: 2
