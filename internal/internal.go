@@ -26,6 +26,7 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
+	azure "github.com/tailwarden/komiser/providers/azure"
 	civo "github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	k8s "github.com/tailwarden/komiser/providers/k8s"
@@ -162,6 +163,10 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.TencentClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
 				tencent.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.AzureClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				azure.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}

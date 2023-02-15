@@ -2,6 +2,7 @@ package models
 
 type Config struct {
 	AWS          []AWSConfig          `toml:"aws"`
+	Azure        []AzureConfig        `toml:"azure"`
 	DigitalOcean []DigitalOceanConfig `toml:"digitalocean"`
 	Oci          []OciConfig          `toml:"oci"`
 	Civo         []CivoConfig         `toml:"civo"`
@@ -17,6 +18,14 @@ type AWSConfig struct {
 	Profile string `toml:"profile"`
 	Source  string `toml:"source"`
 	Path    string `toml:"path,omitempty"`
+}
+
+type AzureConfig struct {
+	Name           string `toml:"name"`
+	TenantId       string `toml:"tenantId"`
+	ClientId       string `toml:"clientId"`
+	ClientSecret   string `toml:"clientSecret"`
+	SubscriptionId string `toml:"subscriptionId"`
 }
 
 type DigitalOceanConfig struct {
