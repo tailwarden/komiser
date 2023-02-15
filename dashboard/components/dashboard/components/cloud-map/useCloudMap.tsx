@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react';
 import mockDataForDashboard from '../../utils/mockDataForDashboard';
 
-type Data = {
-  regions: number;
+export type Regions = {
+  name: string;
+  label: string;
+  latitude: string;
+  longitude: string;
   resources: number;
-  accounts: number;
-  cost: {
-    date: string;
-    amount: number;
-  }[];
-};
+}[];
 
-function useDashboardTopStats() {
+function useCloudMap() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<Data>();
+  const [data, setData] = useState<Regions>();
   const [error, setError] = useState(false);
 
   function fetch() {
@@ -26,7 +24,7 @@ function useDashboardTopStats() {
     }
 
     setTimeout(() => {
-      setData(mockDataForDashboard.stats);
+      setData(mockDataForDashboard.regions);
       setLoading(false);
     }, 1500);
   }
@@ -38,4 +36,4 @@ function useDashboardTopStats() {
   return { loading, data, error, fetch };
 }
 
-export default useDashboardTopStats;
+export default useCloudMap;

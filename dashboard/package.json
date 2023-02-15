@@ -22,6 +22,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
+    "@types/react-simple-maps": "^3.0.0",
     "autoprefixer": "^10.4.13",
     "eslint": "8.26.0",
     "eslint-config-airbnb-base": "^15.0.0",
