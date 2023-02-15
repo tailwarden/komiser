@@ -48,6 +48,15 @@ func Applications(ctx context.Context, client providers.ProviderClient) ([]Resou
 			return resources, err1
 		}
 
+		// add functions to resources [containing applications] too, as functions are sub-resources to applications.
+		allFunctions, err1 := GetFunctions(ctx, application.Id, client, functionsManagementClient)
+		if err1 != nil {
+			return resources, err1
+		}
+		if len(allFunctions) > 0 {
+			resources = append(resources, allFunctions...)
+		}
+
 		resources = append(resources, Resource{
 			Provider:   "OCI",
 			Account:    client.Name,
