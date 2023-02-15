@@ -37,12 +37,17 @@ function InventoryLayout({
     (inventory && inventory.length > 0) ||
     (searchedInventory && searchedInventory.length > 0);
 
-  const displaySidebar =
-    !error && (hasInventory || (views && views.length > 0));
+  const hasNoInventory =
+    (inventory && inventory.length === 0) ||
+    (searchedInventory && searchedInventory.length === 0);
+
+  const hasNoViews = views && views.length === 0;
+
+  const dontDisplaySidebar = (error && hasNoInventory) || hasNoViews;
 
   return (
     <>
-      {displaySidebar && (
+      {!dontDisplaySidebar && (
         <nav
           className={`fixed ${
             displayBanner ? 'mt-[145px]' : 'mt-[73px]'
@@ -152,7 +157,9 @@ function InventoryLayout({
           )}
         </nav>
       )}
-      <main className={displaySidebar ? 'ml-[17rem]' : ''}>{children}</main>
+      <main className={!dontDisplaySidebar ? 'ml-[17rem]' : ''}>
+        {children}
+      </main>
     </>
   );
 }
