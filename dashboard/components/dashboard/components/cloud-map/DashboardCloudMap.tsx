@@ -1,4 +1,5 @@
 import DashboardCloudMapChart from './DashboardCloudMapChart';
+import DashboardCloudMapError from './DashboardCloudMapError';
 import DashboardCloudMapSkeleton from './DashboardCloudMapSkeleton';
 import DashboardCloudMapTooltip from './DashboardCloudMapTooltip';
 import useCloudMap from './hooks/useCloudMap';
@@ -10,7 +11,7 @@ function DashboardCloudMap() {
 
   if (loading) return <DashboardCloudMapSkeleton />;
 
-  if (error) return <>Error loading</>;
+  if (error) return <DashboardCloudMapError fetch={fetch} />;
 
   return (
     <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">
