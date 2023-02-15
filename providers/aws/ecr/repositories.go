@@ -46,7 +46,7 @@ func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error
 				ResourceId: *repository.RepositoryArn,
 				Region:     client.AWSClient.Region,
 				Name:       *repository.RepositoryName,
-				Cost:       0,
+				Cost:       0.10,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecr/repositories/%s", client.AWSClient.Region, *repository.RepositoryName),

@@ -1,17 +1,17 @@
 import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import { InventoryFilterDataProps } from '../../hooks/useInventory';
+import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryFilterOperatorProps = {
-  data: InventoryFilterDataProps;
-  handleOperator: (operator: InventoryFilterDataProps['operator']) => void;
+  data: InventoryFilterData;
+  handleOperator: (operator: InventoryFilterData['operator']) => void;
   handleTagKey: (newValue: { tagKey: string }) => void;
 };
 
 export type InventoryFilterOperatorOptionsProps = {
   label: string;
-  value: InventoryFilterDataProps['operator'];
+  value: InventoryFilterData['operator'];
 };
 
 const inventoryFilterOperatorOptions: InventoryFilterOperatorOptionsProps[] = [

@@ -4,27 +4,31 @@ import settingsService from '../../../../../services/settingsService';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
   HiddenResource,
-  InventoryFilterDataProps,
-  ViewProps
-} from '../../../hooks/useInventory';
+  InventoryFilterData,
+  View
+} from '../../../hooks/useInventory/types/useInventoryTypes';
 
 type useViewsProps = {
   setToast: (toast: ToastProps | undefined) => void;
-  views: ViewProps[] | undefined;
+  views: View[] | undefined;
   router: NextRouter;
-  getViews: (edit?: boolean | undefined, viewName?: string | undefined) => void;
+  getViews: (
+    edit?: boolean | undefined,
+    viewName?: string | undefined,
+    redirect?: boolean | undefined
+  ) => void;
   hiddenResources: HiddenResource[] | undefined;
   setHideOrUnhideHasUpdate: (hideOrUnhideHasUpdate: boolean) => void;
 };
 
-const INITIAL_VIEW: ViewProps = {
+const INITIAL_VIEW: View = {
   id: 0,
   name: '',
   filters: [],
   exclude: []
 };
 
-type Pages = 'view' | 'excluded' | 'delete' | 'hidden resources';
+export type ViewsPages = 'view' | 'excluded' | 'delete' | 'hidden resources';
 
 function useViews({
   setToast,
@@ -35,29 +39,30 @@ function useViews({
   setHideOrUnhideHasUpdate
 }: useViewsProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [view, setView] = useState<ViewProps>(INITIAL_VIEW);
+  const [view, setView] = useState<View>(INITIAL_VIEW);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState<Pages>('view');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [page, setPage] = useState<ViewsPages>('view');
   const [bulkItems, setBulkItems] = useState<number[] | []>([]);
   const [bulkSelectCheckbox, setBulkSelectCheckbox] = useState(false);
   const [unhideLoading, setUnhideLoading] = useState(false);
 
-  function findView(currentViews: ViewProps[]) {
+  function findView(currentViews: View[]) {
     return currentViews.find(
       currentView => currentView.id.toString() === router.query.view
     );
   }
 
-  function populateView(newFilters: InventoryFilterDataProps[]) {
+  function populateView(newFilters: InventoryFilterData[]) {
     setView(prev => ({ ...prev, filters: newFilters }));
   }
 
-  function openModal(filters: InventoryFilterDataProps[], openPage?: Pages) {
+  function openModal(filters?: InventoryFilterData[], openPage?: ViewsPages) {
     setPage('view');
     setBulkItems([]);
     setBulkSelectCheckbox(false);
 
-    if (!router.query.view) {
+    if (!router.query.view && filters) {
       setView(INITIAL_VIEW);
       populateView(filters);
     } else {
@@ -80,21 +85,25 @@ function useViews({
     setView(prev => ({ ...prev, name: newData.name }));
   }
 
-  function goTo(newPage: Pages) {
+  function goTo(newPage: ViewsPages) {
     setPage(newPage);
   }
 
-  function saveView(e: FormEvent<HTMLFormElement>) {
+  function saveView(
+    e: FormEvent<HTMLFormElement>,
+    duplicate?: boolean,
+    viewToBeDuplicated?: View
+  ) {
     e.preventDefault();
 
-    if (view) {
+    if (view && !duplicate) {
       setLoading(true);
       const payload = view;
       const payloadJson = JSON.stringify(payload);
       const { id } = view;
 
       if (router.query.view) {
-        settingsService.updateView(id!, payloadJson).then(res => {
+        settingsService.updateView(id.toString(), payloadJson).then(res => {
           if (res === Error) {
             setLoading(false);
             setToast({
@@ -124,26 +133,53 @@ function useViews({
             });
           } else {
             setLoading(false);
-            getViews();
+            getViews(false, undefined, true);
             setToast({
               hasError: false,
               title: `${view.name} has been created.`,
-              message: `The custom view will now be accessible from the top navigation.`
+              message: `The custom view will now be accessible from the side navigation.`
             });
             closeModal();
-            router.push('/');
           }
         });
       }
     }
+
+    if (duplicate && viewToBeDuplicated) {
+      setLoading(true);
+      const payload = viewToBeDuplicated;
+      payload.id = 0;
+      payload.name = `(copy) ${payload.name}`;
+      const payloadJson = JSON.stringify(payload);
+      settingsService.saveView(payloadJson).then(res => {
+        if (res === Error) {
+          setLoading(false);
+          setToast({
+            hasError: true,
+            title: `${viewToBeDuplicated.name} could not be duplicated.`,
+            message: `There was an error duplicating this custom view. Please refer to the logs and try again!`
+          });
+        } else {
+          setLoading(false);
+          getViews(false, undefined, true);
+          setToast({
+            hasError: false,
+            title: `${viewToBeDuplicated.name} has been duplicated.`,
+            message: `The custom view will now be accessible from the side navigation.`
+          });
+          closeModal();
+          router.push('/');
+        }
+      });
+    }
   }
 
-  function deleteView() {
-    if (view) {
+  function deleteView(dropdown?: boolean, viewToBeDeleted?: View) {
+    if (view && !dropdown) {
       setLoading(true);
       const { id } = view;
 
-      settingsService.deleteView(id!).then(res => {
+      settingsService.deleteView(id.toString()).then(res => {
         if (res === Error) {
           setLoading(false);
           setToast({
@@ -160,6 +196,31 @@ function useViews({
             message: `The custom view has been successfully deleted.`
           });
           closeModal();
+          router.push('/');
+        }
+      });
+    }
+
+    if (dropdown && viewToBeDeleted) {
+      setDeleteLoading(true);
+      const { id } = viewToBeDeleted;
+
+      settingsService.deleteView(id.toString()).then(res => {
+        if (res === Error) {
+          setDeleteLoading(false);
+          setToast({
+            hasError: true,
+            title: `${viewToBeDeleted.name} could not be deleted.`,
+            message: `There was an error deleting this custom view. Please refer to the logs and try again!`
+          });
+        } else {
+          getViews();
+          setDeleteLoading(false);
+          setToast({
+            hasError: false,
+            title: `${viewToBeDeleted.name} has been deleted.`,
+            message: `The custom view has been successfully deleted.`
+          });
           router.push('/');
         }
       });
@@ -242,7 +303,8 @@ function useViews({
     onCheckboxChange,
     handleBulkSelection,
     unhideLoading,
-    unhideResources
+    unhideResources,
+    deleteLoading
   };
 }
 

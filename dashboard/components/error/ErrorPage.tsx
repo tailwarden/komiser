@@ -10,7 +10,7 @@ function ErrorPage({ title, message, action }: ErrorPageProps) {
   return (
     <div className="flex h-[calc(100vh-156px)] items-center justify-center">
       <div className="flex items-center justify-center text-center">
-        <div className="flex flex-col items-center justify-center max-w-sm bg-white p-12 rounded-lg gap-6">
+        <div className="flex max-w-sm flex-col items-center justify-center gap-6 rounded-lg bg-white p-12">
           <picture>
             <img
               src="/assets/img/purplin/fixing.svg"
@@ -19,7 +19,7 @@ function ErrorPage({ title, message, action }: ErrorPageProps) {
             />
           </picture>
           <p className="font-medium text-black-900">{title}</p>
-          <p className="text-sm text-black-300 text-center">{message}</p>
+          <p className="text-center text-sm text-black-300">{message}</p>
           {action && <>{action}</>}
         </div>
       </div>

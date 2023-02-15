@@ -9,7 +9,7 @@ type Props = {
 
 function InventorySearchNoResults({ query, setQuery, router }: Props) {
   return (
-    <div className="w-full bg-white text-sm flex flex-wrap-reverse items-center justify-center gap-8 px-6 py-8 sm:py-20 rounded-b-lg">
+    <div className="flex w-full flex-wrap-reverse items-center justify-center gap-8 rounded-b-lg bg-white px-6 py-8 text-sm sm:py-20">
       <picture className="flex-shrink-0">
         <img
           src="/assets/img/purplin/reading.svg"
@@ -17,7 +17,7 @@ function InventorySearchNoResults({ query, setQuery, router }: Props) {
           alt="No results"
         />
       </picture>
-      <div className="flex flex-col gap-4 items-start">
+      <div className="flex flex-col items-start gap-4">
         <div>
           {query ? (
             <>
@@ -51,7 +51,7 @@ function InventorySearchNoResults({ query, setQuery, router }: Props) {
               stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth="2"
+              strokeWidth="1.5"
               d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
             ></path>
           </svg>

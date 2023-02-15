@@ -7,20 +7,20 @@ function SkeletonStats({ NumOfCards = 3 }) {
 
   return (
     <div
-      className={`grid grid-col md:grid-cols-2 gap-8 ${
+      className={`grid-col grid gap-8 md:grid-cols-2 ${
         NumOfCards === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
       }`}
     >
       {cards.map(card => (
         <div
           key={card}
-          className="flex items-center h-[7.5rem] px-6 text-sm bg-white rounded-lg animate-pulse"
+          className="flex h-[7.5rem] animate-pulse items-center rounded-lg bg-white px-6 text-sm"
         >
-          <div className="w-full flex gap-6">
-            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-komiser-200/50"></div>
-            <div className="flex flex-col w-full gap-3">
-              <div className="w-[36%] h-4 bg-komiser-200/50 rounded-lg"></div>
-              <div className="w-[86%] h-4 bg-komiser-200/50 rounded-lg"></div>
+          <div className="flex w-full gap-6">
+            <div className="h-10 w-10 flex-shrink-0 rounded-xl bg-komiser-200/50"></div>
+            <div className="flex w-full flex-col gap-3">
+              <div className="h-4 w-[36%] rounded-lg bg-komiser-200/50"></div>
+              <div className="h-4 w-[86%] rounded-lg bg-komiser-200/50"></div>
             </div>
           </div>
         </div>

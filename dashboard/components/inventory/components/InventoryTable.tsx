@@ -1,10 +1,13 @@
 import { NextRouter } from 'next/router';
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { InventoryItem, InventoryStats } from '../hooks/useInventory';
+import {
+  InventoryItem,
+  InventoryStats
+} from '../hooks/useInventory/types/useInventoryTypes';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';
 import InventoryTableBulkActions from './InventoryTableBulkActions';
@@ -13,8 +16,8 @@ import InventoryTableTags from './InventoryTableTags';
 
 type InventoryTableProps = {
   error: boolean;
-  inventory: InventoryItem[] | [];
-  searchedInventory: InventoryItem[] | [];
+  inventory: InventoryItem[] | [] | undefined;
+  searchedInventory: InventoryItem[] | [] | undefined;
   query: string;
   openModal: (item: InventoryItem) => void;
   setQuery: (query: string) => void;
@@ -54,8 +57,8 @@ function InventoryTable({
         (!error && searchedInventory)) && (
         <>
           <InventorySearchBar query={query} setQuery={setQuery} error={error} />
-          <div className="pb-6 rounded-lg rounded-t-none">
-            <table className="table-auto text-sm text-left bg-white text-gray-900 w-full">
+          <div className="rounded-lg rounded-t-none pb-6">
+            <table className="w-full table-auto bg-white text-left text-sm text-gray-900">
               {!error && (
                 <thead className="sticky top-[73px] z-10 bg-white">
                   <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
@@ -104,13 +107,13 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 pl-2 pr-6 min-w-[7rem] cursor-pointer"
+                        className="min-w-[7rem] cursor-pointer py-4 pl-2 pr-6"
                       >
                         <div className="flex items-center gap-3">
                           <picture className="flex-shrink-0">
                             <img
                               src={providers.providerImg(item.provider)}
-                              className="w-6 h-6 rounded-full"
+                              className="h-6 w-6 rounded-full"
                               alt={item.provider}
                             />
                           </picture>
@@ -119,37 +122,37 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 cursor-pointer"
+                        className="cursor-pointer py-4 px-6"
                       >
                         <p className="w-12 xl:w-full">{item.service}</p>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 group relative cursor-pointer"
+                        className="group relative cursor-pointer py-4 px-6"
                       >
-                        <div className="peer w-full h-full"></div>
-                        <p className="w-56 2xl:w-96 truncate ...">
+                        <div className="peer h-full w-full"></div>
+                        <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
-                        <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
+                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 text-xs text-black-200 shadow-lg group-hover:flex">
                           {item.name}
                         </div>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 cursor-pointer"
+                        className="cursor-pointer py-4 px-6"
                       >
                         {item.region}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 cursor-pointer"
+                        className="cursor-pointer py-4 px-6"
                       >
                         {item.account}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap cursor-pointer text-right"
+                        className="cursor-pointer whitespace-nowrap py-4 px-6 text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -157,6 +160,8 @@ function InventoryTable({
                         <InventoryTableTags
                           tags={item.tags}
                           setQuery={setQuery}
+                          id={item.id}
+                          bulkItems={bulkItems}
                         />
                       </td>
                     </InventoryTableRow>
@@ -187,13 +192,13 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 pl-2 pr-6 min-w-[7rem] cursor-pointer"
+                        className="min-w-[7rem] cursor-pointer py-4 pl-2 pr-6"
                       >
                         <div className="flex items-center gap-3">
                           <picture className="flex-shrink-0">
                             <img
                               src={providers.providerImg(item.provider)}
-                              className="w-6 h-6 rounded-full"
+                              className="h-6 w-6 rounded-full"
                               alt={item.provider}
                             />
                           </picture>
@@ -202,37 +207,37 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 cursor-pointer"
+                        className="cursor-pointer py-4 px-6"
                       >
                         <p className="w-12 xl:w-full">{item.service}</p>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 group relative cursor-pointer"
+                        className="group relative cursor-pointer py-4 px-6"
                       >
-                        <div className="peer w-full h-full"></div>
-                        <p className="w-56 xl:w-72 2xl:w-96 truncate ...">
+                        <div className="peer h-full w-full"></div>
+                        <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
-                        <div className="absolute hidden group-hover:flex flex-col gap-2 rounded-lg left-4 top-12 bg-black-900 z-10 text-black-200 shadow-lg text-xs py-3 px-4">
+                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 text-xs text-black-200 shadow-lg group-hover:flex">
                           {item.name}
                         </div>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 cursor-pointer"
+                        className="cursor-pointer py-4 px-6"
                       >
                         {item.region}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 cursor-pointer"
+                        className="cursor-pointer py-4 px-6"
                       >
                         {item.account}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="py-4 px-6 whitespace-nowrap cursor-pointer text-right"
+                        className="cursor-pointer whitespace-nowrap py-4 px-6 text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -240,6 +245,8 @@ function InventoryTable({
                         <InventoryTableTags
                           tags={item.tags}
                           setQuery={setQuery}
+                          id={item.id}
+                          bulkItems={bulkItems}
                         />
                       </td>
                     </InventoryTableRow>

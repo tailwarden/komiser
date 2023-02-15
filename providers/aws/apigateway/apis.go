@@ -61,7 +61,7 @@ func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		count := 0.0
-		if len(metricsCountOutput.Datapoints) > 0 {
+		if metricsCountOutput != nil && len(metricsCountOutput.Datapoints) > 0 {
 			count = *metricsCountOutput.Datapoints[0].Sum
 		}
 

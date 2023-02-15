@@ -39,7 +39,7 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]Resource, err
 				Service:    "Pod",
 				ResourceId: fmt.Sprintf("%s", pod.UID),
 				Name:       pod.Name,
-				Region:     "Unknown",
+				Region:     pod.Namespace,
 				Cost:       0,
 				CreatedAt:  pod.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),

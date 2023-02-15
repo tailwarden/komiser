@@ -14,6 +14,10 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
+func BeginningOfMonth(date time.Time) time.Time {
+	return date.AddDate(0, 0, -date.Day()+1)
+}
+
 func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config eks.ListClustersInput
@@ -50,6 +54,24 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 				}
 			}
 
+			outputDescribe, err := eksClient.DescribeCluster(ctx, &eks.DescribeClusterInput{
+				Name: &cluster,
+			})
+
+			monthlyCost := 0.0
+			createdAt := time.Now()
+			if err == nil {
+				startOfMonth := BeginningOfMonth(time.Now())
+				hourlyUsage := 0
+				if (*outputDescribe.Cluster.CreatedAt).Before(startOfMonth) {
+					hourlyUsage = int(time.Now().Sub(startOfMonth).Hours())
+				} else {
+					hourlyUsage = int(time.Now().Sub(*outputDescribe.Cluster.CreatedAt).Hours())
+				}
+				monthlyCost = float64(hourlyUsage) * 0.10
+				createdAt = *outputDescribe.Cluster.CreatedAt
+			}
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -57,8 +79,9 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
 				Name:       cluster,
-				Cost:       0,
+				Cost:       monthlyCost,
 				Tags:       tags,
+				CreatedAt:  createdAt,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, cluster),
 			})

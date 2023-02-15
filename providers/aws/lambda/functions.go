@@ -78,7 +78,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			duration := 0.0
-			if len(metricsDurationOutput.Datapoints) > 0 {
+			if metricsDurationOutput != nil && len(metricsDurationOutput.Datapoints) > 0 {
 				duration = *metricsDurationOutput.Datapoints[0].Average
 			}
 
