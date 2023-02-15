@@ -43,7 +43,7 @@ var Os = runtime.GOOS
 var Arch = runtime.GOARCH
 var db *bun.DB
 
-func Exec(address string, port int, configPath string, noTracking bool, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, regions []string, cmd *cobra.Command) error {
 	cfg, clients, err := config.Load(configPath)
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func Exec(address string, port int, configPath string, noTracking bool, regions 
 
 	go checkUpgrade()
 
-	err = runServer(address, port, noTracking)
+	err = runServer(address, port, telemetry)
 	if err != nil {
 		return err
 	}
@@ -76,10 +76,10 @@ func Exec(address string, port int, configPath string, noTracking bool, regions 
 	return nil
 }
 
-func runServer(address string, port int, noTracking bool) error {
+func runServer(address string, port int, telemetry bool) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), noTracking, db)
+	r := v1.Endpoints(context.Background(), telemetry, db)
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
