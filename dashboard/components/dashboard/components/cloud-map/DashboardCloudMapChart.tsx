@@ -5,12 +5,12 @@ import {
   Geography,
   Marker
 } from 'react-simple-maps';
-import { Regions } from './hooks/useCloudMap';
-import { CloudMapTooltip } from './hooks/useCloudMapTooltip';
+import { DashboardCloudMapRegions } from './hooks/useCloudMap';
+import { DashboardCloudMapTooltipProps } from './hooks/useCloudMapTooltip';
 
 type DashboardCloudMapChartProps = {
-  regions: Regions | undefined;
-  setTooltip: (tooltip: CloudMapTooltip | undefined) => void;
+  regions: DashboardCloudMapRegions | undefined;
+  setTooltip: (tooltip: DashboardCloudMapTooltipProps | undefined) => void;
 };
 
 function DashboardCloudMapChart({

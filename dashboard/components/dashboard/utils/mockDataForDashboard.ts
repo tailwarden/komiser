@@ -163,11 +163,10 @@ const regions = [
 ];
 
 const resources = [
-  { name: 'Lambda', amount: 342 },
-  { name: 'IAM Role', amount: 10 },
-  { name: 'VPC', amount: 12 },
-  { name: 'Security Group', amount: 6 },
-  { name: 'Others', amount: 188 }
+  { name: 'AWS', amount: 451 },
+  { name: 'Azure', amount: 153 },
+  { name: 'GCP', amount: 259 },
+  { name: 'OVH', amount: 100 }
 ];
 
 const explorer = [

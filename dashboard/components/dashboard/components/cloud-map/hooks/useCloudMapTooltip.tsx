@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export type CloudMapTooltip = {
+export type DashboardCloudMapTooltipProps = {
   name: string;
   label: string;
   resources: number;
@@ -9,7 +9,7 @@ export type CloudMapTooltip = {
 };
 
 function useCloudMapTooltip() {
-  const [tooltip, setTooltip] = useState<CloudMapTooltip>();
+  const [tooltip, setTooltip] = useState<DashboardCloudMapTooltipProps>();
 
   return { tooltip, setTooltip };
 }
