@@ -11,7 +11,7 @@ function DashboardTopStatsCards({ data }: DashboardTopStatsCardsProps) {
       {data && (
         <div className="grid-col grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <Card
-            label="Cloud accounts"
+            label={data.accounts === 1 ? 'Cloud account' : 'Cloud accounts'}
             value={data.accounts}
             tooltip="Number of connected cloud accounts"
             icon={
@@ -49,7 +49,7 @@ function DashboardTopStatsCards({ data }: DashboardTopStatsCardsProps) {
             }
           />
           <Card
-            label="Regions"
+            label={data.regions === 1 ? 'Region' : 'Regions'}
             value={data.regions}
             tooltip="Number of regions where a cloud service is running across connected cloud accounts"
             icon={
@@ -86,7 +86,7 @@ function DashboardTopStatsCards({ data }: DashboardTopStatsCardsProps) {
             }
           />
           <Card
-            label="Resources"
+            label={data.resources === 1 ? 'Resource' : 'Resources'}
             value={data.resources}
             tooltip="Number of cloud resources across cloud accounts"
             icon={

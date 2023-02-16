@@ -169,7 +169,7 @@ const resources = [
   { name: 'OVH', amount: 100 }
 ];
 
-const explorer = [
+const costs = [
   {
     date: '2022-03',
     datapoints: [
@@ -322,6 +322,6 @@ const explorer = [
   }
 ];
 
-const mockDataForDashboard = { stats, regions, resources, explorer };
+const mockDataForDashboard = { stats, regions, resources, costs };
 
 export default mockDataForDashboard;
