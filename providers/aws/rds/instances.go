@@ -43,7 +43,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "RDS Instances",
+				Service:    "RDS Instance",
 				Region:     client.AWSClient.Region,
 				ResourceId: *instance.DBInstanceArn,
 				Cost:       0,
@@ -64,7 +64,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "RDS Instances",
+		"service":   "RDS Instance",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
