@@ -22,7 +22,7 @@ function Select({
       <div
         className={`pointer-events-none absolute bottom-[1.15rem] ${
           chevronPadding ? 'right-4' : 'right-2'
-        }  hover:text-purplin-300 text-black-200 transition-all`}
+        }  text-black-200 transition-all`}
       >
         <svg
           width="24"
@@ -46,7 +46,7 @@ function Select({
       <select
         value={value}
         onChange={e => onChange(e)}
-        className="outline-black-150 w-full appearance-none rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900 caret-primary outline focus:outline-2 focus:outline-primary"
+        className="w-full appearance-none rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary"
       >
         {options.map((item, idx) => (
           <option key={idx} value={item}>
