@@ -1,6 +1,8 @@
 import Head from 'next/head';
+import DashboardCloudMap from '../components/dashboard/components/cloud-map/DashboardCloudMap';
 import DashboardLayout from '../components/dashboard/components/DashboardLayout';
 import DashboardTopStats from '../components/dashboard/components/top-stats/DashboardTopStats';
+import Grid from '../components/grid/Grid';
 
 function Dashboard() {
   return (
@@ -12,6 +14,9 @@ function Dashboard() {
       </Head>
       <DashboardLayout>
         <DashboardTopStats />
+        <Grid>
+          <DashboardCloudMap />
+        </Grid>
       </DashboardLayout>
     </>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import mockDataForDashboard from '../../utils/mockDataForDashboard';
+import mockDataForDashboard from '../../../utils/mockDataForDashboard';
 
-type DataProps = {
+type Data = {
   regions: number;
   resources: number;
   accounts: number;
@@ -13,7 +13,7 @@ type DataProps = {
 
 function useDashboardTopStats() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<DataProps>();
+  const [data, setData] = useState<Data>();
   const [error, setError] = useState(false);
 
   function fetch() {
