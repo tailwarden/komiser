@@ -9,7 +9,7 @@ export type ResourcesManagerData = {
 function useResourcesManager() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ResourcesManagerData>();
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(true);
 
   function fetch() {
     if (!loading) {
@@ -17,7 +17,7 @@ function useResourcesManager() {
     }
 
     if (error) {
-      setError(false);
+      // setError(false);
     }
 
     setTimeout(() => {

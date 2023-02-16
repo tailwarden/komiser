@@ -1,4 +1,5 @@
 import DashboardResourcesManagerChart from './DashboardResourcesManagerCard';
+import DashboardResourcesManagerError from './DashboardResourcesManagerError';
 import DashboardResourcesManagerSkeleton from './DashboardResourcesManagerSkeleton';
 import useResourcesManager from './hooks/useResourcesManager';
 
@@ -7,7 +8,7 @@ function DashboardResourcesManager() {
 
   if (loading) return <DashboardResourcesManagerSkeleton />;
 
-  if (error) return <>Error</>;
+  if (error) return <DashboardResourcesManagerError fetch={fetch} />;
 
   return <DashboardResourcesManagerChart data={data} />;
 }
