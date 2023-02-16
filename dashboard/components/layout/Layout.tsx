@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import Banner from '../banner/Banner';
 import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
 import Navbar from '../navbar/Navbar';
-import LayoutContext from './context/LayoutContext';
+import GlobalAppContext from './context/GlobalAppContext';
+import useGlobalStats from './hooks/useGlobalStats';
 
 type LayoutProps = {
   children: ReactNode;
@@ -10,9 +11,20 @@ type LayoutProps = {
 
 function Layout({ children }: LayoutProps) {
   const { displayBanner, dismissBanner, githubStars } = useGithubStarBanner();
+  const { loading, data, error, hasNoAccounts, fetch } = useGlobalStats();
 
   return (
-    <LayoutContext.Provider value={{ displayBanner, dismissBanner }}>
+    <GlobalAppContext.Provider
+      value={{
+        displayBanner,
+        dismissBanner,
+        loading,
+        data,
+        error,
+        hasNoAccounts,
+        fetch
+      }}
+    >
       <Banner githubStars={githubStars} />
       <Navbar />
       <main
@@ -22,9 +34,9 @@ function Layout({ children }: LayoutProps) {
             : 'mt-[73px] min-h-[calc(100vh-73px)]'
         } bg-black-100 p-6 xl:px-8 2xl:px-24`}
       >
-        {children}
+        {hasNoAccounts ? <>There is no account</> : children}
       </main>
-    </LayoutContext.Provider>
+    </GlobalAppContext.Provider>
   );
 }
 

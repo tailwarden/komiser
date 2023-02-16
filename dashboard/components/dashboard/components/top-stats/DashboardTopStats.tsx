@@ -1,10 +1,11 @@
+import { useContext } from 'react';
 import Button from '../../../button/Button';
 import Card from '../../../card/Card';
 import CardSkeleton from '../../../card/CardSkeleton';
-import useDashboardTopStats from './hooks/useDashboardTopStats';
+import GlobalAppContext from '../../../layout/context/GlobalAppContext';
 
 function DashboardTopStats() {
-  const { loading, data, error, fetch } = useDashboardTopStats();
+  const { loading, data, error, fetch } = useContext(GlobalAppContext);
   const numberOfSkeletonCardsToRender = Array.from(Array(4).keys());
 
   if (loading)
@@ -154,7 +155,7 @@ function DashboardTopStats() {
           />
           <Card
             label="Bill"
-            value={data.cost[data.cost.length - 1].amount}
+            value={data.costs}
             formatter="currency"
             tooltip="Up-to-date monthly cost across connected cloud accounts"
             icon={

@@ -133,7 +133,7 @@ module.exports = {
           },
 
           '50%': {
-            opacity: 0.35
+            opacity: 0.3
           },
 
           '100%': {
