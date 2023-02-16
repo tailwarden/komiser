@@ -24,18 +24,12 @@ function useGlobalStats() {
     }
 
     settingsService.getGlobalStats().then(res => {
-      const response = {
-        resources: 522,
-        regions: 17,
-        costs: 680.908480745776,
-        accounts: 0
-      };
       if (res === Error) {
         setError(true);
       } else {
         setLoading(false);
 
-        if (response.accounts === 0) {
+        if (res.accounts === 0) {
           setHasNoAccounts(true);
         } else {
           setData(res);
