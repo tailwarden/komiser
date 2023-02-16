@@ -44,18 +44,18 @@ function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
 
   const colors = ['#80AAF2', '#F19B6E', '#FBC864', '#9BD6CC', '#B8D987'];
 
-  const sortByDescendingCosts =
-    data &&
-    data.sort(
-      (a: ResourcesManagerChartProps, b: ResourcesManagerChartProps) =>
-        b.amount - a.amount
-    );
+  const sortByDescendingCosts = data?.sort(
+    (a: ResourcesManagerChartProps, b: ResourcesManagerChartProps) =>
+      b.amount - a.amount
+  );
 
   const chartData: ChartData<'doughnut'> = {
-    labels: data?.map(item => item.name),
+    labels: sortByDescendingCosts?.map(item => item.name),
     datasets: [
       {
-        data: data?.map(item => Number(formatNumber(item.amount))) as number[],
+        data: sortByDescendingCosts?.map(item =>
+          Number(formatNumber(item.amount))
+        ) as number[],
         backgroundColor: colors,
         borderColor: '#FFFFFF',
         borderWidth: 3,
@@ -83,7 +83,9 @@ function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
             const dataset = chart.data.datasets;
             const background = dataset[0].backgroundColor as string[];
             return dataset[0].data.map((dataSet, i) => ({
-              text: `${' '} ${chart.data.labels![i]} - $${dataSet}`,
+              text: `${' '} ${chart.data.labels![i]} - ${dataSet} ${
+                dataSet === 1 ? 'resource' : 'resources'
+              }`,
               fontColor: '#091126',
               fillStyle: background[i],
               strokeStyle: '#FFFFFF',
@@ -105,7 +107,9 @@ function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
         callbacks: {
           title: () => '',
           label(label) {
-            return `${label.label} - $${label.formattedValue}`;
+            return `${label.label} - ${label.formattedValue} ${
+              Number(label.formattedValue) === 1 ? 'resource' : 'resources'
+            }`;
           }
         }
       }
