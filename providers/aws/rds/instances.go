@@ -43,7 +43,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "RDS",
+				Service:    "RDS Instances",
 				Region:     client.AWSClient.Region,
 				ResourceId: *instance.DBInstanceArn,
 				Cost:       0,
