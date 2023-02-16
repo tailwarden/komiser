@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import DashboardCloudMap from '../components/dashboard/components/cloud-map/DashboardCloudMap';
 import DashboardLayout from '../components/dashboard/components/DashboardLayout';
+import DashboardResourcesManager from '../components/dashboard/components/resources-manager/DashboardResourcesManager';
 import DashboardTopStats from '../components/dashboard/components/top-stats/DashboardTopStats';
 import Grid from '../components/grid/Grid';
 
@@ -16,6 +17,7 @@ function Dashboard() {
         <DashboardTopStats />
         <Grid>
           <DashboardCloudMap />
+          <DashboardResourcesManager />
         </Grid>
       </DashboardLayout>
     </>

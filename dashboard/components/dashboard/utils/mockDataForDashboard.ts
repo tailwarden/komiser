@@ -162,7 +162,7 @@ const regions = [
   }
 ];
 
-const breakdown = [
+const resources = [
   { name: 'Lambda', amount: 342 },
   { name: 'IAM Role', amount: 10 },
   { name: 'VPC', amount: 12 },
@@ -323,6 +323,6 @@ const explorer = [
   }
 ];
 
-const mockDataForDashboard = { stats, regions, breakdown, explorer };
+const mockDataForDashboard = { stats, regions, resources, explorer };
 
 export default mockDataForDashboard;
