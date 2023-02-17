@@ -71,8 +71,7 @@ jobs:
           command: |
             aws s3 cp bin/komiser_darwin_amd64 s3://komiser-releases/3.0.3/osx/amd/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
             aws s3 cp bin/komiser_darwin_arm64 s3://komiser-releases/3.0.3/osx/arm/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-            aws cloudfront create-invalidation --distribution-id ERO8W9KAFNCBV --paths "/*"
-
+            
   build_docker:
     docker:
        - image: docker:20.10.17
