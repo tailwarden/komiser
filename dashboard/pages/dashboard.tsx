@@ -20,7 +20,7 @@ function Dashboard() {
           <DashboardCloudMap />
           <DashboardResourcesManager />
         </Grid>
-        <DashboardCostExplorer />
+        {/* to be un-commented on next release <DashboardCostExplorer /> */}
       </DashboardLayout>
     </>
   );

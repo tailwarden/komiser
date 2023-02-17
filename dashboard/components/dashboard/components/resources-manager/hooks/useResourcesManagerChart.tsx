@@ -25,7 +25,8 @@ function useResourcesManagerChart({
     setQuery(e.currentTarget.value as ResourcesManagerQuery);
   }
 
-  const select: ResourcesManagerGroupBySelectProps = {
+  /* To be un-commented when 'view' is supported 
+    const select: ResourcesManagerGroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
     displayValues: [
       'Cloud provider',
@@ -33,6 +34,16 @@ function useResourcesManagerChart({
       'Cloud region',
       'Cloud account',
       'Custom views'
+    ]
+  }; */
+
+  const select: ResourcesManagerGroupBySelectProps = {
+    values: ['provider', 'service', 'region', 'account'],
+    displayValues: [
+      'Cloud provider',
+      'Cloud service',
+      'Cloud region',
+      'Cloud account'
     ]
   };
 
