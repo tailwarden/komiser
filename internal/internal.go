@@ -131,6 +131,39 @@ func setupSchema(c *models.Config) error {
 		return err
 	}
 
+	// Created pre-defined views
+	untaggedResourcesView := models.View{
+		Name: "Untagged resources",
+		Filters: []models.Filter{
+			models.Filter{
+				Field:    "tags",
+				Operator: "IS_EMPTY",
+				Values:   []string{},
+			},
+		},
+	}
+
+	_, err = db.NewInsert().Model(&untaggedResourcesView).Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	expensiveResourcesView := models.View{
+		Name: "Expensive resources",
+		Filters: []models.Filter{
+			models.Filter{
+				Field:    "cost",
+				Operator: "GREATER_THAN",
+				Values:   []string{"0"},
+			},
+		},
+	}
+
+	_, err = db.NewInsert().Model(&expensiveResourcesView).Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
