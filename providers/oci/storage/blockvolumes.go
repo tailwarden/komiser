@@ -2,8 +2,9 @@ package storage
 
 import (
 	"context"
-	"github.com/oracle/oci-go-sdk/core"
 	"time"
+
+	"github.com/oracle/oci-go-sdk/core"
 
 	log "github.com/sirupsen/logrus"
 
@@ -42,9 +43,9 @@ func BlockVolumes(ctx context.Context, client providers.ProviderClient) ([]Resou
 			})
 		}
 
-		region, err1 := client.OciClient.Region()
-		if err1 != nil {
-			return resources, err1
+		region, err := client.OciClient.Region()
+		if err != nil {
+			return resources, err
 		}
 
 		resources = append(resources, Resource{

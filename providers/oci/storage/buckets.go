@@ -2,8 +2,9 @@ package storage
 
 import (
 	"context"
-	"github.com/oracle/oci-go-sdk/objectstorage"
 	"time"
+
+	"github.com/oracle/oci-go-sdk/objectstorage"
 
 	log "github.com/sirupsen/logrus"
 
@@ -52,16 +53,16 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			})
 		}
 
-		region, err1 := client.OciClient.Region()
-		if err1 != nil {
-			return resources, err1
+		region, err := client.OciClient.Region()
+		if err != nil {
+			return resources, err
 		}
 
 		resources = append(resources, Resource{
 			Provider:   "OCI",
 			Account:    client.Name,
 			ResourceId: *bucket.Name,
-			Service:    "Bucket",
+			Service:    "ObjectStorage Bucket",
 			Region:     region,
 			Name:       *bucket.Name,
 			Cost:       0,

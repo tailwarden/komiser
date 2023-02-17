@@ -2,8 +2,9 @@ package oracledatabase
 
 import (
 	"context"
-	"github.com/oracle/oci-go-sdk/database"
 	"time"
+
+	"github.com/oracle/oci-go-sdk/database"
 
 	log "github.com/sirupsen/logrus"
 
@@ -42,9 +43,9 @@ func AutonomousDatabases(ctx context.Context, client providers.ProviderClient) (
 			})
 		}
 
-		region, err1 := client.OciClient.Region()
-		if err1 != nil {
-			return resources, err1
+		region, err := client.OciClient.Region()
+		if err != nil {
+			return resources, err
 		}
 
 		resources = append(resources, Resource{

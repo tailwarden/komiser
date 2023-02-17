@@ -2,8 +2,9 @@ package developerservices
 
 import (
 	"context"
-	"github.com/oracle/oci-go-sdk/functions"
 	"time"
+
+	"github.com/oracle/oci-go-sdk/functions"
 
 	log "github.com/sirupsen/logrus"
 
@@ -49,7 +50,7 @@ func Applications(ctx context.Context, client providers.ProviderClient) ([]Resou
 		}
 
 		// add functions to resources [containing applications] too, as functions are sub-resources to applications.
-		allFunctions, err := GetFunctions(ctx, application.Id, client, functionsManagementClient)
+		allFunctions, err := Functions(ctx, application.Id, client, functionsManagementClient)
 		if err != nil {
 			return resources, err
 		}

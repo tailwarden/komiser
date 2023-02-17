@@ -2,16 +2,17 @@ package developerservices
 
 import (
 	"context"
+	"time"
+
 	"github.com/oracle/oci-go-sdk/functions"
 	"github.com/tailwarden/komiser/providers"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 
 	. "github.com/tailwarden/komiser/models"
 )
 
-func GetFunctions(ctx context.Context, applicationId *string, client providers.ProviderClient, functionsManagementClient functions.FunctionsManagementClient) ([]Resource, error) {
+func Functions(ctx context.Context, applicationId *string, client providers.ProviderClient, functionsManagementClient functions.FunctionsManagementClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 
 	listFunctionsRequest := functions.ListFunctionsRequest{
@@ -34,9 +35,9 @@ func GetFunctions(ctx context.Context, applicationId *string, client providers.P
 		}
 
 		// extract region from client
-		region, err1 := client.OciClient.Region()
-		if err1 != nil {
-			return resources, err1
+		region, err := client.OciClient.Region()
+		if err != nil {
+			return resources, err
 		}
 
 		resources = append(resources, Resource{

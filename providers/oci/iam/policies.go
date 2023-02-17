@@ -2,8 +2,9 @@ package iam
 
 import (
 	"context"
-	"github.com/oracle/oci-go-sdk/identity"
 	"time"
+
+	"github.com/oracle/oci-go-sdk/identity"
 
 	log "github.com/sirupsen/logrus"
 
@@ -43,16 +44,16 @@ func Policies(ctx context.Context, client providers.ProviderClient) ([]Resource,
 		}
 
 		// extract region from client
-		region, err1 := client.OciClient.Region()
-		if err1 != nil {
-			return resources, err1
+		region, err := client.OciClient.Region()
+		if err != nil {
+			return resources, err
 		}
 
 		resources = append(resources, Resource{
 			Provider:   "OCI",
 			Account:    client.Name,
 			ResourceId: *policy.Id,
-			Service:    "Policy",
+			Service:    "Identity Policy",
 			Region:     region,
 			Name:       *policy.Name,
 			Cost:       0,
