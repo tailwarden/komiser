@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/utils"
 )
 
 func (handler *ApiHandler) DashboardStatsHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,8 +60,7 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 
 	groups := make([]models.OutputResources, 0)
 
-	err = handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
-	fmt.Println(err)
+	handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
 
 	segments := groups[:4]
 
@@ -77,4 +77,29 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 	}
 
 	respondWithJSON(w, 200, segments)
+}
+
+func (handler *ApiHandler) LocationBreakdownStatsHandler(w http.ResponseWriter, r *http.Request) {
+	groups := make([]models.OutputResources, 0)
+
+	handler.db.NewRaw("SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;").Scan(handler.ctx, &groups)
+
+	locations := make([]models.OutputLocations, 0)
+
+	for _, group := range groups {
+
+		location := utils.GetLocationFromRegion(group.Label)
+
+		if location.Label != "" {
+			locations = append(locations, models.OutputLocations{
+				Name:      location.Name,
+				Label:     location.Label,
+				Latitude:  location.Latitude,
+				Longitude: location.Longitude,
+				Resources: group.Total,
+			})
+		}
+	}
+
+	respondWithJSON(w, 200, locations)
 }

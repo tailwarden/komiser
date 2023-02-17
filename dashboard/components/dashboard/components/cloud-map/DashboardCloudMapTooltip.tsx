@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { CloudMapTooltip } from './useCloudMapTooltip';
+import { CloudMapTooltip } from './hooks/useCloudMapTooltip';
 
 type DashboardCloudMapProps = {
   tooltip: CloudMapTooltip | undefined;
