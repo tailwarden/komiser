@@ -2,6 +2,10 @@ package oci
 
 import (
 	"context"
+	"github.com/tailwarden/komiser/providers/oci/developerservices"
+	"github.com/tailwarden/komiser/providers/oci/iam"
+	"github.com/tailwarden/komiser/providers/oci/oracledatabase"
+	"github.com/tailwarden/komiser/providers/oci/storage"
 	"log"
 
 	"github.com/tailwarden/komiser/providers"
@@ -12,6 +16,11 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		compute.Instances,
+		iam.Policies,
+		oracledatabase.AutonomousDatabases,
+		storage.Buckets,
+		storage.BlockVolumes,
+		developerservices.Applications,
 	}
 }
 

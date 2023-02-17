@@ -3,6 +3,7 @@ package providers
 import (
 	"context"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
@@ -23,5 +24,11 @@ type ProviderClient struct {
 	K8sClient          *kubernetes.Clientset
 	LinodeClient       *linodego.Client
 	TencentClient      *tccvm.Client
+	AzureClient        *AzureClient
 	Name               string
+}
+
+type AzureClient struct {
+	Credentials    *azidentity.ClientSecretCredential
+	SubscriptionId string
 }

@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 import { ReactNode, useContext, useState } from 'react';
-import LayoutContext from '../../layout/context/LayoutContext';
+import GlobalAppContext from '../../layout/context/GlobalAppContext';
 import {
   InventoryItem,
   View
@@ -24,7 +24,7 @@ function InventoryLayout({
   searchedInventory
 }: InventoryLayoutProps) {
   const [query, setQuery] = useState('');
-  const { displayBanner } = useContext(LayoutContext);
+  const { displayBanner } = useContext(GlobalAppContext);
 
   let newView = views;
 
@@ -37,12 +37,17 @@ function InventoryLayout({
     (inventory && inventory.length > 0) ||
     (searchedInventory && searchedInventory.length > 0);
 
-  const displaySidebar =
-    !error && (hasInventory || (views && views.length > 0));
+  const hasNoInventory =
+    (inventory && inventory.length === 0) ||
+    (searchedInventory && searchedInventory.length === 0);
+
+  const hasNoViews = views && views.length === 0;
+
+  const dontDisplaySidebar = (error && hasNoInventory) || hasNoViews;
 
   return (
     <>
-      {displaySidebar && (
+      {!dontDisplaySidebar && (
         <nav
           className={`fixed ${
             displayBanner ? 'mt-[145px]' : 'mt-[73px]'
@@ -51,7 +56,7 @@ function InventoryLayout({
           <button
             onClick={() => {
               if (!router.query.view) return;
-              router.push('/');
+              router.push(router.pathname);
             }}
             className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
@@ -126,7 +131,7 @@ function InventoryLayout({
                         key={view.id}
                         onClick={() => {
                           if (isActive) return;
-                          router.push(`/?view=${view.id}`);
+                          router.push(`?view=${view.id}`);
                         }}
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
@@ -152,7 +157,9 @@ function InventoryLayout({
           )}
         </nav>
       )}
-      <main className={displaySidebar ? 'ml-[17rem]' : ''}>{children}</main>
+      <main className={!dontDisplaySidebar ? 'ml-[17rem]' : ''}>
+        {children}
+      </main>
     </>
   );
 }

@@ -26,6 +26,7 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
+	azure "github.com/tailwarden/komiser/providers/azure"
 	civo "github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	k8s "github.com/tailwarden/komiser/providers/k8s"
@@ -43,7 +44,7 @@ var Os = runtime.GOOS
 var Arch = runtime.GOARCH
 var db *bun.DB
 
-func Exec(address string, port int, configPath string, noTracking bool, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, regions []string, cmd *cobra.Command) error {
 	cfg, clients, err := config.Load(configPath)
 	if err != nil {
 		return err
@@ -68,7 +69,7 @@ func Exec(address string, port int, configPath string, noTracking bool, regions 
 
 	go checkUpgrade()
 
-	err = runServer(address, port, noTracking)
+	err = runServer(address, port, telemetry)
 	if err != nil {
 		return err
 	}
@@ -76,10 +77,10 @@ func Exec(address string, port int, configPath string, noTracking bool, regions 
 	return nil
 }
 
-func runServer(address string, port int, noTracking bool) error {
+func runServer(address string, port int, telemetry bool) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), noTracking, db)
+	r := v1.Endpoints(context.Background(), telemetry, db)
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -130,6 +131,39 @@ func setupSchema(c *models.Config) error {
 		return err
 	}
 
+	// Created pre-defined views
+	untaggedResourcesView := models.View{
+		Name: "Untagged resources",
+		Filters: []models.Filter{
+			models.Filter{
+				Field:    "tags",
+				Operator: "IS_EMPTY",
+				Values:   []string{},
+			},
+		},
+	}
+
+	_, err = db.NewInsert().Model(&untaggedResourcesView).Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	expensiveResourcesView := models.View{
+		Name: "Expensive resources",
+		Filters: []models.Filter{
+			models.Filter{
+				Field:    "cost",
+				Operator: "GREATER_THAN",
+				Values:   []string{"0"},
+			},
+		},
+	}
+
+	_, err = db.NewInsert().Model(&expensiveResourcesView).Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -162,6 +196,10 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.TencentClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
 				tencent.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.AzureClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				azure.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}

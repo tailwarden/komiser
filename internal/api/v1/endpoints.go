@@ -9,10 +9,10 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func Endpoints(ctx context.Context, noTracking bool, db *bun.DB) *mux.Router {
+func Endpoints(ctx context.Context, telemetry bool, db *bun.DB) *mux.Router {
 	r := mux.NewRouter()
 
-	api := handlers.NewApiHandler(ctx, noTracking, db)
+	api := handlers.NewApiHandler(ctx, telemetry, db)
 
 	r.HandleFunc("/resources", api.ListResourcesHandler)
 	r.HandleFunc("/resources/search", api.FilterResourcesHandler).Methods("POST")
@@ -36,6 +36,9 @@ func Endpoints(ctx context.Context, noTracking bool, db *bun.DB) *mux.Router {
 	r.HandleFunc("/accounts", api.ListAccountsHandler)
 	r.HandleFunc("/costs", api.CostCounterHandler)
 	r.HandleFunc("/stats", api.StatsHandler)
+	r.HandleFunc("/global/stats", api.DashboardStatsHandler)
+	r.HandleFunc("/global/resources", api.ResourcesBreakdownStatsHandler).Methods("POST")
+	r.HandleFunc("/global/locations", api.LocationBreakdownStatsHandler)
 	r.HandleFunc("/stats/search", api.FilterStatsHandler).Methods("POST")
 	r.HandleFunc("/tracking", api.EnableTrackingHandler)
 
