@@ -43,15 +43,15 @@ func Applications(ctx context.Context, client providers.ProviderClient) ([]Resou
 		}
 
 		// extract region from client
-		region, err1 := client.OciClient.Region()
-		if err1 != nil {
-			return resources, err1
+		region, err := client.OciClient.Region()
+		if err != nil {
+			return resources, err
 		}
 
 		// add functions to resources [containing applications] too, as functions are sub-resources to applications.
-		allFunctions, err1 := GetFunctions(ctx, application.Id, client, functionsManagementClient)
-		if err1 != nil {
-			return resources, err1
+		allFunctions, err := GetFunctions(ctx, application.Id, client, functionsManagementClient)
+		if err != nil {
+			return resources, err
 		}
 		if len(allFunctions) > 0 {
 			resources = append(resources, allFunctions...)
