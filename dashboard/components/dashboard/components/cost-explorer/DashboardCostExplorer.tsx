@@ -1,4 +1,5 @@
 import DashboardCostExplorerCard from './DashboardCostExplorerCard';
+import DashboardCostExplorerSkeleton from './DashboardCostExplorerSkeleton';
 import useCostExplorer from './hooks/useCostExplorer';
 
 function DashboardCostExplorer() {
@@ -15,7 +16,7 @@ function DashboardCostExplorer() {
     setQueryDate
   } = useCostExplorer();
 
-  if (loading) return <>Loading</>;
+  if (loading) return <DashboardCostExplorerSkeleton />;
 
   if (error) return <>Error</>;
 
