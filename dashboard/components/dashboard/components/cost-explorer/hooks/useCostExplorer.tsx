@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import mockDataForDashboard from '../../../utils/mockDataForDashboard';
-import {
+import dateHelper, {
   lastMonth,
   lastSixMonths,
   lastThreeMonths,
@@ -31,7 +31,7 @@ export type CostExplorerQueryDateProps =
 function useCostExplorer() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DashboardCostExplorerData>();
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(true);
   const [queryGroup, setQueryGroup] =
     useState<CostExplorerQueryGroupProps>('provider');
   const [queryGranularity, setQueryGranularity] =
@@ -40,17 +40,17 @@ function useCostExplorer() {
     useState<CostExplorerQueryDateProps>('lastSixMonths');
 
   function fetch(
-    provider: CostExplorerQueryGroupProps,
-    granularity: CostExplorerQueryGranularityProps,
-    startDate: string,
-    endDate: string
+    provider: CostExplorerQueryGroupProps = 'provider',
+    granularity: CostExplorerQueryGranularityProps = 'monthly',
+    startDate: string = dateHelper.getLastSixMonths(),
+    endDate: string = dateHelper.getToday()
   ) {
     if (!loading) {
       setLoading(true);
     }
 
     if (error) {
-      setError(false);
+      // setError(false);
     }
 
     setTimeout(() => {

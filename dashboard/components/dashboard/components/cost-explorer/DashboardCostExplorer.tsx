@@ -1,4 +1,5 @@
 import DashboardCostExplorerCard from './DashboardCostExplorerCard';
+import DashboardCostExplorerError from './DashboardCostExplorerError';
 import DashboardCostExplorerSkeleton from './DashboardCostExplorerSkeleton';
 import useCostExplorer from './hooks/useCostExplorer';
 
@@ -18,7 +19,7 @@ function DashboardCostExplorer() {
 
   if (loading) return <DashboardCostExplorerSkeleton />;
 
-  if (error) return <>Error</>;
+  if (error) return <DashboardCostExplorerError fetch={fetch} />;
 
   return (
     <DashboardCostExplorerCard
