@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 import { ReactNode, useContext, useState } from 'react';
-import LayoutContext from '../../layout/context/LayoutContext';
+import GlobalAppContext from '../../layout/context/GlobalAppContext';
 import {
   InventoryItem,
   View
@@ -24,7 +24,7 @@ function InventoryLayout({
   searchedInventory
 }: InventoryLayoutProps) {
   const [query, setQuery] = useState('');
-  const { displayBanner } = useContext(LayoutContext);
+  const { displayBanner } = useContext(GlobalAppContext);
 
   let newView = views;
 

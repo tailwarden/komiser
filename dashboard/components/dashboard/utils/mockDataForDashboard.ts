@@ -162,12 +162,11 @@ const regions = [
   }
 ];
 
-const breakdown = [
-  { name: 'Lambda', amount: 342 },
-  { name: 'IAM Role', amount: 10 },
-  { name: 'VPC', amount: 12 },
-  { name: 'Security Group', amount: 6 },
-  { name: 'Others', amount: 188 }
+const resources = [
+  { name: 'AWS', amount: 451 },
+  { name: 'Azure', amount: 153 },
+  { name: 'GCP', amount: 259 },
+  { name: 'OVH', amount: 100 }
 ];
 
 const explorer = [
@@ -323,6 +322,6 @@ const explorer = [
   }
 ];
 
-const mockDataForDashboard = { stats, regions, breakdown, explorer };
+const mockDataForDashboard = { stats, regions, resources, explorer };
 
 export default mockDataForDashboard;

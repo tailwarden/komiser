@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import mockDataForDashboard from '../../../utils/mockDataForDashboard';
 
-export type Regions = {
+export type DashboardCloudMapRegions = {
   name: string;
   label: string;
   latitude: string;
@@ -11,7 +11,7 @@ export type Regions = {
 
 function useCloudMap() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<Regions>();
+  const [data, setData] = useState<DashboardCloudMapRegions>();
   const [error, setError] = useState(false);
 
   function fetch() {

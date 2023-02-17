@@ -2,14 +2,14 @@ import Image from 'next/image';
 import { useContext } from 'react';
 import formatNumber from '../../utils/formatNumber';
 import Button from '../button/Button';
-import LayoutContext from '../layout/context/LayoutContext';
+import GlobalAppContext from '../layout/context/GlobalAppContext';
 
 type BannerProps = {
   githubStars: number | undefined;
 };
 
 function Banner({ githubStars }: BannerProps) {
-  const { displayBanner, dismissBanner } = useContext(LayoutContext);
+  const { displayBanner, dismissBanner } = useContext(GlobalAppContext);
 
   return (
     <div

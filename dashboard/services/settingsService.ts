@@ -52,6 +52,16 @@ function settings(arg: string, payload?: string) {
 }
 
 const settingsService = {
+  async getGlobalStats() {
+    try {
+      const res = await fetch(`${BASE_URL}/global/stats`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async getInventoryStats() {
     try {
       const res = await fetch(`${BASE_URL}/stats`, settings('GET'));

@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import mockDataForDashboard from '../../../utils/mockDataForDashboard';
 
-type Data = {
-  regions: number;
-  resources: number;
-  accounts: number;
-  cost: {
-    date: string;
-    amount: number;
-  }[];
-};
+export type ResourcesManagerData = {
+  name: string;
+  amount: number;
+}[];
 
-function useDashboardTopStats() {
+function useResourcesManager() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<Data>();
+  const [data, setData] = useState<ResourcesManagerData>();
   const [error, setError] = useState(false);
 
   function fetch() {
@@ -26,7 +21,7 @@ function useDashboardTopStats() {
     }
 
     setTimeout(() => {
-      setData(mockDataForDashboard.stats);
+      setData(mockDataForDashboard.resources);
       setLoading(false);
     }, 1500);
   }
@@ -38,4 +33,4 @@ function useDashboardTopStats() {
   return { loading, data, error, fetch };
 }
 
-export default useDashboardTopStats;
+export default useResourcesManager;

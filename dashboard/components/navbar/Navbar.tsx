@@ -2,10 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import LayoutContext from '../layout/context/LayoutContext';
+import GlobalAppContext from '../layout/context/GlobalAppContext';
 
 function Navbar() {
-  const { displayBanner } = useContext(LayoutContext);
+  const { displayBanner } = useContext(GlobalAppContext);
   const router = useRouter();
   const nav = [
     { label: 'Dashboard', href: '/dashboard' },
