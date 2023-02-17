@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"github.com/tailwarden/komiser/models"
 )
 
 func (handler *ApiHandler) DashboardStatsHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,4 +46,35 @@ func (handler *ApiHandler) DashboardStatsHandler(w http.ResponseWriter, r *http.
 	}
 
 	respondWithJSON(w, 200, output)
+}
+
+func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter, r *http.Request) {
+	input := models.InputResources{}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	groups := make([]models.OutputResources, 0)
+
+	err = handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
+	fmt.Println(err)
+
+	segments := groups[:4]
+
+	if len(groups) > 4 {
+		sum := 0
+		for i := 4; i < len(groups); i++ {
+			sum += groups[i].Total
+		}
+
+		segments = append(segments, models.OutputResources{
+			Label: "Other",
+			Total: sum,
+		})
+	}
+
+	respondWithJSON(w, 200, segments)
 }
