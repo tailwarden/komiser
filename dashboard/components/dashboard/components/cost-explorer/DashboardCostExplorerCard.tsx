@@ -69,7 +69,10 @@ function DashboardCostExplorerCard({
         <div>
           <p className="text-sm font-semibold text-black-900">Cost explorer</p>
           <div className="mt-1"></div>
-          <p className="text-xs text-black-300">Navigate through costs</p>
+          <p className="text-xs text-black-300">
+            Visualise, understand, and manage your infrastructure costs and
+            usage
+          </p>
         </div>
         <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row">
           <Select

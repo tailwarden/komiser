@@ -22,7 +22,7 @@ function DashboardCostExplorerError({
     <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">
       <div className="-mx-6 flex items-center justify-center gap-6 border-b border-black-200/40 px-6 pb-4">
         <p className="text-sm text-black-400">
-          There was an error loading the resources manager.
+          There was an error loading the cost explorer.
         </p>
         <div className="flex-shrink-0">
           <Button style="outline" size="sm" onClick={() => fetch()}>

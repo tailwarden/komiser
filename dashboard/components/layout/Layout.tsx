@@ -38,7 +38,7 @@ function Layout({ children }: LayoutProps) {
           displayBanner
             ? 'mt-[145px] min-h-[calc(100vh-145px)]'
             : 'mt-[73px] min-h-[calc(100vh-73px)]'
-        } bg-black-100 p-6 xl:px-8 2xl:px-24`}
+        } bg-black-100 p-6 pb-12 xl:px-8 2xl:px-24`}
       >
         {canRender && children}
 
