@@ -62,20 +62,22 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 
 	handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
 
-	segments := groups[:4]
+	segments := groups
 
-	if len(groups) > 4 {
-		sum := 0
-		for i := 4; i < len(groups); i++ {
-			sum += groups[i].Total
+	if len(groups) > 3 {
+		segments = groups[:4]
+		if len(groups) > 4 {
+			sum := 0
+			for i := 4; i < len(groups); i++ {
+				sum += groups[i].Total
+			}
+
+			segments = append(segments, models.OutputResources{
+				Label: "Other",
+				Total: sum,
+			})
 		}
-
-		segments = append(segments, models.OutputResources{
-			Label: "Other",
-			Total: sum,
-		})
 	}
-
 	respondWithJSON(w, 200, segments)
 }
 
