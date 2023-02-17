@@ -31,7 +31,7 @@ export type CostExplorerQueryDateProps =
 function useCostExplorer() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DashboardCostExplorerData>();
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [queryGroup, setQueryGroup] =
     useState<CostExplorerQueryGroupProps>('provider');
   const [queryGranularity, setQueryGranularity] =
@@ -50,7 +50,7 @@ function useCostExplorer() {
     }
 
     if (error) {
-      // setError(false);
+      setError(false);
     }
 
     setTimeout(() => {

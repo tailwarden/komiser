@@ -14,7 +14,7 @@ function DashboardResourcesManagerError({
           There was an error loading the resources manager.
         </p>
         <div className="flex-shrink-0">
-          <Button style="outline" size="sm" onClick={fetch}>
+          <Button style="outline" size="sm" onClick={() => fetch()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

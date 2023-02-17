@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import Select from '../select/Select';
-import { ResourcesManagerData } from './hooks/useResourcesManager';
+import {
+  ResourcesManagerData,
+  ResourcesManagerQuery
+} from './hooks/useResourcesManager';
 import useResourcesManagerChart from './hooks/useResourcesManagerChart';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 type DashboardResourcesManagerCardProps = {
   data: ResourcesManagerData | undefined;
+  query: ResourcesManagerQuery;
+  setQuery: Dispatch<SetStateAction<ResourcesManagerQuery>>;
 };
 
 function DashboardResourcesManagerCard({
-  data
+  data,
+  query,
+  setQuery
 }: DashboardResourcesManagerCardProps) {
-  const { chartData, options, select, query, handleChange } =
-    useResourcesManagerChart({ data });
+  const { chartData, options, select, handleChange } = useResourcesManagerChart(
+    { data, setQuery }
+  );
 
   return (
     <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">

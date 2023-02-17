@@ -6,12 +6,25 @@ export type ResourcesManagerData = {
   amount: number;
 }[];
 
+export type ResourcesManagerQuery =
+  | 'provider'
+  | 'service'
+  | 'region'
+  | 'account'
+  | 'view';
+
+export type ResourcesManagerGroupBySelectProps = {
+  values: ResourcesManagerQuery[];
+  displayValues: string[];
+};
+
 function useResourcesManager() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ResourcesManagerData>();
   const [error, setError] = useState(false);
+  const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
 
-  function fetch() {
+  function fetch(newQuery: ResourcesManagerQuery = 'provider') {
     if (!loading) {
       setLoading(true);
     }
@@ -27,10 +40,10 @@ function useResourcesManager() {
   }
 
   useEffect(() => {
-    fetch();
-  }, []);
+    fetch(query);
+  }, [query]);
 
-  return { loading, data, error, fetch };
+  return { loading, data, error, fetch, query, setQuery };
 }
 
 export default useResourcesManager;

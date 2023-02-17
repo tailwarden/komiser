@@ -1,37 +1,31 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
-import { ResourcesManagerData } from './useResourcesManager';
+import {
+  ResourcesManagerData,
+  ResourcesManagerGroupBySelectProps,
+  ResourcesManagerQuery
+} from './useResourcesManager';
 
 export type ResourcesManagerChartProps = {
   name: string;
   amount: number;
 };
 
-type ResourcesManagerChartQuery =
-  | 'provider'
-  | 'service'
-  | 'region'
-  | 'account'
-  | 'view';
-
-type GroupBySelectProps = {
-  values: ResourcesManagerChartQuery[];
-  displayValues: string[];
-};
-
 type useResourcesManagerChartProps = {
   data: ResourcesManagerData | undefined;
+  setQuery: Dispatch<SetStateAction<ResourcesManagerQuery>>;
 };
 
-function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
-  const [query, setQuery] = useState<ResourcesManagerChartQuery>('provider');
-
+function useResourcesManagerChart({
+  data,
+  setQuery
+}: useResourcesManagerChartProps) {
   function handleChange(e: ChangeEvent<HTMLSelectElement>) {
-    setQuery(e.currentTarget.value as ResourcesManagerChartQuery);
+    setQuery(e.currentTarget.value as ResourcesManagerQuery);
   }
 
-  const select: GroupBySelectProps = {
+  const select: ResourcesManagerGroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
     displayValues: [
       'Cloud provider',
@@ -116,7 +110,7 @@ function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
     }
   };
 
-  return { chartData, options, select, query, handleChange };
+  return { chartData, options, select, handleChange };
 }
 
 export default useResourcesManagerChart;

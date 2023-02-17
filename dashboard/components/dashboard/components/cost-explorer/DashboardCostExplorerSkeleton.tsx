@@ -9,9 +9,9 @@ function DashboardCostExplorerSkeleton() {
           <div className="h-3 w-36 rounded-lg bg-komiser-200/50"></div>
         </div>
         <div className="flex flex-col gap-4 px-6 pb-4 md:flex-row md:flex-wrap">
-          <div className="h-[60px] w-48 rounded-lg bg-komiser-200/50"></div>
-          <div className="h-[60px] w-48 rounded-lg bg-komiser-200/50"></div>
-          <div className="h-[60px] w-48 rounded-lg bg-komiser-200/50"></div>
+          <div className="h-[60px] w-[177.5px] rounded-lg bg-komiser-200/50"></div>
+          <div className="h-[60px] w-[177.5px] rounded-lg bg-komiser-200/50"></div>
+          <div className="h-[60px] w-[177.5px] rounded-lg bg-komiser-200/50"></div>
         </div>
       </div>
       <div className="mt-8"></div>
