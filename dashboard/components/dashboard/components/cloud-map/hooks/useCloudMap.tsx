@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import mockDataForDashboard from '../../../utils/mockDataForDashboard';
+import settingsService from '../../../../../services/settingsService';
 
 export type DashboardCloudMapRegions = {
   name: string;
@@ -23,10 +23,15 @@ function useCloudMap() {
       setError(false);
     }
 
-    setTimeout(() => {
-      setData(mockDataForDashboard.regions);
-      setLoading(false);
-    }, 1500);
+    settingsService.getGlobalLocations().then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setError(true);
+      } else {
+        setLoading(false);
+        setData(res);
+      }
+    });
   }
 
   useEffect(() => {

@@ -8,8 +8,8 @@ import {
 } from './useResourcesManager';
 
 export type ResourcesManagerChartProps = {
-  name: string;
-  amount: number;
+  label: string;
+  total: number;
 };
 
 type useResourcesManagerChartProps = {
@@ -40,15 +40,15 @@ function useResourcesManagerChart({
 
   const sortByDescendingCosts = data?.sort(
     (a: ResourcesManagerChartProps, b: ResourcesManagerChartProps) =>
-      b.amount - a.amount
+      b.total - a.total
   );
 
   const chartData: ChartData<'doughnut'> = {
-    labels: sortByDescendingCosts?.map(item => item.name),
+    labels: sortByDescendingCosts?.map(item => item.label),
     datasets: [
       {
         data: sortByDescendingCosts?.map(item =>
-          Number(formatNumber(item.amount))
+          Number(formatNumber(item.total))
         ) as number[],
         backgroundColor: colors,
         borderColor: '#FFFFFF',

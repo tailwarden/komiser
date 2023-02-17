@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import mockDataForDashboard from '../../../utils/mockDataForDashboard';
+import settingsService from '../../../../../services/settingsService';
 
 export type ResourcesManagerData = {
-  name: string;
-  amount: number;
+  label: string;
+  total: number;
 }[];
 
 export type ResourcesManagerQuery =
@@ -24,7 +24,7 @@ function useResourcesManager() {
   const [error, setError] = useState(false);
   const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
 
-  function fetch(newQuery: ResourcesManagerQuery = 'provider') {
+  function fetch(newQuery: ResourcesManagerQuery = 'region') {
     if (!loading) {
       setLoading(true);
     }
@@ -33,10 +33,18 @@ function useResourcesManager() {
       setError(false);
     }
 
-    setTimeout(() => {
-      setData(mockDataForDashboard.resources);
-      setLoading(false);
-    }, 1500);
+    const payload = { filter: newQuery, exclude: [] };
+    const payloadJson = JSON.stringify(payload);
+
+    settingsService.getGlobalResources(payloadJson).then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setError(true);
+      } else {
+        setLoading(false);
+        setData(res);
+      }
+    });
   }
 
   useEffect(() => {
