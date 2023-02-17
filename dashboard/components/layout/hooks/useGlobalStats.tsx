@@ -25,6 +25,7 @@ function useGlobalStats() {
 
     settingsService.getGlobalStats().then(res => {
       if (res === Error) {
+        setLoading(false);
         setError(true);
       } else {
         setLoading(false);

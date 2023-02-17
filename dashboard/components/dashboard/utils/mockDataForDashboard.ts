@@ -163,13 +163,13 @@ const regions = [
 ];
 
 const resources = [
-  { name: 'AWS', amount: 451 },
-  { name: 'Azure', amount: 153 },
-  { name: 'GCP', amount: 259 },
-  { name: 'OVH', amount: 100 }
+  { label: 'AWS', total: 451 },
+  { label: 'Azure', total: 153 },
+  { label: 'GCP', total: 259 },
+  { label: 'OVH', total: 100 }
 ];
 
-const explorer = [
+const costs = [
   {
     date: '2022-03',
     datapoints: [
@@ -322,6 +322,6 @@ const explorer = [
   }
 ];
 
-const mockDataForDashboard = { stats, regions, resources, explorer };
+const mockDataForDashboard = { stats, regions, resources, costs };
 
 export default mockDataForDashboard;

@@ -1,37 +1,32 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
-import { ResourcesManagerData } from './useResourcesManager';
+import {
+  ResourcesManagerData,
+  ResourcesManagerGroupBySelectProps,
+  ResourcesManagerQuery
+} from './useResourcesManager';
 
 export type ResourcesManagerChartProps = {
-  name: string;
-  amount: number;
-};
-
-type ResourcesManagerChartQuery =
-  | 'provider'
-  | 'service'
-  | 'region'
-  | 'account'
-  | 'view';
-
-type GroupBySelectProps = {
-  values: ResourcesManagerChartQuery[];
-  displayValues: string[];
+  label: string;
+  total: number;
 };
 
 type useResourcesManagerChartProps = {
   data: ResourcesManagerData | undefined;
+  setQuery: Dispatch<SetStateAction<ResourcesManagerQuery>>;
 };
 
-function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
-  const [query, setQuery] = useState<ResourcesManagerChartQuery>('provider');
-
+function useResourcesManagerChart({
+  data,
+  setQuery
+}: useResourcesManagerChartProps) {
   function handleChange(e: ChangeEvent<HTMLSelectElement>) {
-    setQuery(e.currentTarget.value as ResourcesManagerChartQuery);
+    setQuery(e.currentTarget.value as ResourcesManagerQuery);
   }
 
-  const select: GroupBySelectProps = {
+  /* To be un-commented when 'view' is supported 
+    const select: ResourcesManagerGroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
     displayValues: [
       'Cloud provider',
@@ -40,21 +35,31 @@ function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
       'Cloud account',
       'Custom views'
     ]
+  }; */
+
+  const select: ResourcesManagerGroupBySelectProps = {
+    values: ['provider', 'service', 'region', 'account'],
+    displayValues: [
+      'Cloud provider',
+      'Cloud service',
+      'Cloud region',
+      'Cloud account'
+    ]
   };
 
   const colors = ['#80AAF2', '#F19B6E', '#FBC864', '#9BD6CC', '#B8D987'];
 
   const sortByDescendingCosts = data?.sort(
     (a: ResourcesManagerChartProps, b: ResourcesManagerChartProps) =>
-      b.amount - a.amount
+      b.total - a.total
   );
 
   const chartData: ChartData<'doughnut'> = {
-    labels: sortByDescendingCosts?.map(item => item.name),
+    labels: sortByDescendingCosts?.map(item => item.label),
     datasets: [
       {
         data: sortByDescendingCosts?.map(item =>
-          Number(formatNumber(item.amount))
+          Number(formatNumber(item.total))
         ) as number[],
         backgroundColor: colors,
         borderColor: '#FFFFFF',
@@ -116,7 +121,7 @@ function useResourcesManagerChart({ data }: useResourcesManagerChartProps) {
     }
   };
 
-  return { chartData, options, select, query, handleChange };
+  return { chartData, options, select, handleChange };
 }
 
 export default useResourcesManagerChart;

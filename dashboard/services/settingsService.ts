@@ -62,6 +62,29 @@ const settingsService = {
     }
   },
 
+  async getGlobalLocations() {
+    try {
+      const res = await fetch(`${BASE_URL}/global/locations`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getGlobalResources(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/global/resources`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async getInventoryStats() {
     try {
       const res = await fetch(`${BASE_URL}/stats`, settings('GET'));
