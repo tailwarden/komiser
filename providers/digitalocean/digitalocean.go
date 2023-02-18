@@ -2,6 +2,7 @@ package digitalocean
 
 import (
 	"context"
+	"github.com/tailwarden/komiser/providers/digitalocean/k8s"
 	"log"
 
 	"github.com/tailwarden/komiser/providers"
@@ -16,6 +17,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		network.Firewalls,
 		network.LoadBalancers,
 		network.Vpcs,
+		k8s.Clusters,
 	}
 }
 
