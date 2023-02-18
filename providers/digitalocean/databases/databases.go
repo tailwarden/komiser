@@ -1,4 +1,4 @@
-package kubernetes
+package databases
 
 import (
 	"context"
@@ -13,16 +13,16 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Databases(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
-	kubernetesClusters, _, err := client.DigitalOceanClient.Kubernetes.List(ctx, &godo.ListOptions{})
+	databases, _, err := client.DigitalOceanClient.Databases.List(ctx, &godo.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
 
-	for _, kubernetesCluster := range kubernetesClusters {
+	for _, database := range databases {
 		tags := make([]models.Tag, 0)
-		for _, tag := range kubernetesCluster.Tags {
+		for _, tag := range database.Tags {
 			if strings.Contains(tag, ":") {
 				parts := strings.Split(tag, ":")
 				tags = append(tags, models.Tag{
@@ -40,20 +40,20 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 		resources = append(resources, models.Resource{
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
-			Service:    "Kubernetes",
-			ResourceId: fmt.Sprintf("%d", kubernetesCluster.ID),
-			Region:     kubernetesCluster.RegionSlug,
-			Name:       kubernetesCluster.Name,
+			Service:    "Database",
+			ResourceId: fmt.Sprintf("%d", database.ID),
+			Region:     database.RegionSlug,
+			Name:       database.Name,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://cloud.digitalocean.com/kubernetes/clusters/%d", kubernetesCluster.ID),
+			Link:       fmt.Sprintf("https://cloud.digitalocean.com/databases/%d", database.ID),
 		})
 	}
 
 	log.WithFields(log.Fields{
 		"provider":  "DigitalOcean",
 		"account":   client.Name,
-		"service":   "Kubernetes",
+		"service":   "Database",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
