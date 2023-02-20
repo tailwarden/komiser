@@ -15,7 +15,7 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
   return (
     <div
       className={`${
-        isOpen ? 'fixed inset-0 z-30' : ''
+        isOpen ? 'fixed inset-0 z-30 origin-left animate-scale' : ''
       } w-full rounded-lg bg-white py-4 px-6 pb-6`}
     >
       <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
