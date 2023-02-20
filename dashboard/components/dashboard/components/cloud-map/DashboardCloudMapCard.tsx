@@ -1,6 +1,8 @@
+import Button from '../../../button/Button';
 import DashboardCloudMapChart from './DashboardCloudMapChart';
 import DashboardCloudMapTooltip from './DashboardCloudMapTooltip';
 import { DashboardCloudMapRegions } from './hooks/useCloudMap';
+import useCloudMapExpand from './hooks/useCloudMapExpand';
 import useCloudMapTooltip from './hooks/useCloudMapTooltip';
 
 type DashboardCloudMapCardProps = {
@@ -8,9 +10,14 @@ type DashboardCloudMapCardProps = {
 };
 function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
   const { tooltip, setTooltip } = useCloudMapTooltip();
+  const { isOpen, toggle } = useCloudMapExpand();
 
   return (
-    <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">
+    <div
+      className={`${
+        isOpen ? 'fixed inset-0 z-30' : ''
+      } w-full rounded-lg bg-white py-4 px-6 pb-6`}
+    >
       <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
         <div>
           <p className="text-sm font-semibold text-black-900">Cloud map</p>
@@ -19,7 +26,25 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
             Analyze which regions have active resources
           </p>
         </div>
-        <div className="h-[60px]"></div>
+        <div className="flex h-[60px] items-center">
+          <Button style="ghost" size="sm" onClick={toggle}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M21 9V3h-6M3 15v6h6M21 3l-7.5 7.5M10.5 13.5L3 21"
+              ></path>
+            </svg>
+          </Button>
+        </div>
       </div>
       <div className="mt-8"></div>
       <DashboardCloudMapChart regions={data} setTooltip={setTooltip} />
