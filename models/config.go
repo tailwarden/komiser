@@ -9,6 +9,7 @@ type Config struct {
 	Kubernetes   []KubernetesConfig   `toml:"k8s"`
 	Linode       []LinodeConfig       `toml:"linode"`
 	Tencent      []TencentConfig      `toml:"tencent"`
+	Scaleway     []ScalewayConfig     `toml:"scaleway"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 }
@@ -31,6 +32,13 @@ type AzureConfig struct {
 type DigitalOceanConfig struct {
 	Name  string `toml:"name"`
 	Token string `toml:"token"`
+}
+
+type ScalewayConfig struct {
+	Name           string `toml:"name"`
+	OrganizationId string `toml:"organizationId"`
+	AccessKey      string `toml:"accessKey"`
+	SecretKey      string `toml:"secretKey"`
 }
 
 type KubernetesConfig struct {

@@ -17,6 +17,7 @@ import (
 	"github.com/digitalocean/godo"
 	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
+	"github.com/scaleway/scaleway-sdk-go/scw"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
@@ -211,6 +212,23 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				AzureClient: &client,
 				Name:        account.Name,
+			})
+		}
+	}
+
+	if len(config.Scaleway) > 0 {
+		for _, account := range config.Scaleway {
+			client, err := scw.NewClient(
+				scw.WithDefaultOrganizationID(account.OrganizationId),
+				scw.WithAuth(account.AccessKey, account.SecretKey),
+			)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			clients = append(clients, providers.ProviderClient{
+				ScalewayClient: client,
+				Name:           account.Name,
 			})
 		}
 	}
