@@ -18,12 +18,14 @@ function Navbar() {
       } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white py-4 px-6 xl:pr-8 2xl:pr-24`}
     >
       <div className="flex items-center gap-8 text-sm font-semibold text-black-400">
-        <Image
-          src="./assets/img/komiser.svg"
-          width={40}
-          height={40}
-          alt="Komiser logo"
-        />
+        <Link href="/dashboard">
+          <Image
+            src="./assets/img/komiser.svg"
+            width={40}
+            height={40}
+            alt="Komiser logo"
+          />
+        </Link>
         {nav.map((navItem, idx) => (
           <Link
             key={idx}
