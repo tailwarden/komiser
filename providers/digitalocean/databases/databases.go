@@ -41,12 +41,12 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Database",
-			ResourceId: fmt.Sprintf("%d", database.ID),
+			ResourceId: fmt.Sprintf("%s", database.ID),
 			Region:     database.RegionSlug,
 			Name:       database.Name,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://cloud.digitalocean.com/databases/%d", database.ID),
+			Link:       fmt.Sprintf("https://cloud.digitalocean.com/databases/%s", database.ID),
 		})
 	}
 
