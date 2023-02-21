@@ -82,7 +82,8 @@
                 "elasticfilesystem:Describe*",
                 "rds:Describe*",
                 "elasticache:List*",
-                "eks:Describe*"
+                "eks:Describe*",
+                "elasticloadbalancing:DescribeTags"
             ],
             "Resource": "*"
         }
