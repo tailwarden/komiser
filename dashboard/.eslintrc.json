@@ -1,9 +1,20 @@
 {
-  "extends": ["next", "next/core-web-vitals", "airbnb-base", "prettier"],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "airbnb-base",
+    "prettier",
+    "plugin:storybook/recommended"
+  ],
   "plugins": ["prettier"],
   "rules": {
     "react-hooks/exhaustive-deps": "off",
-    "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
