@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
+	"time"
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
@@ -104,4 +106,67 @@ func (handler *ApiHandler) LocationBreakdownStatsHandler(w http.ResponseWriter, 
 	}
 
 	respondWithJSON(w, 200, locations)
+}
+
+func (handler *ApiHandler) CostBreakdownHandler(w http.ResponseWriter, r *http.Request) {
+	input := models.InputCostBreakdown{}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	groups := make([]models.OutputCostBreakdownRaw, 0)
+
+	query := `SELECT provider, account, region, service, sum(cost) as total, strftime("%Y-%m-%d", fetched_at) as period FROM resources WHERE`
+	if input.Granularity == "MONTHLY" {
+		query = `SELECT provider, account, region, service, sum(cost) as total, strftime("%Y-%m", fetched_at) as period FROM resources WHERE`
+	}
+
+	err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
+
+	data := make(map[string][]models.Datapoint, 0)
+
+	for _, group := range groups {
+		if len(data[group.Period]) == 0 {
+			data[group.Period] = make([]models.Datapoint, 0)
+		}
+
+		name := group.Provider
+		switch input.Group {
+		case "account":
+			name = group.Account
+		case "region":
+			name = group.Region
+		case "service":
+			name = group.Service
+		}
+
+		data[group.Period] = append(data[group.Period], models.Datapoint{
+			Name:   name,
+			Amount: group.Total,
+		})
+	}
+
+	sort.Slice(groups, func(i, j int) bool {
+		dateFormat := "2006-01-02"
+		if input.Granularity == "MONTHLY" {
+			dateFormat = "2006-01"
+		}
+		firstDate, _ := time.Parse(dateFormat, groups[i].Period)
+		secondDate, _ := time.Parse(dateFormat, groups[j].Period)
+		return firstDate.Before(secondDate)
+	})
+
+	output := make([]models.OutputCostBreakdown, 0)
+
+	for period, datapoints := range data {
+		output = append(output, models.OutputCostBreakdown{
+			Date:       period,
+			Datapoints: datapoints,
+		})
+	}
+
+	respondWithJSON(w, 200, output)
 }

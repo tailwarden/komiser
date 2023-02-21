@@ -39,6 +39,7 @@ func Endpoints(ctx context.Context, telemetry bool, db *bun.DB) *mux.Router {
 	r.HandleFunc("/global/stats", api.DashboardStatsHandler)
 	r.HandleFunc("/global/resources", api.ResourcesBreakdownStatsHandler).Methods("POST")
 	r.HandleFunc("/global/locations", api.LocationBreakdownStatsHandler)
+	r.HandleFunc("/costs/explorer", api.CostBreakdownHandler).Methods("POST")
 	r.HandleFunc("/stats/search", api.FilterStatsHandler).Methods("POST")
 	r.HandleFunc("/tracking", api.EnableTrackingHandler)
 
