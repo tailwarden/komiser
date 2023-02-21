@@ -16,7 +16,7 @@
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
     "chart.js": "^4.2.1",
-    "next": "13.0.1",
+    "next": "^13.1.6",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
