@@ -25,6 +25,7 @@
         "tsx": "never"
       }
     ],
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "import/prefer-default-export": "off"
   }
 }
