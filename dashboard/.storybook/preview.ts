@@ -1,10 +1,8 @@
 import '../styles/globals.css';
+import komiserTheme from './komiserTheme';
 
 export const parameters = {
   layout: 'centered',
-  backgrounds: {
-    default: 'light'
-  },
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
@@ -12,5 +10,7 @@ export const parameters = {
       date: /Date$/
     }
   },
-  docs: {}
+  docs: {
+    theme: komiserTheme
+  }
 };
