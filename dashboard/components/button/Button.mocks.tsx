@@ -20,8 +20,28 @@ const secondary: ButtonProps = {
   onClick: () => {}
 };
 
+const bulk: ButtonProps = {
+  children: 'Bulk button',
+  type: 'button',
+  style: 'bulk',
+  size: 'lg',
+  disabled: false,
+  loading: false,
+  onClick: () => {}
+};
+
+const bulkOutline: ButtonProps = {
+  children: 'Bulk button',
+  type: 'button',
+  style: 'bulk-outline',
+  size: 'lg',
+  disabled: false,
+  loading: false,
+  onClick: () => {}
+};
+
 const outline: ButtonProps = {
-  children: 'Outline button',
+  children: 'Bulk button',
   type: 'button',
   style: 'outline',
   size: 'lg',
@@ -51,7 +71,7 @@ const ghost: ButtonProps = {
   ),
   type: 'button',
   style: 'ghost',
-  size: 'xs',
+  size: 'sm',
   disabled: false,
   loading: false,
   onClick: () => {}
@@ -67,12 +87,25 @@ const deleteButton: ButtonProps = {
   onClick: () => {}
 };
 
+const deleteButtonGhost: ButtonProps = {
+  children: 'Delete button ghost',
+  type: 'button',
+  style: 'delete-ghost',
+  size: 'lg',
+  disabled: false,
+  loading: false,
+  onClick: () => {}
+};
+
 const mockButtonProps = {
   base,
   secondary,
+  bulk,
+  bulkOutline,
   outline,
   ghost,
-  deleteButton
+  deleteButton,
+  deleteButtonGhost
 };
 
 export default mockButtonProps;
