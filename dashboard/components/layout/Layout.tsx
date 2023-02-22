@@ -4,7 +4,7 @@ import Banner from '../banner/Banner';
 import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
 import Button from '../button/Button';
 import EmptyState from '../empty-state/EmptyState';
-import ErrorPage from '../error/ErrorPage';
+import ErrorState from '../error-state/ErrorState';
 import Navbar from '../navbar/Navbar';
 import GlobalAppContext from './context/GlobalAppContext';
 import useGlobalStats from './hooks/useGlobalStats';
@@ -57,7 +57,7 @@ function Layout({ children }: LayoutProps) {
         )}
 
         {error && (
-          <ErrorPage
+          <ErrorState
             title="Network request error"
             message="There was an error fetching the cloud accounts. Please refer to the logs for more info and try again."
             action={
