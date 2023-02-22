@@ -1,15 +1,15 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
-  Tooltip,
-  Legend
+  Tooltip
 } from 'chart.js';
 import { Dispatch, SetStateAction } from 'react';
 import { Bar } from 'react-chartjs-2';
-import Select from '../select/Select';
+import Select from '../../../select/Select';
 import {
   CostExplorerQueryDateProps,
   CostExplorerQueryGranularityProps,
@@ -77,21 +77,21 @@ function DashboardCostExplorerCard({
         <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row">
           <Select
             label="Group by"
-            options={groupBySelect.values}
+            values={groupBySelect.values}
             value={queryGroup}
             displayValues={groupBySelect.displayValues}
             onChange={e => handleFilterChange(e, 'group')}
           />
           <Select
             label="Granularity"
-            options={granularitySelect.values}
+            values={granularitySelect.values}
             value={queryGranularity}
             displayValues={granularitySelect.displayValues}
             onChange={e => handleFilterChange(e, 'granularity')}
           />
           <Select
             label="Period"
-            options={dateSelect.values}
+            values={dateSelect.values}
             value={queryDate}
             displayValues={dateSelect.displayValues}
             onChange={e => handleFilterChange(e, 'date')}

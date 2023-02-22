@@ -8,6 +8,7 @@ const base: InputProps = {
   type: 'text',
   regex: regex.required,
   error: `Please provide a valid value.`,
+  autofocus: true,
   action: () => {}
 };
 

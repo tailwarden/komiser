@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import Select from '../select/Select';
+import Select from '../../../select/Select';
 import {
   ResourcesManagerData,
   ResourcesManagerQuery
@@ -43,7 +43,7 @@ function DashboardResourcesManagerCard({
       <Select
         label="Group by"
         value={query}
-        options={select.values}
+        values={select.values}
         displayValues={select.displayValues}
         onChange={handleChange}
       />
