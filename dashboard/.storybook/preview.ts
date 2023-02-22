@@ -1,5 +1,5 @@
-import '../styles/globals.css';
 import komiserTheme from './komiserTheme';
+import '../styles/globals.css';
 
 export const parameters = {
   layout: 'centered',
