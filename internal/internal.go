@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
+	"github.com/segmentio/analytics-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
@@ -20,6 +21,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/rs/cors"
+	"github.com/rs/xid"
 	"github.com/spf13/cobra"
 	v1 "github.com/tailwarden/komiser/internal/api/v1"
 	"github.com/tailwarden/komiser/internal/config"
@@ -60,7 +62,7 @@ func Exec(address string, port int, configPath string, telemetry bool, regions [
 
 	cron.Every(1).Hours().Do(func() {
 		log.Info("Fetching resources workflow has started")
-		err = fetchResources(context.Background(), clients, regions)
+		err = fetchResources(context.Background(), clients, regions, telemetry)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -168,47 +170,86 @@ func setupSchema(c *models.Config) error {
 	return nil
 }
 
-func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string) error {
+func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient, regions []string) {
+				if telemetry {
+					trackEvent("AWS")
+				}
 				aws.FetchResources(ctx, client, regions, db)
 			}(ctx, client, regions)
 		} else if client.DigitalOceanClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("DigitalOcean")
+				}
 				do.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.OciClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("OCI")
+				}
 				oci.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.CivoClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("Civo")
+				}
 				civo.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.K8sClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("Kubernetes")
+				}
 				k8s.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.LinodeClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("Linode")
+				}
 				linode.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.TencentClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("Tencent")
+				}
 				tencent.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.AzureClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("Azure")
+				}
 				azure.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.ScalewayClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					trackEvent("Scaleway")
+				}
 				scaleway.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}
 	return nil
+}
+
+func trackEvent(provider string) {
+	if os.Getenv("SEGMENT_WRITE_KEY") != "" {
+		clientAnalytics := analytics.New(os.Getenv("SEGMENT_WRITE_KEY"))
+
+		clientAnalytics.Enqueue(analytics.Track{
+			UserId:     xid.New().String(),
+			Event:      "fetching_resources",
+			Properties: analytics.NewProperties().Set("provider", provider),
+		})
+	}
 }
 
 func checkUpgrade() {
