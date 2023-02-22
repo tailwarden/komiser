@@ -331,27 +331,3 @@ func (handler *ApiHandler) ListAccountsHandler(w http.ResponseWriter, r *http.Re
 
 	respondWithJSON(w, 200, accounts)
 }
-
-func (handler *ApiHandler) ResourcesCounterHandler(w http.ResponseWriter, r *http.Request) {
-	output := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT COUNT(*) FROM resources").Scan(handler.ctx, &output)
-
-	respondWithJSON(w, 200, output)
-}
-
-func (handler *ApiHandler) CostCounterHandler(w http.ResponseWriter, r *http.Request) {
-	output := struct {
-		Sum float64 `bun:"sum" json:"total"`
-	}{}
-
-	handler.db.NewRaw("SELECT SUM(cost) FROM resources").Scan(handler.ctx, &output)
-
-	respondWithJSON(w, 200, output)
-}
-
-func (handler *ApiHandler) EnableTrackingHandler(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, 200, map[string]bool{"tracking": !handler.noTracking})
-}
