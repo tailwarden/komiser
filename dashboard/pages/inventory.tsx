@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Button from '../components/button/Button';
 import EmptyState from '../components/empty-state/EmptyState';
-import ErrorPage from '../components/error/ErrorPage';
+import ErrorState from '../components/error-state/ErrorState';
 import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
 import InventoryActiveFilters from '../components/inventory/components/InventoryActiveFilters';
 import InventoryHeader from '../components/inventory/components/InventoryHeader';
@@ -188,7 +188,7 @@ export default function Inventory() {
 
         {/* Error state */}
         {hasErrorAndNoInventory && (
-          <ErrorPage
+          <ErrorState
             title="Network request error"
             message="There was an error fetching the inventory resources. Check out the server logs for more info and try again."
             action={

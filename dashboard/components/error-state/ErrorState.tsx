@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 
-type ErrorPageProps = {
+export type ErrorStateProps = {
   title: string;
   message: string;
   action?: ReactNode;
 };
 
-function ErrorPage({ title, message, action }: ErrorPageProps) {
+function ErrorState({ title, message, action }: ErrorStateProps) {
   return (
     <div className="flex h-[calc(100vh-156px)] items-center justify-center">
       <div className="flex items-center justify-center text-center">
@@ -27,4 +27,4 @@ function ErrorPage({ title, message, action }: ErrorPageProps) {
   );
 }
 
-export default ErrorPage;
+export default ErrorState;
