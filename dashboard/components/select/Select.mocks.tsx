@@ -7,8 +7,8 @@ const base: SelectProps = {
   values: ['o1', 'o2', 'o3']
 };
 
-const mockButtonProps = {
+const mockSelectProps = {
   base
 };
 
-export default mockButtonProps;
+export default mockSelectProps;

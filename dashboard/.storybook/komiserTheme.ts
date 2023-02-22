@@ -8,8 +8,8 @@ export default create({
   brandTarget: '_self',
   fontBase: '"Noto Sans", sans-serif',
   fontCode: 'monospace',
-  appBg: '#F5FDFD',
-  appContentBg: 'white',
+  appBg: 'white',
+  appContentBg: '#F4F9F9',
   appBorderRadius: 16,
   colorPrimary: '#008484',
   colorSecondary: '#008484'
