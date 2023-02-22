@@ -2,7 +2,7 @@ import komiserTheme from './komiserTheme';
 import '../styles/globals.css';
 
 export const parameters = {
-  layout: 'centered',
+  layout: 'padded',
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
