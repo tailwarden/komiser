@@ -23,8 +23,16 @@ function useResourcesManager() {
   const [data, setData] = useState<ResourcesManagerData>();
   const [error, setError] = useState(false);
   const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
+  const [exclude, setExclude] = useState<string[]>([]);
+  const [listOfResources, setListOfResources] = useState<string[]>([
+    'AWS',
+    'Kubernetes',
+    'Civo',
+    'Azure',
+    'Other'
+  ]);
 
-  function fetch(newQuery: ResourcesManagerQuery = 'region') {
+  function fetch(filter: ResourcesManagerQuery = 'provider') {
     if (!loading) {
       setLoading(true);
     }
@@ -33,7 +41,7 @@ function useResourcesManager() {
       setError(false);
     }
 
-    const payload = { filter: newQuery, exclude: [] };
+    const payload = { filter, exclude };
     const payloadJson = JSON.stringify(payload);
 
     settingsService.getGlobalResources(payloadJson).then(res => {
@@ -49,9 +57,19 @@ function useResourcesManager() {
 
   useEffect(() => {
     fetch(query);
-  }, [query]);
+  }, [query, exclude]);
 
-  return { loading, data, error, fetch, query, setQuery };
+  return {
+    loading,
+    data,
+    error,
+    fetch,
+    query,
+    setQuery,
+    listOfResources,
+    exclude,
+    setExclude
+  };
 }
 
 export default useResourcesManager;

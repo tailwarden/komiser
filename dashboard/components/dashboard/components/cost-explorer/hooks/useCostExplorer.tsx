@@ -38,6 +38,7 @@ function useCostExplorer() {
     useState<CostExplorerQueryGranularityProps>('monthly');
   const [queryDate, setQueryDate] =
     useState<CostExplorerQueryDateProps>('lastSixMonths');
+  const [exclude, setExclude] = useState<string[]>([]);
 
   function fetch(
     group: CostExplorerQueryGroupProps = 'provider',
@@ -58,7 +59,8 @@ function useCostExplorer() {
       group,
       granularity,
       start,
-      end
+      end,
+      exclude
     };
     const payloadJson = JSON.stringify(payload);
 
@@ -91,7 +93,7 @@ function useCostExplorer() {
     }
 
     fetch(queryGroup, queryGranularity, startDate, endDate);
-  }, [queryGroup, queryGranularity, queryDate]);
+  }, [queryGroup, queryGranularity, queryDate, exclude]);
 
   return {
     loading,

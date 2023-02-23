@@ -4,8 +4,17 @@ import DashboardResourcesManagerSkeleton from './DashboardResourcesManagerSkelet
 import useResourcesManager from './hooks/useResourcesManager';
 
 function DashboardResourcesManager() {
-  const { loading, data, error, fetch, query, setQuery } =
-    useResourcesManager();
+  const {
+    loading,
+    data,
+    error,
+    fetch,
+    query,
+    setQuery,
+    listOfResources,
+    exclude,
+    setExclude
+  } = useResourcesManager();
 
   if (loading) return <DashboardResourcesManagerSkeleton />;
 
@@ -16,6 +25,9 @@ function DashboardResourcesManager() {
       data={data}
       query={query}
       setQuery={setQuery}
+      listOfResources={listOfResources}
+      exclude={exclude}
+      setExclude={setExclude}
     />
   );
 }
