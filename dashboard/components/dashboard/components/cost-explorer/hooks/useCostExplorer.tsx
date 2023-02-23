@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import mockDataForDashboard from '../../../utils/mockDataForDashboard';
+import settingsService from '../../../../../services/settingsService';
 import dateHelper, {
   lastMonth,
   lastSixMonths,
@@ -13,7 +13,7 @@ export type DashboardCostExplorerData = {
     name: string;
     amount: number;
   }[];
-}[];
+};
 
 export type CostExplorerQueryGroupProps =
   | 'provider'
@@ -30,7 +30,7 @@ export type CostExplorerQueryDateProps =
 
 function useCostExplorer() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<DashboardCostExplorerData>();
+  const [data, setData] = useState<DashboardCostExplorerData[]>();
   const [error, setError] = useState(false);
   const [queryGroup, setQueryGroup] =
     useState<CostExplorerQueryGroupProps>('provider');
@@ -40,10 +40,10 @@ function useCostExplorer() {
     useState<CostExplorerQueryDateProps>('lastSixMonths');
 
   function fetch(
-    provider: CostExplorerQueryGroupProps = 'provider',
-    granularity: CostExplorerQueryGranularityProps = 'monthly',
-    startDate: string = dateHelper.getLastSixMonths(),
-    endDate: string = dateHelper.getToday()
+    group: CostExplorerQueryGroupProps = 'provider',
+    newGranularity: CostExplorerQueryGranularityProps = 'monthly',
+    start: string = dateHelper.getLastSixMonths(),
+    end: string = dateHelper.getToday()
   ) {
     if (!loading) {
       setLoading(true);
@@ -53,10 +53,24 @@ function useCostExplorer() {
       setError(false);
     }
 
-    setTimeout(() => {
-      setData(mockDataForDashboard.costs);
-      setLoading(false);
-    }, 1500);
+    const granularity = newGranularity.toUpperCase();
+    const payload = {
+      group,
+      granularity,
+      start,
+      end
+    };
+    const payloadJson = JSON.stringify(payload);
+
+    settingsService.getCostExplorer(payloadJson).then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setError(true);
+      } else {
+        setLoading(false);
+        setData(res);
+      }
+    });
   }
 
   useEffect(() => {

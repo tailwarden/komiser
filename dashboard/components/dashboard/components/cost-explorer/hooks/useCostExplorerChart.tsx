@@ -20,7 +20,7 @@ type CostExplorerDatapointsProps = {
   amount: number;
 };
 
-type CostExplorerDataProps = {
+type CostExplorerDatapoints = {
   date: string;
   datapoints: CostExplorerDatapointsProps[];
 };
@@ -31,7 +31,7 @@ export type GroupBySelectProps = {
 };
 
 type useCostExplorerChartProps = {
-  data: DashboardCostExplorerData | undefined;
+  data: DashboardCostExplorerData[] | undefined;
   setQueryGroup: Dispatch<SetStateAction<CostExplorerQueryGroupProps>>;
   queryGranularity: CostExplorerQueryGranularityProps;
   setQueryGranularity: Dispatch<
@@ -50,6 +50,8 @@ function useCostExplorerChart({
   const [chartData, setChartData] = useState<ChartData<'bar'>>();
 
   const colors = ['#80AAF2', '#F19B6E', '#FBC864', '#9BD6CC', '#B8D987'];
+
+  /* To be un-commented when 'view' is supported 
   const groupBySelect: GroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
     displayValues: [
@@ -59,7 +61,18 @@ function useCostExplorerChart({
       'Cloud account',
       'Custom view'
     ]
+  }; */
+
+  const groupBySelect: GroupBySelectProps = {
+    values: ['provider', 'service', 'region', 'account'],
+    displayValues: [
+      'Cloud provider',
+      'Cloud service',
+      'Cloud region',
+      'Cloud account'
+    ]
   };
+
   const granularitySelect: GroupBySelectProps = {
     values: ['monthly', 'daily'],
     displayValues: ['Monthly view', 'Daily view']
@@ -164,7 +177,7 @@ function useCostExplorerChart({
     }
   };
 
-  function getDatasets(dataArray: CostExplorerDataProps[]) {
+  function getDatasets(dataArray: CostExplorerDatapoints[]) {
     const dates = dataArray.map(item =>
       dateFormatter(item.date, queryGranularity)
     );
