@@ -125,6 +125,10 @@ func (handler *ApiHandler) CostBreakdownHandler(w http.ResponseWriter, r *http.R
 	}
 
 	err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	data := make(map[string][]models.Datapoint, 0)
 
@@ -149,24 +153,46 @@ func (handler *ApiHandler) CostBreakdownHandler(w http.ResponseWriter, r *http.R
 		})
 	}
 
-	sort.Slice(groups, func(i, j int) bool {
+	output := make([]models.OutputCostBreakdown, 0)
+
+	for period, datapoints := range data {
+		sort.Slice(datapoints, func(i, j int) bool {
+			return datapoints[i].Amount > datapoints[j].Amount
+		})
+
+		listOfDatapoints := datapoints
+		if len(datapoints) > 3 {
+			listOfDatapoints = datapoints[:4]
+			if len(datapoints) > 4 {
+				sum := 0.0
+				for i := 4; i < len(datapoints); i++ {
+					sum += datapoints[i].Amount
+				}
+
+				listOfDatapoints = append(listOfDatapoints, models.Datapoint{
+					Name:   "Other",
+					Amount: sum,
+				})
+			}
+		}
+
+		output = append(output, models.OutputCostBreakdown{
+			Date:       period,
+			Datapoints: listOfDatapoints,
+		})
+	}
+
+	sort.Slice(output, func(i, j int) bool {
 		dateFormat := "2006-01-02"
 		if input.Granularity == "MONTHLY" {
 			dateFormat = "2006-01"
 		}
-		firstDate, _ := time.Parse(dateFormat, groups[i].Period)
-		secondDate, _ := time.Parse(dateFormat, groups[j].Period)
+
+		firstDate, _ := time.Parse(dateFormat, output[i].Date)
+		secondDate, _ := time.Parse(dateFormat, output[j].Date)
+
 		return firstDate.Before(secondDate)
 	})
-
-	output := make([]models.OutputCostBreakdown, 0)
-
-	for period, datapoints := range data {
-		output = append(output, models.OutputCostBreakdown{
-			Date:       period,
-			Datapoints: datapoints,
-		})
-	}
 
 	respondWithJSON(w, 200, output)
 }
