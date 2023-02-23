@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/tailwarden/komiser/models"
@@ -62,7 +63,12 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 
 	groups := make([]models.OutputResources, 0)
 
-	handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
+	if len(input.Exclude) > 0 {
+		s, _ := json.Marshal(input.Exclude)
+		handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources WHERE %s NOT IN (%s) GROUP BY %s ORDER by total desc;", input.Filter, input.Filter, strings.Trim(string(s), "[]"), input.Filter)).Scan(handler.ctx, &groups)
+	} else {
+		handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
+	}
 
 	segments := groups
 
