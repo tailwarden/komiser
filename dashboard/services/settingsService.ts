@@ -85,6 +85,19 @@ const settingsService = {
     }
   },
 
+  async getCostExplorer(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/costs/explorer`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async getInventory(urlParams: string, payload: string = '[]') {
     try {
       const res = await fetch(
