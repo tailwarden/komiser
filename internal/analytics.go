@@ -44,6 +44,7 @@ func (a *Analytics) TrackEvent(event string, properties map[string]interface{}) 
 		for key, values := range properties {
 			eventProperties.Set(key, values)
 		}
+		eventProperties.Set("version", Version)
 
 		a.SegmentClient.Enqueue(segment.Track{
 			UserId:     a.ID,
