@@ -2,7 +2,7 @@ import { SelectCheckboxProps } from './SelectCheckbox';
 
 const base: SelectCheckboxProps = {
   label: 'Exclude',
-  listOfResources: ['AWS', 'Kubernetes', 'Civo', 'Azure', 'Other'],
+  query: 'provider',
   exclude: [],
   setExclude: () => {}
 };
