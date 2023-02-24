@@ -55,7 +55,6 @@ function InventoryLayout({
         >
           <button
             onClick={() => {
-              if (!router.query.view) return;
               router.push(router.pathname);
             }}
             className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
@@ -121,7 +120,7 @@ function InventoryLayout({
                   )}
                 </div>
               </div>
-              <div className="-mx-4 flex flex-col gap-4 overflow-auto px-4">
+              <div className="-mx-4 -mr-6 flex flex-col gap-4 overflow-auto px-4 pr-6">
                 {newView &&
                   newView.length > 0 &&
                   newView.map(view => {

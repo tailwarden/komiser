@@ -1,15 +1,16 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
-  Tooltip,
-  Legend
+  Tooltip
 } from 'chart.js';
 import { Dispatch, SetStateAction } from 'react';
 import { Bar } from 'react-chartjs-2';
-import Select from '../select/Select';
+import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
+import Select from '../../../select/Select';
 import {
   CostExplorerQueryDateProps,
   CostExplorerQueryGranularityProps,
@@ -28,7 +29,7 @@ ChartJS.register(
 );
 
 type DashboardCostExplorerCardProps = {
-  data: DashboardCostExplorerData | undefined;
+  data: DashboardCostExplorerData[] | undefined;
   queryGroup: CostExplorerQueryGroupProps;
   setQueryGroup: Dispatch<SetStateAction<CostExplorerQueryGroupProps>>;
   queryGranularity: CostExplorerQueryGranularityProps;
@@ -37,6 +38,8 @@ type DashboardCostExplorerCardProps = {
   >;
   queryDate: CostExplorerQueryDateProps;
   setQueryDate: Dispatch<SetStateAction<CostExplorerQueryDateProps>>;
+  exclude: string[];
+  setExclude: Dispatch<SetStateAction<string[]>>;
 };
 
 function DashboardCostExplorerCard({
@@ -46,7 +49,9 @@ function DashboardCostExplorerCard({
   queryGranularity,
   setQueryGranularity,
   queryDate,
-  setQueryDate
+  setQueryDate,
+  exclude,
+  setExclude
 }: DashboardCostExplorerCardProps) {
   const {
     chartData,
@@ -74,29 +79,36 @@ function DashboardCostExplorerCard({
             usage
           </p>
         </div>
-        <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row">
-          <Select
-            label="Group by"
-            options={groupBySelect.values}
-            value={queryGroup}
-            displayValues={groupBySelect.displayValues}
-            onChange={e => handleFilterChange(e, 'group')}
-          />
-          <Select
-            label="Granularity"
-            options={granularitySelect.values}
-            value={queryGranularity}
-            displayValues={granularitySelect.displayValues}
-            onChange={e => handleFilterChange(e, 'granularity')}
-          />
-          <Select
-            label="Period"
-            options={dateSelect.values}
-            value={queryDate}
-            displayValues={dateSelect.displayValues}
-            onChange={e => handleFilterChange(e, 'date')}
-          />
-        </div>
+      </div>
+      <div className="mt-4"></div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Select
+          label="Group by"
+          values={groupBySelect.values}
+          value={queryGroup}
+          displayValues={groupBySelect.displayValues}
+          onChange={e => handleFilterChange(e, 'group')}
+        />
+        <SelectCheckbox
+          label="Excluded"
+          query={queryGroup}
+          exclude={exclude}
+          setExclude={setExclude}
+        />
+        <Select
+          label="Granularity"
+          values={granularitySelect.values}
+          value={queryGranularity}
+          displayValues={granularitySelect.displayValues}
+          onChange={e => handleFilterChange(e, 'granularity')}
+        />
+        <Select
+          label="Period"
+          values={dateSelect.values}
+          value={queryDate}
+          displayValues={dateSelect.displayValues}
+          onChange={e => handleFilterChange(e, 'date')}
+        />
       </div>
       <div className="mt-8"></div>
       <div className="h-full min-h-[22rem]">

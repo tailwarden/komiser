@@ -1,11 +1,11 @@
 import { ChangeEvent } from 'react';
 
-type SelectProps = {
+export type SelectProps = {
   label: string;
-  value: string | number;
+  value?: string | number;
   displayValues?: string[];
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-  options: string[] | number[];
+  values: string[] | number[];
   chevronPadding?: boolean;
 };
 
@@ -14,7 +14,7 @@ function Select({
   value,
   displayValues,
   onChange,
-  options,
+  values,
   chevronPadding
 }: SelectProps) {
   return (
@@ -46,9 +46,9 @@ function Select({
       <select
         value={value}
         onChange={e => onChange(e)}
-        className="w-full appearance-none rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary"
+        className="w-full appearance-none rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900 caret-primary outline outline-black-200/50 hover:outline-black-200 focus:outline-2 focus:outline-primary"
       >
-        {options.map((item, idx) => (
+        {values.map((item, idx) => (
           <option key={idx} value={item}>
             {displayValues ? displayValues[idx] : item}
           </option>

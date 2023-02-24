@@ -32,6 +32,7 @@ import (
 	k8s "github.com/tailwarden/komiser/providers/k8s"
 	linode "github.com/tailwarden/komiser/providers/linode"
 	oci "github.com/tailwarden/komiser/providers/oci"
+	scaleway "github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/uptrace/bun"
 )
@@ -43,12 +44,15 @@ var Commit = "Unknown"
 var Os = runtime.GOOS
 var Arch = runtime.GOARCH
 var db *bun.DB
+var analytics Analytics
 
-func Exec(address string, port int, configPath string, telemetry bool, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, analytics Analytics, regions []string, cmd *cobra.Command) error {
 	cfg, clients, err := config.Load(configPath)
 	if err != nil {
 		return err
 	}
+
+	analytics = analytics
 
 	err = setupSchema(cfg)
 	if err != nil {
@@ -59,7 +63,7 @@ func Exec(address string, port int, configPath string, telemetry bool, regions [
 
 	cron.Every(1).Hours().Do(func() {
 		log.Info("Fetching resources workflow has started")
-		err = fetchResources(context.Background(), clients, regions)
+		err = fetchResources(context.Background(), clients, regions, telemetry)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -167,39 +171,88 @@ func setupSchema(c *models.Config) error {
 	return nil
 }
 
-func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string) error {
+func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient, regions []string) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "AWS",
+					})
+				}
 				aws.FetchResources(ctx, client, regions, db)
 			}(ctx, client, regions)
 		} else if client.DigitalOceanClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "DigitalOcean",
+					})
+				}
 				do.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.OciClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "OCI",
+					})
+				}
 				oci.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.CivoClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "Civo",
+					})
+				}
 				civo.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.K8sClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "Kubernetes",
+					})
+				}
 				k8s.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.LinodeClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "Linode",
+					})
+				}
 				linode.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.TencentClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "Tencent",
+					})
+				}
 				tencent.FetchResources(ctx, client, db)
 			}(ctx, client)
 		} else if client.AzureClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "Azure",
+					})
+				}
 				azure.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.ScalewayClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "Scaleway",
+					})
+				}
+				scaleway.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}

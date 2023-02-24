@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 
 export type ResourcesManagerData = {
@@ -23,8 +23,10 @@ function useResourcesManager() {
   const [data, setData] = useState<ResourcesManagerData>();
   const [error, setError] = useState(false);
   const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
+  const [exclude, setExclude] = useState<string[]>([]);
+  const previousQuery = useRef(query);
 
-  function fetch(newQuery: ResourcesManagerQuery = 'region') {
+  function fetch(filter: ResourcesManagerQuery = 'provider') {
     if (!loading) {
       setLoading(true);
     }
@@ -33,7 +35,7 @@ function useResourcesManager() {
       setError(false);
     }
 
-    const payload = { filter: newQuery, exclude: [] };
+    const payload = { filter, exclude };
     const payloadJson = JSON.stringify(payload);
 
     settingsService.getGlobalResources(payloadJson).then(res => {
@@ -48,10 +50,23 @@ function useResourcesManager() {
   }
 
   useEffect(() => {
+    if (query !== previousQuery.current) {
+      setExclude([]);
+    }
+    previousQuery.current = query;
     fetch(query);
-  }, [query]);
+  }, [query, exclude]);
 
-  return { loading, data, error, fetch, query, setQuery };
+  return {
+    loading,
+    data,
+    error,
+    fetch,
+    query,
+    setQuery,
+    exclude,
+    setExclude
+  };
 }
 
 export default useResourcesManager;

@@ -140,6 +140,19 @@ module.exports = {
             transform: 'scale(2.25, 2.25)',
             opacity: 0
           }
+        },
+        scale: {
+          '0%': {
+            transform: 'scale(0.97)',
+            opacity: 0.85
+          },
+          '50%': {
+            transform: 'scale(1.005)'
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: 1
+          }
         }
       },
       animation: {
@@ -150,9 +163,13 @@ module.exports = {
         'fade-in-down-short': 'fade-in-down-short 250ms ease forwards',
         'fade-in-left': 'fade-in-left 250ms ease forwards',
         'width-to-fit': 'width-to-fit 5000ms ease-in forwards',
-        'wide-pulse': 'wide-pulse 2000ms ease-in infinite'
+        'wide-pulse': 'wide-pulse 2000ms ease-in infinite',
+        scale: 'scale 250ms ease forwards'
       }
     }
+  },
+  future: {
+    hoverOnlyWhenSupported: true
   },
   plugins: []
 };

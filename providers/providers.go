@@ -9,6 +9,7 @@ import (
 	"github.com/digitalocean/godo"
 	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
+	"github.com/scaleway/scaleway-sdk-go/scw"
 	. "github.com/tailwarden/komiser/models"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"k8s.io/client-go/kubernetes"
@@ -25,6 +26,7 @@ type ProviderClient struct {
 	LinodeClient       *linodego.Client
 	TencentClient      *tccvm.Client
 	AzureClient        *AzureClient
+	ScalewayClient     *scw.Client
 	Name               string
 }
 

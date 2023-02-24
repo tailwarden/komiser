@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import mockDataForDashboard from '../../../utils/mockDataForDashboard';
+import { useEffect, useRef, useState } from 'react';
+import settingsService from '../../../../../services/settingsService';
 import dateHelper, {
   lastMonth,
   lastSixMonths,
@@ -13,7 +13,7 @@ export type DashboardCostExplorerData = {
     name: string;
     amount: number;
   }[];
-}[];
+};
 
 export type CostExplorerQueryGroupProps =
   | 'provider'
@@ -30,7 +30,7 @@ export type CostExplorerQueryDateProps =
 
 function useCostExplorer() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<DashboardCostExplorerData>();
+  const [data, setData] = useState<DashboardCostExplorerData[]>();
   const [error, setError] = useState(false);
   const [queryGroup, setQueryGroup] =
     useState<CostExplorerQueryGroupProps>('provider');
@@ -38,12 +38,14 @@ function useCostExplorer() {
     useState<CostExplorerQueryGranularityProps>('monthly');
   const [queryDate, setQueryDate] =
     useState<CostExplorerQueryDateProps>('lastSixMonths');
+  const [exclude, setExclude] = useState<string[]>([]);
+  const previousQueryGroup = useRef(queryGroup);
 
   function fetch(
-    provider: CostExplorerQueryGroupProps = 'provider',
-    granularity: CostExplorerQueryGranularityProps = 'monthly',
-    startDate: string = dateHelper.getLastSixMonths(),
-    endDate: string = dateHelper.getToday()
+    group: CostExplorerQueryGroupProps = 'provider',
+    newGranularity: CostExplorerQueryGranularityProps = 'monthly',
+    start: string = dateHelper.getLastSixMonths(),
+    end: string = dateHelper.getToday()
   ) {
     if (!loading) {
       setLoading(true);
@@ -53,13 +55,6 @@ function useCostExplorer() {
       setError(false);
     }
 
-    setTimeout(() => {
-      setData(mockDataForDashboard.costs);
-      setLoading(false);
-    }, 1500);
-  }
-
-  useEffect(() => {
     let startDate = '';
     let endDate = '';
 
@@ -76,8 +71,34 @@ function useCostExplorer() {
       [startDate, endDate] = lastTwelveMonths;
     }
 
-    fetch(queryGroup, queryGranularity, startDate, endDate);
-  }, [queryGroup, queryGranularity, queryDate]);
+    const granularity = newGranularity.toUpperCase();
+    const payload = {
+      group: queryGroup,
+      granularity,
+      start: startDate,
+      end: endDate,
+      exclude
+    };
+    const payloadJson = JSON.stringify(payload);
+
+    settingsService.getCostExplorer(payloadJson).then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setError(true);
+      } else {
+        setLoading(false);
+        setData(res);
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (queryGroup !== previousQueryGroup.current) {
+      setExclude([]);
+    }
+    previousQueryGroup.current = queryGroup;
+    fetch();
+  }, [queryGroup, queryGranularity, queryDate, exclude]);
 
   return {
     loading,
@@ -89,7 +110,9 @@ function useCostExplorer() {
     queryGranularity,
     setQueryGranularity,
     queryDate,
-    setQueryDate
+    setQueryDate,
+    exclude,
+    setExclude
   };
 }
 

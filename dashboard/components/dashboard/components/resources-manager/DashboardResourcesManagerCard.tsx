@@ -1,7 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import Select from '../select/Select';
+import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
+import Grid from '../../../grid/Grid';
+import Select from '../../../select/Select';
 import {
   ResourcesManagerData,
   ResourcesManagerQuery
@@ -14,12 +16,16 @@ type DashboardResourcesManagerCardProps = {
   data: ResourcesManagerData | undefined;
   query: ResourcesManagerQuery;
   setQuery: Dispatch<SetStateAction<ResourcesManagerQuery>>;
+  exclude: string[];
+  setExclude: Dispatch<SetStateAction<string[]>>;
 };
 
 function DashboardResourcesManagerCard({
   data,
   query,
-  setQuery
+  setQuery,
+  exclude,
+  setExclude
 }: DashboardResourcesManagerCardProps) {
   const { chartData, options, select, handleChange } = useResourcesManagerChart(
     { data, setQuery }
@@ -40,13 +46,21 @@ function DashboardResourcesManagerCard({
         <div className="h-[60px]"></div>
       </div>
       <div className="mt-4"></div>
-      <Select
-        label="Group by"
-        value={query}
-        options={select.values}
-        displayValues={select.displayValues}
-        onChange={handleChange}
-      />
+      <div className="grid gap-4 md:grid-cols-2">
+        <Select
+          label="Group by"
+          value={query}
+          values={select.values}
+          displayValues={select.displayValues}
+          onChange={handleChange}
+        />
+        <SelectCheckbox
+          label="Exclude"
+          setExclude={setExclude}
+          exclude={exclude}
+          query={query}
+        />
+      </div>
       <div className="mt-4"></div>
       <Doughnut data={chartData} options={options} />
     </div>

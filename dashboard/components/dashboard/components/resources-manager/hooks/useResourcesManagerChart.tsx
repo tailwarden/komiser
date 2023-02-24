@@ -25,6 +25,8 @@ function useResourcesManagerChart({
     setQuery(e.currentTarget.value as ResourcesManagerQuery);
   }
 
+  const colors = ['#0072B2', '#FF8C00', '#228B22', '#FFD700', '#9932CC'];
+
   /* To be un-commented when 'view' is supported 
     const select: ResourcesManagerGroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
@@ -46,8 +48,6 @@ function useResourcesManagerChart({
       'Cloud account'
     ]
   };
-
-  const colors = ['#80AAF2', '#F19B6E', '#FBC864', '#9BD6CC', '#B8D987'];
 
   const sortByDescendingCosts = data?.sort(
     (a: ResourcesManagerChartProps, b: ResourcesManagerChartProps) =>

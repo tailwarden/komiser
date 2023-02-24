@@ -2,12 +2,12 @@ import { ReactNode } from 'react';
 import formatNumber from '../../utils/formatNumber';
 import Tooltip from '../tooltip/Tooltip';
 
-type CardProps = {
+export type CardProps = {
   label: string;
   value: number;
   tooltip?: string;
   icon: ReactNode;
-  formatter?: 'currency';
+  formatter?: 'currency' | 'standard';
 };
 
 function Card({ label, value, tooltip, icon, formatter }: CardProps) {
@@ -16,7 +16,10 @@ function Card({ label, value, tooltip, icon, formatter }: CardProps) {
       <div className="rounded-lg bg-komiser-100 p-4">{icon}</div>
       <div className="peer flex flex-col">
         <p className="text-xl font-medium">
-          {formatNumber(value, formatter && formatter)}
+          {formatNumber(
+            value,
+            formatter === 'currency' ? 'currency' : undefined
+          )}
         </p>
         <p className="text-sm text-black-300">{label}</p>
       </div>

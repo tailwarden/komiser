@@ -85,6 +85,32 @@ const settingsService = {
     }
   },
 
+  async getCostExplorer(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/costs/explorer`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getInventory(urlParams: string, payload: string = '[]') {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/search${urlParams}`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async getInventoryStats() {
     try {
       const res = await fetch(`${BASE_URL}/stats`, settings('GET'));
@@ -95,24 +121,11 @@ const settingsService = {
     }
   },
 
-  async getInventoryList(urlParams: string) {
+  async getFilteredInventoryStats(payload: string) {
     try {
       const res = await fetch(
-        `${BASE_URL}/resources${urlParams}`,
-        settings('GET')
-      );
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
-
-  async searchInventory(query: string) {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/inventory?query=${query}`,
-        settings('GET')
+        `${BASE_URL}/stats/search`,
+        settings('POST', payload)
       );
       const data = await res.json();
       return data;
@@ -180,58 +193,6 @@ const settingsService = {
   async getServices() {
     try {
       const res = await fetch(`${BASE_URL}/services`, settings('GET'));
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
-
-  async getFilteredInventory(urlParams: string, payload: string) {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/resources/search${urlParams}`,
-        settings('POST', payload)
-      );
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
-
-  async getInventory(urlParams: string, payload: string = '[]') {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/resources/search${urlParams}`,
-        settings('POST', payload)
-      );
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
-
-  async getCustomViewInventory(id: string, urlParams: string, payload: string) {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/views/${id}/resources${urlParams}`,
-        settings('POST', payload)
-      );
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
-
-  async getFilteredInventoryStats(payload: string) {
-    try {
-      const res = await fetch(
-        `${BASE_URL}/stats/search`,
-        settings('POST', payload)
-      );
       const data = await res.json();
       return data;
     } catch (error) {

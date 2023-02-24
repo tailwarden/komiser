@@ -28,41 +28,6 @@ func NewApiHandler(ctx context.Context, noTracking bool, db *bun.DB) *ApiHandler
 	return &handler
 }
 
-func (handler *ApiHandler) ListResourcesHandler(w http.ResponseWriter, r *http.Request) {
-	resources := make([]Resource, 0)
-
-	limitRaw := r.URL.Query().Get("limit")
-	skipRaw := r.URL.Query().Get("skip")
-	query := r.URL.Query().Get("query")
-
-	var limit int64
-	var skip int64
-	limit = 0
-	skip = 0
-	l, err := strconv.ParseInt(limitRaw, 10, 64)
-	if err != nil {
-		limit = 0
-	} else {
-		limit = l
-	}
-
-	s, err := strconv.ParseInt(skipRaw, 10, 64)
-	if err != nil {
-		skip = 0
-	} else {
-		skip = s
-	}
-
-	if len(query) > 0 {
-		whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
-		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
-	} else {
-		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
-	}
-
-	respondWithJSON(w, 200, resources)
-}
-
 func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http.Request) {
 	var filters []Filter
 

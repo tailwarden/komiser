@@ -14,7 +14,9 @@ function DashboardCostExplorer() {
     queryGranularity,
     setQueryGranularity,
     queryDate,
-    setQueryDate
+    setQueryDate,
+    exclude,
+    setExclude
   } = useCostExplorer();
 
   if (loading) return <DashboardCostExplorerSkeleton />;
@@ -30,6 +32,8 @@ function DashboardCostExplorer() {
       setQueryGranularity={setQueryGranularity}
       queryDate={queryDate}
       setQueryDate={setQueryDate}
+      exclude={exclude}
+      setExclude={setExclude}
     />
   );
 }

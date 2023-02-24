@@ -2,11 +2,12 @@ package digitalocean
 
 import (
 	"context"
+	"log"
+
 	"github.com/tailwarden/komiser/providers/digitalocean/databases"
 	"github.com/tailwarden/komiser/providers/digitalocean/functions"
 	"github.com/tailwarden/komiser/providers/digitalocean/k8s"
 	"github.com/tailwarden/komiser/providers/digitalocean/storage"
-	"log"
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/digitalocean/droplets"

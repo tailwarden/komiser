@@ -20,7 +20,7 @@ type CostExplorerDatapointsProps = {
   amount: number;
 };
 
-type CostExplorerDataProps = {
+type CostExplorerDatapoints = {
   date: string;
   datapoints: CostExplorerDatapointsProps[];
 };
@@ -31,7 +31,7 @@ export type GroupBySelectProps = {
 };
 
 type useCostExplorerChartProps = {
-  data: DashboardCostExplorerData | undefined;
+  data: DashboardCostExplorerData[] | undefined;
   setQueryGroup: Dispatch<SetStateAction<CostExplorerQueryGroupProps>>;
   queryGranularity: CostExplorerQueryGranularityProps;
   setQueryGranularity: Dispatch<
@@ -49,7 +49,35 @@ function useCostExplorerChart({
 }: useCostExplorerChartProps) {
   const [chartData, setChartData] = useState<ChartData<'bar'>>();
 
-  const colors = ['#80AAF2', '#F19B6E', '#FBC864', '#9BD6CC', '#B8D987'];
+  const colors = [
+    '#0072B2',
+    '#FF8C00',
+    '#228B22',
+    '#FFD700',
+    '#9932CC',
+    '#1E90FF',
+    '#FF69B4',
+    '#32CD32',
+    '#FF6347',
+    '#8A2BE2',
+    '#8B0000',
+    '#FFA07A',
+    '#4169E1',
+    '#FFB6C1',
+    '#00BFFF',
+    '#9370DB',
+    '#8FBC8B',
+    '#FF7F50',
+    '#00CED1',
+    '#DC143C',
+    '#00FF7F',
+    '#6A5ACD',
+    '#008080',
+    '#FFA500',
+    '#4B0082'
+  ];
+
+  /* To be un-commented when 'view' is supported 
   const groupBySelect: GroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
     displayValues: [
@@ -59,7 +87,18 @@ function useCostExplorerChart({
       'Cloud account',
       'Custom view'
     ]
+  }; */
+
+  const groupBySelect: GroupBySelectProps = {
+    values: ['provider', 'service', 'region', 'account'],
+    displayValues: [
+      'Cloud provider',
+      'Cloud service',
+      'Cloud region',
+      'Cloud account'
+    ]
   };
+
   const granularitySelect: GroupBySelectProps = {
     values: ['monthly', 'daily'],
     displayValues: ['Monthly view', 'Daily view']
@@ -164,7 +203,7 @@ function useCostExplorerChart({
     }
   };
 
-  function getDatasets(dataArray: CostExplorerDataProps[]) {
+  function getDatasets(dataArray: CostExplorerDatapoints[]) {
     const dates = dataArray.map(item =>
       dateFormatter(item.date, queryGranularity)
     );
