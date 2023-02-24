@@ -2,19 +2,19 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import Button from '../button/Button';
 import Checkbox from '../checkbox/Checkbox';
 
-type CheckboxSelectProps = {
+export type SelectCheckboxProps = {
   label: string;
   listOfResources: string[];
   exclude: string[];
   setExclude: Dispatch<SetStateAction<string[]>>;
 };
 
-function CheckboxSelect({
+function SelectCheckbox({
   label,
   listOfResources,
   exclude,
   setExclude
-}: CheckboxSelectProps) {
+}: SelectCheckboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -159,4 +159,4 @@ function CheckboxSelect({
   );
 }
 
-export default CheckboxSelect;
+export default SelectCheckbox;

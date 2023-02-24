@@ -1,7 +1,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import CheckboxSelect from '../../../checkbox-select/CheckboxSelect';
+import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
 import Grid from '../../../grid/Grid';
 import Select from '../../../select/Select';
 import {
@@ -56,7 +56,7 @@ function DashboardResourcesManagerCard({
           displayValues={select.displayValues}
           onChange={handleChange}
         />
-        <CheckboxSelect
+        <SelectCheckbox
           label="Exclude"
           listOfResources={listOfResources}
           setExclude={setExclude}
