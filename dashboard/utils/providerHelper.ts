@@ -5,7 +5,8 @@ export type Provider =
   | 'digitalocean'
   | 'azure'
   | 'tencent'
-  | 'oci';
+  | 'oci'
+  | 'scaleway';
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -37,6 +38,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'oci') {
       label = 'OCI';
+    }
+
+    if (arg.toLowerCase() === 'scaleway') {
+      label = 'Scaleway';
     }
 
     return label;
@@ -82,6 +87,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'oci') {
       img = '/assets/img/providers/oci.png';
+    }
+
+    if (arg.toLowerCase() === 'scaleway') {
+      img = '/assets/img/providers/scaleway.png';
     }
 
     return img;

@@ -32,6 +32,7 @@ import (
 	k8s "github.com/tailwarden/komiser/providers/k8s"
 	linode "github.com/tailwarden/komiser/providers/linode"
 	oci "github.com/tailwarden/komiser/providers/oci"
+	scaleway "github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/uptrace/bun"
 )
@@ -200,6 +201,10 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.AzureClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
 				azure.FetchResources(ctx, client, db)
+			}(ctx, client)
+		} else if client.ScalewayClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				scaleway.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}
