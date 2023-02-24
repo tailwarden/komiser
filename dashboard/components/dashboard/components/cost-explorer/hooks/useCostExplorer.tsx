@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 import dateHelper, {
   lastMonth,
@@ -39,6 +39,7 @@ function useCostExplorer() {
   const [queryDate, setQueryDate] =
     useState<CostExplorerQueryDateProps>('lastSixMonths');
   const [exclude, setExclude] = useState<string[]>([]);
+  const previousQueryGroup = useRef(queryGroup);
 
   function fetch(
     group: CostExplorerQueryGroupProps = 'provider',
@@ -54,28 +55,6 @@ function useCostExplorer() {
       setError(false);
     }
 
-    const granularity = newGranularity.toUpperCase();
-    const payload = {
-      group,
-      granularity,
-      start,
-      end,
-      exclude
-    };
-    const payloadJson = JSON.stringify(payload);
-
-    settingsService.getCostExplorer(payloadJson).then(res => {
-      if (res === Error) {
-        setLoading(false);
-        setError(true);
-      } else {
-        setLoading(false);
-        setData(res);
-      }
-    });
-  }
-
-  useEffect(() => {
     let startDate = '';
     let endDate = '';
 
@@ -92,7 +71,33 @@ function useCostExplorer() {
       [startDate, endDate] = lastTwelveMonths;
     }
 
-    fetch(queryGroup, queryGranularity, startDate, endDate);
+    const granularity = newGranularity.toUpperCase();
+    const payload = {
+      group: queryGroup,
+      granularity,
+      start: startDate,
+      end: endDate,
+      exclude
+    };
+    const payloadJson = JSON.stringify(payload);
+
+    settingsService.getCostExplorer(payloadJson).then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setError(true);
+      } else {
+        setLoading(false);
+        setData(res);
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (queryGroup !== previousQueryGroup.current) {
+      setExclude([]);
+    }
+    previousQueryGroup.current = queryGroup;
+    fetch();
   }, [queryGroup, queryGranularity, queryDate, exclude]);
 
   return {
@@ -105,7 +110,9 @@ function useCostExplorer() {
     queryGranularity,
     setQueryGranularity,
     queryDate,
-    setQueryDate
+    setQueryDate,
+    exclude,
+    setExclude
   };
 }
 
