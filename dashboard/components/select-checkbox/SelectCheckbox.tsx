@@ -1,23 +1,27 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import Button from '../button/Button';
 import Checkbox from '../checkbox/Checkbox';
+import { ResourcesManagerQuery } from '../dashboard/components/resources-manager/hooks/useResourcesManager';
+import useSelectCheckbox from './hooks/useSelectCheckbox';
 
 export type SelectCheckboxProps = {
   label: string;
-  listOfResources: string[];
+  query: ResourcesManagerQuery;
   exclude: string[];
   setExclude: Dispatch<SetStateAction<string[]>>;
 };
 
 function SelectCheckbox({
   label,
-  listOfResources,
+  query,
   exclude,
   setExclude
 }: SelectCheckboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
+  const { listOfExcludableItems, error } = useSelectCheckbox(query);
 
   function toggle() {
     setCheckedItems(exclude);
@@ -41,7 +45,7 @@ function SelectCheckbox({
     setExclude(checkedItems);
   }
 
-  let resources = listOfResources;
+  let resources = listOfExcludableItems;
 
   if (search) {
     resources = resources.filter(resource =>
@@ -76,6 +80,7 @@ function SelectCheckbox({
           {exclude.length === 0 && 'No resources excluded'}
         </div>
       </button>
+
       {isOpen && (
         <>
           <div
@@ -130,28 +135,39 @@ function SelectCheckbox({
                 autoFocus
               />
             </div>
-            <div className="flex max-h-[12rem] flex-col gap-3 overflow-auto p-4">
-              {resources.map((resource, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    id={resource}
-                    onChange={e => handleChange(e, resource)}
-                    checked={!!checkedItems.find(value => value === resource)}
-                  />
-                  <label htmlFor={resource} className="w-full">
-                    {resource}
-                  </label>
+            {error && (
+              <p className="text-sm text-black-400">
+                There was an error fetching the options for: {query}
+              </p>
+            )}
+            {!error && (
+              <>
+                <div className="flex max-h-[12rem] flex-col gap-3 overflow-auto p-4">
+                  {resources.map((resource, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-sm">
+                      <Checkbox
+                        id={resource}
+                        onChange={e => handleChange(e, resource)}
+                        checked={
+                          !!checkedItems.find(value => value === resource)
+                        }
+                      />
+                      <label htmlFor={resource} className="w-full">
+                        {resource}
+                      </label>
+                    </div>
+                  ))}
+                  {resources.length === 0 && (
+                    <p className="text-sm text-black-400">
+                      There are no results for {search}
+                    </p>
+                  )}
                 </div>
-              ))}
-              {resources.length === 0 && (
-                <p className="text-sm text-black-400">
-                  There are no results for {search}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col border-t border-black-200/50 p-4">
-              <Button onClick={submit}>Apply</Button>
-            </div>
+                <div className="flex flex-col border-t border-black-200/50 p-4">
+                  <Button onClick={submit}>Apply</Button>
+                </div>
+              </>
+            )}
           </div>
         </>
       )}

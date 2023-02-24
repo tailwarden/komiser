@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 
 export type ResourcesManagerData = {
@@ -24,13 +24,7 @@ function useResourcesManager() {
   const [error, setError] = useState(false);
   const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
   const [exclude, setExclude] = useState<string[]>([]);
-  const [listOfResources, setListOfResources] = useState<string[]>([
-    'AWS',
-    'Kubernetes',
-    'Civo',
-    'Azure',
-    'Other'
-  ]);
+  const previousQuery = useRef(query);
 
   function fetch(filter: ResourcesManagerQuery = 'provider') {
     if (!loading) {
@@ -55,9 +49,16 @@ function useResourcesManager() {
     });
   }
 
+  console.log(query, previousQuery.current);
+
+  useEffect(() => {
+    setExclude([]);
+    fetch(query);
+  }, [query]);
+
   useEffect(() => {
     fetch(query);
-  }, [query, exclude]);
+  }, [exclude]);
 
   return {
     loading,
@@ -66,7 +67,6 @@ function useResourcesManager() {
     fetch,
     query,
     setQuery,
-    listOfResources,
     exclude,
     setExclude
   };

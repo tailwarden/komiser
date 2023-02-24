@@ -16,7 +16,6 @@ type DashboardResourcesManagerCardProps = {
   data: ResourcesManagerData | undefined;
   query: ResourcesManagerQuery;
   setQuery: Dispatch<SetStateAction<ResourcesManagerQuery>>;
-  listOfResources: string[];
   exclude: string[];
   setExclude: Dispatch<SetStateAction<string[]>>;
 };
@@ -25,7 +24,6 @@ function DashboardResourcesManagerCard({
   data,
   query,
   setQuery,
-  listOfResources,
   exclude,
   setExclude
 }: DashboardResourcesManagerCardProps) {
@@ -58,9 +56,9 @@ function DashboardResourcesManagerCard({
         />
         <SelectCheckbox
           label="Exclude"
-          listOfResources={listOfResources}
           setExclude={setExclude}
           exclude={exclude}
+          query={query}
         />
       </Grid>
       <div className="mt-4"></div>
