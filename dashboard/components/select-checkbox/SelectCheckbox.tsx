@@ -68,7 +68,10 @@ function SelectCheckbox({
         <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900">
           {exclude.length > 0 &&
             exclude.slice(0, 3).map((resource, idx) => (
-              <p key={idx} className="rounded bg-black-100 py-1 px-3 text-xs">
+              <p
+                key={idx}
+                className="whitespace-nowrap rounded bg-black-100 py-1 px-3 text-xs"
+              >
                 {resource}
               </p>
             ))}
