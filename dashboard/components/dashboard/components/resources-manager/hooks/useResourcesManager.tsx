@@ -49,16 +49,13 @@ function useResourcesManager() {
     });
   }
 
-  console.log(query, previousQuery.current);
-
   useEffect(() => {
-    setExclude([]);
+    if (query !== previousQuery.current) {
+      setExclude([]);
+    }
+    previousQuery.current = query;
     fetch(query);
-  }, [query]);
-
-  useEffect(() => {
-    fetch(query);
-  }, [exclude]);
+  }, [query, exclude]);
 
   return {
     loading,
