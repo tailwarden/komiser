@@ -80,7 +80,7 @@ function SelectCheckbox({
               +{exclude.length - 3}
             </p>
           )}
-          {exclude.length === 0 && 'No resources excluded'}
+          {exclude.length === 0 && 'None excluded'}
         </div>
       </button>
 
