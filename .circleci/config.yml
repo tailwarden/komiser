@@ -62,15 +62,15 @@ jobs:
           chmod +x bin/komiser_windows_amd64.exe bin/komiser_darwin_amd64 bin/komiser_darwin_arm64 bin/komiser_linux_amd64
       - run:
           name: Push Linux binary
-          command: aws s3 cp bin/komiser_linux_amd64 s3://komiser-releases/3.0.3/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp bin/komiser_linux_amd64 s3://komiser-releases/3.0.4/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Windows binary
-          command: aws s3 cp bin/komiser_windows_amd64.exe s3://komiser-releases/3.0.3/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+          command: aws s3 cp bin/komiser_windows_amd64.exe s3://komiser-releases/3.0.4/windows/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - run:
           name: Push Mac OS X binary
           command: |
-            aws s3 cp bin/komiser_darwin_amd64 s3://komiser-releases/3.0.3/osx/amd/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-            aws s3 cp bin/komiser_darwin_arm64 s3://komiser-releases/3.0.3/osx/arm/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+            aws s3 cp bin/komiser_darwin_amd64 s3://komiser-releases/3.0.4/osx/amd/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+            aws s3 cp bin/komiser_darwin_arm64 s3://komiser-releases/3.0.4/osx/arm/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
             
   build_docker:
     docker:
@@ -85,7 +85,7 @@ jobs:
                 docker context create tls-env
                 docker buildx create tls-env --use
                 docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-                docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY -t tailwarden/komiser:latest -t tailwarden/komiser:${CIRCLE_SHA1} -t tailwarden/komiser:3.0.3 .
+                docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY -t tailwarden/komiser:latest -t tailwarden/komiser:${CIRCLE_SHA1} -t tailwarden/komiser:3.0.4 .
 
 workflows:
     version: 2
