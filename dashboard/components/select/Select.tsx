@@ -46,7 +46,7 @@ function Select({
       <select
         value={value}
         onChange={e => onChange(e)}
-        className="w-full appearance-none rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900 caret-primary outline outline-black-200 hover:outline-black-300 focus:outline-2 focus:outline-primary"
+        className="w-full appearance-none rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900 caret-primary outline outline-black-200/50 hover:outline-black-200 focus:outline-2 focus:outline-primary"
       >
         {values.map((item, idx) => (
           <option key={idx} value={item}>

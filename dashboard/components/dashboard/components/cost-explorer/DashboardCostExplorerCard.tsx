@@ -81,7 +81,7 @@ function DashboardCostExplorerCard({
         </div>
       </div>
       <div className="mt-4"></div>
-      <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Select
           label="Group by"
           values={groupBySelect.values}
