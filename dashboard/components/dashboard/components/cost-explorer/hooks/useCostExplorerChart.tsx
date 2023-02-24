@@ -49,8 +49,33 @@ function useCostExplorerChart({
 }: useCostExplorerChartProps) {
   const [chartData, setChartData] = useState<ChartData<'bar'>>();
 
-  const colors = ['#80AAF2', '#F19B6E', '#FBC864', '#9BD6CC', '#B8D987'];
-
+  const colors = [
+    '#3366CC',
+    '#DC3912',
+    '#FF9900',
+    '#109618',
+    '#990099',
+    '#0099C6',
+    '#DD4477',
+    '#66AA00',
+    '#B82E2E',
+    '#316395',
+    '#994499',
+    '#22AA99',
+    '#AAAA11',
+    '#6633CC',
+    '#E67300',
+    '#8B0707',
+    '#329262',
+    '#5574A6',
+    '#3B3EAC',
+    '#FF0099',
+    '#CCFF00',
+    '#00FFFF',
+    '#000080',
+    '#FF00FF',
+    '#800080'
+  ];
   /* To be un-commented when 'view' is supported 
   const groupBySelect: GroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account', 'view'],
