@@ -46,7 +46,7 @@ function DashboardResourcesManagerCard({
         <div className="h-[60px]"></div>
       </div>
       <div className="mt-4"></div>
-      <Grid gap="sm">
+      <div className="grid gap-4 md:grid-cols-2">
         <Select
           label="Group by"
           value={query}
@@ -60,7 +60,7 @@ function DashboardResourcesManagerCard({
           exclude={exclude}
           query={query}
         />
-      </Grid>
+      </div>
       <div className="mt-4"></div>
       <Doughnut data={chartData} options={options} />
     </div>

@@ -57,8 +57,8 @@ function SelectCheckbox({
     <div className="relative">
       <button
         onClick={toggle}
-        className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-black-300 focus:outline-2 focus:outline-primary ${
-          isOpen ? 'outline-2 outline-primary' : 'outline-black-200'
+        className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-black-200 focus:outline-2 focus:outline-primary ${
+          isOpen ? 'outline-2 outline-primary' : 'outline-black-200/50'
         }`}
       >
         <div className="absolute right-0 top-1 h-[50px] w-6 bg-gradient-to-r from-transparent via-white to-white"></div>
