@@ -6,6 +6,7 @@ import (
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/azure/compute"
+	"github.com/tailwarden/komiser/providers/azure/queue"
 	"github.com/uptrace/bun"
 )
 
@@ -14,6 +15,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.Disks,
 		compute.Images,
 		compute.VirtualMachines,
+		queue.Queue,
 	}
 }
 
