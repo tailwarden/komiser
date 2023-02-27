@@ -2,6 +2,7 @@ package scaleway
 
 import (
 	"context"
+	"github.com/tailwarden/komiser/providers/scaleway/compute"
 	"log"
 
 	"github.com/tailwarden/komiser/providers"
@@ -12,6 +13,7 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		serverless.Functions,
+		compute.Instances,
 	}
 }
 
