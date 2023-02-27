@@ -5,6 +5,7 @@ import (
 	"github.com/tailwarden/komiser/providers/scaleway/compute"
 	"github.com/tailwarden/komiser/providers/scaleway/containers"
 	"github.com/tailwarden/komiser/providers/scaleway/manageddbs"
+	"github.com/tailwarden/komiser/providers/scaleway/network"
 	"log"
 
 	"github.com/tailwarden/komiser/providers"
@@ -19,6 +20,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		containers.K8sClusters,
 		containers.ContainerRegistries,
 		manageddbs.PostgresAndMySQLs,
+		network.LoadBalancers,
 	}
 }
 
