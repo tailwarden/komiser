@@ -3,6 +3,7 @@ package scaleway
 import (
 	"context"
 	"github.com/tailwarden/komiser/providers/scaleway/compute"
+	"github.com/tailwarden/komiser/providers/scaleway/containers"
 	"log"
 
 	"github.com/tailwarden/komiser/providers"
@@ -14,6 +15,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		serverless.Functions,
 		compute.Instances,
+		containers.K8sClusters,
 	}
 }
 
