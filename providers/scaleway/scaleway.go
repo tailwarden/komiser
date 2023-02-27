@@ -16,6 +16,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		serverless.Functions,
 		compute.Instances,
 		containers.K8sClusters,
+		containers.ContainerRegistries,
 	}
 }
 
