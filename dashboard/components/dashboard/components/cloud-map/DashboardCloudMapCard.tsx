@@ -47,7 +47,11 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
         </div>
       </div>
       <div className="mt-8"></div>
-      <DashboardCloudMapChart regions={data} setTooltip={setTooltip} />
+      <DashboardCloudMapChart
+        regions={data}
+        setTooltip={setTooltip}
+        isOpen={isOpen}
+      />
       <DashboardCloudMapTooltip tooltip={tooltip} />
       <div className="flex gap-4 text-xs text-black-300">
         <div className="flex items-center gap-2">

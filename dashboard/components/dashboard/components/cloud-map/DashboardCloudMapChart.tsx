@@ -11,11 +11,13 @@ import { DashboardCloudMapTooltipProps } from './hooks/useCloudMapTooltip';
 type DashboardCloudMapChartProps = {
   regions: DashboardCloudMapRegions | undefined;
   setTooltip: (tooltip: DashboardCloudMapTooltipProps | undefined) => void;
+  isOpen: boolean;
 };
 
 function DashboardCloudMapChart({
   regions,
-  setTooltip
+  setTooltip,
+  isOpen
 }: DashboardCloudMapChartProps) {
   const geoUrl = '/data/map/countries.json';
 
@@ -68,13 +70,13 @@ function DashboardCloudMapChart({
           >
             {region.resources > 0 && (
               <circle
-                r={8.5}
+                r={isOpen ? 6 : 8.5}
                 fill="#387BEB"
                 className="pointer-events-none animate-wide-pulse"
               />
             )}
             <circle
-              r={8.5}
+              r={isOpen ? 6 : 8.5}
               fill={region.resources === 0 ? '#95A3A3' : '#387BEB'}
               stroke="white"
               strokeWidth={1.5}
