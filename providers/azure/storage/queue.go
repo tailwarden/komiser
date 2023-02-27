@@ -1,4 +1,4 @@
-package queue
+package storage
 
 import (
 	"context"
@@ -20,7 +20,7 @@ type Storage struct {
 	Location      string
 }
 
-func Queue(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Queues(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 	storage := make([]Storage, 0)
 
