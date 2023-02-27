@@ -16,6 +16,7 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		serverless.Functions,
+		serverless.ServerlessContainers,
 		compute.Instances,
 		containers.K8sClusters,
 		containers.ContainerRegistries,
