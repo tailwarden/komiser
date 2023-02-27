@@ -2,11 +2,12 @@ package scaleway
 
 import (
 	"context"
+	"log"
+
 	"github.com/tailwarden/komiser/providers/scaleway/compute"
 	"github.com/tailwarden/komiser/providers/scaleway/containers"
-	"github.com/tailwarden/komiser/providers/scaleway/manageddbs"
 	"github.com/tailwarden/komiser/providers/scaleway/network"
-	"log"
+	"github.com/tailwarden/komiser/providers/scaleway/storage"
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/scaleway/serverless"
@@ -17,10 +18,10 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		serverless.Functions,
 		serverless.ServerlessContainers,
-		compute.Instances,
+		compute.Servers,
 		containers.K8sClusters,
 		containers.ContainerRegistries,
-		manageddbs.PostgresAndMySQLs,
+		storage.Databases,
 		network.LoadBalancers,
 	}
 }

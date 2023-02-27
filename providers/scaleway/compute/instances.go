@@ -15,7 +15,7 @@ import (
 
 const createdLayout = "2006-01-02 15:04:05 +0000 +0000"
 
-func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Servers(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	instanceSvc := instance.NewAPI(client.ScalewayClient)

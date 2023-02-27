@@ -1,4 +1,4 @@
-package manageddbs
+package storage
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-func PostgresAndMySQLs(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Databases(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	rdbSvc := rdb.NewAPI(client.ScalewayClient)
@@ -41,7 +41,7 @@ func PostgresAndMySQLs(ctx context.Context, client providers.ProviderClient) ([]
 				resources = append(resources, models.Resource{
 					Provider:   "Scaleway",
 					Account:    client.Name,
-					Service:    "PostgreSQLMySQL",
+					Service:    "Database",
 					Region:     region.String(),
 					ResourceId: database.Name,
 					Cost:       0,
@@ -56,7 +56,7 @@ func PostgresAndMySQLs(ctx context.Context, client providers.ProviderClient) ([]
 	log.WithFields(log.Fields{
 		"provider":  "Scaleway",
 		"account":   client.Name,
-		"service":   "PostgreSQLMySQL",
+		"service":   "Database",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil

@@ -3,8 +3,9 @@ package serverless
 import (
 	"context"
 	"fmt"
-	container "github.com/scaleway/scaleway-sdk-go/api/container/v1beta1"
 	"time"
+
+	container "github.com/scaleway/scaleway-sdk-go/api/container/v1beta1"
 
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	log "github.com/sirupsen/logrus"
