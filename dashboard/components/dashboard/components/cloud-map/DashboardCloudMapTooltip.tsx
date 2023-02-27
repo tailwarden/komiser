@@ -43,6 +43,9 @@ function DashboardCloudMap({
               100
             ).toFixed(1)}%`}</span>
           </span>
+          <div className="-mx-3 flex items-center gap-2 border-t border-white/30 px-3 pt-2 pb-1">
+            <span>Click to discover the resources</span>
+          </div>
         </div>
       )}
     </>
