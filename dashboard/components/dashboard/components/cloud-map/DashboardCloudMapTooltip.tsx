@@ -41,7 +41,7 @@ function DashboardCloudMap({
             <span className="font-medium text-white">{`${(
               (tooltip.resources / sumOfResources) *
               100
-            ).toFixed(0)}%`}</span>
+            ).toFixed(1)}%`}</span>
           </span>
         </div>
       )}
