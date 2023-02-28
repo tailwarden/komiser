@@ -9,6 +9,7 @@ import {
   ResourcesManagerQuery
 } from './hooks/useResourcesManager';
 import useResourcesManagerChart from './hooks/useResourcesManagerChart';
+import SelectDropdown from '../../../select/SelectDropdown';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -47,12 +48,12 @@ function DashboardResourcesManagerCard({
       </div>
       <div className="mt-4"></div>
       <div className="grid gap-4 md:grid-cols-2">
-        <Select
+        <SelectDropdown
           label="Group by"
           value={query}
           values={select.values}
           displayValues={select.displayValues}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
         <SelectCheckbox
           label="Exclude"

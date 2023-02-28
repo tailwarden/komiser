@@ -1,5 +1,5 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
 import {
   ResourcesManagerData,
@@ -124,8 +124,8 @@ function useResourcesManagerChart({
     }
   };
 
-  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
-    setQuery(e.currentTarget.value as ResourcesManagerQuery);
+  function handleChange(newValue: string) {
+    setQuery(newValue as ResourcesManagerQuery);
   }
 
   return { chartData, options, select, handleChange };
