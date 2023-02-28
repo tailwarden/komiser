@@ -12,6 +12,7 @@ type Config struct {
 	Scaleway     []ScalewayConfig     `toml:"scaleway"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
+	Slack        SlackConfig          `toml:"slack"`
 }
 
 type AWSConfig struct {
@@ -76,4 +77,8 @@ type TencentConfig struct {
 	Name      string `toml:"name"`
 	SecretID  string `toml:"secret_id"`
 	SecretKey string `toml:"secret_key"`
+}
+
+type SlackConfig struct {
+	Webhook string `toml:"webhook"`
 }

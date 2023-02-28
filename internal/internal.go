@@ -46,13 +46,13 @@ var Arch = runtime.GOARCH
 var db *bun.DB
 var analytics Analytics
 
-func Exec(address string, port int, configPath string, telemetry bool, analytics Analytics, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, a Analytics, regions []string, cmd *cobra.Command) error {
 	cfg, clients, err := config.Load(configPath)
 	if err != nil {
 		return err
 	}
 
-	analytics = analytics
+	analytics = a
 
 	err = setupSchema(cfg)
 	if err != nil {
@@ -73,7 +73,7 @@ func Exec(address string, port int, configPath string, telemetry bool, analytics
 
 	go checkUpgrade()
 
-	err = runServer(address, port, telemetry)
+	err = runServer(address, port, telemetry, *cfg)
 	if err != nil {
 		return err
 	}
@@ -81,10 +81,10 @@ func Exec(address string, port int, configPath string, telemetry bool, analytics
 	return nil
 }
 
-func runServer(address string, port int, telemetry bool) error {
+func runServer(address string, port int, telemetry bool, cfg models.Config) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), telemetry, db)
+	r := v1.Endpoints(context.Background(), telemetry, db, cfg)
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -131,6 +131,11 @@ func setupSchema(c *models.Config) error {
 	}
 
 	_, err = db.NewCreateTable().Model((*models.View)(nil)).IfNotExists().Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	_, err = db.NewCreateTable().Model((*models.Alert)(nil)).IfNotExists().Exec(context.Background())
 	if err != nil {
 		return err
 	}
