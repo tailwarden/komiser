@@ -1,11 +1,5 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState
-} from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
 import { dateFormatter } from '../utils/dateHelper';
 import {

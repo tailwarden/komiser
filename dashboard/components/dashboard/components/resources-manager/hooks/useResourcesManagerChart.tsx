@@ -1,5 +1,6 @@
 import { ChartData, ChartOptions } from 'chart.js';
 import { Dispatch, SetStateAction } from 'react';
+import ReactDOM from 'react-dom';
 import formatNumber from '../../../../../utils/formatNumber';
 import {
   ResourcesManagerData,
