@@ -2,14 +2,12 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
-import Grid from '../../../grid/Grid';
 import Select from '../../../select/Select';
 import {
   ResourcesManagerData,
   ResourcesManagerQuery
 } from './hooks/useResourcesManager';
 import useResourcesManagerChart from './hooks/useResourcesManagerChart';
-import SelectDropdown from '../../../select/SelectDropdown';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -48,7 +46,7 @@ function DashboardResourcesManagerCard({
       </div>
       <div className="mt-4"></div>
       <div className="grid gap-4 md:grid-cols-2">
-        <SelectDropdown
+        <Select
           label="Group by"
           value={query}
           values={select.values}

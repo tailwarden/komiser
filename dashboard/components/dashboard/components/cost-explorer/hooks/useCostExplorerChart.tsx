@@ -277,19 +277,17 @@ function useCostExplorerChart({
     setChartData(newData);
   }
 
-  function handleFilterChange(e: ChangeEvent<HTMLSelectElement>, type: string) {
+  function handleFilterChange(type: string, newValue: string) {
     if (type === 'group') {
-      setQueryGroup(e.currentTarget.value as CostExplorerQueryGroupProps);
+      setQueryGroup(newValue as CostExplorerQueryGroupProps);
     }
 
     if (type === 'granularity') {
-      setQueryGranularity(
-        e.currentTarget.value as CostExplorerQueryGranularityProps
-      );
+      setQueryGranularity(newValue as CostExplorerQueryGranularityProps);
     }
 
     if (type === 'date') {
-      setQueryDate(e.currentTarget.value as CostExplorerQueryDateProps);
+      setQueryDate(newValue as CostExplorerQueryDateProps);
     }
   }
 
