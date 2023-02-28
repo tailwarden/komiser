@@ -294,7 +294,7 @@ function useCostExplorerChart({
   }
 
   useEffect(() => {
-    if (data) {
+    if (data && data.length > 0) {
       getDatasets(data);
     }
   }, [data]);
