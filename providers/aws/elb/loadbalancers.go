@@ -10,11 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -45,7 +42,7 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 			}
 		}
 
-		startOfMonth := BeginningOfMonth(time.Now())
+		startOfMonth := utils.BeginningOfMonth(time.Now())
 		hourlyUsage := 0
 		if (*loadbalancer.CreatedTime).Before(startOfMonth) {
 			hourlyUsage = int(time.Since(startOfMonth).Hours())
