@@ -73,8 +73,8 @@ function SelectDropdown({
                 return (
                   <button
                     key={idx}
-                    className={`flex items-center justify-between rounded-lg p-2 text-left text-sm text-black-400 hover:bg-black-100 ${
-                      isActive ? 'bg-komiser-100' : ''
+                    className={`flex items-center justify-between rounded py-2 px-3 text-left text-sm text-black-400 hover:bg-black-150 ${
+                      isActive ? 'bg-komiser-150' : ''
                     }`}
                     onClick={() => handleChange(item)}
                   >

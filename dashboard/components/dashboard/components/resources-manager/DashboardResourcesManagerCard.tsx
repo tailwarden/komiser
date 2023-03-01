@@ -8,7 +8,6 @@ import {
   ResourcesManagerQuery
 } from './hooks/useResourcesManager';
 import useResourcesManagerChart from './hooks/useResourcesManagerChart';
-import MyChart from './Test';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -64,7 +63,6 @@ function DashboardResourcesManagerCard({
       <div className="mt-4"></div>
       <div>
         <Doughnut data={chartData} options={options} />
-        <MyChart />
       </div>
     </div>
   );

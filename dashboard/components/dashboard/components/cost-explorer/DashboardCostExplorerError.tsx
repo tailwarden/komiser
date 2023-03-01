@@ -52,10 +52,10 @@ function DashboardCostExplorerError({
           <tbody>
             {rows.map(idx => (
               <tr key={idx}>
-                <td className="border-black-150 border"></td>
-                <td className="border-black-150 border"></td>
-                <td className="border-black-150 border"></td>
-                <td className="border-black-150 border"></td>
+                <td className="border border-black-150"></td>
+                <td className="border border-black-150"></td>
+                <td className="border border-black-150"></td>
+                <td className="border border-black-150"></td>
               </tr>
             ))}
           </tbody>
