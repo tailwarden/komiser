@@ -15,11 +15,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -62,7 +59,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			topicName := strings.Replace(*topic.TopicArn, resourceArnPrefix, "", -1)
 
 			metricsMessagesPublishedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("NumberOfMessagesPublished"),
 				Namespace:  aws.String("AWS/SNS"),

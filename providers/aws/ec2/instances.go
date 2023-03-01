@@ -16,6 +16,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
 
 type Ec2Product struct {
@@ -71,10 +72,6 @@ func GetRegionName(code string) string {
 	return regions[code]
 }
 
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
-
 func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var nextToken string
 	resources := make([]Resource, 0)
@@ -116,7 +113,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					})
 				}
 
-				startOfMonth := BeginningOfMonth(time.Now())
+				startOfMonth := utils.BeginningOfMonth(time.Now())
 				hourlyUsage := 0
 				if instance.LaunchTime.Before(startOfMonth) {
 					hourlyUsage = int(time.Now().Sub(startOfMonth).Hours())

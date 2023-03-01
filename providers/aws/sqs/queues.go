@@ -14,11 +14,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -37,7 +34,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			queueName := path.Base(queue)
 
 			metricsNbOfMessagesSentOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("NumberOfMessagesSent"),
 				Namespace:  aws.String("AWS/SQS"),
@@ -63,7 +60,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			metricsNbOfMessagesReceivedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("NumberOfMessagesReceived"),
 				Namespace:  aws.String("AWS/SQS"),
@@ -89,7 +86,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			metricsNbOfMessagesDeletedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("NumberOfMessagesDeleted"),
 				Namespace:  aws.String("AWS/SQS"),

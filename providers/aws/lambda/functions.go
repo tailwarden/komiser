@@ -13,11 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config lambda.ListFunctionsInput
@@ -32,7 +29,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		for _, o := range output.Functions {
 			metricsInvocationsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Invocations"),
 				Namespace:  aws.String("AWS/Lambda"),
@@ -58,7 +55,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			}
 
 			metricsDurationOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Duration"),
 				Namespace:  aws.String("AWS/Lambda"),
