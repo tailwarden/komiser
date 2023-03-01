@@ -130,7 +130,11 @@ function InventoryView({
         <SidepanelTabs
           goTo={goTo}
           page={page}
-          tabs={router.query.view ? ['View', 'Hidden Resources'] : ['View']}
+          tabs={
+            router.query.view
+              ? ['View', 'Alerts', 'Hidden Resources']
+              : ['View']
+          }
         />
         <SidepanelPage page={page} param="view">
           <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
@@ -166,6 +170,9 @@ function InventoryView({
               </Button>
             </div>
           </form>
+        </SidepanelPage>
+        <SidepanelPage page={page} param="alerts">
+          Hello
         </SidepanelPage>
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
