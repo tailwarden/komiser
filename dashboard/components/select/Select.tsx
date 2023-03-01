@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export type SelectProps = {
+type SelectDropdownProps = {
   label: string;
   value: string;
   values: string[];
@@ -8,13 +8,13 @@ export type SelectProps = {
   handleChange: (value: string) => void;
 };
 
-function Select({
+function SelectDropdown({
   label,
   value,
   values,
   displayValues,
   handleChange
-}: SelectProps) {
+}: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const index = values.findIndex(currentValue => currentValue === value);
 
@@ -25,23 +25,24 @@ function Select({
   return (
     <div className="relative">
       <div
-        className={`pointer-events-none absolute right-2
-        bottom-[1.15rem] text-black-200 transition-all`}
+        className={`pointer-events-none absolute right-4
+        bottom-[1.15rem] text-black-900 transition-all`}
       >
         <svg
+          xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
-          viewBox="0 0 24 24"
           fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
         >
           <path
-            d="M7 10L12 15L17 10"
             stroke="currentColor"
-            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-          />
+            strokeMiterlimit="10"
+            strokeWidth="1.5"
+            d="M19.92 8.95l-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
+          ></path>
         </svg>
       </div>
       <button
@@ -66,35 +67,18 @@ function Select({
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
           <div className="absolute top-[4.15rem] z-[21] w-full overflow-hidden rounded-lg border border-black-200 bg-white p-2 shadow-lg">
-            <div className="flex w-full flex-col">
+            <div className="flex w-full flex-col gap-2">
               {values.map((item, idx) => {
                 const isActive = value === item;
                 return (
                   <button
                     key={idx}
-                    className={`flex items-center justify-between rounded-lg p-3 text-left text-sm hover:bg-black-100 ${
-                      isActive ? 'text-primary' : 'text-black-400'
+                    className={`flex items-center justify-between rounded-lg p-2 text-left text-sm text-black-400 hover:bg-black-100 ${
+                      isActive ? 'bg-komiser-100' : ''
                     }`}
                     onClick={() => handleChange(item)}
                   >
                     {displayValues[idx]}
-                    {isActive && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.5"
-                          d="M7 12l3.662 4L18 8"
-                        ></path>
-                      </svg>
-                    )}
                   </button>
                 );
               })}
@@ -106,4 +90,4 @@ function Select({
   );
 }
 
-export default Select;
+export default SelectDropdown;
