@@ -4,6 +4,7 @@ import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
 import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';
 import InventoryViewAlertHasNoSlackAlerts from './InventoryViewAlertsHasNoSlackAlerts';
 import InventoryViewAlertHasNoSlackIntegration from './InventoryViewAlertsHasNoSlackIntegration';
+import InventoryViewAlertsSkeleton from './InventoryViewAlertsSkeleton';
 
 type InventoryViewAlertsProps = {
   view: View;
@@ -21,7 +22,7 @@ function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
     closeSlackAlert
   } = useSlackAlerts({ view });
 
-  if (loading) return <p>loading</p>;
+  if (loading) return <InventoryViewAlertsSkeleton />;
 
   if (error) return <p>error fetching</p>;
 
