@@ -290,6 +290,19 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getSlackAlertsFromAView(id: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/views/${id}/alerts`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

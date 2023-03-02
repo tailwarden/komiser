@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import Button from '../../../../button/Button';
 
-function InventoryViewAlertHasNoSlack() {
+function InventoryViewAlertHasNoSlackIntegration() {
   return (
     <div className="rounded-lg bg-black-100 p-6">
       <div className="flex items-center gap-4">
@@ -36,4 +36,4 @@ function InventoryViewAlertHasNoSlack() {
   );
 }
 
-export default InventoryViewAlertHasNoSlack;
+export default InventoryViewAlertHasNoSlackIntegration;

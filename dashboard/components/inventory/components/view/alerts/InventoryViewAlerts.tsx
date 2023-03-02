@@ -1,14 +1,23 @@
+import { View } from '../../../hooks/useInventory/types/useInventoryTypes';
 import useSlackAlerts from './hooks/useSlackAlerts';
-import InventoryViewAlertHasNoSlack from './InventoryViewAlertsHasNoSlack';
+import InventoryViewAlertHasNoSlackAlerts from './InventoryViewAlertsHasNoSlackAlerts';
+import InventoryViewAlertHasNoSlackIntegration from './InventoryViewAlertsHasNoSlackIntegration';
 
-function InventoryViewAlerts() {
-  const { loading, error, hasSlack } = useSlackAlerts();
+type InventoryViewAlertsProps = {
+  view: View;
+};
+
+function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
+  const { loading, error, hasSlack, slackAlerts, hasNoSlackAlerts } =
+    useSlackAlerts({ view });
 
   if (loading) return <p>loading</p>;
 
   if (error) return <p>error fetching</p>;
 
-  if (!hasSlack) return <InventoryViewAlertHasNoSlack />;
+  if (!hasSlack) return <InventoryViewAlertHasNoSlackIntegration />;
+
+  if (hasNoSlackAlerts) return <InventoryViewAlertHasNoSlackAlerts />;
 
   return <p>Blep</p>;
 }
