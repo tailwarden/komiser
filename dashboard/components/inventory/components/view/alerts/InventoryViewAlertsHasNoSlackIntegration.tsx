@@ -28,7 +28,7 @@ function InventoryViewAlertHasNoSlackIntegration() {
             rel="noreferrer"
             className="mt-2"
           >
-            <Button size="lg">Learn how to connect Slack</Button>
+            <Button>Learn how to connect Slack</Button>
           </a>
         </div>
       </div>

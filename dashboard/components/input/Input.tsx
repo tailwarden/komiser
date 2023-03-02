@@ -1,14 +1,15 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { required } from '../../utils/regex';
 
 export type InputEvent = ChangeEvent<HTMLInputElement>;
 
 export type InputProps = {
   id?: number;
   name: string;
-  type: string;
+  type?: string;
   label: string;
-  regex: RegExp;
-  error: string;
+  regex?: RegExp;
+  error?: string;
   value?: string | number | string[];
   autofocus?: boolean;
   min?: number;
@@ -19,10 +20,10 @@ export type InputProps = {
 function Input({
   id,
   name,
-  type,
+  type = 'text',
   label,
-  regex,
-  error,
+  regex = required,
+  error = 'Please provide a value',
   value,
   autofocus,
   min,

@@ -303,6 +303,16 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async createSlackAlert(payload: string) {
+    try {
+      const res = await fetch(`${BASE_URL}/alerts`, settings('POST', payload));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

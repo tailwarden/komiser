@@ -1,5 +1,7 @@
 import { View } from '../../../hooks/useInventory/types/useInventoryTypes';
 import useSlackAlerts from './hooks/useSlackAlerts';
+import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
+import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';
 import InventoryViewAlertHasNoSlackAlerts from './InventoryViewAlertsHasNoSlackAlerts';
 import InventoryViewAlertHasNoSlackIntegration from './InventoryViewAlertsHasNoSlackIntegration';
 
@@ -8,8 +10,16 @@ type InventoryViewAlertsProps = {
 };
 
 function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
-  const { loading, error, hasSlack, slackAlerts, hasNoSlackAlerts } =
-    useSlackAlerts({ view });
+  const {
+    loading,
+    error,
+    hasSlack,
+    slackAlerts,
+    hasNoSlackAlerts,
+    editSlackAlert,
+    createSlackAlert,
+    closeSlackAlert
+  } = useSlackAlerts({ view });
 
   if (loading) return <p>loading</p>;
 
@@ -17,9 +27,20 @@ function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
 
   if (!hasSlack) return <InventoryViewAlertHasNoSlackIntegration />;
 
-  if (hasNoSlackAlerts) return <InventoryViewAlertHasNoSlackAlerts />;
+  if (hasNoSlackAlerts)
+    return (
+      <InventoryViewAlertHasNoSlackAlerts createSlackAlert={createSlackAlert} />
+    );
 
-  return <p>Blep</p>;
+  if (editSlackAlert)
+    return (
+      <InventoryViewAlertsEditSlackAlert
+        closeSlackAlert={closeSlackAlert}
+        viewId={view.id}
+      />
+    );
+
+  return <InventoryViewAlertsDisplay slackAlerts={slackAlerts} />;
 }
 
 export default InventoryViewAlerts;

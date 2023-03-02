@@ -6,7 +6,7 @@ type useSlackAlertsProps = {
   view: View;
 };
 
-type SlackAlerts = {
+export type SlackAlerts = {
   id: number;
   name: string;
   viewId: string;
@@ -17,9 +17,10 @@ type SlackAlerts = {
 
 function useSlackAlerts({ view }: useSlackAlertsProps) {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [hasSlack, setHasSlack] = useState(false);
   const [slackAlerts, setSlackAlerts] = useState<SlackAlerts[]>();
-  const [error, setError] = useState(false);
+  const [editSlackAlert, setEditSlackAlert] = useState(false);
   const viewId = view.id.toString();
 
   function fetchSlackStatus() {
@@ -62,6 +63,14 @@ function useSlackAlerts({ view }: useSlackAlertsProps) {
     });
   }
 
+  function createSlackAlert() {
+    setEditSlackAlert(true);
+  }
+
+  function closeSlackAlert() {
+    setEditSlackAlert(false);
+  }
+
   useEffect(() => {
     if (!hasSlack) {
       fetchSlackStatus();
@@ -72,9 +81,19 @@ function useSlackAlerts({ view }: useSlackAlertsProps) {
     }
   }, [hasSlack]);
 
-  const hasNoSlackAlerts = slackAlerts && slackAlerts.length === 0;
+  const hasNoSlackAlerts =
+    hasSlack && !editSlackAlert && slackAlerts && slackAlerts.length === 0;
 
-  return { loading, error, hasSlack, slackAlerts, hasNoSlackAlerts };
+  return {
+    loading,
+    error,
+    hasSlack,
+    slackAlerts,
+    hasNoSlackAlerts,
+    editSlackAlert,
+    createSlackAlert,
+    closeSlackAlert
+  };
 }
 
 export default useSlackAlerts;
