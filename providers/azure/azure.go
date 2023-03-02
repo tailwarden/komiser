@@ -17,6 +17,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.Images,
 		compute.VirtualMachines,
 		networking.ApplicationGateways,
+		networking.LoadBalancers,
 		storage.Queues,
 	}
 }
