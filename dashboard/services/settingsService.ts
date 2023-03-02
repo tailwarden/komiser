@@ -313,6 +313,29 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async editSlackAlert(id: string, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/alerts/${id}`,
+        settings('PUT', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async deleteSlackAlert(id: string) {
+    try {
+      const res = await fetch(`${BASE_URL}/alerts/${id}`, settings('DELETE'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 
