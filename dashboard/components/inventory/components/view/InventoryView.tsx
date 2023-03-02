@@ -10,7 +10,6 @@ import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
 import SidepanelPage from '../../../sidepanel/SidepanelPage';
 import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
-import VerticalSpacing from '../../../spacing/VerticalSpacing';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   HiddenResource,
@@ -20,6 +19,7 @@ import {
 } from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import InventoryViewsHeader from '../InventoryViewsHeader';
+import InventoryViewAlerts from './alerts/InventoryViewAlerts';
 import useViews from './hooks/useViews';
 
 type InventoryViewProps = {
@@ -221,35 +221,7 @@ function InventoryView({
         </SidepanelPage>
 
         <SidepanelPage page={page} param="alerts">
-          <div className="rounded-lg bg-black-100 p-6">
-            <div className="flex items-center gap-4">
-              <Image
-                src="/assets/img/purplin/slack.svg"
-                alt="Purplin"
-                width={190}
-                height={105}
-                className="flex-shrink-0"
-              />
-              <div className="flex flex-col items-start gap-2">
-                <p className="font-semibold text-black-900">
-                  To set up alerts, connect your Slack
-                </p>
-                <p className="text-sm text-black-400">
-                  By setting up the Slack integration, you&apos;ll be able to
-                  better track your cloud usage and costs, enabling you and your
-                  team to always be notified when it matters.
-                </p>
-                <a
-                  href="https://docs.komiser.io/docs/introduction/getting-started"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2"
-                >
-                  <Button size="lg">Learn how to connect Slack</Button>
-                </a>
-              </div>
-            </div>
-          </div>
+          <InventoryViewAlerts />
         </SidepanelPage>
 
         <SidepanelPage page={page} param="hidden resources">

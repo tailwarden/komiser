@@ -280,6 +280,16 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getSlackIntegration() {
+    try {
+      const res = await fetch(`${BASE_URL}/slack`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 
