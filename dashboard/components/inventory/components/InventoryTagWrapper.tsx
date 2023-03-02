@@ -1,4 +1,3 @@
-import regex from '../../../utils/regex';
 import Input from '../../input/Input';
 import { Tag } from '../hooks/useInventory/types/useInventoryTypes';
 
@@ -20,7 +19,6 @@ function InventoryTagWrapper({
         name="key"
         label="Key"
         type="text"
-        regex={regex.required}
         error="Please provide a valid key name."
         action={handleChange}
         value={tag.key}
@@ -30,7 +28,6 @@ function InventoryTagWrapper({
         name="value"
         label="Value"
         type="text"
-        regex={regex.required}
         error="Please provide a valid value."
         action={handleChange}
         value={tag.value}

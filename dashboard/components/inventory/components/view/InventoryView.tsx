@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { NextRouter } from 'next/router';
 import formatNumber from '../../../../utils/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
-import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
@@ -197,7 +196,6 @@ function InventoryView({
               name="name"
               label={router.query.view ? 'View name' : 'Choose a view name'}
               type="text"
-              regex={regex.required}
               error="Please provide a name"
               value={view.name}
               action={handleChange}
