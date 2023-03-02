@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import classNames from 'classnames';
 
-type SelectDropdownProps = {
+export type SelectProps = {
   label: string;
   value: string;
   values: string[];
@@ -8,13 +9,13 @@ type SelectDropdownProps = {
   handleChange: (value: string) => void;
 };
 
-function SelectDropdown({
+function Select({
   label,
   value,
   values,
   displayValues,
   handleChange
-}: SelectDropdownProps) {
+}: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const index = values.findIndex(currentValue => currentValue === value);
 
@@ -25,8 +26,8 @@ function SelectDropdown({
   return (
     <div className="relative">
       <div
-        className={`pointer-events-none absolute right-4
-        bottom-[1.15rem] text-black-900 transition-all`}
+        className="pointer-events-none absolute right-4
+        bottom-[1.15rem] text-black-900 transition-all"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -47,9 +48,10 @@ function SelectDropdown({
       </div>
       <button
         onClick={toggle}
-        className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-black-200 focus:outline-2 focus:outline-primary ${
-          isOpen ? 'outline-2 outline-primary' : 'outline-black-200/50'
-        }`}
+        className={classNames(
+          'h-[60px] w-full overflow-hidden rounded text-left outline outline-black-200/50 hover:outline-black-200 focus:outline-2 focus:outline-primary',
+          { 'outline-2 outline-primary': isOpen }
+        )}
       >
         <div className="absolute right-0 top-1 h-[50px] w-6"></div>
         <span className="pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75 select-none font-normal text-black-300">
@@ -73,9 +75,10 @@ function SelectDropdown({
                 return (
                   <button
                     key={idx}
-                    className={`flex items-center justify-between rounded py-2 px-3 text-left text-sm text-black-400 hover:bg-black-150 ${
-                      isActive ? 'bg-komiser-150' : ''
-                    }`}
+                    className={classNames(
+                      'flex items-center justify-between rounded py-2 px-3 text-left text-sm text-black-400 hover:bg-black-150',
+                      { 'bg-komiser-150': isActive }
+                    )}
                     onClick={() => handleChange(item)}
                   >
                     {displayValues[idx]}
@@ -90,4 +93,4 @@ function SelectDropdown({
   );
 }
 
-export default SelectDropdown;
+export default Select;
