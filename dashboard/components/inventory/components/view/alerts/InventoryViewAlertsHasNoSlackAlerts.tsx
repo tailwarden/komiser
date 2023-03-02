@@ -1,13 +1,12 @@
 import Image from 'next/image';
-import React from 'react';
 import Button from '../../../../button/Button';
 
 type InventoryViewAlertHasNoSlackAlertsProps = {
-  createSlackAlert: () => void;
+  createOrEditSlackAlert: (alertId?: number | undefined) => void;
 };
 
 function InventoryViewAlertHasNoSlackAlerts({
-  createSlackAlert
+  createOrEditSlackAlert
 }: InventoryViewAlertHasNoSlackAlertsProps) {
   return (
     <div className="rounded-lg bg-black-100 p-6">
@@ -28,7 +27,7 @@ function InventoryViewAlertHasNoSlackAlerts({
             infrastructure
           </p>
           <span></span>
-          <Button onClick={createSlackAlert}>Add alert</Button>
+          <Button onClick={createOrEditSlackAlert}>Add alert</Button>
         </div>
       </div>
     </div>

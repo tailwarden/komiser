@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
-import { View } from '../../../../hooks/useInventory/types/useInventoryTypes';
 
 type useSlackAlertsProps = {
-  view: View;
+  viewId: number;
 };
 
-export type SlackAlerts = {
+export type SlackAlert = {
   id: number;
   name: string;
   viewId: string;
   type: 'BUDGET' | 'USAGE';
-  budget: number;
-  usage: number;
+  budget?: number | string;
+  usage?: number | string;
 };
 
-function useSlackAlerts({ view }: useSlackAlertsProps) {
+function useSlackAlerts({ viewId }: useSlackAlertsProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [hasSlack, setHasSlack] = useState(false);
-  const [slackAlerts, setSlackAlerts] = useState<SlackAlerts[]>();
+  const [slackAlerts, setSlackAlerts] = useState<SlackAlert[]>();
   const [editSlackAlert, setEditSlackAlert] = useState(false);
-  const viewId = view.id.toString();
+  const [currentSlackAlert, setCurrentSlackAlert] = useState<SlackAlert>();
+  const currentViewId = viewId.toString();
 
   function fetchSlackStatus() {
     if (!loading) {
@@ -52,7 +52,7 @@ function useSlackAlerts({ view }: useSlackAlertsProps) {
       setError(false);
     }
 
-    settingsService.getSlackAlertsFromAView(viewId).then(res => {
+    settingsService.getSlackAlertsFromAView(currentViewId).then(res => {
       if (res === Error) {
         setLoading(false);
         setError(true);
@@ -63,11 +63,19 @@ function useSlackAlerts({ view }: useSlackAlertsProps) {
     });
   }
 
-  function createSlackAlert() {
+  function createOrEditSlackAlert(alertId?: number) {
+    if (alertId && slackAlerts) {
+      const foundSlackAlert = slackAlerts.find(alert => alert.id === alertId);
+
+      if (foundSlackAlert) {
+        setCurrentSlackAlert(foundSlackAlert);
+      }
+    }
     setEditSlackAlert(true);
   }
 
   function closeSlackAlert() {
+    setCurrentSlackAlert(undefined);
     setEditSlackAlert(false);
   }
 
@@ -76,7 +84,7 @@ function useSlackAlerts({ view }: useSlackAlertsProps) {
       fetchSlackStatus();
     }
 
-    if (hasSlack && viewId) {
+    if (hasSlack && currentViewId) {
       fetchViewAlerts();
     }
   }, [hasSlack]);
@@ -91,7 +99,8 @@ function useSlackAlerts({ view }: useSlackAlertsProps) {
     slackAlerts,
     hasNoSlackAlerts,
     editSlackAlert,
-    createSlackAlert,
+    currentSlackAlert,
+    createOrEditSlackAlert,
     closeSlackAlert
   };
 }

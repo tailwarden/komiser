@@ -219,7 +219,7 @@ function InventoryView({
         </SidepanelPage>
 
         <SidepanelPage page={page} param="alerts">
-          <InventoryViewAlerts view={view} />
+          <InventoryViewAlerts viewId={view.id} />
         </SidepanelPage>
 
         <SidepanelPage page={page} param="hidden resources">

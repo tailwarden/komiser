@@ -1,17 +1,21 @@
 import Image from 'next/image';
-import { SlackAlerts } from './hooks/useSlackAlerts';
+import Button from '../../../../button/Button';
+import { SlackAlert } from './hooks/useSlackAlerts';
 
 type InventoryViewAlertsDisplayProps = {
-  slackAlerts: SlackAlerts[] | undefined;
+  slackAlerts: SlackAlert[] | undefined;
+  createOrEditSlackAlert: (alertId?: number | undefined) => void;
 };
 
 function InventoryViewAlertsDisplay({
-  slackAlerts
+  slackAlerts,
+  createOrEditSlackAlert
 }: InventoryViewAlertsDisplayProps) {
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {slackAlerts?.map(alert => (
         <div
+          onClick={() => createOrEditSlackAlert(alert.id)}
           key={alert.id}
           className="flex cursor-pointer select-none items-center justify-between rounded-lg border border-black-170 p-6 hover:border-black-200"
         >
@@ -49,7 +53,12 @@ function InventoryViewAlertsDisplay({
           </svg>
         </div>
       ))}
-    </>
+      <div className="self-end">
+        <Button size="lg" onClick={createOrEditSlackAlert}>
+          Add alert
+        </Button>
+      </div>
+    </div>
   );
 }
 

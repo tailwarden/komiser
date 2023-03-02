@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
 import useToast from '../../../../../toast/hooks/useToast';
+import { SlackAlert } from './useSlackAlerts';
 
 type Selected = 'Cost' | 'Resources';
 
@@ -12,36 +13,32 @@ type Options = {
   type: SlackAlertType;
 };
 
-type SlackAlert = {
-  name: string;
-  viewId: string;
-  type: SlackAlertType;
-  budget?: number | string;
-  usage?: number | string;
-};
-
 type useEditSlackAlertsProps = {
+  currentSlackAlert: SlackAlert | undefined;
   viewId: number;
 };
 
-const INITIAL_BUDGET_SLACK_ALERT: SlackAlert = {
+const INITIAL_BUDGET_SLACK_ALERT: Partial<SlackAlert> = {
   viewId: '',
   name: '',
   type: 'BUDGET',
   budget: '0'
 };
 
-const INITIAL_USAGE_SLACK_ALERT: SlackAlert = {
+const INITIAL_USAGE_SLACK_ALERT: Partial<SlackAlert> = {
   viewId: '',
   name: '',
   type: 'USAGE',
   usage: '0'
 };
 
-function useEditSlackAlerts({ viewId }: useEditSlackAlertsProps) {
+function useEditSlackAlerts({
+  viewId,
+  currentSlackAlert
+}: useEditSlackAlertsProps) {
   const [selected, setSelected] = useState<Selected>('Cost');
-  const [slackAlert, setSlackAlert] = useState<SlackAlert>(
-    INITIAL_BUDGET_SLACK_ALERT
+  const [slackAlert, setSlackAlert] = useState<Partial<SlackAlert>>(
+    currentSlackAlert || INITIAL_BUDGET_SLACK_ALERT
   );
   const [loading, setLoading] = useState(false);
   const { setToast } = useToast();
@@ -75,12 +72,11 @@ function useEditSlackAlerts({ viewId }: useEditSlackAlertsProps) {
     setSlackAlert(prev => ({ ...prev, ...newData }));
   }
 
-  function submit(e: FormEvent<HTMLFormElement>) {
+  function submit(e: FormEvent<HTMLFormElement>, edit?: 'edit') {
     e.preventDefault();
     setLoading(true);
 
     const payload = { ...slackAlert };
-    payload.viewId = viewId.toString();
 
     if (payload.type === 'BUDGET') {
       payload.budget = Number(payload.budget);
@@ -90,25 +86,54 @@ function useEditSlackAlerts({ viewId }: useEditSlackAlertsProps) {
       payload.usage = Number(payload.usage);
     }
 
-    const payloadJson = JSON.stringify(payload);
-    settingsService.createSlackAlert(payloadJson).then(res => {
-      if (res === Error) {
-        setLoading(false);
-        setToast({
-          hasError: false,
-          title: 'Alert not created',
-          message:
-            'There was an error creating this slack alert. Refer to the logs and try again.'
-        });
-      } else {
-        setLoading(false);
-        setToast({
-          hasError: false,
-          title: 'Alert created',
-          message: `The slack alert was successfully created!`
+    if (!edit) {
+      payload.viewId = viewId.toString();
+      const payloadJson = JSON.stringify(payload);
+      settingsService.createSlackAlert(payloadJson).then(res => {
+        if (res === Error) {
+          setLoading(false);
+          setToast({
+            hasError: false,
+            title: 'Alert not created',
+            message:
+              'There was an error creating this slack alert. Refer to the logs and try again.'
+          });
+        } else {
+          setLoading(false);
+          setToast({
+            hasError: false,
+            title: 'Alert created',
+            message: `The slack alert was successfully created!`
+          });
+        }
+      });
+    }
+
+    if (edit) {
+      const id = payload.id?.toString();
+
+      if (id) {
+        const payloadJson = JSON.stringify(payload);
+        settingsService.editSlackAlert(id, payloadJson).then(res => {
+          if (res === Error) {
+            setLoading(false);
+            setToast({
+              hasError: false,
+              title: 'Alert not edited',
+              message:
+                'There was an error editing this slack alert. Refer to the logs and try again.'
+            });
+          } else {
+            setLoading(false);
+            setToast({
+              hasError: false,
+              title: 'Alert edited',
+              message: `The slack alert was successfully edited!`
+            });
+          }
         });
       }
-    });
+    }
   }
 
   const buttonDisabled =

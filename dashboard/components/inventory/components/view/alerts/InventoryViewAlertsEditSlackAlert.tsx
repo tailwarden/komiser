@@ -3,13 +3,16 @@ import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import Input from '../../../../input/Input';
 import useEditSlackAlerts from './hooks/useEditSlackAlerts';
+import { SlackAlert } from './hooks/useSlackAlerts';
 
 type InventoryViewAlertsEditSlackAlertProps = {
+  currentSlackAlert: SlackAlert | undefined;
   closeSlackAlert: () => void;
   viewId: number;
 };
 
 function InventoryViewAlertsEditSlackAlert({
+  currentSlackAlert,
   closeSlackAlert,
   viewId
 }: InventoryViewAlertsEditSlackAlertProps) {
@@ -22,10 +25,19 @@ function InventoryViewAlertsEditSlackAlert({
     buttonDisabled,
     submit,
     loading
-  } = useEditSlackAlerts({ viewId });
+  } = useEditSlackAlerts({ currentSlackAlert, viewId });
 
   return (
-    <form onSubmit={e => submit(e)} className="flex flex-col gap-6 text-sm">
+    <form
+      onSubmit={e => {
+        if (currentSlackAlert) {
+          submit(e, 'edit');
+        } else {
+          submit(e);
+        }
+      }}
+      className="flex flex-col gap-6 text-sm"
+    >
       <div className="flex flex-col gap-4">
         <p className="text-black-400">Type</p>
         <Grid gap="sm">

@@ -1,4 +1,3 @@
-import { View } from '../../../hooks/useInventory/types/useInventoryTypes';
 import useSlackAlerts from './hooks/useSlackAlerts';
 import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
 import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';
@@ -7,10 +6,10 @@ import InventoryViewAlertHasNoSlackIntegration from './InventoryViewAlertsHasNoS
 import InventoryViewAlertsSkeleton from './InventoryViewAlertsSkeleton';
 
 type InventoryViewAlertsProps = {
-  view: View;
+  viewId: number;
 };
 
-function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
+function InventoryViewAlerts({ viewId }: InventoryViewAlertsProps) {
   const {
     loading,
     error,
@@ -18,9 +17,10 @@ function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
     slackAlerts,
     hasNoSlackAlerts,
     editSlackAlert,
-    createSlackAlert,
+    currentSlackAlert,
+    createOrEditSlackAlert,
     closeSlackAlert
-  } = useSlackAlerts({ view });
+  } = useSlackAlerts({ viewId });
 
   if (loading) return <InventoryViewAlertsSkeleton />;
 
@@ -30,18 +30,26 @@ function InventoryViewAlerts({ view }: InventoryViewAlertsProps) {
 
   if (hasNoSlackAlerts)
     return (
-      <InventoryViewAlertHasNoSlackAlerts createSlackAlert={createSlackAlert} />
+      <InventoryViewAlertHasNoSlackAlerts
+        createOrEditSlackAlert={createOrEditSlackAlert}
+      />
     );
 
   if (editSlackAlert)
     return (
       <InventoryViewAlertsEditSlackAlert
+        currentSlackAlert={currentSlackAlert}
         closeSlackAlert={closeSlackAlert}
-        viewId={view.id}
+        viewId={viewId}
       />
     );
 
-  return <InventoryViewAlertsDisplay slackAlerts={slackAlerts} />;
+  return (
+    <InventoryViewAlertsDisplay
+      slackAlerts={slackAlerts}
+      createOrEditSlackAlert={createOrEditSlackAlert}
+    />
+  );
 }
 
 export default InventoryViewAlerts;
