@@ -1,0 +1,223 @@
+{
+  "projectName": "komiser",
+  "projectOwner": "tailwarden",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "golang",
+  "contributors": [
+    {
+      "login": "mlabouardy",
+      "name": "mlabouardy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10320205?v=4",
+      "profile": "https://github.com/mlabouardy",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "victorgaard",
+      "name": "victorgaard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13384559?v=4",
+      "profile": "https://github.com/victorgaard",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "narasago",
+      "name": "narasago",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36790706?v=4",
+      "profile": "https://github.com/narasago",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mahendrabagul",
+      "name": "mahendrabagul",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6149190?v=4",
+      "profile": "https://github.com/mahendrabagul",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jebinjeb",
+      "name": "jebinjeb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33154308?v=4",
+      "profile": "https://github.com/jebinjeb",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nemca",
+      "name": "nemca",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10352850?v=4",
+      "profile": "https://github.com/nemca",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dependabot[bot]",
+      "name": "dependabot[bot]",
+      "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+      "profile": "https://github.com/apps/dependabot",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vijeyash1",
+      "name": "vijeyash1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91282703?v=4",
+      "profile": "https://github.com/vijeyash1",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ekand",
+      "name": "ekand",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52926724?v=4",
+      "profile": "https://github.com/ekand",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ShivamTyagi12345",
+      "name": "ShivamTyagi12345",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60812924?v=4",
+      "profile": "https://github.com/ShivamTyagi12345",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kranurag7",
+      "name": "kranurag7",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81210977?v=4",
+      "profile": "https://github.com/kranurag7",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "snyk-bot",
+      "name": "snyk-bot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19733683?v=4",
+      "profile": "https://github.com/snyk-bot",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "voyc-geoffrey",
+      "name": "voyc-geoffrey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108534125?v=4",
+      "profile": "https://github.com/voyc-geoffrey",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "arunnvrs",
+      "name": "arunnvrs",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68091787?v=4",
+      "profile": "https://github.com/arunnvrs",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ChristianWitts",
+      "name": "ChristianWitts",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156934?v=4",
+      "profile": "https://github.com/ChristianWitts",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "davidjeddy",
+      "name": "davidjeddy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6232455?v=4",
+      "profile": "https://github.com/davidjeddy",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fpapadamis",
+      "name": "fpapadamis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38500451?v=4",
+      "profile": "https://github.com/fpapadamis",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jakepage91",
+      "name": "jakepage91",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38757612?v=4",
+      "profile": "https://github.com/jakepage91",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jazimabbas",
+      "name": "jazimabbas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44744039?v=4",
+      "profile": "https://github.com/jazimabbas",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jbleduigou",
+      "name": "jbleduigou",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1489214?v=4",
+      "profile": "https://github.com/jbleduigou",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "omerh",
+      "name": "omerh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1240184?v=4",
+      "profile": "https://github.com/omerh",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fossabot",
+      "name": "fossabot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29791463?v=4",
+      "profile": "https://github.com/fossabot",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "piercypixel",
+      "name": "piercypixel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13911621?v=4",
+      "profile": "https://github.com/piercypixel",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": true
+}
