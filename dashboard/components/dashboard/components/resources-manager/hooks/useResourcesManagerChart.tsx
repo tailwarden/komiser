@@ -1,5 +1,6 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import ReactDOM from 'react-dom';
 import formatNumber from '../../../../../utils/formatNumber';
 import {
   ResourcesManagerData,
@@ -21,10 +22,6 @@ function useResourcesManagerChart({
   data,
   setQuery
 }: useResourcesManagerChartProps) {
-  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
-    setQuery(e.currentTarget.value as ResourcesManagerQuery);
-  }
-
   const colors = ['#0072B2', '#FF8C00', '#228B22', '#FFD700', '#9932CC'];
 
   /* To be un-commented when 'view' is supported 
@@ -69,6 +66,10 @@ function useResourcesManagerChart({
     ]
   };
 
+  const resources = data && data.map(resource => resource.total);
+  const sumOfResources =
+    resources && resources.reduce((resource, a) => resource + a, 0);
+
   const options: ChartOptions<'doughnut'> = {
     aspectRatio: 2,
     layout: {
@@ -112,14 +113,21 @@ function useResourcesManagerChart({
         callbacks: {
           title: () => '',
           label(label) {
-            return `${label.label} - ${label.formattedValue} ${
-              Number(label.formattedValue) === 1 ? 'resource' : 'resources'
-            }`;
+            if (sumOfResources) {
+              return `${label.label} - ${label.formattedValue} ${
+                Number(label.formattedValue) === 1 ? `resource` : `resources`
+              } (${((Number(label.raw) / sumOfResources) * 100).toFixed(1)}%)`;
+            }
+            return undefined;
           }
         }
       }
     }
   };
+
+  function handleChange(newValue: string) {
+    setQuery(newValue as ResourcesManagerQuery);
+  }
 
   return { chartData, options, select, handleChange };
 }
