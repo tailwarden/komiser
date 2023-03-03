@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { NextRouter } from 'next/router';
 import formatNumber from '../../../../utils/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
-import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
@@ -19,6 +18,7 @@ import {
 } from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import InventoryViewsHeader from '../InventoryViewsHeader';
+import InventoryViewAlerts from './alerts/InventoryViewAlerts';
 import useViews from './hooks/useViews';
 
 type InventoryViewProps = {
@@ -83,6 +83,53 @@ function InventoryView({
         deleteLoading={deleteLoading}
       />
 
+      {/* Alerts button */}
+      {router.query.view && (
+        <div className="absolute right-0">
+          <Button
+            style="outline"
+            size="sm"
+            align="left"
+            transition={false}
+            onClick={() => {
+              openModal(undefined, 'alerts');
+            }}
+            loading={loading}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeMiterlimit="10"
+                strokeWidth="2"
+                d="M12.02 2.91c-3.31 0-6 2.69-6 6v2.89c0 .61-.26 1.54-.57 2.06L4.3 15.77c-.71 1.18-.22 2.49 1.08 2.93 4.31 1.44 8.96 1.44 13.27 0 1.21-.4 1.74-1.83 1.08-2.93l-1.15-1.91c-.3-.52-.56-1.45-.56-2.06V8.91c0-3.3-2.7-6-6-6z"
+              ></path>
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeMiterlimit="10"
+                strokeWidth="2"
+                d="M13.87 3.2a6.754 6.754 0 00-3.7 0c.29-.74 1.01-1.26 1.85-1.26.84 0 1.56.52 1.85 1.26z"
+              ></path>
+              <path
+                stroke="currentColor"
+                strokeMiterlimit="10"
+                strokeWidth="2"
+                d="M15.02 19.06c0 1.65-1.35 3-3 3-.82 0-1.58-.34-2.12-.88a3.01 3.01 0 01-.88-2.12"
+              ></path>
+            </svg>
+            Alerts
+          </Button>
+        </div>
+      )}
+
       {/* Save as a view button */}
       {!router.query.view && (
         <Button size="sm" onClick={() => openModal(filters)}>
@@ -130,7 +177,11 @@ function InventoryView({
         <SidepanelTabs
           goTo={goTo}
           page={page}
-          tabs={router.query.view ? ['View', 'Hidden Resources'] : ['View']}
+          tabs={
+            router.query.view
+              ? ['View', 'Alerts', 'Hidden Resources']
+              : ['View']
+          }
         />
         <SidepanelPage page={page} param="view">
           <form onSubmit={e => saveView(e)} className="flex flex-col gap-4">
@@ -145,7 +196,6 @@ function InventoryView({
               name="name"
               label={router.query.view ? 'View name' : 'Choose a view name'}
               type="text"
-              regex={regex.required}
               error="Please provide a name"
               value={view.name}
               action={handleChange}
@@ -167,6 +217,11 @@ function InventoryView({
             </div>
           </form>
         </SidepanelPage>
+
+        <SidepanelPage page={page} param="alerts">
+          <InventoryViewAlerts viewId={view.id} setToast={setToast} />
+        </SidepanelPage>
+
         <SidepanelPage page={page} param="hidden resources">
           {hiddenResources && hiddenResources.length > 0 && (
             <>

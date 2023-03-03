@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
-import regex from '../../../../utils/regex';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
 import { ToastProps } from '../../../toast/hooks/useToast';
@@ -139,7 +138,6 @@ function InventoryFilterValue({
               name="values"
               label={data.field === 'tag' ? 'Tag value' : 'Resource name'}
               value={data.values}
-              regex={regex.required}
               error="Please provide a value"
               action={handleValueInput}
               autofocus={true}
@@ -155,7 +153,6 @@ function InventoryFilterValue({
             name="values"
             label="Value"
             value={data.values}
-            regex={regex.required}
             error="Value must be higher than 0."
             action={handleValueInput}
             autofocus={true}
@@ -174,7 +171,6 @@ function InventoryFilterValue({
               name="min"
               label="Min value"
               value={costBetween.min}
-              regex={regex.required}
               error="Value must be higher than 0."
               action={handleCostBetween}
               autofocus={true}
@@ -186,7 +182,6 @@ function InventoryFilterValue({
               name="max"
               label="Max value"
               value={costBetween.max}
-              regex={regex.required}
               error="Value must be higher than 0."
               action={handleCostBetween}
               min={0}

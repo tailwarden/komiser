@@ -1,4 +1,3 @@
-import regex from '../../../../utils/regex';
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
 import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
@@ -64,7 +63,6 @@ function InventoryFilterOperator({
             name="tagKey"
             label="Tag key"
             value={data.tagKey}
-            regex={regex.required}
             error="Please provide a tag key"
             action={handleTagKey}
             autofocus={true}
