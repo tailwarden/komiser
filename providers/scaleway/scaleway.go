@@ -4,6 +4,11 @@ import (
 	"context"
 	"log"
 
+	"github.com/tailwarden/komiser/providers/scaleway/compute"
+	"github.com/tailwarden/komiser/providers/scaleway/containers"
+	"github.com/tailwarden/komiser/providers/scaleway/network"
+	"github.com/tailwarden/komiser/providers/scaleway/storage"
+
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/scaleway/serverless"
 	"github.com/uptrace/bun"
@@ -12,6 +17,12 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		serverless.Functions,
+		serverless.ServerlessContainers,
+		compute.Servers,
+		containers.K8sClusters,
+		containers.ContainerRegistries,
+		storage.Databases,
+		network.LoadBalancers,
 	}
 }
 

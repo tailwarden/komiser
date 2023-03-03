@@ -13,11 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func ConvertBytesToTerabytes(bytes int64) float64 {
 	return float64(bytes) / 1000000000000
@@ -32,23 +29,22 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	if err != nil {
 		return resources, err
 	}
-
+  
 	for _, bucket := range output.Buckets {
-
 		metricsBucketSizebytesOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-			StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 			EndTime:    aws.Time(time.Now()),
 			MetricName: aws.String("BucketSizeBytes"),
 			Namespace:  aws.String("AWS/S3"),
 			Dimensions: []types.Dimension{
-				types.Dimension{
-					Name:  aws.String("BucketName"),
-					Value: bucket.Name,
-				},
-				types.Dimension{
-					Name:  aws.String("StorageType"),
-					Value: aws.String("StandardStorage"),
-				},
+					types.Dimension{
+						Name:  aws.String("BucketName"),
+						Value: bucket.Name,
+					},
+					types.Dimension{
+						Name:  aws.String("StorageType"),
+						Value: aws.String("StandardStorage"),
+					},
 			},
 			Unit:   types.StandardUnitBytes,
 			Period: aws.Int32(3600),

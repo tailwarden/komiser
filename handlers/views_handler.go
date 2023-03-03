@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/models"
 )
 
 func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request) {
-	var view View
+	var view models.View
 
 	err := json.NewDecoder(r.Body).Decode(&view)
 	if err != nil {
@@ -33,7 +33,7 @@ func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request
 }
 
 func (handler *ApiHandler) ListViewsHandler(w http.ResponseWriter, r *http.Request) {
-	views := make([]View, 0)
+	views := make([]models.View, 0)
 
 	handler.db.NewRaw("SELECT * FROM views").Scan(handler.ctx, &views)
 
@@ -44,7 +44,7 @@ func (handler *ApiHandler) UpdateViewHandler(w http.ResponseWriter, r *http.Requ
 	vars := mux.Vars(r)
 	viewId, _ := vars["id"]
 
-	var view View
+	var view models.View
 	err := json.NewDecoder(r.Body).Decode(&view)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
@@ -64,7 +64,7 @@ func (handler *ApiHandler) DeleteViewHandler(w http.ResponseWriter, r *http.Requ
 	vars := mux.Vars(r)
 	viewId, _ := vars["id"]
 
-	view := new(View)
+	view := new(models.View)
 	_, err := handler.db.NewDelete().Model(view).Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Error while updating view")
@@ -78,7 +78,7 @@ func (handler *ApiHandler) HideResourcesFromViewHandler(w http.ResponseWriter, r
 	vars := mux.Vars(r)
 	viewId, _ := vars["id"]
 
-	var view View
+	var view models.View
 	err := json.NewDecoder(r.Body).Decode(&view)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
@@ -98,7 +98,7 @@ func (handler *ApiHandler) UnhideResourcesFromViewHandler(w http.ResponseWriter,
 	vars := mux.Vars(r)
 	viewId, _ := vars["id"]
 
-	var view View
+	var view models.View
 	err := json.NewDecoder(r.Body).Decode(&view)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
@@ -118,14 +118,14 @@ func (handler *ApiHandler) ListHiddenResourcesHandler(w http.ResponseWriter, r *
 	vars := mux.Vars(r)
 	viewId, _ := vars["id"]
 
-	view := new(View)
+	view := new(models.View)
 	err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	resources := make([]Resource, len(view.Exclude))
+	resources := make([]models.Resource, len(view.Exclude))
 
 	if len(view.Exclude) > 0 {
 		s, _ := json.Marshal(view.Exclude)
@@ -134,4 +134,15 @@ func (handler *ApiHandler) ListHiddenResourcesHandler(w http.ResponseWriter, r *
 	}
 
 	respondWithJSON(w, 200, resources)
+}
+
+func (handler *ApiHandler) ListViewAlertsHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	viewId := vars["id"]
+
+	alerts := make([]models.Alert, 0)
+
+	handler.db.NewRaw(fmt.Sprintf("SELECT * FROM alerts WHERE view_id = %s", viewId)).Scan(handler.ctx, &alerts)
+
+	respondWithJSON(w, 200, alerts)
 }
