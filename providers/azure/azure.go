@@ -6,6 +6,7 @@ import (
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/azure/compute"
+	"github.com/tailwarden/komiser/providers/azure/databases"
 	"github.com/tailwarden/komiser/providers/azure/networking"
 	"github.com/tailwarden/komiser/providers/azure/storage"
 	"github.com/uptrace/bun"
@@ -19,6 +20,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		networking.ApplicationGateways,
 		networking.LoadBalancers,
 		storage.Queues,
+		databases.Sql,
 	}
 }
 
