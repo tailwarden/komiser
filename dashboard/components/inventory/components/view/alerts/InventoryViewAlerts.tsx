@@ -2,6 +2,7 @@ import { ToastProps } from '../../../../toast/hooks/useToast';
 import useSlackAlerts from './hooks/useSlackAlerts';
 import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
 import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';
+import InventoryViewAlertsError from './InventoryViewAlertsError';
 import InventoryViewAlertHasNoSlackAlerts from './InventoryViewAlertsHasNoSlackAlerts';
 import InventoryViewAlertHasNoSlackIntegration from './InventoryViewAlertsHasNoSlackIntegration';
 import InventoryViewAlertsSkeleton from './InventoryViewAlertsSkeleton';
@@ -21,18 +22,14 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
     editSlackAlert,
     currentSlackAlert,
     createOrEditSlackAlert,
-    closeSlackAlert
+    closeSlackAlert,
+    fetchViewAlerts
   } = useSlackAlerts({ viewId });
 
   if (loading) return <InventoryViewAlertsSkeleton />;
 
   if (error)
-    return (
-      <p className="text-sm text-black-400">
-        There was an error fetching the Slack alerts, please refer to the logs
-        and try again.
-      </p>
-    );
+    return <InventoryViewAlertsError fetchViewAlerts={fetchViewAlerts} />;
 
   if (!hasSlack) return <InventoryViewAlertHasNoSlackIntegration />;
 

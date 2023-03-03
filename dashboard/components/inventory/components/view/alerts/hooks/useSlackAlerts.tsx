@@ -16,7 +16,7 @@ export type SlackAlert = {
 
 function useSlackAlerts({ viewId }: useSlackAlertsProps) {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(true);
   const [hasSlack, setHasSlack] = useState(false);
   const [slackAlerts, setSlackAlerts] = useState<SlackAlert[]>();
   const [editSlackAlert, setEditSlackAlert] = useState(false);
@@ -105,7 +105,8 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
     editSlackAlert,
     currentSlackAlert,
     createOrEditSlackAlert,
-    closeSlackAlert
+    closeSlackAlert,
+    fetchViewAlerts
   };
 }
 
