@@ -5,10 +5,22 @@ import { SlackAlert } from './useSlackAlerts';
 
 type SlackAlertType = 'BUDGET' | 'USAGE';
 
+const SLACK_ALERT_TYPE = {
+  BUDGET: 'BUDGET',
+  USAGE: 'USAGE'
+} as const;
+
 type Options = {
   label: 'Cost' | 'Resources';
   description: string;
   type: SlackAlertType;
+};
+
+type useEditSlackAlertsProps = {
+  currentSlackAlert: SlackAlert | undefined;
+  viewId: number;
+  closeSlackAlert: (action?: 'hasChanges' | undefined) => void;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
 const INITIAL_BUDGET_SLACK_ALERT: Partial<SlackAlert> = {
@@ -25,13 +37,6 @@ const INITIAL_USAGE_SLACK_ALERT: Partial<SlackAlert> = {
   usage: '0'
 };
 
-type useEditSlackAlertsProps = {
-  currentSlackAlert: SlackAlert | undefined;
-  viewId: number;
-  closeSlackAlert: (action?: 'hasChanges' | undefined) => void;
-  setToast: (toast: ToastProps | undefined) => void;
-};
-
 function useEditSlackAlerts({
   viewId,
   currentSlackAlert,
@@ -39,7 +44,7 @@ function useEditSlackAlerts({
   setToast
 }: useEditSlackAlertsProps) {
   const [selected, setSelected] = useState<SlackAlertType>(
-    currentSlackAlert?.type || 'BUDGET'
+    currentSlackAlert?.type || SLACK_ALERT_TYPE.BUDGET
   );
   const [slackAlert, setSlackAlert] = useState<Partial<SlackAlert>>(
     currentSlackAlert || INITIAL_BUDGET_SLACK_ALERT
@@ -60,12 +65,12 @@ function useEditSlackAlerts({
   ];
 
   function changeSlackAlertType(type: SlackAlertType) {
-    if (type === 'BUDGET') {
+    if (type === SLACK_ALERT_TYPE.BUDGET) {
       setSlackAlert(INITIAL_BUDGET_SLACK_ALERT);
       setSelected(type);
     }
 
-    if (type === 'USAGE') {
+    if (type === SLACK_ALERT_TYPE.USAGE) {
       setSlackAlert(INITIAL_USAGE_SLACK_ALERT);
       setSelected(type);
     }
@@ -81,11 +86,11 @@ function useEditSlackAlerts({
 
     const payload = { ...slackAlert };
 
-    if (payload.type === 'BUDGET') {
+    if (payload.type === SLACK_ALERT_TYPE.BUDGET) {
       payload.budget = Number(payload.budget);
     }
 
-    if (payload.type === 'USAGE') {
+    if (payload.type === SLACK_ALERT_TYPE.USAGE) {
       payload.usage = Number(payload.usage);
     }
 
@@ -96,7 +101,7 @@ function useEditSlackAlerts({
         if (res === Error || res.error) {
           setLoading(false);
           setToast({
-            hasError: false,
+            hasError: true,
             title: 'Alert not created',
             message:
               'There was an error creating this slack alert. Refer to the logs and try again.'
@@ -122,7 +127,7 @@ function useEditSlackAlerts({
           if (res === Error || res.error) {
             setLoading(false);
             setToast({
-              hasError: false,
+              hasError: true,
               title: 'Alert not edited',
               message:
                 'There was an error editing this slack alert. Refer to the logs and try again.'
@@ -148,7 +153,7 @@ function useEditSlackAlerts({
       if (res === Error || res.error) {
         setLoading(false);
         setToast({
-          hasError: false,
+          hasError: true,
           title: 'Alert was not deleted',
           message:
             'There was an error deleting this slack alert. Refer to the logs and try again.'
