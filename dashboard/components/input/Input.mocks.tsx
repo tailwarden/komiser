@@ -1,4 +1,3 @@
-import regex from '../../utils/regex';
 import { InputProps } from './Input';
 
 const base: InputProps = {
@@ -6,7 +5,6 @@ const base: InputProps = {
   label: 'Text input',
   name: 'text',
   type: 'text',
-  regex: regex.required,
   error: `Please provide a valid value.`,
   autofocus: true,
   action: () => {}
