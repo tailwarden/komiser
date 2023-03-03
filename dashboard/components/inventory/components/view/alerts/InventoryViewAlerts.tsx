@@ -24,7 +24,13 @@ function InventoryViewAlerts({ viewId }: InventoryViewAlertsProps) {
 
   if (loading) return <InventoryViewAlertsSkeleton />;
 
-  if (error) return <p>error fetching</p>;
+  if (error)
+    return (
+      <p className="text-sm text-black-400">
+        There was an error fetching the Slack alerts, please refer to the logs
+        and try again.
+      </p>
+    );
 
   if (!hasSlack) return <InventoryViewAlertHasNoSlackIntegration />;
 

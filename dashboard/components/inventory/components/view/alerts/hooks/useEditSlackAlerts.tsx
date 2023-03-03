@@ -3,12 +3,10 @@ import settingsService from '../../../../../../services/settingsService';
 import useToast from '../../../../../toast/hooks/useToast';
 import { SlackAlert } from './useSlackAlerts';
 
-type Selected = 'Cost' | 'Resources';
-
 type SlackAlertType = 'BUDGET' | 'USAGE';
 
 type Options = {
-  label: Selected;
+  label: 'Cost' | 'Resources';
   description: string;
   type: SlackAlertType;
 };
@@ -36,12 +34,14 @@ function useEditSlackAlerts({
   viewId,
   currentSlackAlert
 }: useEditSlackAlertsProps) {
-  const [selected, setSelected] = useState<Selected>('Cost');
+  const [selected, setSelected] = useState<SlackAlertType>(
+    currentSlackAlert?.type || 'BUDGET'
+  );
   const [slackAlert, setSlackAlert] = useState<Partial<SlackAlert>>(
     currentSlackAlert || INITIAL_BUDGET_SLACK_ALERT
   );
   const [loading, setLoading] = useState(false);
-  const { setToast } = useToast();
+  const { toast, setToast, dismissToast } = useToast();
 
   const options: Options[] = [
     {
@@ -59,12 +59,12 @@ function useEditSlackAlerts({
   function changeSlackAlertType(type: SlackAlertType) {
     if (type === 'BUDGET') {
       setSlackAlert(INITIAL_BUDGET_SLACK_ALERT);
-      setSelected('Cost');
+      setSelected(type);
     }
 
     if (type === 'USAGE') {
       setSlackAlert(INITIAL_USAGE_SLACK_ALERT);
-      setSelected('Resources');
+      setSelected(type);
     }
   }
 
