@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Button from '../../../../button/Button';
 import { SlackAlert } from './hooks/useSlackAlerts';
+import formatNumber from '../../../../../utils/formatNumber';
 
 type InventoryViewAlertsDisplayProps = {
   slackAlerts: SlackAlert[] | undefined;
@@ -30,8 +31,12 @@ function InventoryViewAlertsDisplay({
               <p className="font-semibold text-black-900">{alert.name}</p>
               <p className="text-xs text-black-400">
                 {alert.budget
-                  ? `When total cost is over $${alert.budget}`
-                  : `When cloud resources are over ${alert.usage}`}
+                  ? `When total cost is over $${formatNumber(
+                      Number(alert.budget)
+                    )}`
+                  : `When cloud resources are over ${formatNumber(
+                      Number(alert.usage)
+                    )}`}
               </p>
             </div>
           </div>
