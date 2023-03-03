@@ -138,6 +138,8 @@ function InventoryViewAlertsEditSlackAlert({
               name="budget"
               action={handleChange}
               value={slackAlert.budget}
+              min={0}
+              positiveNumberOnly
             />
           </Grid>
         )}
@@ -156,6 +158,8 @@ function InventoryViewAlertsEditSlackAlert({
               name="usage"
               action={handleChange}
               value={slackAlert.usage}
+              min={0}
+              positiveNumberOnly
             />
           </Grid>
         )}
