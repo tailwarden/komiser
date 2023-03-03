@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
-import useToast from '../../../../../toast/hooks/useToast';
+import { ToastProps } from '../../../../../toast/hooks/useToast';
 import { SlackAlert } from './useSlackAlerts';
 
 type SlackAlertType = 'BUDGET' | 'USAGE';
@@ -9,11 +9,6 @@ type Options = {
   label: 'Cost' | 'Resources';
   description: string;
   type: SlackAlertType;
-};
-
-type useEditSlackAlertsProps = {
-  currentSlackAlert: SlackAlert | undefined;
-  viewId: number;
 };
 
 const INITIAL_BUDGET_SLACK_ALERT: Partial<SlackAlert> = {
@@ -30,9 +25,18 @@ const INITIAL_USAGE_SLACK_ALERT: Partial<SlackAlert> = {
   usage: '0'
 };
 
+type useEditSlackAlertsProps = {
+  currentSlackAlert: SlackAlert | undefined;
+  viewId: number;
+  closeSlackAlert: (action?: 'hasChanges' | undefined) => void;
+  setToast: (toast: ToastProps | undefined) => void;
+};
+
 function useEditSlackAlerts({
   viewId,
-  currentSlackAlert
+  currentSlackAlert,
+  closeSlackAlert,
+  setToast
 }: useEditSlackAlertsProps) {
   const [selected, setSelected] = useState<SlackAlertType>(
     currentSlackAlert?.type || 'BUDGET'
@@ -41,7 +45,6 @@ function useEditSlackAlerts({
     currentSlackAlert || INITIAL_BUDGET_SLACK_ALERT
   );
   const [loading, setLoading] = useState(false);
-  const { toast, setToast, dismissToast } = useToast();
 
   const options: Options[] = [
     {
@@ -105,6 +108,7 @@ function useEditSlackAlerts({
             title: 'Alert created',
             message: `The slack alert was successfully created!`
           });
+          closeSlackAlert('hasChanges');
         }
       });
     }
@@ -130,10 +134,35 @@ function useEditSlackAlerts({
               title: 'Alert edited',
               message: `The slack alert was successfully edited!`
             });
+            closeSlackAlert('hasChanges');
           }
         });
       }
     }
+  }
+
+  function deleteSlackAlert(alertId: number) {
+    const id = alertId.toString();
+
+    settingsService.deleteSlackAlert(id).then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setToast({
+          hasError: false,
+          title: 'Alert was not deleted',
+          message:
+            'There was an error deleting this slack alert. Refer to the logs and try again.'
+        });
+      } else {
+        setLoading(false);
+        setToast({
+          hasError: false,
+          title: 'Alert deleted',
+          message: `The slack alert was successfully deleted!`
+        });
+        closeSlackAlert('hasChanges');
+      }
+    });
   }
 
   const buttonDisabled =
@@ -147,7 +176,8 @@ function useEditSlackAlerts({
     handleChange,
     buttonDisabled,
     submit,
-    loading
+    loading,
+    deleteSlackAlert
   };
 }
 

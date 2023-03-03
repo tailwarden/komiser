@@ -2,19 +2,22 @@ import classNames from 'classnames';
 import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import Input from '../../../../input/Input';
+import { ToastProps } from '../../../../toast/hooks/useToast';
 import useEditSlackAlerts from './hooks/useEditSlackAlerts';
 import { SlackAlert } from './hooks/useSlackAlerts';
 
 type InventoryViewAlertsEditSlackAlertProps = {
   currentSlackAlert: SlackAlert | undefined;
-  closeSlackAlert: () => void;
+  closeSlackAlert: (action?: 'hasChanges' | undefined) => void;
   viewId: number;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
 function InventoryViewAlertsEditSlackAlert({
   currentSlackAlert,
   closeSlackAlert,
-  viewId
+  viewId,
+  setToast
 }: InventoryViewAlertsEditSlackAlertProps) {
   const {
     selected,
@@ -24,8 +27,14 @@ function InventoryViewAlertsEditSlackAlert({
     handleChange,
     buttonDisabled,
     submit,
-    loading
-  } = useEditSlackAlerts({ currentSlackAlert, viewId });
+    loading,
+    deleteSlackAlert
+  } = useEditSlackAlerts({
+    currentSlackAlert,
+    viewId,
+    closeSlackAlert,
+    setToast
+  });
 
   const findWhichOption =
     currentSlackAlert &&
@@ -45,7 +54,7 @@ function InventoryViewAlertsEditSlackAlert({
       {/* Display a back button if editing a Slack alert */}
       {currentSlackAlert && (
         <div
-          onClick={closeSlackAlert}
+          onClick={() => closeSlackAlert()}
           className="flex cursor-pointer items-center gap-2 self-start text-black-900"
         >
           <svg
@@ -71,7 +80,7 @@ function InventoryViewAlertsEditSlackAlert({
       <div className="flex flex-col gap-4">
         <p className="text-black-400">Type</p>
 
-        {/* When creating a new Slack alert */}
+        {/* Displaying the slack alert types when creating a new alert */}
         {!currentSlackAlert && (
           <Grid gap="sm">
             {options.map(option => {
@@ -98,7 +107,7 @@ function InventoryViewAlertsEditSlackAlert({
           </Grid>
         )}
 
-        {/* When editing a Slack alert */}
+        {/* Displaying the chosen slack alert type when editing an alert */}
         {currentSlackAlert && (
           <div
             className={classNames('flex flex-col items-start justify-center')}
@@ -156,7 +165,11 @@ function InventoryViewAlertsEditSlackAlert({
         <div>
           {/* Display a delete button if it's editing an alert */}
           {currentSlackAlert && (
-            <Button size="lg" style="delete">
+            <Button
+              size="lg"
+              style="delete"
+              onClick={() => deleteSlackAlert(currentSlackAlert.id)}
+            >
               Delete alert
             </Button>
           )}

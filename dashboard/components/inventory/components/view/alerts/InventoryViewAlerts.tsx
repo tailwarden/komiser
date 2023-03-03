@@ -1,3 +1,4 @@
+import { ToastProps } from '../../../../toast/hooks/useToast';
 import useSlackAlerts from './hooks/useSlackAlerts';
 import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
 import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';
@@ -7,9 +8,10 @@ import InventoryViewAlertsSkeleton from './InventoryViewAlertsSkeleton';
 
 type InventoryViewAlertsProps = {
   viewId: number;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
-function InventoryViewAlerts({ viewId }: InventoryViewAlertsProps) {
+function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
   const {
     loading,
     error,
@@ -47,6 +49,7 @@ function InventoryViewAlerts({ viewId }: InventoryViewAlertsProps) {
         currentSlackAlert={currentSlackAlert}
         closeSlackAlert={closeSlackAlert}
         viewId={viewId}
+        setToast={setToast}
       />
     );
 

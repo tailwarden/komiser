@@ -74,9 +74,13 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
     setEditSlackAlert(true);
   }
 
-  function closeSlackAlert() {
+  function closeSlackAlert(action?: 'hasChanges') {
     setCurrentSlackAlert(undefined);
     setEditSlackAlert(false);
+
+    if (action === 'hasChanges') {
+      fetchViewAlerts();
+    }
   }
 
   useEffect(() => {
