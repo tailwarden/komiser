@@ -280,6 +280,62 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getSlackIntegration() {
+    try {
+      const res = await fetch(`${BASE_URL}/slack`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getSlackAlertsFromAView(id: number) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/views/${id}/alerts`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async createSlackAlert(payload: string) {
+    try {
+      const res = await fetch(`${BASE_URL}/alerts`, settings('POST', payload));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async editSlackAlert(id: number, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/alerts/${id}`,
+        settings('PUT', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async deleteSlackAlert(id: number) {
+    try {
+      const res = await fetch(`${BASE_URL}/alerts/${id}`, settings('DELETE'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

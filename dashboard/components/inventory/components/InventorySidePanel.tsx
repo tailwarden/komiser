@@ -103,7 +103,7 @@ function InventorySidePanel({
           )}
 
           <div className="flex flex-shrink-0 items-center gap-2">
-            <Button style="secondary" onClick={closeModal}>
+            <Button style="outline" onClick={closeModal}>
               Close
             </Button>
           </div>
@@ -261,7 +261,7 @@ function InventorySidePanel({
                     </Button>
                     <Button
                       size="lg"
-                      style="delete"
+                      style="delete-ghost"
                       loading={deleteLoading}
                       onClick={() => updateBulkTags('delete')}
                     >

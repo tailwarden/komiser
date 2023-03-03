@@ -13,11 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -40,7 +37,7 @@ func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		metricsCountOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-			StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 			EndTime:    aws.Time(time.Now()),
 			MetricName: aws.String("Count"),
 			Namespace:  aws.String("AWS/ApiGateway"),

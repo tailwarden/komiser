@@ -13,10 +13,6 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
-
 func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config dynamodb.ListTablesInput

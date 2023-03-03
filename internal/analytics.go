@@ -22,7 +22,7 @@ func (a *Analytics) Init() {
 		Dsn:              "https://adb527b644304373a8b045474a9f19dc@o1267000.ingest.sentry.io/4504684284805120",
 		TracesSampleRate: 1.0,
 		Debug:            false,
-		Release:          "komiser@" + Version,
+		Release:          "komiser@" + os.Getenv("VERSION"),
 	})
 	if err != nil {
 		log.Fatalf("sentry.Init: %s", err)
@@ -32,7 +32,7 @@ func (a *Analytics) Init() {
 		a.SegmentClient = segment.New(os.Getenv("SEGMENT_WRITE_KEY"))
 
 		a.TrackEvent("engine_launched", map[string]interface{}{
-			"version": Version,
+			"version": os.Getenv("VERSION"),
 		})
 	}
 }
@@ -44,7 +44,7 @@ func (a *Analytics) TrackEvent(event string, properties map[string]interface{}) 
 		for key, values := range properties {
 			eventProperties.Set(key, values)
 		}
-		eventProperties.Set("version", Version)
+		eventProperties.Set("version", os.Getenv("VERSION"))
 
 		a.SegmentClient.Enqueue(segment.Track{
 			UserId:     a.ID,

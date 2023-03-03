@@ -44,3 +44,8 @@ type Datapoint struct {
 	Name   string  `json:"name"`
 	Amount float64 `json:"amount"`
 }
+
+type ViewStat struct {
+	Resources int     `json:"resources"`
+	Costs     float64 `json:"costs"`
+}

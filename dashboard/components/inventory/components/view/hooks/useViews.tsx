@@ -28,7 +28,12 @@ const INITIAL_VIEW: View = {
   exclude: []
 };
 
-export type ViewsPages = 'view' | 'excluded' | 'delete' | 'hidden resources';
+export type ViewsPages =
+  | 'view'
+  | 'excluded'
+  | 'delete'
+  | 'hidden resources'
+  | 'alerts';
 
 function useViews({
   setToast,
