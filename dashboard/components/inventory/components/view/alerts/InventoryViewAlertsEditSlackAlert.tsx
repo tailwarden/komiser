@@ -42,6 +42,32 @@ function InventoryViewAlertsEditSlackAlert({
       }}
       className="flex flex-col gap-6 text-sm"
     >
+      {/* Display a back button if editing a Slack alert */}
+      {currentSlackAlert && (
+        <div
+          onClick={closeSlackAlert}
+          className="flex cursor-pointer items-center gap-2 self-start text-black-900"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeMiterlimit="10"
+              strokeWidth="1.5"
+              d="M9.57 18.07L3.5 12l6.07-6.07M20.5 12H3.67"
+            ></path>
+          </svg>
+          Edit alert
+        </div>
+      )}
+
       <div className="flex flex-col gap-4">
         <p className="text-black-400">Type</p>
 
@@ -146,7 +172,7 @@ function InventoryViewAlertsEditSlackAlert({
             disabled={buttonDisabled}
             loading={loading}
           >
-            Set up alert
+            {currentSlackAlert ? 'Save changes' : 'Set up alert'}
           </Button>
         </div>
       </div>
