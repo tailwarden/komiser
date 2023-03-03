@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
+import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
 import Input from '../../../../input/Input';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 import useEditSlackAlerts from './hooks/useEditSlackAlerts';
@@ -57,22 +58,7 @@ function InventoryViewAlertsEditSlackAlert({
           onClick={() => closeSlackAlert()}
           className="flex cursor-pointer items-center gap-2 self-start text-black-900"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeMiterlimit="10"
-              strokeWidth="1.5"
-              d="M9.57 18.07L3.5 12l6.07-6.07M20.5 12H3.67"
-            ></path>
-          </svg>
+          <ArrowLeftIcon width={24} height={24} />
           Edit alert
         </div>
       )}
@@ -109,9 +95,7 @@ function InventoryViewAlertsEditSlackAlert({
 
         {/* Displaying the chosen slack alert type when editing an alert */}
         {currentSlackAlert && (
-          <div
-            className={classNames('flex flex-col items-start justify-center')}
-          >
+          <div className="flex flex-col items-start justify-center">
             <p className="text-base font-semibold text-black-900">
               {findWhichOption?.label}
             </p>

@@ -93,7 +93,7 @@ function useEditSlackAlerts({
       payload.viewId = viewId.toString();
       const payloadJson = JSON.stringify(payload);
       settingsService.createSlackAlert(payloadJson).then(res => {
-        if (res === Error) {
+        if (res === Error || res.error) {
           setLoading(false);
           setToast({
             hasError: false,
@@ -114,12 +114,12 @@ function useEditSlackAlerts({
     }
 
     if (edit) {
-      const id = payload.id?.toString();
+      const { id } = payload;
 
       if (id) {
         const payloadJson = JSON.stringify(payload);
         settingsService.editSlackAlert(id, payloadJson).then(res => {
-          if (res === Error) {
+          if (res === Error || res.error) {
             setLoading(false);
             setToast({
               hasError: false,
@@ -142,10 +142,10 @@ function useEditSlackAlerts({
   }
 
   function deleteSlackAlert(alertId: number) {
-    const id = alertId.toString();
+    const id = alertId;
 
     settingsService.deleteSlackAlert(id).then(res => {
-      if (res === Error) {
+      if (res === Error || res.error) {
         setLoading(false);
         setToast({
           hasError: false,

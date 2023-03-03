@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Button from '../../../../button/Button';
 import { SlackAlert } from './hooks/useSlackAlerts';
 import formatNumber from '../../../../../utils/formatNumber';
+import ChevronRightIcon from '../../../../icons/ChevronRightIcon';
 
 type InventoryViewAlertsDisplayProps = {
   slackAlerts: SlackAlert[] | undefined;
@@ -40,22 +41,7 @@ function InventoryViewAlertsDisplay({
               </p>
             </div>
           </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeMiterlimit="10"
-              strokeWidth="1.5"
-              d="M8.91 19.92l6.52-6.52c.77-.77.77-2.03 0-2.8L8.91 4.08"
-            ></path>
-          </svg>
+          <ChevronRightIcon width={24} height={24} />
         </div>
       ))}
       <div className="self-end">

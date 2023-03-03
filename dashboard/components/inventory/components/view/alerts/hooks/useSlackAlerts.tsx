@@ -16,12 +16,11 @@ export type SlackAlert = {
 
 function useSlackAlerts({ viewId }: useSlackAlertsProps) {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [hasSlack, setHasSlack] = useState(false);
   const [slackAlerts, setSlackAlerts] = useState<SlackAlert[]>();
   const [editSlackAlert, setEditSlackAlert] = useState(false);
   const [currentSlackAlert, setCurrentSlackAlert] = useState<SlackAlert>();
-  const currentViewId = viewId.toString();
 
   function fetchSlackStatus() {
     if (!loading) {
@@ -52,7 +51,7 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
       setError(false);
     }
 
-    settingsService.getSlackAlertsFromAView(currentViewId).then(res => {
+    settingsService.getSlackAlertsFromAView(viewId).then(res => {
       if (res === Error) {
         setLoading(false);
         setError(true);
@@ -88,7 +87,7 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
       fetchSlackStatus();
     }
 
-    if (hasSlack && currentViewId) {
+    if (hasSlack && viewId) {
       fetchViewAlerts();
     }
   }, [hasSlack]);

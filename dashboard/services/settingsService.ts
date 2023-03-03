@@ -292,7 +292,7 @@ const settingsService = {
     }
   },
 
-  async getSlackAlertsFromAView(id: string) {
+  async getSlackAlertsFromAView(id: number) {
     try {
       const res = await fetch(
         `${BASE_URL}/views/${id}/alerts`,
@@ -315,7 +315,7 @@ const settingsService = {
     }
   },
 
-  async editSlackAlert(id: string, payload: string) {
+  async editSlackAlert(id: number, payload: string) {
     try {
       const res = await fetch(
         `${BASE_URL}/alerts/${id}`,
@@ -328,7 +328,7 @@ const settingsService = {
     }
   },
 
-  async deleteSlackAlert(id: string) {
+  async deleteSlackAlert(id: number) {
     try {
       const res = await fetch(`${BASE_URL}/alerts/${id}`, settings('DELETE'));
       const data = await res.json();
