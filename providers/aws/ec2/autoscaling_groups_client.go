@@ -8,7 +8,8 @@ import (
 
 type AutoScalingGroupClient interface {
 	DescribeAutoScalingGroups(
-		context.Context,
-		*autoscaling.DescribeAutoScalingGroupsInput,
+		ctx context.Context,
+		params *autoscaling.DescribeAutoScalingGroupsInput,
+		optFns ...func(*autoscaling.Options),
 	) (*autoscaling.DescribeAutoScalingGroupsOutput, error)
 }

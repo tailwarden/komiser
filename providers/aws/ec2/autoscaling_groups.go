@@ -30,7 +30,7 @@ func AutoScalingGroups(ctx context.Context, clientProvider ProviderClient) ([]Re
 // As I see it, this could be a struct that implements the Discoverer interface
 // This would allow us to test it in isolation
 type ASGDiscoverer struct {
-	client      *autoscaling.Client
+	client      AutoScalingGroupClient
 	ctx         context.Context
 	accountName string
 	region      string
