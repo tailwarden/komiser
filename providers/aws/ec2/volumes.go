@@ -12,7 +12,20 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
+
+// This prices can vary strongly depending on the region
+// For estimation, we just assume these prices based on us-east-1
+var ebsPriceMap = map[string]float64{
+	"standard": 0.05,
+	"gp2":      0.1,
+	"gp3":      0.08,
+	"io1":      0.125,
+	"io2":      0.125,
+	"st1":      0.045,
+	"st2":      0.015,
+}
 
 func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config ec2.DescribeVolumesInput
@@ -26,6 +39,7 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	}
 
 	accountId := stsOutput.Account
+	region := client.AWSClient.Region
 
 	for {
 		output, err := ec2Client.DescribeVolumes(ctx, &config)
@@ -42,6 +56,31 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				})
 			}
 
+			startOfMonth := utils.BeginningOfMonth(time.Now())
+			hourlyUsage := 0
+
+			if volume.CreateTime.Before(startOfMonth) {
+				hourlyUsage = int(time.Since(startOfMonth).Hours())
+			} else {
+				hourlyUsage = int(time.Since(*volume.CreateTime).Hours())
+			}
+
+			instanceMonths := float64(hourlyUsage) / 730.0
+			instanceCost := 0.0
+			hourlyCost, ok := ebsPriceMap[string(volume.VolumeType)]
+
+			if !ok {
+				log.WithFields(log.Fields{
+					"service":    "EBS",
+					"volumeId":   *volume.VolumeId,
+					"volumeType": string(volume.VolumeType),
+					"region":     region,
+					"hourlyCost": hourlyCost,
+				}).Warn("Volume type not supported for cost estimation, skipping.")
+			} else {
+				instanceCost = instanceMonths * hourlyCost
+			}
+
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:volume/%s", client.AWSClient.Region, *accountId, *volume.VolumeId)
 
 			resources = append(resources, Resource{
@@ -50,7 +89,7 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Service:    "EBS",
 				Region:     client.AWSClient.Region,
 				ResourceId: resourceArn,
-				Cost:       0,
+				Cost:       instanceCost,
 				Name:       *volume.VolumeId,
 				CreatedAt:  *volume.CreateTime,
 				FetchedAt:  time.Now(),
