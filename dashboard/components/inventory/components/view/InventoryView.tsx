@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { NextRouter } from 'next/router';
-import formatNumber from '../../../../utils/formatNumber';
+import formatNumber from '../../../../utils/formatNumber/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
