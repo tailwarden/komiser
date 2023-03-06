@@ -18,10 +18,10 @@ func AutoScalingGroups(ctx context.Context, clientProvider ProviderClient) ([]Re
 	client := autoscaling.NewFromConfig(*clientProvider.AWSClient)
 
 	d := ASGDiscoverer{
-		client:      client,
-		ctx:         ctx,
-		accountName: clientProvider.Name,
-		region:      clientProvider.AWSClient.Region,
+		Client:      client,
+		Ctx:         ctx,
+		AccountName: clientProvider.Name,
+		Region:      clientProvider.AWSClient.Region,
 	}
 
 	return d.Discover()
@@ -30,10 +30,10 @@ func AutoScalingGroups(ctx context.Context, clientProvider ProviderClient) ([]Re
 // As I see it, this could be a struct that implements the Discoverer interface
 // This would allow us to test it in isolation
 type ASGDiscoverer struct {
-	client      AutoScalingGroupClient
-	ctx         context.Context
-	accountName string
-	region      string
+	Client      AutoScalingGroupClient
+	Ctx         context.Context
+	AccountName string
+	Region      string
 }
 
 // This could possibly be the only method the interface requires
@@ -49,7 +49,7 @@ func (d ASGDiscoverer) Discover() ([]Resource, error) {
 	var queryInput autoscaling.DescribeAutoScalingGroupsInput
 
 	for {
-		output, err := d.client.DescribeAutoScalingGroups(d.ctx, &queryInput)
+		output, err := d.Client.DescribeAutoScalingGroups(d.Ctx, &queryInput)
 		if err != nil {
 			return resources, err
 		}
@@ -65,18 +65,18 @@ func (d ASGDiscoverer) Discover() ([]Resource, error) {
 
 			resources = append(resources, Resource{
 				Provider:   "AWS",
-				Account:    d.accountName,
+				Account:    d.AccountName,
 				Service:    "AutoScalingGroup",
-				Region:     d.region,
+				Region:     d.Region,
 				ResourceId: *asg.AutoScalingGroupARN,
 				Cost:       0,
 				Name:       *asg.AutoScalingGroupName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link: fmt.Sprintf(
-					"https:/%s.console.aws.amazon.com/vpc/home?region=%s#SubnetDetails:subnetId=%s",
-					d.region,
-					d.region,
+					"https://%s.console.aws.amazon.com/ec2/home?region=%s#AutoScalingGroupDetails:id=%s",
+					d.Region,
+					d.Region,
 					*asg.AutoScalingGroupName,
 				),
 			})
@@ -90,8 +90,8 @@ func (d ASGDiscoverer) Discover() ([]Resource, error) {
 
 	log.WithFields(log.Fields{
 		"provider":  "AWS",
-		"account":   d.accountName,
-		"region":    d.region,
+		"account":   d.AccountName,
+		"region":    d.Region,
 		"service":   "AutoScalingGroup",
 		"resources": len(resources),
 	}).Info("Fetched resources")
