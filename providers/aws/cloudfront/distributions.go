@@ -13,11 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
-
-func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
-}
 
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -37,7 +34,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 
 		for _, distribution := range output.DistributionList.Items {
 			metricsBytesDownloadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("BytesDownloaded"),
 				Namespace:  aws.String("AWS/CloudFront"),
@@ -63,7 +60,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			}
 
 			metricsBytesUploadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("BytesUploaded"),
 				Namespace:  aws.String("AWS/CloudFront"),
@@ -89,7 +86,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			}
 
 			metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(BeginningOfMonth(time.Now())),
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Requests"),
 				Namespace:  aws.String("AWS/CloudFront"),

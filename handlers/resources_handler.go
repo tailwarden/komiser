@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
@@ -17,13 +18,15 @@ type ApiHandler struct {
 	db         *bun.DB
 	ctx        context.Context
 	noTracking bool
+	cfg        models.Config
 }
 
-func NewApiHandler(ctx context.Context, noTracking bool, db *bun.DB) *ApiHandler {
+func NewApiHandler(ctx context.Context, noTracking bool, db *bun.DB, cfg models.Config) *ApiHandler {
 	handler := ApiHandler{
 		db:         db,
 		ctx:        ctx,
 		noTracking: noTracking,
+		cfg:        cfg,
 	}
 	return &handler
 }

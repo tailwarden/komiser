@@ -11,11 +11,13 @@ import { DashboardCloudMapTooltipProps } from './hooks/useCloudMapTooltip';
 type DashboardCloudMapChartProps = {
   regions: DashboardCloudMapRegions | undefined;
   setTooltip: (tooltip: DashboardCloudMapTooltipProps | undefined) => void;
+  isOpen: boolean;
 };
 
 function DashboardCloudMapChart({
   regions,
-  setTooltip
+  setTooltip,
+  isOpen
 }: DashboardCloudMapChartProps) {
   const geoUrl = '/data/map/countries.json';
 
@@ -52,34 +54,40 @@ function DashboardCloudMapChart({
       </Geographies>
       {regionsAscendingByNumberOfResources &&
         regionsAscendingByNumberOfResources.map((region, idx) => (
-          <Marker
+          <a
             key={idx}
-            coordinates={[Number(region.longitude), Number(region.latitude)]}
-            onMouseEnter={e =>
-              setTooltip({
-                name: region.name,
-                label: region.label,
-                resources: region.resources,
-                x: e.pageX,
-                y: e.pageY
-              })
-            }
-            onMouseLeave={() => setTooltip(undefined)}
+            href={`/inventory?region:IS:${region.label}`}
+            target="_blank"
+            rel="noreferrer"
           >
-            {region.resources > 0 && (
+            <Marker
+              coordinates={[Number(region.longitude), Number(region.latitude)]}
+              onMouseEnter={e =>
+                setTooltip({
+                  name: region.name,
+                  label: region.label,
+                  resources: region.resources,
+                  x: e.pageX,
+                  y: e.pageY
+                })
+              }
+              onMouseLeave={() => setTooltip(undefined)}
+            >
+              {region.resources > 0 && (
+                <circle
+                  r={isOpen ? 6 : 8.5}
+                  fill="#387BEB"
+                  className="pointer-events-none animate-wide-pulse"
+                />
+              )}
               <circle
-                r={8.5}
-                fill="#387BEB"
-                className="pointer-events-none animate-wide-pulse"
+                r={isOpen ? 6 : 8.5}
+                fill={region.resources === 0 ? '#95A3A3' : '#387BEB'}
+                stroke="white"
+                strokeWidth={1.5}
               />
-            )}
-            <circle
-              r={8.5}
-              fill={region.resources === 0 ? '#95A3A3' : '#387BEB'}
-              stroke="white"
-              strokeWidth={1.5}
-            />
-          </Marker>
+            </Marker>
+          </a>
         ))}
     </ComposableMap>
   );

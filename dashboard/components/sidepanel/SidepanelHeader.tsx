@@ -30,12 +30,12 @@ function SidepanelHeader({
 
       <div className="flex flex-shrink-0 items-center gap-4">
         {deleteAction && (
-          <Button style="delete-ghost" onClick={deleteAction}>
+          <Button style="delete" onClick={deleteAction}>
             {deleteLabel || 'Delete'}
           </Button>
         )}
 
-        <Button style="secondary" onClick={closeModal}>
+        <Button style="outline" onClick={closeModal}>
           Close
         </Button>
       </div>

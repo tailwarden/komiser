@@ -59,7 +59,7 @@ function Button({
 
   const primary = `${base} bg-gradient-to-br from-primary bg-secondary hover:bg-primary active:from-secondary active:bg-secondary text-white disabled:from-primary disabled:bg-secondary disabled:opacity-50`;
 
-  const secondary = `${base} bg-black-100 hover:bg-black-200/50 active:bg-black-100 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
+  const secondary = `${base} hover:bg-black-100 active:bg-black-150 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
 
   const bulk = `${base} bg-white hover:bg-komiser-200 active:bg-komiser-300 text-secondary  disabled:bg-white disabled:opacity-50`;
 
@@ -69,7 +69,7 @@ function Button({
 
   const ghost = `${base} bg-transparent hover:bg-black-400/10 active:bg-black-400/20 text-black-900/60  disabled:bg-transparent disabled:opacity-50`;
 
-  const deleteStyle = `${base} bg-error-600 text-white hover:bg-error-700 active:bg-error-600  disabled:bg-error-700 disabled:text-white/70`;
+  const deleteStyle = `${base} border-2 border-error-600 text-error-600 hover:bg-error-600/5 active:bg-error-600/20 disabled:opacity-50`;
 
   const deleteGhostStyle = `${base} bg-error-100 text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
 

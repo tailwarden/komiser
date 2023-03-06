@@ -84,10 +84,10 @@ function DashboardCostExplorerCard({
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Select
           label="Group by"
-          values={groupBySelect.values}
           value={queryGroup}
+          values={groupBySelect.values}
           displayValues={groupBySelect.displayValues}
-          onChange={e => handleFilterChange(e, 'group')}
+          handleChange={newValue => handleFilterChange('group', newValue)}
         />
         <SelectCheckbox
           label="Excluded"
@@ -97,17 +97,17 @@ function DashboardCostExplorerCard({
         />
         <Select
           label="Granularity"
-          values={granularitySelect.values}
           value={queryGranularity}
+          values={granularitySelect.values}
           displayValues={granularitySelect.displayValues}
-          onChange={e => handleFilterChange(e, 'granularity')}
+          handleChange={newValue => handleFilterChange('granularity', newValue)}
         />
         <Select
           label="Period"
-          values={dateSelect.values}
           value={queryDate}
+          values={dateSelect.values}
           displayValues={dateSelect.displayValues}
-          onChange={e => handleFilterChange(e, 'date')}
+          handleChange={newValue => handleFilterChange('date', newValue)}
         />
       </div>
       <div className="mt-8"></div>

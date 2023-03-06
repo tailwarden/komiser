@@ -18,7 +18,9 @@
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
 [![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/tailwarden/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
-Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, OCI, DigitalOcean, Kubernetes and CIVO, Linode and Tencent), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
+Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, Azure, OCI, DigitalOcean, Kubernetes and CIVO, Linode, Scaleway and Tencent), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
+
+<h1 align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></h1>
 
 *Cloud version is available in private beta, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)*
 
@@ -45,11 +47,13 @@ brew install komiser
     - [Connect Komiser CLI to your AWS account.](#connect-komiser-cli-to-your-aws-account)
     - [Deploy Komiser to single account access EKS cluster (Helm chart)](#deploy-komiser-to-single-account-access-eks-cluster-helm-chart)
     - [Deploy Komiser to a multi account access EKS cluster (Helm chart)](#deploy-komiser-to-a-multi-account-access-eks-cluster-helm-chart)
+  - [Installation on Azure](#installation-on-azure)
   - [Installation on Civo](#installation-on-civo)
   - [Installation on OCI](#installation-on-oci)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
   - [Installation on Linode](#installation-on-linode)
   - [Installation on Tencent](#installation-on-tencent-cloud)
+  - [Installation on Scaleway](#installation-on-scaleway)
 - [Documentation](#documentation)
   - [Jump right in:](#jump-right-in)
 - [Bugs and feature requests](#bugs-and-feature-requests)
@@ -90,6 +94,10 @@ Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
 * If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/cloud-providers/aws#multiple-account-eks-helm-chart-installation?utm_source=github&utm_medium=social).
 
+## Installation on Azure
+
+Connect a local deployment of Komiser CLI to you [**Azure**](https://docs.komiser.io/docs/cloud-providers/azure?utm_source=github&utm_medium=social) account.
+
 ## Installation on Civo
 
 Connect a local deployment of Komiser CLI to your [**Civo**](https://docs.komiser.io/docs/cloud-providers/civo?utm_source=github&utm_medium=social) account.
@@ -109,6 +117,10 @@ Connect a local deployment of Komiser CLI to you [**Linode**](https://docs.komis
 ## Installation on Tencent Cloud
 
 Connect a local deployment of Komiser CLI to you [**Tencent**](https://docs.komiser.io/docs/cloud-providers/tencent?utm_source=github&utm_medium=social) account.
+
+## Installation on Scaleway
+
+Connect a local deployment of Komiser CLI to you [**Scaleway**](https://docs.komiser.io/docs/cloud-providers/scaleway?utm_source=github&utm_medium=social) account.
 
 Watch the installation [video here](https://www.youtube.com/watch?v=NBbEpoW-kVs)
 

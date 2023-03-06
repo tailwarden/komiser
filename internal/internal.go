@@ -4,15 +4,20 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
 	"runtime"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
 	log "github.com/sirupsen/logrus"
+	"github.com/slack-go/slack"
+	"github.com/uptrace/bun/dialect"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/pgdriver"
@@ -46,13 +51,13 @@ var Arch = runtime.GOARCH
 var db *bun.DB
 var analytics Analytics
 
-func Exec(address string, port int, configPath string, telemetry bool, analytics Analytics, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, a Analytics, regions []string, cmd *cobra.Command) error {
 	cfg, clients, err := config.Load(configPath)
 	if err != nil {
 		return err
 	}
 
-	analytics = analytics
+	analytics = a
 
 	err = setupSchema(cfg)
 	if err != nil {
@@ -69,11 +74,18 @@ func Exec(address string, port int, configPath string, telemetry bool, analytics
 		}
 	})
 
+	cron.Every(1).Hours().Do(func() {
+		if len(cfg.Slack.Webhook) > 0 {
+			log.Info("Checking Slack alerts")
+			checkingAlerts(context.Background(), *cfg, telemetry, port)
+		}
+	})
+
 	cron.StartAsync()
 
 	go checkUpgrade()
 
-	err = runServer(address, port, telemetry)
+	err = runServer(address, port, telemetry, *cfg)
 	if err != nil {
 		return err
 	}
@@ -81,10 +93,10 @@ func Exec(address string, port int, configPath string, telemetry bool, analytics
 	return nil
 }
 
-func runServer(address string, port int, telemetry bool) error {
+func runServer(address string, port int, telemetry bool, cfg models.Config) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), telemetry, db)
+	r := v1.Endpoints(context.Background(), telemetry, db, cfg)
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -131,6 +143,11 @@ func setupSchema(c *models.Config) error {
 	}
 
 	_, err = db.NewCreateTable().Model((*models.View)(nil)).IfNotExists().Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	_, err = db.NewCreateTable().Model((*models.Alert)(nil)).IfNotExists().Exec(context.Background())
 	if err != nil {
 		return err
 	}
@@ -293,5 +310,299 @@ func checkUpgrade() {
 				log.Warnf("Upgrade instructions: https://github.com/tailwarden/komiser")
 			}
 		}
+	}
+}
+
+func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port int) {
+	alerts := make([]models.Alert, 0)
+
+	db.NewRaw("SELECT * FROM alerts").Scan(ctx, &alerts)
+
+	for _, alert := range alerts {
+		var view models.View
+		db.NewRaw(fmt.Sprintf("SELECT * FROM views WHERE id = %s", alert.ViewId)).Scan(ctx, &view)
+
+		stats, err := getViewStats(ctx, view.Filters)
+		if err != nil {
+			log.Error("Couldn't get stats for view:", view.Name)
+		} else {
+			if alert.Type == "BUDGET" && alert.Budget <= stats.Costs {
+				log.Info("Sending Slack budget alert for view:", view.Name)
+				if telemetry {
+					analytics.TrackEvent("sending_alerts", map[string]interface{}{
+						"type": "budget",
+					})
+				}
+
+				attachment := slack.Attachment{
+					Color:         "danger",
+					AuthorName:    "Komiser",
+					AuthorSubname: "by Tailwarden",
+					AuthorLink:    "https://tailwarden.com",
+					AuthorIcon:    "https://cdn.komiser.io/images/komiser-logo.jpeg",
+					Text:          "Cost alert :warning:",
+					Footer:        "Komiser",
+					Actions: []slack.AttachmentAction{
+						slack.AttachmentAction{
+							Name: "open",
+							Text: "Open view",
+							Type: "button",
+							URL:  fmt.Sprintf("http://localhost:%d/inventory?view=%d", port, view.Id),
+						},
+					},
+					Fields: []slack.AttachmentField{
+						slack.AttachmentField{
+							Title: "View",
+							Value: view.Name,
+						},
+						slack.AttachmentField{
+							Title: "Cost",
+							Value: fmt.Sprintf("%.2f$", stats.Costs),
+						},
+					},
+					FooterIcon: "https://github.com/tailwarden/komiser",
+					Ts:         json.Number(strconv.FormatInt(time.Now().Unix(), 10)),
+				}
+				msg := slack.WebhookMessage{
+					Attachments: []slack.Attachment{attachment},
+				}
+
+				err := slack.PostWebhook(cfg.Slack.Webhook, &msg)
+				if err != nil {
+					log.Warn(err)
+				}
+			}
+
+			if alert.Type == "USAGE" && alert.Usage <= stats.Resources {
+				log.Info("Sending Slack usage alert for view:", view.Name)
+				if telemetry {
+					analytics.TrackEvent("sending_alerts", map[string]interface{}{
+						"type": "usage",
+					})
+				}
+
+				attachment := slack.Attachment{
+					Color:         "danger",
+					AuthorName:    "Komiser",
+					AuthorSubname: "by Tailwarden",
+					AuthorLink:    "https://tailwarden.com",
+					AuthorIcon:    "https://cdn.komiser.io/images/komiser-logo.jpeg",
+					Text:          "Usage alert :warning:",
+					Footer:        "Komiser",
+					Actions: []slack.AttachmentAction{
+						slack.AttachmentAction{
+							Name: "open",
+							Text: "Open view",
+							Type: "button",
+							URL:  fmt.Sprintf("http://localhost:%d/inventory?view=%d", port, view.Id),
+						},
+					},
+					Fields: []slack.AttachmentField{
+						slack.AttachmentField{
+							Title: "View",
+							Value: view.Name,
+						},
+						slack.AttachmentField{
+							Title: "Resources",
+							Value: fmt.Sprintf("%d", stats.Resources),
+						},
+					},
+					FooterIcon: "https://github.com/tailwarden/komiser",
+					Ts:         json.Number(strconv.FormatInt(time.Now().Unix(), 10)),
+				}
+				msg := slack.WebhookMessage{
+					Attachments: []slack.Attachment{attachment},
+				}
+
+				err := slack.PostWebhook(cfg.Slack.Webhook, &msg)
+				if err != nil {
+					log.Warn(err)
+				}
+			}
+		}
+	}
+}
+
+func getViewStats(ctx context.Context, filters []models.Filter) (models.ViewStat, error) {
+	filterWithTags := false
+	whereQueries := make([]string, 0)
+	for _, filter := range filters {
+		if filter.Field == "name" || filter.Field == "region" || filter.Field == "service" || filter.Field == "provider" || filter.Field == "account" {
+			switch filter.Operator {
+			case "IS":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("(%s IN (%s))", filter.Field, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "IS_NOT":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("(%s NOT IN (%s))", filter.Field, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "CONTAINS":
+				queries := make([]string, 0)
+				specialChar := "%"
+				for i := 0; i < len(filter.Values); i++ {
+					queries = append(queries, fmt.Sprintf("(%s LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " OR ")))
+			case "NOT_CONTAINS":
+				queries := make([]string, 0)
+				specialChar := "%"
+				for i := 0; i < len(filter.Values); i++ {
+					queries = append(queries, fmt.Sprintf("(%s NOT LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " AND ")))
+			case "IS_EMPTY":
+				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') = ''))", filter.Field))
+			case "IS_NOT_EMPTY":
+				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
+			default:
+				return models.ViewStat{}, errors.New("Operation is invalid or not supported")
+			}
+		} else if strings.HasPrefix(filter.Field, "tag:") {
+			filterWithTags = true
+			key := strings.ReplaceAll(filter.Field, "tag:", "")
+			switch filter.Operator {
+			case "CONTAINS":
+			case "IS":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' IN (%s)))", key, strings.Join(filter.Values, ","))
+				if db.Dialect().Name() == dialect.SQLite {
+					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') IN (%s)))", key, strings.Join(filter.Values, ","))
+				}
+				whereQueries = append(whereQueries, query)
+			case "NOT_CONTAINS":
+			case "IS_NOT":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				if db.Dialect().Name() == dialect.SQLite {
+					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') NOT IN (%s)))", key, strings.Join(filter.Values, ","))
+				}
+				whereQueries = append(whereQueries, query)
+			case "IS_EMPTY":
+				if db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') = ''))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
+				}
+			case "IS_NOT_EMPTY":
+				if db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') != ''))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
+				}
+			default:
+				return models.ViewStat{}, errors.New("Operation is invalid or not supported")
+			}
+		} else if filter.Field == "tags" {
+			switch filter.Operator {
+			case "IS_EMPTY":
+				if db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) = 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
+				}
+			case "IS_NOT_EMPTY":
+				if db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, "json_array_length(tags) != 0")
+				} else {
+					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
+				}
+			default:
+				return models.ViewStat{}, errors.New("Operation is invalid or not supported")
+			}
+		} else if filter.Field == "cost" {
+			switch filter.Operator {
+			case "EQUAL":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					return models.ViewStat{}, errors.New("The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
+			case "BETWEEN":
+				min, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					return models.ViewStat{}, errors.New("The value should be a number")
+				}
+				max, err := strconv.ParseFloat(filter.Values[1], 64)
+				if err != nil {
+					return models.ViewStat{}, errors.New("The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
+			case "GREATER_THAN":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					return models.ViewStat{}, errors.New("The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
+			case "LESS_THAN":
+				cost, err := strconv.ParseFloat(filter.Values[0], 64)
+				if err != nil {
+					return models.ViewStat{}, errors.New("The value should be a number")
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
+			default:
+				return models.ViewStat{}, errors.New("Operation is invalid or not supported")
+
+			}
+		} else {
+			return models.ViewStat{}, errors.New("Field is invalid or not supported")
+		}
+	}
+
+	whereClause := strings.Join(whereQueries, " AND ")
+
+	if filterWithTags {
+		query := fmt.Sprintf("FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s", whereClause)
+		if db.Dialect().Name() == dialect.SQLite {
+			query = fmt.Sprintf("FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s", whereClause)
+		}
+
+		resources := struct {
+			Count int `bun:"count" json:"total"`
+		}{}
+
+		db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(ctx, &resources)
+
+		cost := struct {
+			Sum float64 `bun:"sum" json:"total"`
+		}{}
+
+		db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(ctx, &cost)
+
+		output := models.ViewStat{
+			Resources: resources.Count,
+			Costs:     cost.Sum,
+		}
+
+		return output, nil
+	} else {
+		query := fmt.Sprintf("FROM resources WHERE %s", whereClause)
+
+		resources := struct {
+			Count int `bun:"count" json:"total"`
+		}{}
+
+		db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(ctx, &resources)
+
+		cost := struct {
+			Sum float64 `bun:"sum" json:"total"`
+		}{}
+
+		db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(ctx, &cost)
+
+		output := models.ViewStat{
+			Resources: resources.Count,
+			Costs:     cost.Sum,
+		}
+
+		return output, nil
 	}
 }
