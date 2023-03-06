@@ -161,3 +161,9 @@ We will need a URL to a svg or png logo, a text title and a company URL.
 # Versioning 🧮
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/tailwarden/komiser/tags). 
+
+# Contributors
+
+<a href="https://github.com/tailwarden/komiser/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=tailwarden/komiser" />
+</a>
