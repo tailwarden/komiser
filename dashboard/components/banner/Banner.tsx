@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useContext } from 'react';
-import formatNumber from '../../utils/formatNumber';
+import formatNumber from '../../utils/formatNumber/formatNumber';
 import Button from '../button/Button';
 import GlobalAppContext from '../layout/context/GlobalAppContext';
 

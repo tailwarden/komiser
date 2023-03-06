@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
-import formatNumber from '../../../utils/formatNumber';
+import formatNumber from '../../../utils/formatNumber/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
