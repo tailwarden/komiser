@@ -6,7 +6,6 @@ const base: InputProps = {
   label: 'Text input',
   name: 'text',
   type: 'text',
-  regex: regex.required,
   error: `Please provide a valid value.`,
   autofocus: true,
   action: () => {}
