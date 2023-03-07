@@ -10,7 +10,8 @@
     "prepare": "cd .. && husky install dashboard/.husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "jest --watch"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@types/node": "18.11.9",
