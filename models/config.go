@@ -80,5 +80,6 @@ type TencentConfig struct {
 }
 
 type SlackConfig struct {
-	Webhook string `toml:"webhook"`
+	Webhook   string `toml:"webhook"`
+	Reporting bool   `toml:"reporting"`
 }
