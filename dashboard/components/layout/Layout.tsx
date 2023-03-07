@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 import Banner from '../banner/Banner';
 import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
 import Button from '../button/Button';
@@ -9,6 +11,7 @@ import Navbar from '../navbar/Navbar';
 import GlobalAppContext from './context/GlobalAppContext';
 import useGlobalStats from './hooks/useGlobalStats';
 import useTelemetry from './hooks/useTelemetry';
+import environment from '../../environments/environment';
 
 type LayoutProps = {
   children: ReactNode;
@@ -18,9 +21,21 @@ function Layout({ children }: LayoutProps) {
   const { displayBanner, dismissBanner, githubStars } = useGithubStarBanner();
   const { loading, data, error, hasNoAccounts, fetch } = useGlobalStats();
   const { telemetry } = useTelemetry();
-
-  const canRender = !error && !hasNoAccounts;
   const router = useRouter();
+  const canRender = !error && !hasNoAccounts;
+
+  useEffect(() => {
+    if (telemetry?.telemetry_enabled && environment.production) {
+      Sentry.init({
+        dsn: environment.SENTRY_URL,
+        integrations: [new BrowserTracing()],
+
+        // We recommend adjusting this value in production, or using tracesSampler
+        // for finer control
+        tracesSampleRate: 1.0
+      });
+    }
+  }, [telemetry]);
 
   return (
     <GlobalAppContext.Provider
