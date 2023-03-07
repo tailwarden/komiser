@@ -1,0 +1,65 @@
+import { render, screen } from '@testing-library/react';
+import RefreshIcon from '../icons/RefreshIcon';
+import Card from './Card';
+
+describe('Card', () => {
+  test('should render card component', () => {
+    render(
+      <Card
+        label="Test card"
+        value={500}
+        icon={<RefreshIcon width={24} height={24} />}
+      />
+    );
+  });
+
+  test('should render the icon', () => {
+    render(
+      <Card
+        label="Test card"
+        value={500}
+        icon={<RefreshIcon width={24} height={24} />}
+      />
+    );
+    const icon = screen.getByRole('icon');
+    expect(icon).toBeInTheDocument();
+  });
+
+  test('should display the value formatted', () => {
+    render(
+      <Card
+        label="Test card"
+        value={5000}
+        icon={<RefreshIcon width={24} height={24} />}
+      />
+    );
+    const formattedNumber = screen.getByRole('formattedNumber');
+    expect(formattedNumber).toHaveTextContent('5K');
+  });
+
+  test('should display the value formatted as currency', () => {
+    render(
+      <Card
+        label="Test card"
+        value={6000}
+        icon={<RefreshIcon width={24} height={24} />}
+        formatter="currency"
+      />
+    );
+    const formattedNumber = screen.getByRole('formattedNumber');
+    expect(formattedNumber).toHaveTextContent('$6K');
+  });
+
+  test('should render tooltip if there is a tooltip set', () => {
+    render(
+      <Card
+        label="Test card"
+        value={500}
+        tooltip="This will be the tooltip text"
+        icon={<RefreshIcon width={24} height={24} />}
+      />
+    );
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip).toHaveTextContent('This will be the tooltip text');
+  });
+});
