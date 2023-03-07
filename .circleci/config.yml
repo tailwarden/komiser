@@ -1,5 +1,28 @@
 version: 2.1
 jobs:
+  test_lint_frontend:
+    docker:
+      - image: circleci/node:14.15-stretch-browsers
+    working_directory: ~/komiser
+    resource_class: large
+    steps:
+      - checkout
+      - restore_cache:
+          key: node-modules-{{checksum "dashboard/package.json"}}
+      - run:
+          name: Install dependencies
+          command: cd dashboard && npm ci
+      - save_cache:
+          key: node-modules-{{checksum "dashboard/package.json"}}
+          paths:
+            - dashboard/node_modules
+      - run:
+          name: Run lint
+          command: cd dashboard && npm run lint
+      - run:
+          name: Run npm test
+          command: cd dashboard && npm run test
+
   build_frontend:
     docker:
       - image: circleci/node:14.15-stretch-browsers
@@ -96,6 +119,10 @@ jobs:
 
 workflows:
   version: 2
+  build_and_test_frontend:
+    jobs:
+      - test_lint_frontend
+
   build_and_deploy:
     jobs:
       - build_frontend:
