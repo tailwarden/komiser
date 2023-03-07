@@ -8,6 +8,7 @@ import ErrorState from '../error-state/ErrorState';
 import Navbar from '../navbar/Navbar';
 import GlobalAppContext from './context/GlobalAppContext';
 import useGlobalStats from './hooks/useGlobalStats';
+import useTelemetry from './hooks/useTelemetry';
 
 type LayoutProps = {
   children: ReactNode;
@@ -16,6 +17,8 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
   const { displayBanner, dismissBanner, githubStars } = useGithubStarBanner();
   const { loading, data, error, hasNoAccounts, fetch } = useGlobalStats();
+  const { telemetry } = useTelemetry();
+
   const canRender = !error && !hasNoAccounts;
   const router = useRouter();
 
