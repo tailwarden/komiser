@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import formatNumber from '../../../../../utils/formatNumber/formatNumber';
+import formatNumber from '../../../../../utils/formatNumber';
 import Button from '../../../../button/Button';
 import ChevronRightIcon from '../../../../icons/ChevronRightIcon';
 import { SlackAlert } from './hooks/useSlackAlerts';
