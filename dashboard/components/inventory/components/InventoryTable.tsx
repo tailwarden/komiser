@@ -1,12 +1,12 @@
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber/formatNumber';
-import providers from '../../../utils/providerHelper';
+import providers from '../../../utils/providerHelper/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
 import {
-  InventoryItem,
-  InventoryStats
+    InventoryItem,
+    InventoryStats
 } from '../hooks/useInventory/types/useInventoryTypes';
 import InventorySearchBar from './InventorySearchBar';
 import InventorySearchNoResults from './InventorySearchNoResults';

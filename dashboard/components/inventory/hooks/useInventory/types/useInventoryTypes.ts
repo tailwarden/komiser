@@ -1,4 +1,4 @@
-import { Provider } from '../../../../../utils/providerHelper';
+import { Provider } from '../../../../../utils/providerHelper/providerHelper';
 
 export type InventoryFilterData = {
   field:
