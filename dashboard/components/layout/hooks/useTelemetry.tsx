@@ -12,7 +12,7 @@ function useTelemetry() {
     settingsService.getTelemetry().then(res => {
       if (res === Error) {
         throw new Error(
-          'Server could not be find. Refer to the logs and try again.'
+          'Server could not be found. Refer to the logs and try again.'
         );
       } else {
         setTelemetry(res);
