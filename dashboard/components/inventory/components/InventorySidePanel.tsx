@@ -1,12 +1,12 @@
 import formatNumber from '../../../utils/formatNumber/formatNumber';
-import providers from '../../../utils/providerHelper';
+import providers from '../../../utils/providerHelper/providerHelper';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
 import SidepanelTabs from '../../sidepanel/SidepanelTabs';
 import {
-  InventoryItem,
-  Pages,
-  Tag
+    InventoryItem,
+    Pages,
+    Tag
 } from '../hooks/useInventory/types/useInventoryTypes';
 import InventoryTagWrapper from './InventoryTagWrapper';
 
