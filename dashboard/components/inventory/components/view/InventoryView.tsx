@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import { NextRouter } from 'next/router';
 import formatNumber from '../../../../utils/formatNumber/formatNumber';
-import providers, { Provider } from '../../../../utils/providerHelper/providerHelper';
+import providers, {
+  Provider
+} from '../../../../utils/providerHelper/providerHelper';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
@@ -11,10 +13,10 @@ import SidepanelPage from '../../../sidepanel/SidepanelPage';
 import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
 import { ToastProps } from '../../../toast/hooks/useToast';
 import {
-    HiddenResource,
-    InventoryFilterData,
-    InventoryStats,
-    View
+  HiddenResource,
+  InventoryFilterData,
+  InventoryStats,
+  View
 } from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
 import InventoryViewsHeader from '../InventoryViewsHeader';
