@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import formatNumber from '../../../utils/formatNumber';
+import formatNumber from '../../../utils/formatNumber/formatNumber';
 import Button from '../../button/Button';
 import { InventoryStats } from '../hooks/useInventory/types/useInventoryTypes';
 

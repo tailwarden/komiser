@@ -1,6 +1,6 @@
 import { ChartData, ChartOptions } from 'chart.js';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import formatNumber from '../../../../../utils/formatNumber';
+import formatNumber from '../../../../../utils/formatNumber/formatNumber';
 import { dateFormatter } from '../utils/dateHelper';
 import {
   CostExplorerQueryDateProps,

@@ -6,7 +6,10 @@
     "prettier",
     "plugin:storybook/recommended"
   ],
-  "plugins": ["prettier"],
+  "env": {
+    "jest/globals": true
+  },
+  "plugins": ["jest", "prettier"],
   "rules": {
     "react-hooks/exhaustive-deps": "off",
     "prettier/prettier": [

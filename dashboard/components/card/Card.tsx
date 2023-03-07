@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import formatNumber from '../../utils/formatNumber';
+import formatNumber from '../../utils/formatNumber/formatNumber';
 import Tooltip from '../tooltip/Tooltip';
 
 export type CardProps = {
