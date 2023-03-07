@@ -15,47 +15,47 @@ const providers = {
   providerLabel(arg: Provider) {
     let label;
 
-    if (arg === 'aws') {
+    if (arg.toLowerCase() === 'aws') {
       label = 'Amazon Web Services';
     }
 
-    if (arg === 'gcp') {
+    if (arg.toLowerCase() === 'gcp') {
       label = 'Google Cloud Platform';
     }
 
-    if (arg === 'ovh') {
+    if (arg.toLowerCase() === 'ovh') {
       label = 'OVH';
     }
 
-    if (arg === 'digitalocean') {
+    if (arg.toLowerCase() === 'digitalocean') {
       label = 'DigitalOcean';
     }
 
-    if (arg === 'azure') {
+    if (arg.toLowerCase() === 'azure') {
       label = 'Azure';
     }
 
-    if (arg === 'tencent') {
+    if (arg.toLowerCase() === 'tencent') {
       label = 'Tencent';
     }
 
-    if (arg === 'civo') {
+    if (arg.toLowerCase() === 'civo') {
       label = 'Civo';
     }
 
-    if (arg === 'kubernetes') {
+    if (arg.toLowerCase() === 'kubernetes') {
       label = 'Kubernetes';
     }
 
-    if (arg === 'linode') {
+    if (arg.toLowerCase() === 'linode') {
       label = 'Linode';
     }
 
-    if (arg === 'oci') {
+    if (arg.toLowerCase() === 'oci') {
       label = 'OCI';
     }
 
-    if (arg === 'scaleway') {
+    if (arg.toLowerCase() === 'scaleway') {
       label = 'Scaleway';
     }
 
@@ -64,47 +64,47 @@ const providers = {
   providerImg(arg: Provider) {
     let img;
 
-    if (arg === 'aws') {
+    if (arg.toLowerCase() === 'aws') {
       img = '/assets/img/providers/aws.png';
     }
 
-    if (arg === 'gcp') {
+    if (arg.toLowerCase() === 'gcp') {
       img = '/assets/img/providers/gcp.png';
     }
 
-    if (arg === 'ovh') {
+    if (arg.toLowerCase() === 'ovh') {
       img = '/assets/img/providers/ovh.jpeg';
     }
 
-    if (arg === 'digitalocean') {
+    if (arg.toLowerCase() === 'digitalocean') {
       img = '/assets/img/providers/digitalocean.png';
     }
 
-    if (arg === 'azure') {
+    if (arg.toLowerCase() === 'azure') {
       img = '/assets/img/providers/azure.svg';
     }
 
-    if (arg === 'civo') {
+    if (arg.toLowerCase() === 'civo') {
       img = '/assets/img/providers/civo.jpeg';
     }
 
-    if (arg === 'kubernetes') {
+    if (arg.toLowerCase() === 'kubernetes') {
       img = '/assets/img/providers/kubernetes.png';
     }
 
-    if (arg === 'linode') {
+    if (arg.toLowerCase() === 'linode') {
       img = '/assets/img/providers/linode.png';
     }
 
-    if (arg === 'tencent') {
+    if (arg.toLowerCase() === 'tencent') {
       img = '/assets/img/providers/tencent.jpeg';
     }
 
-    if (arg === 'oci') {
+    if (arg.toLowerCase() === 'oci') {
       img = '/assets/img/providers/oci.png';
     }
 
-    if (arg === 'scaleway') {
+    if (arg.toLowerCase() === 'scaleway') {
       img = '/assets/img/providers/scaleway.png';
     }
 
