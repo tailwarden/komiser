@@ -1,5 +1,5 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { required } from '../../utils/regex';
+import { required } from '../../utils/regex/regex';
 
 export type InputEvent = ChangeEvent<HTMLInputElement>;
 
