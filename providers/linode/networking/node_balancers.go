@@ -44,7 +44,7 @@ func NodeBalancers(ctx context.Context, client providers.ProviderClient) ([]Reso
 			Account:    client.Name,
 			Service:    "NodeBalancer",
 			Region:     nodeBalancer.Region,
-			ResourceId: fmt.Sprintf("%s", nodeBalancer.ID),
+			ResourceId: fmt.Sprintf("%d", nodeBalancer.ID),
 			Cost:       0,
 			Name:       *nodeBalancer.Label,
 			FetchedAt:  time.Now(),

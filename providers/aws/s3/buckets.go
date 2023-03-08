@@ -29,7 +29,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	if err != nil {
 		return resources, err
 	}
-  
+
 	for _, bucket := range output.Buckets {
 		metricsBucketSizebytesOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
@@ -37,14 +37,14 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			MetricName: aws.String("BucketSizeBytes"),
 			Namespace:  aws.String("AWS/S3"),
 			Dimensions: []types.Dimension{
-					types.Dimension{
-						Name:  aws.String("BucketName"),
-						Value: bucket.Name,
-					},
-					types.Dimension{
-						Name:  aws.String("StorageType"),
-						Value: aws.String("StandardStorage"),
-					},
+				types.Dimension{
+					Name:  aws.String("BucketName"),
+					Value: bucket.Name,
+				},
+				types.Dimension{
+					Name:  aws.String("StorageType"),
+					Value: aws.String("StandardStorage"),
+				},
 			},
 			Unit:   types.StandardUnitBytes,
 			Period: aws.Int32(3600),
@@ -53,7 +53,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			},
 		})
 		if err != nil {
-			log.Warn("Couldn't fetch invocations metric for %s", *bucket.Name)
+			log.Warnf("Couldn't fetch invocations metric for %s", *bucket.Name)
 		}
 
 		bucketSize := 0.0

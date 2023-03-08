@@ -46,7 +46,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", *o.FunctionName)
+				log.Warnf("Couldn't fetch invocations metric for %s", *o.FunctionName)
 			}
 
 			invocations := 0.0
@@ -71,7 +71,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				},
 			})
 			if err != nil {
-				log.Warn("Couldn't fetch duration metric for %s", *o.FunctionName)
+				log.Warnf("Couldn't fetch duration metric for %s", *o.FunctionName)
 			}
 
 			duration := 0.0
