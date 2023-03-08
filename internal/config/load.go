@@ -16,6 +16,7 @@ import (
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
 	"github.com/linode/linodego"
+	"github.com/mongodb-forks/digest"
 	"github.com/oracle/oci-go-sdk/common"
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	. "github.com/tailwarden/komiser/models"
@@ -24,6 +25,7 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	"go.mongodb.org/atlas/mongodbatlas"
 	"golang.org/x/oauth2"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -229,6 +231,22 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				ScalewayClient: client,
 				Name:           account.Name,
+			})
+		}
+	}
+
+	if len(config.MongoDBAtlas) > 0 {
+		for _, account := range config.MongoDBAtlas {
+			t := digest.NewTransport(account.PublicApiKey, account.PrivateApiKey)
+			tc, err := t.Client()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			client := mongodbatlas.NewClient(tc)
+			clients = append(clients, providers.ProviderClient{
+				MongoDBAtlasClient: client,
+				Name:               account.OrganizationID,
 			})
 		}
 	}
