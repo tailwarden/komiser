@@ -109,7 +109,7 @@ func runServer(address string, port int, telemetry bool, cfg models.Config) erro
 	if err != nil {
 		return err
 	} else {
-		log.Info("Server started on %s:%d", address, port)
+		log.Infof("Server started on %s:%d", address, port)
 	}
 
 	return nil
