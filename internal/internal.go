@@ -289,7 +289,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "MongoDBAtlas",
 					})
 				}
-				mongodbatlas.FetchResources(ctx, client)
+				mongodbatlas.FetchResources(ctx, client, db)
 			}(ctx, client)
 		}
 	}

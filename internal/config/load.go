@@ -246,7 +246,7 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			client := mongodbatlas.NewClient(tc)
 			clients = append(clients, providers.ProviderClient{
 				MongoDBAtlasClient: client,
-				Name:               account.OrganizationID,
+				Name:               account.Name,
 			})
 		}
 	}
