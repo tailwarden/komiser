@@ -301,7 +301,7 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics) (*Config
 			client := mongodbatlas.NewClient(tc)
 			clients = append(clients, providers.ProviderClient{
 				MongoDBAtlasClient: client,
-				Name:               account.OrganizationID,
+				Name:               account.Name,
 			})
 		}
 	}
