@@ -9,7 +9,8 @@ export type Provider =
   | 'linode'
   | 'tencent'
   | 'oci'
-  | 'scaleway';
+  | 'scaleway'
+  | 'mongodbatlas';
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -59,6 +60,10 @@ const providers = {
       label = 'Scaleway';
     }
 
+    if (arg.toLowerCase() === 'mongodbatlas') {
+      label = 'MongoDB Atlas';
+    }
+
     return label;
   },
   providerImg(arg: Provider) {
@@ -106,6 +111,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'scaleway') {
       img = '/assets/img/providers/scaleway.png';
+    }
+
+    if (arg.toLowerCase() === 'mongodbatlas') {
+      img = '/assets/img/providers/mongodbatlas.jpg';
     }
 
     return img;
