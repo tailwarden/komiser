@@ -35,6 +35,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Acls,
 		ec2.Subnets,
 		ec2.SecurityGroups,
+		ec2.AutoScalingGroups,
 		iam.Roles,
 		sqs.Queues,
 		s3.Buckets,
