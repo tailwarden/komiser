@@ -36,6 +36,7 @@ import (
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	k8s "github.com/tailwarden/komiser/providers/k8s"
 	linode "github.com/tailwarden/komiser/providers/linode"
+	"github.com/tailwarden/komiser/providers/mongodbatlas"
 	oci "github.com/tailwarden/komiser/providers/oci"
 	scaleway "github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
@@ -281,6 +282,15 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 					})
 				}
 				scaleway.FetchResources(ctx, client, db, telemetry, analytics)
+			}(ctx, client)
+		} else if client.MongoDBAtlasClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "MongoDBAtlas",
+					})
+				}
+				mongodbatlas.FetchResources(ctx, client)
 			}(ctx, client)
 		}
 	}
