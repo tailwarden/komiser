@@ -81,6 +81,7 @@ type TencentConfig struct {
 }
 
 type MongoDBAtlasConfig struct {
+	Name           string `tomle:"name"`
 	OrganizationID string `toml:"organizationId"`
 	PublicApiKey   string `toml:"publicApiKey"`
 	PrivateApiKey  string `toml:"privateApiKey"`
