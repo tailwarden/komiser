@@ -10,23 +10,26 @@ import (
 
 	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
 )
 
 type ApiHandler struct {
-	db         *bun.DB
-	ctx        context.Context
-	noTracking bool
-	cfg        models.Config
+	db        *bun.DB
+	ctx       context.Context
+	telemetry bool
+	cfg       models.Config
+	analytics utils.Analytics
 }
 
-func NewApiHandler(ctx context.Context, noTracking bool, db *bun.DB, cfg models.Config) *ApiHandler {
+func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config) *ApiHandler {
 	handler := ApiHandler{
-		db:         db,
-		ctx:        ctx,
-		noTracking: noTracking,
-		cfg:        cfg,
+		db:        db,
+		ctx:       ctx,
+		telemetry: telemetry,
+		cfg:       cfg,
+		analytics: analytics,
 	}
 	return &handler
 }

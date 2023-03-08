@@ -40,6 +40,13 @@ func (handler *ApiHandler) NewAlertHandler(w http.ResponseWriter, r *http.Reques
 	alertId, _ := result.LastInsertId()
 	alert.Id = alertId
 
+	if handler.telemetry {
+		handler.analytics.TrackEvent("creating_alert", map[string]interface{}{
+			"type":        alert.Type,
+			"destination": "Slack",
+		})
+	}
+
 	respondWithJSON(w, 200, alert)
 }
 

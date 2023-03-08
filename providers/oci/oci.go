@@ -2,11 +2,13 @@ package oci
 
 import (
 	"context"
+	"log"
+
 	"github.com/tailwarden/komiser/providers/oci/developerservices"
 	"github.com/tailwarden/komiser/providers/oci/iam"
 	"github.com/tailwarden/komiser/providers/oci/oracledatabase"
 	"github.com/tailwarden/komiser/providers/oci/storage"
-	"log"
+	"github.com/tailwarden/komiser/utils"
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/oci/compute"
@@ -24,14 +26,20 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	}
 }
 
-func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB) {
+func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics) {
 	for _, fetchResources := range listOfSupportedServices() {
 		resources, err := fetchResources(ctx, client)
 		if err != nil {
 			log.Printf("[%s][OCI] %s", client.Name, err)
 		} else {
 			for _, resource := range resources {
-				db.NewInsert().Model(&resource).Exec(context.Background())
+				db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+			}
+			if telemetry {
+				analytics.TrackEvent("discovered_resources", map[string]interface{}{
+					"provider":  "OCI",
+					"resources": len(resources),
+				})
 			}
 		}
 	}

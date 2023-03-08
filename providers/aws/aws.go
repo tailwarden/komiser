@@ -25,6 +25,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/s3"
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
 
@@ -59,7 +60,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	}
 }
 
-func FetchResources(ctx context.Context, client providers.ProviderClient, regions []string, db *bun.DB) {
+func FetchResources(ctx context.Context, client providers.ProviderClient, regions []string, db *bun.DB, telemetry bool, analytics utils.Analytics) {
 	listOfSupportedRegions := getRegions()
 	if len(regions) > 0 {
 		log.Infof("Komiser will fetch resources from the following regions: %s", strings.Join(regions, ","))
@@ -74,7 +75,13 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 				log.Warn("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("link = EXCLUDED.link, cost = EXCLUDED.cost").Exec(context.Background())
+					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+				}
+				if telemetry {
+					analytics.TrackEvent("discovered_resources", map[string]interface{}{
+						"provider":  "AWS",
+						"resources": len(resources),
+					})
 				}
 			}
 		}

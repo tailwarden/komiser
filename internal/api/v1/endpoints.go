@@ -7,13 +7,14 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/tailwarden/komiser/handlers"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
 
-func Endpoints(ctx context.Context, telemetry bool, db *bun.DB, cfg models.Config) *mux.Router {
+func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config) *mux.Router {
 	r := mux.NewRouter()
 
-	api := handlers.NewApiHandler(ctx, telemetry, db, cfg)
+	api := handlers.NewApiHandler(ctx, telemetry, analytics, db, cfg)
 
 	r.HandleFunc("/resources/search", api.FilterResourcesHandler).Methods("POST")
 	r.HandleFunc("/resources/tags", api.BulkUpdateTagsHandler).Methods("POST")

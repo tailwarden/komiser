@@ -20,6 +20,7 @@ import (
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
@@ -58,7 +59,7 @@ func loadConfigFromBytes(b []byte) (*Config, error) {
 	return &config, nil
 }
 
-func Load(configPath string) (*Config, []providers.ProviderClient, error) {
+func Load(configPath string, telemetry bool, analytics utils.Analytics) (*Config, []providers.ProviderClient, error) {
 	config, err := loadConfigFromFile(configPath)
 	if err != nil {
 		return nil, nil, err
@@ -105,6 +106,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 				})
 			}
 		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.AWS),
+				"provider": "AWS",
+			})
+		}
 	}
 
 	if len(config.DigitalOcean) > 0 {
@@ -113,6 +120,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				DigitalOceanClient: client,
 				Name:               account.Name,
+			})
+		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.DigitalOcean),
+				"provider": "DigitalOcean",
 			})
 		}
 	}
@@ -127,6 +140,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 				})
 			}
 		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Oci),
+				"provider": "OCI",
+			})
+		}
 	}
 
 	if len(config.Civo) > 0 {
@@ -138,6 +157,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				CivoClient: client,
 				Name:       account.Name,
+			})
+		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Civo),
+				"provider": "Civo",
 			})
 		}
 	}
@@ -161,6 +186,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 				Name:      account.Name,
 			})
 		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Kubernetes),
+				"provider": "Kubernetes",
+			})
+		}
 	}
 
 	if len(config.Linode) > 0 {
@@ -178,6 +209,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 				Name:         account.Name,
 			})
 		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Linode),
+				"provider": "Linode",
+			})
+		}
 	}
 
 	if len(config.Tencent) > 0 {
@@ -193,6 +230,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				TencentClient: client,
 				Name:          account.Name,
+			})
+		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Tencent),
+				"provider": "Tencent",
 			})
 		}
 	}
@@ -214,6 +257,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 				Name:        account.Name,
 			})
 		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Azure),
+				"provider": "Azure",
+			})
+		}
 	}
 
 	if len(config.Scaleway) > 0 {
@@ -229,6 +278,12 @@ func Load(configPath string) (*Config, []providers.ProviderClient, error) {
 			clients = append(clients, providers.ProviderClient{
 				ScalewayClient: client,
 				Name:           account.Name,
+			})
+		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Scaleway),
+				"provider": "Scaleway",
 			})
 		}
 	}

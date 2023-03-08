@@ -7,6 +7,7 @@ import (
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/tencent/cvm"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"github.com/uptrace/bun"
@@ -18,7 +19,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	}
 }
 
-func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB) {
+func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics) {
 	for _, fetchResources := range listOfSupportedServices() {
 		regions, err := client.TencentClient.DescribeRegionsWithContext(ctx, tccvm.NewDescribeRegionsRequest())
 		if err != nil {
@@ -40,7 +41,13 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 				log.Printf("[%s][Tencent] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("link = EXCLUDED.link").Exec(context.Background())
+					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+				}
+				if telemetry {
+					analytics.TrackEvent("discovered_resources", map[string]interface{}{
+						"provider":  "Tencent",
+						"resources": len(resources),
+					})
 				}
 			}
 		}

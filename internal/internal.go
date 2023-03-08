@@ -39,6 +39,7 @@ import (
 	oci "github.com/tailwarden/komiser/providers/oci"
 	scaleway "github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
 
@@ -49,15 +50,15 @@ var Commit = "Unknown"
 var Os = runtime.GOOS
 var Arch = runtime.GOARCH
 var db *bun.DB
-var analytics Analytics
+var analytics utils.Analytics
 
-func Exec(address string, port int, configPath string, telemetry bool, a Analytics, regions []string, cmd *cobra.Command) error {
-	cfg, clients, err := config.Load(configPath)
+func Exec(address string, port int, configPath string, telemetry bool, a utils.Analytics, regions []string, cmd *cobra.Command) error {
+	analytics = a
+
+	cfg, clients, err := config.Load(configPath, telemetry, analytics)
 	if err != nil {
 		return err
 	}
-
-	analytics = a
 
 	err = setupSchema(cfg)
 	if err != nil {
@@ -96,7 +97,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a Analyti
 func runServer(address string, port int, telemetry bool, cfg models.Config) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), telemetry, db, cfg)
+	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg)
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -197,7 +198,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "AWS",
 					})
 				}
-				aws.FetchResources(ctx, client, regions, db)
+				aws.FetchResources(ctx, client, regions, db, telemetry, analytics)
 			}(ctx, client, regions)
 		} else if client.DigitalOceanClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -206,7 +207,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "DigitalOcean",
 					})
 				}
-				do.FetchResources(ctx, client, db)
+				do.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.OciClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -215,7 +216,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "OCI",
 					})
 				}
-				oci.FetchResources(ctx, client, db)
+				oci.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.CivoClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -224,7 +225,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "Civo",
 					})
 				}
-				civo.FetchResources(ctx, client, db)
+				civo.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.K8sClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -233,7 +234,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "Kubernetes",
 					})
 				}
-				k8s.FetchResources(ctx, client, db)
+				k8s.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.LinodeClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -242,7 +243,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "Linode",
 					})
 				}
-				linode.FetchResources(ctx, client, db)
+				linode.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.TencentClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -251,7 +252,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "Tencent",
 					})
 				}
-				tencent.FetchResources(ctx, client, db)
+				tencent.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.AzureClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -260,7 +261,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "Azure",
 					})
 				}
-				azure.FetchResources(ctx, client, db)
+				azure.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		} else if client.ScalewayClient != nil {
 			go func(ctx context.Context, client providers.ProviderClient) {
@@ -269,7 +270,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 						"provider": "Scaleway",
 					})
 				}
-				scaleway.FetchResources(ctx, client, db)
+				scaleway.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		}
 	}

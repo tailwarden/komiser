@@ -29,6 +29,10 @@ func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request
 	viewId, _ := result.LastInsertId()
 	view.Id = viewId
 
+	if handler.telemetry {
+		handler.analytics.TrackEvent("creating_view", nil)
+	}
+
 	respondWithJSON(w, 200, view)
 }
 

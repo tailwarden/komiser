@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/tailwarden/komiser/internal"
+	"github.com/tailwarden/komiser/utils"
 )
 
 var startCmd = &cobra.Command{
@@ -29,7 +30,7 @@ var startCmd = &cobra.Command{
 		verbose, _ := cmd.Flags().GetBool("verbose")
 		setupLogging(verbose)
 
-		analytics := internal.Analytics{}
+		analytics := utils.Analytics{}
 
 		telemetry, _ := cmd.Flags().GetBool("telemetry")
 		if !telemetry {
