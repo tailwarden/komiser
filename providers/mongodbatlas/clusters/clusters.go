@@ -30,6 +30,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 				Provider:   "MongoDBAtlas",
 				Account:    client.Name,
 				Service:    "Cluster",
+				Region:     cluster.ProviderSettings.RegionName,
 				ResourceId: cluster.ID,
 				Name:       cluster.Name,
 				Cost:       0,
