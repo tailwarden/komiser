@@ -3,7 +3,7 @@ import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
 
 describe('Card', () => {
-  test('should render card component', () => {
+  test('should render card component without crashing', () => {
     render(
       <Card
         label="Test card"
