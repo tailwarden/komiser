@@ -2,9 +2,9 @@
   "extends": [
     "next",
     "next/core-web-vitals",
+    "plugin:storybook/recommended",
     "airbnb-base",
-    "prettier",
-    "plugin:storybook/recommended"
+    "prettier"
   ],
   "env": {
     "jest/globals": true
@@ -29,6 +29,26 @@
       }
     ],
     "no-unused-vars": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*test.{ts,tsx}", // komiser tests
+          "test/**", // tape, common npm pattern
+          "tests/**", // also common npm pattern
+          "spec/**", // mocha, rspec-like pattern
+          "**/__tests__/**", // jest pattern
+          "**/__mocks__/**", // jest pattern
+          "test.{js,jsx}", // repos with a single test file
+          "test-*.{js,jsx}", // repos with multiple top-level test files
+          "**/*{.,_}{test,spec}.{js,jsx}", // tests where the extension or filename suffix denotes that it is a test
+          "**/jest.config.js", // jest config
+          "**/jest.setup.js", // jest setup
+          "**/.eslintrc.js" // eslint config
+        ],
+        "optionalDependencies": false
+      }
+    ]
   }
 }
