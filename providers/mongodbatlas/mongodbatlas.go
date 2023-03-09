@@ -26,5 +26,4 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 			}
 		}
 	}
-
 }
