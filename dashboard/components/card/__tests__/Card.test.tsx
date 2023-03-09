@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import RefreshIcon from '../icons/RefreshIcon';
-import Card from './Card';
+import RefreshIcon from '../../icons/RefreshIcon';
+import Card from '../Card';
 
 describe('Card', () => {
   test('should render card component without crashing', () => {
