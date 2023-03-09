@@ -9,7 +9,10 @@ function DashboardTopStatsCards({ data }: DashboardTopStatsCardsProps) {
   return (
     <>
       {data && (
-        <div className="grid-col grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div
+          data-testid="data"
+          className="grid-col grid gap-8 md:grid-cols-2 lg:grid-cols-4"
+        >
           <Card
             label={data.accounts === 1 ? 'Cloud account' : 'Cloud accounts'}
             value={data.accounts}
