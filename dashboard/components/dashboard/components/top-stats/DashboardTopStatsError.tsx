@@ -6,7 +6,10 @@ type DashboardTopStatsErrorProps = {
 
 function DashboardTopStatsError({ fetch }: DashboardTopStatsErrorProps) {
   return (
-    <div className="flex h-[7.5rem] items-center justify-center gap-4 rounded-lg bg-white">
+    <div
+      data-testid="error"
+      className="flex h-[7.5rem] items-center justify-center gap-4 rounded-lg bg-white"
+    >
       <p className="text-sm text-black-400">
         There was an error loading the top stats.
       </p>
