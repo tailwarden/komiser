@@ -3,6 +3,7 @@ package clusters
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -12,7 +13,7 @@ import (
 	"go.mongodb.org/atlas/mongodbatlas"
 )
 
-func GetPricingMap(instanceSize string) float64 {
+func getPricingMap(instanceSize string) float64 {
 	// Values taken from https://www.mongodb.com/pricing
 	pricingMap := map[string]float64{
 		"M10":  0.08,
@@ -30,6 +31,15 @@ func GetPricingMap(instanceSize string) float64 {
 	}
 
 	return pricingMap[instanceSize]
+}
+
+// MongoDB Atlas returns the region names of AWS, GCP and Azure.
+// The names are written as "EU_CENTRAL_1" instead of "eu-central-1", which
+// this function fixes.
+func normalizeRegionName(regionName string) string {
+	lowercased := strings.ToLower(regionName)
+	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
+	return dashReplaced
 }
 
 func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -74,14 +84,14 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 					hourlyUsage = int(time.Since(clusterCreatedAt).Hours())
 				}
 
-				monthlyCost = float64(hourlyUsage) * GetPricingMap(cluster.ProviderSettings.InstanceSizeName)
+				monthlyCost = float64(hourlyUsage) * getPricingMap(cluster.ProviderSettings.InstanceSizeName)
 			}
 
 			resources = append(resources, models.Resource{
 				Provider:   "MongoDBAtlas",
 				Account:    client.Name,
 				Service:    "Cluster",
-				Region:     cluster.ProviderSettings.RegionName,
+				Region:     normalizeRegionName(cluster.ProviderSettings.RegionName),
 				ResourceId: cluster.ID,
 				Name:       cluster.Name,
 				Cost:       monthlyCost,
