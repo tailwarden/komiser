@@ -74,22 +74,21 @@ function useResourcesManagerChart({
     resources && resources.reduce((resource, a) => resource + a, 0);
 
   const options: ChartOptions<'doughnut'> = {
+    onClick(_, legendItem, legend) {
+      const clickedIndex = legendItem[0].index || 0;
+      const labels = legend.config.data.labels ?? [];
+
+      window.open(
+        `./inventory?${currentQuery}:IS:${labels[clickedIndex]}`,
+        '_blank'
+      );
+    },
     aspectRatio: 2,
     layout: {
       padding: 5
     },
     plugins: {
       legend: {
-        onClick(_, legendItem, legend) {
-          const clickedIndex = legendItem.index || 0;
-          // The labels are the providers in this case
-          const labels = legend.chart.data.labels ?? [];
-
-          window.open(
-            `./inventory?${currentQuery}:IS:${labels[clickedIndex]}`,
-            '_blank'
-          );
-        },
         position: 'right',
         align: 'center',
         labels: {
