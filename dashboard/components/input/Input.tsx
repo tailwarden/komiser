@@ -43,7 +43,7 @@ function Input({
     const trimmedValue = e.target.value.trim();
     if (!regex || !trimmedValue) return;
 
-    const testResult = regex.it(trimmedValue);
+    const testResult = regex.test(trimmedValue);
     setIsValid(testResult);
   }
 
