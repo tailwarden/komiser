@@ -46,7 +46,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			Name:       kubernetesCluster.Name,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://cloud.digitalocean.com/kubernetes/clusters/%d", kubernetesCluster.ID),
+			Link:       fmt.Sprintf("https://cloud.digitalocean.com/kubernetes/clusters/%s", kubernetesCluster.ID),
 		})
 	}
 

@@ -27,7 +27,7 @@ function DashboardResourcesManagerCard({
   setExclude
 }: DashboardResourcesManagerCardProps) {
   const { chartData, options, select, handleChange } = useResourcesManagerChart(
-    { data, setQuery }
+    { data, setQuery, initialQuery: query }
   );
 
   return (

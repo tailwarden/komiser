@@ -35,6 +35,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Acls,
 		ec2.Subnets,
 		ec2.SecurityGroups,
+		ec2.AutoScalingGroups,
 		iam.Roles,
 		sqs.Queues,
 		s3.Buckets,
@@ -72,7 +73,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		for _, fetchResources := range listOfSupportedServices() {
 			resources, err := fetchResources(ctx, client)
 			if err != nil {
-				log.Warn("[%s][AWS] %s", client.Name, err)
+				log.Warnf("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
 					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())

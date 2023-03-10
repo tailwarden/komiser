@@ -49,3 +49,8 @@ type ViewStat struct {
 	Resources int     `json:"resources"`
 	Costs     float64 `json:"costs"`
 }
+
+type OutputCostByField struct {
+	Label string  `bun:"label"`
+	Total float64 `bun:"total"`
+}

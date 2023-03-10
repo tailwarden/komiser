@@ -76,7 +76,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", *topic.TopicArn)
+				log.Warnf("Couldn't fetch invocations metric for %s", *topic.TopicArn)
 			}
 
 			requests := 0.0

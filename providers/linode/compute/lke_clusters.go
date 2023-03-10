@@ -44,7 +44,7 @@ func LKEClusters(ctx context.Context, client providers.ProviderClient) ([]Resour
 			Account:    client.Name,
 			Service:    "LKE",
 			Region:     lkeCluster.Region,
-			ResourceId: fmt.Sprintf("%s", lkeCluster.ID),
+			ResourceId: fmt.Sprintf("%d", lkeCluster.ID),
 			Cost:       0,
 			Name:       lkeCluster.Label,
 			FetchedAt:  time.Now(),

@@ -27,7 +27,7 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]Resource
 			Account:    client.Name,
 			Service:    "Database",
 			Region:     database.Region,
-			ResourceId: fmt.Sprintf("%s", database.ID),
+			ResourceId: fmt.Sprintf("%d", database.ID),
 			Cost:       0,
 			Name:       database.Label,
 			FetchedAt:  time.Now(),

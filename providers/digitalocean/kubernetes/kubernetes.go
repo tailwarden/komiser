@@ -41,12 +41,12 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Kubernetes",
-			ResourceId: fmt.Sprintf("%d", kubernetesCluster.ID),
+			ResourceId: fmt.Sprintf("%s", kubernetesCluster.ID),
 			Region:     kubernetesCluster.RegionSlug,
 			Name:       kubernetesCluster.Name,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://cloud.digitalocean.com/kubernetes/clusters/%d", kubernetesCluster.ID),
+			Link:       fmt.Sprintf("https://cloud.digitalocean.com/kubernetes/clusters/%s", kubernetesCluster.ID),
 		})
 	}
 

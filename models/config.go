@@ -10,6 +10,7 @@ type Config struct {
 	Linode       []LinodeConfig       `toml:"linode"`
 	Tencent      []TencentConfig      `toml:"tencent"`
 	Scaleway     []ScalewayConfig     `toml:"scaleway"`
+	MongoDBAtlas []MongoDBAtlasConfig `toml:"mongodbatlas"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 	Slack        SlackConfig          `toml:"slack"`
@@ -79,6 +80,14 @@ type TencentConfig struct {
 	SecretKey string `toml:"secret_key"`
 }
 
+type MongoDBAtlasConfig struct {
+	Name           string `tomle:"name"`
+	OrganizationID string `toml:"organizationId"`
+	PublicApiKey   string `toml:"publicApiKey"`
+	PrivateApiKey  string `toml:"privateApiKey"`
+}
+
 type SlackConfig struct {
-	Webhook string `toml:"webhook"`
+	Webhook   string `toml:"webhook"`
+	Reporting bool   `toml:"reporting"`
 }
