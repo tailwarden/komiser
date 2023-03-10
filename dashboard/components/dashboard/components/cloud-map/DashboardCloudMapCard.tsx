@@ -14,6 +14,7 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
 
   return (
     <div
+      data-testid="cloudMap"
       className={`${
         isOpen ? 'fixed inset-0 z-30 origin-left animate-scale' : ''
       } w-full rounded-lg bg-white py-4 px-6 pb-6`}
@@ -47,15 +48,19 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
         </div>
       </div>
       <div className="mt-8"></div>
-      <DashboardCloudMapChart
-        regions={data}
-        setTooltip={setTooltip}
-        isOpen={isOpen}
-      />
-      <DashboardCloudMapTooltip
-        tooltip={tooltip}
-        sumOfResources={sumOfResources}
-      />
+      {data && (
+        <>
+          <DashboardCloudMapChart
+            regions={data}
+            setTooltip={setTooltip}
+            isOpen={isOpen}
+          />
+          <DashboardCloudMapTooltip
+            tooltip={tooltip}
+            sumOfResources={sumOfResources}
+          />
+        </>
+      )}
       <div className="flex gap-4 text-xs text-black-300">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-info-600"></div>Active region

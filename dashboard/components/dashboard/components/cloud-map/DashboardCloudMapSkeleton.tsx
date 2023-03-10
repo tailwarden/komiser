@@ -1,6 +1,9 @@
 function DashboardCloudMapSkeleton() {
   return (
-    <div className="min-h-[396px] w-full animate-pulse rounded-lg bg-white py-4 px-6 pb-6">
+    <div
+      data-testid="loading"
+      className="min-h-[396px] w-full animate-pulse rounded-lg bg-white py-4 px-6 pb-6"
+    >
       <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
         <div>
           <div className="h-3 w-24 rounded-lg bg-komiser-200/50"></div>

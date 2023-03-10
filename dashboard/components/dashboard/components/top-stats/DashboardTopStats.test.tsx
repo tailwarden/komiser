@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import DashboardTopStats from './DashboardTopStats';
 import GlobalAppContext from '../../../layout/context/GlobalAppContext';
+import DashboardTopStats from './DashboardTopStats';
 
 const initialContext = {
   displayBanner: false,
@@ -13,7 +13,19 @@ const initialContext = {
 };
 
 describe('Dashboard Top Stats', () => {
-  test('should render the skeleton component when loading is true', () => {
+  it('should render without crashing', () => {
+    render(
+      <GlobalAppContext.Provider
+        value={{
+          ...initialContext
+        }}
+      >
+        <DashboardTopStats />
+      </GlobalAppContext.Provider>
+    );
+  });
+
+  it('should render the skeleton component when loading is true', () => {
     render(
       <GlobalAppContext.Provider
         value={{
@@ -28,7 +40,7 @@ describe('Dashboard Top Stats', () => {
     expect(skeleton).toBeInTheDocument();
   });
 
-  test('should render the error component when error is true', () => {
+  it('should render the error component when error is true', () => {
     render(
       <GlobalAppContext.Provider
         value={{
@@ -43,7 +55,7 @@ describe('Dashboard Top Stats', () => {
     expect(error).toBeInTheDocument();
   });
 
-  test('should render the component if error and loading are false', () => {
+  it('should render the top stats cards component if error and loading are false', () => {
     render(
       <GlobalAppContext.Provider
         value={{
