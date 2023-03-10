@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import DashboardCloudMap from '../components/dashboard/components/cloud-map/DashboardCloudMap';
+import DashboardCloudMapWrapper from '../components/dashboard/components/cloud-map/DashboardCloudMapWrapper';
 import DashboardCostExplorer from '../components/dashboard/components/cost-explorer/DashboardCostExplorer';
 import DashboardLayout from '../components/dashboard/components/DashboardLayout';
 import DashboardResourcesManager from '../components/dashboard/components/resources-manager/DashboardResourcesManager';
@@ -17,7 +17,7 @@ function Dashboard() {
       <DashboardLayout>
         <DashboardTopStats />
         <Grid>
-          <DashboardCloudMap />
+          <DashboardCloudMapWrapper />
           <DashboardResourcesManager />
         </Grid>
         <DashboardCostExplorer />

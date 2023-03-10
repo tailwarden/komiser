@@ -3,7 +3,7 @@ import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
 
 describe('Card', () => {
-  test('should render card component without crashing', () => {
+  it('should render card component without crashing', () => {
     render(
       <Card
         label="Test card"
@@ -13,7 +13,7 @@ describe('Card', () => {
     );
   });
 
-  test('should render the icon', () => {
+  it('should render the icon', () => {
     render(
       <Card
         label="Test card"
@@ -25,7 +25,7 @@ describe('Card', () => {
     expect(icon).toBeInTheDocument();
   });
 
-  test('should display the value formatted', () => {
+  it('should display the value formatted', () => {
     render(
       <Card
         label="Test card"
@@ -37,7 +37,7 @@ describe('Card', () => {
     expect(formattedNumber).toHaveTextContent('5K');
   });
 
-  test('should display the value formatted as currency', () => {
+  it('should display the value formatted as currency', () => {
     render(
       <Card
         label="Test card"
@@ -50,7 +50,7 @@ describe('Card', () => {
     expect(formattedNumber).toHaveTextContent('$6K');
   });
 
-  test('should render tooltip if there is a tooltip set', () => {
+  it('should render tooltip if there is a tooltip set', () => {
     render(
       <Card
         label="Test card"
