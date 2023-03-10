@@ -59,11 +59,56 @@ Testing convention:
 
 Testing examples:
 
-- Simple Jest unit test example `/utils/formatNumber.test.ts`:
-  <img width="782" alt="image" src="https://user-images.githubusercontent.com/13384559/224322144-bf043140-6555-496f-879c-4c88ca6cc663.png">
+- Simple Jest unit test example (snippet from `/utils/formatNumber.test.ts`):
 
-- Jest & Testing library example `/components/card/Card.test.tsx`:
-  <img width="828" alt="image" src="https://user-images.githubusercontent.com/13384559/224322574-8a251ee8-3449-4add-b65f-88316d47cce2.png">
+```Typescript
+import formatNumber from './formatNumber';
+
+describe('formatNumber outputs', () => {
+  it('should format number (over a thousand) in short notation', () => {
+    const result = formatNumber(12345);
+    expect(result).toBe('12K');
+  });
+
+  ...
+
+});
+```
+
+- Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
+
+```Typescript
+import { render, screen } from '@testing-library/react';
+import RefreshIcon from '../icons/RefreshIcon';
+import Card from './Card';
+
+describe('Card', () => {
+  it('should render card component without crashing', () => {
+    render(
+      <Card
+        label="Test card"
+        value={500}
+        icon={<RefreshIcon width={24} height={24} />}
+      />
+    );
+  });
+
+  it('should display the value formatted', () => {
+    render(
+      <Card
+        label="Test card"
+        value={5000}
+        icon={<RefreshIcon width={24} height={24} />}
+      />
+    );
+    const formattedNumber = screen.getByTestId('formattedNumber');
+    expect(formattedNumber).toHaveTextContent('5K');
+  });
+
+  ...
+
+});
+```
 
 ## Contributing
 
