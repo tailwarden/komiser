@@ -1,5 +1,5 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
 import {
   ResourcesManagerData,
@@ -15,11 +15,13 @@ export type ResourcesManagerChartProps = {
 type useResourcesManagerChartProps = {
   data: ResourcesManagerData | undefined;
   setQuery: Dispatch<SetStateAction<ResourcesManagerQuery>>;
+  initialQuery: ResourcesManagerQuery;
 };
 
 function useResourcesManagerChart({
   data,
-  setQuery
+  setQuery,
+  initialQuery
 }: useResourcesManagerChartProps) {
   const colors = ['#0072B2', '#FF8C00', '#228B22', '#FFD700', '#9932CC'];
 
@@ -34,6 +36,8 @@ function useResourcesManagerChart({
       'Custom views'
     ]
   }; */
+
+  const [currentQuery, setCurrentQuery] = useState(initialQuery);
 
   const select: ResourcesManagerGroupBySelectProps = {
     values: ['provider', 'service', 'region', 'account'],
@@ -70,6 +74,15 @@ function useResourcesManagerChart({
     resources && resources.reduce((resource, a) => resource + a, 0);
 
   const options: ChartOptions<'doughnut'> = {
+    onClick(_, legendItem, legend) {
+      const clickedIndex = legendItem[0].index || 0;
+      const labels = legend.config.data.labels ?? [];
+
+      window.open(
+        `./inventory?${currentQuery}:IS:${labels[clickedIndex]}`,
+        '_blank'
+      );
+    },
     aspectRatio: 2,
     layout: {
       padding: 5
@@ -125,6 +138,7 @@ function useResourcesManagerChart({
   };
 
   function handleChange(newValue: string) {
+    setCurrentQuery(newValue as ResourcesManagerQuery);
     setQuery(newValue as ResourcesManagerQuery);
   }
 
