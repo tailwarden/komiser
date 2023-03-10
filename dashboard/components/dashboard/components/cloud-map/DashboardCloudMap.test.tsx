@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import mockDataForDashboard from '../../utils/mockDataForDashboard';
 import DashboardCloudMap, { DashboardCloudMapProps } from './DashboardCloudMap';
 
 const props: DashboardCloudMapProps = {
