@@ -76,6 +76,16 @@ function useResourcesManagerChart({
     },
     plugins: {
       legend: {
+        onClick(_, legendItem, legend) {
+          const clickedIndex = legendItem.index || 0;
+          // The labels are the providers in this case
+          const labels = legend.chart.data.labels ?? [];
+
+          window.open(
+            `./inventory?provider:IS:${labels[clickedIndex]}`,
+            '_blank'
+          );
+        },
         position: 'right',
         align: 'center',
         labels: {
