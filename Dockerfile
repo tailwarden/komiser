@@ -7,7 +7,7 @@ MAINTAINER mlabouardy <mohamed@tailwarden.com>
 RUN echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
 
 ENV SEGMENT_WRITE_KEY $SEGMENT_WRITE_KEY
-ENV VERSION 3.0.5
+ENV VERSION 3.0.6
 
 RUN apk update && apk add curl
 RUN curl -L https://cli.komiser.io/$VERSION/linux/komiser -o /usr/bin/komiser && \
