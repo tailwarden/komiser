@@ -5,13 +5,20 @@ import (
 )
 
 func TestNormalizeRegionNames(t *testing.T) {
-	got := normalizeRegionName("EU_CENTRAL_1")
-	if got != "eu-central-1" {
-		t.Errorf("NormalizeRegionName('EU_CENTRAL_1') = %s; want 'eu-central-1'", got)
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"EU_CENTRAL_1", "eu-central-1"},
+		{"US_EAST1", "us-east1"},
+		{"southafricawest", "southafricawest"},
 	}
 
-	got = normalizeRegionName("US_EAST1")
-	if got != "us-east1" {
-		t.Errorf("NormalizeRegionName('US_EAST1') = %s; want 'us-east1'", got)
+	for _, tt := range tests {
+		got := normalizeRegionName(tt.input)
+
+		if got != tt.expected {
+			t.Errorf("got %s, want %s", got, tt.expected)
+		}
 	}
 }
