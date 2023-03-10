@@ -12,7 +12,7 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-func Databox(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Databoxes(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	svc, err := armdatabox.NewJobsClient(client.AzureClient.SubscriptionId, client.AzureClient.Credentials, nil)
