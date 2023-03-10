@@ -4,9 +4,13 @@ export type Provider =
   | 'ovh'
   | 'digitalocean'
   | 'azure'
+  | 'civo'
+  | 'kubernetes'
+  | 'linode'
   | 'tencent'
   | 'oci'
-  | 'scaleway';
+  | 'scaleway'
+  | 'mongodbatlas';
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -36,12 +40,28 @@ const providers = {
       label = 'Tencent';
     }
 
+    if (arg.toLowerCase() === 'civo') {
+      label = 'Civo';
+    }
+
+    if (arg.toLowerCase() === 'kubernetes') {
+      label = 'Kubernetes';
+    }
+
+    if (arg.toLowerCase() === 'linode') {
+      label = 'Linode';
+    }
+
     if (arg.toLowerCase() === 'oci') {
       label = 'OCI';
     }
 
     if (arg.toLowerCase() === 'scaleway') {
       label = 'Scaleway';
+    }
+
+    if (arg.toLowerCase() === 'mongodbatlas') {
+      label = 'MongoDB Atlas';
     }
 
     return label;
@@ -91,6 +111,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'scaleway') {
       img = '/assets/img/providers/scaleway.png';
+    }
+
+    if (arg.toLowerCase() === 'mongodbatlas') {
+      img = '/assets/img/providers/mongodbatlas.jpg';
     }
 
     return img;

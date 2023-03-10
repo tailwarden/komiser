@@ -62,6 +62,16 @@ const settingsService = {
     }
   },
 
+  async getTelemetry() {
+    try {
+      const res = await fetch(`${BASE_URL}/telemetry`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async getGlobalLocations() {
     try {
       const res = await fetch(`${BASE_URL}/global/locations`, settings('GET'));
