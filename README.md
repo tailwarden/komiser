@@ -18,7 +18,7 @@
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
 [![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/tailwarden/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
-Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, Azure, OCI, DigitalOcean, Kubernetes and CIVO, Linode, Scaleway and Tencent), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
+Komiser is a powerful open-source cloud resource manager that helps you gain visibility and control over your cloud infrastructure across multiple cloud platforms, including AWS, Azure, OCI, DigitalOcean, Kubernetes and CIVO, Linode, Scaleway, and Tencent. With Komiser, you can easily build a comprehensive cloud asset inventory and get a clear breakdown of your costs at the resource level, making it easier to understand and optimize your cloud spending. Additionally, Komiser provides advanced analytics and customizable alerts to help you monitor your cloud resources and quickly identify any issues or potential cost-saving opportunities. 💰
 
 <h1 align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></h1>
 
@@ -64,10 +64,14 @@ brew install komiser
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # What is Komiser? 🤷
-Komiser is an open source project created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
-* Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
-* Detect **potential vulnerabilities** that could put your cloud environment at risk.
-* Get a deep understanding of **how you spend** on the AWS, Civo, OVH, DigitalOcean and OCI.
+Komiser is an open source tool created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can: 
+
+* Control your **resource usage** and get a clear view of how you're spending money on cloud services.
+* Support multiple cloud platforms, including AWS, Civo, OVH, DigitalOcean, and OCI.
+* Identify **potential security vulnerabilities** in your cloud environment and take action to mitigate them.
+* Optimize your cloud usage to **save money**, ensure compliance with security best practices, and gain better control over your cloud resources.
+
+By providing a single place for managing cloud cost, usage, security, and governance, Komiser simplifies cloud management and helps you make **informed decisions**.
 
 <h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-wireframe.png?version=latest" alt="Amp Logo"></h1>
 
@@ -134,7 +138,7 @@ We know that writing docs isn't usually at the top of too many peoples "What I l
 * [Documentation overview](https://docs.komiser.io/docs/intro)
 * [Installation](https://docs.komiser.io/docs/overview/introduction/getting-started)
 * [FAQs](https://docs.komiser.io/docs/FAQ/)
-* Video series: 📹
+* **Video series:** 📹
     * [How to: Komiser](https://www.youtube.com/watch?v=9pCimmIT-HQ&list=PLFIcIMmOFDZeMzcvOi7bPd4I6xUNq3A5R/alerts)
     * [Cloud cost savings tips](https://docs.komiser.io/docs/Quickstarts/overview)
     * [Installation videos](https://www.youtube.com/watch?v=urxi9z2IUf4&list=PLFIcIMmOFDZfaO_WmUF_qnF8akCII7Uk_) 
