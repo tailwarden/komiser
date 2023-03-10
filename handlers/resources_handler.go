@@ -15,18 +15,18 @@ import (
 )
 
 type ApiHandler struct {
-	db         *bun.DB
-	ctx        context.Context
-	noTracking bool
-	cfg        models.Config
+	db               *bun.DB
+	ctx              context.Context
+	telemetryEnabled bool
+	cfg              models.Config
 }
 
-func NewApiHandler(ctx context.Context, noTracking bool, db *bun.DB, cfg models.Config) *ApiHandler {
+func NewApiHandler(ctx context.Context, telemetryEnabled bool, db *bun.DB, cfg models.Config) *ApiHandler {
 	handler := ApiHandler{
-		db:         db,
-		ctx:        ctx,
-		noTracking: noTracking,
-		cfg:        cfg,
+		db:               db,
+		ctx:              ctx,
+		telemetryEnabled: telemetryEnabled,
+		cfg:              cfg,
 	}
 	return &handler
 }

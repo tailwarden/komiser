@@ -44,6 +44,8 @@ func Endpoints(ctx context.Context, telemetry bool, db *bun.DB, cfg models.Confi
 	r.HandleFunc("/alerts/{id}", api.UpdateAlertHandler).Methods("PUT")
 	r.HandleFunc("/alerts/{id}", api.DeleteAlertHandler).Methods("DELETE")
 
+	r.HandleFunc("/telemetry", api.TelemetryHandler).Methods("GET")
+
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
 	return r

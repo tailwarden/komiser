@@ -12,6 +12,7 @@ import (
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	. "github.com/tailwarden/komiser/models"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	"go.mongodb.org/atlas/mongodbatlas"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -27,6 +28,7 @@ type ProviderClient struct {
 	TencentClient      *tccvm.Client
 	AzureClient        *AzureClient
 	ScalewayClient     *scw.Client
+	MongoDBAtlasClient *mongodbatlas.Client
 	Name               string
 }
 
