@@ -1,20 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { ReactElement } from 'react';
 import GlobalAppContext, {
+  initialContext,
   GlobalAppContextProps
 } from '../../../layout/context/GlobalAppContext';
 import mockDataForDashboard from '../../utils/mockDataForDashboard';
 import DashboardTopStats from './DashboardTopStats';
-
-const initialContext: GlobalAppContextProps = {
-  displayBanner: false,
-  dismissBanner: () => {},
-  loading: false,
-  data: undefined,
-  error: false,
-  hasNoAccounts: false,
-  fetch: () => {}
-};
 
 const customRender = (
   children: ReactElement,
