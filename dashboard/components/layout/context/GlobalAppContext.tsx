@@ -17,14 +17,16 @@ export type GlobalAppContextProps = {
   fetch: () => void;
 };
 
-const GlobalAppContext = createContext<GlobalAppContextProps>({
+export const initialContext = {
   displayBanner: false,
   dismissBanner: () => {},
-  loading: true,
+  loading: false,
   data: undefined,
   error: false,
   hasNoAccounts: false,
   fetch: () => {}
-});
+};
+
+const GlobalAppContext = createContext<GlobalAppContextProps>(initialContext);
 
 export default GlobalAppContext;
