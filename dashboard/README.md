@@ -77,7 +77,7 @@ describe('formatNumber outputs', () => {
 
 - Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
 
-```Typescript 
+```Typescript
 import { render, screen } from '@testing-library/react';
 import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
@@ -112,7 +112,7 @@ describe('Card', () => {
 
 ## Contributing
 
-We welcome all contributors to join us on the mission of improving Komiser, especially when it comes to writing tests and adding documentation. :)
+We welcome all contributors to join us on the mission of improving Komiser, especially when it comes to writing tests and adding documentation.
 
 Not sure where to start?
 
