@@ -51,7 +51,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", *distribution.Id)
+				log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
 			}
 
 			bytesDownloaded := 0.0
@@ -77,7 +77,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", *distribution.Id)
+				log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
 			}
 
 			bytesUploaded := 0.0
@@ -103,7 +103,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", *distribution.Id)
+				log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
 			}
 
 			requests := 0.0

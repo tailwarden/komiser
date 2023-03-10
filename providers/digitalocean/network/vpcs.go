@@ -16,7 +16,7 @@ func Vpcs(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 
 	regions, _, err := client.DigitalOceanClient.Regions.List(ctx, &godo.ListOptions{})
 	if err != nil {
-		log.Warn("[%s][DigitalOcean] Couldn't fetch the list of regions: %s", client.Name, err)
+		log.Warnf("[%s][DigitalOcean] Couldn't fetch the list of regions: %s", client.Name, err)
 	}
 	for _, region := range regions {
 		regionsMap[region.Slug] = region.Name

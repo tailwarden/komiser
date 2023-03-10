@@ -54,7 +54,7 @@ func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		})
 
 		if err != nil {
-			log.Warn("Couldn't fetch count metric for %s", *api.Name)
+			log.Warnf("Couldn't fetch count metric for %s", *api.Name)
 		}
 
 		count := 0.0

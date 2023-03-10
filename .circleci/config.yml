@@ -76,8 +76,12 @@ jobs:
             go-bindata-assetfs -o internal/api/v1/template.go out/...
             sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
       - run:
-          name: Build binary
-          command: |
+         name: Run tests
+         command: |
+            make test
+      - run:
+         name: Build binary
+         command: |
             make build
             make package
       - run:

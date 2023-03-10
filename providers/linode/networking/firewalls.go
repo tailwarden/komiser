@@ -44,7 +44,7 @@ func Firewalls(ctx context.Context, client providers.ProviderClient) ([]Resource
 			Account:    client.Name,
 			Service:    "Firewall",
 			Region:     "Global",
-			ResourceId: fmt.Sprintf("%s", firewall.ID),
+			ResourceId: fmt.Sprintf("%d", firewall.ID),
 			Cost:       0,
 			Name:       firewall.Label,
 			FetchedAt:  time.Now(),
