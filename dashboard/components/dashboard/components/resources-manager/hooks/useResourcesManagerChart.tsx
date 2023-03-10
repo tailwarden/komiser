@@ -1,6 +1,6 @@
 import { ChartData, ChartOptions } from 'chart.js';
 import { Dispatch, SetStateAction } from 'react';
-import formatNumber from '../../../../../utils/formatNumber/formatNumber';
+import formatNumber from '../../../../../utils/formatNumber';
 import {
   ResourcesManagerData,
   ResourcesManagerGroupBySelectProps,
