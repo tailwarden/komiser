@@ -1,18 +1,16 @@
-const stats = {
+import { GlobalData } from '../../layout/context/GlobalAppContext';
+import { DashboardCloudMapRegions } from '../components/cloud-map/hooks/useCloudMap';
+import { DashboardCostExplorerData } from '../components/cost-explorer/hooks/useCostExplorer';
+import { ResourcesManagerChartProps } from '../components/resources-manager/hooks/useResourcesManagerChart';
+
+const stats: GlobalData = {
   regions: 17,
   resources: 255,
   accounts: 4,
-  cost: [
-    { date: '2022-09-14T14:14:48.642911784Z', amount: 60 },
-    { date: '2022-10-14T14:14:48.642913512Z', amount: 55 },
-    { date: '2022-11-14T14:14:48.642913898Z', amount: 1204 },
-    { date: '2022-12-14T14:14:48.642914061Z', amount: 554 },
-    { date: '2023-01-14T14:14:48.642914723Z', amount: 324 },
-    { date: '2023-02-14T14:14:48.642914908Z', amount: 4324 }
-  ]
+  costs: 60
 };
 
-const regions = [
+const regions: DashboardCloudMapRegions = [
   {
     name: 'Ohio',
     label: 'us-east-2',
@@ -162,14 +160,14 @@ const regions = [
   }
 ];
 
-const resources = [
+const resources: ResourcesManagerChartProps[] = [
   { label: 'AWS', total: 451 },
   { label: 'Azure', total: 153 },
   { label: 'GCP', total: 259 },
   { label: 'OVH', total: 100 }
 ];
 
-const costs = [
+const costs: DashboardCostExplorerData[] = [
   {
     date: '2022-03',
     datapoints: [
