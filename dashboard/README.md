@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Komiser dashboard is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+Full frontend stack: `Next.js`, `Typescript`, `Tailwind`, `Storybook`, `Jest` & `React Testing Library.`
 
 ## Getting Started
 
@@ -10,27 +12,75 @@ go run *.go start --config /path/to/config.toml
 
 # In a different terminal tab in the dashboard folder, run:
 NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
+
+# Alternatively, you can create an .env file with it:
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3002](http://localhost:3002) with your browser to see the result.
+Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
+<img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
+<img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png">
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Components
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Komiser components are documented under `/components`
+
+Component convention:
+
+- Component folder: component name in `kebab-case`
+- Component file: component name in `UpperCamelCase.*`
+- Component story: component name in `UpperCamelCase.stories.*`
+- Component story mock (if needed): component name in `UpperCamelCase.mocks.*`
+- Component unit test: component name in `UpperCamelCase.test.*`
+- Check `Card` example for more details:
+
+<img width="220" alt="image" src="https://user-images.githubusercontent.com/13384559/224307211-2ce62245-de24-4ee7-a156-fb54d8d34b4f.png">
+
+Additional instructions:
+
+- To view this component on Storybook, run: `npm run storybook`, then pick `Card`
+  <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png">
+
+- To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
+  <img width="668" alt="image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png">
+
+## Testing
+
+We use Jest & React Testing Library for our unit tests.
+
+Testing convention:
+
+- All tests should be wrapped in a `describe`
+- If it's a unit test for a function: `describe('functionName outputs', () => { ... })`
+- If it's a unit test for a component: `describe('Component Name', () => { ... })`
+- A test should use 'it' for the test function: `it('should do something', () => { ... })`
+
+Testing examples:
+
+- Simple Jest unit test example `/utils/formatNumber.test.ts`:
+  <img width="782" alt="image" src="https://user-images.githubusercontent.com/13384559/224322144-bf043140-6555-496f-879c-4c88ca6cc663.png">
+
+- Jest & Testing library example `/components/card/Card.test.tsx`:
+  <img width="828" alt="image" src="https://user-images.githubusercontent.com/13384559/224322574-8a251ee8-3449-4add-b65f-88316d47cce2.png">
+
+## Contributing
+
+We welcome all contributors to join us on the mission of improving Komiser, especially when it comes to writing tests and adding documentation. :)
+
+Not sure where to start?
+
+- Read the [contributor guidelines](https://docs.komiser.io/docs/introduction/community)
+- [Join our Discord](https://discord.tailwarden.com/) and hang with us on #contributors channel.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about our stack, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Next.js documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Tailwind documentation](https://tailwindcss.com/docs/)
+- [Storybook documentation](https://storybook.js.org/docs/react/get-started/whats-a-story)
+- [Jest documentation](https://jestjs.io/docs/getting-started)
+- [React testing library documentation](https://testing-library.com/docs/dom-testing-library/intro)
