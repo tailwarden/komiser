@@ -77,7 +77,7 @@ describe('formatNumber outputs', () => {
 
 - Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
 
-```Typescript
+```Typescript 
 import { render, screen } from '@testing-library/react';
 import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
