@@ -19,6 +19,9 @@ jobs:
       - run:
           name: Build artifact
           command: cd dashboard && npm run build
+      - run:
+          name: Run npm test
+          command: cd dashboard && npm run test
       - persist_to_workspace:
           root: dashboard
           paths:
@@ -39,14 +42,14 @@ jobs:
       - run:
           name: Install go-bin-data
           command: |
-           go install -a -v github.com/go-bindata/go-bindata/...@latest
-           go install -v github.com/elazarl/go-bindata-assetfs/...
+            go install -a -v github.com/go-bindata/go-bindata/...@latest
+            go install -v github.com/elazarl/go-bindata-assetfs/...
       - run:
-         name: Fix path
-         command: mv /tmp/dashboard/out .
+          name: Fix path
+          command: mv /tmp/dashboard/out .
       - run:
-         name: Create assets
-         command: |
+          name: Create assets
+          command: |
             go-bindata-assetfs -o internal/api/v1/template.go out/...
             sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
       - run:
@@ -54,16 +57,16 @@ jobs:
          command: |
             make test
       - run:
-         name: Build binary
-         command: |
+          name: Build binary
+          command: |
             make build
             make package
       - run:
-         name: Install AWS CLI
-         command: |
-          apt-get update
-          apt-get install -y awscli
-          chmod +x bin/komiser_windows_amd64.exe bin/komiser_darwin_amd64 bin/komiser_darwin_arm64 bin/komiser_linux_amd64
+          name: Install AWS CLI
+          command: |
+            apt-get update
+            apt-get install -y awscli
+            chmod +x bin/komiser_windows_amd64.exe bin/komiser_darwin_amd64 bin/komiser_darwin_arm64 bin/komiser_linux_amd64
       - run:
           name: Push Linux binary
           command: aws s3 cp bin/komiser_linux_amd64 s3://komiser-releases/3.0.5/linux/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
@@ -75,42 +78,42 @@ jobs:
           command: |
             aws s3 cp bin/komiser_darwin_amd64 s3://komiser-releases/3.0.5/osx/amd/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
             aws s3 cp bin/komiser_darwin_arm64 s3://komiser-releases/3.0.5/osx/arm/komiser --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-            
+
   build_docker:
     docker:
-       - image: docker:20.10.17
+      - image: docker:20.10.17
     resource_class: large
     steps:
-        - checkout
-        - setup_remote_docker
-        - run:
-            name: Build & Push Komiser Docker Image
-            command: |
-                docker context create tls-env
-                docker buildx create tls-env --use
-                docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
-                docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY -t tailwarden/komiser:latest -t tailwarden/komiser:${CIRCLE_SHA1} -t tailwarden/komiser:3.0.5 .
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build & Push Komiser Docker Image
+          command: |
+            docker context create tls-env
+            docker buildx create tls-env --use
+            docker login -u$DOCKERHUB_LOGIN -p$DOCKERHUB_PASSWORD
+            docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY -t tailwarden/komiser:latest -t tailwarden/komiser:${CIRCLE_SHA1} -t tailwarden/komiser:3.0.5 .
 
 workflows:
-    version: 2
-    build_and_deploy:
-        jobs:
-            - build_frontend:
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build_cli:
-                requires:
-                    - build_frontend
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build_docker:
-                requires:
-                    - build_cli
-                filters:
-                    branches:
-                        only:
-                            - master
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_frontend:
+          filters:
+            branches:
+              only:
+                - master
+      - build_cli:
+          requires:
+            - build_frontend
+          filters:
+            branches:
+              only:
+                - master
+      - build_docker:
+          requires:
+            - build_cli
+          filters:
+            branches:
+              only:
+                - master
