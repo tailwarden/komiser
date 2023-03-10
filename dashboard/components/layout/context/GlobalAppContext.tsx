@@ -7,7 +7,7 @@ export type GlobalData = {
   accounts: number;
 };
 
-type GlobalAppContextProps = {
+export type GlobalAppContextProps = {
   displayBanner: boolean;
   dismissBanner: () => void;
   loading: boolean;

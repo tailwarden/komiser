@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import GlobalAppContext from '../../../layout/context/GlobalAppContext';
+import { ReactElement } from 'react';
+import GlobalAppContext, {
+  GlobalAppContextProps
+} from '../../../layout/context/GlobalAppContext';
+import mockDataForDashboard from '../../utils/mockDataForDashboard';
 import DashboardTopStats from './DashboardTopStats';
 
-const initialContext = {
+const initialContext: GlobalAppContextProps = {
   displayBanner: false,
   dismissBanner: () => {},
   loading: false,
@@ -12,60 +16,35 @@ const initialContext = {
   fetch: () => {}
 };
 
+const customRender = (
+  children: ReactElement,
+  props?: Partial<GlobalAppContextProps>
+) =>
+  render(
+    <GlobalAppContext.Provider value={{ ...initialContext, ...props }}>
+      {children}
+    </GlobalAppContext.Provider>
+  );
+
 describe('Dashboard Top Stats', () => {
   it('should render without crashing', () => {
-    render(
-      <GlobalAppContext.Provider
-        value={{
-          ...initialContext
-        }}
-      >
-        <DashboardTopStats />
-      </GlobalAppContext.Provider>
-    );
+    customRender(<DashboardTopStats />);
   });
 
   it('should render the skeleton component when loading is true', () => {
-    render(
-      <GlobalAppContext.Provider
-        value={{
-          ...initialContext,
-          loading: true
-        }}
-      >
-        <DashboardTopStats />
-      </GlobalAppContext.Provider>
-    );
+    customRender(<DashboardTopStats />, { loading: true });
     const skeleton = screen.getByTestId('loading');
     expect(skeleton).toBeInTheDocument();
   });
 
   it('should render the error component when error is true', () => {
-    render(
-      <GlobalAppContext.Provider
-        value={{
-          ...initialContext,
-          error: true
-        }}
-      >
-        <DashboardTopStats />
-      </GlobalAppContext.Provider>
-    );
+    customRender(<DashboardTopStats />, { error: true });
     const error = screen.getByTestId('error');
     expect(error).toBeInTheDocument();
   });
 
-  it('should render the top stats cards component if error and loading are false', () => {
-    render(
-      <GlobalAppContext.Provider
-        value={{
-          ...initialContext,
-          data: { resources: 25, regions: 17, costs: 5, accounts: 20 }
-        }}
-      >
-        <DashboardTopStats />
-      </GlobalAppContext.Provider>
-    );
+  it('should render the top stats cards component when there is data', () => {
+    customRender(<DashboardTopStats />, { data: mockDataForDashboard.stats });
     const component = screen.getByTestId('data');
     expect(component).toBeInTheDocument();
   });

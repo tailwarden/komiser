@@ -10,8 +10,7 @@ const meta: Meta<typeof DashboardCloudMap> = {
     data: {
       control: 'hidden'
     }
-  },
-  decorators: [Story => <Story />]
+  }
 };
 
 export default meta;
