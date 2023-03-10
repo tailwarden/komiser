@@ -51,7 +51,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", queueName)
+				log.Warnf("Couldn't fetch invocations metric for %s", queueName)
 			}
 
 			nbOfMessagesSent := 0.0
@@ -77,7 +77,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", queueName)
+				log.Warnf("Couldn't fetch invocations metric for %s", queueName)
 			}
 
 			nbOfMessagesReceived := 0.0
@@ -103,7 +103,7 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warn("Couldn't fetch invocations metric for %s", queueName)
+				log.Warnf("Couldn't fetch invocations metric for %s", queueName)
 			}
 
 			nbOfMessagesDeleted := 0.0
