@@ -21,6 +21,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		networking.ApplicationGateways,
 		networking.LoadBalancers,
 		storage.Queues,
+		storage.Tables,
 		storage.Databoxes,
 		databases.Sql,
 	}
