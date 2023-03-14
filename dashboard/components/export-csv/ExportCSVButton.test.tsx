@@ -7,8 +7,14 @@ const props = {
   loading: false
 };
 
-describe('ExportCSV component', () => {
+describe('Export CSV component', () => {
   it('should render without crashing', () => {
     render(<ExportCSVButton {...props} />);
+  });
+
+  it('should display loading spinner if loading is true', () => {
+    render(<ExportCSVButton {...props} loading={true} />);
+    const loadingSpinner = screen.getByTestId('loading-spinner');
+    expect(loadingSpinner).toBeInTheDocument();
   });
 });

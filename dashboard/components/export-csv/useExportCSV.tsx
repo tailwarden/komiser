@@ -14,7 +14,6 @@ function useExportCSV({ setToast }: useExportCSVProps) {
 
     settingsService.exportCSV(id || undefined).then(res => {
       if (res === Error) {
-        console.log(res);
         setLoading(false);
         setToast({
           hasError: true,
@@ -23,7 +22,6 @@ function useExportCSV({ setToast }: useExportCSVProps) {
             'There was an error exporting the CSV for this list of resources.'
         });
       } else {
-        console.log(res);
         setToast({
           hasError: false,
           title: 'CSV exported',
