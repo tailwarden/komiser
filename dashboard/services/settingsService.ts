@@ -348,7 +348,7 @@ const settingsService = {
     }
   },
 
-  async exportCSV(id?: number) {
+  async exportCSV(id?: string) {
     try {
       const res = await fetch(
         `${BASE_URL}/resources/export-csv${id ? `?viewId=${id}` : ''}`,

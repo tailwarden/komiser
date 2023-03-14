@@ -9,10 +9,8 @@ type useExportCSVProps = {
 function useExportCSV({ setToast }: useExportCSVProps) {
   const [loading, setLoading] = useState(false);
 
-  function exportCSV(id?: number) {
-    if (!loading) {
-      setLoading(true);
-    }
+  function exportCSV(id?: string) {
+    setLoading(true);
 
     settingsService.exportCSV(id || undefined).then(res => {
       if (res === Error) {

@@ -2,9 +2,9 @@ import Button from '../button/Button';
 import DownloadIcon from '../icons/DownloadIcon';
 
 type ExportCSVButtonProps = {
-  id?: number;
+  id?: string;
   loading: boolean;
-  exportCSV: (id?: number) => void;
+  exportCSV: (id?: string) => void;
 };
 
 function ExportCSVButton({ id, loading, exportCSV }: ExportCSVButtonProps) {

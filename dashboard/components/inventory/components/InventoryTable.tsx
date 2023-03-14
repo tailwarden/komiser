@@ -4,6 +4,7 @@ import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
+import { ToastProps } from '../../toast/hooks/useToast';
 import {
   InventoryItem,
   InventoryStats
@@ -31,6 +32,7 @@ type InventoryTableProps = {
   searchedLoading: boolean;
   hideResourceFromCustomView: () => void;
   hideResourcesLoading: boolean;
+  setToast: (toast: ToastProps | undefined) => void;
 };
 
 function InventoryTable({
@@ -49,14 +51,21 @@ function InventoryTable({
   router,
   searchedLoading,
   hideResourceFromCustomView,
-  hideResourcesLoading
+  hideResourcesLoading,
+  setToast
 }: InventoryTableProps) {
   return (
     <>
       {((!error && inventory && inventory.length > 0) ||
         (!error && searchedInventory)) && (
         <>
-          <InventorySearchBar query={query} setQuery={setQuery} error={error} />
+          <InventorySearchBar
+            query={query}
+            setQuery={setQuery}
+            error={error}
+            setToast={setToast}
+            router={router}
+          />
           <div className="rounded-lg rounded-t-none pb-6">
             <table className="w-full table-auto bg-white text-left text-sm text-gray-900">
               {!error && (
