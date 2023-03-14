@@ -346,6 +346,19 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async exportCSV(id?: number) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/export-csv${id ? `?viewId=${id}` : ''}`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 
