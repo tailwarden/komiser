@@ -3,8 +3,8 @@ package models
 import "time"
 
 type Resource struct {
-	Id         int64             `json:"id" bun:"id,pk,autoincrement" csv:"id"`
-	ResourceId string            `json:"resourceId" bun:"resource_id,unique" csv:"provider"`
+	Id         int64             `json:"id" bun:"id,pk,autoincrement"`
+	ResourceId string            `json:"resourceId" bun:"resource_id,unique"`
 	Provider   string            `json:"provider"`
 	Account    string            `json:"account"`
 	AccountId  string            `json:"accountId" bun:"account_id"`
