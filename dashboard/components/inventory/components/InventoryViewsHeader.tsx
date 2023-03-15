@@ -305,8 +305,8 @@ function InventoryViewsHeader({
                 ></path>
               </svg>
             </div>
-            <div className="flex flex-col items-center gap-6">
-              <p className="text-center font-medium text-black-900">
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-center text-lg font-medium text-black-900">
                 Are you sure you want to delete this view?
               </p>
               <p className="text-sm text-black-400">
@@ -317,7 +317,6 @@ function InventoryViewsHeader({
           <div className="flex flex-wrap items-center justify-end gap-6">
             <Button
               type="button"
-              size="lg"
               style="ghost"
               onClick={closeDoubleConfirmationModal}
             >
@@ -325,7 +324,6 @@ function InventoryViewsHeader({
             </Button>
             <Button
               type="button"
-              size="lg"
               style="delete"
               onClick={() => {
                 deleteView(true, currentView);

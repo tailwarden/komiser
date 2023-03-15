@@ -170,7 +170,7 @@ function InventoryView({
               ? 'are part of this view'
               : 'will be added to this view'
           }`}
-          deleteAction={router.query.view ? deleteView : undefined}
+          deleteAction={router.query.view ? () => deleteView(false) : undefined}
           deleteLabel="Delete view"
           closeModal={closeModal}
         />
