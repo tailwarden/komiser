@@ -1,0 +1,79 @@
+name: "Release Komiser"
+on: push
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: "dashboard/package-lock.json"
+
+      - run: npm ci
+        working-directory: dashboard
+
+      - run: npm run build
+        working-directory: dashboard
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dashboard-build
+          path: dashboard/out
+
+  build_komiser:
+    runs-on: ubuntu-latest
+    needs: build_frontend
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.2
+
+      - name: Install go-bin-data
+        run: |
+          go install -a -v github.com/go-bindata/go-bindata/...@latest
+          go install -v github.com/elazarl/go-bindata-assetfs/...
+
+      - name: Install dependencies
+        run: go mod download
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dashboard-build
+          path: out
+
+      - name: Create assets
+        run: |
+          go-bindata-assetfs -o internal/api/v1/template.go out/...
+          sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
+
+      - name: Build & Package
+        run: |
+          make build
+          make package
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: komiser_linux_amd64
+          path: bin/komiser_linux_amd64
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bin/komiser_windows_amd64.exe
+          path: bin/bin/komiser_windows_amd64.exe
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bin/komiser_darwin_amd64
+          path: bin/bin/komiser_darwin_amd64
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bin/komiser_darwin_arm64
+          path: bin/bin/komiser_darwin_arm64
