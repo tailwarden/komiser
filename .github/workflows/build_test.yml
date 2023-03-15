@@ -1,0 +1,59 @@
+name: "Build and Test komiser"
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  build_test_dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: "dashboard/package-lock.json"
+
+      - run: npm ci
+        working-directory: dashboard
+
+      - run: npm run lint
+        working-directory: dashboard
+
+      - run: npm test
+        working-directory: dashboard
+
+      - run: npm run build
+        working-directory: dashboard
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dashboard-build
+          path: dashboard/out
+
+  build_test_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.2
+
+      - name: Install go-bin-data
+        run: |
+          go install -a -v github.com/go-bindata/go-bindata/...@latest
+          go install -v github.com/elazarl/go-bindata-assetfs/...
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Test
+        run: make test
+
+      - name: Build
+        run: make build
