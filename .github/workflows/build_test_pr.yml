@@ -1,4 +1,4 @@
-name: "Build and Test komiser"
+name: "Build and Test Komiser PRs"
 on:
   pull_request:
     branches:
