@@ -17,13 +17,13 @@ func OIDCProviders(ctx context.Context, client ProviderClient) ([]Resource, erro
 	var config iam.ListOpenIDConnectProvidersInput
 	iamClient := iam.NewFromConfig(*client.AWSClient)
 
-	output, err := iamClient.ListOpenIDConnectProviders(context.Background(), &config)
+	output, err := iamClient.ListOpenIDConnectProviders(ctx, &config)
 	if err != nil {
 		return resources, err
 	}
 
 	for _, oidcprovider := range output.OpenIDConnectProviderList {
-		outputProvider, err := iamClient.GetOpenIDConnectProvider(context.Background(), &iam.GetOpenIDConnectProviderInput{
+		outputProvider, err := iamClient.GetOpenIDConnectProvider(ctx, &iam.GetOpenIDConnectProviderInput{
 			OpenIDConnectProviderArn: oidcprovider.Arn,
 		})
 		if err != nil {
