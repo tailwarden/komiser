@@ -14,16 +14,6 @@ import (
 	"github.com/tailwarden/komiser/models"
 )
 
-type Row struct {
-	ID       string   `csv:"id"`
-	Provider string   `csv:"provider"`
-	Account  string   `csv:"account"`
-	Name     string   `csv:"name"`
-	Region   string   `csv:"region"`
-	Tags     []string `csv:"tags"`
-	Cost     float64  `csv:"cost"`
-}
-
 func (handler *ApiHandler) DownloadInventoryCSV(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Create("/tmp/export.csv")
 	if err != nil {
@@ -37,8 +27,8 @@ func (handler *ApiHandler) DownloadInventoryCSV(w http.ResponseWriter, r *http.R
 	fw := bufio.NewWriter(file)
 	csvWriter := csv.NewWriter(fw)
 
-	var resources []models.Resource
-	err = handler.db.NewSelect().Model((*models.Resource)(nil)).Scan(handler.ctx, &resources)
+	resources := make([]models.Resource, 0)
+	err = handler.db.NewSelect().Model(resources).Scan(handler.ctx, &resources)
 	if err != nil {
 		respondWithError(w, 500, "Could not read from DB")
 		return
