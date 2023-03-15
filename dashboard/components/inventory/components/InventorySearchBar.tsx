@@ -42,13 +42,20 @@ function InventorySearchBar({
             type="text"
             placeholder="Search by tags, service, name, region..."
             className="w-full border-b border-black-200/30 bg-white py-6 pl-14 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-type="other"
           />
-          <div className="absolute top-[14px] right-4">
-            <ExportCSV
-              setToast={setToast}
-              id={router.query.view ? router.query.view.toString() : undefined}
-            />
-          </div>
+          {(router.asPath === '/inventory' || router.query.view) && (
+            <div className="absolute top-[14px] right-4">
+              <ExportCSV
+                setToast={setToast}
+                id={
+                  router.query.view ? router.query.view.toString() : undefined
+                }
+              />
+            </div>
+          )}
         </div>
       )}
     </>

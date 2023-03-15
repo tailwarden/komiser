@@ -350,12 +350,9 @@ const settingsService = {
 
   async exportCSV(id?: string) {
     try {
-      const res = await fetch(
-        `${BASE_URL}/resources/export-csv${id ? `/${id}` : ''}`,
-        settings('GET')
+      return window.location.replace(
+        `${BASE_URL}/resources/export-csv${id ? `/${id}` : ''}`
       );
-      const data = await res.json();
-      return data;
     } catch (error) {
       return Error;
     }
