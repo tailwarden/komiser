@@ -259,6 +259,7 @@ func respondWithCSVDownload(resources []models.Resource, w http.ResponseWriter, 
 			return
 		}
 	}
+	fw.Flush()
 
 	cd := mime.FormatMediaType("attachment", map[string]string{"filename": "export.csv"})
 	w.Header().Set("Content-Disposition", cd)
