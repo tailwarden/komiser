@@ -20,6 +20,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	r.HandleFunc("/resources/tags", api.BulkUpdateTagsHandler).Methods("POST")
 	r.HandleFunc("/resources/{id}/tags", api.UpdateTagsHandler).Methods("POST")
 	r.HandleFunc("/resources/export-csv", api.DownloadInventoryCSV).Methods("GET")
+	r.HandleFunc("/resources/export-csv/{viewId}", api.DownloadInventoryCSVForView).Methods("GET")
 
 	r.HandleFunc("/views", api.ListViewsHandler).Methods("GET")
 	r.HandleFunc("/views", api.NewViewHandler).Methods("POST")
