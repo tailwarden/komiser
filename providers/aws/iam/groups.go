@@ -14,10 +14,10 @@ import (
 
 func Groups(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	var config iam.ListRolesInput
+	var config iam.ListGroupsInput
 	iamClient := iam.NewFromConfig(*client.AWSClient)
 
-	output, err := iamClient.ListGroups(context.Background(), &iam.ListGroupsInput{})
+	output, err := iamClient.ListGroups(context.Background(), &config)
 	if err != nil {
 		return resources, err
 	}
