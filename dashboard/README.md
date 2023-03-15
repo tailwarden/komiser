@@ -129,3 +129,28 @@ To learn more about our stack, take a look at the following resources:
 - [Storybook documentation](https://storybook.js.org/docs/react/get-started/whats-a-story)
 - [Jest documentation](https://jestjs.io/docs/getting-started)
 - [React testing library documentation](https://testing-library.com/docs/dom-testing-library/intro)
+
+## Walkthrough video
+
+<div style={{
+    position: 'relative',
+    paddingBottom: '56.25%',
+    paddingTop:'30px',
+    height:0,
+    overflow:'hidden',
+  }}>
+  <iframe
+    src='https://www.youtube.com/embed/uwxj11-eRt8'
+    allowFullScreen
+    webkitallowfullscreen="true"
+    frameBorder="0"
+    style={{
+      position: 'absolute',
+      top:0,
+      left:0,
+      width:'100%',
+      height:'100%',
+    }}
+  >
+  </iframe>
+</div>
