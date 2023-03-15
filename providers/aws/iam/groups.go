@@ -17,7 +17,7 @@ func Groups(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config iam.ListGroupsInput
 	iamClient := iam.NewFromConfig(*client.AWSClient)
 
-	output, err := iamClient.ListGroups(context.Background(), &config)
+	output, err := iamClient.ListGroups(ctx, &config)
 	if err != nil {
 		return resources, err
 	}
