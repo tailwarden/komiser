@@ -1,9 +1,5 @@
 name: "Build and Test Komiser PRs"
-on:
-  pull_request:
-    branches:
-      - master
-      - develop
+on: pull_request
 
 jobs:
   build_test_dashboard:
@@ -29,11 +25,6 @@ jobs:
       - run: npm run build
         working-directory: dashboard
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dashboard-build
-          path: dashboard/out
-
   build_test_cli:
     runs-on: ubuntu-latest
     steps:
@@ -43,11 +34,6 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.20.2
-
-      - name: Install go-bin-data
-        run: |
-          go install -a -v github.com/go-bindata/go-bindata/...@latest
-          go install -v github.com/elazarl/go-bindata-assetfs/...
 
       - name: Install dependencies
         run: go mod download
