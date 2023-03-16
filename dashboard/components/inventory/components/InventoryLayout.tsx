@@ -1,7 +1,8 @@
 import type { NextRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useContext, useState } from 'react';
-import GlobalAppContext from '../../layout/context/GlobalAppContext';
+import GlobalAppContext from '@/components/layout/context/GlobalAppContext';
+import classNames from 'classnames';
 import type {
   InventoryItem,
   View
@@ -133,13 +134,12 @@ function InventoryLayout({
                           if (isActive) return;
                           router.push(`?view=${view.id}`);
                         }}
-                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
-              ${
-                isActive
-                  ? 'border-l-2 border-primary bg-komiser-150 text-primary'
-                  : 'text-black-400 transition-colors hover:bg-komiser-100'
-              }
-            `}
+                        className={classNames([
+                          'flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium',
+                          isActive
+                            ? 'border-l-2 border-primary bg-komiser-150 text-primary'
+                            : 'text-black-400 transition-colors hover:bg-komiser-100'
+                        ])}
                       >
                         <div className={isActive ? 'ml-[-2px]' : ''}>
                           <p className="w-[188px] truncate">{view.name}</p>

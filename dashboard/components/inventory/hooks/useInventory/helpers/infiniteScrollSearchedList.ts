@@ -1,7 +1,7 @@
 import type { NextRouter } from 'next/router';
 import type { SetStateAction } from 'react';
-import settingsService from '../../../../../services/settingsService';
-import type { ToastProps } from '../../../../toast/hooks/useToast';
+import settingsService from '@/services/settingsService';
+import type { ToastProps } from '@/components/toast/hooks/useToast';
 import type { InventoryItem } from '../types/useInventoryTypes';
 
 type InfiniteScrollSearchedListProps = {

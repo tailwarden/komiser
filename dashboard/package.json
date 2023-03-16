@@ -8,10 +8,11 @@
     "start": "next start -p 3002",
     "lint": "next lint --cache",
     "lint:fix": "eslint --cache --fix .",
+    "typecheck": "tsc --noEmit",
     "prepare": "cd .. && husky install dashboard/.husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "jest",
+    "test": "jest --max-old-space-size=8192 --runInBand --logHeapUsage",
     "test:watch": "jest --watch"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
-import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
-import Button from '../../button/Button';
-import Sidepanel from '../../sidepanel/Sidepanel';
-import SidepanelTabs from '../../sidepanel/SidepanelTabs';
+import formatNumber from '@/utils/formatNumber';
+import providers from '@/utils/providerHelper';
+import Button from '@/components/button/Button';
+import Sidepanel from '@/components/sidepanel/Sidepanel';
+import SidepanelTabs from '@/components/sidepanel/SidepanelTabs';
 import type {
   InventoryItem,
   Pages,
@@ -119,12 +119,8 @@ function InventorySidePanel({
               <form
                 onSubmit={e => {
                   e.preventDefault();
-
-                  if (!data && bulkItems) {
-                    updateBulkTags();
-                  } else {
-                    updateTags();
-                  }
+                  if (!data && bulkItems) updateBulkTags();
+                  else updateTags();
                 }}
                 className="flex flex-col gap-6"
               >
@@ -191,11 +187,8 @@ function InventorySidePanel({
                       style="delete-ghost"
                       loading={deleteLoading}
                       onClick={() => {
-                        if (!data && bulkItems) {
-                          goTo('delete');
-                        } else {
-                          updateTags('delete');
-                        }
+                        if (!data && bulkItems) goTo('delete');
+                        else updateTags('delete');
                       }}
                     >
                       {deleteLoading ? 'Deleting...' : 'Delete all tags'}

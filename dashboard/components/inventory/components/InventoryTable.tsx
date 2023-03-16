@@ -1,9 +1,9 @@
 import type { NextRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
-import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
-import Checkbox from '../../checkbox/Checkbox';
-import SkeletonInventory from '../../skeleton/SkeletonInventory';
+import formatNumber from '@/utils/formatNumber';
+import providers from '@/utils/providerHelper';
+import Checkbox from '@/components/checkbox/Checkbox';
+import SkeletonInventory from '@/components/skeleton/SkeletonInventory';
 import type {
   InventoryItem,
   InventoryStats

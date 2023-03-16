@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import settingsService from '../../../../services/settingsService';
-import useToast from '../../../toast/hooks/useToast';
+import settingsService from '@/services/settingsService';
+import useToast from '@/components/toast/hooks/useToast';
 import useIsVisible from '../useIsVisible/useIsVisible';
 import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
 import getInventoryListAndStats from './helpers/getInventoryListAndStats';
@@ -118,50 +118,52 @@ function useInventory() {
     }
 
     if (views) {
-      getInventoryListAndStats({
-        router,
-        setStatsLoading,
-        setDisplayedFilters,
-        setFilters,
-        setError,
-        setSearchedInventory,
-        setInventoryStats,
-        batchSize,
-        setInventory,
-        setSkipped
-      });
+      Promise.all([
+        getInventoryListAndStats({
+          router,
+          setStatsLoading,
+          setDisplayedFilters,
+          setFilters,
+          setError,
+          setSearchedInventory,
+          setInventoryStats,
+          batchSize,
+          setInventory,
+          setSkipped
+        }),
 
-      getInventoryListFromAFilter({
-        router,
-        setSearchedLoading,
-        setStatsLoading,
-        setToast,
-        setError,
-        setInventoryStats,
-        batchSize,
-        setSearchedInventory,
-        setFilters,
-        setDisplayedFilters,
-        setSkippedSearch,
-        setShouldFetchMore
-      });
+        getInventoryListFromAFilter({
+          router,
+          setSearchedLoading,
+          setStatsLoading,
+          setToast,
+          setError,
+          setInventoryStats,
+          batchSize,
+          setSearchedInventory,
+          setFilters,
+          setDisplayedFilters,
+          setSkippedSearch,
+          setShouldFetchMore
+        }),
 
-      getCustomViewInventoryListAndStats({
-        router,
-        views,
-        setSearchedLoading,
-        setStatsLoading,
-        setToast,
-        setError,
-        setHiddenResources,
-        setInventoryStats,
-        batchSize,
-        setSearchedInventory,
-        setDisplayedFilters,
-        setSkippedSearch,
-        setHideOrUnhideHasUpdate,
-        setShouldFetchMore
-      });
+        getCustomViewInventoryListAndStats({
+          router,
+          views,
+          setSearchedLoading,
+          setStatsLoading,
+          setToast,
+          setError,
+          setHiddenResources,
+          setInventoryStats,
+          batchSize,
+          setSearchedInventory,
+          setDisplayedFilters,
+          setSkippedSearch,
+          setHideOrUnhideHasUpdate,
+          setShouldFetchMore
+        })
+      ]);
     }
   }, [router.query, views]);
 

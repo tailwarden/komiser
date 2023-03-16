@@ -1,4 +1,4 @@
-import environment from '../environments/environment';
+import environment from '@/environments/environment';
 
 const BASE_URL = environment.API_URL;
 

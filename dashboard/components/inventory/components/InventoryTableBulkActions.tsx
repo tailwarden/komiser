@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import formatNumber from '../../../utils/formatNumber';
-import Button from '../../button/Button';
+import formatNumber from '@/utils/formatNumber';
+import Button from '@/components/button/Button';
 import type { InventoryStats } from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryTableBulkActionsProps = {

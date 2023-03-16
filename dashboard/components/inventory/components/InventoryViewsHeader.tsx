@@ -1,9 +1,9 @@
 import type { NextRouter } from 'next/router';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import Button from '../../button/Button';
-import Modal from '../../modal/Modal';
-import type { ToastProps } from '../../toast/hooks/useToast';
+import Button from '@/components/button/Button';
+import Modal from '@/components/modal/Modal';
+import type { ToastProps } from '@/components/toast/hooks/useToast';
 import type {
   InventoryFilterData,
   View

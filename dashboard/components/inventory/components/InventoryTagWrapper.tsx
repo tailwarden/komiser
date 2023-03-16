@@ -1,4 +1,4 @@
-import Input from '../../input/Input';
+import Input from '@/components/input/Input';
 import type { Tag } from '../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryTagWrapperProps = {
