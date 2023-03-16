@@ -1,5 +1,5 @@
-import Card from '../../../card/Card';
-import type { GlobalData } from '../../../layout/context/GlobalAppContext';
+import Card from '@/components/card/Card';
+import type { GlobalData } from '@/components/layout/context/GlobalAppContext';
 
 type DashboardTopStatsCardsProps = {
   data: GlobalData | undefined;

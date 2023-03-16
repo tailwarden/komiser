@@ -1,4 +1,4 @@
-import CardSkeleton from '../../../card/CardSkeleton';
+import CardSkeleton from '@/components/card/CardSkeleton';
 
 function DashboardTopStatsSkeleton() {
   const numberOfSkeletonCardsToRender = Array.from(Array(4).keys());

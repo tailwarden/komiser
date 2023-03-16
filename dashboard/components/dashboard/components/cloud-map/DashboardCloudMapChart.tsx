@@ -21,8 +21,9 @@ function DashboardCloudMapChart({
 }: DashboardCloudMapChartProps) {
   const geoUrl = '/data/map/countries.json';
 
-  const regionsAscendingByNumberOfResources =
-    regions && regions.sort((a, b) => a.resources - b.resources);
+  const regionsAscendingByNumberOfResources:
+    | DashboardCloudMapRegions
+    | undefined = regions && regions.sort((a, b) => a.resources - b.resources);
 
   return (
     <ComposableMap

@@ -1,4 +1,4 @@
-import Button from '../../../button/Button';
+import Button from '@/components/button/Button';
 import DashboardCloudMapChart from './DashboardCloudMapChart';
 import DashboardCloudMapTooltip from './DashboardCloudMapTooltip';
 import type { DashboardCloudMapRegions } from './hooks/useCloudMap';

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import settingsService from '../../../../../services/settingsService';
+import settingsService from '@/services/settingsService';
 
 export type ResourcesManagerData = {
   label: string;

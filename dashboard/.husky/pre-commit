@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 cd dashboard
-npx prettier --write .
+npx prettier --write . --cache --ignore-unknown
 npm run lint
 npm test
