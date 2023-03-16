@@ -3,8 +3,6 @@ before:
     - go mod tidy
     - go-bindata-assetfs -o internal/api/v1/template.go out/...
     - sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
-    - docker context create tls-env
-    - docker buildx create tls-env --use
 builds:
   - env:
       - CGO_ENABLED=0
@@ -34,6 +32,7 @@ dockers:
   - image_templates:
       - tailwarden/komiser:{{ .Tag }}
       - tailwarden/komiser:latest
+      - tailwarden/komiser:{{ .FullCommit }}
     use: buildx
     build_flag_templates:
       - "--platform linux/amd64,linux/arm64"
