@@ -1,4 +1,3 @@
-import { ReactElement, ReactNode } from 'react';
 import Button from '../button/Button';
 
 type Poses =

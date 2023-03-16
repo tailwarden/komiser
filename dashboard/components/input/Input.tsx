@@ -1,6 +1,7 @@
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { required } from '../../utils/regex';
+import { required } from '@/utils/regex';
+import classNames from 'classnames';
 
 export type InputEvent = ChangeEvent<HTMLInputElement>;
 
@@ -67,13 +68,15 @@ function Input({
         <input
           type={type}
           name={name}
-          className={`peer w-full rounded bg-white px-4 pt-[1.75rem] pb-[0.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${
+          className={classNames([
+            'peer w-full rounded bg-white px-4 pt-[1.75rem] pb-[0.75rem] text-sm text-black-900',
+            'caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary',
             isValid === false && `outline-error-600 focus:outline-error-600`
-          }`}
+          ])}
           placeholder=" "
           onFocus={handleFocus}
           onBlur={e => handleBlur(e)}
-          onChange={e => {
+          onChange={(e: InputEvent) => {
             if (typeof id === 'number') {
               action({ [name]: e.target.value }, id);
             } else {
@@ -88,7 +91,13 @@ function Input({
           data-lpignore="true"
           data-form-type="other"
         />
-        <span className="pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75 select-none font-normal text-black-300 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
+        <span
+          className={classNames([
+            'pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75',
+            'select-none font-normal text-black-300 transition-all peer-placeholder-shown:left-4 peer-focus:scale-75',
+            'peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem]'
+          ])}
+        >
           {label}
         </span>
       </div>

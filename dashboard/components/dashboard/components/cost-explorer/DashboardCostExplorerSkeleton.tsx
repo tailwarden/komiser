@@ -18,7 +18,7 @@ function DashboardCostExplorerSkeleton() {
       <div className="h-[22rem]">
         <table className="h-[90%] w-full table-auto">
           <tbody>
-            {rows.map(idx => (
+            {rows.map((idx: number) => (
               <tr key={idx}>
                 <td className="border border-black-150"></td>
                 <td className="border border-black-150"></td>
