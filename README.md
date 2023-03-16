@@ -39,9 +39,9 @@ brew install komiser
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [What is Komiser?](#what-is-komiser-🤷)
+- [What is Komiser?](#what-is-komiser-%F0%9F%A4%B7)
   - [Who is using it?](#who-is-using-it)
-- [Getting started](#getting-started-👇)
+- [Getting started](#getting-started-%F0%9F%91%87)
   - [Download](#download)
   - [Installation on AWS](#installation-on-aws)
     - [Connect Komiser CLI to your AWS account.](#connect-komiser-cli-to-your-aws-account)
@@ -56,10 +56,10 @@ brew install komiser
   - [Installation on Scaleway](#installation-on-scaleway)
 - [Documentation](#documentation-📖)
   - [Jump right in:](#jump-right-in)
-- [Bugs and feature requests](#bugs-and-feature-requests-🐞)
-- [Roadmap and Contributing](#roadmap-and-contributing-🛣️)
-- [Users](#users-🧑‍🤝‍🧑)
-- [Versioning](#versioning-🧮)
+- [Bugs and feature requests](#bugs-and-feature-requests-%F0%9F%90%9E)
+- [Roadmap and Contributing](#roadmap-and-contributing-%F0%9F%9B%A3%EF%B8%8F)
+- [Users](#users-%F0%9F%A7%91%E2%80%8D%F0%9F%A4%9D%E2%80%8D%F0%9F%A7%91)
+- [Versioning](#versioning-%F0%9F%A7%AE)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
