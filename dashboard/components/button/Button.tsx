@@ -94,6 +94,7 @@ function Button({
       type={type}
       className={handleStyle()}
       disabled={disabled || loading}
+      data-testid={style}
     >
       {loading && (
         <>

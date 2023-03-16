@@ -4,7 +4,6 @@ import Tooltip from '../tooltip/Tooltip';
 
 type ExportCSVButtonProps = {
   id?: string;
-  loading: boolean;
   disabled: boolean;
   displayInTable: boolean;
   exportCSV: (id?: string) => void;
@@ -12,7 +11,6 @@ type ExportCSVButtonProps = {
 
 function ExportCSVButton({
   id,
-  loading,
   disabled,
   displayInTable,
   exportCSV
@@ -26,11 +24,10 @@ function ExportCSVButton({
           align="left"
           gap="md"
           transition={false}
-          loading={loading}
           disabled={disabled}
-          onClick={() => exportCSV(id || undefined)}
+          onClick={() => exportCSV(id)}
         >
-          {!loading && <DownloadIcon width={24} height={24} />}
+          <DownloadIcon width={24} height={24} />
           Download CSV
         </Button>
       </div>

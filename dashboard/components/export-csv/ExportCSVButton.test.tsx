@@ -3,7 +3,6 @@ import ExportCSVButton from './ExportCSVButton';
 
 const props = {
   id: undefined,
-  loading: false,
   disabled: false,
   displayInTable: false,
   exportCSV: jest.fn()
@@ -14,10 +13,10 @@ describe('Export CSV component', () => {
     render(<ExportCSVButton {...props} />);
   });
 
-  it('should display loading spinner if loading is true', () => {
-    render(<ExportCSVButton {...props} loading={true} />);
-    const loadingSpinner = screen.getByTestId('loading-spinner');
-    expect(loadingSpinner).toBeInTheDocument();
+  it('should render the correct button props if displayInTable is true', () => {
+    render(<ExportCSVButton {...props} displayInTable={true} />);
+    const button = screen.getByTestId('secondary');
+    expect(button).toBeInTheDocument();
   });
 
   it('should display the auxiliary info in the tooltip if disabled is true', () => {

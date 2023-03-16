@@ -348,14 +348,10 @@ const settingsService = {
     }
   },
 
-  async exportCSV(id?: string) {
-    try {
-      return window.location.replace(
-        `${BASE_URL}/resources/export-csv${id ? `/${id}` : ''}`
-      );
-    } catch (error) {
-      return Error;
-    }
+  exportCSV(id?: string) {
+    return window.location.replace(
+      `${BASE_URL}/resources/export-csv${id ? `/${id}` : ''}`
+    );
   }
 };
 
