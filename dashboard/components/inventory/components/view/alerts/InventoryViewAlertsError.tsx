@@ -1,5 +1,5 @@
-import Button from '../../../../button/Button';
-import RefreshIcon from '../../../../icons/RefreshIcon';
+import Button from '@/components/button/Button';
+import RefreshIcon from '@/components/icons/RefreshIcon';
 
 type InventoryViewAlertsErrorProps = {
   fetchViewAlerts: () => void;

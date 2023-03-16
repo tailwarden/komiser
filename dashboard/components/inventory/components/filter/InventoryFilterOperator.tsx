@@ -1,5 +1,5 @@
-import Button from '../../../button/Button';
-import Input from '../../../input/Input';
+import Button from '@/components/button/Button';
+import Input from '@/components/input/Input';
 import type { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryFilterOperatorProps = {

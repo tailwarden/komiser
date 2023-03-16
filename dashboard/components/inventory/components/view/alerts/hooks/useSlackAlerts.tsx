@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import settingsService from '../../../../../../services/settingsService';
+import settingsService from '@/services/settingsService';
 
 type useSlackAlertsProps = {
   viewId: number;
@@ -66,9 +66,7 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
     if (alertId && slackAlerts) {
       const foundSlackAlert = slackAlerts.find(alert => alert.id === alertId);
 
-      if (foundSlackAlert) {
-        setCurrentSlackAlert(foundSlackAlert);
-      }
+      if (foundSlackAlert) setCurrentSlackAlert(foundSlackAlert);
     }
     setEditSlackAlert(true);
   }
@@ -77,19 +75,13 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
     setCurrentSlackAlert(undefined);
     setEditSlackAlert(false);
 
-    if (action === 'hasChanges') {
-      fetchViewAlerts();
-    }
+    if (action === 'hasChanges') fetchViewAlerts();
   }
 
   useEffect(() => {
-    if (!hasSlack) {
-      fetchSlackStatus();
-    }
+    if (!hasSlack) fetchSlackStatus();
 
-    if (hasSlack && viewId) {
-      fetchViewAlerts();
-    }
+    if (hasSlack && viewId) fetchViewAlerts();
   }, [hasSlack]);
 
   const hasNoSlackAlerts =

@@ -1,16 +1,16 @@
 import Image from 'next/image';
 import type { NextRouter } from 'next/router';
-import formatNumber from '../../../../utils/formatNumber';
-import type { Provider } from '../../../../utils/providerHelper';
-import providers from '../../../../utils/providerHelper';
-import Button from '../../../button/Button';
-import Checkbox from '../../../checkbox/Checkbox';
-import Input from '../../../input/Input';
-import Sidepanel from '../../../sidepanel/Sidepanel';
-import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
-import SidepanelPage from '../../../sidepanel/SidepanelPage';
-import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
-import type { ToastProps } from '../../../toast/hooks/useToast';
+import formatNumber from '@/utils/formatNumber';
+import type { Provider } from '@/utils/providerHelper';
+import providers from '@/utils/providerHelper';
+import Button from '@/components/button/Button';
+import Checkbox from '@/components/checkbox/Checkbox';
+import Input from '@/components/input/Input';
+import Sidepanel from '@/components/sidepanel/Sidepanel';
+import SidepanelHeader from '@/components/sidepanel/SidepanelHeader';
+import SidepanelPage from '@/components/sidepanel/SidepanelPage';
+import SidepanelTabs from '@/components/sidepanel/SidepanelTabs';
+import type { ToastProps } from '@/components/toast/hooks/useToast';
 import type {
   HiddenResource,
   InventoryFilterData,

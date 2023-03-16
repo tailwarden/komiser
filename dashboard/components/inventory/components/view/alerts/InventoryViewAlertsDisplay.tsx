@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import formatNumber from '../../../../../utils/formatNumber';
-import Button from '../../../../button/Button';
-import ChevronRightIcon from '../../../../icons/ChevronRightIcon';
+import formatNumber from '@/utils/formatNumber';
+import Button from '@/components/button/Button';
+import ChevronRightIcon from '@/components/icons/ChevronRightIcon';
 import type { SlackAlert } from './hooks/useSlackAlerts';
 
 type InventoryViewAlertsDisplayProps = {

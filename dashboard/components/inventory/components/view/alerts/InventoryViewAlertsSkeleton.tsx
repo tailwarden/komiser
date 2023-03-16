@@ -1,5 +1,3 @@
-import React from 'react';
-
 function InventoryViewAlertsSkeleton() {
   const rows = Array.from(Array(2).keys());
   return (

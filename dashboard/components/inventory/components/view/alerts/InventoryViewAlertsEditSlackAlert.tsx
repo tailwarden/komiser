@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import Button from '../../../../button/Button';
-import Grid from '../../../../grid/Grid';
-import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
-import Input from '../../../../input/Input';
-import type { ToastProps } from '../../../../toast/hooks/useToast';
+import Button from '@/components/button/Button';
+import Grid from '@/components/grid/Grid';
+import ArrowLeftIcon from '@/components/icons/ArrowLeftIcon';
+import Input from '@/components/input/Input';
+import type { ToastProps } from '@/components/toast/hooks/useToast';
 import useEditSlackAlerts from './hooks/useEditSlackAlerts';
 import type { SlackAlert } from './hooks/useSlackAlerts';
 

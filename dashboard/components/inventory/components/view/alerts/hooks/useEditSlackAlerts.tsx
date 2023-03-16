@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import settingsService from '../../../../../../services/settingsService';
-import type { ToastProps } from '../../../../../toast/hooks/useToast';
+import settingsService from '@/services/settingsService';
+import type { ToastProps } from '@/components/toast/hooks/useToast';
 import type { SlackAlert } from './useSlackAlerts';
 
 type SlackAlertType = 'BUDGET' | 'USAGE';

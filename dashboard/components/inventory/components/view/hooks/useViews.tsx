@@ -1,8 +1,8 @@
 import type { NextRouter } from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useState } from 'react';
-import settingsService from '../../../../../services/settingsService';
-import type { ToastProps } from '../../../../toast/hooks/useToast';
+import settingsService from '@/services/settingsService';
+import type { ToastProps } from '@/components/toast/hooks/useToast';
 import type {
   HiddenResource,
   InventoryFilterData,

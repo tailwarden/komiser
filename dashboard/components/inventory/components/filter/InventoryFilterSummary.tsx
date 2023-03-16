@@ -1,4 +1,4 @@
-import Button from '../../../button/Button';
+import Button from '@/components/button/Button';
 import type { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
