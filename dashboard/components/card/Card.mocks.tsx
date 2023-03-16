@@ -1,4 +1,4 @@
-import { CardProps } from './Card';
+import type { CardProps } from './Card';
 
 const base: CardProps = {
   label: 'Blop',

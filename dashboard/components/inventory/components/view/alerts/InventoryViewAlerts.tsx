@@ -1,4 +1,4 @@
-import { ToastProps } from '../../../../toast/hooks/useToast';
+import type { ToastProps } from '../../../../toast/hooks/useToast';
 import useSlackAlerts from './hooks/useSlackAlerts';
 import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
 import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';

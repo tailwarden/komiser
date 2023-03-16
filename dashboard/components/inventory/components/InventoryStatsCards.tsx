@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import formatNumber from '../../../utils/formatNumber';
 import Tooltip from '../../tooltip/Tooltip';
-import {
+import type {
   HiddenResource,
   InventoryStats
 } from '../hooks/useInventory/types/useInventoryTypes';

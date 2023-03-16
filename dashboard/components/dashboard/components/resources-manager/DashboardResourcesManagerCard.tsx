@@ -1,9 +1,9 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
 import Select from '../../../select/Select';
-import {
+import type {
   ResourcesManagerData,
   ResourcesManagerQuery
 } from './hooks/useResourcesManager';

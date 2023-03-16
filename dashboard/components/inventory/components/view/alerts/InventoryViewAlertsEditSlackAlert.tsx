@@ -3,9 +3,9 @@ import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
 import Input from '../../../../input/Input';
-import { ToastProps } from '../../../../toast/hooks/useToast';
+import type { ToastProps } from '../../../../toast/hooks/useToast';
 import useEditSlackAlerts from './hooks/useEditSlackAlerts';
-import { SlackAlert } from './hooks/useSlackAlerts';
+import type { SlackAlert } from './hooks/useSlackAlerts';
 
 type InventoryViewAlertsEditSlackAlertProps = {
   currentSlackAlert: SlackAlert | undefined;

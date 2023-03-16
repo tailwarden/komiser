@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import type { GlobalAppContextProps } from '../../../layout/context/GlobalAppContext';
 import GlobalAppContext, {
-  initialContext,
-  GlobalAppContextProps
+  initialContext
 } from '../../../layout/context/GlobalAppContext';
 import mockDataForDashboard from '../../utils/mockDataForDashboard';
 import DashboardTopStats from './DashboardTopStats';

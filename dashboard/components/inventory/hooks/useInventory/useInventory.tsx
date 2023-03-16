@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
 import useToast from '../../../toast/hooks/useToast';
 import useIsVisible from '../useIsVisible/useIsVisible';
@@ -12,7 +13,7 @@ import infiniteScrollInventoryList from './helpers/infiniteScrollInventoryList';
 import infiniteScrollSearchedAndFilteredList from './helpers/infiniteScrollSearchedAndFilteredList';
 import infiniteScrollSearchedCustomViewList from './helpers/infiniteScrollSearchedCustomViewList';
 import infiniteScrollSearchedList from './helpers/infiniteScrollSearchedList';
-import {
+import type {
   HiddenResource,
   InventoryFilterData,
   InventoryItem,
@@ -53,7 +54,7 @@ function useInventory() {
   const { toast, setToast, dismissToast } = useToast();
   const reloadDiv = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(reloadDiv);
-  const batchSize: number = 50;
+  const batchSize = 50;
   const router = useRouter();
 
   /** Reset most of the UI states:

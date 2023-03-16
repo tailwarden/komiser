@@ -1,7 +1,8 @@
-import { NextRouter } from 'next/router';
-import { ReactNode, useContext, useState } from 'react';
+import type { NextRouter } from 'next/router';
+import type { ReactNode } from 'react';
+import { useContext, useState } from 'react';
 import GlobalAppContext from '../../layout/context/GlobalAppContext';
-import {
+import type {
   InventoryItem,
   View
 } from '../hooks/useInventory/types/useInventoryTypes';

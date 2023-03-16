@@ -1,4 +1,4 @@
-import { SelectCheckboxProps } from './SelectCheckbox';
+import type { SelectCheckboxProps } from './SelectCheckbox';
 
 const base: SelectCheckboxProps = {
   label: 'Exclude',

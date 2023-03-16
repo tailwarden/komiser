@@ -1,4 +1,4 @@
-import { TemplateProps } from './Template';
+import type { TemplateProps } from './Template';
 
 const base: TemplateProps = {
   sampleTextProp: 'Hello, you can change me :)'

@@ -1,6 +1,6 @@
 import Button from '../../../button/Button';
 import Input from '../../../input/Input';
-import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
+import type { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 
 type InventoryFilterOperatorProps = {
   data: InventoryFilterData;

@@ -1,5 +1,5 @@
 import Button from '../button/Button';
-import { ErrorStateProps } from './ErrorState';
+import type { ErrorStateProps } from './ErrorState';
 
 const base: ErrorStateProps = {
   title: 'Network request error',

@@ -7,11 +7,11 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { Bar } from 'react-chartjs-2';
 import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
 import Select from '../../../select/Select';
-import {
+import type {
   CostExplorerQueryDateProps,
   CostExplorerQueryGranularityProps,
   CostExplorerQueryGroupProps,

@@ -1,7 +1,7 @@
 import Button from '../../../button/Button';
 import DashboardCloudMapChart from './DashboardCloudMapChart';
 import DashboardCloudMapTooltip from './DashboardCloudMapTooltip';
-import { DashboardCloudMapRegions } from './hooks/useCloudMap';
+import type { DashboardCloudMapRegions } from './hooks/useCloudMap';
 import useCloudMapExpand from './hooks/useCloudMapExpand';
 import useCloudMapTooltip from './hooks/useCloudMapTooltip';
 

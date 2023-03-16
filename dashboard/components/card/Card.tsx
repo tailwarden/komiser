@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import formatNumber from '../../utils/formatNumber';
 import Tooltip from '../tooltip/Tooltip';
 

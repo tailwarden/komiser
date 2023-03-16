@@ -1,6 +1,6 @@
-import { NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import Button from '../../button/Button';
-import { InventoryFilterData } from '../hooks/useInventory/types/useInventoryTypes';
+import type { InventoryFilterData } from '../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from './filter/InventoryFilterSummary';
 
 type InventoryActiveFiltersProps = {

@@ -1,7 +1,7 @@
-import { NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import Button from '../../../button/Button';
 import Dropdown from '../../../dropdown/Dropdown';
-import { ToastProps } from '../../../toast/hooks/useToast';
+import type { ToastProps } from '../../../toast/hooks/useToast';
 import useFilterWizard from './hooks/useFilterWizard';
 import InventoryFilterBreadcrumbs from './InventoryFilterBreadcrumbs';
 import InventoryFilterField from './InventoryFilterField';

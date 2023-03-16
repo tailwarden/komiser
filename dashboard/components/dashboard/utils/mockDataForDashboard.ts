@@ -1,7 +1,7 @@
-import { GlobalData } from '../../layout/context/GlobalAppContext';
-import { DashboardCloudMapRegions } from '../components/cloud-map/hooks/useCloudMap';
-import { DashboardCostExplorerData } from '../components/cost-explorer/hooks/useCostExplorer';
-import { ResourcesManagerChartProps } from '../components/resources-manager/hooks/useResourcesManagerChart';
+import type { GlobalData } from '../../layout/context/GlobalAppContext';
+import type { DashboardCloudMapRegions } from '../components/cloud-map/hooks/useCloudMap';
+import type { DashboardCostExplorerData } from '../components/cost-explorer/hooks/useCostExplorer';
+import type { ResourcesManagerChartProps } from '../components/resources-manager/hooks/useResourcesManagerChart';
 
 const stats: GlobalData = {
   regions: 17,

@@ -1,8 +1,9 @@
-import { ChartData, ChartOptions } from 'chart.js';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import type { ChartData, ChartOptions } from 'chart.js';
+import type { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
 import { dateFormatter } from '../utils/dateHelper';
-import {
+import type {
   CostExplorerQueryDateProps,
   CostExplorerQueryGranularityProps,
   CostExplorerQueryGroupProps,

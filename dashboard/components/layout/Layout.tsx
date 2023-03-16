@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 import Banner from '../banner/Banner';

@@ -1,4 +1,4 @@
-import { SelectProps } from './Select';
+import type { SelectProps } from './Select';
 
 const base: SelectProps = {
   value: 'o1',

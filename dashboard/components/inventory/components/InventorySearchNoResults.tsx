@@ -1,4 +1,4 @@
-import { NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import Button from '../../button/Button';
 
 type Props = {

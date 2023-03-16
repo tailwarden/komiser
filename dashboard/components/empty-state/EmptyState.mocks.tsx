@@ -1,4 +1,4 @@
-import { EmptyStateProps } from './EmptyState';
+import type { EmptyStateProps } from './EmptyState';
 
 const base: EmptyStateProps = {
   title: 'We could not find a cloud account',

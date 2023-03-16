@@ -1,8 +1,9 @@
-import { NextRouter } from 'next/router';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import type { NextRouter } from 'next/router';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import { ToastProps } from '../../../../toast/hooks/useToast';
-import {
+import type { ToastProps } from '../../../../toast/hooks/useToast';
+import type {
   HiddenResource,
   InventoryFilterData,
   View

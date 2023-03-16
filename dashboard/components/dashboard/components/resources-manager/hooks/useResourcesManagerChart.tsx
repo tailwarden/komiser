@@ -1,7 +1,8 @@
-import { ChartData, ChartOptions } from 'chart.js';
-import { Dispatch, SetStateAction, useState } from 'react';
+import type { ChartData, ChartOptions } from 'chart.js';
+import type { Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import formatNumber from '../../../../../utils/formatNumber';
-import {
+import type {
   ResourcesManagerData,
   ResourcesManagerGroupBySelectProps,
   ResourcesManagerQuery

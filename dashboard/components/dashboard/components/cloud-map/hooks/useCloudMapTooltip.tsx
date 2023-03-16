@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DashboardCloudMapRegions } from './useCloudMap';
+import type { DashboardCloudMapRegions } from './useCloudMap';
 
 export type DashboardCloudMapTooltipProps = {
   name: string;

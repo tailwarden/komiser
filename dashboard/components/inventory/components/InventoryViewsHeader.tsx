@@ -1,13 +1,14 @@
-import { NextRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import type { NextRouter } from 'next/router';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
 import Button from '../../button/Button';
 import Modal from '../../modal/Modal';
-import { ToastProps } from '../../toast/hooks/useToast';
-import {
+import type { ToastProps } from '../../toast/hooks/useToast';
+import type {
   InventoryFilterData,
   View
 } from '../hooks/useInventory/types/useInventoryTypes';
-import { ViewsPages } from './view/hooks/useViews';
+import type { ViewsPages } from './view/hooks/useViews';
 
 type InventoryViewsHeaderProps = {
   openModal: (

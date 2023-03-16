@@ -1,4 +1,4 @@
-import { InventoryFilterData } from '../types/useInventoryTypes';
+import type { InventoryFilterData } from '../types/useInventoryTypes';
 
 /** Parse the URL Params.
  * - Argument of type 'fetch' will output the object to fetch an inventory list and stats based on filters.

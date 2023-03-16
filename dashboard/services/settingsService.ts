@@ -108,7 +108,7 @@ const settingsService = {
     }
   },
 
-  async getInventory(urlParams: string, payload: string = '[]') {
+  async getInventory(urlParams: string, payload = '[]') {
     try {
       const res = await fetch(
         `${BASE_URL}/resources/search${urlParams}`,

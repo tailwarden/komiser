@@ -3,7 +3,7 @@ import providers from '../../../utils/providerHelper';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
 import SidepanelTabs from '../../sidepanel/SidepanelTabs';
-import {
+import type {
   InventoryItem,
   Pages,
   Tag

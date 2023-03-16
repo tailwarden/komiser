@@ -1,5 +1,5 @@
 import Button from '../../../button/Button';
-import {
+import type {
   CostExplorerQueryGranularityProps,
   CostExplorerQueryGroupProps
 } from './hooks/useCostExplorer';

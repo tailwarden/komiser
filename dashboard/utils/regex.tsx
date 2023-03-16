@@ -7,6 +7,6 @@ const regex: Regex = {
   number: / \d+ /
 };
 
-export const required: RegExp = /./;
+export const required = /./;
 
 export default regex;

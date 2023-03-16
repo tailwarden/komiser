@@ -1,7 +1,8 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import Button from '../button/Button';
 import Checkbox from '../checkbox/Checkbox';
-import { ResourcesManagerQuery } from '../dashboard/components/resources-manager/hooks/useResourcesManager';
+import type { ResourcesManagerQuery } from '../dashboard/components/resources-manager/hooks/useResourcesManager';
 import useSelectCheckbox from './hooks/useSelectCheckbox';
 
 export type SelectCheckboxProps = {

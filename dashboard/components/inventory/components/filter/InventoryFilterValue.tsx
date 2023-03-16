@@ -1,10 +1,11 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
-import { ToastProps } from '../../../toast/hooks/useToast';
-import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
-import { CostBetween } from './hooks/useFilterWizard';
+import type { ToastProps } from '../../../toast/hooks/useToast';
+import type { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
+import type { CostBetween } from './hooks/useFilterWizard';
 
 type InventoryFilterValueProps = {
   data: InventoryFilterData;

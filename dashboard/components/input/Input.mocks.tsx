@@ -1,4 +1,4 @@
-import { InputProps } from './Input';
+import type { InputProps } from './Input';
 
 const base: InputProps = {
   id: 0,

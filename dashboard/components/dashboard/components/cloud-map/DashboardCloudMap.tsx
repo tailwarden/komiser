@@ -1,7 +1,7 @@
 import DashboardCloudMapCard from './DashboardCloudMapCard';
 import DashboardCloudMapError from './DashboardCloudMapError';
 import DashboardCloudMapSkeleton from './DashboardCloudMapSkeleton';
-import { DashboardCloudMapRegions } from './hooks/useCloudMap';
+import type { DashboardCloudMapRegions } from './hooks/useCloudMap';
 
 export type DashboardCloudMapProps = {
   loading: boolean;

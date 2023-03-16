@@ -1,7 +1,7 @@
-import { NextRouter } from 'next/router';
-import { SetStateAction } from 'react';
+import type { NextRouter } from 'next/router';
+import type { SetStateAction } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import {
+import type {
   InventoryFilterData,
   InventoryItem,
   InventoryStats

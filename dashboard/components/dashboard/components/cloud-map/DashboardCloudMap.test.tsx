@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import DashboardCloudMap, { DashboardCloudMapProps } from './DashboardCloudMap';
+import type { DashboardCloudMapProps } from './DashboardCloudMap';
+import DashboardCloudMap from './DashboardCloudMap';
 
 const props: DashboardCloudMapProps = {
   loading: false,
