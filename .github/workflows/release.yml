@@ -1,5 +1,9 @@
 name: "Release Komiser"
-on: push
+on:
+  push:
+    # run only against tags
+    tags:
+      - "*"
 
 jobs:
   build_frontend:
@@ -29,51 +33,30 @@ jobs:
     needs: build_frontend
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
         with:
-          go-version: 1.20.2
+          fetch-depth: 0
+
+      - run: git fetch --force --tags
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ">=1.20.2"
+          cache: true
 
       - name: Install go-bin-data
         run: |
           go install -a -v github.com/go-bindata/go-bindata/...@latest
           go install -v github.com/elazarl/go-bindata-assetfs/...
 
-      - name: Install dependencies
-        run: go mod download
-
       - uses: actions/download-artifact@v3
         with:
           name: dashboard-build
           path: out
 
-      - name: Create assets
-        run: |
-          go-bindata-assetfs -o internal/api/v1/template.go out/...
-          sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
-
-      - name: Build & Package
-        run: |
-          make build
-          make package
-
-      - uses: actions/upload-artifact@v3
+      - uses: goreleaser/goreleaser-action@v4
         with:
-          name: komiser_linux_amd64
-          path: bin/komiser_linux_amd64
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: bin/komiser_windows_amd64.exe
-          path: bin/bin/komiser_windows_amd64.exe
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: bin/komiser_darwin_amd64
-          path: bin/bin/komiser_darwin_amd64
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: bin/komiser_darwin_arm64
-          path: bin/bin/komiser_darwin_arm64
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
