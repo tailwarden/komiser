@@ -19,4 +19,10 @@ describe('Export CSV component', () => {
     const loadingSpinner = screen.getByTestId('loading-spinner');
     expect(loadingSpinner).toBeInTheDocument();
   });
+
+  it('should display the auxiliary info in the tooltip if disabled is true', () => {
+    render(<ExportCSVButton {...props} disabled={true} />);
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip).toBeInTheDocument();
+  });
 });
