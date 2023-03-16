@@ -153,7 +153,7 @@ function InventoryViewHeader({
                     <LinkIcon width={24} height={24} />
                     Copy view link
                   </Button>
-                  <ExportCSV id={currentView.id} setToast={setToast} />
+                  <ExportCSV setToast={setToast} />
                   <span className="m-2 -mx-4 border-b border-black-200/40"></span>
                   <Button
                     style="ghost"

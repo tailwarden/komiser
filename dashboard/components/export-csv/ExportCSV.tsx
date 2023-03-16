@@ -3,7 +3,7 @@ import ExportCSVButton from './ExportCSVButton';
 import useExportCSV from './useExportCSV';
 
 type ExportCSVProps = {
-  displayInTable: boolean;
+  displayInTable?: boolean;
   setToast: (toast: ToastProps | undefined) => void;
 };
 
