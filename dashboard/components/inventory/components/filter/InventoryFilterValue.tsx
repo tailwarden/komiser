@@ -1,6 +1,3 @@
-import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
-import settingsService from '@/services/settingsService';
 import Checkbox from '@/components/checkbox/Checkbox';
 import Input from '@/components/input/Input';
 import type { ToastProps } from '@/components/toast/hooks/useToast';

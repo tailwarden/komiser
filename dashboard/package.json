@@ -64,6 +64,7 @@
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.2.2",
     "storybook": "^7.0.0-beta.52",
-    "tailwindcss": "^3.2.1"
+    "tailwindcss": "^3.2.1",
+    "unplugin-auto-import": "^0.15.1"
   }
 }
