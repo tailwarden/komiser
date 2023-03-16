@@ -64,7 +64,6 @@ function InventoryTable({
             setQuery={setQuery}
             error={error}
             setToast={setToast}
-            router={router}
           />
           <div className="rounded-lg rounded-t-none pb-6">
             <table className="w-full table-auto bg-white text-left text-sm text-gray-900">

@@ -3,8 +3,10 @@ import ExportCSVButton from './ExportCSVButton';
 
 const props = {
   id: undefined,
-  exportCSV: jest.fn(),
-  loading: false
+  loading: false,
+  disabled: false,
+  displayInTable: false,
+  exportCSV: jest.fn()
 };
 
 describe('Export CSV component', () => {

@@ -3,14 +3,22 @@ import ExportCSVButton from './ExportCSVButton';
 import useExportCSV from './useExportCSV';
 
 type ExportCSVProps = {
-  id?: string;
+  displayInTable: boolean;
   setToast: (toast: ToastProps | undefined) => void;
 };
 
-function ExportCSV({ id, setToast }: ExportCSVProps) {
-  const { loading, exportCSV } = useExportCSV({ setToast });
+function ExportCSV({ displayInTable = false, setToast }: ExportCSVProps) {
+  const { id, isFilteredList, loading, exportCSV } = useExportCSV({ setToast });
 
-  return <ExportCSVButton id={id} loading={loading} exportCSV={exportCSV} />;
+  return (
+    <ExportCSVButton
+      id={id}
+      loading={loading}
+      disabled={isFilteredList}
+      displayInTable={displayInTable}
+      exportCSV={exportCSV}
+    />
+  );
 }
 
 export default ExportCSV;

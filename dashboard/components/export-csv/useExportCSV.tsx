@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import settingsService from '../../services/settingsService';
 import { ToastProps } from '../toast/hooks/useToast';
@@ -8,6 +9,7 @@ type useExportCSVProps = {
 
 function useExportCSV({ setToast }: useExportCSVProps) {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   function exportCSV(id?: string) {
     setLoading(true);
@@ -32,7 +34,11 @@ function useExportCSV({ setToast }: useExportCSVProps) {
     });
   }
 
-  return { loading, exportCSV };
+  const isFilteredList =
+    Object.keys(router.query).length > 0 && !router.query.view;
+  const id = router.query.view ? router.query.view.toString() : undefined;
+
+  return { id, isFilteredList, loading, exportCSV };
 }
 
 export default useExportCSV;

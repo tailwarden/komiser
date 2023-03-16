@@ -59,7 +59,7 @@ function Button({
 
   const primary = `${base} bg-gradient-to-br from-primary bg-secondary hover:bg-primary active:from-secondary active:bg-secondary text-white disabled:from-primary disabled:bg-secondary disabled:opacity-50`;
 
-  const secondary = `${base} hover:bg-black-100 active:bg-black-150 text-black-400  disabled:bg-black-100 disabled:opacity-50`;
+  const secondary = `${base} hover:bg-black-100 text-black-900 active:bg-black-150 text-black-400 disabled:hover:bg-transparent disabled:opacity-30`;
 
   const bulk = `${base} bg-white hover:bg-komiser-200 active:bg-komiser-300 text-secondary  disabled:bg-white disabled:opacity-50`;
 
