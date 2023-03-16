@@ -1,9 +1,6 @@
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
-    - go generate ./...
     - go-bindata-assetfs -o internal/api/v1/template.go out/...
     - sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
 builds:
@@ -16,6 +13,33 @@ builds:
     goarch:
       - amd64
       - arm64
+
+blobs:
+  - provider: s3
+    bucket: komiser-releases
+    folder: "/{{.Version}}"
+
+brews:
+  - tap:
+      owner: tailwarden
+      name: homebrew-komiser
+      branch: master
+    folder: Formula
+    homepage: "https://komiser.io"
+    description: "Komiser.io command line interface"
+
+dockers:
+  - image_templates:
+      - tailwarden/komiser
+    build_flag_templates:
+      - "--platform linux/amd64,linux/arm64"
+      - "--build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY"
+
+release:
+  github:
+    owner: tailwarden
+    name: komiser
+  draft: true
 
 archives:
   - format: tar.gz
