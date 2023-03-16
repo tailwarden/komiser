@@ -27,6 +27,7 @@ brews:
     folder: Formula
     homepage: "https://komiser.io"
     description: "Komiser.io command line interface"
+    url_template: "https://cli.komiser.io/{{ .Tag }}/{{ .ArtifactName }}"
 
 dockers:
   - image_templates:
