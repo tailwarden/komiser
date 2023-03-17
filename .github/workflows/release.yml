@@ -75,3 +75,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+
+      - uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            SEGMENT_WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
+          tags: ${{ github.ref_name }}, latest, $(git rev-parse --short "$GITHUB_SHA")
+          provenance: false
