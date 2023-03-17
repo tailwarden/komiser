@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -37,7 +36,7 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]Resource, err
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "Pod",
-				ResourceId: fmt.Sprintf("%s", pod.UID),
+				ResourceId: string(pod.UID),
 				Name:       pod.Name,
 				Region:     pod.Namespace,
 				Cost:       0,

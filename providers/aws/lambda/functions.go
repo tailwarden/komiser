@@ -34,7 +34,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				MetricName: aws.String("Invocations"),
 				Namespace:  aws.String("AWS/Lambda"),
 				Dimensions: []types.Dimension{
-					types.Dimension{
+					{
 						Name:  aws.String("FunctionName"),
 						Value: o.FunctionName,
 					},
@@ -60,7 +60,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				MetricName: aws.String("Duration"),
 				Namespace:  aws.String("AWS/Lambda"),
 				Dimensions: []types.Dimension{
-					types.Dimension{
+					{
 						Name:  aws.String("FunctionName"),
 						Value: o.FunctionName,
 					},
@@ -106,7 +106,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Name:       *o.FunctionName,
 				Cost:       monthlyCost,
 				Metadata: map[string]string{
-					"runtime": fmt.Sprintf("%s", o.Runtime),
+					"runtime": string(o.Runtime),
 				},
 				FetchedAt: time.Now(),
 				Tags:      tags,

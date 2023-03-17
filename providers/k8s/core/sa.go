@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -37,7 +36,7 @@ func ServiceAccounts(ctx context.Context, client providers.ProviderClient) ([]Re
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "ServiceAccount",
-				ResourceId: fmt.Sprintf("%s", sa.UID),
+				ResourceId: string(sa.UID),
 				Name:       sa.Name,
 				Region:     sa.Namespace,
 				Cost:       0,

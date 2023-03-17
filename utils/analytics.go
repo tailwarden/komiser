@@ -7,6 +7,7 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/rs/xid"
 	segment "github.com/segmentio/analytics-go"
+	"github.com/sirupsen/logrus"
 )
 
 type Analytics struct {
@@ -46,10 +47,15 @@ func (a *Analytics) TrackEvent(event string, properties map[string]interface{}) 
 		}
 		eventProperties.Set("version", os.Getenv("VERSION"))
 
-		a.SegmentClient.Enqueue(segment.Track{
+		err := a.SegmentClient.Enqueue(segment.Track{
 			UserId:     a.ID,
 			Event:      event,
 			Properties: eventProperties,
 		})
+
+		if err != nil {
+			logrus.WithError(err).Error("enqueue failed")
+		}
 	}
+
 }
