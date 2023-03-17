@@ -1,4 +1,4 @@
 run:
-  timeout: 5m
+  timeout: 1m
   skip-dirs:
     - dashboard
