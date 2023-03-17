@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
 )
@@ -17,25 +18,37 @@ func (handler *ApiHandler) DashboardStatsHandler(w http.ResponseWriter, r *http.
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	err := handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	resources := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
+	err = handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	cost := struct {
 		Sum float64 `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
+	err = handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	accounts := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT account FROM resources) AS temp").Scan(handler.ctx, &accounts)
+	err = handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT account FROM resources) AS temp").Scan(handler.ctx, &accounts)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	output := struct {
 		Resources int     `json:"resources"`
@@ -65,9 +78,15 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 
 	if len(input.Exclude) > 0 {
 		s, _ := json.Marshal(input.Exclude)
-		handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources WHERE %s NOT IN (%s) GROUP BY %s ORDER by total desc;", input.Filter, input.Filter, strings.Trim(string(s), "[]"), input.Filter)).Scan(handler.ctx, &groups)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources WHERE %s NOT IN (%s) GROUP BY %s ORDER by total desc;", input.Filter, input.Filter, strings.Trim(string(s), "[]"), input.Filter)).Scan(handler.ctx, &groups)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 	} else {
-		handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT %s as label, COUNT(*) as total FROM resources GROUP BY %s ORDER by total desc;", input.Filter, input.Filter)).Scan(handler.ctx, &groups)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 	}
 
 	segments := groups
@@ -92,7 +111,10 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 func (handler *ApiHandler) LocationBreakdownStatsHandler(w http.ResponseWriter, r *http.Request) {
 	groups := make([]models.OutputResources, 0)
 
-	handler.db.NewRaw("SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;").Scan(handler.ctx, &groups)
+	err := handler.db.NewRaw("SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;").Scan(handler.ctx, &groups)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	locations := make([]models.OutputLocations, 0)
 

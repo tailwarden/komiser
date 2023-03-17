@@ -50,7 +50,10 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 	resources := make([]models.Resource, 0)
 
 	if len(view.Filters) == 0 {
-		handler.db.NewRaw("SELECT * FROM resources").Scan(handler.ctx, &resources)
+		err := handler.db.NewRaw("SELECT * FROM resources").Scan(handler.ctx, &resources)
+		if err != nil {
+			logrus.WithError(err).Errorf("select failed")
+		}
 		respondWithCSVDownload(resources, w, r)
 		return
 	}
@@ -208,7 +211,10 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 			}
 		}
 
-		handler.db.NewRaw(query).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
+		if err != nil {
+			logrus.WithError(err).Errorf("scan failed")
+		}
 	} else {
 		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id", whereClause)
 		if len(view.Exclude) > 0 {

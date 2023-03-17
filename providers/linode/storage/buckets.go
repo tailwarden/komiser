@@ -30,13 +30,13 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			Account:    client.Name,
 			Service:    "Bucket",
 			Region:     region,
-			ResourceId: fmt.Sprintf("%s", bucket.Hostname),
+			ResourceId: bucket.Hostname,
 			Cost:       0,
 			Name:       bucket.Label,
 			FetchedAt:  time.Now(),
 			CreatedAt:  *bucket.Created,
-			Link:       fmt.Sprintf("https://cloud.linode.com/object-storage" +
-									"/buckets/%s/%s", region, bucket.Label),
+			Link: fmt.Sprintf("https://cloud.linode.com/object-storage"+
+				"/buckets/%s/%s", region, bucket.Label),
 		})
 	}
 

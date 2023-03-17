@@ -41,7 +41,7 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Volume",
-			ResourceId: fmt.Sprintf("%s", volume.ID),
+			ResourceId: volume.ID,
 			Region:     volume.Region.Name,
 			Name:       volume.Name,
 			Tags:       tags,

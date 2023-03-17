@@ -3,6 +3,7 @@ package tencent
 import (
 	"context"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/providers"
@@ -41,7 +42,10 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 				log.Printf("[%s][Tencent] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+					_, err := db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+					if err != nil {
+						logrus.WithError(err).Error("db trigger failed")
+					}
 				}
 				if telemetry {
 					analytics.TrackEvent("discovered_resources", map[string]interface{}{

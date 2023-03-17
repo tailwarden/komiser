@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
@@ -53,8 +54,6 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 
 	var limit int64
 	var skip int64
-	limit = 0
-	skip = 0
 	l, err := strconv.ParseInt(limitRaw, 10, 64)
 	if err != nil {
 		limit = 0
@@ -224,9 +223,15 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 	if len(filters) == 0 {
 		if len(query) > 0 {
 			whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
-			handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+			err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+			if err != nil {
+				logrus.WithError(err).Error("scan failed")
+			}
 		} else {
-			handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
+			err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
+			if err != nil {
+				logrus.WithError(err).Error("scan failed")
+			}
 		}
 		respondWithJSON(w, 200, resources)
 		return
@@ -246,7 +251,10 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 			}
 		}
 
-		handler.db.NewRaw(query).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 	} else {
 		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
 		if len(view.Exclude) > 0 {
@@ -272,5 +280,8 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(response)
+	_, err := w.Write(response)
+	if err != nil {
+		logrus.WithError(err).Error("write failed")
+	}
 }

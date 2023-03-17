@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -37,7 +36,7 @@ func Ingress(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "Ingress",
-				ResourceId: fmt.Sprintf("%s", ingress.UID),
+				ResourceId: string(ingress.UID),
 				Name:       ingress.Name,
 				Region:     ingress.Namespace,
 				Cost:       0,

@@ -41,7 +41,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Kubernetes",
-			ResourceId: fmt.Sprintf("%s", kubernetesCluster.ID),
+			ResourceId: kubernetesCluster.ID,
 			Region:     kubernetesCluster.RegionSlug,
 			Name:       kubernetesCluster.Name,
 			Tags:       tags,
