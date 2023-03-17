@@ -132,4 +132,4 @@ To learn more about our stack, take a look at the following resources:
 
 ## Walkthrough video
 
-[![Watch the video](https://komiser-assets-cdn.s3.eu-central-1.amazonaws.com/images/dashboard-contrib-video-thumb.png)](https://youtu.be/nTQUwghvy5Q)
+[![Watch the video](https://komiser-assets-cdn.s3.eu-central-1.amazonaws.com/images/dashboard-contrib-video-thumb.png)](https://www.youtube.com/watch?v=uwxj11-eRt8)
