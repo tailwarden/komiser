@@ -20,26 +20,26 @@ import (
 )
 
 type Ec2Product struct {
-	Sku           string `json:sku`
-	ProductFamily string `json:productFamily`
+	Sku           string `json:"sku"`
+	ProductFamily string `json:"productFamily"`
 	Attributes    struct {
-		Location        string `json:location`
-		InstanceType    string `json:instanceType`
-		Tenancy         string `json:tenancy`
-		OperatingSystem string `json:operatingSystem`
-		LicenseModel    string `json:licenseModel`
-		UsageType       string `json:usagetype`
-		PreInstalledSw  string `json:preInstalledSw`
+		Location        string `json:"location"`
+		InstanceType    string `json:"instanceType"`
+		Tenancy         string `json:"tenancy"`
+		OperatingSystem string `json:"operatingSystem"`
+		LicenseModel    string `json:"licenseModel"`
+		UsageType       string `json:"usagetype"`
+		PreInstalledSw  string `json:"preInstalledSw"`
 	}
 }
 
 type PricingResult struct {
-	Product Ec2Product `json:product`
+	Product Ec2Product `json:"product"`
 	Terms   map[string]map[string]map[string]map[string]struct {
 		PricePerUnit struct {
-			USD string `json:USD`
-		} `json:pricePerUnit`
-	} `json:terms`
+			USD string `json:"USD"`
+		} `json:"pricePerUnit"`
+	} `json:"terms"`
 }
 
 func GetRegionName(code string) string {
@@ -116,30 +116,30 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				startOfMonth := utils.BeginningOfMonth(time.Now())
 				hourlyUsage := 0
 				if instance.LaunchTime.Before(startOfMonth) {
-					hourlyUsage = int(time.Now().Sub(startOfMonth).Hours())
+					hourlyUsage = int(time.Since(startOfMonth).Hours())
 				} else {
-					hourlyUsage = int(time.Now().Sub(*instance.LaunchTime).Hours())
+					hourlyUsage = int(time.Since(*instance.LaunchTime).Hours())
 				}
 
 				pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 					ServiceCode: aws.String("AmazonEC2"),
 					Filters: []types.Filter{
-						types.Filter{
+						{
 							Field: aws.String("operatingSystem"),
 							Value: aws.String("linux"),
 							Type:  types.FilterTypeTermMatch,
 						},
-						types.Filter{
+						{
 							Field: aws.String("instanceType"),
 							Value: aws.String(string(instance.InstanceType)),
 							Type:  types.FilterTypeTermMatch,
 						},
-						types.Filter{
+						{
 							Field: aws.String("location"),
 							Value: aws.String(GetRegionName(client.AWSClient.Region)),
 							Type:  types.FilterTypeTermMatch,
 						},
-						types.Filter{
+						{
 							Field: aws.String("capacitystatus"),
 							Value: aws.String("Used"),
 							Type:  types.FilterTypeTermMatch,
@@ -158,7 +158,10 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					s, _ := strconv.Unquote(string(b))
 
 					pricingResult := PricingResult{}
-					json.Unmarshal([]byte(s), &pricingResult)
+					err = json.Unmarshal([]byte(s), &pricingResult)
+					if err != nil {
+						log.WithError(err).Error("could not unmarshal")
+					}
 
 					hourlyCostRaw := pricingResult.Terms["OnDemand"][fmt.Sprintf("%s.JRTCKXETXF", pricingResult.Product.Sku)]["priceDimensions"][fmt.Sprintf("%s.JRTCKXETXF.6YS6EN2CT7", pricingResult.Product.Sku)].PricePerUnit.USD
 					hourlyCost, _ = strconv.ParseFloat(hourlyCostRaw, 64)
@@ -180,8 +183,8 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					Cost:       monthlyCost,
 					Tags:       tags,
 					Metadata: map[string]string{
-						"instanceType": fmt.Sprintf("%s", instance.InstanceType),
-						"state":        fmt.Sprintf("%s", instance.State.Name),
+						"instanceType": string(instance.InstanceType),
+						"state":        string(instance.State.Name),
 					},
 					Link: fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.InstanceId),
 				})

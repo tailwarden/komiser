@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun/dialect"
 )
@@ -16,19 +17,28 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	err := handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	resources := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
+	err = handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	cost := struct {
 		Sum float64 `bun:"sum" json:"total"`
 	}{}
 
-	handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
+	err = handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	output := struct {
 		Resources int     `json:"resources"`
@@ -201,19 +211,28 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 			query = fmt.Sprintf("FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s", whereClause)
 		}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 		resources := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 		cost := struct {
 			Sum float64 `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(handler.ctx, &cost)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(handler.ctx, &cost)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 		output := struct {
 			Resources int     `json:"resources"`
@@ -232,19 +251,28 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 		regions := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count FROM (SELECT DISTINCT region %s) AS temp", query)).Scan(handler.ctx, &regions)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 		resources := struct {
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(handler.ctx, &resources)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 		cost := struct {
 			Sum float64 `bun:"sum" json:"total"`
 		}{}
 
-		handler.db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(handler.ctx, &cost)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(handler.ctx, &cost)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 		output := struct {
 			Resources int     `json:"resources"`
@@ -267,7 +295,10 @@ func (handler *ApiHandler) ListRegionsHandler(w http.ResponseWriter, r *http.Req
 
 	outputs := make([]Output, 0)
 
-	handler.db.NewRaw("SELECT DISTINCT(region) FROM resources").Scan(handler.ctx, &outputs)
+	err := handler.db.NewRaw("SELECT DISTINCT(region) FROM resources").Scan(handler.ctx, &outputs)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	regions := make([]string, 0)
 
@@ -285,7 +316,10 @@ func (handler *ApiHandler) ListProvidersHandler(w http.ResponseWriter, r *http.R
 
 	outputs := make([]Output, 0)
 
-	handler.db.NewRaw("SELECT DISTINCT(provider) FROM resources").Scan(handler.ctx, &outputs)
+	err := handler.db.NewRaw("SELECT DISTINCT(provider) FROM resources").Scan(handler.ctx, &outputs)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	providers := make([]string, 0)
 
@@ -303,7 +337,10 @@ func (handler *ApiHandler) ListServicesHandler(w http.ResponseWriter, r *http.Re
 
 	outputs := make([]Output, 0)
 
-	handler.db.NewRaw("SELECT DISTINCT(service) FROM resources").Scan(handler.ctx, &outputs)
+	err := handler.db.NewRaw("SELECT DISTINCT(service) FROM resources").Scan(handler.ctx, &outputs)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	services := make([]string, 0)
 
@@ -321,7 +358,10 @@ func (handler *ApiHandler) ListAccountsHandler(w http.ResponseWriter, r *http.Re
 
 	outputs := make([]Output, 0)
 
-	handler.db.NewRaw("SELECT DISTINCT(account) FROM resources").Scan(handler.ctx, &outputs)
+	err := handler.db.NewRaw("SELECT DISTINCT(account) FROM resources").Scan(handler.ctx, &outputs)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	accounts := make([]string, 0)
 

@@ -3,8 +3,9 @@ package functions
 import (
 	"context"
 	"fmt"
-	"github.com/digitalocean/godo"
 	"time"
+
+	"github.com/digitalocean/godo"
 
 	log "github.com/sirupsen/logrus"
 
@@ -24,7 +25,7 @@ func Triggers(ctx context.Context, client providers.ProviderClient, namespace go
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Trigger",
-			ResourceId: fmt.Sprintf("%s", trigger.Name),
+			ResourceId: trigger.Name,
 			Region:     namespace.Region,
 			Name:       trigger.Name,
 			FetchedAt:  time.Now(),

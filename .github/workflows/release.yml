@@ -1,0 +1,77 @@
+name: "Release Komiser"
+on:
+  push:
+    # run only against tags
+    tags:
+      - "*"
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: "dashboard/package-lock.json"
+
+      - run: npm ci
+        working-directory: dashboard
+
+      - run: npm run build
+        working-directory: dashboard
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dashboard-build
+          path: dashboard/out
+
+  build_komiser:
+    runs-on: ubuntu-latest
+    needs: build_frontend
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - run: git fetch --force --tags
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ">=1.20.2"
+          cache: true
+
+      - name: Install go-bin-data
+        run: |
+          go install -a -v github.com/go-bindata/go-bindata/...@latest
+          go install -v github.com/elazarl/go-bindata-assetfs/...
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dashboard-build
+          path: out
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_LOGIN }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
