@@ -19,25 +19,25 @@ blobs:
     bucket: komiser-releases
     folder: "/{{.Version}}"
 
-brews:
-  - tap:
-      owner: tailwarden
-      name: homebrew-komiser
-      branch: master
-    folder: Formula
-    homepage: "https://komiser.io"
-    description: "Komiser.io command line interface"
-    url_template: "https://cli.komiser.io/{{ .Tag }}/{{ .ArtifactName }}"
+# brews:
+#   - tap:
+#       owner: tailwarden
+#       name: homebrew-komiser
+#       branch: master
+#     folder: Formula
+#     homepage: "https://komiser.io"
+#     description: "Komiser.io command line interface"
+#     url_template: "https://cli.komiser.io/{{ .Tag }}/{{ .ArtifactName }}"
 
-dockers:
-  - image_templates:
-      - tailwarden/komiser:{{ .Tag }}
-      - tailwarden/komiser:latest
-      - tailwarden/komiser:{{ .FullCommit }}
-    use: buildx
-    build_flag_templates:
-      - "--platform linux/amd64,linux/arm64"
-      - "--build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY"
+# dockers:
+#   - image_templates:
+#       - tailwarden/komiser:{{ .Tag }}
+#       - tailwarden/komiser:latest
+#       - tailwarden/komiser:{{ .FullCommit }}
+#     use: buildx
+#     build_flag_templates:
+#       - "--platform linux/amd64,linux/arm64"
+#       - "--build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY"
 
 release:
   github:
