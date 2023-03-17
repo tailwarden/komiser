@@ -163,6 +163,7 @@ export default function Inventory() {
           searchedLoading={searchedLoading}
           hideResourceFromCustomView={hideResourceFromCustomView}
           hideResourcesLoading={hideResourcesLoading}
+          setToast={setToast}
         />
 
         {/* Infite scroll trigger */}
