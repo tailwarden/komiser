@@ -1,0 +1,32 @@
+name: "Test"
+on: push
+
+jobs:
+  update_helm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: komiser
+
+      - uses: actions/checkout@v3
+        with:
+          repository: tailwarden/helm
+          ref: master
+          path: helm
+          token: ${{ secrets.PURPLIN_BOT }}
+
+      - name: "Create new values.yml"
+        run: |
+          export VERSION=3.0.7
+          cat komiser/templates/values.template.yml | envsubst > helm/values.yml
+
+      - name: "Push changes to tailwarden/helm"
+        run: |
+          cd ./helm
+          git add .
+          git config user.name "purplin"
+          git config user.email "purplin@tailwarden.com"
+          git commit -m "Bump version to 3.0.7"
+          git push
