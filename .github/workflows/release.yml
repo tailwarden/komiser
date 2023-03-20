@@ -5,6 +5,8 @@ on:
     tags:
       - "*"
 
+permissions: write-all
+
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
