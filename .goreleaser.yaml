@@ -58,11 +58,11 @@ docker_manifests:
   - name_template: tailwarden/komiser:{{ .Version }}
     image_templates:
       - tailwarden/komiser:{{ .Version }}-amd64
-      - tailwarden/komiser:{{ .Version }}-arm64v8
+      - tailwarden/komiser:{{ .Version }}-arm64
   - name_template: tailwarden/komiser:latest
     image_templates:
       - tailwarden/komiser:{{ .Version }}-amd64
-      - tailwarden/komiser:{{ .Version }}-arm64v8
+      - tailwarden/komiser:{{ .Version }}-arm64
 
 release:
   github:
