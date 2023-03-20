@@ -16,6 +16,7 @@ jobs:
           ref: master
           path: helm
           token: ${{ secrets.PURPLIN_BOT }}
+          persist-credentials: true
 
       - name: "Create new values.yml"
         run: |
