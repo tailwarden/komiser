@@ -34,11 +34,11 @@ brews:
     folder: Formula
     homepage: "https://komiser.io"
     description: "Komiser.io command line interface"
-    url_template: "https://cli.komiser.io/{{ .Tag }}/{{ .ArtifactName }}"
+    url_template: "https://cli.komiser.io/{{ .Version }}/{{ .ArtifactName }}"
 
 dockers:
   - image_templates:
-      - tailwarden/komiser:{{ .Tag }}-amd64
+      - tailwarden/komiser:{{ .Version }}-amd64
       - tailwarden/komiser:{{ .FullCommit }}-amd64
     dockerfile: Dockerfile
     use: buildx
@@ -46,13 +46,23 @@ dockers:
       - --platform=linux/amd64
       - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
   - image_templates:
-      - tailwarden/komiser:{{ .Tag }}-arm64
+      - tailwarden/komiser:{{ .Version }}-arm64
       - tailwarden/komiser:{{ .FullCommit }}-arm64
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
       - --platform=linux/arm64
       - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
+
+docker_manifests:
+  - name_template: tailwarden/komiser:{{ .Version }}
+    image_templates:
+      - tailwarden/komiser:{{ .Version }}-amd64
+      - tailwarden/komiser:{{ .Version }}-arm64v8
+  - name_template: tailwarden/komiser:latest
+    image_templates:
+      - tailwarden/komiser:{{ .Version }}-amd64
+      - tailwarden/komiser:{{ .Version }}-arm64v8
 
 release:
   github:
