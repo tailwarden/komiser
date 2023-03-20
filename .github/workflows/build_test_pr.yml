@@ -1,0 +1,51 @@
+name: "Build and Test Komiser PRs"
+on: pull_request
+
+jobs:
+  build_test_dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: "dashboard/package-lock.json"
+
+      - run: npm ci
+        working-directory: dashboard
+
+      - run: npm run lint
+        working-directory: dashboard
+
+      - run: npm test
+        working-directory: dashboard
+
+      - run: npm run build
+        working-directory: dashboard
+
+  build_test_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.2
+
+      # FIXME: https://github.com/golangci/golangci-lint-action/issues/677
+      # - name: golangci-lint
+      #   uses: golangci/golangci-lint-action@v3
+      #   with:
+      #     skip-pkg-cache: true
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Test
+        run: make test
+
+      - name: Build
+        run: make build

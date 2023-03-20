@@ -30,7 +30,7 @@ function Modal({ isOpen, closeModal, children }: ModalProps) {
             onClick={closeModal}
             className="fixed inset-0 z-30 hidden animate-fade-in bg-black-900/10 opacity-0 sm:block"
           ></div>
-          <div className="fixed inset-0 z-30 w-full animate-fade-in-down-short overflow-auto bg-white p-6 opacity-0 shadow-2xl sm:top-[30%] sm:bottom-[70%] sm:m-auto sm:min-h-fit sm:w-[28rem] sm:rounded-lg">
+          <div className="fixed inset-0 z-30 w-full animate-fade-in-down-short bg-white p-8 opacity-0 shadow-2xl sm:top-[15%] sm:bottom-auto sm:m-auto sm:max-w-fit sm:rounded-lg">
             {children}
           </div>
         </>

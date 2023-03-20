@@ -1,0 +1,75 @@
+before:
+  hooks:
+    - go mod tidy
+    - go-bindata-assetfs -o internal/api/v1/template.go out/...
+    - sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+blobs:
+  - provider: s3
+    bucket: komiser-releases
+    folder: "/{{.Version}}"
+
+# brews:
+#   - tap:
+#       owner: tailwarden
+#       name: homebrew-komiser
+#       branch: master
+#     folder: Formula
+#     homepage: "https://komiser.io"
+#     description: "Komiser.io command line interface"
+#     url_template: "https://cli.komiser.io/{{ .Tag }}/{{ .ArtifactName }}"
+
+# dockers:
+#   - image_templates:
+#       - tailwarden/komiser:{{ .Tag }}
+#       - tailwarden/komiser:latest
+#       - tailwarden/komiser:{{ .FullCommit }}
+#     use: buildx
+#     build_flag_templates:
+#       - "--platform linux/amd64,linux/arm64"
+#       - "--build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY"
+
+release:
+  github:
+    owner: tailwarden
+    name: komiser
+  draft: true
+
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of uname.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+# The lines beneath this are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/use them.
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj

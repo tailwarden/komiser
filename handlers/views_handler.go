@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 )
 
@@ -39,14 +40,17 @@ func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request
 func (handler *ApiHandler) ListViewsHandler(w http.ResponseWriter, r *http.Request) {
 	views := make([]models.View, 0)
 
-	handler.db.NewRaw("SELECT * FROM views").Scan(handler.ctx, &views)
+	err := handler.db.NewRaw("SELECT * FROM views").Scan(handler.ctx, &views)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	respondWithJSON(w, 200, views)
 }
 
 func (handler *ApiHandler) UpdateViewHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	viewId, _ := vars["id"]
+	viewId := vars["id"]
 
 	var view models.View
 	err := json.NewDecoder(r.Body).Decode(&view)
@@ -66,7 +70,7 @@ func (handler *ApiHandler) UpdateViewHandler(w http.ResponseWriter, r *http.Requ
 
 func (handler *ApiHandler) DeleteViewHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	viewId, _ := vars["id"]
+	viewId := vars["id"]
 
 	view := new(models.View)
 	_, err := handler.db.NewDelete().Model(view).Where("id = ?", viewId).Exec(handler.ctx)
@@ -80,7 +84,7 @@ func (handler *ApiHandler) DeleteViewHandler(w http.ResponseWriter, r *http.Requ
 
 func (handler *ApiHandler) HideResourcesFromViewHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	viewId, _ := vars["id"]
+	viewId := vars["id"]
 
 	var view models.View
 	err := json.NewDecoder(r.Body).Decode(&view)
@@ -100,7 +104,7 @@ func (handler *ApiHandler) HideResourcesFromViewHandler(w http.ResponseWriter, r
 
 func (handler *ApiHandler) UnhideResourcesFromViewHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	viewId, _ := vars["id"]
+	viewId := vars["id"]
 
 	var view models.View
 	err := json.NewDecoder(r.Body).Decode(&view)
@@ -120,7 +124,7 @@ func (handler *ApiHandler) UnhideResourcesFromViewHandler(w http.ResponseWriter,
 
 func (handler *ApiHandler) ListHiddenResourcesHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	viewId, _ := vars["id"]
+	viewId := vars["id"]
 
 	view := new(models.View)
 	err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
@@ -133,7 +137,10 @@ func (handler *ApiHandler) ListHiddenResourcesHandler(w http.ResponseWriter, r *
 
 	if len(view.Exclude) > 0 {
 		s, _ := json.Marshal(view.Exclude)
-		handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE id IN (%s)", strings.Trim(string(s), "[]"))).Scan(handler.ctx, &resources)
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE id IN (%s)", strings.Trim(string(s), "[]"))).Scan(handler.ctx, &resources)
+		if err != nil {
+			logrus.WithError(err).Error("scan failed")
+		}
 
 	}
 
@@ -146,7 +153,10 @@ func (handler *ApiHandler) ListViewAlertsHandler(w http.ResponseWriter, r *http.
 
 	alerts := make([]models.Alert, 0)
 
-	handler.db.NewRaw(fmt.Sprintf("SELECT * FROM alerts WHERE view_id = %s", viewId)).Scan(handler.ctx, &alerts)
+	err := handler.db.NewRaw(fmt.Sprintf("SELECT * FROM alerts WHERE view_id = %s", viewId)).Scan(handler.ctx, &alerts)
+	if err != nil {
+		logrus.WithError(err).Error("scan failed")
+	}
 
 	respondWithJSON(w, 200, alerts)
 }

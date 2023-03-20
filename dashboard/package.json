@@ -1,6 +1,6 @@
 {
   "name": "komiser-dashboard",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3002",
@@ -34,12 +34,13 @@
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
     "@jest/globals": "^29.5.0",
+    "@storybook/addon-actions": "^7.0.0-alpha.40",
     "@storybook/addon-essentials": "^7.0.0-beta.52",
     "@storybook/addon-interactions": "^7.0.0-beta.52",
     "@storybook/addon-links": "^7.0.0-beta.52",
     "@storybook/addons": "^7.0.0-beta.52",
     "@storybook/blocks": "^7.0.0-alpha.8",
-    "@storybook/nextjs": "^7.0.0-alpha.41",
+    "@storybook/nextjs": "^7.0.0-rc.4",
     "@storybook/react": "^7.0.0-beta.52",
     "@storybook/testing-library": "^0.0.14-next.1",
     "@storybook/theming": "^7.0.0-beta.52",

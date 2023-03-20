@@ -33,7 +33,7 @@ func Namespaces(ctx context.Context, client providers.ProviderClient) ([]models.
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
 			Service:    "Namespace",
-			ResourceId: fmt.Sprintf("%s", namespace.UUID),
+			ResourceId: string(namespace.UUID),
 			Region:     namespace.Region,
 			Name:       namespace.Namespace,
 			FetchedAt:  time.Now(),

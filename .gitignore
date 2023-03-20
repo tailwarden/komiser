@@ -13,3 +13,4 @@ bin
 
 .vscode/
 .env
+dist/

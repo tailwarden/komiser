@@ -129,3 +129,7 @@ To learn more about our stack, take a look at the following resources:
 - [Storybook documentation](https://storybook.js.org/docs/react/get-started/whats-a-story)
 - [Jest documentation](https://jestjs.io/docs/getting-started)
 - [React testing library documentation](https://testing-library.com/docs/dom-testing-library/intro)
+
+## Walkthrough video
+
+[![Watch the video](https://komiser-assets-cdn.s3.eu-central-1.amazonaws.com/images/dashboard-contrib-video-thumb.png)](https://www.youtube.com/watch?v=uwxj11-eRt8)

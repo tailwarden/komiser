@@ -24,7 +24,7 @@ function useResourcesManagerChart({
   setQuery,
   initialQuery
 }: useResourcesManagerChartProps) {
-  const colors = ['#0072B2', '#FF8C00', '#228B22', '#FFD700', '#9932CC'];
+  const colors = ['#FF9A87', '#6DB7FF', '#B6D3B4', '#FFB459', '#59ACAC'];
 
   /* To be un-commented when 'view' is supported 
     const select: ResourcesManagerGroupBySelectProps = {

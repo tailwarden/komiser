@@ -5,12 +5,14 @@ import type { Provider } from '@/utils/providerHelper';
 import providers from '@/utils/providerHelper';
 import Button from '@/components/button/Button';
 import Checkbox from '@/components/checkbox/Checkbox';
+import AlertIcon from '@/components/icons/AlertIcon';
 import Input from '@/components/input/Input';
 import Sidepanel from '@/components/sidepanel/Sidepanel';
 import SidepanelHeader from '@/components/sidepanel/SidepanelHeader';
 import SidepanelPage from '@/components/sidepanel/SidepanelPage';
 import SidepanelTabs from '@/components/sidepanel/SidepanelTabs';
 import type { ToastProps } from '@/components/toast/hooks/useToast';
+import BookmarkIcon from '@/components/icons/BookmarkIcon';
 import type {
   HiddenResource,
   InventoryFilterData,
@@ -18,9 +20,9 @@ import type {
   View
 } from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
-import InventoryViewsHeader from '../InventoryViewsHeader';
 import InventoryViewAlerts from './alerts/InventoryViewAlerts';
 import useViews from './hooks/useViews';
+import InventoryViewHeader from './InventoryViewHeader';
 
 type InventoryViewProps = {
   filters: InventoryFilterData[] | undefined;
@@ -73,7 +75,7 @@ function InventoryView({
 
   return (
     <>
-      <InventoryViewsHeader
+      <InventoryViewHeader
         openModal={openModal}
         views={views}
         router={router}
@@ -97,35 +99,7 @@ function InventoryView({
             }}
             loading={loading}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-                d="M12.02 2.91c-3.31 0-6 2.69-6 6v2.89c0 .61-.26 1.54-.57 2.06L4.3 15.77c-.71 1.18-.22 2.49 1.08 2.93 4.31 1.44 8.96 1.44 13.27 0 1.21-.4 1.74-1.83 1.08-2.93l-1.15-1.91c-.3-.52-.56-1.45-.56-2.06V8.91c0-3.3-2.7-6-6-6z"
-              ></path>
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-                d="M13.87 3.2a6.754 6.754 0 00-3.7 0c.29-.74 1.01-1.26 1.85-1.26.84 0 1.56.52 1.85 1.26z"
-              ></path>
-              <path
-                stroke="currentColor"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-                d="M15.02 19.06c0 1.65-1.35 3-3 3-.82 0-1.58-.34-2.12-.88a3.01 3.01 0 01-.88-2.12"
-              ></path>
-            </svg>
+            <AlertIcon width={16} height={16} />
             Alerts
           </Button>
         </div>
@@ -134,28 +108,7 @@ function InventoryView({
       {/* Save as a view button */}
       {!router.query.view && (
         <Button size="sm" onClick={() => openModal(filters)}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="M16 8.99v11.36c0 1.45-1.04 2.06-2.31 1.36l-3.93-2.19c-.42-.23-1.1-.23-1.52 0l-3.93 2.19c-1.27.7-2.31.09-2.31-1.36V8.99c0-1.71 1.4-3.11 3.11-3.11h7.78c1.71 0 3.11 1.4 3.11 3.11z"
-            ></path>
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="M22 5.11v11.36c0 1.45-1.04 2.06-2.31 1.36L16 15.77V8.99c0-1.71-1.4-3.11-3.11-3.11H8v-.77C8 3.4 9.4 2 11.11 2h7.78C20.6 2 22 3.4 22 5.11zM7 12h4M9 14v-4"
-            ></path>
-          </svg>
+          <BookmarkIcon width={16} height={16} />
           Save as a view
         </Button>
       )}
@@ -171,7 +124,7 @@ function InventoryView({
               ? 'are part of this view'
               : 'will be added to this view'
           }`}
-          deleteAction={router.query.view ? deleteView : undefined}
+          deleteAction={router.query.view ? () => deleteView(false) : undefined}
           deleteLabel="Delete view"
           closeModal={closeModal}
         />
