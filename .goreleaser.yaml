@@ -55,6 +55,10 @@ dockers:
       - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
 
 docker_manifests:
+  - name_template: tailwarden/komiser:{{ .FullCommit }}
+    image_templates:
+      - tailwarden/komiser:{{ .FullCommit }}-amd64
+      - tailwarden/komiser:{{ .FullCommit }}-arm64
   - name_template: tailwarden/komiser:{{ .Version }}
     image_templates:
       - tailwarden/komiser:{{ .Version }}-amd64
