@@ -75,3 +75,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+          PURPLIN_BOT: ${{ secrets.PURPLIN_BOT }}

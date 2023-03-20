@@ -13,17 +13,24 @@ builds:
     goarch:
       - amd64
       - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+      - goos: linux
+        goarch: arm64
 
 blobs:
   - provider: s3
     bucket: komiser-releases
     folder: "/{{.Version}}"
+    region: eu-central-1
 
 brews:
   - tap:
       owner: tailwarden
       name: homebrew-komiser
       branch: master
+      token: "{{ .Env.PURPLIN_BOT }}"
     folder: Formula
     homepage: "https://komiser.io"
     description: "Komiser.io command line interface"
@@ -31,13 +38,21 @@ brews:
 
 dockers:
   - image_templates:
-      - tailwarden/komiser:{{ .Tag }}
-      - tailwarden/komiser:latest
-      - tailwarden/komiser:{{ .FullCommit }}
+      - tailwarden/komiser:{{ .Tag }}-amd64
+      - tailwarden/komiser:{{ .FullCommit }}-amd64
+    dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
-      - "--platform linux/amd64,linux/arm64"
-      - "--build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY"
+      - --platform=linux/amd64
+      - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
+  - image_templates:
+      - tailwarden/komiser:{{ .Tag }}-arm64
+      - tailwarden/komiser:{{ .FullCommit }}-arm64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/arm64
+      - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
 
 release:
   github:
