@@ -78,3 +78,27 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
           PURPLIN_BOT: ${{ secrets.PURPLIN_BOT }}
+
+      - uses: actions/checkout@v3
+        with:
+          repository: tailwarden/helm
+          ref: master
+          path: helm
+          token: ${{ secrets.PURPLIN_BOT }}
+          persist-credentials: true
+
+      - name: "Create new values.yaml"
+        run: |
+          export VERSION=$(echo $TAG | cut -c2-)
+          cat templates/values.template.yaml | envsubst > helm/values.yaml
+        env:
+          TAG: ${{ github.ref_name }}
+
+      - name: "Push changes to tailwarden/helm"
+        run: |
+          cd ./helm
+          git add .
+          git config user.name "purplin"
+          git config user.email "purplin@tailwarden.com"
+          git commit -m "Bump version to 3.0.7"
+          git push
