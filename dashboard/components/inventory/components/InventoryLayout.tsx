@@ -1,8 +1,8 @@
 import type { NextRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useContext, useState } from 'react';
-import GlobalAppContext from '@/components/layout/context/GlobalAppContext';
 import classNames from 'classnames';
+import GlobalAppContext from '@/components/layout/context/GlobalAppContext';
 import type {
   InventoryItem,
   View
