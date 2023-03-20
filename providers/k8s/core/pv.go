@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -37,7 +36,7 @@ func PersistentVolumes(ctx context.Context, client providers.ProviderClient) ([]
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "PersistentVolume",
-				ResourceId: fmt.Sprintf("%s", pv.UID),
+				ResourceId: string(pv.UID),
 				Name:       pv.Name,
 				Region:     pv.Namespace,
 				Cost:       0,

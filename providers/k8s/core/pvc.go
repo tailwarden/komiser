@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -37,7 +36,7 @@ func PersistentVolumeClaims(ctx context.Context, client providers.ProviderClient
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "PersistentVolumeClaim",
-				ResourceId: fmt.Sprintf("%s", pvc.UID),
+				ResourceId: string(pvc.UID),
 				Name:       pvc.Name,
 				Region:     pvc.Namespace,
 				Cost:       0,

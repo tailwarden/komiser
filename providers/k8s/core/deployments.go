@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/siruspen/logrus"
@@ -36,7 +35,7 @@ func Deployments(ctx context.Context, client providers.ProviderClient) ([]Resour
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "Deployment",
-				ResourceId: fmt.Sprintf("%s", deploy.UID),
+				ResourceId: string(deploy.UID),
 				Name:       deploy.Name,
 				Region:     deploy.Namespace,
 				Cost:       0,

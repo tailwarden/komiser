@@ -70,7 +70,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 
 	cron := gocron.NewScheduler(time.UTC)
 
-	cron.Every(1).Hours().Do(func() {
+	_, err = cron.Every(1).Hours().Do(func() {
 		log.Info("Fetching resources workflow has started")
 		err = fetchResources(ctx, clients, regions, telemetry)
 		if err != nil {
@@ -78,20 +78,32 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 		}
 	})
 
-	cron.Every(1).Hours().Do(func() {
+	if err != nil {
+		log.WithError(err).Error("setting up cron job failed")
+	}
+
+	_, err = cron.Every(1).Hours().Do(func() {
 		if len(cfg.Slack.Webhook) > 0 {
 			log.Info("Checking Slack alerts")
 			checkingAlerts(ctx, *cfg, telemetry, port)
 		}
 	})
 
-	cron.Every(1).Friday().At("09:00").Do(func() {
+	if err != nil {
+		log.WithError(err).Error("setting up cron job failed")
+	}
+
+	_, err = cron.Every(1).Friday().At("09:00").Do(func() {
 		if len(cfg.Slack.Webhook) > 0 && cfg.Slack.Reporting {
 			log.Info("Sending weekly reporting")
 			sendTagsCoverageReport(ctx, *cfg)
 			sendCostBreakdownReport(ctx, *cfg)
 		}
 	})
+
+	if err != nil {
+		log.WithError(err).Error("setting up cron job failed")
+	}
 
 	cron.StartAsync()
 
@@ -337,11 +349,17 @@ func checkUpgrade() {
 func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port int) {
 	alerts := make([]models.Alert, 0)
 
-	db.NewRaw("SELECT * FROM alerts").Scan(ctx, &alerts)
+	err := db.NewRaw("SELECT * FROM alerts").Scan(ctx, &alerts)
+	if err != nil {
+		log.WithError(err).Error("scan failed")
+	}
 
 	for _, alert := range alerts {
 		var view models.View
-		db.NewRaw(fmt.Sprintf("SELECT * FROM views WHERE id = %s", alert.ViewId)).Scan(ctx, &view)
+		err = db.NewRaw(fmt.Sprintf("SELECT * FROM views WHERE id = %s", alert.ViewId)).Scan(ctx, &view)
+		if err != nil {
+			log.WithError(err).Error("scan failed")
+		}
 
 		stats, err := getViewStats(ctx, view.Filters)
 		if err != nil {
@@ -364,7 +382,7 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 					Text:          "Cost alert :warning:",
 					Footer:        "Komiser",
 					Actions: []slack.AttachmentAction{
-						slack.AttachmentAction{
+						{
 							Name: "open",
 							Text: "Open view",
 							Type: "button",
@@ -372,11 +390,11 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 						},
 					},
 					Fields: []slack.AttachmentField{
-						slack.AttachmentField{
+						{
 							Title: "View",
 							Value: view.Name,
 						},
-						slack.AttachmentField{
+						{
 							Title: "Cost",
 							Value: fmt.Sprintf("%.2f$", stats.Costs),
 						},
@@ -411,7 +429,7 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 					Text:          "Usage alert :warning:",
 					Footer:        "Komiser",
 					Actions: []slack.AttachmentAction{
-						slack.AttachmentAction{
+						{
 							Name: "open",
 							Text: "Open view",
 							Type: "button",
@@ -419,11 +437,11 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 						},
 					},
 					Fields: []slack.AttachmentField{
-						slack.AttachmentField{
+						{
 							Title: "View",
 							Value: view.Name,
 						},
-						slack.AttachmentField{
+						{
 							Title: "Resources",
 							Value: fmt.Sprintf("%d", stats.Resources),
 						},
@@ -590,13 +608,19 @@ func getViewStats(ctx context.Context, filters []models.Filter) (models.ViewStat
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(ctx, &resources)
+		err := db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(ctx, &resources)
+		if err != nil {
+			log.WithError(err).Error("scan failed")
+		}
 
 		cost := struct {
 			Sum float64 `bun:"sum" json:"total"`
 		}{}
 
-		db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(ctx, &cost)
+		err = db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(ctx, &cost)
+		if err != nil {
+			log.WithError(err).Error("scan failed")
+		}
 
 		output := models.ViewStat{
 			Resources: resources.Count,
@@ -611,13 +635,19 @@ func getViewStats(ctx context.Context, filters []models.Filter) (models.ViewStat
 			Count int `bun:"count" json:"total"`
 		}{}
 
-		db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(ctx, &resources)
+		err := db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as count %s", query)).Scan(ctx, &resources)
+		if err != nil {
+			log.WithError(err).Error("scan failed")
+		}
 
 		cost := struct {
 			Sum float64 `bun:"sum" json:"total"`
 		}{}
 
-		db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(ctx, &cost)
+		err = db.NewRaw(fmt.Sprintf("SELECT SUM(cost) as sum %s", query)).Scan(ctx, &cost)
+		if err != nil {
+			log.WithError(err).Error("scan failed")
+		}
 
 		output := models.ViewStat{
 			Resources: resources.Count,
@@ -634,7 +664,10 @@ func sendTagsCoverageReport(ctx context.Context, cfg models.Config) {
 		Label models.Tag `bun:"label"`
 	}, 0)
 
-	db.NewRaw("SELECT count(*) as total, value as label FROM resources CROSS JOIN json_each(tags) GROUP BY value ORDER BY total DESC").Scan(ctx, &tags)
+	err := db.NewRaw("SELECT count(*) as total, value as label FROM resources CROSS JOIN json_each(tags) GROUP BY value ORDER BY total DESC").Scan(ctx, &tags)
+	if err != nil {
+		log.WithError(err).Error("scan failed")
+	}
 
 	fields := make([]slack.AttachmentField, 0)
 
@@ -650,7 +683,10 @@ func sendTagsCoverageReport(ctx context.Context, cfg models.Config) {
 		Total int `bun:"total"`
 	}{}
 
-	db.NewRaw("SELECT COUNT(*) as total FROM resources where json_array_length(tags) = 0;").Scan(ctx, &output)
+	err = db.NewRaw("SELECT COUNT(*) as total FROM resources where json_array_length(tags) = 0;").Scan(ctx, &output)
+	if err != nil {
+		log.WithError(err).Error("scan failed")
+	}
 
 	currentTime := time.Now()
 
@@ -670,7 +706,7 @@ func sendTagsCoverageReport(ctx context.Context, cfg models.Config) {
 		Attachments: []slack.Attachment{attachment},
 	}
 
-	err := slack.PostWebhook(cfg.Slack.Webhook, &msg)
+	err = slack.PostWebhook(cfg.Slack.Webhook, &msg)
 	if err != nil {
 		log.Warn(err)
 	}
@@ -681,7 +717,10 @@ func sendCostBreakdownReport(ctx context.Context, cfg models.Config) {
 	currentTime := time.Now()
 
 	for _, field := range []string{"service", "provider", "account", "region"} {
-		db.NewRaw(fmt.Sprintf("SELECT %s as label, SUM(cost) as total FROM resources GROUP BY %s ORDER by total desc;", field, field)).Scan(ctx, &groups)
+		err := db.NewRaw(fmt.Sprintf("SELECT %s as label, SUM(cost) as total FROM resources GROUP BY %s ORDER by total desc;", field, field)).Scan(ctx, &groups)
+		if err != nil {
+			log.WithError(err).Error("scan failed")
+		}
 
 		segments := groups
 
@@ -725,7 +764,7 @@ func sendCostBreakdownReport(ctx context.Context, cfg models.Config) {
 			Attachments: []slack.Attachment{attachment},
 		}
 
-		err := slack.PostWebhook(cfg.Slack.Webhook, &msg)
+		err = slack.PostWebhook(cfg.Slack.Webhook, &msg)
 		if err != nil {
 			log.Warn(err)
 		}
