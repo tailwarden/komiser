@@ -31,6 +31,9 @@ brews:
       name: homebrew-komiser
       branch: master
       token: "{{ .Env.PURPLIN_BOT }}"
+    commit_author:
+      name: purplin
+      email: purplin@tailwarden.com
     folder: Formula
     homepage: "https://komiser.io"
     description: "Komiser.io command line interface"
