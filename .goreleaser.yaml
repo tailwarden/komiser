@@ -49,6 +49,7 @@ dockers:
     build_flag_templates:
       - --platform=linux/amd64
       - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
+      - --build-arg=VERSION={{ .Version }}
   - image_templates:
       - tailwarden/komiser:{{ .Version }}-arm64
       - tailwarden/komiser:{{ .FullCommit }}-arm64
