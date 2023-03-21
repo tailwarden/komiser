@@ -56,6 +56,7 @@ dockers:
     build_flag_templates:
       - --platform=linux/arm64
       - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
+      - --build-arg=VERSION={{ .Version }}
 
 docker_manifests:
   - name_template: tailwarden/komiser:{{ .FullCommit }}
@@ -78,7 +79,7 @@ release:
   draft: true
 
 archives:
-  - format: tar.gz
+  - format: binary
     # this name template makes the OS and Arch compatible with the results of uname.
     name_template: >-
       {{ .ProjectName }}_

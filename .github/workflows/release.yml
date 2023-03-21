@@ -100,5 +100,5 @@ jobs:
           git add .
           git config user.name "purplin"
           git config user.email "purplin@tailwarden.com"
-          git commit -m "Bump version to 3.0.7"
+          git commit -m "Bump version to ${VERSION}"
           git push
