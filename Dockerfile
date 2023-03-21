@@ -2,6 +2,7 @@ FROM --platform=$BUILDPLATFORM alpine:3.16
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG SEGMENT_WRITE_KEY
+ARG VERSION
 MAINTAINER mlabouardy <mohamed@tailwarden.com>
 
 RUN echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log

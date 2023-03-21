@@ -88,8 +88,10 @@ jobs:
           persist-credentials: true
 
       - name: "Create new values.yaml"
+        id: release-version
         run: |
           export VERSION=$(echo $TAG | cut -c2-)
+          echo "RELEASE_VERSION=${VERSION}" >> $GITHUB_OUTPUT
           cat templates/values.template.yaml | envsubst > helm/values.yaml
         env:
           TAG: ${{ github.ref_name }}
@@ -102,3 +104,5 @@ jobs:
           git config user.email "purplin@tailwarden.com"
           git commit -m "Bump version to ${VERSION}"
           git push
+        env:
+          VERSION: ${{ steps.release-version.outputs.RELEASE_VERSION }}
