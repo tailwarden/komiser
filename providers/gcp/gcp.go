@@ -5,12 +5,15 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/gcp/storage"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
 
 func listOfSupportedServices() []providers.FetchDataFunction {
-	return []providers.FetchDataFunction{}
+	return []providers.FetchDataFunction{
+		storage.Buckets,
+	}
 }
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics) {
