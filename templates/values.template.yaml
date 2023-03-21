@@ -1,0 +1,7 @@
+image:
+  repository: tailwarden/komiser
+  tag: ${VERSION}
+  pullPolicy: IfNotPresent
+
+aws:
+  region: "eu-central-1"
