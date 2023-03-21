@@ -38,6 +38,7 @@ brews:
     homepage: "https://komiser.io"
     description: "Komiser.io command line interface"
     url_template: "https://cli.komiser.io/{{ .Version }}/{{ .ArtifactName }}"
+    commit_msg_template: "chore: bump version to {{ .Version }}"
 
 dockers:
   - image_templates:

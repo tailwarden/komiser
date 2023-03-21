@@ -102,7 +102,7 @@ jobs:
           git add .
           git config user.name "purplin"
           git config user.email "purplin@tailwarden.com"
-          git commit -m "Bump version to ${VERSION}"
+          git commit -m "chore: bump version to ${VERSION}"
           git push
         env:
           VERSION: ${{ steps.release-version.outputs.RELEASE_VERSION }}
