@@ -14,6 +14,9 @@ import (
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
+
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 func ConvertBytesToTerabytes(bytes int64) float64 {
@@ -111,4 +114,38 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func AccessPoints(ctx context.Context, client ProviderClient) ([]Resource, error) {
+	// Collect Amazon S3 accesspoints
+
+	resources := make([]Resource, 0)
+
+	// Create a new AWS session
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-west-2"),
+	})
+	if err != nil {
+		fmt.Println("Failed to create AWS session", err)
+		return
+	}
+
+	// Create a new S3 service client
+	s3svc := s3.New(sess)
+
+	// List all S3 access points in the account
+	resp, err := s3svc.ListAccessPoints(&s3.ListAccessPointsInput{})
+	if err != nil {
+		fmt.Println("Failed to list S3 access points", err)
+		return
+	}
+
+	// Print out the name and ARN of each access point
+	for _, ap := range resp.AccessPointList {
+		fmt.Println("Access point name:", *ap.Name)
+		fmt.Println("Access point ARN:", *ap.AccessPointArn)
+	}
+
+	return resources, nil
+
 }
