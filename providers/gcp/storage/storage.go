@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -51,6 +52,7 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			Region:     strings.ToLower(bucket.Location),
 			Tags:       tags,
 			FetchedAt:  time.Now(),
+			Link:       fmt.Sprintf("https://console.cloud.google.com/storage/browser/%s?project=%s", bucket.Name, client.GCPClient.Credentials.ProjectID),
 		})
 	}
 
