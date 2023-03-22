@@ -1,5 +1,7 @@
 package utils
 
+import "strings"
+
 type Location struct {
 	Name      string `json:"name"`
 	Label     string `json:"label"`
@@ -232,4 +234,14 @@ func GetLocationFromRegion(label string) Location {
 	}
 
 	return Location{}
+}
+
+// MongoDB Atlas returns the region names of AWS, GCP and Azure.
+// The names are written as "EU_CENTRAL_1" instead of "eu-central-1", which
+// this function fixes.
+
+func NormalizeRegionName(regionName string) string {
+	lowercased := strings.ToLower(regionName)
+	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
+	return dashReplaced
 }
