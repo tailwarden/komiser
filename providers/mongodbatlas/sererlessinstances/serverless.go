@@ -56,7 +56,7 @@ func ServerlessInstances(ctx context.Context, client providers.ProviderClient) (
 	log.WithFields(log.Fields{
 		"provider":  "MongoDBAtlas",
 		"account":   client.Name,
-		"service":   "Cluster",
+		"service":   "Serverless Cluster",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 

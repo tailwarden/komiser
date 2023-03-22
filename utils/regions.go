@@ -239,7 +239,6 @@ func GetLocationFromRegion(label string) Location {
 // MongoDB Atlas returns the region names of AWS, GCP and Azure.
 // The names are written as "EU_CENTRAL_1" instead of "eu-central-1", which
 // this function fixes.
-
 func NormalizeRegionName(regionName string) string {
 	lowercased := strings.ToLower(regionName)
 	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
