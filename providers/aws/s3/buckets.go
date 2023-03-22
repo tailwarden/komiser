@@ -11,12 +11,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3control"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
-
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 func ConvertBytesToTerabytes(bytes int64) float64 {
@@ -127,17 +126,18 @@ func AccessPoints(ctx context.Context, client ProviderClient) ([]Resource, error
 	})
 	if err != nil {
 		fmt.Println("Failed to create AWS session", err)
-		return
+		return nil, err
 	}
 
 	// Create a new S3 service client
-	s3svc := s3.New(sess)
+	s3svc := s3control.New(sess)
 
 	// List all S3 access points in the account
-	resp, err := s3svc.ListAccessPoints(&s3.ListAccessPointsInput{})
+	// resp, err := s3svc.ListAccessPoints(&s3.ListAccessPointsInput{})
+	resp, err := s3svc.ListAccessPoints(&s3control.ListAccessPointsInput{})
 	if err != nil {
 		fmt.Println("Failed to list S3 access points", err)
-		return
+		return nil, err
 	}
 
 	// Print out the name and ARN of each access point
