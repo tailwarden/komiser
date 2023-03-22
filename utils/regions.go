@@ -215,9 +215,106 @@ func getDigitalOceanRegions() []Location {
 	}
 }
 
+func getGCPRegions() []Location {
+	return []Location{
+		{
+			Name:      "Ashburn",
+			Label:     "us-east1",
+			Latitude:  "39.04372",
+			Longitude: "-77.48749",
+		},
+		{
+			Name:      "Moncks Corner",
+			Label:     "us-east4",
+			Latitude:  "33.20087",
+			Longitude: "-80.00756",
+		},
+		{
+			Name:      "Los Angeles",
+			Label:     "us-west2",
+			Latitude:  "34.05223",
+			Longitude: "-118.24368",
+		},
+		{
+			Name:      "Salt Lake City",
+			Label:     "us-west3",
+			Latitude:  "40.76078",
+			Longitude: "-111.89105",
+		},
+		{
+			Name:      "Las Vegas",
+			Label:     "us-west4",
+			Latitude:  "36.16994",
+			Longitude: "-115.13983",
+		},
+		{
+			Name:      "South Carolina",
+			Label:     "us-central1",
+			Latitude:  "34.00071",
+			Longitude: "-81.03481",
+		},
+		{
+			Name:      "Iowa",
+			Label:     "us-central2",
+			Latitude:  "41.87801",
+			Longitude: "-93.0977",
+		},
+		{
+			Name:      "Oregon",
+			Label:     "us-west1",
+			Latitude:  "45.52345",
+			Longitude: "-122.67621",
+		},
+		{
+			Name:      "South Carolina",
+			Label:     "us-east2",
+			Latitude:  "34.00071",
+			Longitude: "-81.03481",
+		},
+		{
+			Name:      "South Carolina",
+			Label:     "us-east3",
+			Latitude:  "34.00071",
+			Longitude: "-81.03481",
+		},
+		{
+			Name:      "Finland",
+			Label:     "europe-north1",
+			Latitude:  "60.16952",
+			Longitude: "24.93838",
+		},
+		{
+			Name:      "Belgium",
+			Label:     "europe-west1",
+			Latitude:  "50.85034",
+			Longitude: "4.35171",
+		},
+		// Regions below are used for multi-region buckets
+		{
+			Name:      "EU",
+			Label:     "eu",
+			Latitude:  "47.751569",
+			Longitude: "1.675063",
+		},
+		{
+			Name:      "US",
+			Label:     "us",
+			Latitude:  "44.967243",
+			Longitude: "-103.771556",
+		},
+		{
+			Name:      "ASIA",
+			Label:     "asia",
+			Latitude:  "52.483333",
+			Longitude: "96.085833",
+		},
+	}
+}
+
 func GetLocationFromRegion(label string) Location {
 	awsRegions := getAWSRegions()
 	doRegions := getDigitalOceanRegions()
+	gcpRegions := getGCPRegions()
 
 	for _, region := range awsRegions {
 		if region.Label == label {
@@ -226,6 +323,12 @@ func GetLocationFromRegion(label string) Location {
 	}
 
 	for _, region := range doRegions {
+		if region.Label == label {
+			return region
+		}
+	}
+
+	for _, region := range gcpRegions {
 		if region.Label == label {
 			return region
 		}

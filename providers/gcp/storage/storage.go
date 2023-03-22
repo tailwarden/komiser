@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/storage"
@@ -45,8 +46,9 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			Provider:   "GCP",
 			Account:    client.Name,
 			Service:    "Bucket",
+			Name:       bucket.Name,
 			ResourceId: bucket.Name,
-			Region:     bucket.Location,
+			Region:     strings.ToLower(bucket.Location),
 			Tags:       tags,
 			FetchedAt:  time.Now(),
 		})
