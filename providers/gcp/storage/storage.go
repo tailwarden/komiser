@@ -59,5 +59,5 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]models.Res
 		"resources": len(resources),
 	}).Info("Fetched resources")
 
-	return []models.Resource{}, nil
+	return resources, nil
 }
