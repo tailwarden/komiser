@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	monitoring "cloud.google.com/go/monitoring/apiv3"
+	monitoring "cloud.google.com/go/monitoring/apiv3/v2"
 	monitoringpb "cloud.google.com/go/monitoring/apiv3/v2/monitoringpb"
 	"cloud.google.com/go/storage"
 	"github.com/golang/protobuf/ptypes/duration"
