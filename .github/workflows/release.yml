@@ -22,6 +22,9 @@ jobs:
       - run: npm ci
         working-directory: dashboard
 
+      - run: npm run lint
+        working-directory: dashboard
+
       - run: npm run build
         working-directory: dashboard
 

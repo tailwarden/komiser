@@ -36,4 +36,3 @@ yarn-error.log*
 next-env.d.ts
 
 .eslintcache
-auto-imports.d.ts
