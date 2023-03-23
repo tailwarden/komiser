@@ -62,6 +62,15 @@ func GetBucketSize(ctx context.Context, client providers.ProviderClient, bucketN
 	return 0, errors.New("no data found")
 }
 
+func getPricingForGCPBuckets() map[string]float64 {
+	return map[string]float64{
+		"STANDARD": 0.20,
+		"NEARLINE": 0.10,
+		"COLDLINE": 0.01,
+		"ARCHIVE":  0.005,
+	}
+}
+
 func Buckets(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
@@ -102,7 +111,7 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]models.Res
 
 		if bucketSize > 0 {
 			bucketSizeInGB := float64(bucketSize) / 1024 / 1024 / 1024
-			monthlyCost = float64(bucketSizeInGB) * 0.20
+			monthlyCost = float64(bucketSizeInGB) * getPricingForGCPBuckets()[strings.ToUpper(bucket.StorageClass)]
 		}
 
 		resources = append(resources, models.Resource{
