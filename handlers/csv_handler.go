@@ -28,6 +28,10 @@ func (handler *ApiHandler) DownloadInventoryCSV(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	if handler.telemetry {
+		handler.analytics.TrackEvent("exporting_csv", nil)
+	}
+
 	respondWithCSVDownload(resources, w, r)
 }
 

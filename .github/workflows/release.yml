@@ -5,6 +5,8 @@ on:
     tags:
       - "*"
 
+permissions: write-all
+
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
@@ -75,14 +77,32 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+          PURPLIN_BOT: ${{ secrets.PURPLIN_BOT }}
 
-      - uses: docker/build-push-action@v3
+      - uses: actions/checkout@v3
         with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          build-args: |
-            SEGMENT_WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
-          tags: ${{ github.ref_name }}, latest, $(git rev-parse --short "$GITHUB_SHA")
-          provenance: false
+          repository: tailwarden/helm
+          ref: master
+          path: helm
+          token: ${{ secrets.PURPLIN_BOT }}
+          persist-credentials: true
+
+      - name: "Create new values.yaml"
+        id: release-version
+        run: |
+          export VERSION=$(echo $TAG | cut -c2-)
+          echo "RELEASE_VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          cat templates/values.template.yaml | envsubst > helm/values.yaml
+        env:
+          TAG: ${{ github.ref_name }}
+
+      - name: "Push changes to tailwarden/helm"
+        run: |
+          cd ./helm
+          git add .
+          git config user.name "purplin"
+          git config user.email "purplin@tailwarden.com"
+          git commit -m "chore: bump version to ${VERSION}"
+          git push
+        env:
+          VERSION: ${{ steps.release-version.outputs.RELEASE_VERSION }}

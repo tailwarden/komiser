@@ -13,31 +13,66 @@ builds:
     goarch:
       - amd64
       - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+      - goos: linux
+        goarch: arm64
 
 blobs:
   - provider: s3
     bucket: komiser-releases
     folder: "/{{.Version}}"
+    region: eu-central-1
 
-# brews:
-#   - tap:
-#       owner: tailwarden
-#       name: homebrew-komiser
-#       branch: master
-#     folder: Formula
-#     homepage: "https://komiser.io"
-#     description: "Komiser.io command line interface"
-#     url_template: "https://cli.komiser.io/{{ .Tag }}/{{ .ArtifactName }}"
+brews:
+  - tap:
+      owner: tailwarden
+      name: homebrew-komiser
+      branch: master
+      token: "{{ .Env.PURPLIN_BOT }}"
+    commit_author:
+      name: purplin
+      email: purplin@tailwarden.com
+    folder: Formula
+    homepage: "https://komiser.io"
+    description: "Komiser.io command line interface"
+    url_template: "https://cli.komiser.io/{{ .Version }}/{{ .ArtifactName }}"
+    commit_msg_template: "chore: bump version to {{ .Version }}"
 
-# dockers:
-#   - image_templates:
-#       - tailwarden/komiser:{{ .Tag }}
-#       - tailwarden/komiser:latest
-#       - tailwarden/komiser:{{ .FullCommit }}
-#     use: buildx
-#     build_flag_templates:
-#       - "--platform linux/amd64,linux/arm64"
-#       - "--build-arg SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY"
+dockers:
+  - image_templates:
+      - tailwarden/komiser:{{ .Version }}-amd64
+      - tailwarden/komiser:{{ .FullCommit }}-amd64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/amd64
+      - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
+      - --build-arg=VERSION={{ .Version }}
+  - image_templates:
+      - tailwarden/komiser:{{ .Version }}-arm64
+      - tailwarden/komiser:{{ .FullCommit }}-arm64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - --platform=linux/arm64
+      - --build-arg=SEGMENT_WRITE_KEY=$SEGMENT_WRITE_KEY
+      - --build-arg=VERSION={{ .Version }}
+
+docker_manifests:
+  - name_template: tailwarden/komiser:{{ .FullCommit }}
+    image_templates:
+      - tailwarden/komiser:{{ .FullCommit }}-amd64
+      - tailwarden/komiser:{{ .FullCommit }}-arm64
+  - name_template: tailwarden/komiser:{{ .Version }}
+    image_templates:
+      - tailwarden/komiser:{{ .Version }}-amd64
+      - tailwarden/komiser:{{ .Version }}-arm64
+  - name_template: tailwarden/komiser:latest
+    image_templates:
+      - tailwarden/komiser:{{ .Version }}-amd64
+      - tailwarden/komiser:{{ .Version }}-arm64
 
 release:
   github:
@@ -46,7 +81,7 @@ release:
   draft: true
 
 archives:
-  - format: tar.gz
+  - format: binary
     # this name template makes the OS and Arch compatible with the results of uname.
     name_template: >-
       {{ .ProjectName }}_

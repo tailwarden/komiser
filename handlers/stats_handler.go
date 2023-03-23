@@ -50,6 +50,14 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 		Costs:     cost.Sum,
 	}
 
+	if handler.telemetry {
+		handler.analytics.TrackEvent("global_stats", map[string]interface{}{
+			"costs":     cost.Sum,
+			"regions":   regions.Count,
+			"resources": resources.Count,
+		})
+	}
+
 	respondWithJSON(w, 200, output)
 }
 
