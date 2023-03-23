@@ -13,6 +13,7 @@ import (
 	. "github.com/tailwarden/komiser/models"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"go.mongodb.org/atlas/mongodbatlas"
+	"golang.org/x/oauth2/google"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -29,10 +30,15 @@ type ProviderClient struct {
 	AzureClient        *AzureClient
 	ScalewayClient     *scw.Client
 	MongoDBAtlasClient *mongodbatlas.Client
+	GCPClient          *GCPClient
 	Name               string
 }
 
 type AzureClient struct {
 	Credentials    *azidentity.ClientSecretCredential
 	SubscriptionId string
+}
+
+type GCPClient struct {
+	Credentials *google.Credentials
 }

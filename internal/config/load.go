@@ -28,6 +28,7 @@ import (
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"go.mongodb.org/atlas/mongodbatlas"
 	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -302,6 +303,28 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics) (*Config
 			clients = append(clients, providers.ProviderClient{
 				MongoDBAtlasClient: client,
 				Name:               account.Name,
+			})
+		}
+	}
+
+	if len(config.GCP) > 0 {
+		// Initialize a GCP client
+		for _, account := range config.GCP {
+			data, err := ioutil.ReadFile(account.ServiceAccountKeyPath)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			creds, err := google.CredentialsFromJSON(context.Background(), data, "https://www.googleapis.com/auth/cloud-platform")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			clients = append(clients, providers.ProviderClient{
+				GCPClient: &providers.GCPClient{
+					Credentials: creds,
+				},
+				Name: account.Name,
 			})
 		}
 	}
