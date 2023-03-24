@@ -31,7 +31,7 @@ func GetBucketSize(ctx context.Context, client providers.ProviderClient, bucketN
 
 	req := &monitoringpb.ListTimeSeriesRequest{
 		Name:   "projects/" + client.GCPClient.Credentials.ProjectID,
-		Filter: "metric.type=\"storage.googleapis.com/storage/total_bytes\" resource.type=\"gcs_bucket\" resource.label.bucket_name=\"" + bucketName + "\"",
+		Filter: fmt.Sprintf(`metric.type="storage.googleapis.com/storage/total_bytes" resource.type="gcs_bucket" resource.label.bucket_name="%s"`, bucketName),
 		Interval: &monitoringpb.TimeInterval{
 			StartTime: &timestamp.Timestamp{Seconds: beginningOfMonth},
 			EndTime:   &timestamp.Timestamp{Seconds: time.Now().Unix()},
