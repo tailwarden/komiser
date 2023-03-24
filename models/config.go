@@ -11,6 +11,7 @@ type Config struct {
 	Tencent      []TencentConfig      `toml:"tencent"`
 	Scaleway     []ScalewayConfig     `toml:"scaleway"`
 	MongoDBAtlas []MongoDBAtlasConfig `toml:"mongodbatlas"`
+	GCP          []GCPConfig          `toml:"gcp"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 	Slack        SlackConfig          `toml:"slack"`
@@ -81,10 +82,15 @@ type TencentConfig struct {
 }
 
 type MongoDBAtlasConfig struct {
-	Name           string `tomle:"name"`
+	Name           string `toml:"name"`
 	OrganizationID string `toml:"organizationId"`
 	PublicApiKey   string `toml:"publicApiKey"`
 	PrivateApiKey  string `toml:"privateApiKey"`
+}
+
+type GCPConfig struct {
+	Name                  string `toml:"name"`
+	ServiceAccountKeyPath string `toml:"serviceAccountKeyPath"`
 }
 
 type SlackConfig struct {

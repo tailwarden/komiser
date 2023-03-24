@@ -14,67 +14,14 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
 	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
 )
 
-type Ec2Product struct {
-	Sku           string `json:"sku"`
-	ProductFamily string `json:"productFamily"`
-	Attributes    struct {
-		Location        string `json:"location"`
-		InstanceType    string `json:"instanceType"`
-		Tenancy         string `json:"tenancy"`
-		OperatingSystem string `json:"operatingSystem"`
-		LicenseModel    string `json:"licenseModel"`
-		UsageType       string `json:"usagetype"`
-		PreInstalledSw  string `json:"preInstalledSw"`
-	}
-}
-
-type PricingResult struct {
-	Product Ec2Product `json:"product"`
-	Terms   map[string]map[string]map[string]map[string]struct {
-		PricePerUnit struct {
-			USD string `json:"USD"`
-		} `json:"pricePerUnit"`
-	} `json:"terms"`
-}
-
-func GetRegionName(code string) string {
-	regions := map[string]string{
-		"us-east-2":      "US East (Ohio)",
-		"us-east-1":      "US East (N. Virginia)",
-		"us-west-1":      "US West (N. California)",
-		"us-west-2":      "US West (Oregon)",
-		"af-south-1":     "Africa (Cape Town)",
-		"ap-east-1":      "Asia Pacific (Hong Kong)",
-		"ap-south-2":     "Asia Pacific (Hyderabad)",
-		"ap-southeast-3": "Asia Pacific (Jakarta)",
-		"ap-south-1":     "Asia Pacific (Mumbai)",
-		"ap-northeast-3": "Asia Pacific (Osaka)",
-		"ap-northeast-2": "Asia Pacific (Seoul)",
-		"ap-southeast-1": "Asia Pacific (Singapore)",
-		"ap-southeast-2": "Asia Pacific (Sydney)",
-		"ap-northeast-1": "Asia Pacific (Tokyo)",
-		"ca-central-1":   "Canada (Central)",
-		"eu-central-1":   "EU (Frankfurt)",
-		"eu-west-1":      "EU (Ireland)",
-		"eu-west-2":      "EU (London)",
-		"eu-south-1":     "EU (Milan)",
-		"eu-west-3":      "EU (Paris)",
-		"eu-south-2":     "EU (Spain)",
-		"eu-north-1":     "EU (Stockholm)",
-		"eu-central-2":   "EU (Zurich)",
-		"sa-east-1":      "South America (São Paulo)",
-	}
-	return regions[code]
-}
-
-func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var nextToken string
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
@@ -100,14 +47,14 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		for _, reservations := range output.Reservations {
 			for _, instance := range reservations.Instances {
-				tags := make([]Tag, 0)
+				tags := make([]models.Tag, 0)
 
 				name := ""
 				for _, tag := range instance.Tags {
 					if *tag.Key == "Name" {
 						name = *tag.Value
 					}
-					tags = append(tags, Tag{
+					tags = append(tags, models.Tag{
 						Key:   *tag.Key,
 						Value: *tag.Value,
 					})
@@ -135,8 +82,8 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 							Type:  types.FilterTypeTermMatch,
 						},
 						{
-							Field: aws.String("location"),
-							Value: aws.String(GetRegionName(client.AWSClient.Region)),
+							Field: aws.String("regionCode"),
+							Value: aws.String(client.AWSClient.Region),
 							Type:  types.FilterTypeTermMatch,
 						},
 						{
@@ -157,7 +104,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					b, _ := json.Marshal(pricingOutput.PriceList[0])
 					s, _ := strconv.Unquote(string(b))
 
-					pricingResult := PricingResult{}
+					pricingResult := models.PricingResult{}
 					err = json.Unmarshal([]byte(s), &pricingResult)
 					if err != nil {
 						log.WithError(err).Error("could not unmarshal")
@@ -171,7 +118,7 @@ func Instances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 				resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", client.AWSClient.Region, *accountId, *instance.InstanceId)
 
-				resources = append(resources, Resource{
+				resources = append(resources, models.Resource{
 					Provider:   "AWS",
 					Account:    client.Name,
 					Service:    "EC2",

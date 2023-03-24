@@ -38,6 +38,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.SecurityGroups,
 		ec2.AutoScalingGroups,
 		iam.Roles,
+		iam.InstanceProfiles,
 		iam.OIDCProviders,
 		iam.Groups,
 		sqs.Queues,
