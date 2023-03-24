@@ -34,6 +34,7 @@ import (
 	azure "github.com/tailwarden/komiser/providers/azure"
 	civo "github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
+	"github.com/tailwarden/komiser/providers/gcp"
 	k8s "github.com/tailwarden/komiser/providers/k8s"
 	linode "github.com/tailwarden/komiser/providers/linode"
 	"github.com/tailwarden/komiser/providers/mongodbatlas"
@@ -303,6 +304,15 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 					})
 				}
 				mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
+			}(ctx, client)
+		} else if client.GCPClient != nil {
+			go func(ctx context.Context, client providers.ProviderClient) {
+				if telemetry {
+					analytics.TrackEvent("fetching_resources", map[string]interface{}{
+						"provider": "GCP",
+					})
+				}
+				gcp.FetchResources(ctx, client, db, telemetry, analytics)
 			}(ctx, client)
 		}
 	}
