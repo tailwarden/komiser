@@ -1,5 +1,4 @@
-package clusters
-
+package utils
 import (
 	"testing"
 )
@@ -15,7 +14,7 @@ func TestNormalizeRegionNames(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got := normalizeRegionName(tt.input)
+		got := NormalizeRegionName(tt.input)
 
 		if got != tt.expected {
 			t.Errorf("got %s, want %s", got, tt.expected)

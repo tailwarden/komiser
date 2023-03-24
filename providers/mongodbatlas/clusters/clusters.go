@@ -3,7 +3,6 @@ package clusters
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -33,14 +32,6 @@ func getPricingMap(instanceSize string) float64 {
 	return pricingMap[instanceSize]
 }
 
-// MongoDB Atlas returns the region names of AWS, GCP and Azure.
-// The names are written as "EU_CENTRAL_1" instead of "eu-central-1", which
-// this function fixes.
-func normalizeRegionName(regionName string) string {
-	lowercased := strings.ToLower(regionName)
-	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
-	return dashReplaced
-}
 
 func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
@@ -91,7 +82,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 				Provider:   "MongoDBAtlas",
 				Account:    client.Name,
 				Service:    "Cluster",
-				Region:     normalizeRegionName(cluster.ProviderSettings.RegionName),
+				Region:     utils.NormalizeRegionName(cluster.ProviderSettings.RegionName),
 				ResourceId: cluster.ID,
 				Name:       cluster.Name,
 				Cost:       monthlyCost,
