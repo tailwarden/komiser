@@ -18,6 +18,10 @@ builds:
         goarch: arm64
       - goos: linux
         goarch: arm64
+    ldflags:
+      - -X github.com/tailwarden/komiser/internal.Version={{ .Version }}
+      - -X github.com/tailwarden/komiser/internal.Buildtime={{ .Timestamp }}
+      - -X github.com/tailwarden/komiser/internal.Commit={{ .FullCommit }}
 
 blobs:
   - provider: s3
