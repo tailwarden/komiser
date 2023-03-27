@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
+	"github.com/aws/aws-sdk-go-v2/service/kms/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
@@ -40,13 +41,26 @@ func Keys(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				}
 			}
 
+			keyOutput, err := kmsClient.DescribeKey(ctx, &kms.DescribeKeyInput{
+				KeyId: key.KeyId,
+			})
+			if err != nil {
+				log.WithError(err).Errorf("Error getting key %s", *key.KeyId)
+			}
+
+			monthlyCost := 0.0
+			// AWS Managed Keys are free
+			if keyOutput.KeyMetadata.KeyManager != types.KeyManagerTypeAws {
+				monthlyCost = 1.0
+			}
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "KMS",
 				Region:     client.AWSClient.Region,
 				ResourceId: *key.KeyArn,
-				Cost:       1,
+				Cost:       monthlyCost,
 				Name:       *key.KeyId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
