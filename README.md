@@ -8,27 +8,27 @@
     <a href="https://discord.tailwarden.com">Discord</a> |
     <a href="https://github.com/tailwarden/komiser/discussions">Discussions</a> |
     <a href="https://komiser.io?utm_source=github&utm_medium=social/">Site</a><br/><br/>
-    <a href="https://docs.komiser.io?utm_source=github&utm_medium=social/">Guide</a> |
-    <a href="https://docs.komiser.io/docs/docs/how-to-komiser/alerts?utm_source=github&utm_medium=social">How to Komiser</a> |
+    <a href="https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social/">Guide</a> |
+    <a href="https://docs.komiser.io/docs/guides/overview?utm_source=github&utm_medium=social">How to Komiser</a> |
     <a href="https://docs.komiser.io/docs/intro">Docs</a><br/><br/>
-    <a href="https://docs.komiser.io/docs/introduction/contribute?utm_source=github&utm_medium=social">Contribute</a> | 
+    <a href="https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social">Contribute</a> | 
     <a href="https://roadmap.tailwarden.com">Roadmap</a><br/><br/>
 </h4>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
 [![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/tailwarden/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
-Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, Azure, OCI, DigitalOcean, Kubernetes and CIVO, Linode, Scaleway and Tencent), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
+Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, Azure, Civo, Digital Ocean, OCI, Linode, Tencent, Scaleway and Tencent), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
 
 <h1 align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></h1>
 
 *Cloud version is available in private beta, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)*
 
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiseree) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/tailwarden/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiser) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/tailwarden/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
 ## Komiser CLI, try it out! 🚀
 ---
-The easiest way to get started with Komiser is to install the [Komiser CLI](https://docs.komiser.io/docs/overview/introduction/getting-started?utm_source=github&utm_medium=social) by running the `Homebrew` commands below. Don't have Homebrew? Install it [here](https://docs.brew.sh/Installation).
+The easiest way to get started with Komiser is to install the [Komiser CLI](https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social) by running the `Homebrew` commands below. Don't have Homebrew? Install it [here](https://docs.brew.sh/Installation).
 
 ```
 brew tap tailwarden/komiser
@@ -79,20 +79,20 @@ Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE 
 ## Download
 
 You can run Komiser locally, as a Docker container or by running it inside a Kubernetes cluster.
-Below are the available downloads for the latest version of Komiser (3.0.0). Please [download](https://docs.komiser.io/docs/overview/introduction/getting-started?utm_source=github&utm_medium=social) the appropriate package for your operating system and architecture. 
+Below are the available downloads for the latest version of Komiser. Please [download](https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social) the appropriate package for your operating system and architecture. 
 
 ## Installation on AWS
 
 ### Connect Komiser CLI to your AWS account. 
-* Connect a [local deployment](https://docs.komiser.io/docs/cloud-providers/aws#local-komiser-cli-single-account?utm_source=github&utm_medium=social) of Komiser CLI to you AWS account
+* Connect a [local deployment](https://docs.komiser.io/docs/cloud-providers/aws/#local-komiser-cli) of Komiser CLI to you AWS account
 
 ### Deploy Komiser to single account access EKS cluster (Helm chart)
-* If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/cloud-providers/aws#eks-installation-single-account?utm_source=github&utm_medium=social). 
+* If you want to connect a single AWS account follow the documentation [here](https://docs.komiser.io/docs/cloud-providers/aws/#eks-installation-single-account). 
 
 Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&t)
 
 ### Deploy Komiser to a multi account access EKS cluster (Helm chart)
-* If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/cloud-providers/aws#multiple-account-eks-helm-chart-installation?utm_source=github&utm_medium=social).
+* If you would like to connect various AWS accounts to a Komiser deployment in a Management EKS cluster, follow the steps [here](https://docs.komiser.io/docs/cloud-providers/aws/#multiple-account-eks-helm-chart-installation).
 
 ## Installation on Azure
 
@@ -101,6 +101,7 @@ Connect a local deployment of Komiser CLI to you [**Azure**](https://docs.komise
 ## Installation on Civo
 
 Connect a local deployment of Komiser CLI to your [**Civo**](https://docs.komiser.io/docs/cloud-providers/civo?utm_source=github&utm_medium=social) account.
+Watch the installation [video here](https://www.youtube.com/watch?v=NBbEpoW-kVs)
 
 ## Installation on OCI
 
@@ -122,21 +123,19 @@ Connect a local deployment of Komiser CLI to you [**Tencent**](https://docs.komi
 
 Connect a local deployment of Komiser CLI to you [**Scaleway**](https://docs.komiser.io/docs/cloud-providers/scaleway?utm_source=github&utm_medium=social) account.
 
-Watch the installation [video here](https://www.youtube.com/watch?v=NBbEpoW-kVs)
 
 # Documentation 📖
 
 Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io?utm_source=github&utm_medium=social). The source repository for the documentation website is [tailwarden/docs](https://github.com/tailwarden/docs). 
 
-We know that writing docs isn't usually at the top of too many peoples "What I like to do for fun" list, but if you feel so inclined, by all means, consider [contributing](https://docs.komiser.io/docs/introduction/contribute?utm_source=github&utm_medium=social) to our documentation repository, we will be very grateful. It's built using [Docusaurus](https://docusaurus.io/). 
+We know that writing docs isn't usually at the top of too many peoples "What I like to do for fun" list, but if you feel so inclined, by all means, consider [contributing](https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social) to our documentation repository, we will be very grateful. It's built using [Docusaurus](https://docusaurus.io/). 
 
 ## Jump right in:
-* [Documentation overview](https://docs.komiser.io/docs/intro)
-* [Installation](https://docs.komiser.io/docs/overview/introduction/getting-started)
-* [FAQs](https://docs.komiser.io/docs/FAQ/)
+* [Documentation overview](https://docs.komiser.io/docs/intro?utm_source=github&utm_medium=social)
+* [Installation](https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social)
+* [FAQs](https://docs.komiser.io/docs/faqs?utm_source=github&utm_medium=social)
 * Video series: 📹
     * [How to: Komiser](https://www.youtube.com/watch?v=9pCimmIT-HQ&list=PLFIcIMmOFDZeMzcvOi7bPd4I6xUNq3A5R/alerts)
-    * [Cloud cost savings tips](https://docs.komiser.io/docs/Quickstarts/overview)
     * [Installation videos](https://www.youtube.com/watch?v=urxi9z2IUf4&list=PLFIcIMmOFDZfaO_WmUF_qnF8akCII7Uk_) 
 
 # Bugs and feature requests 🐞
@@ -154,7 +153,7 @@ Learn how to contribute with this walkthrough [video](https://www.youtube.com/wa
 
 # Users 🧑‍🤝‍🧑
 
-If you'd like to have your company represented and are using `Komiser` please give formal written permission below via a comment on this [thread](https://github.com/tailwarden/komiser/issues/76) or via email to contact@tailwarden.com.
+If you'd like to have your company represented and are using `Komiser` please give formal written permission below via email to contact@tailwarden.com.
 
 We will need a URL to a svg or png logo, a text title and a company URL.
 
