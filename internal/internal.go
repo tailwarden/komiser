@@ -181,7 +181,7 @@ func setupSchema(c *models.Config) error {
 	untaggedResourcesView := models.View{
 		Name: "Untagged resources",
 		Filters: []models.Filter{
-			models.Filter{
+			{
 				Field:    "tags",
 				Operator: "IS_EMPTY",
 				Values:   []string{},
@@ -189,15 +189,18 @@ func setupSchema(c *models.Config) error {
 		},
 	}
 
-	_, err = db.NewInsert().Model(&untaggedResourcesView).Exec(context.Background())
-	if err != nil {
-		return err
+	count, _ := db.NewSelect().Model(&untaggedResourcesView).Where("name = ?", untaggedResourcesView.Name).ScanAndCount(context.Background())
+	if count == 0 {
+		_, err = db.NewInsert().Model(&untaggedResourcesView).Exec(context.Background())
+		if err != nil {
+			return err
+		}
 	}
 
 	expensiveResourcesView := models.View{
 		Name: "Expensive resources",
 		Filters: []models.Filter{
-			models.Filter{
+			{
 				Field:    "cost",
 				Operator: "GREATER_THAN",
 				Values:   []string{"0"},
@@ -205,9 +208,12 @@ func setupSchema(c *models.Config) error {
 		},
 	}
 
-	_, err = db.NewInsert().Model(&expensiveResourcesView).Exec(context.Background())
-	if err != nil {
-		return err
+	count, _ = db.NewSelect().Model(&expensiveResourcesView).Where("name = ?", expensiveResourcesView.Name).ScanAndCount(context.Background())
+	if count == 0 {
+		_, err = db.NewInsert().Model(&expensiveResourcesView).Exec(context.Background())
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
