@@ -1,4 +1,5 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import Image from 'next/image';
 import { Dispatch, SetStateAction } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
@@ -29,6 +30,9 @@ function DashboardResourcesManagerCard({
   const { chartData, options, select, handleChange } = useResourcesManagerChart(
     { data, setQuery, initialQuery: query }
   );
+
+  const displayChart =
+    chartData && chartData.labels && chartData.labels.length > 0;
 
   return (
     <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">
@@ -62,7 +66,22 @@ function DashboardResourcesManagerCard({
       </div>
       <div className="mt-4"></div>
       <div>
-        <Doughnut data={chartData} options={options} />
+        {displayChart && <Doughnut data={chartData} options={options} />}
+        {!displayChart && (
+          <div className="relative flex items-center gap-16 px-4 pt-10">
+            <Image
+              src="/assets/img/others/empty-state-resources-manager.png"
+              width={200}
+              height={200}
+              alt="No data to display image"
+            />
+            <p className="text-center text-lg text-black-900">
+              No resource data
+              <br />
+              to display
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
