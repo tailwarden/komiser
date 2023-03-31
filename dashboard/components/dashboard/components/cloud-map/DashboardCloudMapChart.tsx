@@ -55,12 +55,7 @@ function DashboardCloudMapChart({
       </Geographies>
       {regionsAscendingByNumberOfResources &&
         regionsAscendingByNumberOfResources.map((region, idx) => (
-          <Link
-            key={idx}
-            href={`/inventory?region:IS:${region.label}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link key={idx} href={`/inventory?region:IS:${region.label}`}>
             <Marker
               coordinates={[Number(region.longitude), Number(region.latitude)]}
               onMouseEnter={e =>
