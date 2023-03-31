@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
+import Image from 'next/image';
 import { Dispatch, SetStateAction } from 'react';
 import { Bar } from 'react-chartjs-2';
 import SelectCheckbox from '../../../select-checkbox/SelectCheckbox';
@@ -113,6 +114,20 @@ function DashboardCostExplorerCard({
       <div className="mt-8"></div>
       <div className="h-full min-h-[22rem]">
         {chartData && <Bar data={chartData} options={options} />}
+        {!chartData && (
+          <div className="relative flex flex-col items-center">
+            <p className="mt-10 text-lg text-black-900">
+              No data for this time period
+            </p>
+            <Image
+              src="/assets/img/others/empty-state-cost-explorer.png"
+              width={940}
+              height={330}
+              alt="No data to display image"
+              className="absolute top-0"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -37,10 +37,12 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Subnets,
 		ec2.SecurityGroups,
 		ec2.AutoScalingGroups,
+		ec2.InternetGateways,
 		iam.Roles,
 		iam.InstanceProfiles,
 		iam.OIDCProviders,
 		iam.Groups,
+		iam.Policies,
 		sqs.Queues,
 		s3.Buckets,
 		ec2.Instances,
@@ -63,6 +65,8 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		elasticache.Clusters,
 		cloudwatch.Alarms,
 		ec2.NetworkInterfaces,
+		cloudwatch.Dashboards,
+		ec2.ElasticIps,
 	}
 }
 
