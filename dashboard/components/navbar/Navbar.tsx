@@ -20,7 +20,7 @@ function Navbar() {
       <div className="flex items-center gap-8 text-sm font-semibold text-black-400">
         <Link href="/dashboard">
           <Image
-            src="./assets/img/komiser.svg"
+            src="/assets/img/komiser.svg"
             width={40}
             height={40}
             alt="Komiser logo"
