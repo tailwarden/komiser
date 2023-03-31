@@ -64,6 +64,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		apigateway.Apis,
 		elasticache.Clusters,
 		cloudwatch.Alarms,
+		ec2.NetworkInterfaces,
 		cloudwatch.Dashboards,
 		ec2.ElasticIps,
 	}
