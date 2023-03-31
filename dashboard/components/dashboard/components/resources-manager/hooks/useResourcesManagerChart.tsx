@@ -1,5 +1,6 @@
 import { ChartData, ChartOptions } from 'chart.js';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { useRouter } from 'next/router';
 import formatNumber from '../../../../../utils/formatNumber';
 import {
   ResourcesManagerData,
@@ -23,6 +24,7 @@ function useResourcesManagerChart({
   setQuery,
   initialQuery
 }: useResourcesManagerChartProps) {
+  const router = useRouter();
   const colors = ['#FF9A87', '#6DB7FF', '#B6D3B4', '#FFB459', '#59ACAC'];
 
   /* To be un-commented when 'view' is supported 
@@ -78,10 +80,7 @@ function useResourcesManagerChart({
       const clickedIndex = legendItem[0].index || 0;
       const labels = legend.config.data.labels ?? [];
 
-      window.open(
-        `./inventory?${currentQuery}:IS:${labels[clickedIndex]}`,
-        '_blank'
-      );
+      router.push(`/inventory?${currentQuery}:IS:${labels[clickedIndex]}`);
     },
     aspectRatio: 2,
     layout: {
