@@ -1,91 +1,93 @@
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "1",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:Describe*",
-                "elasticloadbalancing:Describe*",
-                "autoscaling:Describe*",
-                "s3:Describe*",
-                "ecs:List*",
-                "ce:GetCostAndUsage",
-                "ce:GetCostForecast",
-                "apigateway:GET",
-                "dynamodb:Describe*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "2",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:List*",
-                "dynamodb:List*",
-                "cloudfront:List*",
-                "iam:List*",
-                "ecs:Describe*",
-                "glacier:List*",
-                "sqs:List*",
-                "route53:List*",
-                "sns:List*",
-                "s3:Get*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "3",
-            "Effect": "Allow",
-            "Action": [
-                "acm:List*",
-                "mq:List*",
-                "cloudwatch:Get*",
-                "cloudtrail:LookupEvents",
-                "datapipeline:List*",
-                "eks:List*",
-                "elasticache:Describe*",
-                "es:List*",
-                "logs:Describe*",
-                "rds:Describe*",
-                "cloudwatch:Describe*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "4",
-            "Effect": "Allow",
-            "Action": [
-                "glue:Get*",
-                "organizations:Describe*",
-                "iam:Get*",
-                "kinesis:List*",
-                "kms:List*",
-                "redshift:Describe*",
-                "tag:Get*",
-                "route53:List*",
-                "support:Describe*",
-                "swf:List*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "5",
-            "Effect": "Allow",
-            "Action": [
-                "sns:List*",
-                "s3:Get*",
-                "lambda:List*",
-                "kms:List*",
-                "pricing:GetProducts",
-                "ecr:Describe*",
-                "elasticfilesystem:Describe*",
-                "rds:Describe*",
-                "elasticache:List*",
-                "eks:Describe*",
-                "elasticloadbalancing:DescribeTags"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "1",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*",
+        "elasticloadbalancing:Describe*",
+        "autoscaling:Describe*",
+        "s3:Describe*",
+        "ecs:List*",
+        "ce:GetCostAndUsage",
+        "ce:GetCostForecast",
+        "apigateway:GET",
+        "dynamodb:Describe*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "2",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:List*",
+        "dynamodb:List*",
+        "cloudfront:List*",
+        "iam:List*",
+        "ecs:Describe*",
+        "glacier:List*",
+        "sqs:List*",
+        "route53:List*",
+        "sns:List*",
+        "s3:Get*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "3",
+      "Effect": "Allow",
+      "Action": [
+        "acm:List*",
+        "mq:List*",
+        "cloudwatch:Get*",
+        "cloudtrail:LookupEvents",
+        "datapipeline:List*",
+        "eks:List*",
+        "elasticache:Describe*",
+        "es:List*",
+        "logs:Describe*",
+        "rds:Describe*",
+        "cloudwatch:Describe*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "4",
+      "Effect": "Allow",
+      "Action": [
+        "glue:Get*",
+        "organizations:Describe*",
+        "iam:Get*",
+        "kinesis:List*",
+        "kms:List*",
+        "redshift:Describe*",
+        "tag:Get*",
+        "route53:List*",
+        "support:Describe*",
+        "swf:List*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "5",
+      "Effect": "Allow",
+      "Action": [
+        "sns:List*",
+        "s3:Get*",
+        "s3:*",
+        "s3-object-lambda:*",
+        "lambda:List*",
+        "kms:List*",
+        "pricing:GetProducts",
+        "ecr:Describe*",
+        "elasticfilesystem:Describe*",
+        "rds:Describe*",
+        "elasticache:List*",
+        "eks:Describe*",
+        "elasticloadbalancing:DescribeTags"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
