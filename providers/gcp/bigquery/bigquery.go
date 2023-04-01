@@ -1,4 +1,4 @@
-package compute
+package bigquery
 
 import (
 	"context"
@@ -50,7 +50,7 @@ func BigQueryTables(ctx context.Context, client providers.ProviderClient) ([]mod
 			}
 
 			tags := make([]models.Tag, 0)
-			
+
 			for key, value := range tableMetadata.Labels {
 				tags = append(tags, models.Tag{
 					Key:   key,
@@ -62,7 +62,7 @@ func BigQueryTables(ctx context.Context, client providers.ProviderClient) ([]mod
 				Provider:   "GCP",
 				Account:    client.Name,
 				Service:    "BigQuery Table",
-				ResourceId: fmt.Sprintf("%d", table.TableID),
+				ResourceId: table.TableID,
 				Region:     tableMetadata.Location,
 				Name:       tableMetadata.Name,
 				FetchedAt:  time.Now(),
@@ -71,12 +71,12 @@ func BigQueryTables(ctx context.Context, client providers.ProviderClient) ([]mod
 			})
 		}
 
-	} 
+	}
 
 	logrus.WithFields(logrus.Fields{
 		"provider":  "GCP",
 		"account":   client.Name,
-		"service":   "Compute Engine",
+		"service":   "BigQuery",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 
