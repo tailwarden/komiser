@@ -41,17 +41,18 @@ func Keys(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				}
 			}
 
+			monthlyCost := 0.0
+
 			keyOutput, err := kmsClient.DescribeKey(ctx, &kms.DescribeKeyInput{
 				KeyId: key.KeyId,
 			})
 			if err != nil {
-				log.WithError(err).Errorf("Error getting key %s", *key.KeyId)
-			}
-
-			monthlyCost := 0.0
-			// AWS Managed Keys are free
-			if keyOutput.KeyMetadata.KeyManager != types.KeyManagerTypeAws {
-				monthlyCost = 1.0
+				log.WithError(err).Warnf("Error getting key %s", *key.KeyId)
+			} else {
+				if keyOutput.KeyMetadata.KeyManager != types.KeyManagerTypeAws {
+					// AWS Managed Keys are free
+					monthlyCost = 1.0
+				}
 			}
 
 			resources = append(resources, Resource{
