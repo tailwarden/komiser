@@ -3,12 +3,12 @@ package compute
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -54,7 +54,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 				}
 			}
 
-			zone := extractZoneFromURL(instance.GetZone())
+			zone := utils.ExtractZoneFromURL(instance.GetZone())
 
 			resources = append(resources, models.Resource{
 				Provider:   "GCP",
@@ -80,6 +80,4 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-func extractZoneFromURL(url string) string {
-	return url[strings.LastIndex(url, "/")+1:]
-}
+
