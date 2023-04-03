@@ -955,3 +955,7 @@ func NormalizeRegionName(regionName string) string {
 	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
 	return dashReplaced
 }
+
+func ExtractZoneFromURL(url string) string {
+	return url[strings.LastIndex(url, "/")+1:]
+}
