@@ -79,5 +79,3 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 	return resources, nil
 }
-
-
