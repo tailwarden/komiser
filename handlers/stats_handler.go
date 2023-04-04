@@ -68,7 +68,6 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
 		c.JSON(http.StatusCreated, gin.H{"message": err.Error()})
-		return
 	}
 
 	filterWithTags := false
@@ -108,7 +107,6 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
 			filterWithTags = true
@@ -148,7 +146,6 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
 			}
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
@@ -166,7 +163,6 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
 			}
 		} else if filter.Field == "cost" {
 			switch filter.Operator {
@@ -200,11 +196,9 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
 			}
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-			return
 		}
 	}
 

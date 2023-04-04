@@ -15,7 +15,6 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
 	}
 
 	resource := Resource{Tags: input.Tags}
@@ -24,7 +23,6 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 		_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", resourceId).Exec(handler.ctx)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
-			return
 		}
 	}
 
@@ -39,13 +37,11 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 	id, err := strconv.Atoi(resourceId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "resource id should be an integer"})
-		return
 	}
 
 	err = json.NewDecoder(c.Request.Body).Decode(&tags)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
 	}
 
 	resource := Resource{Tags: tags}
@@ -53,7 +49,6 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 	_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", id).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
-		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "tags has been successfuly updated"})
