@@ -149,6 +149,18 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				} else {
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
+			case "EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s'))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s'))", key))
+				}
+			case "NOT_EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf(`(NOT EXISTS (SELECT 1 FROM json_each(resources.tags) WHERE (json_extract(value, '$.key') = '%s')))`, key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' != '%s'))", key))
+				}
 			default:
 				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
 				return
