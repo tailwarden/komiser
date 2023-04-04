@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"runtime"
@@ -130,11 +131,15 @@ func runServer(address string, port int, telemetry bool, cfg models.Config) erro
 	})
 
 	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
-	err := http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), loggedRouter)
+	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", address, port))
 	if err != nil {
 		return err
-	} else {
-		log.Infof("Server started on %s:%d", address, port)
+	}
+
+	log.Infof("Server started on %s:%d", address, port)
+
+	if err := http.Serve(listener, loggedRouter); err != nil {
+		return err
 	}
 
 	return nil
