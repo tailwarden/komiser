@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tailwarden/komiser/handlers"
@@ -52,7 +53,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 
 	router.GET("/telemetry", api.TelemetryHandler)
 
-	//r.PathPrefix("/").Handler(http.FileServer(assetFS()))
+	router.NoRoute(gin.WrapH(http.FileServer(assetFS())))
 
 	return router
 }
