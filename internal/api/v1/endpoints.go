@@ -11,7 +11,10 @@ import (
 )
 
 func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config) *gin.Engine {
-	router := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+
+	router := gin.New()
+	router.Use(gin.Recovery())
 
 	api := handlers.NewApiHandler(ctx, telemetry, analytics, db, cfg)
 

@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
 	log "github.com/sirupsen/logrus"
@@ -119,10 +120,35 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 	return nil
 }
 
+func loggingMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		startTime := time.Now()
+		ctx.Next()
+		endTime := time.Now()
+		latencyTime := endTime.Sub(startTime)
+		reqMethod := ctx.Request.Method
+		reqUri := ctx.Request.RequestURI
+		statusCode := ctx.Writer.Status()
+		clientIP := ctx.ClientIP()
+
+		log.WithFields(log.Fields{
+			"method":  reqMethod,
+			"uri":     reqUri,
+			"status":  statusCode,
+			"latency": latencyTime,
+			"ip":      clientIP,
+		}).Info("HTTP request")
+
+		ctx.Next()
+	}
+}
+
 func runServer(address string, port int, telemetry bool, cfg models.Config) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
 	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg)
+
+	r.Use(loggingMiddleware())
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
