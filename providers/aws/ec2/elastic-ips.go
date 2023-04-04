@@ -43,13 +43,23 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:elastic-ip/%s", client.AWSClient.Region, *accountId, *elasticIps.AllocationId)
 
+			fetchedAt := time.Now()
+			hoursSinceFetched := hoursSince(fetchedAt)
+			hourlyCost := 0.005
+			cost := 0.0
+			if elasticIps.InstanceId != nil {
+				cost = 0
+			} else {
+				cost = hourlyCost * hoursSinceFetched
+			}
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Elastic IP",
 				Region:     client.AWSClient.Region,
 				ResourceId: resourceArn,
-				Cost:       0,
+				Cost:       cost,
 				Name:       *elasticIps.AllocationId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
@@ -66,4 +76,9 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 		}).Info("Fetched resources")
 		return resources, nil
 	}
+}
+
+func hoursSince(t time.Time) float64 {
+	duration := time.Since(t)
+	return duration.Hours()
 }
