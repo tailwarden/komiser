@@ -39,7 +39,7 @@ function DashboardCloudMapError({ fetch }: DashboardCloudMapErrorProps) {
       <div className="mt-8"></div>
       <div className="-mx-6 -ml-20 min-w-full">
         <picture>
-          <img src="/assets/img/others/world.svg" alt="world map" />
+          <img src="/assets/img/others/world.svg" alt="" />
         </picture>
       </div>
       <div className="mt-12"></div>
