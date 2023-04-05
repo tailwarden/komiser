@@ -2,6 +2,7 @@ package container
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -23,7 +24,6 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 	}
 
 	req := &containerpb.ListClustersRequest{
-
 		ProjectId: client.GCPClient.Credentials.ProjectID,
 	}
 	clusters, err := clusterClient.ListClusters(ctx, req)
@@ -43,7 +43,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 				})
 			}
 		}
-		zone := utils.ExtractZoneFromURL(cluster.GetLocation())
+		zone := utils.GcpExtractZoneFromURL(cluster.GetLocation())
 
 		resources = append(resources, models.Resource{
 			Provider:   "GCP",
@@ -54,7 +54,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			Name:       cluster.GetName(),
 			FetchedAt:  time.Now(),
 			Tags:       tags,
-			//Link
+			Link:       fmt.Sprintf("https://console.cloud.google.com/kubernetes/clusters/details/%s/%s/details?project=%s", zone, cluster.GetName(), client.GCPClient.Credentials.ProjectID),
 		})
 	}
 

@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	cloud.google.com/go/compute v1.18.0
+	cloud.google.com/go/container v1.13.1
 	cloud.google.com/go/monitoring v1.13.0
 	cloud.google.com/go/storage v1.30.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.3.1
@@ -68,7 +69,7 @@ require (
 	go.mongodb.org/atlas v0.23.1
 	golang.org/x/oauth2 v0.6.0
 	golang.org/x/text v0.8.0
-	google.golang.org/api v0.110.0
+	google.golang.org/api v0.111.0
 	k8s.io/apimachinery v0.26.1
 	k8s.io/client-go v0.26.1
 )
@@ -151,7 +152,6 @@ require (
 	golang.org/x/time v0.0.0-20220922220347-f3bd1da661af // indirect
 	golang.org/x/tools v0.6.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
-	google.golang.org/api v0.111.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4 // indirect
 	google.golang.org/grpc v1.53.0 // indirect
