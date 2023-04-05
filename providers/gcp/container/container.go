@@ -26,6 +26,17 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 	req := &containerpb.ListClustersRequest{
 		ProjectId: client.GCPClient.Credentials.ProjectID,
 	}
+
+	nodepoolReq := &containerpb.GetNodePoolRequest{
+		ProjectId: client.GCPClient.Credentials.ProjectID,
+	}
+
+	node_pool, err := clusterClient.GetNodePool(ctx, nodepoolReq)
+	if err != nil {
+		logrus.WithError(err).Errorf("failed to collect labels")
+	}
+	nodeconfigLabels := node_pool.Config.Labels
+
 	clusters, err := clusterClient.ListClusters(ctx, req)
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to collect clusters")
@@ -34,15 +45,14 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 
 	for _, cluster := range clusters.Clusters {
 		tags := make([]models.Tag, 0)
-		//according to docs, NodeConfig is deprecated and is advised to use node_pool.config
-		if cluster.NodeConfig.Labels != nil {
-			for key, value := range cluster.NodeConfig.Labels {
-				tags = append(tags, models.Tag{
-					Key:   key,
-					Value: value,
-				})
-			}
+
+		for key, value := range nodeconfigLabels {
+			tags = append(tags, models.Tag{
+				Key:   key,
+				Value: value,
+			})
 		}
+
 		zone := utils.GcpExtractZoneFromURL(cluster.GetLocation())
 
 		resources = append(resources, models.Resource{
