@@ -54,7 +54,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 				}
 			}
 
-			zone := utils.ExtractZoneFromURL(instance.GetZone())
+			zone := utils.GcpExtractZoneFromURL(instance.GetZone())
 
 			resources = append(resources, models.Resource{
 				Provider:   "GCP",
