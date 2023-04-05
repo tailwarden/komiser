@@ -56,9 +56,9 @@ func BlockVolumes(ctx context.Context, client providers.ProviderClient) ([]Resou
 	if err != nil {
 		return resources, err
 	}
-	PerGBMonth := 0.0255
+	perGBMonth := 0.0255
 	
-	cost := float64(*volumeResponse.Volume.SizeInGBs) * PerGBMonth
+	cost := float64(*volumeResponse.Volume.SizeInGBs) * perGBMonth
 
 
 		resources = append(resources, Resource{
