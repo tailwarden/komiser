@@ -2,60 +2,95 @@ package s3
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3control"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3control"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func AccessPoint(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func AccessPoints(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	mySession := session.Must(session.NewSession())
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		log.Fatalf("unable to load SDK config, %v", err)
+	}
 
-	svc := s3control.New(mySession)
-	stsClient := sts.NewFromConfig(*client.AWSClient)
-	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	s3Client := s3.NewFromConfig(cfg)
+	s3ControlClient := s3control.NewFromConfig(cfg)
+	stsClient := sts.NewFromConfig(cfg)
+
+	identity, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
 		return resources, err
 	}
-	AccountId := stsOutput.Account
-	Name := stsOutput.Arn
+	accountId := *identity.Account
 
-	svc.CreateAccessPointRequest(&s3control.CreateAccessPointInput{
-		AccountId: AccountId,
-		Name:      Name,
+	output, err := s3ControlClient.ListAccessPoints(ctx, &s3control.ListAccessPointsInput{
+		AccountId: &accountId,
 	})
-	input := s3control.ListAccessPointsInput{
-		AccountId: AccountId,
+	if err != nil {
+		return resources, err
 	}
 
-	listOfAccessPoints, err := svc.ListAccessPoints(&input)
+	for _, accesspoints := range output.AccessPointList {
+		objects, err := s3Client.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
+			Bucket: accesspoints.Bucket,
+		})
 
-	AccesspointList := []string{}
+		if err != nil {
+			log.Warnf("Couldn't fetch objects for %s", *accesspoints.Name)
+			continue
+		}
 
-	for _, accessPoints := range listOfAccessPoints.AccessPointList {
-		AccesspointList = append(AccesspointList, *accessPoints.Name)
+		var lastModified time.Time
+		for _, object := range objects.Contents {
+			if object.LastModified.After(lastModified) {
+				lastModified = *object.LastModified
+			}
+		}
+		tagsResp, err := s3Client.GetBucketTagging(ctx, &s3.GetBucketTaggingInput{
+			Bucket: accesspoints.Bucket,
+		})
+
+		tags := make([]Tag, 0)
+		if err == nil {
+			for _, t := range tagsResp.TagSet {
+				tags = append(tags, Tag{
+					Key:   *t.Key,
+					Value: *t.Value,
+				})
+			}
+		}
+
+		resourceArn := fmt.Sprintf("arn:aws:s3:::%s", *accesspoints.Name)
+		resources = append(resources, Resource{
+			Provider:   "AWS",
+			Account:    client.Name,
+			Service:    "Accesspoints",
+			Region:     client.AWSClient.Region,
+			ResourceId: resourceArn,
+			Name:       *accesspoints.Name,
+			Cost:       0,
+			CreatedAt:  lastModified,
+			Tags:       tags,
+			FetchedAt:  time.Now(),
+			Link:       fmt.Sprintf("https://s3.console.aws.amazon.com/s3/buckets/%s", *accesspoints.Name),
+		})
 	}
-	resources = append(resources, Resource{
-		Provider:  "AWS",
-		Account:   client.Name,
-		Service:   "S3-AccessPoint",
-		Region:    client.AWSClient.Region,
-		FetchedAt: time.Now(),
-	})
+
 	log.WithFields(log.Fields{
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "S3-AccessPoint",
+		"service":   "Accesspoints",
 		"resources": len(resources),
 	}).Info("Fetched resources")
-	return resources, err
-	// return listOfAccessPoints.AccessPointList, err
-
+	return resources, nil
 }

@@ -42,7 +42,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		iam.Groups,
 		sqs.Queues,
 		s3.Buckets,
-		s3.AccessPoint,
+		s3.AccessPoints,
 		ec2.Instances,
 		eks.KubernetesClusters,
 		cloudfront.Distributions,
