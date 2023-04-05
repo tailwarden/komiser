@@ -10,12 +10,13 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"google.golang.org/api/iterator"
+	"google.golang.org/api/option"
 )
 
 func BigQueryTables(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	bqclient, err := bigquery.NewClient(ctx, client.GCPClient.Credentials.ProjectID, nil)
+	bqclient, err := bigquery.NewClient(ctx, client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +68,7 @@ func BigQueryTables(ctx context.Context, client providers.ProviderClient) ([]mod
 				Name:       tableMetadata.Name,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https://console.cloud.google.com/compute/instancesDetail/zones/%s/instances/%s?project=%s", tableMetadata.Location, tableMetadata.Name, client.GCPClient.Credentials.ProjectID),
+				Link:       fmt.Sprintf("https://console.cloud.google.com/bigquery?project=%s&page=dataset&p=%s&d=%s", client.GCPClient.Credentials.ProjectID, client.GCPClient.Credentials.ProjectID, dataset.DatasetID),
 			})
 		}
 
