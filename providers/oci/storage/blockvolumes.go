@@ -48,6 +48,19 @@ func BlockVolumes(ctx context.Context, client providers.ProviderClient) ([]Resou
 			return resources, err
 		}
 
+	//Calculate cost 
+	volumeRequest := core.GetVolumeRequest{
+		VolumeId: volume.Id,
+	}
+	volumeResponse, err := blockStorageClient.GetVolume(context.Background(), volumeRequest)
+	if err != nil {
+		return resources, err
+	}
+	PerGBMonth := 0.0255
+	
+	cost := float64(*volumeResponse.Volume.SizeInGBs) * PerGBMonth
+
+
 		resources = append(resources, Resource{
 			Provider:   "OCI",
 			Account:    client.Name,
@@ -55,7 +68,7 @@ func BlockVolumes(ctx context.Context, client providers.ProviderClient) ([]Resou
 			Service:    "Block Volume",
 			Region:     region,
 			Name:       *volume.DisplayName,
-			Cost:       0,
+			Cost:       cost,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
 		})
