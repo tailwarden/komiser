@@ -58,7 +58,7 @@ func SamlProviders(ctx context.Context, client ProviderClient) ([]Resource, erro
 			CreatedAt:  *samlprovider.CreateDate,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/identity_providers/details/%s", client.AWSClient.Region, *samlprovider.Arn),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/identity_providers/details/%s", client.AWSClient.Region, client.AWSClient.Region, *samlprovider.Arn),
 		})
 	}
 
