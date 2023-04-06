@@ -7,7 +7,6 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/configservice"
 	"github.com/aws/aws-sdk-go-v2/service/configservice/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -77,7 +76,7 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				Region:     client.AWSClient.Region,
 				ResourceId: resourceArn,
 				Cost:       cost,
-				Name:       aws.ToString(elasticIps.AllocationId),
+				Name:       *elasticIps.AllocationId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/ec2/home?region=%s#ElasticIpDetails:AllocationId=%s", client.AWSClient.Region, client.AWSClient.Region, *elasticIps.AllocationId),
