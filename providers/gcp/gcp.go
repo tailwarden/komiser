@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/gcp/bigquery"
+	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
 	"github.com/tailwarden/komiser/providers/gcp/storage"
 	"github.com/tailwarden/komiser/utils"
@@ -17,6 +18,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.Instances,
 		storage.Buckets,
 		bigquery.BigQueryTables,
+		certficate.Certificates,
 	}
 }
 
