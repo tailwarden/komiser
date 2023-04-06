@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
@@ -35,20 +36,19 @@ func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytic
 	return &handler
 }
 
-func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	var filters []Filter
 
-	limitRaw := r.URL.Query().Get("limit")
-	skipRaw := r.URL.Query().Get("skip")
-	query := r.URL.Query().Get("query")
-	viewId := r.URL.Query().Get("view")
+	limitRaw := c.Query("limit")
+	skipRaw := c.Query("skip")
+	query := c.Query("query")
+	viewId := c.Query("view")
 
 	view := new(View)
 	if viewId != "" {
 		err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 	}
 
@@ -68,10 +68,9 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		skip = s
 	}
 
-	err = json.NewDecoder(r.Body).Decode(&filters)
+	err = json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	filterWithTags := false
@@ -110,8 +109,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 			case "IS_NOT_EMPTY":
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
-				return
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
 			filterWithTags = true
@@ -150,8 +148,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
-				return
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 			}
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
@@ -168,46 +165,43 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
-				return
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 			}
 		} else if filter.Field == "cost" {
 			switch filter.Operator {
 			case "EQUAL":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
-				return
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 			}
 		} else {
-			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
-			return
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "field is invalid or not supported"})
 		}
 	}
 
@@ -233,8 +227,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				logrus.WithError(err).Error("scan failed")
 			}
 		}
-		respondWithJSON(w, 200, resources)
-		return
+		c.JSON(http.StatusOK, resources)
 	}
 
 	if filterWithTags {
@@ -264,12 +257,10 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 
 		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 	}
-
-	respondWithJSON(w, 200, resources)
+	c.JSON(http.StatusOK, resources)
 }
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {
