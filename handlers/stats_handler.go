@@ -7,12 +7,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun/dialect"
 )
 
-func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
@@ -58,15 +59,15 @@ func (handler *ApiHandler) StatsHandler(w http.ResponseWriter, r *http.Request) 
 		})
 	}
 
-	respondWithJSON(w, 200, output)
+	c.JSON(http.StatusOK, output)
 }
 
-func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 	var filters []Filter
 
-	err := json.NewDecoder(r.Body).Decode(&filters)
+	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusCreated, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -106,7 +107,7 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 			case "IS_NOT_EMPTY":
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
@@ -146,7 +147,7 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if filter.Field == "tags" {
@@ -164,7 +165,7 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if filter.Field == "cost" {
@@ -172,37 +173,37 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 			case "EQUAL":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else {
-			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 			return
 		}
 	}
@@ -252,7 +253,7 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 			Costs:     cost.Sum,
 		}
 
-		respondWithJSON(w, 200, output)
+		c.JSON(http.StatusOK, output)
 	} else {
 		query := fmt.Sprintf("FROM resources WHERE %s", whereClause)
 
@@ -292,11 +293,11 @@ func (handler *ApiHandler) FilterStatsHandler(w http.ResponseWriter, r *http.Req
 			Costs:     cost.Sum,
 		}
 
-		respondWithJSON(w, 200, output)
+		c.JSON(http.StatusOK, output)
 	}
 }
 
-func (handler *ApiHandler) ListRegionsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ListRegionsHandler(c *gin.Context) {
 	type Output struct {
 		Region string `bun:"region" json:"region"`
 	}
@@ -314,10 +315,10 @@ func (handler *ApiHandler) ListRegionsHandler(w http.ResponseWriter, r *http.Req
 		regions = append(regions, o.Region)
 	}
 
-	respondWithJSON(w, 200, regions)
+	c.JSON(http.StatusOK, regions)
 }
 
-func (handler *ApiHandler) ListProvidersHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ListProvidersHandler(c *gin.Context) {
 	type Output struct {
 		Provider string `bun:"provider" json:"provider"`
 	}
@@ -335,10 +336,10 @@ func (handler *ApiHandler) ListProvidersHandler(w http.ResponseWriter, r *http.R
 		providers = append(providers, o.Provider)
 	}
 
-	respondWithJSON(w, 200, providers)
+	c.JSON(http.StatusOK, providers)
 }
 
-func (handler *ApiHandler) ListServicesHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ListServicesHandler(c *gin.Context) {
 	type Output struct {
 		Service string `bun:"service" json:"service"`
 	}
@@ -356,10 +357,10 @@ func (handler *ApiHandler) ListServicesHandler(w http.ResponseWriter, r *http.Re
 		services = append(services, o.Service)
 	}
 
-	respondWithJSON(w, 200, services)
+	c.JSON(http.StatusOK, services)
 }
 
-func (handler *ApiHandler) ListAccountsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ListAccountsHandler(c *gin.Context) {
 	type Output struct {
 		Account string `bun:"account" json:"account"`
 	}
@@ -377,5 +378,5 @@ func (handler *ApiHandler) ListAccountsHandler(w http.ResponseWriter, r *http.Re
 		accounts = append(accounts, o.Account)
 	}
 
-	respondWithJSON(w, 200, accounts)
+	c.JSON(http.StatusOK, accounts)
 }

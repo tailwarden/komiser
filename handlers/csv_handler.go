@@ -6,48 +6,39 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"mime"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun/dialect"
 )
 
-func (handler *ApiHandler) DownloadInventoryCSV(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) DownloadInventoryCSV(c *gin.Context) {
 	resources := make([]models.Resource, 0)
 	err := handler.db.NewSelect().Table("resources").Scan(handler.ctx, &resources)
 	if err != nil {
 		logrus.WithError(err).Error("Could not read from DB")
-		respondWithError(w, http.StatusInternalServerError, "Could not read from DB")
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "cloud not read from DB"})
 	}
 
 	if handler.telemetry {
 		handler.analytics.TrackEvent("exporting_csv", nil)
 	}
 
-	respondWithCSVDownload(resources, w, r)
+	respondWithCSVDownload(resources, c)
 }
 
-func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId, ok := vars["viewId"]
-
-	if !ok {
-		respondWithError(w, http.StatusBadRequest, "viewId param is missing")
-		return
-	}
+func (handler *ApiHandler) DownloadInventoryCSVForView(c *gin.Context) {
+	viewId := c.Param("viewId")
 
 	view := new(models.View)
 	err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -58,7 +49,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 		if err != nil {
 			logrus.WithError(err).Errorf("select failed")
 		}
-		respondWithCSVDownload(resources, w, r)
+		respondWithCSVDownload(resources, c)
 		return
 	}
 
@@ -98,7 +89,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 			case "IS_NOT_EMPTY":
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
@@ -138,7 +129,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if filter.Field == "tags" {
@@ -156,7 +147,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if filter.Field == "cost" {
@@ -164,37 +155,37 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 			case "EQUAL":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				return
 			}
 		} else {
-			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "field is invalid or unsupported"})
 			return
 		}
 	}
@@ -228,18 +219,18 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(w http.ResponseWriter, r 
 
 		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 	}
 
-	respondWithCSVDownload(resources, w, r)
+	respondWithCSVDownload(resources, c)
 }
 
-func respondWithCSVDownload(resources []models.Resource, w http.ResponseWriter, r *http.Request) {
+func respondWithCSVDownload(resources []models.Resource, c *gin.Context) {
 	file, err := os.Create("/tmp/export.csv")
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Could not create file at /tmp")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create file at /tmp"})
 		return
 	}
 
@@ -251,7 +242,7 @@ func respondWithCSVDownload(resources []models.Resource, w http.ResponseWriter, 
 
 	header := []string{"id", "provider", "account", "name", "region", "tags", "cost"}
 	if err := csvWriter.Write(header); err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Could not write CSV")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not write csv"})
 		return
 	}
 
@@ -265,14 +256,15 @@ func respondWithCSVDownload(resources []models.Resource, w http.ResponseWriter, 
 			record.ResourceId, record.Provider, record.Account, record.Name, record.Region, string(tags), fmt.Sprintf("%2.f", record.Cost),
 		}
 		if err := csvWriter.Write(row); err != nil {
-			respondWithError(w, http.StatusInternalServerError, "Could not write CSV")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "could not write csv"})
 			return
 		}
 	}
 	fw.Flush()
 
-	cd := mime.FormatMediaType("attachment", map[string]string{"filename": "export.csv"})
+	/*cd := mime.FormatMediaType("attachment", map[string]string{"filename": "export.csv"})
 	w.Header().Set("Content-Disposition", cd)
 	w.Header().Set("Content-Type", "application/octet-stream")
-	http.ServeContent(w, r, "export.csv", time.Now(), file)
+	http.ServeContent(w, r, "export.csv", time.Now(), file)*/
+	c.FileAttachment("/tmp/export.csv", "export.csv")
 }

@@ -8,12 +8,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
 )
 
-func (handler *ApiHandler) DashboardStatsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
@@ -62,16 +63,15 @@ func (handler *ApiHandler) DashboardStatsHandler(w http.ResponseWriter, r *http.
 		Accounts:  accounts.Count,
 	}
 
-	respondWithJSON(w, 200, output)
+	c.JSON(http.StatusOK, output)
 }
 
-func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ResourcesBreakdownStatsHandler(c *gin.Context) {
 	input := models.InputResources{}
 
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	groups := make([]models.OutputResources, 0)
@@ -105,10 +105,10 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(w http.ResponseWriter,
 			})
 		}
 	}
-	respondWithJSON(w, 200, segments)
+	c.JSON(http.StatusOK, segments)
 }
 
-func (handler *ApiHandler) LocationBreakdownStatsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
 	groups := make([]models.OutputResources, 0)
 
 	err := handler.db.NewRaw("SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;").Scan(handler.ctx, &groups)
@@ -133,16 +133,15 @@ func (handler *ApiHandler) LocationBreakdownStatsHandler(w http.ResponseWriter, 
 		}
 	}
 
-	respondWithJSON(w, 200, locations)
+	c.JSON(http.StatusOK, locations)
 }
 
-func (handler *ApiHandler) CostBreakdownHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 	input := models.InputCostBreakdown{}
 
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	groups := make([]models.OutputCostBreakdownRaw, 0)
@@ -156,14 +155,12 @@ func (handler *ApiHandler) CostBreakdownHandler(w http.ResponseWriter, r *http.R
 		s, _ := json.Marshal(input.Exclude)
 		err = handler.db.NewRaw(fmt.Sprintf(`%s %s NOT IN (%s) AND DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Group, strings.Trim(string(s), "[]"), input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 	}
 
@@ -231,5 +228,5 @@ func (handler *ApiHandler) CostBreakdownHandler(w http.ResponseWriter, r *http.R
 		return firstDate.Before(secondDate)
 	})
 
-	respondWithJSON(w, 200, output)
+	c.JSON(http.StatusOK, output)
 }
