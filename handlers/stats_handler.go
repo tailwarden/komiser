@@ -144,6 +144,18 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				} else {
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
+			case "EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s'))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s'))", key))
+				}
+			case "NOT_EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf(`(NOT EXISTS (SELECT 1 FROM json_each(resources.tags) WHERE (json_extract(value, '$.key') = '%s')))`, key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' != '%s'))", key))
+				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 			}

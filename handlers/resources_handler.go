@@ -147,6 +147,18 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 				} else {
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
+			case "EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s'))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s'))", key))
+				}
+			case "NOT_EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf(`(NOT EXISTS (SELECT 1 FROM json_each(resources.tags) WHERE (json_extract(value, '$.key') = '%s')))`, key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' != '%s'))", key))
+				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 			}
@@ -231,16 +243,16 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	}
 
 	if filterWithTags {
-		query := fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+		query := fmt.Sprintf("SELECT DISTINCT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
 		if len(view.Exclude) > 0 {
 			s, _ := json.Marshal(view.Exclude)
-			query = fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
+			query = fmt.Sprintf("SELECT DISTINCT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
 		}
 		if handler.db.Dialect().Name() == dialect.SQLite {
-			query = fmt.Sprintf("SELECT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
+			query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
 			if len(view.Exclude) > 0 {
 				s, _ := json.Marshal(view.Exclude)
-				query = fmt.Sprintf("SELECT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE resources.id NOT IN (%s) AND type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", strings.Trim(string(s), "[]"), whereClause, limit, skip)
+				query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE resources.id NOT IN (%s) AND type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", strings.Trim(string(s), "[]"), whereClause, limit, skip)
 			}
 		}
 
