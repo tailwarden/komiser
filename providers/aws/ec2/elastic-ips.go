@@ -7,6 +7,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/aws/aws-sdk-go-v2/service/configservice"
+	"github.com/aws/aws-sdk-go-v2/service/configservice/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
@@ -17,6 +19,7 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 	config := ec2.DescribeAddressesInput{}
 	resources := make([]Resource, 0)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
+	configClient := configservice.NewFromConfig(*client.AWSClient)
 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
 	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
@@ -41,6 +44,36 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				})
 			}
 
+			cost := 0.0
+
+			resourceConfig, err := configClient.BatchGetResourceConfig(ctx, &configservice.BatchGetResourceConfigInput{
+				ResourceKeys: []types.ResourceKey{
+					{
+						ResourceId:   elasticIps.AllocationId,
+						ResourceType: "AWS::EC2::EIP",
+					},
+				},
+			})
+			if err != nil {
+				log.WithFields(log.Fields{
+					"service":  "Elastic IP",
+					"name":     *elasticIps.AllocationId,
+					"region":   client.AWSClient.Region,
+					"provider": "AWS",
+				}).Warn("Cost couldn't be calculated due to missing AWS config")
+			} else {
+				creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
+				hoursSinceCreation := hoursSince(*creationTime)
+
+				hourlyCost := 0.005
+
+				if elasticIps.InstanceId != nil {
+					cost = 0
+				} else {
+					cost = hourlyCost * hoursSinceCreation
+				}
+			}
+
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:elastic-ip/%s", client.AWSClient.Region, *accountId, *elasticIps.AllocationId)
 
 			resources = append(resources, Resource{
@@ -49,7 +82,7 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				Service:    "Elastic IP",
 				Region:     client.AWSClient.Region,
 				ResourceId: resourceArn,
-				Cost:       0,
+				Cost:       cost,
 				Name:       *elasticIps.AllocationId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
@@ -66,4 +99,9 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 		}).Info("Fetched resources")
 		return resources, nil
 	}
+}
+
+func hoursSince(t time.Time) float64 {
+	duration := time.Since(t)
+	return duration.Hours()
 }
