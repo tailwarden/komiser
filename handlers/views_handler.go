@@ -18,11 +18,13 @@ func (handler *ApiHandler) NewViewHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	result, err := handler.db.NewInsert().Model(&view).Exec(context.Background())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	viewId, _ := result.LastInsertId()
@@ -42,6 +44,7 @@ func (handler *ApiHandler) ListViewsHandler(c *gin.Context) {
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
+		return
 	}
 
 	c.JSON(http.StatusOK, views)
@@ -54,11 +57,13 @@ func (handler *ApiHandler) UpdateViewHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("name", "filters", "exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusCreated, view)
@@ -71,6 +76,7 @@ func (handler *ApiHandler) DeleteViewHandler(c *gin.Context) {
 	_, err := handler.db.NewDelete().Model(view).Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "view has been deleted"})
@@ -83,11 +89,13 @@ func (handler *ApiHandler) HideResourcesFromViewHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "resource has been hidden"})
@@ -100,11 +108,13 @@ func (handler *ApiHandler) UnhideResourcesFromViewHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "resource has been revealed"})
@@ -117,6 +127,7 @@ func (handler *ApiHandler) ListHiddenResourcesHandler(c *gin.Context) {
 	err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	resources := make([]models.Resource, len(view.Exclude))
@@ -141,6 +152,7 @@ func (handler *ApiHandler) ListViewAlertsHandler(c *gin.Context) {
 	err := handler.db.NewRaw(fmt.Sprintf("SELECT * FROM alerts WHERE view_id = %s", viewId)).Scan(handler.ctx, &alerts)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, alerts)

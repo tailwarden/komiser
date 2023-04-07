@@ -68,6 +68,7 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
 		c.JSON(http.StatusCreated, gin.H{"message": err.Error()})
+		return
 	}
 
 	filterWithTags := false
@@ -107,6 +108,7 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
 			filterWithTags = true
@@ -158,6 +160,7 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
@@ -175,6 +178,7 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else if filter.Field == "cost" {
 			switch filter.Operator {
@@ -182,35 +186,42 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+					return
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+			return
 		}
 	}
 
@@ -260,6 +271,7 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, output)
+		return
 	} else {
 		query := fmt.Sprintf("FROM resources WHERE %s", whereClause)
 

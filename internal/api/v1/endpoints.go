@@ -18,11 +18,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router := gin.New()
 	router.Use(gin.Recovery())
 
-	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
-		AllowHeaders: []string{"*"},
-	}))
+	router.Use(cors.Default())
 
 	api := handlers.NewApiHandler(ctx, telemetry, analytics, db, cfg)
 

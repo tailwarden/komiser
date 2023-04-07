@@ -49,6 +49,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 		err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 	}
 
@@ -71,6 +72,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	err = json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	filterWithTags := false
@@ -110,6 +112,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
 			filterWithTags = true
@@ -161,6 +164,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
@@ -178,6 +182,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 				}
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
 			}
 		} else if filter.Field == "cost" {
 			switch filter.Operator {
@@ -185,35 +190,42 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+				return
 			}
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "field is invalid or not supported"})
+			return
 		}
 	}
 
@@ -240,6 +252,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 			}
 		}
 		c.JSON(http.StatusOK, resources)
+		return
 	}
 
 	if filterWithTags {
@@ -262,6 +275,11 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 		}
 	} else {
 		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+
+		if whereClause == "" {
+			query = fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)
+		}
+
 		if len(view.Exclude) > 0 {
 			s, _ := json.Marshal(view.Exclude)
 			query = fmt.Sprintf("SELECT * FROM resources WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
@@ -270,21 +288,8 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 	}
 	c.JSON(http.StatusOK, resources)
-}
-
-func respondWithError(w http.ResponseWriter, code int, msg string) {
-	respondWithJSON(w, code, map[string]string{"error": msg})
-}
-
-func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	_, err := w.Write(response)
-	if err != nil {
-		logrus.WithError(err).Error("write failed")
-	}
 }

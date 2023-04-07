@@ -28,11 +28,13 @@ func (handler *ApiHandler) NewAlertHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&alert)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	result, err := handler.db.NewInsert().Model(&alert).Exec(context.Background())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	alertId, _ := result.LastInsertId()
@@ -55,11 +57,13 @@ func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&alert)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&alert).Column("name", "type", "budget", "usage").Where("id = ?", alertId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, alert)
@@ -72,6 +76,7 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	_, err := handler.db.NewDelete().Model(alert).Where("id = ?", alertId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "alert has been deleted"})

@@ -72,6 +72,7 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	groups := make([]models.OutputResources, 0)
@@ -142,6 +143,7 @@ func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	groups := make([]models.OutputCostBreakdownRaw, 0)
@@ -156,11 +158,13 @@ func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 		err = handler.db.NewRaw(fmt.Sprintf(`%s %s NOT IN (%s) AND DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Group, strings.Trim(string(s), "[]"), input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 	} else {
 		err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 	}
 
