@@ -44,6 +44,8 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				})
 			}
 
+			cost := 0.0
+
 			resourceConfig, err := configClient.BatchGetResourceConfig(ctx, &configservice.BatchGetResourceConfigInput{
 				ResourceKeys: []types.ResourceKey{
 					{
@@ -53,21 +55,26 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				},
 			})
 			if err != nil {
-				return resources, err
-			}
+				log.WithFields(log.Fields{
+					"service":  "Elastic IP",
+					"name":     *elasticIps.AllocationId,
+					"region":   client.AWSClient.Region,
+					"provider": "AWS",
+				}).Warn("Cost couldn't be calculated due to missing AWS config")
+			} else {
+				creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
+				hoursSinceCreation := hoursSince(*creationTime)
 
-			creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
-			hoursSinceCreation := hoursSince(*creationTime)
+				hourlyCost := 0.005
+
+				if elasticIps.InstanceId != nil {
+					cost = 0
+				} else {
+					cost = hourlyCost * hoursSinceCreation
+				}
+			}
 
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:elastic-ip/%s", client.AWSClient.Region, *accountId, *elasticIps.AllocationId)
-
-			hourlyCost := 0.005
-			cost := 0.0
-			if elasticIps.InstanceId != nil {
-				cost = 0
-			} else {
-				cost = hourlyCost * hoursSinceCreation
-			}
 
 			resources = append(resources, Resource{
 				Provider:   "AWS",
