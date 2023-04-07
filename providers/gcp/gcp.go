@@ -8,6 +8,7 @@ import (
 	"github.com/tailwarden/komiser/providers/gcp/bigquery"
 	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
+	"github.com/tailwarden/komiser/providers/gcp/sql"
 	"github.com/tailwarden/komiser/providers/gcp/storage"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -19,6 +20,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		storage.Buckets,
 		bigquery.BigQueryTables,
 		certficate.Certificates,
+		sql.SqlInstances,
 	}
 }
 
