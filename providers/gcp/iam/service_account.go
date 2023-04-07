@@ -1,36 +1,36 @@
-package compute
+package iam
 
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"google.golang.org/api/iterator"
-	"google.golang.org/api/option"
 
-	compute "cloud.google.com/go/compute/apiv1"
 	computepb "cloud.google.com/go/compute/apiv1/computepb"
+	"cloud.google.com/go/iam"
 )
 
-func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func ServiceAccounts(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	disksClient, err := compute.NewDisksRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
+	serviceClient, err := iamcredentials.GenerateAccessTokenRequest
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to create compute client")
 		return resources, err
 	}
 
-	req := &computepb.AggregatedListDisksRequest{
+	req := &computepb.AggregatedListInstancesRequest{
 		Project: client.GCPClient.Credentials.ProjectID,
 	}
-	disks := disksClient.AggregatedList(ctx, req)
+	instances := instancesClient.AggregatedList(ctx, req)
 
 	for {
-		disksListPair, err := disks.Next()
+		instanceListPair, err := instances.Next()
 		if err == iterator.Done {
 			break
 		}
@@ -38,14 +38,14 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 			logrus.WithError(err).Errorf("failed to list instances")
 			return resources, err
 		}
-		if len(disksListPair.Value.Disks) == 0 {
+		if len(instanceListPair.Value.Instances) == 0 {
 			continue
 		}
 
-		for _, disk := range disksListPair.Value.Disks {
+		for _, instance := range instanceListPair.Value.Instances {
 			tags := make([]models.Tag, 0)
-			if disk.Labels != nil {
-				for key, value := range disk.Labels {
+			if instance.Labels != nil {
+				for key, value := range instance.Labels {
 					tags = append(tags, models.Tag{
 						Key:   key,
 						Value: value,
@@ -53,18 +53,18 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 				}
 			}
 
-			zone := extractZoneFromURL(disk.GetZone())
+			zone := extractZoneFromURL(instance.GetZone())
 
 			resources = append(resources, models.Resource{
 				Provider:   "GCP",
 				Account:    client.Name,
-				Service:    "Compute Disk",
-				ResourceId: fmt.Sprintf("%d", disk.GetId()),
+				Service:    "VM Instance",
+				ResourceId: fmt.Sprintf("%d", instance.GetId()),
 				Region:     zone,
-				Name:       disk.GetName(),
+				Name:       instance.GetName(),
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https://console.cloud.google.com/compute/disksDetail/zones/%s/disks/%s?project=%s", zone, disk.GetName(), client.GCPClient.Credentials.ProjectID),
+				Link:       fmt.Sprintf("https://console.cloud.google.com/compute/instancesDetail/zones/%s/instances/%s?project=%s", zone, instance.GetName(), client.GCPClient.Credentials.ProjectID),
 			})
 		}
 	}
@@ -77,4 +77,8 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 	}).Info("Fetched resources")
 
 	return resources, nil
+}
+
+func extractZoneFromURL(url string) string {
+	return url[strings.LastIndex(url, "/")+1:]
 }
