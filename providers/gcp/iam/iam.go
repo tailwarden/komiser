@@ -45,8 +45,14 @@ func IamRoles(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			FetchedAt: time.Now(),
 			Link:      fmt.Sprintf("https://console.cloud.google.com/iam-admin/roles/details/%s?project=%s", targetForUrl, client.GCPClient.Credentials.ProjectID),
 		})
-
 	}
+	logrus.WithFields(logrus.Fields{
+		"provider":  "GCP",
+		"account":   client.Name,
+		"service":   "IAM Custom Roles",
+		"resources": len(resources),
+	}).Info("Fetched resources")
+
 	return resources, nil
 
 }
