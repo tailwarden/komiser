@@ -7,23 +7,23 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 )
 
-func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) NewViewHandler(c *gin.Context) {
 	var view models.View
 
-	err := json.NewDecoder(r.Body).Decode(&view)
+	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	result, err := handler.db.NewInsert().Model(&view).Exec(context.Background())
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -34,102 +34,99 @@ func (handler *ApiHandler) NewViewHandler(w http.ResponseWriter, r *http.Request
 		handler.analytics.TrackEvent("creating_view", nil)
 	}
 
-	respondWithJSON(w, 200, view)
+	c.JSON(http.StatusCreated, view)
 }
 
-func (handler *ApiHandler) ListViewsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) ListViewsHandler(c *gin.Context) {
 	views := make([]models.View, 0)
 
 	err := handler.db.NewRaw("SELECT * FROM views").Scan(handler.ctx, &views)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
+		return
 	}
 
-	respondWithJSON(w, 200, views)
+	c.JSON(http.StatusOK, views)
 }
 
-func (handler *ApiHandler) UpdateViewHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId := vars["id"]
+func (handler *ApiHandler) UpdateViewHandler(c *gin.Context) {
+	viewId := c.Param("id")
 
 	var view models.View
-	err := json.NewDecoder(r.Body).Decode(&view)
+	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("name", "filters", "exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating view")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	respondWithJSON(w, 200, view)
+	c.JSON(http.StatusCreated, view)
 }
 
-func (handler *ApiHandler) DeleteViewHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId := vars["id"]
+func (handler *ApiHandler) DeleteViewHandler(c *gin.Context) {
+	viewId := c.Param("id")
 
 	view := new(models.View)
 	_, err := handler.db.NewDelete().Model(view).Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating view")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	respondWithJSON(w, 200, "View has been deleted")
+	c.JSON(http.StatusCreated, gin.H{"message": "view has been deleted"})
 }
 
-func (handler *ApiHandler) HideResourcesFromViewHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId := vars["id"]
+func (handler *ApiHandler) HideResourcesFromViewHandler(c *gin.Context) {
+	viewId := c.Param("id")
 
 	var view models.View
-	err := json.NewDecoder(r.Body).Decode(&view)
+	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating view")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	respondWithJSON(w, 200, "Resources has been hidden")
+	c.JSON(http.StatusOK, gin.H{"message": "resource has been hidden"})
 }
 
-func (handler *ApiHandler) UnhideResourcesFromViewHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId := vars["id"]
+func (handler *ApiHandler) UnhideResourcesFromViewHandler(c *gin.Context) {
+	viewId := c.Param("id")
 
 	var view models.View
-	err := json.NewDecoder(r.Body).Decode(&view)
+	err := json.NewDecoder(c.Request.Body).Decode(&view)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	_, err = handler.db.NewUpdate().Model(&view).Column("exclude").Where("id = ?", viewId).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating view")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	respondWithJSON(w, 200, "Resources has been revealed")
+	c.JSON(http.StatusOK, gin.H{"message": "resource has been revealed"})
 }
 
-func (handler *ApiHandler) ListHiddenResourcesHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId := vars["id"]
+func (handler *ApiHandler) ListHiddenResourcesHandler(c *gin.Context) {
+	viewId := c.Param("id")
 
 	view := new(models.View)
 	err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -144,19 +141,19 @@ func (handler *ApiHandler) ListHiddenResourcesHandler(w http.ResponseWriter, r *
 
 	}
 
-	respondWithJSON(w, 200, resources)
+	c.JSON(http.StatusOK, resources)
 }
 
-func (handler *ApiHandler) ListViewAlertsHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	viewId := vars["id"]
+func (handler *ApiHandler) ListViewAlertsHandler(c *gin.Context) {
+	viewId := c.Param("id")
 
 	alerts := make([]models.Alert, 0)
 
 	err := handler.db.NewRaw(fmt.Sprintf("SELECT * FROM alerts WHERE view_id = %s", viewId)).Scan(handler.ctx, &alerts)
 	if err != nil {
-		logrus.WithError(err).Error("scan failed")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	respondWithJSON(w, 200, alerts)
+	c.JSON(http.StatusOK, alerts)
 }

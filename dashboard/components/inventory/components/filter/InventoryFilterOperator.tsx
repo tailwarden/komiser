@@ -22,6 +22,12 @@ const inventoryFilterOperatorOptions: InventoryFilterOperatorOptionsProps[] = [
   { label: 'is not empty', value: 'IS_NOT_EMPTY' }
 ];
 
+const inventoryFilterOperatorSpecificTagsOptions: InventoryFilterOperatorOptionsProps[] =
+  [
+    { label: 'does exist', value: 'EXISTS' },
+    { label: 'does not exist', value: 'NOT_EXISTS' }
+  ];
+
 const inventoryFilterOperatorAllTagsOptions: InventoryFilterOperatorOptionsProps[] =
   [
     { label: 'which are empty', value: 'IS_EMPTY' },
@@ -82,6 +88,23 @@ function InventoryFilterOperator({
             gap="md"
             disabled={data.field === 'tag' && !data.tagKey}
             transition={false}
+            onClick={() => handleOperator(option.value)}
+          >
+            {option.label}
+          </Button>
+        ))}
+
+      {/* Operators list for specific tags */}
+      {data.field === 'tag' &&
+        inventoryFilterOperatorSpecificTagsOptions.map((option, idx) => (
+          <Button
+            key={idx}
+            size="sm"
+            style="ghost"
+            align="left"
+            gap="md"
+            transition={false}
+            disabled={data.field === 'tag' && !data.tagKey}
             onClick={() => handleOperator(option.value)}
           >
             {option.label}

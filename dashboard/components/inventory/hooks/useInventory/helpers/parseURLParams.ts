@@ -32,7 +32,9 @@ function parseURLParams(
     if (formatString.length > 2) {
       if (
         formatString.indexOf('IS_EMPTY') !== -1 ||
-        formatString.indexOf('IS_NOT_EMPTY') !== -1
+        formatString.indexOf('IS_NOT_EMPTY') !== -1 ||
+        formatString.indexOf('EXISTS') !== -1 ||
+        formatString.indexOf('NOT_EXISTS') !== -1
       ) {
         const key = formatString.slice(1, formatString.length - 1).join(':');
 

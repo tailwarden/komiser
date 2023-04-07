@@ -42,6 +42,8 @@ function InventoryFilterSummary({
     if (param === 'BETWEEN') return 'is between';
     if (param === 'GREATER_THAN') return 'is greater than';
     if (param === 'LESS_THAN') return 'is less than';
+    if (param === 'EXISTS') return 'does exist';
+    if (param === 'NOT_EXISTS') return 'does not exist';
     return param;
   }
 

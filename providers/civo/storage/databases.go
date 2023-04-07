@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -22,6 +23,14 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 	// func (c *Client) ListDatabases(page int, perPage int) (*PaginatedDatabaseList, error) {}
 
 	for _, resource := range paginatedDatabases.Items {
+
+		resourceInGB, err := strconv.Atoi(resource.Size)
+		if err != nil {
+			return resources, nil
+		}
+
+		monthlyCost := float64((resourceInGB / 20) * (20 + (resource.Nodes-1)*15))
+
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
@@ -29,6 +38,7 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 			Region:     client.CivoClient.Region,
 			ResourceId: resource.ID,
 			Name:       resource.Name,
+			Cost:       monthlyCost,
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://dashboard.civo.com/databases/%s", resource.ID),
 		})
