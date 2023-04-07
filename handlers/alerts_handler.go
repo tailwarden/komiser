@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/tailwarden/komiser/models"
 )
 
-func (handler *ApiHandler) IsSlackEnabledHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) IsSlackEnabledHandler(c *gin.Context) {
 	output := struct {
 		Enabled bool `json:"enabled"`
 	}{
@@ -19,22 +19,20 @@ func (handler *ApiHandler) IsSlackEnabledHandler(w http.ResponseWriter, r *http.
 		output.Enabled = true
 	}
 
-	respondWithJSON(w, 200, output)
+	c.JSON(http.StatusOK, output)
 }
 
-func (handler *ApiHandler) NewAlertHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) NewAlertHandler(c *gin.Context) {
 	var alert models.Alert
 
-	err := json.NewDecoder(r.Body).Decode(&alert)
+	err := json.NewDecoder(c.Request.Body).Decode(&alert)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	result, err := handler.db.NewInsert().Model(&alert).Exec(context.Background())
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	alertId, _ := result.LastInsertId()
@@ -47,39 +45,34 @@ func (handler *ApiHandler) NewAlertHandler(w http.ResponseWriter, r *http.Reques
 		})
 	}
 
-	respondWithJSON(w, 200, alert)
+	c.JSON(http.StatusCreated, alert)
 }
 
-func (handler *ApiHandler) UpdateAlertHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	alertId := vars["id"]
+func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
+	alertId := c.Param("id")
 
 	var alert models.Alert
-	err := json.NewDecoder(r.Body).Decode(&alert)
+	err := json.NewDecoder(c.Request.Body).Decode(&alert)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	_, err = handler.db.NewUpdate().Model(&alert).Column("name", "type", "budget", "usage").Where("id = ?", alertId).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating alert")
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	respondWithJSON(w, 200, alert)
+	c.JSON(http.StatusOK, alert)
 }
 
-func (handler *ApiHandler) DeleteAlertHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	alertId := vars["id"]
+func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
+	alertId := c.Param("id")
 
 	alert := new(models.Alert)
 	_, err := handler.db.NewDelete().Model(alert).Where("id = ?", alertId).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating alert")
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	respondWithJSON(w, 200, "Alert has been deleted")
+	c.JSON(http.StatusOK, gin.H{"message": "alert has been deleted"})
 }
