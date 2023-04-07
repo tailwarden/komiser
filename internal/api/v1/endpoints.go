@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/tailwarden/komiser/handlers"
 	"github.com/tailwarden/komiser/models"
@@ -16,6 +17,12 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 
 	router := gin.New()
 	router.Use(gin.Recovery())
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+		AllowHeaders: []string{"*"},
+	}))
 
 	api := handlers.NewApiHandler(ctx, telemetry, analytics, db, cfg)
 

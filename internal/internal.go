@@ -6,9 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net"
 	"net/http"
-	"os"
 	"runtime"
 	"strconv"
 	"strings"
@@ -25,8 +23,6 @@ import (
 	"github.com/uptrace/bun/driver/pgdriver"
 	"github.com/uptrace/bun/driver/sqliteshim"
 
-	"github.com/gorilla/handlers"
-	"github.com/rs/cors"
 	"github.com/spf13/cobra"
 	v1 "github.com/tailwarden/komiser/internal/api/v1"
 	"github.com/tailwarden/komiser/internal/config"
@@ -150,23 +146,11 @@ func runServer(address string, port int, telemetry bool, cfg models.Config) erro
 
 	r.Use(loggingMiddleware())
 
-	cors := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
-		AllowedHeaders: []string{"profile", "X-Requested-With", "Content-Type", "Authorization"},
-	})
-
-	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
-	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", address, port))
-	if err != nil {
+	if err := r.Run(fmt.Sprintf("%s:%d", address, port)); err != nil {
 		return err
 	}
 
 	log.Infof("Server started on %s:%d", address, port)
-
-	if err := http.Serve(listener, loggedRouter); err != nil {
-		return err
-	}
 
 	return nil
 }
