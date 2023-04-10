@@ -28,6 +28,9 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 	}
 
 	accountId := stsOutput.Account
+	if accountId == nil {
+		return resources, fmt.Errorf("stsOutput.Account is nil")
+	}
 
 	for {
 		output, err := ec2Client.DescribeAddresses(ctx, &config)
@@ -36,16 +39,20 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 		}
 
 		for _, elasticIps := range output.Addresses {
+			if elasticIps.AllocationId == nil {
+				log.Warn("elasticIps.AllocationId is nil")
+				continue
+			}
 			tags := make([]Tag, 0)
 			for _, tag := range elasticIps.Tags {
-				tags = append(tags, Tag{
-					Key:   *tag.Key,
-					Value: *tag.Value,
-				})
+				if tag.Key != nil && tag.Value != nil {
+					tags = append(tags, Tag{
+						Key:   *tag.Key,
+						Value: *tag.Value,
+					})
+				}
 			}
-
 			cost := 0.0
-
 			resourceConfig, err := configClient.BatchGetResourceConfig(ctx, &configservice.BatchGetResourceConfigInput{
 				ResourceKeys: []types.ResourceKey{
 					{
@@ -62,15 +69,36 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 					"provider": "AWS",
 				}).Warn("Cost couldn't be calculated due to missing AWS config")
 			} else {
-				creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
-				hoursSinceCreation := hoursSince(*creationTime)
+				if len(resourceConfig.BaseConfigurationItems) > 0 {
+					if resourceConfig.BaseConfigurationItems[0].ResourceCreationTime != nil {
 
-				hourlyCost := 0.005
+						creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
+						hoursSinceCreation := hoursSince(*creationTime)
 
-				if elasticIps.InstanceId != nil {
-					cost = 0
+						hourlyCost := 0.005
+
+						if elasticIps.InstanceId != nil {
+							cost = 0
+						} else {
+							cost = hourlyCost * hoursSinceCreation
+						}
+					} else {
+						log.WithFields(log.Fields{
+							"service":  "Elastic IP",
+							"name":     *elasticIps.AllocationId,
+							"region":   client.AWSClient.Region,
+							"provider": "AWS",
+						}).Warn("ResourceCreationTime is nil for elastic IP")
+					}
+					cost = 0.0
 				} else {
-					cost = hourlyCost * hoursSinceCreation
+					log.WithFields(log.Fields{
+						"service":  "Elastic IP",
+						"name":     *elasticIps.AllocationId,
+						"region":   client.AWSClient.Region,
+						"provider": "AWS",
+					}).Warn("BaseConfigurationItems is empty")
+					cost = 0.0
 				}
 			}
 
