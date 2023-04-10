@@ -22,6 +22,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		bigquery.BigQueryTables,
 		certficate.Certificates,
 		iam.IamRoles,
+		iam.ServiceAccounts,
 		sql.SqlInstances,
 	}
 }
