@@ -9,7 +9,6 @@ import (
 	redis "cloud.google.com/go/redis/apiv1"
 	"cloud.google.com/go/redis/apiv1/redispb"
 	"github.com/sirupsen/logrus"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
@@ -91,13 +90,13 @@ func listGCPRegions(projectId string, creds option.ClientOption) ([]string, erro
 	ctx := context.Background()
 	computeService, err := compute.NewService(ctx, creds)
 	if err != nil {
-		log.WithError(err).Debug("failed to create new service for fetching GCP regions for redis instance")
+		logrus.WithError(err).Errorf("failed to create new service for fetching GCP regions for redis instance")
 		return nil, err
 	}
 
 	regionList, err := computeService.Regions.List(projectId).Do()
 	if err != nil {
-		log.WithError(err).Debug("failed to list regions for fetching GCP regions for redis instance")
+		logrus.WithError(err).Errorf("failed to list regions for fetching GCP regions for redis instance")
 		return nil, err
 	}
 
