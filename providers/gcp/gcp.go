@@ -14,6 +14,7 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		compute.Instances,
+		compute.Disks,
 		storage.Buckets,
 	}
 }
