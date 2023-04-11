@@ -34,6 +34,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 	node_pool, err := clusterClient.GetNodePool(ctx, nodepoolReq)
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to collect labels")
+		return resources, err
 	}
 	nodeconfigLabels := node_pool.Config.Labels
 
