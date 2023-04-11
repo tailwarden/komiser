@@ -40,6 +40,7 @@ module.exports = {
         },
         black: {
           100: '#F4F9F9',
+          130: '#F4F2F7',
           150: '#F5F5F5',
           170: '#EDEBEE',
           200: '#CFD7D7',

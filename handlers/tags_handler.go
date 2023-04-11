@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	. "github.com/tailwarden/komiser/models"
 )
 
-func (handler *ApiHandler) BulkUpdateTagsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 	var input BulkUpdateTag
 
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -23,34 +23,28 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(w http.ResponseWriter, r *http.
 	for _, resourceId := range input.Resources {
 		_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", resourceId).Exec(handler.ctx)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, "Error while updating tags")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 			return
 		}
 	}
 
-	respondWithJSON(w, 200, "Tags has been successfuly updated")
+	c.JSON(http.StatusCreated, gin.H{"message": "tags has been successfuly updated"})
 }
 
-func (handler *ApiHandler) UpdateTagsHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 	tags := make([]Tag, 0)
 
-	vars := mux.Vars(r)
-	resourceId, ok := vars["id"]
-
-	if !ok {
-		respondWithError(w, http.StatusBadRequest, "Resource id is missing")
-		return
-	}
+	resourceId := c.Param("id")
 
 	id, err := strconv.Atoi(resourceId)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Resource id should be an integer")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "resource id should be an integer"})
 		return
 	}
 
-	err = json.NewDecoder(r.Body).Decode(&tags)
+	err = json.NewDecoder(c.Request.Body).Decode(&tags)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -58,9 +52,9 @@ func (handler *ApiHandler) UpdateTagsHandler(w http.ResponseWriter, r *http.Requ
 
 	_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", id).Exec(handler.ctx)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Error while updating tags")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 		return
 	}
 
-	respondWithJSON(w, 200, "Tags has been successfuly updated")
+	c.JSON(http.StatusCreated, gin.H{"message": "tags has been successfuly updated"})
 }

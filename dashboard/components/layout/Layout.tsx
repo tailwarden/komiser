@@ -66,7 +66,7 @@ function Layout({ children }: LayoutProps) {
             message="It seems you have not connected a cloud account to Komiser. Connect one right now so you can start managing it from your dashboard"
             action={() => {
               router.push(
-                'https://docs.komiser.io/docs/overview/introduction/getting-started/'
+                'https://docs.komiser.io/docs/introduction/getting-started#self-hosted'
               );
             }}
             actionLabel="Guide to connect account"
