@@ -6,14 +6,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net"
 	"net/http"
-	"os"
 	"runtime"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
 	log "github.com/sirupsen/logrus"
@@ -25,8 +24,6 @@ import (
 	"github.com/uptrace/bun/driver/sqliteshim"
 	"github.com/uptrace/bun/migrate"
 
-	"github.com/gorilla/handlers"
-	"github.com/rs/cors"
 	"github.com/spf13/cobra"
 	v1 "github.com/tailwarden/komiser/internal/api/v1"
 	"github.com/tailwarden/komiser/internal/config"
@@ -126,28 +123,41 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 	return nil
 }
 
+func loggingMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		startTime := time.Now()
+		ctx.Next()
+		endTime := time.Now()
+		latencyTime := endTime.Sub(startTime)
+		reqMethod := ctx.Request.Method
+		reqUri := ctx.Request.RequestURI
+		statusCode := ctx.Writer.Status()
+		clientIP := ctx.ClientIP()
+
+		log.WithFields(log.Fields{
+			"method":  reqMethod,
+			"uri":     reqUri,
+			"status":  statusCode,
+			"latency": latencyTime,
+			"ip":      clientIP,
+		}).Info("HTTP request")
+
+		ctx.Next()
+	}
+}
+
 func runServer(address string, port int, telemetry bool, cfg models.Config) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
 	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg)
 
-	cors := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
-		AllowedHeaders: []string{"profile", "X-Requested-With", "Content-Type", "Authorization"},
-	})
+	r.Use(loggingMiddleware())
 
-	loggedRouter := handlers.LoggingHandler(os.Stdout, cors.Handler(r))
-	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", address, port))
-	if err != nil {
+	if err := r.Run(fmt.Sprintf("%s:%d", address, port)); err != nil {
 		return err
 	}
 
 	log.Infof("Server started on %s:%d", address, port)
-
-	if err := http.Serve(listener, loggedRouter); err != nil {
-		return err
-	}
 
 	return nil
 }

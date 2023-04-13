@@ -137,6 +137,12 @@ func getAWSRegions() []Location {
 			Latitude:  "26.066700",
 			Longitude: "50.557700",
 		},
+		{
+			Name:      "Sao Paulo",
+			Label:     "sa-east-1",
+			Latitude:  "-33.469120",
+			Longitude: "-70.641997",
+		},
 	}
 }
 
