@@ -8,16 +8,10 @@ import (
 	"github.com/tailwarden/komiser/providers/gcp/bigquery"
 	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 91439c4 (fix: follow naming convention)
+	"github.com/tailwarden/komiser/providers/gcp/container"
 	"github.com/tailwarden/komiser/providers/gcp/iam"
 	"github.com/tailwarden/komiser/providers/gcp/redis"
 	"github.com/tailwarden/komiser/providers/gcp/sql"
-=======
-	"github.com/tailwarden/komiser/providers/gcp/redis"
->>>>>>> 0773214 (feat: support redis in gcp)
 	"github.com/tailwarden/komiser/providers/gcp/storage"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -29,17 +23,12 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		storage.Buckets,
 		bigquery.BigQueryTables,
 		certficate.Certificates,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 		redis.Instances,
->>>>>>> 91439c4 (fix: follow naming convention)
 		iam.IamRoles,
 		iam.ServiceAccounts,
 		sql.SqlInstances,
-=======
-		redis.Redis,
->>>>>>> 0773214 (feat: support redis in gcp)
+		redis.Instances,
+		container.Clusters,
 	}
 }
 
