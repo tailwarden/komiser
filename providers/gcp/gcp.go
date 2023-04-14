@@ -8,6 +8,12 @@ import (
 	"github.com/tailwarden/komiser/providers/gcp/bigquery"
 	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
+	"github.com/tailwarden/komiser/providers/gcp/container"
+	"github.com/tailwarden/komiser/providers/gcp/gateway"
+	"github.com/tailwarden/komiser/providers/gcp/iam"
+	"github.com/tailwarden/komiser/providers/gcp/kms"
+	"github.com/tailwarden/komiser/providers/gcp/redis"
+	"github.com/tailwarden/komiser/providers/gcp/sql"
 	"github.com/tailwarden/komiser/providers/gcp/storage"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -16,9 +22,17 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		compute.Instances,
+		compute.Disks,
 		storage.Buckets,
-		bigquery.BigQueryTables,
+		bigquery.Tables,
 		certficate.Certificates,
+		iam.Roles,
+		iam.ServiceAccounts,
+		sql.Instances,
+		redis.Instances,
+		container.Clusters,
+		kms.Keys,
+		gateway.ApiGateways,
 	}
 }
 

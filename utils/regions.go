@@ -1,6 +1,13 @@
 package utils
 
-import "strings"
+import (
+	"context"
+	"strings"
+
+	"github.com/sirupsen/logrus"
+	"google.golang.org/api/compute/v1"
+	"google.golang.org/api/option"
+)
 
 type Location struct {
 	Name      string `json:"name"`
@@ -136,6 +143,12 @@ func getAWSRegions() []Location {
 			Label:     "me-south-1",
 			Latitude:  "26.066700",
 			Longitude: "50.557700",
+		},
+		{
+			Name:      "Sao Paulo",
+			Label:     "sa-east-1",
+			Latitude:  "-33.469120",
+			Longitude: "-70.641997",
 		},
 	}
 }
@@ -954,4 +967,31 @@ func NormalizeRegionName(regionName string) string {
 	lowercased := strings.ToLower(regionName)
 	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
 	return dashReplaced
+}
+
+func GcpExtractZoneFromURL(url string) string {
+	return url[strings.LastIndex(url, "/")+1:]
+}
+
+// Fetch all the available GCP Regions for the given ProjectID
+func FetchGCPRegionsInRealtime(projectId string, creds option.ClientOption) ([]string, error) {
+	var regions []string
+
+	ctx := context.Background()
+	computeService, err := compute.NewService(ctx, creds)
+	if err != nil {
+		logrus.WithError(err).Errorf("failed to fetch GCP regions")
+		return nil, err
+	}
+
+	regionList, err := computeService.Regions.List(projectId).Do()
+	if err != nil {
+		logrus.WithError(err).Errorf("failed to list GCP regions")
+		return nil, err
+	}
+
+	for _, region := range regionList.Items {
+		regions = append(regions, region.Name)
+	}
+	return regions, nil
 }
