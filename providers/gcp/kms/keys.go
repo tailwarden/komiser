@@ -20,7 +20,7 @@ func Keys(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 
 	kmsclient, err := kms.NewKeyManagementClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
-		return nil, err
+		return resources, err
 	}
 
 	parent := fmt.Sprintf("projects/%s/locations/global", client.GCPClient.Credentials.ProjectID)
