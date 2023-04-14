@@ -12,15 +12,16 @@ import (
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
-	"google.golang.org/api/compute/v1"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
+
+	"github.com/tailwarden/komiser/utils"
 )
 
 func Redis(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	regions, err := listGCPRegions(client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))
+	regions, err := utils.FetchGCPRegionsInRealtime(client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to list zones to fetch redis")
 		return resources, err
@@ -46,7 +47,6 @@ RegionsLoop:
 				break
 			}
 			if err != nil {
-
 				if err.Error() == "googleapi: Error 403: Location "+regionName+" is not found or access is unauthorized." {
 					continue RegionsLoop
 				} else {
@@ -82,26 +82,4 @@ RegionsLoop:
 	}).Info("Fetched resources")
 
 	return resources, nil
-}
-
-func listGCPRegions(projectId string, creds option.ClientOption) ([]string, error) {
-	var regions []string
-
-	ctx := context.Background()
-	computeService, err := compute.NewService(ctx, creds)
-	if err != nil {
-		logrus.WithError(err).Errorf("failed to create new service for fetching GCP regions for redis instance")
-		return nil, err
-	}
-
-	regionList, err := computeService.Regions.List(projectId).Do()
-	if err != nil {
-		logrus.WithError(err).Errorf("failed to list regions for fetching GCP regions for redis instance")
-		return nil, err
-	}
-
-	for _, region := range regionList.Items {
-		regions = append(regions, region.Name)
-	}
-	return regions, nil
 }
