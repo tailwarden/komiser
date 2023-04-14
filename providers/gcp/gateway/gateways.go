@@ -44,10 +44,7 @@ RegionsLoop:
 		}
 
 		for _, apiGateway := range apiGateways.Gateways {
-			fmt.Printf("%+v\n", apiGateway)
-
-			layout := "2006-01-02T15:04:05.999999999Z"
-			parsedCreatedTime, err := time.Parse(layout, apiGateway.CreateTime)
+			parsedCreatedTime, err := time.Parse(time.RFC3339Nano, apiGateway.CreateTime)
 			if err != nil {
 				logrus.WithError(err).Errorf("failed to parse create time for API Gateways")
 				return resources, err
