@@ -22,10 +22,12 @@ import (
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/pgdriver"
 	"github.com/uptrace/bun/driver/sqliteshim"
+	"github.com/uptrace/bun/migrate"
 
 	"github.com/spf13/cobra"
 	v1 "github.com/tailwarden/komiser/internal/api/v1"
 	"github.com/tailwarden/komiser/internal/config"
+	"github.com/tailwarden/komiser/migrations"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
@@ -63,6 +65,11 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 	}
 
 	err = setupSchema(cfg)
+	if err != nil {
+		return err
+	}
+
+	err = doMigrations(ctx)
 	if err != nil {
 		return err
 	}
@@ -231,6 +238,23 @@ func setupSchema(c *models.Config) error {
 		}
 	}
 
+	return nil
+}
+
+func doMigrations(ctx context.Context) error {
+	migrator := migrate.NewMigrator(db, migrations.Migrations)
+
+	migrator.Init(ctx)
+
+	group, err := migrator.Migrate(ctx)
+	if err != nil {
+		return err
+	}
+	if group.IsZero() {
+		log.Infof("there are no new migrations to run (database is up to date)\n")
+		return nil
+	}
+	log.Infof("migrated to %s\n", group)
 	return nil
 }
 
