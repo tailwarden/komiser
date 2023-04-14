@@ -62,15 +62,17 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 					"provider": "AWS",
 				}).Warn("Cost couldn't be calculated due to missing AWS config")
 			} else {
-				creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
-				hoursSinceCreation := hoursSince(*creationTime)
+				if len(resourceConfig.BaseConfigurationItems) > 0 {
+					creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
+					hoursSinceCreation := hoursSince(*creationTime)
 
-				hourlyCost := 0.005
+					hourlyCost := 0.005
 
-				if elasticIps.InstanceId != nil {
-					cost = 0
-				} else {
-					cost = hourlyCost * hoursSinceCreation
+					if elasticIps.InstanceId != nil {
+						cost = 0
+					} else {
+						cost = hourlyCost * hoursSinceCreation
+					}
 				}
 			}
 
