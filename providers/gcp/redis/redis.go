@@ -18,7 +18,7 @@ import (
 	"github.com/tailwarden/komiser/utils"
 )
 
-func Redis(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	regions, err := utils.FetchGCPRegionsInRealtime(client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))

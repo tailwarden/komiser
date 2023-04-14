@@ -9,7 +9,11 @@ import (
 	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 91439c4 (fix: follow naming convention)
 	"github.com/tailwarden/komiser/providers/gcp/iam"
+	"github.com/tailwarden/komiser/providers/gcp/redis"
 	"github.com/tailwarden/komiser/providers/gcp/sql"
 =======
 	"github.com/tailwarden/komiser/providers/gcp/redis"
@@ -26,6 +30,10 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		bigquery.BigQueryTables,
 		certficate.Certificates,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		redis.Instances,
+>>>>>>> 91439c4 (fix: follow naming convention)
 		iam.IamRoles,
 		iam.ServiceAccounts,
 		sql.SqlInstances,
