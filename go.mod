@@ -1,6 +1,6 @@
 module github.com/tailwarden/komiser
 
-go 1.18
+go 1.20
 
 require (
 	cloud.google.com/go/bigquery v1.49.0
