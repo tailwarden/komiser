@@ -5,6 +5,7 @@ import {
   Geography,
   Marker
 } from 'react-simple-maps';
+import Link from 'next/link';
 import { DashboardCloudMapRegions } from './hooks/useCloudMap';
 import { DashboardCloudMapTooltipProps } from './hooks/useCloudMapTooltip';
 
@@ -54,12 +55,7 @@ function DashboardCloudMapChart({
       </Geographies>
       {regionsAscendingByNumberOfResources &&
         regionsAscendingByNumberOfResources.map((region, idx) => (
-          <a
-            key={idx}
-            href={`/inventory?region:IS:${region.label}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link key={idx} href={`/inventory?region:IS:${region.label}`}>
             <Marker
               coordinates={[Number(region.longitude), Number(region.latitude)]}
               onMouseEnter={e =>
@@ -87,7 +83,7 @@ function DashboardCloudMapChart({
                 strokeWidth={1.5}
               />
             </Marker>
-          </a>
+          </Link>
         ))}
     </ComposableMap>
   );

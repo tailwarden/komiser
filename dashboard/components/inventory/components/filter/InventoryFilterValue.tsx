@@ -33,80 +33,71 @@ function InventoryFilterValue({
   const [options, setOptions] = useState<Options | undefined>();
 
   useEffect(() => {
-    let mounted = true;
-
-    if (data.operator === 'IS_EMPTY' || data.operator === 'IS_NOT_EMPTY') {
+    if (
+      data.operator === 'IS_EMPTY' ||
+      data.operator === 'IS_NOT_EMPTY' ||
+      data.operator === 'EXISTS' ||
+      data.operator === 'NOT_EXISTS'
+    ) {
       cleanValues();
       setOptions(undefined);
     } else {
       if (data.field === 'provider') {
         settingsService.getProviders().then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setToast({
-                hasError: true,
-                title: `There was an error when fetching the cloud providers`,
-                message: `Please refresh the page and try again.`
-              });
-            } else {
-              setOptions(res);
-            }
+          if (res === Error) {
+            setToast({
+              hasError: true,
+              title: `There was an error when fetching the cloud providers`,
+              message: `Please refresh the page and try again.`
+            });
+          } else {
+            setOptions(res);
           }
         });
       }
 
       if (data.field === 'account') {
         settingsService.getAccounts().then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setToast({
-                hasError: true,
-                title: `There was an error when fetching the cloud accounts`,
-                message: `Please refresh the page and try again.`
-              });
-            } else {
-              setOptions(res);
-            }
+          if (res === Error) {
+            setToast({
+              hasError: true,
+              title: `There was an error when fetching the cloud accounts`,
+              message: `Please refresh the page and try again.`
+            });
+          } else {
+            setOptions(res);
           }
         });
       }
 
       if (data.field === 'region') {
         settingsService.getRegions().then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setToast({
-                hasError: true,
-                title: `There was an error when fetching the cloud regions`,
-                message: `Please refresh the page and try again.`
-              });
-            } else {
-              setOptions(res);
-            }
+          if (res === Error) {
+            setToast({
+              hasError: true,
+              title: `There was an error when fetching the cloud regions`,
+              message: `Please refresh the page and try again.`
+            });
+          } else {
+            setOptions(res);
           }
         });
       }
 
       if (data.field === 'service') {
         settingsService.getServices().then(res => {
-          if (mounted) {
-            if (res === Error) {
-              setToast({
-                hasError: true,
-                title: `There was an error when fetching the cloud services`,
-                message: `Please refresh the page and try again.`
-              });
-            } else {
-              setOptions(res);
-            }
+          if (res === Error) {
+            setToast({
+              hasError: true,
+              title: `There was an error when fetching the cloud services`,
+              message: `Please refresh the page and try again.`
+            });
+          } else {
+            setOptions(res);
           }
         });
       }
     }
-
-    return () => {
-      mounted = false;
-    };
   }, []);
 
   return (
@@ -131,7 +122,9 @@ function InventoryFilterValue({
       {!options &&
         data.field !== 'cost' &&
         data.operator !== 'IS_EMPTY' &&
-        data.operator !== 'IS_NOT_EMPTY' && (
+        data.operator !== 'IS_NOT_EMPTY' &&
+        data.operator !== 'EXISTS' &&
+        data.operator !== 'NOT_EXISTS' && (
           <div className="pl-1 pt-2 pr-4 pb-2">
             <Input
               type="text"

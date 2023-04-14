@@ -125,6 +125,8 @@ function InventoryFilter({
                         data &&
                         data.operator !== 'IS_EMPTY' &&
                         data.operator !== 'IS_NOT_EMPTY' &&
+                        data.operator !== 'EXISTS' &&
+                        data.operator !== 'NOT_EXISTS' &&
                         data.values &&
                         data.values.length === 0
                       }

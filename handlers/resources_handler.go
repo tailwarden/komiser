@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
@@ -35,19 +36,19 @@ func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytic
 	return &handler
 }
 
-func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	var filters []Filter
 
-	limitRaw := r.URL.Query().Get("limit")
-	skipRaw := r.URL.Query().Get("skip")
-	query := r.URL.Query().Get("query")
-	viewId := r.URL.Query().Get("view")
+	limitRaw := c.Query("limit")
+	skipRaw := c.Query("skip")
+	query := c.Query("query")
+	viewId := c.Query("view")
 
 	view := new(View)
 	if viewId != "" {
 		err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
@@ -68,9 +69,9 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		skip = s
 	}
 
-	err = json.NewDecoder(r.Body).Decode(&filters)
+	err = json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -110,7 +111,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 			case "IS_NOT_EMPTY":
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
@@ -149,8 +150,20 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				} else {
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
+			case "EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s'))", key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s'))", key))
+				}
+			case "NOT_EXISTS":
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf(`(NOT EXISTS (SELECT 1 FROM json_each(resources.tags) WHERE (json_extract(value, '$.key') = '%s')))`, key))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' != '%s'))", key))
+				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if filter.Field == "tags" {
@@ -168,7 +181,7 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
 				}
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
 				return
 			}
 		} else if filter.Field == "cost" {
@@ -176,37 +189,42 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 			case "EQUAL":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					respondWithError(w, http.StatusBadRequest, "The value should be a number")
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
-				respondWithError(w, http.StatusBadRequest, "Operation is invalid or not supported")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
 				return
 			}
 		} else {
-			respondWithError(w, http.StatusBadRequest, "Field is invalid or not supported")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "field is invalid or not supported"})
 			return
 		}
 	}
@@ -233,21 +251,21 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 				logrus.WithError(err).Error("scan failed")
 			}
 		}
-		respondWithJSON(w, 200, resources)
+		c.JSON(http.StatusOK, resources)
 		return
 	}
 
 	if filterWithTags {
-		query := fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+		query := fmt.Sprintf("SELECT DISTINCT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
 		if len(view.Exclude) > 0 {
 			s, _ := json.Marshal(view.Exclude)
-			query = fmt.Sprintf("SELECT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
+			query = fmt.Sprintf("SELECT DISTINCT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
 		}
 		if handler.db.Dialect().Name() == dialect.SQLite {
-			query = fmt.Sprintf("SELECT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
+			query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
 			if len(view.Exclude) > 0 {
 				s, _ := json.Marshal(view.Exclude)
-				query = fmt.Sprintf("SELECT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE resources.id NOT IN (%s) AND type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", strings.Trim(string(s), "[]"), whereClause, limit, skip)
+				query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE resources.id NOT IN (%s) AND type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", strings.Trim(string(s), "[]"), whereClause, limit, skip)
 			}
 		}
 
@@ -257,6 +275,11 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 		}
 	} else {
 		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+
+		if whereClause == "" {
+			query = fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)
+		}
+
 		if len(view.Exclude) > 0 {
 			s, _ := json.Marshal(view.Exclude)
 			query = fmt.Sprintf("SELECT * FROM resources WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
@@ -264,24 +287,9 @@ func (handler *ApiHandler) FilterResourcesHandler(w http.ResponseWriter, r *http
 
 		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
-
-	respondWithJSON(w, 200, resources)
-}
-
-func respondWithError(w http.ResponseWriter, code int, msg string) {
-	respondWithJSON(w, code, map[string]string{"error": msg})
-}
-
-func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	_, err := w.Write(response)
-	if err != nil {
-		logrus.WithError(err).Error("write failed")
-	}
+	c.JSON(http.StatusOK, resources)
 }

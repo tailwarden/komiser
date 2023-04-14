@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import classNames from 'classnames';
+import ChevronDownIcon from '../icons/ChevronDownIcon';
 
 export type SelectProps = {
   label: string;
@@ -29,27 +30,12 @@ function Select({
         className="pointer-events-none absolute right-4
         bottom-[1.15rem] text-black-900 transition-all"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeMiterlimit="10"
-            strokeWidth="1.5"
-            d="M19.92 8.95l-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
-          ></path>
-        </svg>
+        <ChevronDownIcon width={24} height={24} />
       </div>
       <button
         onClick={toggle}
         className={classNames(
-          'h-[60px] w-full overflow-hidden rounded text-left outline outline-black-200/50 hover:outline-black-200 focus:outline-2 focus:outline-primary',
+          'h-[60px] w-full overflow-hidden rounded text-left outline outline-black-200/50 hover:outline-black-200 focus:outline-primary',
           { 'outline-2 outline-primary': isOpen }
         )}
       >
@@ -68,8 +54,8 @@ function Select({
             onClick={toggle}
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
-          <div className="absolute top-[4.15rem] z-[21] w-full overflow-hidden rounded-lg border border-black-200 bg-white p-2 shadow-lg">
-            <div className="flex w-full flex-col gap-2">
+          <div className="absolute top-[66px] z-[21] w-full overflow-hidden rounded-lg border border-black-130 bg-white p-1 shadow-lg">
+            <div className="flex w-full flex-col gap-1">
               {values.map((item, idx) => {
                 const isActive = value === item;
                 return (

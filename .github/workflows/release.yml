@@ -102,6 +102,10 @@ jobs:
           git add .
           git config user.name "purplin"
           git config user.email "purplin@tailwarden.com"
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit"
+            exit 0
+          fi
           git commit -m "chore: bump version to ${VERSION}"
           git push
         env:

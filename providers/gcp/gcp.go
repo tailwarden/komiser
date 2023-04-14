@@ -5,7 +5,13 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/gcp/bigquery"
+	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
+	"github.com/tailwarden/komiser/providers/gcp/container"
+	"github.com/tailwarden/komiser/providers/gcp/iam"
+	"github.com/tailwarden/komiser/providers/gcp/redis"
+	"github.com/tailwarden/komiser/providers/gcp/sql"
 	"github.com/tailwarden/komiser/providers/gcp/storage"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -16,6 +22,13 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		compute.Instances,
 		compute.Disks,
 		storage.Buckets,
+		bigquery.BigQueryTables,
+		certficate.Certificates,
+		iam.IamRoles,
+		iam.ServiceAccounts,
+		sql.SqlInstances,
+		redis.Instances,
+		container.Clusters,
 	}
 }
 
