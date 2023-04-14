@@ -23,22 +23,18 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 		return resources, err
 	}
 
-	req := &containerpb.ListClustersRequest{
+	node_pool, err := clusterClient.GetNodePool(ctx, &containerpb.GetNodePoolRequest{
 		ProjectId: client.GCPClient.Credentials.ProjectID,
-	}
-
-	nodepoolReq := &containerpb.GetNodePoolRequest{
-		ProjectId: client.GCPClient.Credentials.ProjectID,
-	}
-
-	node_pool, err := clusterClient.GetNodePool(ctx, nodepoolReq)
+	})
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to collect labels")
 		return resources, err
 	}
 	nodeconfigLabels := node_pool.Config.Labels
 
-	clusters, err := clusterClient.ListClusters(ctx, req)
+	clusters, err := clusterClient.ListClusters(ctx, &containerpb.ListClustersRequest{
+		ProjectId: client.GCPClient.Credentials.ProjectID,
+	})
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to collect clusters")
 		return resources, err
