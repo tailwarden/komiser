@@ -26,6 +26,8 @@ cloud.google.com/go/longrunning v0.4.1 h1:v+yFJOfKC3yZdY6ZUI933pIYdhyhV8S3NpWrXW
 cloud.google.com/go/longrunning v0.4.1/go.mod h1:4iWDqhBZ70CvZ6BfETbvam3T8FMvLK+eFj0E6AaRQTo=
 cloud.google.com/go/monitoring v1.13.0 h1:2qsrgXGVoRXpP7otZ14eE1I568zAa92sJSDPyOJvwjM=
 cloud.google.com/go/monitoring v1.13.0/go.mod h1:k2yMBAB1H9JT/QETjNkgdCGD9bPF712XiLTVr+cBrpw=
+cloud.google.com/go/redis v1.11.0 h1:JoAd3SkeDt3rLFAAxEvw6wV4t+8y4ZzfZcZmddqphQ8=
+cloud.google.com/go/redis v1.11.0/go.mod h1:/X6eicana+BWcUda5PpwZC48o37SiFVTFSs0fWAJ7uQ=
 cloud.google.com/go/storage v1.30.0 h1:g1yrbxAWOrvg/594228pETWkOi00MLTrOWfh56veU5o=
 cloud.google.com/go/storage v1.30.0/go.mod h1:xAVretHSROm1BQX4IIsoVgJqw0LqOyX+I/O2GzRAzdE=
 github.com/Azure/azure-sdk-for-go/sdk/azcore v1.3.1 h1:gVXuXcWd1i4C2Ruxe321aU+IKGaStvGB/S90PUPB/W8=
