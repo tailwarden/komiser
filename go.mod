@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/bigquery v1.49.0
 	cloud.google.com/go/compute v1.19.0
 	cloud.google.com/go/container v1.16.0
+	cloud.google.com/go/kms v1.10.0
 	cloud.google.com/go/monitoring v1.13.0
 	cloud.google.com/go/redis v1.11.0
 	cloud.google.com/go/storage v1.30.0
@@ -181,7 +182,7 @@ require (
 	golang.org/x/tools v0.6.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20230330154414-c0448cd141ea // indirect
+	google.golang.org/genproto v0.0.0-20230330154414-c0448cd141ea
 	google.golang.org/grpc v1.54.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect

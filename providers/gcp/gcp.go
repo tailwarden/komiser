@@ -10,6 +10,7 @@ import (
 	"github.com/tailwarden/komiser/providers/gcp/compute"
 	"github.com/tailwarden/komiser/providers/gcp/container"
 	"github.com/tailwarden/komiser/providers/gcp/iam"
+	"github.com/tailwarden/komiser/providers/gcp/kms"
 	"github.com/tailwarden/komiser/providers/gcp/redis"
 	"github.com/tailwarden/komiser/providers/gcp/sql"
 	"github.com/tailwarden/komiser/providers/gcp/storage"
@@ -29,6 +30,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		sql.Instances,
 		redis.Instances,
 		container.Clusters,
+		kms.Keys,
 	}
 }
 
