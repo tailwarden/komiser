@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -53,7 +54,7 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 				}
 			}
 
-			zone := extractZoneFromURL(disk.GetZone())
+			zone := utils.GcpExtractZoneFromURL(disk.GetZone())
 
 			resources = append(resources, models.Resource{
 				Provider:   "GCP",

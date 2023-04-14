@@ -13,7 +13,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func BigQueryTables(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Tables(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	bqclient, err := bigquery.NewClient(ctx, client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))
