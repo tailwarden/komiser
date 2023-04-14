@@ -13,7 +13,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func IamRoles(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Roles(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	iamService, err := iam.NewService(ctx, option.WithCredentials(client.GCPClient.Credentials))

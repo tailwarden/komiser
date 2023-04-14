@@ -12,7 +12,7 @@ import (
 	sqladmin "google.golang.org/api/sqladmin/v1beta4"
 )
 
-func SqlInstances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	instancesClient, err := sqladmin.NewService(ctx, option.WithCredentials(client.GCPClient.Credentials))
