@@ -21,6 +21,7 @@ func ConvertBytesToTerabytes(bytes int64) float64 {
 }
 
 func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
+	log.Fatal("Accessed Buckets function")
 	resources := make([]Resource, 0)
 	var config s3.ListBucketsInput
 	s3Client := s3.NewFromConfig(*client.AWSClient)

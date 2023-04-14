@@ -25,7 +25,6 @@ func AccessPoints(ctx context.Context, client ProviderClient) ([]Resource, error
 	s3Client := s3.NewFromConfig(cfg)
 	s3ControlClient := s3control.NewFromConfig(cfg)
 	stsClient := sts.NewFromConfig(cfg)
-
 	identity, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
 		return resources, err
