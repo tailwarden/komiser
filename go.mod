@@ -7,6 +7,7 @@ require (
 	cloud.google.com/go/compute v1.19.0
 	cloud.google.com/go/container v1.16.0
 	cloud.google.com/go/monitoring v1.13.0
+	cloud.google.com/go/redis v1.11.0
 	cloud.google.com/go/storage v1.30.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.3.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
@@ -88,7 +89,6 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.1.2 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.8.1 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/apache/arrow/go/v10 v10.0.1 // indirect
 	github.com/apache/thrift v0.16.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.3 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.12.9 // indirect
