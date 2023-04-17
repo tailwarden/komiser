@@ -9,6 +9,7 @@ import (
 	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
 	"github.com/tailwarden/komiser/providers/gcp/container"
+	"github.com/tailwarden/komiser/providers/gcp/function"
 	"github.com/tailwarden/komiser/providers/gcp/gateway"
 	"github.com/tailwarden/komiser/providers/gcp/iam"
 	"github.com/tailwarden/komiser/providers/gcp/kms"
@@ -33,6 +34,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		container.Clusters,
 		kms.Keys,
 		gateway.ApiGateways,
+		function.Functions,
 	}
 }
 
