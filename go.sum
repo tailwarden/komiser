@@ -134,6 +134,8 @@ github.com/aws/aws-sdk-go-v2/service/kms v1.18.18 h1:VEj0VdYbmx12y3GKWSXm8hB/mPu
 github.com/aws/aws-sdk-go-v2/service/kms v1.18.18/go.mod h1:kZodDPTQjSH/qM6/OvyTfM5mms5JHB/EKYp5dhn/vI4=
 github.com/aws/aws-sdk-go-v2/service/lambda v1.23.4 h1:d1Olp+josNRAlrrtacghtos74rffKS6Mq5gEUBHfgHw=
 github.com/aws/aws-sdk-go-v2/service/lambda v1.23.4/go.mod h1:XiSHsT7z5ScD2AsTgfa1UEFQaAr53dHP1oWvaqSW6jQ=
+github.com/aws/aws-sdk-go-v2/service/opensearch v1.15.4 h1:56esBN+m4kQrGPHZfE60PqfXDryuv8oYbSAc0aU1F10=
+github.com/aws/aws-sdk-go-v2/service/opensearch v1.15.4/go.mod h1:2Azx9xDn2nuX+yv4wTR7MO5EYqJNXt2fUC/axUV67qI=
 github.com/aws/aws-sdk-go-v2/service/pricing v1.17.5 h1:89yKwg+Kn3jgjcpxzmbZYH0O+I2+HjEcILIQrLkj8ik=
 github.com/aws/aws-sdk-go-v2/service/pricing v1.17.5/go.mod h1:1YtXjD073MNbQvowCxfSsdhGUCJQOt04FVDcs8uYCmI=
 github.com/aws/aws-sdk-go-v2/service/rds v1.30.1 h1:/B3GswjV+ScqZSZnhs3NMLwvVFXb1/aQL/elQwo0CMM=
