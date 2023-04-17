@@ -26,41 +26,44 @@ func Policies(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, policy := range outputPolicies.Policies {
-			tags := make([]Tag, 0)
-			for {
-				configTags.PolicyArn = policy.Arn
-				outputPolicyTags, err := iamClient.ListPolicyTags(ctx, &configTags)
-				if err != nil {
-					return resources, err
+			// only fetch user created policies
+			if aws.ToString(policy.Arn)[:20] != "arn:aws:iam::aws:pol" {
+				tags := make([]Tag, 0)
+				for {
+					configTags.PolicyArn = policy.Arn
+					outputPolicyTags, err := iamClient.ListPolicyTags(ctx, &configTags)
+					if err != nil {
+						return resources, err
+					}
+
+					for _, t := range outputPolicyTags.Tags {
+						tags = append(tags, Tag{
+							Key:   *t.Key,
+							Value: *t.Value,
+						})
+					}
+
+					if aws.ToString(outputPolicyTags.Marker) == "" {
+						break
+					}
+
+					configTags.Marker = outputPolicyTags.Marker
 				}
 
-				for _, t := range outputPolicyTags.Tags {
-					tags = append(tags, Tag{
-						Key:   *t.Key,
-						Value: *t.Value,
-					})
-				}
-
-				if aws.ToString(outputPolicyTags.Marker) == "" {
-					break
-				}
-
-				configTags.Marker = outputPolicyTags.Marker
+				resources = append(resources, Resource{
+					Provider:   "AWS",
+					Account:    client.Name,
+					Service:    "IAM Policy",
+					ResourceId: *policy.Arn,
+					Region:     client.AWSClient.Region,
+					Name:       *policy.PolicyName,
+					Cost:       0,
+					CreatedAt:  *policy.CreateDate,
+					Tags:       tags,
+					FetchedAt:  time.Now(),
+					Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iam/home#/policies/%s", client.AWSClient.Region, *policy.Arn),
+				})
 			}
-
-			resources = append(resources, Resource{
-				Provider:   "AWS",
-				Account:    client.Name,
-				Service:    "IAM Policy",
-				ResourceId: *policy.Arn,
-				Region:     client.AWSClient.Region,
-				Name:       *policy.PolicyName,
-				Cost:       0,
-				CreatedAt:  *policy.CreateDate,
-				Tags:       tags,
-				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iam/home#/policies/%s", client.AWSClient.Region, *policy.Arn),
-			})
 		}
 
 		if aws.ToString(outputPolicies.Marker) == "" {
