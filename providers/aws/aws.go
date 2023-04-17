@@ -69,6 +69,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.NetworkInterfaces,
 		cloudwatch.Dashboards,
 		ec2.ElasticIps,
+		ec2.Snapshots,
 		opensearch.ServiceDomains,
 	}
 }
