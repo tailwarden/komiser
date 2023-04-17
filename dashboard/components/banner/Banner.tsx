@@ -30,7 +30,7 @@ function Banner({ githubStars }: BannerProps) {
         >
           <Button style="bulk-outline" size="md">
             <Image
-              src="./assets/img/others/github-white.svg"
+              src="/assets/img/others/github-white.svg"
               width="18"
               height="16"
               alt="Github logo"

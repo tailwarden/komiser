@@ -42,6 +42,12 @@ export const Secondary: Story = {
   }
 };
 
+export const Ghost: Story = {
+  args: {
+    ...mockButtonProps.ghost
+  }
+};
+
 export const Bulk: Story = {
   args: {
     ...mockButtonProps.bulk
@@ -51,18 +57,6 @@ export const Bulk: Story = {
 export const BulkOutline: Story = {
   args: {
     ...mockButtonProps.bulkOutline
-  }
-};
-
-export const Outline: Story = {
-  args: {
-    ...mockButtonProps.outline
-  }
-};
-
-export const Ghost: Story = {
-  args: {
-    ...mockButtonProps.ghost
   }
 };
 

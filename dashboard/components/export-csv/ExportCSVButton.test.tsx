@@ -15,7 +15,7 @@ describe('Export CSV component', () => {
 
   it('should render the correct button props if displayInTable is true', () => {
     render(<ExportCSVButton {...props} displayInTable={true} />);
-    const button = screen.getByTestId('secondary');
+    const button = screen.getByTestId('ghost');
     expect(button).toBeInTheDocument();
   });
 

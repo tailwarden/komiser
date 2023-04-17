@@ -103,7 +103,7 @@ function InventorySidePanel({
           )}
 
           <div className="flex flex-shrink-0 items-center gap-2">
-            <Button style="outline" onClick={closeModal}>
+            <Button style="secondary" onClick={closeModal}>
               Close
             </Button>
           </div>
@@ -252,7 +252,7 @@ function InventorySidePanel({
                   <div className="flex items-center justify-end gap-6">
                     <Button
                       size="lg"
-                      style="secondary"
+                      style="ghost"
                       onClick={() => {
                         goTo('tags');
                       }}

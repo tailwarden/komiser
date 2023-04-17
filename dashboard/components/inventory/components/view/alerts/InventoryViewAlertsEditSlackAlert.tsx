@@ -164,7 +164,7 @@ function InventoryViewAlertsEditSlackAlert({
         </div>
 
         <div className="flex gap-4">
-          <Button style="secondary" size="lg" onClick={closeSlackAlert}>
+          <Button style="ghost" size="lg" onClick={closeSlackAlert}>
             Cancel
           </Button>
           <Button

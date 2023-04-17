@@ -35,7 +35,7 @@ function SidepanelHeader({
           </Button>
         )}
 
-        <Button style="outline" onClick={closeModal}>
+        <Button style="secondary" onClick={closeModal}>
           Close
         </Button>
       </div>

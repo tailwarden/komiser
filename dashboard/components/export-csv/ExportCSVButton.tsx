@@ -19,7 +19,7 @@ function ExportCSVButton({
     <>
       <div className="peer flex flex-col">
         <Button
-          style={displayInTable ? 'secondary' : 'ghost'}
+          style="ghost"
           size="sm"
           align="left"
           gap="md"

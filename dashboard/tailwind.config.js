@@ -13,6 +13,7 @@ module.exports = {
         komiser: {
           100: '#F5FDFD',
           120: '#e5f8f8',
+          130: '#E2F6F6',
           150: '#DFF5F5',
           200: '#CCF2F2',
           300: '#99E5E5',

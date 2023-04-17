@@ -1,7 +1,8 @@
-import { useRouter } from 'next/router';
-import { ReactNode, useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
+import { useRouter } from 'next/router';
+import { ReactNode, useEffect } from 'react';
+import environment from '../../environments/environment';
 import Banner from '../banner/Banner';
 import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
 import Button from '../button/Button';
@@ -11,7 +12,6 @@ import Navbar from '../navbar/Navbar';
 import GlobalAppContext from './context/GlobalAppContext';
 import useGlobalStats from './hooks/useGlobalStats';
 import useTelemetry from './hooks/useTelemetry';
-import environment from '../../environments/environment';
 
 type LayoutProps = {
   children: ReactNode;
@@ -85,7 +85,11 @@ function Layout({ children }: LayoutProps) {
             title="Network request error"
             message="There was an error fetching the cloud accounts. Please refer to the logs for more info and try again."
             action={
-              <Button size="lg" style="outline" onClick={() => router.reload()}>
+              <Button
+                size="lg"
+                style="secondary"
+                onClick={() => router.reload()}
+              >
                 Refresh the page
               </Button>
             }

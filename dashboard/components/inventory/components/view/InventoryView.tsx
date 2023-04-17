@@ -19,9 +19,9 @@ import {
   View
 } from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
+import InventoryViewHeader from './InventoryViewHeader';
 import InventoryViewAlerts from './alerts/InventoryViewAlerts';
 import useViews from './hooks/useViews';
-import InventoryViewHeader from './InventoryViewHeader';
 
 type InventoryViewProps = {
   filters: InventoryFilterData[] | undefined;
@@ -89,7 +89,7 @@ function InventoryView({
       {router.query.view && (
         <div className="absolute right-0">
           <Button
-            style="outline"
+            style="secondary"
             size="sm"
             align="left"
             transition={false}

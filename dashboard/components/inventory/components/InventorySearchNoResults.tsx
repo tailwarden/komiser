@@ -31,7 +31,7 @@ function InventorySearchNoResults({ query, setQuery, router }: Props) {
           )}
         </div>
         <Button
-          style="outline"
+          style="secondary"
           onClick={
             query
               ? () => {
