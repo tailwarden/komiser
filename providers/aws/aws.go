@@ -22,6 +22,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/iam"
 	"github.com/tailwarden/komiser/providers/aws/kms"
 	"github.com/tailwarden/komiser/providers/aws/lambda"
+	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
 	"github.com/tailwarden/komiser/providers/aws/s3"
 	"github.com/tailwarden/komiser/providers/aws/sns"
@@ -68,6 +69,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.NetworkInterfaces,
 		cloudwatch.Dashboards,
 		ec2.ElasticIps,
+		opensearch.ServiceDomains,
 	}
 }
 
