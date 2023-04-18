@@ -24,8 +24,8 @@ function InventoryTableBulkActions({
   return (
     <>
       {bulkItems && bulkItems.length > 0 && (
-        <div className="border-purplin-650 sticky bottom-0 flex w-full items-center justify-between bg-gradient-to-r from-komiser-600 to-komiser-700 py-4 px-6 text-sm">
-          <p className="text-black-100">
+        <div className="border-purplin-650 sticky bottom-0 flex w-full items-center justify-between bg-white py-4 px-6 text-sm font-medium shadow-[0px_-2px_4px_rgba(0,0,0,0.05)]">
+          <p className="text-black-900">
             {bulkItems.length} {bulkItems.length > 1 ? 'resources' : 'resource'}{' '}
             {inventoryStats &&
               !query &&
@@ -34,25 +34,25 @@ function InventoryTableBulkActions({
           </p>
           <div className="flex gap-4">
             <Button
-              size="lg"
-              style="bulk"
+              size="sm"
+              style="primary"
               onClick={() => openBulkModal(bulkItems)}
             >
               Manage tags
-              <span className="flex items-center justify-center rounded-lg bg-primary/10 py-1 px-2 text-xs">
+              <span className="ml-1 flex items-center justify-center rounded-lg bg-white/10 py-1 px-2 text-xs">
                 {formatNumber(bulkItems.length)}
               </span>
             </Button>
 
             {router.query.view && (
               <Button
-                size="lg"
-                style="bulk-outline"
+                size="sm"
+                style="secondary"
                 onClick={hideResourceFromCustomView}
                 loading={hideResourcesLoading}
               >
                 Hide from view
-                <span className="flex items-center justify-center rounded-lg bg-white/10 py-1 px-2 text-xs">
+                <span className="ml-1 flex items-center justify-center rounded-lg bg-primary/10 py-1 px-2 text-xs">
                   {formatNumber(bulkItems.length)}
                 </span>
               </Button>
