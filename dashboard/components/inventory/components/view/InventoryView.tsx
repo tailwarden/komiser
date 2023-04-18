@@ -90,15 +90,14 @@ function InventoryView({
         <div className="absolute right-0">
           <Button
             style="secondary"
-            size="sm"
-            align="left"
+            size="xs"
             transition={false}
             onClick={() => {
               openModal(undefined, 'alerts');
             }}
             loading={loading}
           >
-            <AlertIcon width={16} height={16} />
+            <AlertIcon width={20} height={20} />
             Alerts
           </Button>
         </div>
@@ -107,7 +106,7 @@ function InventoryView({
       {/* Save as a view button */}
       {!router.query.view && (
         <Button size="sm" onClick={() => openModal(filters)}>
-          <BookmarkIcon width={16} height={16} />
+          <BookmarkIcon width={20} height={20} />
           Save as a view
         </Button>
       )}

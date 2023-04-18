@@ -48,25 +48,20 @@ export const Ghost: Story = {
   }
 };
 
-export const Bulk: Story = {
+export const Text: Story = {
   args: {
-    ...mockButtonProps.bulk
+    ...mockButtonProps.text
   }
 };
 
-export const BulkOutline: Story = {
+export const Dropdown: Story = {
   args: {
-    ...mockButtonProps.bulkOutline
+    ...mockButtonProps.dropdown
   }
 };
 
 export const Delete: Story = {
   args: {
     ...mockButtonProps.deleteButton
-  }
-};
-export const DeleteGhost: Story = {
-  args: {
-    ...mockButtonProps.deleteButtonGhost
   }
 };

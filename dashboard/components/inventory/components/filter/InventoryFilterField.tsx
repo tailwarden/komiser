@@ -12,8 +12,7 @@ function InventoryFilterField({ handleField }: InventoryFilterFieldProps) {
         <Button
           key={idx}
           size="sm"
-          style="ghost"
-          align="left"
+          style="dropdown"
           gap="md"
           transition={false}
           onClick={() => handleField(option.value)}

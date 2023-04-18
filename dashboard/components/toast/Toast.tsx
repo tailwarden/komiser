@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import Button from '../button/Button';
 import { ToastProps } from './hooks/useToast';
+import ErrorIcon from '../icons/ErrorIcon';
+import CheckIcon from '../icons/CheckIcon';
 
 type ToastProp = ToastProps & {
   dismissToast: () => void;
@@ -35,37 +37,9 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
             })}
           >
             {hasError ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10zM12 8v5M11.995 16h.009"
-                ></path>
-              </svg>
+              <ErrorIcon width={24} height={24} />
             ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M20 6L9 17l-5-5"
-                ></path>
-              </svg>
+              <CheckIcon width={24} height={24} />
             )}
           </div>
           <div>
@@ -77,7 +51,7 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
           </div>
         </div>
         <div className="w-12"></div>
-        <Button style="ghost" onClick={dismissToast}>
+        <Button style="text" onClick={dismissToast}>
           Dismiss
         </Button>
       </div>
