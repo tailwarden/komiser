@@ -189,7 +189,7 @@ function InventorySidePanel({
 
           {page === 'delete' && (
             <>
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 bg-black-100 p-6">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-error-100 text-error-600">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +230,7 @@ function InventorySidePanel({
                   </Button>
                   <Button
                     size="lg"
-                    style="delete-secondary"
+                    style="delete"
                     loading={deleteLoading}
                     onClick={() => updateBulkTags('delete')}
                   >
