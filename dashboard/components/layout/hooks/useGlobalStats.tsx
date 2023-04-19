@@ -12,7 +12,7 @@ function useGlobalStats() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Data>();
   const [error, setError] = useState(false);
-  const [hasNoAccounts, setHasNoAccounts] = useState(true);
+  const [hasNoAccounts, setHasNoAccounts] = useState(false);
 
   function fetch() {
     if (!loading) {
