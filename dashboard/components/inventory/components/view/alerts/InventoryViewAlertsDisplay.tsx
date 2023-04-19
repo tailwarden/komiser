@@ -23,7 +23,7 @@ function InventoryViewAlertsDisplay({
         >
           <div className="flex items-center gap-4">
             <Image
-              src="./assets/img/others/slack.svg"
+              src="/assets/img/others/slack.svg"
               height={42}
               width={42}
               alt="Slack logo"

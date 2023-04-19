@@ -5,25 +5,16 @@ import Tooltip from '../tooltip/Tooltip';
 type ExportCSVButtonProps = {
   id?: string;
   disabled: boolean;
-  displayInTable: boolean;
   exportCSV: (id?: string) => void;
 };
 
-function ExportCSVButton({
-  id,
-  disabled,
-  displayInTable,
-  exportCSV
-}: ExportCSVButtonProps) {
+function ExportCSVButton({ id, disabled, exportCSV }: ExportCSVButtonProps) {
   return (
     <>
       <div className="peer flex flex-col">
         <Button
-          style={displayInTable ? 'secondary' : 'ghost'}
+          style="dropdown"
           size="sm"
-          align="left"
-          gap="md"
-          transition={false}
           disabled={disabled}
           onClick={() => exportCSV(id)}
         >

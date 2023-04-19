@@ -1,18 +1,11 @@
 import { ReactNode } from 'react';
+import LoadingSpinner from '../icons/LoadingSpinner';
 
 export type ButtonProps = {
   children: ReactNode;
   type?: 'button' | 'submit';
-  style?:
-    | 'primary'
-    | 'secondary'
-    | 'bulk'
-    | 'bulk-outline'
-    | 'outline'
-    | 'ghost'
-    | 'delete'
-    | 'delete-ghost';
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  style?: 'primary' | 'secondary' | 'ghost' | 'text' | 'dropdown' | 'delete';
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
   align?: 'left';
@@ -33,14 +26,16 @@ function Button({
   transition = true,
   onClick
 }: ButtonProps) {
-  const xs = 'p-1';
-  const sm = 'h-[2.5rem] px-3';
-  const md = 'h-[3rem] px-6';
-  const lg = 'h-[3.75rem] px-6';
+  const xxs = 'p-1';
+  const xs = 'py-2 px-4';
+  const sm = 'py-2.5 px-6';
+  const md = 'py-3.5 px-6';
+  const lg = 'py-4 px-6';
 
   function handleSize() {
     let buttonSize;
 
+    if (size === 'xxs') buttonSize = xxs;
     if (size === 'xs') buttonSize = xs;
     if (size === 'sm') buttonSize = sm;
     if (size === 'md') buttonSize = md;
@@ -49,40 +44,34 @@ function Button({
     return buttonSize;
   }
 
-  const base = `${handleSize()} ${
-    size === 'lg' ? 'rounded' : 'rounded-lg'
-  } flex items-center ${align ? 'justify-start' : 'justify-center '} ${
-    gap ? 'gap-3' : 'gap-2'
+  const base = `${handleSize()} rounded flex items-center ${
+    align ? 'justify-start' : 'justify-center '
+  } ${
+    gap ? 'gap-3' : 'gap-1'
   }  text-sm font-medium box-border w-full sm:w-auto disabled:cursor-not-allowed ${
     transition ? 'transition-colors' : ''
   }`;
 
-  const primary = `${base} bg-gradient-to-br from-primary bg-secondary hover:bg-primary active:from-secondary active:bg-secondary text-white disabled:from-primary disabled:bg-secondary disabled:opacity-50`;
+  const primary = `${base} font-semibold bg-gradient-to-br from-primary bg-secondary hover:bg-primary active:from-secondary active:bg-secondary text-white disabled:from-primary disabled:bg-secondary disabled:opacity-50`;
 
-  const secondary = `${base} hover:bg-black-100 text-black-900 active:bg-black-150 text-black-400 disabled:hover:bg-transparent disabled:opacity-30`;
+  const secondary = `${base} bg-transparent text-primary border-[1.5px] border-primary hover:bg-komiser-130 active:bg-komiser-200 active:text-primary disabled:bg-transparent disabled:opacity-50`;
 
-  const bulk = `${base} bg-white hover:bg-komiser-200 active:bg-komiser-300 text-secondary  disabled:bg-white disabled:opacity-50`;
+  const ghost = `${base} bg-transparent hover:bg-black-100 active:bg-black-400/20 text-black-800  disabled:bg-transparent disabled:opacity-50`;
 
-  const bulkOutline = `${base} bg-transparent text-white border-2 border-white hover:bg-komiser-100/10 active:bg-transparent active:border-white/50 active:text-white disabled:bg-transparent disabled:opacity-50`;
+  const text = `font-semibold text-sm text-komiser-700 hover:underline active:text-black-800`;
 
-  const outline = `${base} bg-transparent text-primary border-2 border-primary hover:bg-komiser-100 active:border-primary active:text-primary disabled:bg-transparent disabled:opacity-50`;
+  const dropdown = `text-sm font-medium flex items-center gap-2 justify-start p-2 bg-transparent text-black-400 hover:bg-black-150 active:bg-black-200 rounded disabled:bg-transparent disabled:opacity-50`;
 
-  const ghost = `${base} bg-transparent hover:bg-black-400/10 active:bg-black-400/20 text-black-900/60  disabled:bg-transparent disabled:opacity-50`;
-
-  const deleteStyle = `${base} border-2 border-error-600 text-error-600 hover:bg-error-600/5 active:bg-error-600/20 disabled:opacity-50`;
-
-  const deleteGhostStyle = `${base} bg-error-100 text-error-600 hover:bg-error-600 hover:text-white active:bg-error-100 active:text-error-600 disabled:bg-error-600 disabled:text-white`;
+  const deleteStyle = `${base} border-[1.5px] border-error-600 text-error-600 hover:bg-error-100 active:bg-error-600/20 disabled:opacity-50`;
 
   function handleStyle() {
     let buttonStyle;
 
     if (style === 'primary') buttonStyle = primary;
     if (style === 'secondary') buttonStyle = secondary;
-    if (style === 'bulk') buttonStyle = bulk;
-    if (style === 'bulk-outline') buttonStyle = bulkOutline;
-    if (style === 'outline') buttonStyle = outline;
     if (style === 'ghost') buttonStyle = ghost;
-    if (style === 'delete-ghost') buttonStyle = deleteGhostStyle;
+    if (style === 'text') buttonStyle = text;
+    if (style === 'dropdown') buttonStyle = dropdown;
     if (style === 'delete') buttonStyle = deleteStyle;
 
     return buttonStyle;
@@ -90,37 +79,13 @@ function Button({
 
   return (
     <button
-      onClick={onClick}
       type={type}
+      onClick={onClick}
       className={handleStyle()}
       disabled={disabled || loading}
       data-testid={style}
     >
-      {loading && (
-        <>
-          <svg
-            className="h-5 w-5 animate-spin text-inherit"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            data-testid="loading-spinner"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-        </>
-      )}
+      {loading && <LoadingSpinner />}
       {children}
     </button>
   );

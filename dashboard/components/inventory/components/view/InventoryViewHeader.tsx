@@ -5,7 +5,6 @@ import ExportCSV from '../../../export-csv/ExportCSV';
 import AlertIcon from '../../../icons/AlertIcon';
 import ChevronDownIcon from '../../../icons/ChevronDownIcon';
 import DeleteIcon from '../../../icons/DeleteIcon';
-import DownloadIcon from '../../../icons/DownloadIcon';
 import DuplicateIcon from '../../../icons/DuplicateIcon';
 import EditIcon from '../../../icons/EditIcon';
 import LinkIcon from '../../../icons/LinkIcon';
@@ -78,7 +77,7 @@ function InventoryViewHeader({
         <>
           <div className="flex items-center gap-2 text-lg font-medium text-black-900">
             <span>{currentView.name}</span>
-            <Button style="ghost" size="xs" onClick={openDropdown}>
+            <Button style="ghost" size="xxs" onClick={openDropdown}>
               <ChevronDownIcon width={16} height={16} />
             </Button>
           </div>
@@ -92,10 +91,8 @@ function InventoryViewHeader({
               <div className="absolute left-0 top-10 z-[21] inline-flex w-[16rem] rounded-lg bg-white p-4 text-sm shadow-xl">
                 <div className="flex w-full flex-col gap-1">
                   <Button
-                    style="ghost"
+                    style="dropdown"
                     size="sm"
-                    align="left"
-                    gap="md"
                     transition={false}
                     onClick={() => {
                       closeDropdown();
@@ -106,10 +103,8 @@ function InventoryViewHeader({
                     Edit view
                   </Button>
                   <Button
-                    style="ghost"
+                    style="dropdown"
                     size="sm"
-                    align="left"
-                    gap="md"
                     transition={false}
                     onClick={e => {
                       closeDropdown();
@@ -121,10 +116,8 @@ function InventoryViewHeader({
                     Duplicate view
                   </Button>
                   <Button
-                    style="ghost"
+                    style="dropdown"
                     size="sm"
-                    align="left"
-                    gap="md"
                     transition={false}
                     onClick={() => {
                       closeDropdown();
@@ -136,10 +129,8 @@ function InventoryViewHeader({
                     Set up alert
                   </Button>
                   <Button
-                    style="ghost"
+                    style="dropdown"
                     size="sm"
-                    align="left"
-                    gap="md"
                     transition={false}
                     onClick={() => {
                       navigator.clipboard.writeText(document.URL);
@@ -156,10 +147,8 @@ function InventoryViewHeader({
                   <ExportCSV setToast={setToast} />
                   <span className="m-2 -mx-4 border-b border-black-200/40"></span>
                   <Button
-                    style="ghost"
+                    style="dropdown"
                     size="sm"
-                    align="left"
-                    gap="md"
                     transition={false}
                     onClick={() => {
                       closeDropdown();

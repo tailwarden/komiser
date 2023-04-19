@@ -42,37 +42,26 @@ export const Secondary: Story = {
   }
 };
 
-export const Bulk: Story = {
-  args: {
-    ...mockButtonProps.bulk
-  }
-};
-
-export const BulkOutline: Story = {
-  args: {
-    ...mockButtonProps.bulkOutline
-  }
-};
-
-export const Outline: Story = {
-  args: {
-    ...mockButtonProps.outline
-  }
-};
-
 export const Ghost: Story = {
   args: {
     ...mockButtonProps.ghost
   }
 };
 
+export const Text: Story = {
+  args: {
+    ...mockButtonProps.text
+  }
+};
+
+export const Dropdown: Story = {
+  args: {
+    ...mockButtonProps.dropdown
+  }
+};
+
 export const Delete: Story = {
   args: {
     ...mockButtonProps.deleteButton
-  }
-};
-export const DeleteGhost: Story = {
-  args: {
-    ...mockButtonProps.deleteButtonGhost
   }
 };

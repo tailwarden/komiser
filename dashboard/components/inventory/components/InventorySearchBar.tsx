@@ -44,7 +44,7 @@ function InventorySearchBar({
             data-form-type="other"
           />
           <div className="absolute top-[14px] right-4">
-            <ExportCSV setToast={setToast} displayInTable={true} />
+            <ExportCSV setToast={setToast} />
           </div>
         </div>
       )}

@@ -82,12 +82,8 @@ function InventoryFilterOperator({
         inventoryFilterOperatorOptions.map((option, idx) => (
           <Button
             key={idx}
-            size="sm"
-            style="ghost"
-            align="left"
-            gap="md"
+            style="dropdown"
             disabled={data.field === 'tag' && !data.tagKey}
-            transition={false}
             onClick={() => handleOperator(option.value)}
           >
             {option.label}
@@ -99,11 +95,7 @@ function InventoryFilterOperator({
         inventoryFilterOperatorSpecificTagsOptions.map((option, idx) => (
           <Button
             key={idx}
-            size="sm"
-            style="ghost"
-            align="left"
-            gap="md"
-            transition={false}
+            style="dropdown"
             disabled={data.field === 'tag' && !data.tagKey}
             onClick={() => handleOperator(option.value)}
           >
@@ -116,11 +108,7 @@ function InventoryFilterOperator({
         inventoryFilterOperatorAllTagsOptions.map((option, idx) => (
           <Button
             key={idx}
-            size="sm"
-            style="ghost"
-            align="left"
-            gap="md"
-            transition={false}
+            style="dropdown"
             onClick={() => handleOperator(option.value)}
           >
             {option.label}
@@ -132,11 +120,7 @@ function InventoryFilterOperator({
         inventoryFilterOperatorCostOptions.map((option, idx) => (
           <Button
             key={idx}
-            size="sm"
-            style="ghost"
-            align="left"
-            gap="md"
-            transition={false}
+            style="dropdown"
             onClick={() => handleOperator(option.value)}
           >
             {option.label}

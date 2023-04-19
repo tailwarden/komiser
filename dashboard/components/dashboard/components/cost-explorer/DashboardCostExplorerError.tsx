@@ -25,7 +25,7 @@ function DashboardCostExplorerError({
           There was an error loading the cost explorer.
         </p>
         <div className="flex-shrink-0">
-          <Button style="outline" size="sm" onClick={() => fetch()}>
+          <Button style="secondary" size="sm" onClick={() => fetch()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

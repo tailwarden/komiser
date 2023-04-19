@@ -19,9 +19,9 @@ import {
   View
 } from '../../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from '../filter/InventoryFilterSummary';
+import InventoryViewHeader from './InventoryViewHeader';
 import InventoryViewAlerts from './alerts/InventoryViewAlerts';
 import useViews from './hooks/useViews';
-import InventoryViewHeader from './InventoryViewHeader';
 
 type InventoryViewProps = {
   filters: InventoryFilterData[] | undefined;
@@ -89,16 +89,15 @@ function InventoryView({
       {router.query.view && (
         <div className="absolute right-0">
           <Button
-            style="outline"
-            size="sm"
-            align="left"
+            style="secondary"
+            size="xs"
             transition={false}
             onClick={() => {
               openModal(undefined, 'alerts');
             }}
             loading={loading}
           >
-            <AlertIcon width={16} height={16} />
+            <AlertIcon width={20} height={20} />
             Alerts
           </Button>
         </div>
@@ -107,7 +106,7 @@ function InventoryView({
       {/* Save as a view button */}
       {!router.query.view && (
         <Button size="sm" onClick={() => openModal(filters)}>
-          <BookmarkIcon width={16} height={16} />
+          <BookmarkIcon width={20} height={20} />
           Save as a view
         </Button>
       )}

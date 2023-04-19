@@ -18,7 +18,7 @@ function InventoryViewAlertsError({
             </p>
           </div>
         </div>
-        <Button style="outline" size="sm" onClick={fetchViewAlerts}>
+        <Button style="secondary" size="sm" onClick={fetchViewAlerts}>
           <RefreshIcon width={16} height={16} />
           Try again
         </Button>

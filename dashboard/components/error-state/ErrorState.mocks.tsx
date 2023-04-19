@@ -6,7 +6,7 @@ const base: ErrorStateProps = {
   message:
     'There was an error fetching the cloud accounts. Please refer to the logs for more info and try again.',
   action: (
-    <Button style="outline" size="lg">
+    <Button style="secondary" size="lg">
       Refresh the page
     </Button>
   )
