@@ -211,7 +211,7 @@ export default function Inventory() {
               );
             }}
             actionLabel="Check our docs"
-            mascotPose="greetings"
+            mascotPose="thinking"
           />
         )}
       </InventoryLayout>
