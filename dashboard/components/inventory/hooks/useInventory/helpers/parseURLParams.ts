@@ -2,7 +2,10 @@ import { InventoryFilterData } from '../types/useInventoryTypes';
 
 /** Parse the URL Params.
  * - Argument of type 'fetch' will output the object to fetch an inventory list and stats based on filters.
- * - Argument of type 'display' will output the object to populate the InventoryFilterSummary component */
+ * - Argument of type 'display' will output the object to populate the InventoryFilterSummary component
+ * Input:
+ *  one portion of the URL params: e.g. tag:A:IS_EMPTY
+ * */
 function parseURLParams(
   param: string | InventoryFilterData,
   type: 'fetch' | 'display',
@@ -79,7 +82,9 @@ function parseURLParams(
     if (formatString.length > 2) {
       if (
         formatString.indexOf('IS_EMPTY') !== -1 ||
-        formatString.indexOf('IS_NOT_EMPTY') !== -1
+        formatString.indexOf('IS_NOT_EMPTY') !== -1 ||
+        formatString.indexOf('EXISTS') !== -1 ||
+        formatString.indexOf('NOT_EXISTS') !== -1
       ) {
         const key = formatString.slice(1, formatString.length - 1).join(':');
 
