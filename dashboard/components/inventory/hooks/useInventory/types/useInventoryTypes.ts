@@ -19,6 +19,8 @@ export type InventoryFilterData = {
     | 'NOT_CONTAINS'
     | 'IS_EMPTY'
     | 'IS_NOT_EMPTY'
+    | 'EXISTS'
+    | 'NOT_EXISTS'
     | string
     | undefined;
   tagKey?: string;
