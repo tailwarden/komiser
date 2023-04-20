@@ -86,12 +86,10 @@ function parseURLParams(
         formatString.indexOf('EXISTS') !== -1 ||
         formatString.indexOf('NOT_EXISTS') !== -1
       ) {
-        const key = formatString.slice(1, formatString.length - 1).join(':');
-
         filter = {
           field: formatString[0],
-          tagKey: key,
-          operator: formatString[formatString.length - 1],
+          tagKey: formatString[1],
+          operator: formatString[2],
           values: []
         };
       } else {
