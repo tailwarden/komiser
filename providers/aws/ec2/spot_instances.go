@@ -25,9 +25,9 @@ func SpotInstanceRequests(ctx context.Context, client providers.ProviderClient) 
 			return resources, err
 		}
 
-		for _, request := range output.SpotInstanceRequests {
+		for _, spotInstance := range output.SpotInstanceRequests {
 			var tags []models.Tag
-			for _, tag := range request.Tags {
+			for _, tag := range spotInstance.Tags {
 				tags = append(tags, models.Tag{
 					Key:   aws.ToString(tag.Key),
 					Value: aws.ToString(tag.Value),
@@ -35,8 +35,8 @@ func SpotInstanceRequests(ctx context.Context, client providers.ProviderClient) 
 			}
 
 			cost := float64(0)
-			if request.SpotPrice != nil {
-				spotPrice, err := strconv.ParseFloat(*request.SpotPrice, 64)
+			if spotInstance.SpotPrice != nil {
+				spotPrice, err := strconv.ParseFloat(*spotInstance.SpotPrice, 64)
 				if err != nil {
 					return resources, err
 				}
@@ -47,15 +47,15 @@ func SpotInstanceRequests(ctx context.Context, client providers.ProviderClient) 
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "EC2 Spot Instance Request",
-				ResourceId: aws.ToString(request.SpotInstanceRequestId),
+				ResourceId: aws.ToString(spotInstance.SpotInstanceRequestId),
 				Region:     client.AWSClient.Region,
-				Name:       aws.ToString(request.SpotInstanceRequestId),
+				Name:       aws.ToString(spotInstance.SpotInstanceRequestId),
 				Cost:       cost,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#SpotInstancesDetails:id=%s", client.AWSClient.Region, client.AWSClient.Region, aws.ToString(request.SpotInstanceRequestId)),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#SpotInstancesDetails:id=%s", client.AWSClient.Region, client.AWSClient.Region, aws.ToString(spotInstance.SpotInstanceRequestId)),
 				Metadata: map[string]string{
-					"Availability Zone": aws.ToString(request.LaunchSpecification.Placement.AvailabilityZone),
+					"Availability Zone": aws.ToString(spotInstance.LaunchSpecification.Placement.AvailabilityZone),
 				},
 			})
 		}
