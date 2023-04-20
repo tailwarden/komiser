@@ -142,6 +142,8 @@ github.com/aws/aws-sdk-go-v2/service/rds v1.30.1 h1:/B3GswjV+ScqZSZnhs3NMLwvVFXb
 github.com/aws/aws-sdk-go-v2/service/rds v1.30.1/go.mod h1:wPFe1Cj3nZWmNWKKdkXw961l1dJheTZQ5JjPImqbMuI=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1 h1:OKQIQ0QhEBmGr2LfT952meIZz3ujrPYnxH+dO/5ldnI=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1/go.mod h1:NffjpNsMUFXp6Ok/PahrktAncoekWrywvmIK83Q2raE=
+github.com/aws/aws-sdk-go-v2/service/servicecatalog v1.18.2 h1:YQ7/6UE9h6dIHMjHFr4xXLMZDfhwtQUea/D18XAjhcE=
+github.com/aws/aws-sdk-go-v2/service/servicecatalog v1.18.2/go.mod h1:2WSFojT6r+rKQ+3kn3Ss3MGlbR6BwdfsUsk4L/Lrn14=
 github.com/aws/aws-sdk-go-v2/service/sns v1.18.3 h1:cEFSVrEnbjco0dkcejv7wand04RFaexRdEwbNd1zxCo=
 github.com/aws/aws-sdk-go-v2/service/sns v1.18.3/go.mod h1:2cPUjR63iE9MPMPJtSyzYmsTFCNrN/Xi9j0v9BL5OU0=
 github.com/aws/aws-sdk-go-v2/service/sqs v1.19.12 h1:uiG0JUqcL9w3IUu+tLG/BWJSUUhTgzkMVGThM2wDES4=

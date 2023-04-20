@@ -25,6 +25,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
 	"github.com/tailwarden/komiser/providers/aws/s3"
+	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
 	"github.com/tailwarden/komiser/utils"
@@ -73,6 +74,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		cloudwatch.MetricStreams,
 		ec2.Snapshots,
 		opensearch.ServiceDomains,
+		servicecatalog.Products,
 	}
 }
 
