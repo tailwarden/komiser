@@ -75,6 +75,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Snapshots,
 		opensearch.ServiceDomains,
 		servicecatalog.Products,
+		ec2.SpotInstanceRequests,
 		ec2.KeyPairs,
 	}
 }
