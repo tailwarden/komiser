@@ -77,6 +77,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		servicecatalog.Products,
 		ec2.SpotInstanceRequests,
 		ec2.KeyPairs,
+		ec2.PlacementGroups,
 	}
 }
 
