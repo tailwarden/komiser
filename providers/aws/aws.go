@@ -28,6 +28,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
+	"github.com/tailwarden/komiser/providers/aws/systemsmanager"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
@@ -78,6 +79,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.SpotInstanceRequests,
 		ec2.KeyPairs,
 		ec2.PlacementGroups,
+		systemsmanager.MaintenanceWindows,
 	}
 }
 
