@@ -1,4 +1,5 @@
 import Button from '../../../button/Button';
+import CloseIcon from '../../../icons/CloseIcon';
 import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
@@ -55,12 +56,12 @@ function InventoryFilterSummary({
     >
       {(deleteFilter || resetData) && (
         <div
-          className={`absolute bottom-[.35rem] ${
-            deleteFilter ? 'right-1' : 'right-0'
+          className={`absolute bottom-[.25rem] ${
+            deleteFilter ? 'right-1.5' : 'right-0'
           } ${bg ? 'bg-white' : 'bg-black-100'}`}
         >
           <Button
-            size="xs"
+            size="xxs"
             style="ghost"
             onClick={() => {
               if (deleteFilter) {
@@ -70,21 +71,7 @@ function InventoryFilterSummary({
               }
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M7.757 16.243l8.486-8.486M16.243 16.243L7.757 7.757"
-              ></path>
-            </svg>
+            <CloseIcon width={20} height={24} />
           </Button>
         </div>
       )}

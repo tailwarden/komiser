@@ -34,7 +34,7 @@ function InventoryActiveFilters({
             ))}
           {isNotCustomView && (
             <Button
-              size="sm"
+              size="xs"
               style="ghost"
               onClick={() => router.push(router.pathname)}
             >

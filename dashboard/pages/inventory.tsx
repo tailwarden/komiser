@@ -2,13 +2,13 @@ import Head from 'next/head';
 import Button from '../components/button/Button';
 import EmptyState from '../components/empty-state/EmptyState';
 import ErrorState from '../components/error-state/ErrorState';
-import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
 import InventoryActiveFilters from '../components/inventory/components/InventoryActiveFilters';
 import InventoryHeader from '../components/inventory/components/InventoryHeader';
 import InventoryLayout from '../components/inventory/components/InventoryLayout';
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
+import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
 import InventoryView from '../components/inventory/components/view/InventoryView';
 import useInventory from '../components/inventory/hooks/useInventory/useInventory';
 import SkeletonFilters from '../components/skeleton/SkeletonFilters';
@@ -193,7 +193,11 @@ export default function Inventory() {
             title="Network request error"
             message="There was an error fetching the inventory resources. Check out the server logs for more info and try again."
             action={
-              <Button size="lg" style="outline" onClick={() => router.reload()}>
+              <Button
+                size="lg"
+                style="secondary"
+                onClick={() => router.reload()}
+              >
                 Refresh the page
               </Button>
             }
@@ -211,7 +215,7 @@ export default function Inventory() {
               );
             }}
             actionLabel="Check our docs"
-            mascotPose="greetings"
+            mascotPose="thinking"
           />
         )}
       </InventoryLayout>

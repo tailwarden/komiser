@@ -9,13 +9,16 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/aws/aws-sdk-go-v2/service/iam/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
 
 func Policies(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	var configPolicies iam.ListPoliciesInput
+	configPolicies := iam.ListPoliciesInput{
+		Scope: types.PolicyScopeTypeLocal,
+	}
 	var configTags iam.ListPolicyTagsInput
 	iamClient := iam.NewFromConfig(*client.AWSClient)
 

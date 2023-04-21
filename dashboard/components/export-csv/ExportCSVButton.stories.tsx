@@ -23,7 +23,6 @@ type Story = StoryObj<typeof ExportCSVButton>;
 export const Primary: Story = {
   args: {
     disabled: false,
-    displayInTable: false,
     exportCSV: () => {}
   }
 };
