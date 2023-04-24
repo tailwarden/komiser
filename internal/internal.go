@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
@@ -261,104 +262,247 @@ func doMigrations(ctx context.Context) error {
 func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient, regions []string) {
+			go func(ctx context.Context, client providers.ProviderClient, regions []string, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching AWS resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "AWS")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "AWS",
 					})
 				}
 				aws.FetchResources(ctx, client, regions, db, telemetry, analytics)
-			}(ctx, client, regions)
+			}(ctx, client, regions, sentry.CurrentHub().Clone())
 		} else if client.DigitalOceanClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching DigitalOcean resources")
+					if err != nil {
+						localHub.CaptureException(err.(error))
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "DigitalOcean")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "DigitalOcean",
 					})
 				}
 				do.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.OciClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching OCI resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "OCI")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "OCI",
 					})
 				}
 				oci.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.CivoClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching Civo resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "Civo")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "Civo",
 					})
 				}
 				civo.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.K8sClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching Kubernetes resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "Kubernetes")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "Kubernetes",
 					})
 				}
 				k8s.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.LinodeClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching Linode resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "Linode")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "Linode",
 					})
 				}
 				linode.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.TencentClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching Tencent resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "TenCent")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "Tencent",
 					})
 				}
 				tencent.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.AzureClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching Azure resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "Azure")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "Azure",
 					})
 				}
 				azure.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.ScalewayClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching Scaleway resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "Scaleway")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "Scaleway",
 					})
 				}
 				scaleway.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.MongoDBAtlasClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching MongoDBAtlas resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "MongoDBAtlas")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "MongoDBAtlas",
 					})
 				}
 				mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		} else if client.GCPClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
+			go func(ctx context.Context, client providers.ProviderClient, localHub *sentry.Hub) {
+				defer func() {
+					err := recover()
+					log.WithField("err", err).Error("error fetching GCP resources")
+					if err != nil {
+						localHub.Recover(err)
+						localHub.Flush(2 * time.Second)
+					}
+				}()
+
+				localHub.ConfigureScope(func(scope *sentry.Scope) {
+					scope.SetTag("provider", "GCP")
+				})
+
 				if telemetry {
 					analytics.TrackEvent("fetching_resources", map[string]interface{}{
 						"provider": "GCP",
 					})
 				}
 				gcp.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			}(ctx, client, sentry.CurrentHub().Clone())
 		}
 	}
 	return nil
