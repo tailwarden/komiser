@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"errors"
+	"time"
 
+	"github.com/getsentry/sentry-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/tailwarden/komiser/internal"
@@ -14,6 +16,14 @@ var startCmd = &cobra.Command{
 	Short: "Run Komiser server",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		defer func() {
+			err := recover()
+			if err != nil {
+				sentry.CurrentHub().Recover(err)
+				sentry.Flush(time.Second * 5)
+			}
+		}()
+
 		file, err := cmd.Flags().GetString("config")
 		if err != nil {
 			return err
