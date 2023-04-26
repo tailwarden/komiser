@@ -79,7 +79,7 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 						log.WithFields(log.Fields{
 							"service":  "Elastic IP",
 							"provider": "AWS",
-						}).Warn("Cost couldn't be calculated because the creationTime returned by resource config is nil")
+						}).Error("Cost couldn't be calculated because the creationTime returned by resource config is nil")
 					}
 
 				}
