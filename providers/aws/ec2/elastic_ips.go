@@ -64,15 +64,24 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 			} else {
 				if len(resourceConfig.BaseConfigurationItems) > 0 {
 					creationTime := resourceConfig.BaseConfigurationItems[0].ResourceCreationTime
-					hoursSinceCreation := hoursSince(*creationTime)
+					if creationTime != nil {
+						hoursSinceCreation := hoursSince(*creationTime)
 
-					hourlyCost := 0.005
+						hourlyCost := 0.005
 
-					if elasticIps.InstanceId != nil {
-						cost = 0
+						if elasticIps.InstanceId != nil {
+							cost = 0
+						} else {
+							cost = hourlyCost * hoursSinceCreation
+						}
 					} else {
-						cost = hourlyCost * hoursSinceCreation
+						cost = 0
+						log.WithFields(log.Fields{
+							"service":  "Elastic IP",
+							"provider": "AWS",
+						}).Warn("Cost couldn't be calculated because the creationTime returned by resource config is nil")
 					}
+
 				}
 			}
 
