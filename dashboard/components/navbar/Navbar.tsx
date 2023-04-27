@@ -43,7 +43,7 @@ function Navbar() {
       <div className="flex gap-4 text-sm font-medium text-black-900 lg:gap-10">
         <a
           className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
-          href="https://docs.komiser.io/docs/intro"
+          href="https://docs.komiser.io/docs/intro?utm_source=komiser&utm_medium=referral&utm_campaign=static"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -75,7 +75,7 @@ function Navbar() {
         </a>
         <a
           className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
-          href="https://www.tailwarden.com/changelog"
+          href="https://www.tailwarden.com/changelog?utm_source=komiser&utm_medium=referral&utm_campaign=static"
           target="_blank"
           rel="noopener noreferrer"
         >
