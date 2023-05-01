@@ -211,7 +211,7 @@ export default function Inventory() {
             message="Check if your connected cloud accounts have active services running or if you have attached the proper permissions."
             action={() => {
               router.push(
-                'https://docs.komiser.io/docs/overview/introduction/getting-started/'
+                'https://docs.komiser.io/docs/overview/introduction/getting-started/?utm_source=komiser&utm_medium=referral&utm_campaign=static'
               );
             }}
             actionLabel="Check our docs"
