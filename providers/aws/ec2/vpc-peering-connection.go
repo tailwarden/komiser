@@ -13,21 +13,21 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func VpcPeeringConnection(ctx context.Context, client ProviderClient) ([]Resource, error) {
-	var config ec2.DescribeVpcEndpointsInput
+func VpcPeeringConnections(ctx context.Context, client ProviderClient) ([]Resource, error) {
+	var config ec2.DescribeVpcPeeringConnectionsInput
 	resources := make([]Resource, 0)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
 
 	for {
-		output, err := ec2Client.DescribeVpcEndpoints(ctx, &config)
+		output, err := ec2Client.DescribeVpcPeeringConnections(ctx, &config)
 		if err != nil {
 			return resources, err
 		}
 
-		for _, vpcEndpoint := range output.VpcEndpoints {
+		for _, vpcPeeringConnection := range output.VpcPeeringConnections {
 			name := ""
 			tags := make([]Tag, 0)
-			for _, tag := range vpcEndpoint.Tags {
+			for _, tag := range vpcPeeringConnection.Tags {
 				if *tag.Key == "Name" {
 					name = *tag.Value
 				}
@@ -43,21 +43,16 @@ func VpcPeeringConnection(ctx context.Context, client ProviderClient) ([]Resourc
 				Service:    "VPC Peering Connection",
 				Region:     client.AWSClient.Region,
 				Name:       name,
-				ResourceId: *vpcEndpoint.VpcEndpointId,
-				CreatedAt:  *vpcEndpoint.CreationTimestamp,
+				ResourceId: *vpcPeeringConnection.VpcPeeringConnectionId,
 				FetchedAt:  time.Now(),
 				Cost:       0,
 				Tags:       tags,
 				Link: fmt.Sprintf(
-					"https:/%s.console.aws.amazon.com/vpc/home?region=%s#EndpointDetails:vpcEndpointId=%s",
+					"https:/%s.console.aws.amazon.com/vpc/home?region=%s#PeeringConnectionDetails:VpcPeeringConnectionId=%s",
 					client.AWSClient.Region,
 					client.AWSClient.Region,
-					*vpcEndpoint.VpcEndpointId,
+					*vpcPeeringConnection.VpcPeeringConnectionId,
 				),
-				Metadata: map[string]string{
-					"VpcEndpointType": string(vpcEndpoint.VpcEndpointType),
-					"ServiceName":     string(*vpcEndpoint.ServiceName),
-				},
 			})
 		}
 
