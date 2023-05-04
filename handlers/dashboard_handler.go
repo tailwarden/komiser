@@ -63,6 +63,15 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		Accounts:  accounts.Count,
 	}
 
+	if handler.telemetry {
+		handler.analytics.TrackEvent("global_stats", map[string]interface{}{
+			"regions":   regions.Count,
+			"resources": resources.Count,
+			"accounts":  accounts.Count,
+			"cost":      cost.Sum,
+		})
+	}
+
 	c.JSON(http.StatusOK, output)
 }
 
