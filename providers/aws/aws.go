@@ -81,6 +81,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.PlacementGroups,
 		systemsmanager.MaintenanceWindows,
 		ec2.VpcEndpoints,
+		ec2.VpcPeeringConnections,
 	}
 }
 
