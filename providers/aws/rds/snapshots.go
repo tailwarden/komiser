@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
+	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 )
@@ -53,5 +54,12 @@ func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.R
 		config.Marker = output.Marker
 	}
 
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "RDS Snapshot",
+		"resources": len(resources),
+	}).Info("Fetched resources")
 	return resources, nil
 }
