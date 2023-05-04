@@ -62,6 +62,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		rds.Clusters,
 		rds.Instances,
+		rds.Snapshots,
 		elb.LoadBalancers,
 		efs.ElasticFileStorage,
 		apigateway.Apis,

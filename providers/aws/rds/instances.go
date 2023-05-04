@@ -85,17 +85,26 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 			hourlyCost := 0.0
 			if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
-				b, _ := json.Marshal(pricingOutput.PriceList[0])
-				s, _ := strconv.Unquote(string(b))
+				log.Infof(`Raw pricingOutput.PriceList[0] : %s`, pricingOutput.PriceList[0])
 
 				pricingResult := models.PricingResult{}
-				err = json.Unmarshal([]byte(s), &pricingResult)
+				err := json.Unmarshal([]byte(pricingOutput.PriceList[0]), &pricingResult)
 				if err != nil {
-					log.WithError(err).Error("could not unmarshal")
+					log.Fatalf("Failed to unmarshal JSON: %v", err)
 				}
 
-				hourlyCostRaw := pricingResult.Terms["OnDemand"][fmt.Sprintf("%s.JRTCKXETXF", pricingResult.Product.Sku)]["priceDimensions"][fmt.Sprintf("%s.JRTCKXETXF.6YS6EN2CT7", pricingResult.Product.Sku)].PricePerUnit.USD
-				hourlyCost, _ = strconv.ParseFloat(hourlyCostRaw, 64)
+				for _, onDemand := range pricingResult.Terms.OnDemand {
+					for _, priceDimension := range onDemand.PriceDimensions {
+						hourlyCost, err = strconv.ParseFloat(priceDimension.PricePerUnit.USD, 64)
+						if err != nil {
+							log.Fatalf("Failed to parse hourly cost: %v", err)
+						}
+						break
+					}
+					break
+				}
+
+				//log.Printf("Hourly cost RDS: %f", hourlyCost)
 			}
 
 			monthlyCost := float64(hourlyUsage) * hourlyCost
