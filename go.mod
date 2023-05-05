@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	cloud.google.com/go/bigquery v1.49.0
+	cloud.google.com/go/billing v1.13.0
 	cloud.google.com/go/compute v1.19.0
 	cloud.google.com/go/container v1.16.0
 	cloud.google.com/go/kms v1.10.0
@@ -79,6 +80,7 @@ require (
 
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
+	github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230505154127-b80654087ea6 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
 )
 

@@ -13,7 +13,7 @@ import (
 	"google.golang.org/api/option"
 
 	compute "cloud.google.com/go/compute/apiv1"
-	computepb "cloud.google.com/go/compute/apiv1/computepb"
+	"cloud.google.com/go/compute/apiv1/computepb"
 )
 
 func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
