@@ -28,6 +28,10 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 		}
 	}
 
+	if handler.telemetry {
+		handler.analytics.TrackEvent("tagging_resources", nil)
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"message": "tags has been successfuly updated"})
 }
 
@@ -54,6 +58,10 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 		return
+	}
+
+	if handler.telemetry {
+		handler.analytics.TrackEvent("tagging_resources", nil)
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "tags has been successfuly updated"})

@@ -62,6 +62,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		rds.Clusters,
 		rds.Instances,
+		rds.Snapshots,
 		elb.LoadBalancers,
 		efs.ElasticFileStorage,
 		apigateway.Apis,
@@ -80,6 +81,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.PlacementGroups,
 		systemsmanager.MaintenanceWindows,
 		ec2.VpcEndpoints,
+		ec2.VpcPeeringConnections,
 	}
 }
 
