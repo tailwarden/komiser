@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/providers"
@@ -63,6 +62,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		rds.Clusters,
 		rds.Instances,
+		rds.Snapshots,
 		elb.LoadBalancers,
 		efs.ElasticFileStorage,
 		apigateway.Apis,
@@ -80,6 +80,8 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.KeyPairs,
 		ec2.PlacementGroups,
 		systemsmanager.MaintenanceWindows,
+		ec2.VpcEndpoints,
+		ec2.VpcPeeringConnections,
 	}
 }
 
@@ -100,7 +102,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 				for _, resource := range resources {
 					_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
 					if err != nil {
-						logrus.WithError(err).Errorf("db trigger failed")
+						log.WithError(err).Errorf("db trigger failed")
 					}
 				}
 				if telemetry {

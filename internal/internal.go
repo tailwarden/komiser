@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
@@ -32,13 +33,13 @@ import (
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
 	azure "github.com/tailwarden/komiser/providers/azure"
-	civo "github.com/tailwarden/komiser/providers/civo"
+	"github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	"github.com/tailwarden/komiser/providers/gcp"
 	k8s "github.com/tailwarden/komiser/providers/k8s"
 	linode "github.com/tailwarden/komiser/providers/linode"
 	"github.com/tailwarden/komiser/providers/mongodbatlas"
-	oci "github.com/tailwarden/komiser/providers/oci"
+	"github.com/tailwarden/komiser/providers/oci"
 	scaleway "github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/tailwarden/komiser/utils"
@@ -258,107 +259,78 @@ func doMigrations(ctx context.Context) error {
 	return nil
 }
 
+func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string) {
+	localHub := sentry.CurrentHub().Clone()
+
+	defer func() {
+		err := recover()
+		log.WithField("err", err).Error(fmt.Sprintf("error fetching %s resources", provider))
+		if err != nil {
+			localHub.CaptureException(err.(error))
+			localHub.Flush(2 * time.Second)
+		}
+	}()
+
+	localHub.ConfigureScope(func(scope *sentry.Scope) {
+		scope.SetTag("provider", provider)
+	})
+
+	if telemetry {
+		analytics.TrackEvent("fetching_resources", map[string]interface{}{
+			"provider": provider,
+		})
+	}
+
+	switch provider {
+	case "AWS":
+		aws.FetchResources(ctx, client, regions, db, telemetry, analytics)
+	case "DigitalOcean":
+		do.FetchResources(ctx, client, db, telemetry, analytics)
+	case "OCI":
+		oci.FetchResources(ctx, client, db, telemetry, analytics)
+	case "Civo":
+		civo.FetchResources(ctx, client, db, telemetry, analytics)
+	case "Kubernetes":
+		k8s.FetchResources(ctx, client, db, telemetry, analytics)
+	case "Linode":
+		linode.FetchResources(ctx, client, db, telemetry, analytics)
+	case "Tencent":
+		tencent.FetchResources(ctx, client, db, telemetry, analytics)
+	case "Azure":
+		azure.FetchResources(ctx, client, db, telemetry, analytics)
+	case "Scaleway":
+		scaleway.FetchResources(ctx, client, db, telemetry, analytics)
+	case "MongoDBAtlas":
+		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
+	case "GCP":
+		gcp.FetchResources(ctx, client, db, telemetry, analytics)
+	}
+}
+
 func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient, regions []string) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "AWS",
-					})
-				}
-				aws.FetchResources(ctx, client, regions, db, telemetry, analytics)
-			}(ctx, client, regions)
+			go triggerFetchingWorfklow(ctx, client, "AWS", telemetry, regions)
 		} else if client.DigitalOceanClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "DigitalOcean",
-					})
-				}
-				do.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "DigitalOcean", telemetry, regions)
 		} else if client.OciClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "OCI",
-					})
-				}
-				oci.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "OCI", telemetry, regions)
 		} else if client.CivoClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "Civo",
-					})
-				}
-				civo.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "Civo", telemetry, regions)
 		} else if client.K8sClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "Kubernetes",
-					})
-				}
-				k8s.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "Kubernetes", telemetry, regions)
 		} else if client.LinodeClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "Linode",
-					})
-				}
-				linode.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "Linode", telemetry, regions)
 		} else if client.TencentClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "Tencent",
-					})
-				}
-				tencent.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "Tencent", telemetry, regions)
 		} else if client.AzureClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "Azure",
-					})
-				}
-				azure.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "Azure", telemetry, regions)
 		} else if client.ScalewayClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "Scaleway",
-					})
-				}
-				scaleway.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "Scaleway", telemetry, regions)
 		} else if client.MongoDBAtlasClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "MongoDBAtlas",
-					})
-				}
-				mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "MongoDBAtlas", telemetry, regions)
 		} else if client.GCPClient != nil {
-			go func(ctx context.Context, client providers.ProviderClient) {
-				if telemetry {
-					analytics.TrackEvent("fetching_resources", map[string]interface{}{
-						"provider": "GCP",
-					})
-				}
-				gcp.FetchResources(ctx, client, db, telemetry, analytics)
-			}(ctx, client)
+			go triggerFetchingWorfklow(ctx, client, "GCP", telemetry, regions)
 		}
 	}
 	return nil

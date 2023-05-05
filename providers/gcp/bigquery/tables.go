@@ -44,7 +44,7 @@ func Tables(ctx context.Context, client providers.ProviderClient) ([]models.Reso
 				return resources, err
 			}
 
-			tableMetadata, err := table.Metadata(ctx, nil)
+			tableMetadata, err := table.Metadata(ctx)
 			if err != nil {
 				logrus.WithError(err).Errorf("failed to load table metadata")
 				return resources, err
