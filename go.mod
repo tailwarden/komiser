@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	cloud.google.com/go/bigquery v1.49.0
-	cloud.google.com/go/billing v1.13.0
 	cloud.google.com/go/compute v1.19.0
 	cloud.google.com/go/container v1.16.0
 	cloud.google.com/go/kms v1.10.0
@@ -19,6 +18,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/sql/armsql v1.0.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/storage/armstorage v1.2.0
 	github.com/BurntSushi/toml v1.2.1
+	github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230505154127-b80654087ea6
 	github.com/aws/aws-sdk-go-v2 v1.17.8
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
 	github.com/aws/aws-sdk-go-v2/service/apigateway v1.16.0
@@ -80,7 +80,6 @@ require (
 
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
-	github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230505154127-b80654087ea6 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
 )
 
