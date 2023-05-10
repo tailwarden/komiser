@@ -34,7 +34,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 	actualPricing, err := gcpcomputepricing.Fetch()
 	if err != nil {
-		logrus.WithError(err).Errorf("failedto fetch actual GCP VM pricing") // TODO figure out text
+		logrus.WithError(err).Errorf("failed to fetch actual GCP VM pricing")
 		return resources, err
 	}
 
@@ -111,25 +111,56 @@ func calculateCost(ctx context.Context, client providers.ProviderClient, machine
 		return 0, err
 	}
 
+	var opts = gcpcomputepricing.Opts{
+		Commitment:  gcpcomputepricing.OnDemand, // TODO decide this based on normal or Spot instance
+		Region:      getRegionFromZone(zone),
+		NumOfCPU:    uint64(*mt.GuestCpus),
+		NumOfMemory: uint64(*mt.MemoryMb / 1024),
+	}
 	var cost float64
 	if mt.Name != nil {
 		switch {
-		case strings.Contains(*mt.Name, gcpcomputepricing.E2):
-			hourlyRate, err := gcpcomputepricing.Calculate(pricing, gcpcomputepricing.Opts{
-				Type:        gcpcomputepricing.E2,
-				Commitment:  gcpcomputepricing.OnDemand, // TODO
-				Region:      "us-central1",
-				NumOfCPU:    uint64(*mt.GuestCpus),
-				NumOfMemory: uint64(*mt.MemoryMb / 1024),
-			})
-			if err != nil {
-				return 0, err
-			}
-			cost = float64(hourlyRate) * 24 * 30 // TODO
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.E2)):
+			opts.Type = gcpcomputepricing.E2
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.C3)):
+			opts.Type = gcpcomputepricing.C3
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.N2)):
+			opts.Type = gcpcomputepricing.N2
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.N2D)):
+			opts.Type = gcpcomputepricing.N2D
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.T2A)):
+			opts.Type = gcpcomputepricing.T2A
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.T2D)):
+			opts.Type = gcpcomputepricing.T2D
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.N1)):
+			opts.Type = gcpcomputepricing.N1
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.C2)):
+			opts.Type = gcpcomputepricing.C2
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.C2D)):
+			opts.Type = gcpcomputepricing.C2D
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.M1)):
+			opts.Type = gcpcomputepricing.M1
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.M2)):
+			opts.Type = gcpcomputepricing.M2
+		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.M3)):
+			opts.Type = gcpcomputepricing.M3
 		}
 	}
+	if opts.Type != "" {
+		hourlyRate, err := gcpcomputepricing.CalculateMachine(pricing, opts)
+		if err != nil {
+			return 0, err
+		}
+		startOfMonth := utils.BeginningOfMonth(time.Now())
+		hourlyUsage := int(time.Since(startOfMonth).Hours())
+		normalizedHourlyRate := float64(hourlyRate) / 1000000000
+		cost = normalizedHourlyRate * float64(hourlyUsage)
+	}
 
-	fmt.Println(mt)
+	return cost, nil
+}
 
-	return cost / 1000000000, nil
+func getRegionFromZone(zone string) string {
+	p := strings.Split(zone, "-")
+	return strings.Join(p[:len(p)-1], "-")
 }
