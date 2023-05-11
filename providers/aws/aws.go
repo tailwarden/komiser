@@ -19,6 +19,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/elasticache"
 	"github.com/tailwarden/komiser/providers/aws/elb"
 	"github.com/tailwarden/komiser/providers/aws/iam"
+	"github.com/tailwarden/komiser/providers/aws/kinesis"
 	"github.com/tailwarden/komiser/providers/aws/kms"
 	"github.com/tailwarden/komiser/providers/aws/lambda"
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
@@ -82,6 +83,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		systemsmanager.MaintenanceWindows,
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
+		kinesis.Shards,
 	}
 }
 
