@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PumpkinSeed/gcpcomputepricing"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
+	"github.com/tailwarden/komiser/utils/gcpcomputepricing"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -113,7 +113,7 @@ func calculateCost(ctx context.Context, client providers.ProviderClient, machine
 
 	var opts = gcpcomputepricing.Opts{
 		Commitment:  gcpcomputepricing.OnDemand, // TODO decide this based on normal or Spot instance
-		Region:      getRegionFromZone(zone),
+		Region:      utils.GcpGetRegionFromZone(zone),
 		NumOfCPU:    uint64(*mt.GuestCpus),
 		NumOfMemory: uint64(*mt.MemoryMb / 1024),
 	}
@@ -158,9 +158,4 @@ func calculateCost(ctx context.Context, client providers.ProviderClient, machine
 	}
 
 	return cost, nil
-}
-
-func getRegionFromZone(zone string) string {
-	p := strings.Split(zone, "-")
-	return strings.Join(p[:len(p)-1], "-")
 }
