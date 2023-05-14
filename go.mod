@@ -18,7 +18,6 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/sql/armsql v1.0.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/storage/armstorage v1.2.0
 	github.com/BurntSushi/toml v1.2.1
-	github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230510114213-bbcb06b6c2f8
 	github.com/aws/aws-sdk-go-v2 v1.17.8
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
 	github.com/aws/aws-sdk-go-v2/service/apigateway v1.16.0

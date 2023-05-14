@@ -49,10 +49,6 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/toml v1.2.1 h1:9F2/+DoOYIOksmaJFPw1tGFy1eDnIJXg+UHjuD8lTak=
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/JohnCGriffin/overflow v0.0.0-20211019200055-46fa312c352c h1:RGWPOewvKIROun94nF7v2cua9qP+thov/7M50KEoeSU=
-github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230505154127-b80654087ea6 h1:P/qMU6e+zNXKeJlqE/0Wi3ccdUIxQKOQmNsI+vgon98=
-github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230505154127-b80654087ea6/go.mod h1:4+uknxSoYWLLXeh2QkNsDXgBEge/6LtPgk0kxsZ4cO0=
-github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230510114213-bbcb06b6c2f8 h1:YBSSE8hGolU332nhccmMFlWeukqDBff6jKumbyaF68o=
-github.com/PumpkinSeed/gcpcomputepricing v0.0.0-20230510114213-bbcb06b6c2f8/go.mod h1:4+uknxSoYWLLXeh2QkNsDXgBEge/6LtPgk0kxsZ4cO0=
 github.com/andybalholm/brotli v1.0.4 h1:V7DdXeJtZscaqfNuAdSRuRFzuiKlHSC/Zh3zl9qY3JY=
 github.com/andybalholm/brotli v1.0.4/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/apache/arrow/go/v11 v11.0.0 h1:hqauxvFQxww+0mEU/2XHG6LT7eZternCZq+A5Yly2uM=
