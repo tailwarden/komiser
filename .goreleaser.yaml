@@ -28,6 +28,10 @@ blobs:
     bucket: komiser-releases
     folder: "/{{.Version}}"
     region: eu-central-1
+  - provider: s3
+    bucket: komiser-releases
+    folder: "/latest"
+    region: eu-central-1
 
 brews:
   - tap:
