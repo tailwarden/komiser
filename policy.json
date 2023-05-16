@@ -76,7 +76,6 @@
       "Effect": "Allow",
       "Action": [
         "sns:List*",
-        "s3:Get*",
         "lambda:List*",
         "kms:List*",
         "pricing:GetProducts",
