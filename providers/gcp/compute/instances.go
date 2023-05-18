@@ -64,7 +64,13 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 			zone := utils.GcpExtractZoneFromURL(instance.GetZone())
 
-			cost, err := calculateCost(ctx, client, instance.GetMachineType(), client.GCPClient.Credentials.ProjectID, zone, actualPricing)
+			cost, err := calculateCost(ctx, client, calculateCostData{
+				machineType: instance.GetMachineType(),
+				project:     client.GCPClient.Credentials.ProjectID,
+				zone:        zone,
+				commitment:  resolveCommitment(instance),
+				pricing:     actualPricing,
+			})
 			if err != nil {
 				logrus.WithError(err).Errorf("failed to calculate cost")
 			}
@@ -94,26 +100,34 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-func calculateCost(ctx context.Context, client providers.ProviderClient, machineType, project, zone string, pricing *gcpcomputepricing.Pricing) (float64, error) {
+type calculateCostData struct {
+	machineType string
+	project     string
+	zone        string
+	commitment  string
+	pricing     *gcpcomputepricing.Pricing
+}
+
+func calculateCost(ctx context.Context, client providers.ProviderClient, data calculateCostData) (float64, error) {
 	machineTypeClient, err := compute.NewMachineTypesRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
 		return 0, err
 	}
 
-	mtS := strings.Split(machineType, "/")
+	mtS := strings.Split(data.machineType, "/")
 
 	mt, err := machineTypeClient.Get(ctx, &computepb.GetMachineTypeRequest{
 		MachineType: mtS[len(mtS)-1],
-		Project:     project,
-		Zone:        zone,
+		Project:     data.project,
+		Zone:        data.zone,
 	})
 	if err != nil {
 		return 0, err
 	}
 
 	var opts = gcpcomputepricing.Opts{
-		Commitment:  gcpcomputepricing.OnDemand, // TODO decide this based on normal or Spot instance
-		Region:      utils.GcpGetRegionFromZone(zone),
+		Commitment:  data.commitment,
+		Region:      utils.GcpGetRegionFromZone(data.zone),
 		NumOfCPU:    uint64(*mt.GuestCpus),
 		NumOfMemory: uint64(*mt.MemoryMb / 1024),
 	}
@@ -147,7 +161,7 @@ func calculateCost(ctx context.Context, client providers.ProviderClient, machine
 		}
 	}
 	if opts.Type != "" {
-		hourlyRate, err := gcpcomputepricing.CalculateMachine(pricing, opts)
+		hourlyRate, err := gcpcomputepricing.CalculateMachine(data.pricing, opts)
 		if err != nil {
 			return 0, err
 		}
@@ -158,4 +172,11 @@ func calculateCost(ctx context.Context, client providers.ProviderClient, machine
 	}
 
 	return cost, nil
+}
+
+func resolveCommitment(instance *computepb.Instance) string {
+	if instance.Scheduling.Preemptible != nil && *instance.Scheduling.Preemptible {
+		return gcpcomputepricing.Spot
+	}
+	return gcpcomputepricing.OnDemand
 }
