@@ -64,6 +64,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		rds.Clusters,
 		rds.Instances,
 		rds.Snapshots,
+		rds.ProxyEndpoints,
 		elb.LoadBalancers,
 		efs.ElasticFileStorage,
 		apigateway.Apis,
