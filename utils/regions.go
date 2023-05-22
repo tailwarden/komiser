@@ -969,6 +969,11 @@ func NormalizeRegionName(regionName string) string {
 	return dashReplaced
 }
 
+func GcpGetRegionFromZone(zone string) string {
+	p := strings.Split(zone, "-")
+	return strings.Join(p[:len(p)-1], "-")
+}
+
 func GcpExtractZoneFromURL(url string) string {
 	return url[strings.LastIndex(url, "/")+1:]
 }
