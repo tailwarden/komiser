@@ -34,6 +34,7 @@ func KeyPairs(ctx context.Context, client providers.ProviderClient) ([]models.Re
 
 		resources = append(resources, models.Resource{
 			Provider:   "AWS",
+			Account:    client.Name,
 			Service:    "EC2 KeyPair",
 			ResourceId: aws.ToString(keypair.KeyPairId),
 			Region:     client.AWSClient.Region,
