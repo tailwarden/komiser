@@ -53,8 +53,6 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		eks.KubernetesClusters,
 		cloudfront.Distributions,
 		dynamodb.Tables,
-		ecs.Tasks,
-		ecs.Services,
 		ecs.Clusters,
 		ecr.Repositories,
 		sns.Topics,
@@ -84,7 +82,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		systemsmanager.MaintenanceWindows,
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
-		kinesis.Shards,
+		kinesis.Streams,
 	}
 }
 
