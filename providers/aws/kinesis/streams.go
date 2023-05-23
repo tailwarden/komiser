@@ -13,28 +13,29 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func Shards(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	var config kinesis.ListShardsInput
+	var config kinesis.ListStreamsInput
 	kinesisClient := kinesis.NewFromConfig(*client.AWSClient)
 
 	for {
-		output, err := kinesisClient.ListShards(ctx, &config)
+		output, err := kinesisClient.ListStreams(ctx, &config)
 		if err != nil {
 			return resources, err
 		}
 
-		for _, shard := range output.Shards {
+		for _, stream := range output.StreamSummaries {
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "Kinesis Shard",
-				ResourceId: *shard.ShardId,
+				Service:    "Kinesis Stream",
+				ResourceId: *stream.StreamARN,
 				Region:     client.AWSClient.Region,
-				Name:       *shard.ShardId,
+				Name:       *stream.StreamName,
 				Cost:       0,
+				CreatedAt:  *stream.StreamCreationTimestamp,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/kinesis/home?region=%s#/streams/details/%s", client.AWSClient.Region, client.AWSClient.Region, *shard.ShardId),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/kinesis/home?region=%s#/streams/details/%s", client.AWSClient.Region, client.AWSClient.Region, *stream.StreamName),
 			})
 		}
 
@@ -49,7 +50,7 @@ func Shards(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "Kinesis Shard",
+		"service":   "Kinesis Stream",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 
