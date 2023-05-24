@@ -61,7 +61,7 @@ function useResourcesManagerChart({
     datasets: [
       {
         data: sortByDescendingCosts?.map(item =>
-          Number(formatNumber(item.total))
+          item.total
         ) as number[],
         backgroundColor: colors,
         borderColor: '#FFFFFF',
