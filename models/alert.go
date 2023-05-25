@@ -11,3 +11,25 @@ type Alert struct {
 	Endpoint string  `json:"endpoint"`
 	Secret   string  `json:"secret"`
 }
+
+type Endpoint struct {
+	Url string `json:"url"`
+}
+
+type BudgetWebhookPayload struct {
+	View    string  `json:"view"`
+	Message string  `json:"message"`
+	Cost    float64 `json:"cost"`
+}
+
+type UsageWebhookPayload struct {
+	View      string  `json:"view"`
+	Message   string  `json:"message"`
+	Resources float64 `json:"resources"`
+}
+
+type TestWebhookPayload struct {
+	View    string `json:"view"`
+	Message string `json:"message"`
+	From    string `json:"from"`
+}

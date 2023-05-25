@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -80,4 +81,50 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "alert has been deleted"})
+}
+
+func (handler *ApiHandler) TestEndpoint(c *gin.Context) {
+	var endpoint models.Endpoint
+
+	err := json.NewDecoder(c.Request.Body).Decode(&endpoint)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var payloadJSON []byte
+	payload := models.TestWebhookPayload{
+		View:    "Test Connection",
+		Message: "Cost alert",
+		From:    "Komiser",
+	}
+
+	payloadJSON, err = json.Marshal(payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	req, err := http.NewRequest("POST", endpoint.Url, bytes.NewBuffer(payloadJSON))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+		errMessage := "Custom Webhook with endpoint " + endpoint.Url + " returned back a status code of " + string(rune(resp.StatusCode)) + " . Expected Status Code: 200"
+		c.JSON(http.StatusBadRequest, gin.H{"success": "false", "message": errMessage})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": "true", "message": "Pinged server successfully"})
+
 }
