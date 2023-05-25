@@ -12,6 +12,9 @@ export type SlackAlert = {
   type: 'BUDGET' | 'USAGE';
   budget?: number | string;
   usage?: number | string;
+  IsSlack?: boolean;
+  endpoint?: string;
+  secret?: string;
 };
 
 function useSlackAlerts({ viewId }: useSlackAlertsProps) {
