@@ -27,14 +27,16 @@ const INITIAL_BUDGET_SLACK_ALERT: Partial<SlackAlert> = {
   viewId: '',
   name: '',
   type: 'BUDGET',
-  budget: '0'
+  budget: '0',
+  IsSlack: true,
 };
 
 const INITIAL_USAGE_SLACK_ALERT: Partial<SlackAlert> = {
   viewId: '',
   name: '',
   type: 'USAGE',
-  usage: '0'
+  usage: '0',
+  IsSlack: true,
 };
 
 function useEditSlackAlerts({
