@@ -60,7 +60,7 @@ func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = handler.db.NewUpdate().Model(&alert).Column("name", "type", "budget", "usage").Where("id = ?", alertId).Exec(handler.ctx)
+	_, err = handler.db.NewUpdate().Model(&alert).Column("name", "type", "budget", "usage", "endpoint", "secret").Where("id = ?", alertId).Exec(handler.ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
