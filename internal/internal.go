@@ -389,23 +389,11 @@ func checkUpgrade() {
 	}
 }
 
-type BudgetWebhookPayload struct {
-	View    string  `json:"view"`
-	Message string  `json:"message"`
-	Cost    float64 `json:"cost"`
-}
-
-type UsageWebhookPayload struct {
-	View      string  `json:"view"`
-	Message   string  `json:"message"`
-	Resources float64 `json:"resources"`
-}
-
 func hitCustomWebhook(endpoint string, secret string, viewName string, resources int, cost float64, alertType string) {
 	var payloadJSON []byte
 	var err error
 	if alertType == "BUDGET" {
-		payload := BudgetWebhookPayload{
+		payload := models.BudgetWebhookPayload{
 			View:    viewName,
 			Message: "Cost alert",
 			Cost:    cost,
@@ -416,7 +404,7 @@ func hitCustomWebhook(endpoint string, secret string, viewName string, resources
 		}
 
 	} else if alertType == "USAGE" {
-		payload := UsageWebhookPayload{
+		payload := models.UsageWebhookPayload{
 			View:      viewName,
 			Message:   "Usage alert :warning:",
 			Resources: float64(resources),

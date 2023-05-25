@@ -53,6 +53,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.POST("/alerts", api.NewAlertHandler)
 	router.PUT("/alerts/:id", api.UpdateAlertHandler)
 	router.DELETE("/alerts/:id", api.DeleteAlertHandler)
+	router.POST("/testendpoint", api.TestEndpoint)
 
 	router.GET("/telemetry", api.TelemetryHandler)
 
