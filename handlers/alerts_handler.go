@@ -23,6 +23,22 @@ func (handler *ApiHandler) IsSlackEnabledHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, output)
 }
 
+func (handler *ApiHandler) DoAlertsExistHandler(c *gin.Context) {
+	alerts := make([]models.Alert, 0)
+	output := struct {
+		Present bool `json:"present"`
+	}{
+		Present: false,
+	}
+
+	_ = handler.db.NewRaw("SELECT * FROM alerts").Scan(c, &alerts)
+	if len(alerts) > 0 {
+		output.Present = true
+	}
+	c.JSON(http.StatusOK, output)
+
+}
+
 func (handler *ApiHandler) NewAlertHandler(c *gin.Context) {
 	var alert models.Alert
 
@@ -83,7 +99,7 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "alert has been deleted"})
 }
 
-func (handler *ApiHandler) TestEndpoint(c *gin.Context) {
+func (handler *ApiHandler) TestEndpointHandler(c *gin.Context) {
 	var endpoint models.Endpoint
 
 	err := json.NewDecoder(c.Request.Body).Decode(&endpoint)

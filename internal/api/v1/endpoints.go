@@ -50,10 +50,11 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.POST("/costs/explorer", api.CostBreakdownHandler)
 
 	router.GET("/slack", api.IsSlackEnabledHandler)
+	router.GET("/alerts", api.DoAlertsExistHandler)
 	router.POST("/alerts", api.NewAlertHandler)
 	router.PUT("/alerts/:id", api.UpdateAlertHandler)
 	router.DELETE("/alerts/:id", api.DeleteAlertHandler)
-	router.POST("/testendpoint", api.TestEndpoint)
+	router.POST("/testendpoint", api.TestEndpointHandler)
 
 	router.GET("/telemetry", api.TelemetryHandler)
 
