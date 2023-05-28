@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Button from '../../../../button/Button';
-import { AlertMethod, Alert } from './hooks/useSlackAlerts';
-import useEditAlerts from './hooks/useEditSlackAlerts';
+import { AlertMethod, Alert } from './hooks/useAlerts';
+import useEditAlerts from './hooks/useEditAlerts';
 import { ToastProps } from '../../../../toast/hooks/useToast';
 
 type InventoryViewAlertsDeleteAlert = {

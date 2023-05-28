@@ -1,8 +1,8 @@
 import { ToastProps } from '../../../../toast/hooks/useToast';
-import useAlerts from './hooks/useSlackAlerts';
+import useAlerts from './hooks/useAlerts';
 import InventoryViewAlertsDeleteAlert from './InventoryViewAlertsDeleteAlert';
 import InventoryViewAlertDisplayAlerts from './InventoryViewAlertsDisplay';
-import InventoryViewAlertsCreateOrEditAlert from './InventoryViewAlertsEditSlackAlert';
+import InventoryViewAlertsCreateOrEditAlert from './InventoryViewAlertsEditAlert';
 import InventoryViewAlertsError from './InventoryViewAlertsError';
 import InventoryViewAlertHasNoExistingAlerts from './InventoryViewAlertsHasNoAlerts';
 import InventoryViewAlertsSkeleton from './InventoryViewAlertsSkeleton';
