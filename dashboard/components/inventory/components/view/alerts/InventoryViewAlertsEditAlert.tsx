@@ -1,4 +1,6 @@
 import classNames from 'classnames';
+import { useState } from 'react';
+import Image from 'next/image';
 import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
@@ -7,10 +9,9 @@ import { ToastProps } from '../../../../toast/hooks/useToast';
 import useEditAlerts from './hooks/useEditAlerts';
 import { AlertMethod, Alert } from './hooks/useAlerts';
 import settingsService from '../../../../../services/settingsService';
-import { useState } from 'react';
 import LoadingSpinner from '../../../../icons/LoadingSpinner';
 
-type InventoryViewAlertsCreateOrEditAlert = {
+type InventoryViewAlertsCreateOrEditAlertProps = {
   alertMethod: AlertMethod;
   setViewControllerOnSubmit: () => void;
   setViewControllerOnClickingBackButton: () => void;
@@ -30,7 +31,7 @@ function InventoryViewAlertsCreateOrEditAlert({
   closeAlert,
   viewId,
   setToast
-}: InventoryViewAlertsCreateOrEditAlert) {
+}: InventoryViewAlertsCreateOrEditAlertProps) {
   const {
     selected,
     options,
@@ -39,46 +40,50 @@ function InventoryViewAlertsCreateOrEditAlert({
     handleChange,
     buttonDisabled,
     submit,
-    loading,
+    loading
   } = useEditAlerts({
     alertMethod,
-    currentAlert: currentAlert,
+    currentAlert,
     viewId,
     closeAlert,
     setToast
   });
 
   const [testingEndpoint, setTestingEndpoint] = useState(false);
-  const [testResultData, setTestResultData] = useState<{ success: boolean, message: string }>();
+  const [testResultData, setTestResultData] = useState<{
+    success: boolean;
+    message: string;
+  }>();
   const [testResultSuccess, setTestResultSuccess] = useState<boolean>(false);
 
   const findWhichOption =
-    currentAlert &&
-    options.find(option => option.type === currentAlert.type);
+    currentAlert && options.find(option => option.type === currentAlert.type);
 
-  let alertName = alertMethod == 0 ? "Slack" : "Webhook";
+  let alertName = alertMethod === 0 ? 'Slack' : 'Webhook';
   if (!currentAlert) {
-    alert.isSlack = alertName !== "Webhook";
+    alert.isSlack = alertName !== 'Webhook';
   } else {
     alert.isSlack = currentAlert.isSlack;
-    alertName = currentAlert.isSlack ? "Slack" : "Webhook";
+    alertName = currentAlert.isSlack ? 'Slack' : 'Webhook';
   }
 
   const testEndpoint = async () => {
     if (alert.endpoint) {
       setTestingEndpoint(true);
-      settingsService.testEndpoint(alert.endpoint).then((data) => {
+      settingsService.testEndpoint(alert.endpoint).then(data => {
         setTestingEndpoint(false);
-        setTestResultSuccess(data.success)
+        setTestResultSuccess(data.success);
         setTestResultData({ success: data.success, message: data.message });
 
         setTimeout(() => {
-          setTestResultSuccess(false)
-        }, 3000)
-
-      })
+          setTestResultSuccess(false);
+        }, 3000);
+      });
     } else {
-      setTestResultData({ success: false, message: "Please type an endpoint above" });
+      setTestResultData({
+        success: false,
+        message: 'Please type an endpoint above'
+      });
     }
   };
 
@@ -86,7 +91,7 @@ function InventoryViewAlertsCreateOrEditAlert({
     <form
       onSubmit={e => {
         if (currentAlert) {
-          submit(e, setViewControllerOnSubmit, 'edit',);
+          submit(e, setViewControllerOnSubmit, 'edit');
         } else {
           submit(e, setViewControllerOnSubmit);
         }
@@ -109,7 +114,7 @@ function InventoryViewAlertsCreateOrEditAlert({
           className="flex cursor-pointer items-center gap-2 self-start text-black-900"
         >
           <ArrowLeftIcon width={24} height={24} />
-          Edit {currentAlert.isSlack ? "Slack" : "Webhook"} alert
+          Edit {currentAlert.isSlack ? 'Slack' : 'Webhook'} alert
         </div>
       )}
 
@@ -134,12 +139,19 @@ function InventoryViewAlertsCreateOrEditAlert({
                   )}
                 >
                   <div className="flex items-center gap-4">
-                    <img src={option.image} alt={option.label} height={42} width={42} />
+                    <Image
+                      src={option.image}
+                      alt={option.label}
+                      height={42}
+                      width={42}
+                    />
                     <div className="flex flex-col">
                       <p className="text-base font-semibold text-black-900">
                         {option.label}
                       </p>
-                      <p className="text-xs text-black-400">{option.description}</p>
+                      <p className="text-xs text-black-400">
+                        {option.description}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -203,7 +215,7 @@ function InventoryViewAlertsCreateOrEditAlert({
           </Grid>
         )}
       </div>
-      {alertName === "Webhook" && (
+      {alertName === 'Webhook' && (
         <div>
           <div className="flex flex-col gap-4">
             <p className="text-black-400">Output</p>
@@ -213,15 +225,14 @@ function InventoryViewAlertsCreateOrEditAlert({
                   <input
                     type="text"
                     name="endpoint"
-                    className={`peer w-full mr-6 rounded bg-white pl-4 pr-32 pt-[1.75rem] pb-[0.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${testResultData?.success === false && `outline-error-600 focus:outline-error-600`
-                      }`}
+                    className={`peer mr-6 w-full rounded bg-white pl-4 pr-32 pt-[1.75rem] pb-[0.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${
+                      testResultData?.success === false &&
+                      `outline-error-600 focus:outline-error-600`
+                    }`}
                     placeholder=""
                     onChange={e => {
-                      {
-                        handleChange({ ["endpoint"]: e.target.value });
-                      }
-                    }
-                    }
+                      handleChange({ endpoint: e.target.value });
+                    }}
                     value={alert.endpoint}
                     autoComplete="off"
                     data-lpignore="true"
@@ -233,35 +244,41 @@ function InventoryViewAlertsCreateOrEditAlert({
                 </div>
               </div>
               <span
-                className={`absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer flex items-center gap-2 text-primary bg-transparent text-primary active:bg-komiser-200 active:text-primary rounded text-sm font-medium w-full sm:w-auto disabled:cursor-not-allowed ${testingEndpoint ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded bg-transparent text-sm font-medium text-primary text-primary active:bg-komiser-200 active:text-primary disabled:cursor-not-allowed sm:w-auto ${
+                  testingEndpoint ? 'pointer-events-none opacity-50' : ''
+                }`}
                 onClick={testEndpoint}
               >
                 {testingEndpoint ? (
                   <>
                     <LoadingSpinner />
-                    <span className="ml-1 flex justify-center align-center">Test Endpoint</span>
+                    <span className="align-center ml-1 flex justify-center">
+                      Test Endpoint
+                    </span>
                   </>
                 ) : (
                   <>
-                    {testResultSuccess &&
-                      <img
+                    {testResultSuccess && (
+                      <Image
                         src="/assets/img/others/tickmark.svg"
                         height={20}
                         width={20}
                         alt="tickmark"
                         className="-mr-1"
                       />
-                    }
+                    )}
 
-                    <span className={testResultSuccess ? "text-green-600" : ""}>{testResultSuccess ? "Valid Endpoint" : "Test Endpoint"}</span>
+                    <span className={testResultSuccess ? 'text-green-600' : ''}>
+                      {testResultSuccess ? 'Valid Endpoint' : 'Test Endpoint'}
+                    </span>
                   </>
-
                 )}
               </span>
-
             </div>
             {testResultData?.success === false && (
-              <p className="-mt-2 text-xs text-error-600">{testResultData.message}</p>
+              <p className="-mt-2 text-xs text-error-600">
+                {testResultData.message}
+              </p>
             )}
 
             <Input
@@ -273,7 +290,8 @@ function InventoryViewAlertsCreateOrEditAlert({
           </div>
           <div className="mt-2">
             <p className="text-xs text-black-400">
-              We’ll send a POST request to the endpoint. More information can be found in our{" "}
+              We’ll send a POST request to the endpoint. More information can be
+              found in our{' '}
               <a
                 // TODO: update link when docs are ready
                 href="https://docs.komiser.io/docs/introduction/getting-started/"

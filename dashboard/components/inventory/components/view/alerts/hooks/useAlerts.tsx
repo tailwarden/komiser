@@ -17,8 +17,10 @@ export type Alert = {
   secret?: string;
 };
 
+// eslint-disable-next-line no-shadow
 export enum AlertMethod {
-  "SLACK", "WEBHOOK"
+  'SLACK',
+  'WEBHOOK'
 }
 
 function useAlerts({ viewId }: useAlertsProps) {
@@ -30,7 +32,9 @@ function useAlerts({ viewId }: useAlertsProps) {
   const [editAlert, setEditAlert] = useState(false);
   const [currentAlert, setCurrentAlert] = useState<Alert>();
   const [alertsViewController, setAlertsViewController] = useState(0);
-  const [alertMethod, setAlertMethod] = useState<AlertMethod>(AlertMethod.SLACK);
+  const [alertMethod, setAlertMethod] = useState<AlertMethod>(
+    AlertMethod.SLACK
+  );
 
   function fetchAlertStatus() {
     if (!loading) {
@@ -49,7 +53,7 @@ function useAlerts({ viewId }: useAlertsProps) {
         setLoading(false);
         setHasAlerts(res.present);
       }
-    })
+    });
 
     settingsService.getSlackIntegration().then(res => {
       if (res === Error) {
@@ -84,25 +88,25 @@ function useAlerts({ viewId }: useAlertsProps) {
   }
 
   function incrementViewController() {
-    setAlertsViewController(alertsViewController + 1)
+    setAlertsViewController(alertsViewController + 1);
   }
 
   function decrementViewController() {
-    setAlertsViewController(alertsViewController - 1)
+    setAlertsViewController(alertsViewController - 1);
   }
 
   function setViewControllerToAlertsBaseView() {
-    setAlertsViewController(0)
+    setAlertsViewController(0);
   }
 
   function setViewControllerToDeleteView() {
-    setEditAlert(false)
-    setAlertsViewController(3)
+    setEditAlert(false);
+    setAlertsViewController(3);
   }
 
   function setAlertMethodInAndIncrementViewController(alertName: AlertMethod) {
-    incrementViewController()
-    setAlertMethod(alertName)
+    incrementViewController();
+    setAlertMethod(alertName);
   }
 
   function createOrEditAlert(alertId?: number) {
@@ -119,7 +123,7 @@ function useAlerts({ viewId }: useAlertsProps) {
   function closeAlert(action?: 'hasChanges') {
     setCurrentAlert(undefined);
     setEditAlert(false);
-    setViewControllerToAlertsBaseView()
+    setViewControllerToAlertsBaseView();
 
     if (action === 'hasChanges') {
       fetchViewAlerts();
@@ -153,7 +157,7 @@ function useAlerts({ viewId }: useAlertsProps) {
     fetchViewAlerts,
     setAlertMethodInAndIncrementViewController,
     decrementViewController,
-    incrementViewController,
+    incrementViewController
   };
 }
 
