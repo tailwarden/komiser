@@ -18,7 +18,7 @@ type Options = {
 };
 
 type useEditAlertsProps = {
-  alertMethod: AlertMethod
+  alertMethod: AlertMethod;
   currentAlert: Alert | undefined;
   viewId: number;
   closeAlert: (action?: 'hasChanges' | undefined) => void;
@@ -29,14 +29,14 @@ const INITIAL_BUDGET_ALERT: Partial<Alert> = {
   viewId: '',
   name: '',
   type: 'BUDGET',
-  budget: '0',
+  budget: '0'
 };
 
 const INITIAL_USAGE_ALERT: Partial<Alert> = {
   viewId: '',
   name: '',
   type: 'USAGE',
-  usage: '0',
+  usage: '0'
 };
 
 function useEditAlerts({
@@ -85,7 +85,11 @@ function useEditAlerts({
     setAlert(prev => ({ ...prev, ...newData }));
   }
 
-  function submit(e: FormEvent<HTMLFormElement>, setViewControllerToAlertsBase: () => void, edit?: 'edit') {
+  function submit(
+    e: FormEvent<HTMLFormElement>,
+    setViewControllerToAlertsBase: () => void,
+    edit?: 'edit'
+  ) {
     e.preventDefault();
     setLoading(true);
 
@@ -99,7 +103,7 @@ function useEditAlerts({
       payload.usage = Number(payload.usage);
     }
 
-    payload.isSlack = alertType === 0 ? true : false
+    payload.isSlack = alertType === 0;
     if (!edit) {
       payload.viewId = viewId.toString();
       const payloadJson = JSON.stringify(payload);
@@ -177,8 +181,7 @@ function useEditAlerts({
     });
   }
 
-  const buttonDisabled =
-    !alert.name || (!alert.budget && !alert.usage);
+  const buttonDisabled = !alert.name || (!alert.budget && !alert.usage);
 
   return {
     selected,

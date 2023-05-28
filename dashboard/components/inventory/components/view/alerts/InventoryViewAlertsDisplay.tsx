@@ -25,21 +25,25 @@ function InventoryViewAlertDisplayAlerts({
         >
           <div className="flex items-center gap-4">
             <Image
-              src={alert.isSlack ? "/assets/img/others/slack.svg" : "/assets/img/others/custom-webhook.svg"}
+              src={
+                alert.isSlack
+                  ? '/assets/img/others/slack.svg'
+                  : '/assets/img/others/custom-webhook.svg'
+              }
               height={42}
               width={42}
-              alt={alert.isSlack ? "Slack logo" : "Webhook logo"}
+              alt={alert.isSlack ? 'Slack logo' : 'Webhook logo'}
             />
             <div className="flex flex-col">
               <p className="font-semibold text-black-900">{alert.name}</p>
               <p className="text-xs text-black-400">
                 {alert.budget
                   ? `When total cost is over $${formatNumber(
-                    Number(alert.budget)
-                  )}`
+                      Number(alert.budget)
+                    )}`
                   : `When cloud resources are over ${formatNumber(
-                    Number(alert.usage)
-                  )}`}
+                      Number(alert.usage)
+                    )}`}
               </p>
             </div>
           </div>

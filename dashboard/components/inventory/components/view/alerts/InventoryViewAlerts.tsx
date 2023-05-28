@@ -17,7 +17,7 @@ const viewControllerOptions = {
   NO_ALERTS_OR_EXSITING_ALERTS: 0,
   CHOOSE_ALERT_METHOD: 1,
   CREATE_OR_EDIT_ALERT: 2,
-  DELETE_ALERT: 3,
+  DELETE_ALERT: 3
 };
 
 function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
@@ -56,12 +56,15 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
             incrementViewController={incrementViewController}
           />
         );
-      } else if (editAlert) {
+      }
+      if (editAlert) {
         return (
           <InventoryViewAlertsCreateOrEditAlert
             alertMethod={alertMethod}
             setViewControllerOnSubmit={setViewControllerToAlertsBaseView}
-            setViewControllerOnClickingBackButton={setViewControllerToAlertsBaseView}
+            setViewControllerOnClickingBackButton={
+              setViewControllerToAlertsBaseView
+            }
             setViewControllerOnDelete={setViewControllerToDeleteView}
             currentAlert={currentAlert}
             closeAlert={closeAlert}
@@ -69,19 +72,21 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
             setToast={setToast}
           />
         );
-      } else {
-        return (
-          <InventoryViewAlertDisplayAlerts
-            alerts={alerts}
-            createOrEditAlert={createOrEditAlert}
-            setViewControllerOnAddAlert={incrementViewController}
-          />
-        );
       }
+      return (
+        <InventoryViewAlertDisplayAlerts
+          alerts={alerts}
+          createOrEditAlert={createOrEditAlert}
+          setViewControllerOnAddAlert={incrementViewController}
+        />
+      );
+
     case viewControllerOptions.CHOOSE_ALERT_METHOD:
       return (
         <InventoryViewAlertsChooseAlertMethod
-          setAlertMethodInViewController={setAlertMethodInAndIncrementViewController}
+          setAlertMethodInViewController={
+            setAlertMethodInAndIncrementViewController
+          }
           setViewControllerOnClickingBackButton={decrementViewController}
           isSlackConfigured={isSlackConfigured}
         />
@@ -114,6 +119,5 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
       return null;
   }
 }
-
 
 export default InventoryViewAlerts;
