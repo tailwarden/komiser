@@ -302,6 +302,35 @@ const settingsService = {
     }
   },
 
+  async getExistingAlertsPresence() {
+    try {
+      const res = await fetch(`${BASE_URL}/alerts`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async testEndpoint(endpoint: string) {
+    if (!endpoint) return { success: false, message: "Endpoint is required." };
+    try {
+      const response = await fetch(`${BASE_URL}/testendpoint`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ "url": endpoint }),
+      });
+      const data = await response.json();
+      return data;
+    } catch {
+      return {
+        success: false, message: "Something went wrong!"
+      }
+    }
+  },
+
   async getSlackAlertsFromAView(id: number) {
     try {
       const res = await fetch(
