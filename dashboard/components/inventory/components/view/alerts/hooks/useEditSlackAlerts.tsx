@@ -1,121 +1,126 @@
 import { FormEvent, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
 import { ToastProps } from '../../../../../toast/hooks/useToast';
-import { SlackAlert } from './useSlackAlerts';
+import { AlertMethod, Alert } from './useSlackAlerts';
 
-type SlackAlertType = 'BUDGET' | 'USAGE';
+type AlertType = 'BUDGET' | 'USAGE';
 
-const SLACK_ALERT_TYPE = {
+const ALERT_TYPE = {
   BUDGET: 'BUDGET',
   USAGE: 'USAGE'
 } as const;
 
 type Options = {
   label: 'Cost' | 'Resources';
+  image: string;
   description: string;
-  type: SlackAlertType;
+  type: AlertType;
 };
 
-type useEditSlackAlertsProps = {
-  currentSlackAlert: SlackAlert | undefined;
+type useEditAlertsProps = {
+  alertMethod: AlertMethod
+  currentAlert: Alert | undefined;
   viewId: number;
-  closeSlackAlert: (action?: 'hasChanges' | undefined) => void;
+  closeAlert: (action?: 'hasChanges' | undefined) => void;
   setToast: (toast: ToastProps | undefined) => void;
 };
 
-const INITIAL_BUDGET_SLACK_ALERT: Partial<SlackAlert> = {
+const INITIAL_BUDGET_ALERT: Partial<Alert> = {
   viewId: '',
   name: '',
   type: 'BUDGET',
   budget: '0',
-  IsSlack: true,
 };
 
-const INITIAL_USAGE_SLACK_ALERT: Partial<SlackAlert> = {
+const INITIAL_USAGE_ALERT: Partial<Alert> = {
   viewId: '',
   name: '',
   type: 'USAGE',
   usage: '0',
-  IsSlack: true,
 };
 
-function useEditSlackAlerts({
+function useEditAlerts({
+  alertMethod: alertType,
   viewId,
-  currentSlackAlert,
-  closeSlackAlert,
+  currentAlert,
+  closeAlert,
   setToast
-}: useEditSlackAlertsProps) {
-  const [selected, setSelected] = useState<SlackAlertType>(
-    currentSlackAlert?.type || SLACK_ALERT_TYPE.BUDGET
+}: useEditAlertsProps) {
+  const [selected, setSelected] = useState<AlertType>(
+    currentAlert?.type || ALERT_TYPE.BUDGET
   );
-  const [slackAlert, setSlackAlert] = useState<Partial<SlackAlert>>(
-    currentSlackAlert || INITIAL_BUDGET_SLACK_ALERT
+  const [alert, setAlert] = useState<Partial<Alert>>(
+    currentAlert || INITIAL_BUDGET_ALERT
   );
   const [loading, setLoading] = useState(false);
 
   const options: Options[] = [
     {
       label: 'Cost',
+      image: '/assets/img/others/cost.svg',
       description: 'If the total cost goes over the limit threshold',
       type: 'BUDGET'
     },
     {
       label: 'Resources',
+      image: '/assets/img/others/resource.svg',
       description: 'If the number of resources goes over the limit',
       type: 'USAGE'
     }
   ];
 
-  function changeSlackAlertType(type: SlackAlertType) {
-    if (type === SLACK_ALERT_TYPE.BUDGET) {
-      setSlackAlert(INITIAL_BUDGET_SLACK_ALERT);
+  function changeAlertType(type: AlertType) {
+    if (type === ALERT_TYPE.BUDGET) {
+      setAlert(INITIAL_BUDGET_ALERT);
       setSelected(type);
     }
 
-    if (type === SLACK_ALERT_TYPE.USAGE) {
-      setSlackAlert(INITIAL_USAGE_SLACK_ALERT);
+    if (type === ALERT_TYPE.USAGE) {
+      setAlert(INITIAL_USAGE_ALERT);
       setSelected(type);
     }
   }
 
-  function handleChange(newData: Partial<SlackAlert>) {
-    setSlackAlert(prev => ({ ...prev, ...newData }));
+  function handleChange(newData: Partial<Alert>) {
+    setAlert(prev => ({ ...prev, ...newData }));
   }
 
-  function submit(e: FormEvent<HTMLFormElement>, edit?: 'edit') {
+  function submit(e: FormEvent<HTMLFormElement>, setViewControllerToAlertsBase: () => void, edit?: 'edit') {
     e.preventDefault();
     setLoading(true);
 
-    const payload = { ...slackAlert };
+    const payload = { ...alert };
 
-    if (payload.type === SLACK_ALERT_TYPE.BUDGET) {
+    if (payload.type === ALERT_TYPE.BUDGET) {
       payload.budget = Number(payload.budget);
     }
 
-    if (payload.type === SLACK_ALERT_TYPE.USAGE) {
+    if (payload.type === ALERT_TYPE.USAGE) {
       payload.usage = Number(payload.usage);
     }
 
+    payload.isSlack = alertType === 0 ? true : false
     if (!edit) {
       payload.viewId = viewId.toString();
       const payloadJson = JSON.stringify(payload);
-      settingsService.createSlackAlert(payloadJson).then(res => {
+      settingsService.createAlert(payloadJson).then(res => {
         if (res === Error || res.error) {
           setLoading(false);
           setToast({
             hasError: true,
             title: 'Alert not created',
             message:
-              'There was an error creating this slack alert. Refer to the logs and try again.'
+              'There was an error creating this alert. Refer to the logs and try again.'
           });
         } else {
           setLoading(false);
           setToast({
             hasError: false,
             title: 'Alert created',
-            message: `The slack alert was successfully created!`
+            message: `The alert was successfully created!`
           });
-          closeSlackAlert('hasChanges');
+          closeAlert('hasChanges');
+          setViewControllerToAlertsBase();
         }
       });
     }
@@ -125,67 +130,67 @@ function useEditSlackAlerts({
 
       if (id) {
         const payloadJson = JSON.stringify(payload);
-        settingsService.editSlackAlert(id, payloadJson).then(res => {
+        settingsService.editAlert(id, payloadJson).then(res => {
           if (res === Error || res.error) {
             setLoading(false);
             setToast({
               hasError: true,
               title: 'Alert not edited',
               message:
-                'There was an error editing this slack alert. Refer to the logs and try again.'
+                'There was an error editing this alert. Refer to the logs and try again.'
             });
           } else {
             setLoading(false);
             setToast({
               hasError: false,
               title: 'Alert edited',
-              message: `The slack alert was successfully edited!`
+              message: `The alert was successfully edited!`
             });
-            closeSlackAlert('hasChanges');
+            closeAlert('hasChanges');
           }
         });
       }
     }
   }
 
-  function deleteSlackAlert(alertId: number) {
+  function deleteAlert(alertId: number) {
     const id = alertId;
 
-    settingsService.deleteSlackAlert(id).then(res => {
+    settingsService.deleteAlert(id).then(res => {
       if (res === Error || res.error) {
         setLoading(false);
         setToast({
           hasError: true,
           title: 'Alert was not deleted',
           message:
-            'There was an error deleting this slack alert. Refer to the logs and try again.'
+            'There was an error deleting this alert. Refer to the logs and try again.'
         });
       } else {
         setLoading(false);
         setToast({
           hasError: false,
           title: 'Alert deleted',
-          message: `The slack alert was successfully deleted!`
+          message: `The alert was successfully deleted!`
         });
-        closeSlackAlert('hasChanges');
+        closeAlert('hasChanges');
       }
     });
   }
 
   const buttonDisabled =
-    !slackAlert.name || (!slackAlert.budget && !slackAlert.usage);
+    !alert.name || (!alert.budget && !alert.usage);
 
   return {
     selected,
     options,
-    slackAlert,
-    changeSlackAlertType,
+    alert,
+    changeAlertType,
     handleChange,
     buttonDisabled,
     submit,
     loading,
-    deleteSlackAlert
+    deleteAlert
   };
 }
 
-export default useEditSlackAlerts;
+export default useEditAlerts;

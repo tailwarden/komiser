@@ -1,61 +1,119 @@
 import { ToastProps } from '../../../../toast/hooks/useToast';
-import useSlackAlerts from './hooks/useSlackAlerts';
-import InventoryViewAlertsDisplay from './InventoryViewAlertsDisplay';
-import InventoryViewAlertsEditSlackAlert from './InventoryViewAlertsEditSlackAlert';
+import useAlerts from './hooks/useSlackAlerts';
+import InventoryViewAlertsDeleteAlert from './InventoryViewAlertsDeleteAlert';
+import InventoryViewAlertDisplayAlerts from './InventoryViewAlertsDisplay';
+import InventoryViewAlertsCreateOrEditAlert from './InventoryViewAlertsEditSlackAlert';
 import InventoryViewAlertsError from './InventoryViewAlertsError';
-import InventoryViewAlertHasNoSlackAlerts from './InventoryViewAlertsHasNoSlackAlerts';
-import InventoryViewAlertHasNoSlackIntegration from './InventoryViewAlertsHasNoSlackIntegration';
+import InventoryViewAlertHasNoExistingAlerts from './InventoryViewAlertsHasNoAlerts';
 import InventoryViewAlertsSkeleton from './InventoryViewAlertsSkeleton';
+import InventoryViewAlertsChooseAlertMethod from './InventoryViewAlertsChooseAlertMethod';
 
 type InventoryViewAlertsProps = {
   viewId: number;
   setToast: (toast: ToastProps | undefined) => void;
 };
 
+const viewControllerOptions = {
+  NO_ALERTS_OR_EXSITING_ALERTS: 0,
+  CHOOSE_ALERT_METHOD: 1,
+  CREATE_OR_EDIT_ALERT: 2,
+  DELETE_ALERT: 3,
+};
+
 function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
   const {
     loading,
     error,
-    hasSlack,
-    slackAlerts,
-    hasNoSlackAlerts,
-    editSlackAlert,
-    currentSlackAlert,
-    createOrEditSlackAlert,
-    closeSlackAlert,
+    hasAlerts,
+    isSlackConfigured,
+    alerts,
+    alertsViewController,
+    editAlert,
+    alertMethod,
+    currentAlert,
+    setAlertMethodInAndIncrementViewController,
+    setViewControllerToAlertsBaseView,
+    setViewControllerToDeleteView,
+    createOrEditAlert,
+    incrementViewController,
+    decrementViewController,
+    closeAlert,
     fetchViewAlerts
-  } = useSlackAlerts({ viewId });
+  } = useAlerts({ viewId });
 
-  if (loading) return <InventoryViewAlertsSkeleton />;
-
-  if (error)
+  if (loading) {
+    return <InventoryViewAlertsSkeleton />;
+  }
+  if (error) {
     return <InventoryViewAlertsError fetchViewAlerts={fetchViewAlerts} />;
+  }
 
-  if (!hasSlack) return <InventoryViewAlertHasNoSlackIntegration />;
-
-  if (hasNoSlackAlerts)
-    return (
-      <InventoryViewAlertHasNoSlackAlerts
-        createOrEditSlackAlert={createOrEditSlackAlert}
-      />
-    );
-
-  if (editSlackAlert)
-    return (
-      <InventoryViewAlertsEditSlackAlert
-        currentSlackAlert={currentSlackAlert}
-        closeSlackAlert={closeSlackAlert}
-        viewId={viewId}
-        setToast={setToast}
-      />
-    );
-
-  return (
-    <InventoryViewAlertsDisplay
-      slackAlerts={slackAlerts}
-      createOrEditSlackAlert={createOrEditSlackAlert}
-    />
-  );
+  switch (alertsViewController) {
+    case viewControllerOptions.NO_ALERTS_OR_EXSITING_ALERTS:
+      if (!hasAlerts) {
+        return (
+          <InventoryViewAlertHasNoExistingAlerts
+            incrementViewController={incrementViewController}
+          />
+        );
+      } else if (editAlert) {
+        return (
+          <InventoryViewAlertsCreateOrEditAlert
+            alertMethod={alertMethod}
+            setViewControllerOnSubmit={setViewControllerToAlertsBaseView}
+            setViewControllerOnClickingBackButton={setViewControllerToAlertsBaseView}
+            setViewControllerOnDelete={setViewControllerToDeleteView}
+            currentAlert={currentAlert}
+            closeAlert={closeAlert}
+            viewId={viewId}
+            setToast={setToast}
+          />
+        );
+      } else {
+        return (
+          <InventoryViewAlertDisplayAlerts
+            alerts={alerts}
+            createOrEditAlert={createOrEditAlert}
+            setViewControllerOnAddAlert={incrementViewController}
+          />
+        );
+      }
+    case viewControllerOptions.CHOOSE_ALERT_METHOD:
+      return (
+        <InventoryViewAlertsChooseAlertMethod
+          setAlertMethodInViewController={setAlertMethodInAndIncrementViewController}
+          setViewControllerOnClickingBackButton={decrementViewController}
+          isSlackConfigured={isSlackConfigured}
+        />
+      );
+    case viewControllerOptions.CREATE_OR_EDIT_ALERT:
+      return (
+        <InventoryViewAlertsCreateOrEditAlert
+          alertMethod={alertMethod}
+          setViewControllerOnSubmit={setViewControllerToAlertsBaseView}
+          setViewControllerOnClickingBackButton={decrementViewController}
+          setViewControllerOnDelete={incrementViewController}
+          currentAlert={currentAlert}
+          closeAlert={closeAlert}
+          viewId={viewId}
+          setToast={setToast}
+        />
+      );
+    case viewControllerOptions.DELETE_ALERT:
+      return (
+        <InventoryViewAlertsDeleteAlert
+          alertMethod={alertMethod}
+          viewControllerOnCancelButton={decrementViewController}
+          currentAlert={currentAlert}
+          closeAlert={closeAlert}
+          viewId={viewId}
+          setToast={setToast}
+        />
+      );
+    default:
+      return null;
+  }
 }
+
 
 export default InventoryViewAlerts;
