@@ -1,31 +1,38 @@
 import { useEffect, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
 
-type useSlackAlertsProps = {
+type useAlertsProps = {
   viewId: number;
 };
 
-export type SlackAlert = {
+export type Alert = {
   id: number;
   name: string;
   viewId: string;
   type: 'BUDGET' | 'USAGE';
   budget?: number | string;
   usage?: number | string;
-  IsSlack?: boolean;
+  isSlack: boolean;
   endpoint?: string;
   secret?: string;
 };
 
-function useSlackAlerts({ viewId }: useSlackAlertsProps) {
+export enum AlertMethod {
+  "SLACK", "WEBHOOK"
+}
+
+function useAlerts({ viewId }: useAlertsProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [hasSlack, setHasSlack] = useState(false);
-  const [slackAlerts, setSlackAlerts] = useState<SlackAlert[]>();
-  const [editSlackAlert, setEditSlackAlert] = useState(false);
-  const [currentSlackAlert, setCurrentSlackAlert] = useState<SlackAlert>();
+  const [isSlackConfigured, setIsSlackConfigured] = useState(false);
+  const [hasAlerts, setHasAlerts] = useState(false);
+  const [alerts, setAlerts] = useState<Alert[]>();
+  const [editAlert, setEditAlert] = useState(false);
+  const [currentAlert, setCurrentAlert] = useState<Alert>();
+  const [alertsViewController, setAlertsViewController] = useState(0);
+  const [alertMethod, setAlertMethod] = useState<AlertMethod>(AlertMethod.SLACK);
 
-  function fetchSlackStatus() {
+  function fetchAlertStatus() {
     if (!loading) {
       setLoading(true);
     }
@@ -34,13 +41,23 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
       setError(false);
     }
 
+    settingsService.getExistingAlertsPresence().then(res => {
+      if (res === Error) {
+        setLoading(false);
+        setError(true);
+      } else {
+        setLoading(false);
+        setHasAlerts(res.present);
+      }
+    })
+
     settingsService.getSlackIntegration().then(res => {
       if (res === Error) {
         setLoading(false);
         setError(true);
       } else {
         setLoading(false);
-        setHasSlack(res.enabled);
+        setIsSlackConfigured(res.enabled);
       }
     });
   }
@@ -54,31 +71,55 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
       setError(false);
     }
 
-    settingsService.getSlackAlertsFromAView(viewId).then(res => {
+    settingsService.getAlertsFromAView(viewId).then(res => {
       if (res === Error) {
         setLoading(false);
         setError(true);
       } else {
         setLoading(false);
-        setSlackAlerts(res);
+        setHasAlerts(res.length > 0);
+        setAlerts(res);
       }
     });
   }
 
-  function createOrEditSlackAlert(alertId?: number) {
-    if (alertId && slackAlerts) {
-      const foundSlackAlert = slackAlerts.find(alert => alert.id === alertId);
-
-      if (foundSlackAlert) {
-        setCurrentSlackAlert(foundSlackAlert);
-      }
-    }
-    setEditSlackAlert(true);
+  function incrementViewController() {
+    setAlertsViewController(alertsViewController + 1)
   }
 
-  function closeSlackAlert(action?: 'hasChanges') {
-    setCurrentSlackAlert(undefined);
-    setEditSlackAlert(false);
+  function decrementViewController() {
+    setAlertsViewController(alertsViewController - 1)
+  }
+
+  function setViewControllerToAlertsBaseView() {
+    setAlertsViewController(0)
+  }
+
+  function setViewControllerToDeleteView() {
+    setEditAlert(false)
+    setAlertsViewController(3)
+  }
+
+  function setAlertMethodInAndIncrementViewController(alertName: AlertMethod) {
+    incrementViewController()
+    setAlertMethod(alertName)
+  }
+
+  function createOrEditAlert(alertId?: number) {
+    if (alertId && alerts) {
+      const foundAlert = alerts.find(alert => alert.id === alertId);
+
+      if (foundAlert) {
+        setCurrentAlert(foundAlert);
+      }
+    }
+    setEditAlert(true);
+  }
+
+  function closeAlert(action?: 'hasChanges') {
+    setCurrentAlert(undefined);
+    setEditAlert(false);
+    setViewControllerToAlertsBaseView()
 
     if (action === 'hasChanges') {
       fetchViewAlerts();
@@ -86,30 +127,34 @@ function useSlackAlerts({ viewId }: useSlackAlertsProps) {
   }
 
   useEffect(() => {
-    if (!hasSlack) {
-      fetchSlackStatus();
+    if (!hasAlerts) {
+      fetchAlertStatus();
     }
 
-    if (hasSlack && viewId) {
+    if (hasAlerts && viewId) {
       fetchViewAlerts();
     }
-  }, [hasSlack]);
-
-  const hasNoSlackAlerts =
-    hasSlack && !editSlackAlert && slackAlerts && slackAlerts.length === 0;
+  }, [hasAlerts]);
 
   return {
     loading,
     error,
-    hasSlack,
-    slackAlerts,
-    hasNoSlackAlerts,
-    editSlackAlert,
-    currentSlackAlert,
-    createOrEditSlackAlert,
-    closeSlackAlert,
-    fetchViewAlerts
+    hasAlerts,
+    isSlackConfigured,
+    alerts,
+    editAlert,
+    currentAlert,
+    alertsViewController,
+    alertMethod,
+    createOrEditAlert,
+    setViewControllerToAlertsBaseView,
+    setViewControllerToDeleteView,
+    closeAlert,
+    fetchViewAlerts,
+    setAlertMethodInAndIncrementViewController,
+    decrementViewController,
+    incrementViewController,
   };
 }
 
-export default useSlackAlerts;
+export default useAlerts;
