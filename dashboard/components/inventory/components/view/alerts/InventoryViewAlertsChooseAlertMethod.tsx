@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import ChevronRightIcon from '../../../../icons/ChevronRightIcon';
 import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
-import { AlertMethod } from './hooks/useSlackAlerts';
+import { AlertMethod } from './hooks/useAlerts';
 
 type InventoryViewAlertsChooseAlertMethod = {
     setAlertMethodInViewController: (alertName: AlertMethod) => void;
