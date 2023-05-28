@@ -401,6 +401,7 @@ func hitCustomWebhook(endpoint string, secret string, viewName string, resources
 		payloadJSON, err = json.Marshal(payload)
 		if err != nil {
 			log.Error("Couldn't encode JSON payload:", err)
+			return
 		}
 
 	} else if alertType == "USAGE" {
@@ -412,13 +413,14 @@ func hitCustomWebhook(endpoint string, secret string, viewName string, resources
 		payloadJSON, err = json.Marshal(payload)
 		if err != nil {
 			log.Error("Couldn't encode JSON payload:", err)
+			return
 		}
-
 	}
 
 	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(payloadJSON))
 	if err != nil {
 		log.Error("Couldn't create HTTP request for custom webhook endpoint:", err)
+		return
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -430,10 +432,12 @@ func hitCustomWebhook(endpoint string, secret string, viewName string, resources
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Error("Couldn't make HTTP request for custom webhook endpoint:", err)
+		return
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		log.Error("Custom Webhook with endpoint " + endpoint + " returned back a status code of " + string(rune(resp.StatusCode)) + " . Expected Status Code: 200")
+		return
 	}
 }
 
