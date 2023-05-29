@@ -20,12 +20,12 @@ export type GlobalAppContextProps = {
 
 export const initialContext = {
   displayBanner: false,
-  dismissBanner: () => { },
+  dismissBanner: () => {},
   loading: false,
   data: undefined,
   error: false,
   hasNoAccounts: false,
-  fetch: () => { },
+  fetch: () => {},
   betaFlagOnboardingWizard: false
 };
 
