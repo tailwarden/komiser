@@ -157,9 +157,7 @@ function useCostExplorerChart({
             )}`;
           },
           label(chart) {
-            return `${chart.dataset.label}: $${formatNumber(
-              Number(chart.formattedValue)
-            )}`;
+            return `${chart.dataset.label}: ${chart.formattedValue}`;
           }
         }
       }
