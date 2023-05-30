@@ -128,7 +128,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 				    }
 
-					monthlyCost := float64(hourlyUsage) * hourlyCost
+					monthlyCost = float64(hourlyUsage) * hourlyCost
 
 				}
 
