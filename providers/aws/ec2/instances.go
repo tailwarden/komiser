@@ -60,70 +60,77 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 					})
 				}
 
-				startOfMonth := utils.BeginningOfMonth(time.Now())
-				hourlyUsage := 0
-				if instance.LaunchTime.Before(startOfMonth) {
-					hourlyUsage = int(time.Since(startOfMonth).Hours())
-				} else {
-					hourlyUsage = int(time.Since(*instance.LaunchTime).Hours())
-				}
+				monthlyCost := 0.0
 
-				pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
-					ServiceCode: aws.String("AmazonEC2"),
-					Filters: []types.Filter{
-						{
-							Field: aws.String("operatingSystem"),
-							Value: aws.String("linux"),
-							Type:  types.FilterTypeTermMatch,
-						},
-						{
-							Field: aws.String("instanceType"),
-							Value: aws.String(string(instance.InstanceType)),
-							Type:  types.FilterTypeTermMatch,
-						},
-						{
-							Field: aws.String("regionCode"),
-							Value: aws.String(client.AWSClient.Region),
-							Type:  types.FilterTypeTermMatch,
-						},
-						{
-							Field: aws.String("capacitystatus"),
-							Value: aws.String("Used"),
-							Type:  types.FilterTypeTermMatch,
-						},
-					},
-					MaxResults: aws.Int32(1),
-				})
-				if err != nil {
-					log.Warnf("Couldn't fetch invocations metric for %s", name)
-				}
+				if instance.State.Name != "stopped" {
+					// no need to calc usage and fetch price if stopped
 
-				hourlyCost := 0.0
-
-				if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
-
-					pricingResult := models.PricingResult{}
-					err := json.Unmarshal([]byte(pricingOutput.PriceList[0]), &pricingResult)
-					if err != nil {
-						log.Fatalf("Failed to unmarshal JSON: %v", err)
+					startOfMonth := utils.BeginningOfMonth(time.Now())
+					hourlyUsage := 0
+					if instance.LaunchTime.Before(startOfMonth) {
+						hourlyUsage = int(time.Since(startOfMonth).Hours())
+					} else {
+						hourlyUsage = int(time.Since(*instance.LaunchTime).Hours())
 					}
 
-					for _, onDemand := range pricingResult.Terms.OnDemand {
-						for _, priceDimension := range onDemand.PriceDimensions {
-							hourlyCost, err = strconv.ParseFloat(priceDimension.PricePerUnit.USD, 64)
-							if err != nil {
-								log.Fatalf("Failed to parse hourly cost: %v", err)
+					pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
+						ServiceCode: aws.String("AmazonEC2"),
+						Filters: []types.Filter{
+							{
+								Field: aws.String("operatingSystem"),
+								Value: aws.String("linux"),
+								Type:  types.FilterTypeTermMatch,
+							},
+							{
+								Field: aws.String("instanceType"),
+								Value: aws.String(string(instance.InstanceType)),
+								Type:  types.FilterTypeTermMatch,
+							},
+							{
+								Field: aws.String("regionCode"),
+								Value: aws.String(client.AWSClient.Region),
+								Type:  types.FilterTypeTermMatch,
+							},
+							{
+								Field: aws.String("capacitystatus"),
+								Value: aws.String("Used"),
+								Type:  types.FilterTypeTermMatch,
+							},
+						},
+						MaxResults: aws.Int32(1),
+					})
+					if err != nil {
+						log.Warnf("Couldn't fetch invocations metric for %s", name)
+					}
+
+					hourlyCost := 0.0
+
+					if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
+
+						pricingResult := models.PricingResult{}
+						err := json.Unmarshal([]byte(pricingOutput.PriceList[0]), &pricingResult)
+						if err != nil {
+							log.Fatalf("Failed to unmarshal JSON: %v", err)
+						}
+
+						for _, onDemand := range pricingResult.Terms.OnDemand {
+							for _, priceDimension := range onDemand.PriceDimensions {
+								hourlyCost, err = strconv.ParseFloat(priceDimension.PricePerUnit.USD, 64)
+								if err != nil {
+									log.Fatalf("Failed to parse hourly cost: %v", err)
+								}
+								break
 							}
 							break
 						}
-						break
-					}
 
-					//log.Printf("Hourly cost EC2: %f", hourlyCost)
+						//log.Printf("Hourly cost EC2: %f", hourlyCost)
+
+				    }
+
+					monthlyCost = float64(hourlyUsage) * hourlyCost
 
 				}
-
-				monthlyCost := float64(hourlyUsage) * hourlyCost
 
 				resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", client.AWSClient.Region, *accountId, *instance.InstanceId)
 
