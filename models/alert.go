@@ -7,7 +7,7 @@ type Alert struct {
 	Type     string  `json:"type"`
 	Budget   float64 `json:"budget"`
 	Usage    int     `json:"usage"`
-	IsSlack  bool    `json:"isSlack"`
+	IsSlack  bool    `json:"isSlack" bun:"is_slack"`
 	Endpoint string  `json:"endpoint"`
 	Secret   string  `json:"secret"`
 }
