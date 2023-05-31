@@ -302,16 +302,6 @@ const settingsService = {
     }
   },
 
-  async getExistingAlertsPresence() {
-    try {
-      const res = await fetch(`${BASE_URL}/alerts`, settings('GET'));
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
-
   async testEndpoint(endpoint: string) {
     if (!endpoint) return { success: false, message: 'Endpoint is required.' };
     try {

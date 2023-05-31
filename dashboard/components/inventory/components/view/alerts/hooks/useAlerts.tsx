@@ -45,13 +45,13 @@ function useAlerts({ viewId }: useAlertsProps) {
       setError(false);
     }
 
-    settingsService.getExistingAlertsPresence().then(res => {
+    settingsService.getAlertsFromAView(viewId).then(res => {
       if (res === Error) {
         setLoading(false);
         setError(true);
       } else {
         setLoading(false);
-        setHasAlerts(res.present);
+        setHasAlerts(res.length > 0);
       }
     });
 
