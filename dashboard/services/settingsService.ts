@@ -313,21 +313,22 @@ const settingsService = {
   },
 
   async testEndpoint(endpoint: string) {
-    if (!endpoint) return { success: false, message: "Endpoint is required." };
+    if (!endpoint) return { success: false, message: 'Endpoint is required.' };
     try {
-      const response = await fetch(`${BASE_URL}/testendpoint`, {
-        method: "POST",
+      const response = await fetch(`${BASE_URL}/alerts/test`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "url": endpoint }),
+        body: JSON.stringify({ url: endpoint })
       });
       const data = await response.json();
       return data;
     } catch {
       return {
-        success: false, message: "Something went wrong!"
-      }
+        success: false,
+        message: 'Something went wrong!'
+      };
     }
   },
 
