@@ -69,7 +69,7 @@ func Snapshot(ctx context.Context, client providers.ProviderClient) ([]models.Re
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "RDS Instance",
+		"service":   "RDS Cluster Snapshot",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
