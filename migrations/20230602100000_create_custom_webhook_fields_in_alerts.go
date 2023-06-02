@@ -15,7 +15,7 @@ func init() {
 		if err != nil {
 			_, err := db.ExecContext(ctx, `
 				ALTER TABLE alerts
-				ADD COLUMN is_slack BOOLEAN DEFAULT 0;
+				ADD COLUMN is_slack BOOLEAN DEFAULT 1;
 			`)
 			if err != nil {
 				return err
