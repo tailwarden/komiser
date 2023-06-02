@@ -3,7 +3,7 @@ ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG SEGMENT_WRITE_KEY
 ARG VERSION
-MAINTAINER mlabouardy <mohamed@tailwarden.com>
+LABEL MAINTAINER="mlabouardy <mohamed@tailwarden.com>"
 
 RUN echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
 
