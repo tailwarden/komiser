@@ -13,29 +13,20 @@ func init() {
 		`)
 
 		if err != nil {
-			_, err := db.ExecContext(ctx, `
+			db.ExecContext(ctx, `
 				ALTER TABLE alerts
 				ADD COLUMN is_slack BOOLEAN DEFAULT 1;
 			`)
-			if err != nil {
-				return err
-			}
 
-			_, err = db.ExecContext(ctx, `
+			db.ExecContext(ctx, `
 				ALTER TABLE alerts
 				ADD COLUMN endpoint TEXT;
 			`)
-			if err != nil {
-				return err
-			}
 
-			_, err = db.ExecContext(ctx, `
+			db.ExecContext(ctx, `
 				ALTER TABLE alerts
 				ADD COLUMN secret TEXT;
 			`)
-			if err != nil {
-				return err
-			}
 
 			_, err = db.ExecContext(ctx, `
 				UPDATE alerts
