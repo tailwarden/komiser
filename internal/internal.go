@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -90,9 +91,11 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 	}
 
 	_, err = cron.Every(1).Hours().Do(func() {
-		if len(cfg.Slack.Webhook) > 0 {
-			log.Info("Checking Slack alerts")
-			checkingAlerts(ctx, *cfg, telemetry, port)
+		alertsExist, alerts := checkIfAlertsExist(ctx)
+
+		if alertsExist {
+			log.Info("Checking Alerts")
+			checkingAlerts(ctx, *cfg, telemetry, port, alerts)
 		}
 	})
 
@@ -122,6 +125,19 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 	}
 
 	return nil
+}
+
+func checkIfAlertsExist(ctx context.Context) (bool, []models.Alert) {
+	alerts := make([]models.Alert, 0)
+
+	err := db.NewRaw("SELECT * FROM alerts").Scan(ctx, &alerts)
+	if err != nil {
+		log.WithError(err).Error("scan failed")
+	}
+	if len(alerts) > 0 {
+		return true, alerts
+	}
+	return false, alerts
 }
 
 func loggingMiddleware() gin.HandlerFunc {
@@ -373,17 +389,112 @@ func checkUpgrade() {
 	}
 }
 
-func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port int) {
-	alerts := make([]models.Alert, 0)
-
-	err := db.NewRaw("SELECT * FROM alerts").Scan(ctx, &alerts)
-	if err != nil {
-		log.WithError(err).Error("scan failed")
+func hitCustomWebhook(endpoint string, secret string, viewName string, resources int, cost float64, alertType string) {
+	var payloadJSON []byte
+	var err error
+	payload := models.CustomWebhookPayload{
+		Komiser:   Version,
+		View:      viewName,
+		Timestamp: time.Now().Unix(),
 	}
 
+	switch alertType {
+	case "BUDGET":
+		payload.Message = "Cost alert"
+		payload.Data = cost
+	case "USAGE":
+		payload.Message = "Usage alert"
+		payload.Data = float64(resources)
+	default:
+		log.Error("Invalid Alert Type")
+		return
+	}
+
+	payloadJSON, err = json.Marshal(payload)
+	if err != nil {
+		log.Error("Couldn't encode JSON payload:", err)
+		return
+	}
+
+	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(payloadJSON))
+	if err != nil {
+		log.Error("Couldn't create HTTP request for custom webhook endpoint:", err)
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	if len(secret) > 0 {
+		req.Header.Set("Authorization", secret)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Error("Couldn't make HTTP request for custom webhook endpoint:", err)
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		log.Error("Custom Webhook with endpoint " + endpoint + " returned back a status code of " + string(rune(resp.StatusCode)) + " . Expected Status Code: 200")
+		return
+	}
+}
+
+func hitSlackWebhook(viewName string, port int, viewId int, resources int, cost float64, webhookUrl string, alertType string) {
+	attachment := slack.Attachment{
+		Color:         "danger",
+		AuthorName:    "Komiser",
+		AuthorSubname: "by Tailwarden",
+		AuthorLink:    "https://tailwarden.com",
+		AuthorIcon:    "https://cdn.komiser.io/images/komiser-logo.jpeg",
+		Footer:        "Komiser",
+		Actions: []slack.AttachmentAction{
+			{
+				Name: "open",
+				Text: "Open view",
+				Type: "button",
+				URL:  fmt.Sprintf("http://localhost:%d/inventory?view=%d", port, viewId),
+			},
+		},
+		Fields: []slack.AttachmentField{
+			{
+				Title: "View",
+				Value: viewName,
+			},
+		},
+		FooterIcon: "https://github.com/tailwarden/komiser",
+		Ts:         json.Number(strconv.FormatInt(time.Now().Unix(), 10)),
+	}
+
+	if alertType == "BUDGET" {
+		attachment.Text = "Cost alert :warning:"
+		attachment.Fields = append(attachment.Fields, slack.AttachmentField{
+			Title: "Cost",
+			Value: fmt.Sprintf("%.2f$", cost),
+		})
+	} else if alertType == "USAGE" {
+		attachment.Text = "Usage alert :warning:"
+		attachment.Fields = append(attachment.Fields, slack.AttachmentField{
+			Title: "Resources",
+			Value: fmt.Sprintf("%d", resources),
+		})
+	}
+
+	msg := slack.WebhookMessage{
+		Attachments: []slack.Attachment{attachment},
+	}
+
+	err := slack.PostWebhook(webhookUrl, &msg)
+	if err != nil {
+		log.Warn(err)
+	}
+
+}
+
+func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port int, alerts []models.Alert) {
 	for _, alert := range alerts {
 		var view models.View
-		err = db.NewRaw(fmt.Sprintf("SELECT * FROM views WHERE id = %s", alert.ViewId)).Scan(ctx, &view)
+		err := db.NewRaw(fmt.Sprintf("SELECT * FROM views WHERE id = %s", alert.ViewId)).Scan(ctx, &view)
 		if err != nil {
 			log.WithError(err).Error("scan failed")
 		}
@@ -393,96 +504,31 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 			log.Error("Couldn't get stats for view:", view.Name)
 		} else {
 			if alert.Type == "BUDGET" && alert.Budget <= stats.Costs {
-				log.Info("Sending Slack budget alert for view:", view.Name)
 				if telemetry {
 					analytics.TrackEvent("sending_alerts", map[string]interface{}{
 						"type": "budget",
 					})
 				}
-
-				attachment := slack.Attachment{
-					Color:         "danger",
-					AuthorName:    "Komiser",
-					AuthorSubname: "by Tailwarden",
-					AuthorLink:    "https://tailwarden.com",
-					AuthorIcon:    "https://cdn.komiser.io/images/komiser-logo.jpeg",
-					Text:          "Cost alert :warning:",
-					Footer:        "Komiser",
-					Actions: []slack.AttachmentAction{
-						{
-							Name: "open",
-							Text: "Open view",
-							Type: "button",
-							URL:  fmt.Sprintf("http://localhost:%d/inventory?view=%d", port, view.Id),
-						},
-					},
-					Fields: []slack.AttachmentField{
-						{
-							Title: "View",
-							Value: view.Name,
-						},
-						{
-							Title: "Cost",
-							Value: fmt.Sprintf("%.2f$", stats.Costs),
-						},
-					},
-					FooterIcon: "https://github.com/tailwarden/komiser",
-					Ts:         json.Number(strconv.FormatInt(time.Now().Unix(), 10)),
-				}
-				msg := slack.WebhookMessage{
-					Attachments: []slack.Attachment{attachment},
-				}
-
-				err := slack.PostWebhook(cfg.Slack.Webhook, &msg)
-				if err != nil {
-					log.Warn(err)
+				if alert.IsSlack {
+					log.Info("Sending Slack budget alert for view:", view.Name)
+					hitSlackWebhook(view.Name, port, int(view.Id), 0, stats.Costs, cfg.Slack.Webhook, alert.Type)
+				} else {
+					log.Info("Sending Custom Webhook budget alert for view:", view.Name)
+					hitCustomWebhook(alert.Endpoint, alert.Secret, view.Name, 0, stats.Costs, alert.Type)
 				}
 			}
-
 			if alert.Type == "USAGE" && alert.Usage <= stats.Resources {
-				log.Info("Sending Slack usage alert for view:", view.Name)
 				if telemetry {
 					analytics.TrackEvent("sending_alerts", map[string]interface{}{
 						"type": "usage",
 					})
 				}
-
-				attachment := slack.Attachment{
-					Color:         "danger",
-					AuthorName:    "Komiser",
-					AuthorSubname: "by Tailwarden",
-					AuthorLink:    "https://tailwarden.com",
-					AuthorIcon:    "https://cdn.komiser.io/images/komiser-logo.jpeg",
-					Text:          "Usage alert :warning:",
-					Footer:        "Komiser",
-					Actions: []slack.AttachmentAction{
-						{
-							Name: "open",
-							Text: "Open view",
-							Type: "button",
-							URL:  fmt.Sprintf("http://localhost:%d/inventory?view=%d", port, view.Id),
-						},
-					},
-					Fields: []slack.AttachmentField{
-						{
-							Title: "View",
-							Value: view.Name,
-						},
-						{
-							Title: "Resources",
-							Value: fmt.Sprintf("%d", stats.Resources),
-						},
-					},
-					FooterIcon: "https://github.com/tailwarden/komiser",
-					Ts:         json.Number(strconv.FormatInt(time.Now().Unix(), 10)),
-				}
-				msg := slack.WebhookMessage{
-					Attachments: []slack.Attachment{attachment},
-				}
-
-				err := slack.PostWebhook(cfg.Slack.Webhook, &msg)
-				if err != nil {
-					log.Warn(err)
+				if alert.IsSlack {
+					log.Info("Sending Slack usage alert for view:", view.Name)
+					hitSlackWebhook(view.Name, port, int(view.Id), stats.Resources, 0, cfg.Slack.Webhook, alert.Type)
+				} else {
+					log.Info("Sending Custom Webhook usage alert for view:", view.Name)
+					hitCustomWebhook(alert.Endpoint, alert.Secret, view.Name, stats.Resources, 0, alert.Type)
 				}
 			}
 		}

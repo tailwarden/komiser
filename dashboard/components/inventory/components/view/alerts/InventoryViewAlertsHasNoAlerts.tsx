@@ -1,15 +1,15 @@
 import Image from 'next/image';
 import Button from '../../../../button/Button';
 
-type InventoryViewAlertHasNoSlackAlertsProps = {
-  createOrEditSlackAlert: (alertId?: number | undefined) => void;
+type InventoryViewAlertHasNoExistingAlertsProps = {
+  incrementViewController: () => void;
 };
 
-function InventoryViewAlertHasNoSlackAlerts({
-  createOrEditSlackAlert
-}: InventoryViewAlertHasNoSlackAlertsProps) {
+function InventoryViewAlertHasNoExistingAlerts({
+  incrementViewController
+}: InventoryViewAlertHasNoExistingAlertsProps) {
   return (
-    <div className="rounded-lg bg-black-100 p-6">
+    <div className="rounded-lg p-6">
       <div className="flex items-center gap-6">
         <Image
           src="/assets/img/purplin/tablet.svg"
@@ -27,11 +27,11 @@ function InventoryViewAlertHasNoSlackAlerts({
             infrastructure
           </p>
           <span></span>
-          <Button onClick={createOrEditSlackAlert}>Add alert</Button>
+          <Button onClick={incrementViewController}>Add alert</Button>
         </div>
       </div>
     </div>
   );
 }
 
-export default InventoryViewAlertHasNoSlackAlerts;
+export default InventoryViewAlertHasNoExistingAlerts;
