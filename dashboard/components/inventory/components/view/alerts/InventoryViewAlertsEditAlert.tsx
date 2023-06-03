@@ -293,8 +293,7 @@ function InventoryViewAlertsCreateOrEditAlert({
               We’ll send a POST request to the endpoint. More information can be
               found in our{' '}
               <a
-                // TODO: update link when docs are ready
-                href="https://docs.komiser.io/docs/introduction/getting-started/"
+                href="https://docs.komiser.io/docs/guides/how-to-komiser/alerts#request-details"
                 target="_blank"
                 rel="noreferrer"
                 className="text-primary"
