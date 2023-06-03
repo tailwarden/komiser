@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tailwarden/komiser/models"
@@ -93,10 +94,12 @@ func (handler *ApiHandler) TestEndpointHandler(c *gin.Context) {
 	}
 
 	var payloadJSON []byte
-	payload := models.TestWebhookPayload{
-		View:    "Test Connection",
-		Message: "Cost alert",
-		From:    "Komiser",
+	payload := models.CustomWebhookPayload{
+		Komiser:   "komiser version that will send the webhook",
+		View:      "testing the connection",
+		Message:   "test alert",
+		Data:      0,
+		Timestamp: time.Now().Unix(),
 	}
 
 	payloadJSON, err = json.Marshal(payload)

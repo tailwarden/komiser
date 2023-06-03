@@ -392,29 +392,28 @@ func checkUpgrade() {
 func hitCustomWebhook(endpoint string, secret string, viewName string, resources int, cost float64, alertType string) {
 	var payloadJSON []byte
 	var err error
-	if alertType == "BUDGET" {
-		payload := models.BudgetWebhookPayload{
-			View:    viewName,
-			Message: "Cost alert",
-			Cost:    cost,
-		}
-		payloadJSON, err = json.Marshal(payload)
-		if err != nil {
-			log.Error("Couldn't encode JSON payload:", err)
-			return
-		}
+	payload := models.CustomWebhookPayload{
+		Komiser:   Version,
+		View:      viewName,
+		Timestamp: time.Now().Unix(),
+	}
 
-	} else if alertType == "USAGE" {
-		payload := models.UsageWebhookPayload{
-			View:      viewName,
-			Message:   "Usage alert :warning:",
-			Resources: float64(resources),
-		}
-		payloadJSON, err = json.Marshal(payload)
-		if err != nil {
-			log.Error("Couldn't encode JSON payload:", err)
-			return
-		}
+	switch alertType {
+	case "BUDGET":
+		payload.Message = "Cost alert"
+		payload.Data = cost
+	case "USAGE":
+		payload.Message = "Usage alert"
+		payload.Data = float64(resources)
+	default:
+		log.Error("Invalid Alert Type")
+		return
+	}
+
+	payloadJSON, err = json.Marshal(payload)
+	if err != nil {
+		log.Error("Couldn't encode JSON payload:", err)
+		return
 	}
 
 	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(payloadJSON))

@@ -16,20 +16,10 @@ type Endpoint struct {
 	Url string `json:"url"`
 }
 
-type BudgetWebhookPayload struct {
-	View    string  `json:"view"`
-	Message string  `json:"message"`
-	Cost    float64 `json:"cost"`
-}
-
-type UsageWebhookPayload struct {
+type CustomWebhookPayload struct {
+	Komiser   string  `json:"komiser"`
 	View      string  `json:"view"`
 	Message   string  `json:"message"`
-	Resources float64 `json:"resources"`
-}
-
-type TestWebhookPayload struct {
-	View    string `json:"view"`
-	Message string `json:"message"`
-	From    string `json:"from"`
+	Data      float64 `json:"data"`
+	Timestamp int64   `json:"timestamp"`
 }
