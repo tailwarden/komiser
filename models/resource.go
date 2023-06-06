@@ -15,6 +15,7 @@ type Resource struct {
 	FetchedAt  time.Time         `json:"fetchedAt" bun:"fetched_at"`
 	Cost       float64           `json:"cost"`
 	Metadata   map[string]string `json:"metadata"`
+	Relations  []Link			 `json:"relations"`
 	Tags       []Tag             `json:"tags" bun:"tags,default:'[]'"`
 	Link       string            `json:"link" bson:"link"`
 	Value      string            `bun:",scanonly"` //to be deprecated

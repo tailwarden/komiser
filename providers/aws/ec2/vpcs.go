@@ -41,7 +41,7 @@ func Vpcs(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					Value: *tag.Value,
 				})
 			}
-
+			
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:vpc/%s", client.AWSClient.Region, *accountId, *vpc.VpcId)
 
 			resources = append(resources, Resource{

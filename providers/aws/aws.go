@@ -35,6 +35,8 @@ import (
 
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
+		ec2.Instances,
+		ec2.ElasticIps,
 		lambda.Functions,
 		ec2.Acls,
 		ec2.Subnets,

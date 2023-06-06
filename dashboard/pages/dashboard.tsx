@@ -5,6 +5,7 @@ import DashboardLayout from '../components/dashboard/components/DashboardLayout'
 import DashboardResourcesManager from '../components/dashboard/components/resources-manager/DashboardResourcesManager';
 import DashboardTopStats from '../components/dashboard/components/top-stats/DashboardTopStats';
 import Grid from '../components/grid/Grid';
+import DashboardDependencyGraphWrapper from '../components/dashboard/components/dependency-graph/dependencygraphwrapper';
 
 function Dashboard() {
   return (
@@ -20,6 +21,7 @@ function Dashboard() {
           <DashboardCloudMapWrapper />
           <DashboardResourcesManager />
         </Grid>
+        <DashboardDependencyGraphWrapper />
         <DashboardCostExplorer />
       </DashboardLayout>
     </>
