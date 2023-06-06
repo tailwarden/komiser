@@ -2,6 +2,7 @@ package rds
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -28,22 +29,14 @@ func Proxies(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			return resources, err
 		}
 
-		for _, instance := range output.DBProxies {
-			// tags := make([]models.Tag, 0)
-			// for _, tag := range instance.TagList {
-			// 	tags = append(tags, models.Tag{
-			// 		Key:   *tag.Key,
-			// 		Value: *tag.Value,
-			// 	})
-			// }
-
-			var _ProxyName string = *instance.DBProxyName
+		for _, proxy := range output.DBProxies {
+			var _ProxyName string = *proxy.DBProxyName
 			startOfMonth := utils.BeginningOfMonth(time.Now())
 			hourlyUsage := 0
-			if (*instance.CreatedDate).Before(startOfMonth) {
+			if (*proxy.CreatedDate).Before(startOfMonth) {
 				hourlyUsage = int(time.Since(startOfMonth).Hours())
 			} else {
-				hourlyUsage = int(time.Since(*instance.CreatedDate).Hours())
+				hourlyUsage = int(time.Since(*proxy.CreatedDate).Hours())
 			}
 
 			hourlyCost := 0.0
@@ -54,12 +47,11 @@ func Proxies(ctx context.Context, client providers.ProviderClient) ([]models.Res
 				Account:    client.Name,
 				Service:    "RDS Instance",
 				Region:     client.AWSClient.Region,
-				ResourceId: *instance.DBProxyArn,
+				ResourceId: *proxy.DBProxyArn,
 				Cost:       monthlyCost,
 				Name:       _ProxyName,
 				FetchedAt:  time.Now(),
-				// Tags:       tags,
-				// Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.DBInstanceIdentifier),
+				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#proxies:id=%s", client.AWSClient.Region, client.AWSClient.Region, *proxy.DBProxyName),
 			})
 		}
 
