@@ -2,6 +2,7 @@ package rds
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -13,7 +14,7 @@ import (
 	"github.com/tailwarden/komiser/utils"
 )
 
-func Snapshot(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func ClusterSnapshots(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config rds.DescribeDBClusterSnapshotsInput
 	resources := make([]models.Resource, 0)
 	rdsClient := rds.NewFromConfig(*client.AWSClient)
@@ -55,7 +56,7 @@ func Snapshot(ctx context.Context, client providers.ProviderClient) ([]models.Re
 				Name:       _clusterSnapshotName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				// Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.DBInstanceIdentifier),
+				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#snapshots-list:%s", client.AWSClient.Region, client.AWSClient.Region, *clusterSnapshot.DBClusterSnapshotIdentifier),
 			})
 		}
 
