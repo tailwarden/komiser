@@ -2,31 +2,37 @@ import Image from 'next/image';
 import formatNumber from '../../../../../utils/formatNumber';
 import Button from '../../../../button/Button';
 import ChevronRightIcon from '../../../../icons/ChevronRightIcon';
-import { SlackAlert } from './hooks/useSlackAlerts';
+import { Alert } from './hooks/useAlerts';
 
-type InventoryViewAlertsDisplayProps = {
-  slackAlerts: SlackAlert[] | undefined;
-  createOrEditSlackAlert: (alertId?: number | undefined) => void;
+type InventoryViewAlertDisplayAlertsProps = {
+  alerts: Alert[] | undefined;
+  createOrEditAlert: (alertId?: number | undefined) => void;
+  setViewControllerOnAddAlert: () => void;
 };
 
-function InventoryViewAlertsDisplay({
-  slackAlerts,
-  createOrEditSlackAlert
-}: InventoryViewAlertsDisplayProps) {
+function InventoryViewAlertDisplayAlerts({
+  alerts,
+  createOrEditAlert,
+  setViewControllerOnAddAlert
+}: InventoryViewAlertDisplayAlertsProps) {
   return (
     <div className="flex flex-col gap-4">
-      {slackAlerts?.map(alert => (
+      {alerts?.map(alert => (
         <div
-          onClick={() => createOrEditSlackAlert(alert.id)}
+          onClick={() => createOrEditAlert(alert.id)}
           key={alert.id}
           className="flex cursor-pointer select-none items-center justify-between rounded-lg border border-black-170 p-6 hover:border-black-200"
         >
           <div className="flex items-center gap-4">
             <Image
-              src="/assets/img/others/slack.svg"
+              src={
+                alert.isSlack
+                  ? '/assets/img/others/slack.svg'
+                  : '/assets/img/others/custom-webhook.svg'
+              }
               height={42}
               width={42}
-              alt="Slack logo"
+              alt={alert.isSlack ? 'Slack logo' : 'Webhook logo'}
             />
             <div className="flex flex-col">
               <p className="font-semibold text-black-900">{alert.name}</p>
@@ -45,7 +51,7 @@ function InventoryViewAlertsDisplay({
         </div>
       ))}
       <div className="self-end">
-        <Button size="lg" onClick={createOrEditSlackAlert}>
+        <Button size="lg" onClick={setViewControllerOnAddAlert}>
           Add alert
         </Button>
       </div>
@@ -53,4 +59,4 @@ function InventoryViewAlertsDisplay({
   );
 }
 
-export default InventoryViewAlertsDisplay;
+export default InventoryViewAlertDisplayAlerts;

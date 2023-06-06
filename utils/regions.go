@@ -147,8 +147,8 @@ func getAWSRegions() []Location {
 		{
 			Name:      "Sao Paulo",
 			Label:     "sa-east-1",
-			Latitude:  "-33.469120",
-			Longitude: "-70.641997",
+			Latitude:  "-23.533773",
+			Longitude: "-46.625290",
 		},
 	}
 }
@@ -967,6 +967,11 @@ func NormalizeRegionName(regionName string) string {
 	lowercased := strings.ToLower(regionName)
 	dashReplaced := strings.Replace(lowercased, "_", "-", -1)
 	return dashReplaced
+}
+
+func GcpGetRegionFromZone(zone string) string {
+	p := strings.Split(zone, "-")
+	return strings.Join(p[:len(p)-1], "-")
 }
 
 func GcpExtractZoneFromURL(url string) string {

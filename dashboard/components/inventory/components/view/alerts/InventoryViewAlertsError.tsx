@@ -14,7 +14,7 @@ function InventoryViewAlertsError({
         <div className="flex items-center gap-4">
           <div className="flex flex-col gap-2">
             <p className="text-sm text-black-400">
-              There was an error fetching the Slack alerts
+              There was an error fetching the alerts
             </p>
           </div>
         </div>
