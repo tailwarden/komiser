@@ -61,6 +61,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		rds.Clusters,
 		rds.Instances,
+		rds.Proxies,
 		rds.Snapshots,
 		rds.ClusterSnapshots,
 		rds.ProxyEndpoints,
