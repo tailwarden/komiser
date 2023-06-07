@@ -45,7 +45,7 @@ func Proxies(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "RDS Instance",
+				Service:    "RDS Proxy",
 				Region:     client.AWSClient.Region,
 				ResourceId: *proxy.DBProxyArn,
 				Cost:       monthlyCost,
@@ -65,7 +65,7 @@ func Proxies(ctx context.Context, client providers.ProviderClient) ([]models.Res
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "RDS Instance",
+		"service":   "RDS Proxy",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
