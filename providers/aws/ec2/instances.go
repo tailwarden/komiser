@@ -132,7 +132,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 					monthlyCost = float64(hourlyUsage) * hourlyCost
 
 				}
-				relations := getInstRelations(&instance)
+				relations := getInstRelations(&instance, fmt.Sprintf("arn:aws:ec2:%s:%s", client.AWSClient.Region, *accountId))
 
 				resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", client.AWSClient.Region, *accountId, *instance.InstanceId)
 
@@ -174,12 +174,12 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 }
 
 
-func getInstRelations(inst *etype.Instance) (rel []models.Link) {
+func getInstRelations(inst *etype.Instance, resourceArn string) (rel []models.Link) {
 	 // Get associated security groups
 	
 	for _, sgrp := range inst.SecurityGroups {
 		rel = append(rel, models.Link{
-			Name: *sgrp.GroupName,
+			ResourceID: *sgrp.GroupId,
 			Type: "SECURITY GROUPS",
 			Relation: "USES",
 		})
@@ -187,8 +187,9 @@ func getInstRelations(inst *etype.Instance) (rel []models.Link) {
 
 	// Get associated volumes
 	for _, blk := range inst.BlockDeviceMappings {
+		id := fmt.Sprintf("%s:volume/%s", resourceArn, *blk.Ebs.VolumeId)
 		rel = append(rel, models.Link{
-			Name: *blk.DeviceName,
+			ResourceID: id,
 			Type: "BLOCK DEVICE",
 			Relation: "USES",
 		})
@@ -196,21 +197,21 @@ func getInstRelations(inst *etype.Instance) (rel []models.Link) {
 
 	// Get associated VPC
 	rel = append(rel, models.Link{
-		Name: *inst.VpcId,
+		ResourceID: fmt.Sprintf("%s:vpc/%s", resourceArn, *inst.VpcId),
 		Type: "VPC",
 		Relation: "USES",
 	})
 
 	// Get associated Subnet
 	rel = append(rel, models.Link{
-		Name: *inst.SubnetId,
+		ResourceID: fmt.Sprintf("%s:subnet/%s", resourceArn, *inst.SubnetId),
 		Type: "SUBNET",
 		Relation: "USES",
 	})
 
 	// Get associated Keypair
 	rel = append(rel, models.Link{
-		Name: *inst.KeyName,
+		ResourceID: *inst.KeyName,
 		Type: "KEYPAIR",
 		Relation: "USES",
 	}) 

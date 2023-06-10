@@ -86,10 +86,10 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 
 				}
 			}
-			relations := getEIPRelations(&elasticIps)
+			
 
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:elastic-ip/%s", client.AWSClient.Region, *accountId, *elasticIps.AllocationId)
-			
+			relations := getEIPRelations(&elasticIps, fmt.Sprintf("arn:aws:ec2:%s:%s", client.AWSClient.Region, *accountId))
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -117,12 +117,13 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 }
 
 
-func getEIPRelations(ip *etype.Address) (rel []models.Link) {
+func getEIPRelations(ip *etype.Address, resourceArn string) (rel []models.Link) {
 	
 	if ip.InstanceId != nil {
+		id := fmt.Sprintf("%s:instance/%s", resourceArn, *ip.InstanceId)
 		rel = append(rel, models.Link{
-			Name: *ip.InstanceId,
-			Type: "INSTANCE",
+			ResourceID: id,
+			Type: "EC2",
 			Relation:  "USES",
 		})
 	}

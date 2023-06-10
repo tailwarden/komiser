@@ -1,12 +1,18 @@
-import DependencyGraph from "./dependencygraph"
+import DependencyGraph from './dependencygraph';
+import useDependencyGraph from './hooks/useDependencyGraph';
 
-
-function DashboardDependencyGraphWrapper() {    
-    return (
-        <>
-            <DependencyGraph />
-        </>
-    )
+function DashboardDependencyGraphWrapper() {
+  const { loading, data, error, fetch } = useDependencyGraph();
+  return (
+    <>
+      <DependencyGraph
+        loading={loading}
+        data={data}
+        error={error}
+        fetch={fetch}
+      />
+    </>
+  );
 }
 
-export default DashboardDependencyGraphWrapper
+export default DashboardDependencyGraphWrapper;
