@@ -7,7 +7,7 @@ function Home() {
 
   useEffect(() => {
     if (isBetaFlagOnboardingWizard) {
-      router.push('/onboarding');
+      router.push('/onboarding/choose-cloud');
     } else {
       router.push('/dashboard');
     }

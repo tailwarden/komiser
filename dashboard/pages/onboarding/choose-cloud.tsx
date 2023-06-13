@@ -3,12 +3,12 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import Select from '../components/select/Select';
-import Button from '../components/button/Button';
+import Select from '../../components/select/Select';
+import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../components/onboarding-wizard/OnboardingWizardLayout';
+} from '../../components/onboarding-wizard/OnboardingWizardLayout';
 
 const SelectCloud = {
   'Amazon Web Services': 'aws',
@@ -48,7 +48,7 @@ export default function Onboarding() {
   const [provider, setProvider] = useState<CloudsValues>('aws');
 
   const handleNext = () => {
-    console.log('next clicked');
+    router.push(`/onboarding/${provider}`);
   };
 
   const handleSuggest = () =>
