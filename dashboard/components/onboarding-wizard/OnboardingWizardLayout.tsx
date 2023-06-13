@@ -1,18 +1,45 @@
 import { ReactNode } from 'react';
 
-type OnboardingWizardLayoutProps = {
+import OnboardingWizardHeader from './PageHeaders';
+import OnboardingWizardProgressBar from './ProgressBar';
+
+function OnboardingWizardLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="font-['Noto Sans'] grid h-screen grid-cols-11">
+      {children}
+    </div>
+  );
+}
+
+type LeftSideLayoutProps = {
+  title: string;
   children: ReactNode;
+  progressBarWidth: string;
 };
 
-function OnboardingWizardLayout({ children }: OnboardingWizardLayoutProps) {
+function LeftSideLayout({
+  title,
+  children,
+  progressBarWidth
+}: LeftSideLayoutProps) {
   return (
-    <div className="flex flex-col gap-6">
-      <p className="flex items-center gap-2 text-lg font-medium text-black-900">
-        Onboarding Wizard
-      </p>
+    <div className="col-span-6">
+      <OnboardingWizardProgressBar width={progressBarWidth} />
+      <div className="p-20">
+        <OnboardingWizardHeader title={title} />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function RightSideLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="col-span-5 flex items-center justify-center bg-komiser-100 p-7">
       {children}
     </div>
   );
 }
 
 export default OnboardingWizardLayout;
+export { LeftSideLayout, RightSideLayout };
