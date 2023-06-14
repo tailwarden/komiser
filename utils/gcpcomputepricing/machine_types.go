@@ -30,6 +30,8 @@ type Opts struct {
 	Region      string
 	NumOfCPU    uint64
 	NumOfMemory uint64
+	DiskType    string
+	DiskSize    uint64
 }
 
 func CalculateMachine(p *Pricing, opts Opts) (uint64, error) {
