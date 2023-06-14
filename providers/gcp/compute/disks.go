@@ -3,7 +3,6 @@ package compute
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -65,12 +64,13 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 			zone := utils.GcpExtractZoneFromURL(disk.GetZone())
 			size := disk.GetSizeGb()
 
-			cost, err := calculateDiskCost(ctx, client, calculateDiskCostData{
-				diskType: disk.GetType(),
-				size:     size,
-				project:  client.GCPClient.Credentials.ProjectID,
-				zone:     zone,
-				pricing:  actualPricing,
+			cost, err := gcpcomputepricing.CalculateDiskCost(ctx, client, gcpcomputepricing.CalculateDiskCostData{
+				DiskType:          disk.GetType(),
+				Size:              size,
+				CreationTimestamp: disk.GetCreationTimestamp(),
+				Project:           client.GCPClient.Credentials.ProjectID,
+				Zone:              zone,
+				Pricing:           actualPricing,
 			})
 			if err != nil {
 				logrus.WithError(err).Errorf("failed to calculate disk cost")
@@ -94,67 +94,9 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 	logrus.WithFields(logrus.Fields{
 		"provider":  "GCP",
 		"account":   client.Name,
-		"service":   "Compute Engine",
+		"service":   "Compute Disk",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 
 	return resources, nil
-}
-
-type calculateDiskCostData struct {
-	diskType string
-	size     int64
-	project  string
-	zone     string
-	pricing  *gcpcomputepricing.Pricing
-}
-
-func calculateDiskCost(ctx context.Context, client providers.ProviderClient, data calculateDiskCostData) (float64, error) {
-	diskTypeClient, err := compute.NewDiskTypesRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
-	if err != nil {
-		return 0, err
-	}
-
-	dtS := strings.Split(data.diskType, "/")
-	dt, err := diskTypeClient.Get(ctx, &computepb.GetDiskTypeRequest{
-		DiskType: dtS[len(dtS)-1],
-		Project:  data.project,
-		Zone:     data.zone,
-	})
-	if err != nil {
-		return 0, err
-	}
-
-	var opts = gcpcomputepricing.Opts{
-		Region:   utils.GcpGetRegionFromZone(data.zone),
-		DiskType: dtS[len(dtS)-1],
-		DiskSize: uint64(data.size),
-	}
-	var cost float64
-	if dt.Name != nil {
-		switch {
-		case strings.Contains(strings.ToLower(*dt.Name), strings.ToLower(gcpcomputepricing.Standard)):
-			opts.DiskType = gcpcomputepricing.Standard
-		case strings.Contains(strings.ToLower(*dt.Name), strings.ToLower(gcpcomputepricing.SSD)):
-			opts.DiskType = gcpcomputepricing.SSD
-		case strings.Contains(strings.ToLower(*dt.Name), strings.ToLower(gcpcomputepricing.Balanced)):
-			opts.DiskType = gcpcomputepricing.Balanced
-		}
-	}
-	if opts.DiskType != "" {
-		monthlyRate, err := gcpcomputepricing.CalculateDisk(data.pricing, opts)
-		if err != nil {
-			return 0, err
-		}
-		startOfMonth := utils.BeginningOfMonth(time.Now())
-		endOfMonth := utils.EndingOfMonth(time.Now())
-
-		hourlyRate := monthlyRate / uint64(endOfMonth.Sub(startOfMonth).Hours())
-		hourlyUsage := int(time.Since(startOfMonth).Hours())
-
-		normalizedHourlyRate := float64(hourlyRate) / 1000000000
-		cost = normalizedHourlyRate * float64(hourlyUsage)
-	}
-
-	return cost, nil
 }
