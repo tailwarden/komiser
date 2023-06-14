@@ -23,7 +23,7 @@ function LeftSideLayout({
   progressBarWidth
 }: LeftSideLayoutProps) {
   return (
-    <div className="col-span-6">
+    <div className="no-scrollbar col-span-6 overflow-y-scroll">
       <OnboardingWizardProgressBar width={progressBarWidth} />
       <div className="p-20">
         <OnboardingWizardHeader title={title} />
