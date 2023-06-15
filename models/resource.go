@@ -17,7 +17,7 @@ type Resource struct {
 	Metadata   map[string]string `json:"metadata"`
 	Tags       []Tag             `json:"tags" bun:"tags,default:'[]'"`
 	Link       string            `json:"link" bson:"link"`
-	Value      string            `bun:"-"` //to be deprecated
+	Value      string            `bun:",scanonly"` //to be deprecated
 }
 
 type Tag struct {
