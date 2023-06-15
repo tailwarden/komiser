@@ -230,7 +230,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	}
 
 	if len(query) > 0 {
-		clause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
+		clause := fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (tags LIKE '%%%s%%'))", query, query, query, query, query, query)
 		whereQueries = append(whereQueries, clause)
 	}
 
@@ -240,7 +240,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 
 	if len(filters) == 0 {
 		if len(query) > 0 {
-			whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
+			whereClause := fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (tags LIKE '%%%s%%'))", query, query, query, query, query, query)
 			err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
 			if err != nil {
 				logrus.WithError(err).Error("scan failed")
