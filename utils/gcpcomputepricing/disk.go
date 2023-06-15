@@ -53,7 +53,7 @@ func CalculateDiskCost(ctx context.Context, client providers.ProviderClient, dat
 	}
 
 	var cost float64
-	monthlyRate, err := getDiskMonthly(data.Pricing, opts, typeDiskGetter)
+	monthlyRate, err := getDiskMonthly(data.Pricing, opts, typeDiskGet)
 	if err != nil {
 		return 0, err
 	}
@@ -79,7 +79,7 @@ func CalculateDiskCost(ctx context.Context, client providers.ProviderClient, dat
 	return cost, nil
 }
 
-func typeDiskGetter(p *Pricing, opts Opts) (Subtype, error) {
+func typeDiskGet(p *Pricing, opts Opts) (Subtype, error) {
 	var capacity Subtype
 	switch opts.Type {
 	case Standard:
@@ -96,7 +96,7 @@ func typeDiskGetter(p *Pricing, opts Opts) (Subtype, error) {
 }
 
 // getDiskMonthly returs a calculated price by region for month.
-func getDiskMonthly(p *Pricing, opts Opts, tg func(p *Pricing, opts Opts) (Subtype, error)) (uint64, error) {
+func getDiskMonthly(p *Pricing, opts Opts, tg typeDiskGetter) (uint64, error) {
 	capacity, err := tg(p, opts)
 	if err != nil {
 		return 0, err
@@ -115,9 +115,4 @@ func getDiskMonthly(p *Pricing, opts Opts, tg func(p *Pricing, opts Opts) (Subty
 	sum += capacityPricePerRegion * opts.DiskSize
 
 	return sum, nil
-}
-
-// nameToTypeMatch reports whether the name string n contains any match of the string with type t.
-func nameToTypeMatch(n, t string) bool {
-	return strings.Contains(strings.ToLower(n), strings.ToLower(t))
 }

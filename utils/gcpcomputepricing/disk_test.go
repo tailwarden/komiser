@@ -47,7 +47,7 @@ func diskGetter(t *testing.T, diskType string, diskSize uint64) uint64 {
 			Type:     diskType,
 			DiskSize: diskSize,
 		},
-		typeDiskGetter,
+		typeDiskGet,
 	)
 	if err != nil {
 		t.Fatal(err)
