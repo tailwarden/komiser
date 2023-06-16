@@ -60,5 +60,58 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 		"service":   "Linode",
 		"resources": len(resources),
 	}).Info("Fetched resources")
+
+	return resources, nil
+}
+
+func LinodeMySQLInstances(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
+	resources := make([]Resource, 0)
+
+	linodes, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
+	if err != nil {
+		return resources, err
+	}
+
+	for _, linode := range linodes {
+		if linode.MySQLStatus == "enabled" {
+			tags := make([]Tag, 0)
+			for _, tag := range linode.Tags {
+				if strings.Contains(tag, ":") {
+					parts := strings.Split(tag, ":")
+					tags = append(tags, models.Tag{
+						Key:   parts[0],
+						Value: parts[1],
+					})
+				} else {
+					tags = append(tags, models.Tag{
+						Key:   tag,
+						Value: tag,
+					})
+				}
+			}
+
+			resources = append(resources, models.Resource{
+				Provider:   "Linode",
+				Account:    client.Name,
+				Service:    "MySQL",
+				Region:     linode.Region,
+				ResourceId: fmt.Sprintf("%d", linode.ID),
+				Cost:       0,
+				Name:       linode.Label,
+				FetchedAt:  time.Now(),
+				CreatedAt:  *linode.Created,
+				Tags:       tags,
+				Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", linode.ID),
+			})
+		}
+	}
+
+	log.WithFields(log.Fields{
+		"provider":  "Linode",
+		"account":   client.Name,
+		"service":   "MySQL",
+		"resources": len(resources),
+	}).Info("Fetched resources")
+
 	return resources, nil
 }
