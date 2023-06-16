@@ -230,7 +230,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	}
 
 	if len(query) > 0 {
-		clause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
+		clause := fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (tags LIKE '%%%s%%'))", query, query, query, query, query, query)
 		whereQueries = append(whereQueries, clause)
 	}
 
@@ -240,8 +240,15 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 
 	if len(filters) == 0 {
 		if len(query) > 0 {
-			whereClause := fmt.Sprintf("(name ilike '%s' OR region ilike '%s' OR service ilike '%s' OR provider ilike '%s' OR account ilike '%s' OR tags @> '[{\"value\":\"%s\"}]' or tags @> '[{\"key\":\"%s\"}]')", query, query, query, query, query, query, query)
-			err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)).Scan(handler.ctx, &resources)
+			whereClause := fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (tags LIKE '%%%s%%'))", query, query, query, query, query, query)
+			searchQuery := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+
+			if handler.db.Dialect().Name() == dialect.PG {
+				whereClause = fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (value->>'key' LIKE '%%%s%%') OR (value->>'value' LIKE '%%%s%%'))", query, query, query, query, query, query, query)
+				searchQuery = fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
+			}
+
+			err = handler.db.NewRaw(searchQuery).Scan(handler.ctx, &resources)
 			if err != nil {
 				logrus.WithError(err).Error("scan failed")
 			}
@@ -268,7 +275,6 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 				query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE resources.id NOT IN (%s) AND type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", strings.Trim(string(s), "[]"), whereClause, limit, skip)
 			}
 		}
-
 		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 		if err != nil {
 			logrus.WithError(err).Error("scan failed")

@@ -3,6 +3,7 @@ import Button from '../button/Button';
 import Checkbox from '../checkbox/Checkbox';
 import { ResourcesManagerQuery } from '../dashboard/components/resources-manager/hooks/useResourcesManager';
 import useSelectCheckbox from './hooks/useSelectCheckbox';
+import ChevronDownIcon from '../icons/ChevronDownIcon';
 
 export type SelectCheckboxProps = {
   label: string;
@@ -41,6 +42,14 @@ function SelectCheckbox({
     }
   }
 
+  function handleCheckAll(e: ChangeEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      setCheckedItems(listOfExcludableItems);
+    } else {
+      setCheckedItems([]);
+    }
+  }
+
   function submit() {
     setExclude(checkedItems);
   }
@@ -55,6 +64,12 @@ function SelectCheckbox({
 
   return (
     <div className="relative">
+      <div
+        className="pointer-events-none absolute right-4
+        bottom-[1.15rem] text-black-900 transition-all"
+      >
+        <ChevronDownIcon width={24} height={24} />
+      </div>
       <button
         onClick={toggle}
         className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-black-200 focus:outline-2 focus:outline-primary ${
@@ -87,37 +102,43 @@ function SelectCheckbox({
       {isOpen && (
         <>
           <div
+            data-testid="overlay"
             onClick={toggle}
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
-          <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-black-200 bg-white shadow-lg">
-            <div className="relative overflow-hidden rounded-lg rounded-b-none">
+          <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-black-100 bg-white shadow-lg">
+            <div className="relative m-4 ">
               {!search ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
+                  width="24"
+                  height="24"
                   fill="none"
                   viewBox="0 0 24 24"
-                  className="absolute top-[1.125rem] left-4"
+                  className="absolute top-[0.5rem] left-3"
                 >
                   <path
-                    stroke="currentColor"
+                    d="M17 17L21 21"
+                    stroke="#ababab"
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth="1.5"
-                    d="M11.5 21a9.5 9.5 0 100-19 9.5 9.5 0 000 19zM22 22l-2-2"
-                  ></path>
+                  />
+                  <path
+                    d="M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                    stroke="#ababab"
+                    strokeWidth="2"
+                  />
                 </svg>
               ) : (
                 <svg
                   onClick={() => setSearch('')}
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
+                  width="24"
+                  height="24"
                   fill="none"
                   viewBox="0 0 24 24"
-                  className="absolute top-[1.175rem] left-4 cursor-pointer"
+                  className="absolute top-[0.5rem] left-3 cursor-pointer"
                 >
                   <path
                     stroke="currentColor"
@@ -134,7 +155,7 @@ function SelectCheckbox({
                 onChange={e => setSearch(e.target.value)}
                 type="text"
                 placeholder="Search"
-                className="w-full border-b border-black-200/50 bg-white py-4 pl-10 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
+                className="h-10 w-full rounded-md border border-black-200/50 bg-white py-4 pl-10 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
                 autoFocus
               />
             </div>
@@ -145,26 +166,52 @@ function SelectCheckbox({
             )}
             {!error && (
               <>
-                <div className="flex max-h-[12rem] flex-col gap-3 overflow-auto p-4">
-                  {resources.map((resource, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm">
-                      <Checkbox
-                        id={resource}
-                        onChange={e => handleChange(e, resource)}
-                        checked={
-                          !!checkedItems.find(value => value === resource)
-                        }
-                      />
-                      <label htmlFor={resource} className="w-full">
-                        {resource}
-                      </label>
-                    </div>
-                  ))}
-                  {resources.length === 0 && (
-                    <p className="text-sm text-black-400">
-                      There are no results for {search}
-                    </p>
-                  )}
+                {!search && (
+                  <div className="m-4 ml-6 flex items-center gap-2 text-sm">
+                    <Checkbox
+                      id="all"
+                      onChange={e => {
+                        handleCheckAll(e);
+                      }}
+                      checked={checkedItems.length === resources.length}
+                    />
+                    <label
+                      htmlFor="all"
+                      className="w-full text-sm text-black-400"
+                    >
+                      Exclude All
+                    </label>
+                  </div>
+                )}
+                <hr className="m-4 mb-0 h-px border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
+                <div className="scrollbar mt-2 mb-2 mr-3 overflow-auto">
+                  <div className="mt-2 flex max-h-[12rem] flex-col gap-3 p-4 pb-4 pt-0 pl-6">
+                    {resources.map((resource, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        <Checkbox
+                          id={resource}
+                          onChange={e => handleChange(e, resource)}
+                          checked={
+                            !!checkedItems.find(value => value === resource)
+                          }
+                        />
+                        <label
+                          htmlFor={resource}
+                          className="w-full text-black-400"
+                        >
+                          {resource}
+                        </label>
+                      </div>
+                    ))}
+                    {resources.length === 0 && (
+                      <p className="text-sm text-black-400">
+                        There are no results for {search}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col border-t border-black-200/50 p-4">
                   <Button onClick={submit}>Apply</Button>
