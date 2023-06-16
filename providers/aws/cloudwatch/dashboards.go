@@ -27,7 +27,7 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 			return resources, err
 		}
 
-		for _, dashboard := range output.DashboardEntries {
+		for index, dashboard := range output.DashboardEntries {
 			outputTags, err := cloudWatchClient.ListTagsForResource(ctx, &cloudwatch.ListTagsForResourceInput{
 				ResourceARN: dashboard.DashboardArn,
 			})
@@ -43,6 +43,8 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				}
 			}
 
+			cost := calculateDashboardCost(index + 1)
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -50,7 +52,7 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				ResourceId: *dashboard.DashboardArn,
 				Region:     client.AWSClient.Region,
 				Name:       *dashboard.DashboardName,
-				Cost:       0,
+				Cost:       cost,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudwatch/home?region=%s#dashboards:name=%s", client.AWSClient.Region, client.AWSClient.Region, *dashboard.DashboardName),
@@ -72,4 +74,14 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 	}).Info("Fetched resources")
 
 	return resources, nil
+}
+
+func calculateDashboardCost(dashboardCount int) float64 {
+	freeDashboards := 3
+	cost := 0.0
+
+	if dashboardCount > freeDashboards {
+		cost = 3.0
+	}
+	return cost
 }
