@@ -39,24 +39,13 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			}
 		}
 
-		cost, ok := GetCost(instance.Type)
-		if !ok {
-			log.WithFields(log.Fields{
-				"provider":   "Linode",
-				"account":    client.Name,
-				"service":    "Linode",
-				"instance":   instance.Label,
-				"instanceID": instance.ID,
-			}).Warn("Failed to get cost for instance")
-		}
-
 		resources = append(resources, models.Resource{
 			Provider:   "Linode",
 			Account:    client.Name,
 			Service:    "Linode",
 			Region:     instance.Region,
 			ResourceId: fmt.Sprintf("%d", instance.ID),
-			Cost:       cost,
+			Cost:       0,
 			Name:       instance.Label,
 			FetchedAt:  time.Now(),
 			CreatedAt:  *instance.Created,
