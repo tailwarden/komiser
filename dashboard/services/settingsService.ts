@@ -84,7 +84,7 @@ const settingsService = {
 
   async getRelations() {
     try {
-      const res = await fetch(`${BASE_URL}/views/relations`, settings('GET'));
+      const res = await fetch(`${BASE_URL}/resources/relations`, settings('GET'));
       const data = await res.json();
       return data;
     } catch (error) {

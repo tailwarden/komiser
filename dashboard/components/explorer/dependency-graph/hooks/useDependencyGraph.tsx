@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import settingsService from '../../../../../services/settingsService';
+import settingsService from '../../../../services/settingsService';
 
 export type ReactFlowData = {
   nodes: any[];
@@ -18,7 +18,7 @@ function GetData(res: any) {
       const a = {
         id: ele.resourceId,
         type: 'customNode',
-        data: { label: ele.service },
+        data: { label: ele.service, resource: 'AWS' },
         position: { x: 0, y: 0 }
       };
       d.nodes.push(a);
@@ -29,7 +29,7 @@ function GetData(res: any) {
         const a = {
           id: rel.ResourceID,
           type: 'customNode',
-          data: { label: rel.Type },
+          data: { label: rel.Type, resource: 'AWS' }, // when supporting new provider this could be made dynamic
           position: { x: 0, y: 0 }
         };
         d.nodes.push(a);

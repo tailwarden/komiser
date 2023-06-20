@@ -299,3 +299,25 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, resources)
 }
+
+func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
+	
+	output := make([]models.Resource, 0)
+
+	err := handler.db.NewRaw("SELECT DISTINCT resources.resource_id, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)").Scan(handler.ctx, &output)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return 
+	}
+	out := make([]models.OutputRelationResponse,0)
+	for _, ele := range output {
+		out = append(out, models.OutputRelationResponse{
+			ResourceID: ele.ResourceId,
+			Type: ele.Service,
+			Link: ele.Relations,
+		})
+	}
+
+	c.JSON(http.StatusOK, out)
+	
+}
