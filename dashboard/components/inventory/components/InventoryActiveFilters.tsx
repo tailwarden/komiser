@@ -2,6 +2,10 @@ import { NextRouter } from 'next/router';
 import Button from '../../button/Button';
 import { InventoryFilterData } from '../hooks/useInventory/types/useInventoryTypes';
 import InventoryFilterSummary from './filter/InventoryFilterSummary';
+import PlusIcon from '../../icons/PlusIcon';
+import useFilterWizard from './filter/hooks/useFilterWizard';
+import useInventory from '../hooks/useInventory/useInventory';
+import InventoryFilterDropdown from './InventoryFilterDropdown';
 
 type InventoryActiveFiltersProps = {
   hasFilters: boolean | undefined;
@@ -18,6 +22,9 @@ function InventoryActiveFilters({
   deleteFilter,
   router
 }: InventoryActiveFiltersProps) {
+  const { setSkippedSearch } = useInventory();
+  const { toggle, isOpen } = useFilterWizard({ router, setSkippedSearch });
+
   return (
     <>
       {hasFilters && (
@@ -32,9 +39,21 @@ function InventoryActiveFilters({
                 deleteFilter={isNotCustomView ? deleteFilter : undefined}
               />
             ))}
+
+          <div className="relative">
+            <div className="cursor-pointer" onClick={toggle}>
+              <PlusIcon width={16} height={16} />
+            </div>
+            {isOpen && (
+              <InventoryFilterDropdown position={'top-10'} toggle={toggle} />
+            )}
+          </div>
+
+          <div className="border-x-1 h-7 border"></div>
+
           {isNotCustomView && (
             <Button
-              size="xs"
+              size="xxs"
               style="ghost"
               onClick={() => router.push(router.pathname)}
             >
