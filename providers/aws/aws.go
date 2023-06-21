@@ -106,7 +106,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 				log.Warnf("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+				_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
 					if err != nil {
 						log.WithError(err).Errorf("db trigger failed")
 					}

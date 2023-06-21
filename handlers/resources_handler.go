@@ -304,7 +304,11 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 	
 	output := make([]models.Resource, 0)
 
-	err := handler.db.NewRaw("SELECT DISTINCT resources.resource_id, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)").Scan(handler.ctx, &output)
+	query := "SELECT DISTINCT resources.resource_id, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)"
+	if handler.db.Dialect().Name() == dialect.SQLite {
+		query = "SELECT DISTINCT resources.resource_id, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)"
+	}
+	err := handler.db.NewRaw(query).Scan(handler.ctx, &output)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return 
