@@ -24,7 +24,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		storage.Buckets,
 		networking.NodeBalancers,
 		networking.Firewalls,
-		sql.GetSQLInstances,
+		sql.Instances,
 	}
 }
 
