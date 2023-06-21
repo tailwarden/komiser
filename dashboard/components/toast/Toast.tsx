@@ -43,7 +43,7 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
             )}
           </div>
           <div className="p-3">
-            <p className="pb-2 text-xl font-medium">{title}</p>
+            <p className="pb-2 text-lg font-medium">{title}</p>
             <p
               className="text-sm text-black-900/60 "
               dangerouslySetInnerHTML={{ __html: message }}
