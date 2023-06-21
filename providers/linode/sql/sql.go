@@ -102,8 +102,8 @@ var sharedCPUCosts = map[string]map[string]float64{
 	},
 }
 
-// GetSQLInstances fetches SQL instances from the provider and returns them as resources.
-func GetSQLInstances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+// Instances fetches SQL instances from the provider and returns them as resources.
+func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	instances, err := client.SQLClient.GetInstances(ctx)
@@ -129,7 +129,7 @@ func GetSQLInstances(ctx context.Context, client providers.ProviderClient) ([]mo
 		}
 
 		// Calculate the cost based on the instance type and node count
-		cost, ok := getSQLInstanceCost(instance.Type, instance.NodeCount)
+		cost, ok := InstancesCost(instance.Type, instance.NodeCount)
 		if !ok {
 			log.Warnf("Failed to calculate cost for SQL instance: %s, Type: %s, NodeCount: %d", instance.ID, instance.Type, instance.NodeCount)
 		}
@@ -158,8 +158,8 @@ func GetSQLInstances(ctx context.Context, client providers.ProviderClient) ([]mo
 	return resources, nil
 }
 
-// getSQLInstanceCost calculates the cost for a SQL instance based on the instance type and node count.
-func getSQLInstanceCost(instanceType string, nodeCount int) (float64, bool) {
+// InstancesCost calculates the cost for a SQL instance based on the instance type and node count.
+func InstancesCost(instanceType string, nodeCount int) (float64, bool) {
 	var costs map[string]map[string]float64
 
 	if strings.HasPrefix(instanceType, "Dedicated") {
