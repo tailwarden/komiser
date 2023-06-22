@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import useInventory from '../hooks/useInventory/useInventory';
 import useFilterWizard from './filter/hooks/useFilterWizard';
 import Button from '../../button/Button';
@@ -6,9 +7,8 @@ import InventoryFilterSummary from './filter/InventoryFilterSummary';
 import InventoryFilterField from './filter/InventoryFilterField';
 import InventoryFilterOperator from './filter/InventoryFilterOperator';
 import InventoryFilterValue from './filter/InventoryFilterValue';
-import { useEffect } from 'react';
 
-type InventoryFilterDropdown = {
+type InventoryFilterDropdownProps = {
   position: string;
   closeDropdownAfterAdd: boolean;
   toggle: () => void;
@@ -18,7 +18,7 @@ export default function InventoryFilterDropdown({
   position,
   toggle,
   closeDropdownAfterAdd
-}: InventoryFilterDropdown) {
+}: InventoryFilterDropdownProps) {
   const { setSkippedSearch, router, setToast } = useInventory();
 
   const {
@@ -82,7 +82,7 @@ export default function InventoryFilterDropdown({
               onSubmit={e => {
                 e.preventDefault();
                 filter();
-                closeDropdownAfterAdd && toggle();
+                if (closeDropdownAfterAdd) toggle();
               }}
             >
               <div className="-mr-4 max-h-[calc(100vh-23rem)] overflow-auto pb-2">
