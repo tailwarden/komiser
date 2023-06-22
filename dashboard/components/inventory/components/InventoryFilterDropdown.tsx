@@ -6,15 +6,18 @@ import InventoryFilterSummary from './filter/InventoryFilterSummary';
 import InventoryFilterField from './filter/InventoryFilterField';
 import InventoryFilterOperator from './filter/InventoryFilterOperator';
 import InventoryFilterValue from './filter/InventoryFilterValue';
+import { useEffect } from 'react';
 
 type InventoryFilterDropdown = {
   position: string;
+  closeDropdownAfterAdd: boolean;
   toggle: () => void;
 };
 
 export default function InventoryFilterDropdown({
   position,
-  toggle
+  toggle,
+  closeDropdownAfterAdd
 }: InventoryFilterDropdown) {
   const { setSkippedSearch, router, setToast } = useInventory();
 
@@ -35,6 +38,10 @@ export default function InventoryFilterDropdown({
     cleanValues,
     filter
   } = useFilterWizard({ router, setSkippedSearch });
+
+  useEffect(() => {
+    cleanValues();
+  }, []);
 
   return (
     <>
@@ -75,6 +82,7 @@ export default function InventoryFilterDropdown({
               onSubmit={e => {
                 e.preventDefault();
                 filter();
+                closeDropdownAfterAdd && toggle();
               }}
             >
               <div className="-mr-4 max-h-[calc(100vh-23rem)] overflow-auto pb-2">

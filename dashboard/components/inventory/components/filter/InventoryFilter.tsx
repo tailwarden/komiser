@@ -21,7 +21,11 @@ function InventoryFilter({ router, setSkippedSearch }: InventoryFilterProps) {
 
       {/* Dropdown open */}
       {isOpen && (
-        <InventoryFilterDropdown position={'right-0 top-12'} toggle={toggle} />
+        <InventoryFilterDropdown
+          position={'right-0 top-12'}
+          toggle={toggle}
+          closeDropdownAfterAdd={true}
+        />
       )}
     </div>
   );
