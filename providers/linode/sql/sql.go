@@ -15,91 +15,31 @@ import (
 )
 
 // Cost data for Dedicated CPU instances
-var dedicatedCPUCosts = map[string]map[string]float64{
-	"Dedicated 4GB": {
-		"1 Node": 65.00,
-		"3 Node": 195.00,
-	},
-	"Dedicated 8GB": {
-		"1 Node": 130.00,
-		"3 Node": 390.00,
-	},
-	"Dedicated 16GB": {
-		"1 Node": 260.00,
-		"3 Node": 780.00,
-	},
-	"Dedicated 32GB": {
-		"1 Node": 520.00,
-		"3 Node": 1560.00,
-	},
-	"Dedicated 64GB": {
-		"1 Node": 1040.00,
-		"3 Node": 3120.00,
-	},
-	"Dedicated 96GB": {
-		"1 Node": 1560.00,
-		"3 Node": 4680.00,
-	},
-	"Dedicated 128GB": {
-		"1 Node": 2080.00,
-		"3 Node": 6240.00,
-	},
-	"Dedicated 256GB": {
-		"1 Node": 4160.00,
-		"3 Node": 12480.00,
-	},
-	"Dedicated 512GB": {
-		"1 Node": 8320.00,
-		"3 Node": 24960.00,
-	},
+var dedicatedCPUCosts = map[string]float64{
+	"Dedicated 4GB":   65.00,
+	"Dedicated 8GB":   130.00,
+	"Dedicated 16GB":  260.00,
+	"Dedicated 32GB":  520.00,
+	"Dedicated 64GB":  1040.00,
+	"Dedicated 96GB":  1560.00,
+	"Dedicated 128GB": 2080.00,
+	"Dedicated 256GB": 4160.00,
+	"Dedicated 512GB": 8320.00,
 }
 
 // Cost data for Shared CPU instances
-var sharedCPUCosts = map[string]map[string]float64{
-	"Shared 1GB": {
-		"1 Node":  15.00,
-		"3 Node":  35.00,
-	},
-	"Shared 2GB": {
-		"1 Node":  30.00,
-		"3 Node":  70.00,
-	},
-	"Shared 4GB": {
-		"1 Node":  60.00,
-		"3 Node":  140.00,
-	},
-	"Shared 8GB": {
-		"1 Node":  120.00,
-		"3 Node":  280.00,
-	},
-	"Shared 16GB": {
-		"1 Node":  240.00,
-		"3 Node":  560.00,
-	},
-	"Shared 32GB": {
-		"1 Node":  480.00,
-		"3 Node":  1120.00,
-	},
-	"Shared 64GB": {
-		"1 Node":  960.00,
-		"3 Node":  2240.00,
-	},
-	"Shared 96GB": {
-		"1 Node":  1440.00,
-		"3 Node":  3360.00,
-	},
-	"Shared 128GB": {
-		"1 Node":  1920.00,
-		"3 Node":  4480.00,
-	},
-	"Shared 192GB": {
-		"1 Node":  2880.00,
-		"3 Node":  6720.00,
-	},
-	"Shared 256GB": {
-		"1 Node":  3840.00,
-		"3 Node":  8960.00,
-	},
+var sharedCPUCosts = map[string]float64{
+	"Shared 1GB":   15.00,
+	"Shared 2GB":   30.00,
+	"Shared 4GB":   60.00,
+	"Shared 8GB":   120.00,
+	"Shared 16GB":  240.00,
+	"Shared 32GB":  480.00,
+	"Shared 64GB":  960.00,
+	"Shared 96GB":  1440.00,
+	"Shared 128GB": 1920.00,
+	"Shared 192GB": 2880.00,
+	"Shared 256GB": 3840.00,
 }
 
 // Instances fetches SQL instances from the provider and returns them as resources.
@@ -160,23 +100,29 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 // InstancesCost calculates the cost for a SQL instance based on the instance type and node count.
 func InstancesCost(instanceType string, nodeCount int) (float64, bool) {
-	var costs map[string]map[string]float64
+	var cost float64
 
 	if strings.HasPrefix(instanceType, "Dedicated") {
-		costs = dedicatedCPUCosts
+		cost, ok := dedicatedCPUCosts[instanceType]
+		if !ok {
+			return 0, false
+		}
+
+		// Adjust cost for 3 Node instances
+		if nodeCount == 3 {
+			cost *= 3
+		}
 	} else if strings.HasPrefix(instanceType, "Shared") {
-		costs = sharedCPUCosts
+		cost, ok := sharedCPUCosts[instanceType]
+		if !ok {
+			return 0, false
+		}
+
+		// Adjust cost for 3 Node instances
+		if nodeCount == 3 {
+			cost *= 2.333
+		}
 	} else {
-		return 0, false
-	}
-
-	costMap, ok := costs[instanceType]
-	if !ok {
-		return 0, false
-	}
-
-	cost, ok := costMap[fmt.Sprintf("%d Node", nodeCount)]
-	if !ok {
 		return 0, false
 	}
 
