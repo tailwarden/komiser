@@ -1,38 +1,101 @@
 package gcpcomputepricing
 
-import "errors"
+import (
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+	"time"
 
-const (
-	E2  = "e2"
-	C3  = "c3"
-	N2  = "n2"
-	N2D = "n2d"
-	T2A = "t2a"
-	T2D = "t2d"
-	N1  = "n1"
-	C2  = "c2"
-	C2D = "c2d"
-	M1  = "m1"
-	M2  = "m2"
-	M3  = "m3"
+	compute "cloud.google.com/go/compute/apiv1"
+	"cloud.google.com/go/compute/apiv1/computepb"
+	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
+	"google.golang.org/api/option"
 )
 
-const (
-	OnDemand                = "on-demand"
-	Spot                    = "spot"
-	Commitment1YearResource = "commitment-1-year-resource"
-	Commitment3YearResource = "commitment-3-year-resource"
-)
+// CalculateMachineCost returns a calculated and normalized machine cost by hours in this month.
+func CalculateMachineCost(ctx context.Context, client providers.ProviderClient, data CalculateMachineCostData) (float64, error) {
+	machineTypeClient, err := compute.NewMachineTypesRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
+	if err != nil {
+		return 0, err
+	}
 
-type Opts struct {
-	Type        string
-	Commitment  string
-	Region      string
-	NumOfCPU    uint64
-	NumOfMemory uint64
+	mtS := strings.Split(data.MachineType, "/")
+
+	mt, err := machineTypeClient.Get(ctx, &computepb.GetMachineTypeRequest{
+		MachineType: mtS[len(mtS)-1],
+		Project:     data.Project,
+		Zone:        data.Zone,
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	var opts = Opts{
+		Commitment:  data.Commitment,
+		Region:      utils.GcpGetRegionFromZone(data.Zone),
+		NumOfCPU:    uint64(*mt.GuestCpus),
+		NumOfMemory: uint64(*mt.MemoryMb / 1024),
+	}
+	if mt.Name != nil {
+		switch {
+		case nameToTypeMatch(*mt.Name, E2):
+			opts.Type = E2
+		case nameToTypeMatch(*mt.Name, C3):
+			opts.Type = C3
+		case nameToTypeMatch(*mt.Name, N2):
+			opts.Type = N2
+		case nameToTypeMatch(*mt.Name, N2D):
+			opts.Type = N2D
+		case nameToTypeMatch(*mt.Name, T2A):
+			opts.Type = T2A
+		case nameToTypeMatch(*mt.Name, T2D):
+			opts.Type = T2D
+		case nameToTypeMatch(*mt.Name, N1):
+			opts.Type = N1
+		case nameToTypeMatch(*mt.Name, C2):
+			opts.Type = C2
+		case nameToTypeMatch(*mt.Name, C2D):
+			opts.Type = C2D
+		case nameToTypeMatch(*mt.Name, M1):
+			opts.Type = M1
+		case nameToTypeMatch(*mt.Name, M2):
+			opts.Type = M2
+		case nameToTypeMatch(*mt.Name, M3):
+			opts.Type = M3
+		default:
+			// Early return if machine type unsupported and do not need calculate cost
+			return 0, errors.New("unsupported machine type")
+		}
+	}
+
+	var cost float64
+	hourlyRate, err := calculateMachineHourly(data.Pricing, opts)
+	if err != nil {
+		return 0, err
+	}
+
+	currentTime := time.Now()
+	startOfMonth := utils.BeginningOfMonth(currentTime)
+
+	created, err := time.Parse(time.RFC3339, data.CreationTimestamp)
+	if err != nil {
+		return 0, err
+	}
+
+	duration := currentTime.Sub(startOfMonth)
+	if created.After(startOfMonth) {
+		duration = currentTime.Sub(created)
+	}
+
+	normalizedHourlyRate := float64(hourlyRate) / 1000000000
+	cost = normalizedHourlyRate * float64(duration.Hours())
+
+	return cost, nil
 }
 
-func CalculateMachine(p *Pricing, opts Opts) (uint64, error) {
+func calculateMachineHourly(p *Pricing, opts Opts) (uint64, error) {
 	switch opts.Type {
 	case E2:
 		return getHourly(p, opts, typeGetterE2)
@@ -56,8 +119,6 @@ func CalculateMachine(p *Pricing, opts Opts) (uint64, error) {
 	return 0, errors.New("unknown type")
 }
 
-type typeGetter func(p *Pricing, opts Opts) (Subtype, Subtype, error)
-
 func typeGetterE2(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 	var core Subtype
 	var memory Subtype
@@ -75,7 +136,9 @@ func typeGetterE2(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmente2CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmente2RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -98,7 +161,9 @@ func typeGetterC3(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.C3.Commitmentc3CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.C3.Commitmentc3RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -120,7 +185,9 @@ func typeGetterN2(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentn2CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentn2RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -142,7 +209,9 @@ func typeGetterN2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentn2Dcpu3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentn2Dram3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -158,7 +227,9 @@ func typeGetterT2A(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.T2A.Vmimagepreemptiblet2Astandardcore
 		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.T2A.Vmimagepreemptiblet2Astandardram
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -180,7 +251,9 @@ func typeGetterT2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentt2Dcpu3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentt2Dram3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -196,7 +269,9 @@ func typeGetterN1(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.Vmimagepreemptiblen1Standardcore
 		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.Vmimagepreemptiblen1Standardram
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -218,7 +293,9 @@ func typeGetterC2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentc2Dcpu3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentc2Dram3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
@@ -240,12 +317,14 @@ func typeGetterM3(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.M3.Commitmentm3CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.M3.Commitmentm3RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New("commitment not supported") // TODO improve error
+		return Subtype{}, Subtype{}, errors.New(
+			fmt.Sprintf("commitment %q not supported", opts.Commitment),
+		)
 	}
 	return core, memory, nil
 }
 
-func getHourly(p *Pricing, opts Opts, tg typeGetter) (uint64, error) {
+func getHourly(p *Pricing, opts Opts, tg typeMachineGetter) (uint64, error) {
 	core, memory, err := tg(p, opts)
 	if err != nil {
 		return 0, err
@@ -257,7 +336,9 @@ func getHourly(p *Pricing, opts Opts, tg typeGetter) (uint64, error) {
 			corePricePerRegion = region.Prices[0].Nanos
 		}
 	} else {
-		return 0, errors.New("core not found for that region") // TODO improve error
+		return 0, errors.New(
+			fmt.Sprintf("core price not found for %q region", opts.Region),
+		)
 	}
 
 	var memoryPricePerRegion uint64 = 0
@@ -266,7 +347,9 @@ func getHourly(p *Pricing, opts Opts, tg typeGetter) (uint64, error) {
 			memoryPricePerRegion = region.Prices[0].Nanos
 		}
 	} else {
-		return 0, errors.New("memory not found for that region") // TODO improve error
+		return 0, errors.New(
+			fmt.Sprintf("memory not found for %q region", opts.Region),
+		)
 	}
 
 	var sum uint64 = 0
