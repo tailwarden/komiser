@@ -46,7 +46,7 @@ var sharedCPUCosts = map[string]float64{
 func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	instances, err := client.SQLClient.GetInstances(ctx)
+	instances, err := client.LinodeClient.GetInstances(ctx)
 	if err != nil {
 		return resources, err
 	}
