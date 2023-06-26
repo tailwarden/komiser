@@ -14,7 +14,7 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func Container(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func ContainerInstances(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config ecs.ListContainerInstancesInput
 	ecsContainer := ecs.NewFromConfig(*client.AWSClient)

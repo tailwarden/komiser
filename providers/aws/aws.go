@@ -46,7 +46,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ecs.Tasks,
 		ecs.Services,
 		ecs.Clusters,
-		ecs.Container,
+		ecs.ContainerInstances,
 		ecr.Repositories,
 		sns.Topics,
 		ec2.Vpcs,
