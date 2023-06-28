@@ -101,8 +101,8 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 // GetInstances fetches SQL instances from the Linode provider.
 func GetInstances(ctx context.Context, client providers.ProviderClient) ([]linodego.Instance, error) {
-	client.SetToken(client.Token)
-	instances, err := client.ListInstances(ctx, nil)
+	// Use the Linode provider client to fetch instances
+	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
