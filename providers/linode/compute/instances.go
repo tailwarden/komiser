@@ -14,6 +14,11 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
+type Instance struct {
+	linodego.Instance
+	NodeCount int `json:"node_count"`
+}
+
 func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 
@@ -39,7 +44,7 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			}
 		}
 
-		resources = append(resources, models.Resource{
+		resource := models.Resource{
 			Provider:   "Linode",
 			Account:    client.Name,
 			Service:    "Linode",
@@ -51,7 +56,13 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			CreatedAt:  *instance.Created,
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", instance.ID),
-		})
+		}
+
+		if inst, ok := instance.(Instance); ok {
+			resource.NodeCount = inst.NodeCount
+		}
+
+		resources = append(resources, resource)
 	}
 
 	log.WithFields(log.Fields{
