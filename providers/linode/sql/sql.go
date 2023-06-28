@@ -9,8 +9,8 @@ import (
 	"github.com/linode/linodego"
 	log "github.com/sirupsen/logrus"
 
-	// "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/models"
+	// . "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 )
 
@@ -86,7 +86,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			FetchedAt:  time.Now(),
 			CreatedAt:  *instance.Created,
 			Tags:       tags,
-			Link:       fmt.Sprintf("https://cloud.linode.com/databases/%s", instance.ID),
+			Link:       fmt.Sprintf("https://cloud.linode.com/databases/%d", instance.ID),
 		})
 	}
 
@@ -99,33 +99,24 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-// InstancesCost calculates the cost for a SQL instance based on the instance type.
-func InstancesCost(instanceType string) (float64, bool) {
-	var cost float64
-
-	if strings.HasPrefix(instanceType, "Dedicated") {
-		cost, ok := dedicatedCPUCosts[instanceType]
-		if !ok {
-			return 0, false
-		}
-	} else if strings.HasPrefix(instanceType, "Shared") {
-		cost, ok := sharedCPUCosts[instanceType]
-		if !ok {
-			return 0, false
-		}
-	} else {
-		return 0, false
-	}
-
-	return cost, true
-}
-
 // GetInstances fetches SQL instances from the Linode provider.
 func GetInstances(ctx context.Context, client providers.ProviderClient) ([]linodego.Instance, error) {
-	// Use the Linode provider client to fetch instances
-	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
+	client.SetToken(client.Token)
+	instances, err := client.ListInstances(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
 	return instances, nil
+}
+
+// InstancesCost calculates the cost of a SQL instance based on its type.
+func InstancesCost(instanceType string) (float64, bool) {
+	if strings.Contains(instanceType, "Dedicated") {
+		cost, ok := dedicatedCPUCosts[instanceType]
+		return cost, ok
+	} else if strings.Contains(instanceType, "Shared") {
+		cost, ok := sharedCPUCosts[instanceType]
+		return cost, ok
+	}
+	return 0.0, false
 }
