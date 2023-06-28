@@ -2,7 +2,15 @@ import { useRouter } from 'next/router';
 
 import Button from '../button/Button';
 
-function CredentialsButton({ handleNext }: { handleNext?: (e?: any) => void }) {
+interface CredentialsButtonProps {
+  nextLabel?: string;
+  handleNext?: (e?: any) => void;
+}
+
+function CredentialsButton({
+  handleNext,
+  nextLabel = 'Add a cloud account'
+}: CredentialsButtonProps) {
   const router = useRouter();
 
   return (
@@ -22,7 +30,7 @@ function CredentialsButton({ handleNext }: { handleNext?: (e?: any) => void }) {
         type="button"
         disabled={true}
       >
-        Add a cloud account
+        {nextLabel}
       </Button>
     </div>
   );
