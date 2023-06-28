@@ -64,7 +64,8 @@ function DatabaseRightItem({
       <Image
         src={imageUrl}
         alt={`${value} Logo`}
-        className={`h-20 w-20 rounded-full ${selected !== value ? 'opacity-[0.6]' : ''}`}
+        className={`h-20 w-20 rounded-full ${selected !== value ? 'opacity-[0.6]' : ''
+          }`}
         width={0}
         height={0}
       />
@@ -76,9 +77,7 @@ export default function Onboarding() {
   const router = useRouter();
   const [database, setDatabase] = useState<DB>('postgres');
 
-  const handleNext = () => {
-    router.push(`/database/`);
-  };
+  const handleNext = () => router.push(`/onboarding/database/${database}`);
 
   const handleClick = (db: DB) => setDatabase(db);
 
