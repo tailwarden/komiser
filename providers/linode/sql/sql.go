@@ -9,7 +9,7 @@ import (
 	"github.com/linode/linodego"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/tailwarden/komiser/models"
+	// "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 )
