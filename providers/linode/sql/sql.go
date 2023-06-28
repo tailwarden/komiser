@@ -86,7 +86,6 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			CreatedAt:  instance.Created,
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/databases/%s", instance.ID),
-			NodeCount:  instance.NodeCount, // Add the NodeCount field
 		})
 	}
 
