@@ -10,7 +10,6 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 )
 
@@ -46,7 +45,8 @@ var sharedCPUCosts = map[string]float64{
 func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
+	// Fetch instances from the Linode provider
+	instances, err := GetInstances(ctx, client)
 	if err != nil {
 		return resources, err
 	}
@@ -68,10 +68,10 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			}
 		}
 
-		// Calculate the cost based on the instance type and node count
-		cost, ok := InstancesCost(instance.Type, instance.NodeCount)
+		// Calculate the cost based on the instance type
+		cost, ok := InstancesCost(instance.Type)
 		if !ok {
-			log.Warnf("Failed to calculate cost for SQL instance: %s, Type: %s, NodeCount: %d", instance.ID, instance.Type, instance.NodeCount)
+			log.Warnf("Failed to calculate cost for SQL instance: %s, Type: %s", instance.ID, instance.Type)
 		}
 
 		resources = append(resources, models.Resource{
@@ -98,8 +98,8 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-// InstancesCost calculates the cost for a SQL instance based on the instance type and node count.
-func InstancesCost(instanceType string, nodeCount int) (float64, bool) {
+// InstancesCost calculates the cost for a SQL instance based on the instance type.
+func InstancesCost(instanceType string) (float64, bool) {
 	var cost float64
 
 	if strings.HasPrefix(instanceType, "Dedicated") {
@@ -107,24 +107,24 @@ func InstancesCost(instanceType string, nodeCount int) (float64, bool) {
 		if !ok {
 			return 0, false
 		}
-
-		// Adjust cost for 3 Node instances
-		if nodeCount == 3 {
-			cost *= 3
-		}
 	} else if strings.HasPrefix(instanceType, "Shared") {
 		cost, ok := sharedCPUCosts[instanceType]
 		if !ok {
 			return 0, false
-		}
-
-		// Adjust cost for 3 Node instances
-		if nodeCount == 3 {
-			cost *= 2.333
 		}
 	} else {
 		return 0, false
 	}
 
 	return cost, true
+}
+
+// GetInstances fetches SQL instances from the Linode provider.
+func GetInstances(ctx context.Context, client providers.ProviderClient) ([]linodego.Instance, error) {
+	// Use the Linode provider client to fetch instances
+	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return instances, nil
 }
