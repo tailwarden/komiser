@@ -54,6 +54,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		cloudfront.Distributions,
 		dynamodb.Tables,
 		ecs.Clusters,
+		ecs.TaskDefinitions,
 		ecr.Repositories,
 		sns.Topics,
 		ec2.Vpcs,
