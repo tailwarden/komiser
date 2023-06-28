@@ -10,6 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
+	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 )
 
@@ -79,11 +80,11 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			Account:    client.Name,
 			Service:    "SQL",
 			Region:     instance.Region,
-			ResourceId: instance.ID,
+			ResourceId: fmt.Sprintf("%d", instance.ID),
 			Cost:       cost,
 			Name:       instance.Label,
 			FetchedAt:  time.Now(),
-			CreatedAt:  instance.Created,
+			CreatedAt:  *instance.Created,
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/databases/%s", instance.ID),
 		})
