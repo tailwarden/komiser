@@ -36,3 +36,8 @@
     scrollbar-width: none;  /* Firefox */
   }
 }
+
+.rotate-onboarding-arrow {
+    /* flip horizontally */
+    transform: rotateY(180deg);
+}

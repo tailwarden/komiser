@@ -33,11 +33,29 @@ function LeftSideLayout({
   );
 }
 
-function RightSideLayout({ children }: { children: ReactNode }) {
+interface RightSideLayoutProps {
+  children: ReactNode;
+  isCustom?: boolean;
+  customClasses?: string;
+}
+
+function RightSideLayout({
+  isCustom,
+  children,
+  customClasses
+}: RightSideLayoutProps) {
   return (
-    <div className="col-span-5 flex items-center justify-center bg-komiser-100 p-7">
-      {children}
-    </div>
+    <>
+      {isCustom ? (
+        <div className={`col-span-5 bg-komiser-100 ${customClasses}`}>
+          {children}
+        </div>
+      ) : (
+        <div className="col-span-5 flex items-center justify-center bg-komiser-100 p-7">
+          {children}
+        </div>
+      )}
+    </>
   );
 }
 
