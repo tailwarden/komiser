@@ -24,6 +24,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		compute.Instances,
 		compute.Disks,
+		compute.Snapshots,
 		storage.Buckets,
 		bigquery.Tables,
 		certficate.Certificates,
