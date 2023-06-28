@@ -15,19 +15,16 @@ import (
 )
 
 type LinodeInstance struct {
-	Instance   linodego.Instance
-	NodeCount  int `json:"node_count"`
+	Instance  *linodego.Instance
+	NodeCount int
 }
 
-func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
+func Linodes(ctx context.Context, client providers.ProviderClient, linodeInstances []LinodeInstance) ([]Resource, error) {
 	resources := make([]Resource, 0)
 
-	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
-	if err != nil {
-		return resources, err
-	}
+	for _, linodeInstance := range linodeInstances {
+		instance := linodeInstance.Instance
 
-	for _, instance := range instances {
 		tags := make([]Tag, 0)
 		for _, tag := range instance.Tags {
 			if strings.Contains(tag, ":") {
@@ -44,7 +41,7 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			}
 		}
 
-		resource := models.Resource{
+		resources = append(resources, models.Resource{
 			Provider:   "Linode",
 			Account:    client.Name,
 			Service:    "Linode",
@@ -56,13 +53,8 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			CreatedAt:  *instance.Created,
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", instance.ID),
-		}
-
-		if inst, ok := instance.(*LinodeInstance); ok {
-			resource.NodeCount = inst.NodeCount
-		}
-
-		resources = append(resources, resource)
+			NodeCount:  linodeInstance.NodeCount, // Include the NodeCount value
+		})
 	}
 
 	log.WithFields(log.Fields{
@@ -73,3 +65,5 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 	}).Info("Fetched resources")
 	return resources, nil
 }
+
+
