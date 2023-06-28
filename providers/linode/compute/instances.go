@@ -14,7 +14,7 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-type InstanceWithNodeCount struct {
+type LinodeInstance struct {
 	Instance   linodego.Instance
 	NodeCount  int `json:"node_count"`
 }
@@ -58,7 +58,7 @@ func Linodes(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 			Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", instance.ID),
 		}
 
-		if inst, ok := instance.(*InstanceWithNodeCount); ok {
+		if inst, ok := instance.(*LinodeInstance); ok {
 			resource.NodeCount = inst.NodeCount
 		}
 
