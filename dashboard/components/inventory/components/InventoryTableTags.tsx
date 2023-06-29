@@ -49,7 +49,7 @@ function InventoryTableTags({
               {tags.length}
             </span>
           </div>
-          <div className="absolute right-6 top-11 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 shadow-lg group-hover:flex">
+          <div className="absolute right-6 top-11 z-10 hidden max-w-xs flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 shadow-lg group-hover:flex">
             {tags.map((tag, index) => (
               <div
                 key={index}
@@ -82,14 +82,14 @@ function InventoryTableTags({
                     onClick={e => {
                       setQuery(tag.key);
                     }}
-                    className="cursor-pointer hover:text-komiser-500"
+                    className="line-clamp-2 cursor-pointer hover:text-komiser-500"
                   >
                     {tag.key}:
                   </span>
                 </div>
                 <span
                   onClick={() => setQuery(tag.value)}
-                  className="cursor-pointer font-medium hover:text-komiser-500"
+                  className="line-clamp-2 cursor-pointer font-medium hover:text-komiser-500"
                 >
                   {tag.value}
                 </span>
