@@ -87,6 +87,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			CreatedAt:  *instance.Created,
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/databases/%d", instance.ID),
+			NodeCount:  instance.NodeCount,
 		})
 	}
 
@@ -99,24 +100,51 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-// GetInstances fetches SQL instances from the Linode provider.
+// InstancesCost calculates the cost for the given SQL instance type and node count.
+func InstancesCost(instanceType string, nodeCount int) (float64, bool) {
+	// Calculate cost based on instance type
+	if strings.Contains(instanceType, "Dedicated") {
+		cost, ok := dedicatedCPUCosts[instanceType]
+		if !ok {
+			return 0, false
+		}
+
+		// Adjust cost based on the NodeCount
+		if nodeCount == 3 {
+			cost *= 3
+		}
+
+		return cost, true
+	} else if strings.Contains(instanceType, "Shared") {
+		cost, ok := sharedCPUCosts[instanceType]
+		if !ok {
+			return 0, false
+		}
+
+		// Adjust cost for 3 Node instances
+		if nodeCount == 3 {
+			cost *= 2.333
+
+		return cost, true
+	}
+
+	return 0, false
+}
+
+	// GetInstances retrieves SQL instances from the Linode provider.
 func GetInstances(ctx context.Context, client providers.ProviderClient) ([]linodego.Instance, error) {
-	// Use the Linode provider client to fetch instances
-	instances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{})
+	instances, err := client.LinodeClient.ListInstances(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
-	return instances, nil
-}
 
-// InstancesCost calculates the cost of a SQL instance based on its type.
-func InstancesCost(instanceType string) (float64, bool) {
-	if strings.Contains(instanceType, "Dedicated") {
-		cost, ok := dedicatedCPUCosts[instanceType]
-		return cost, ok
-	} else if strings.Contains(instanceType, "Shared") {
-		cost, ok := sharedCPUCosts[instanceType]
-		return cost, ok
+	sqlInstances := make([]linodego.Instance, 0)
+
+	for _, instance := range instances {
+		if instance.Type == "db" {
+			sqlInstances = append(sqlInstances, instance)
+		}
 	}
-	return 0.0, false
+
+	return sqlInstances, nil
 }
