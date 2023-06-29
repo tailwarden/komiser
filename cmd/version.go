@@ -22,7 +22,7 @@ var versionCmd = &cobra.Command{
 	Short: "Show tool version",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(logo)
+		fmt.Print(logo)
 		showLine(cmd, "Version", internal.Version)
 		showLine(cmd, "Go version", internal.GoVersion)
 		showLine(cmd, "Commit", internal.Commit)

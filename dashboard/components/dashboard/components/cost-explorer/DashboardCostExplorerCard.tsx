@@ -70,8 +70,8 @@ function DashboardCostExplorerCard({
   });
 
   return (
-    <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">
-      <div className=" -mx-6 flex flex-wrap items-center justify-between gap-4 border-b border-black-200/40 px-6 pb-4">
+    <div className="w-full rounded-lg bg-white px-6 py-4 pb-6">
+      <div className="-mx-6 flex flex-wrap items-center justify-between gap-4 border-b border-black-200/40 px-6 pb-4">
         <div>
           <p className="text-sm font-semibold text-black-900">Cost explorer</p>
           <div className="mt-1"></div>

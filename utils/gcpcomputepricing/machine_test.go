@@ -50,7 +50,7 @@ func getter(t *testing.T, cpu, memory uint64) uint64 {
 		t.Fatal(err)
 	}
 
-	hourlyRate, err := CalculateMachine(p, Opts{
+	hourlyRate, err := calculateMachineHourly(p, Opts{
 		Type:        E2,
 		Commitment:  OnDemand,
 		Region:      "us-west1",
