@@ -3,7 +3,6 @@ package compute
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -64,12 +63,13 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 			zone := utils.GcpExtractZoneFromURL(instance.GetZone())
 
-			cost, err := calculateCost(ctx, client, calculateCostData{
-				machineType: instance.GetMachineType(),
-				project:     client.GCPClient.Credentials.ProjectID,
-				zone:        zone,
-				commitment:  resolveCommitment(instance),
-				pricing:     actualPricing,
+			cost, err := gcpcomputepricing.CalculateMachineCost(ctx, client, gcpcomputepricing.CalculateMachineCostData{
+				MachineType:       instance.GetMachineType(),
+				Project:           client.GCPClient.Credentials.ProjectID,
+				Zone:              zone,
+				Commitment:        resolveCommitment(instance),
+				CreationTimestamp: instance.GetCreationTimestamp(),
+				Pricing:           actualPricing,
 			})
 			if err != nil {
 				logrus.WithError(err).Errorf("failed to calculate cost")
@@ -100,80 +100,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-type calculateCostData struct {
-	machineType string
-	project     string
-	zone        string
-	commitment  string
-	pricing     *gcpcomputepricing.Pricing
-}
-
-func calculateCost(ctx context.Context, client providers.ProviderClient, data calculateCostData) (float64, error) {
-	machineTypeClient, err := compute.NewMachineTypesRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
-	if err != nil {
-		return 0, err
-	}
-
-	mtS := strings.Split(data.machineType, "/")
-
-	mt, err := machineTypeClient.Get(ctx, &computepb.GetMachineTypeRequest{
-		MachineType: mtS[len(mtS)-1],
-		Project:     data.project,
-		Zone:        data.zone,
-	})
-	if err != nil {
-		return 0, err
-	}
-
-	var opts = gcpcomputepricing.Opts{
-		Commitment:  data.commitment,
-		Region:      utils.GcpGetRegionFromZone(data.zone),
-		NumOfCPU:    uint64(*mt.GuestCpus),
-		NumOfMemory: uint64(*mt.MemoryMb / 1024),
-	}
-	var cost float64
-	if mt.Name != nil {
-		switch {
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.E2)):
-			opts.Type = gcpcomputepricing.E2
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.C3)):
-			opts.Type = gcpcomputepricing.C3
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.N2)):
-			opts.Type = gcpcomputepricing.N2
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.N2D)):
-			opts.Type = gcpcomputepricing.N2D
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.T2A)):
-			opts.Type = gcpcomputepricing.T2A
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.T2D)):
-			opts.Type = gcpcomputepricing.T2D
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.N1)):
-			opts.Type = gcpcomputepricing.N1
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.C2)):
-			opts.Type = gcpcomputepricing.C2
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.C2D)):
-			opts.Type = gcpcomputepricing.C2D
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.M1)):
-			opts.Type = gcpcomputepricing.M1
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.M2)):
-			opts.Type = gcpcomputepricing.M2
-		case strings.Contains(strings.ToLower(*mt.Name), strings.ToLower(gcpcomputepricing.M3)):
-			opts.Type = gcpcomputepricing.M3
-		}
-	}
-	if opts.Type != "" {
-		hourlyRate, err := gcpcomputepricing.CalculateMachine(data.pricing, opts)
-		if err != nil {
-			return 0, err
-		}
-		startOfMonth := utils.BeginningOfMonth(time.Now())
-		hourlyUsage := int(time.Since(startOfMonth).Hours())
-		normalizedHourlyRate := float64(hourlyRate) / 1000000000
-		cost = normalizedHourlyRate * float64(hourlyUsage)
-	}
-
-	return cost, nil
-}
-
+// resolveCommitment resolve whether the instance is preemptible or on-demand.
 func resolveCommitment(instance *computepb.Instance) string {
 	if instance.Scheduling.Preemptible != nil && *instance.Scheduling.Preemptible {
 		return gcpcomputepricing.Spot

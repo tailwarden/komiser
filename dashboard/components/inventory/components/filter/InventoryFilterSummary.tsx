@@ -50,32 +50,10 @@ function InventoryFilterSummary({
 
   return (
     <div
-      className={`${bg ? 'bg-white' : 'bg-black-100'} ${
-        deleteFilter || resetData ? 'pr-12' : 'pr-4'
-      } relative flex max-w-[calc(100vw-250px)] overflow-hidden rounded p-2 pr-12 text-xs text-black-900/70 md:max-w-[calc(100vw-400px)]`}
+      className={`${
+        bg ? 'bg-white' : 'bg-black-150'
+      }  relative flex h-6 max-w-[calc(100vw-250px)] items-center gap-3 overflow-hidden rounded px-2 text-xs text-black-900/70 md:max-w-[calc(100vw-400px)]`}
     >
-      {(deleteFilter || resetData) && (
-        <div
-          className={`absolute bottom-[.25rem] ${
-            deleteFilter ? 'right-1.5' : 'right-0'
-          } ${bg ? 'bg-white' : 'bg-black-100'}`}
-        >
-          <Button
-            size="xxs"
-            style="ghost"
-            onClick={() => {
-              if (deleteFilter) {
-                deleteFilter(id!);
-              } else {
-                resetData!();
-              }
-            }}
-          >
-            <CloseIcon width={20} height={24} />
-          </Button>
-        </div>
-      )}
-
       <div className="flex items-center gap-1 whitespace-nowrap">
         <div className="scale-75">{getField('icon')}</div>
         <p>{getField('label')}</p>
@@ -107,6 +85,23 @@ function InventoryFilterSummary({
             </p>
           ))}
       </div>
+      {(deleteFilter || resetData) && (
+        <div>
+          <Button
+            size="xxs"
+            style="ghost"
+            onClick={() => {
+              if (deleteFilter) {
+                deleteFilter(id!);
+              } else {
+                resetData!();
+              }
+            }}
+          >
+            <CloseIcon width={20} height={24} />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

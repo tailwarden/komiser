@@ -108,7 +108,6 @@ export default function Inventory() {
             <InventoryFilter
               router={router}
               setSkippedSearch={setSkippedSearch}
-              setToast={setToast}
             />
           )}
         </InventoryHeader>
