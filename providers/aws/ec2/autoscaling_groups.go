@@ -89,3 +89,11 @@ func (d ASGDiscoverer) Discover() ([]Resource, error) {
 	}).Info("Fetched resources")
 	return resources, nil
 }
+
+type AutoScalingGroupClient interface {
+	DescribeAutoScalingGroups(
+		ctx context.Context,
+		params *autoscaling.DescribeAutoScalingGroupsInput,
+		optFns ...func(*autoscaling.Options),
+	) (*autoscaling.DescribeAutoScalingGroupsOutput, error)
+}
