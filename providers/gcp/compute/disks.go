@@ -9,6 +9,7 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
+	"github.com/tailwarden/komiser/utils/gcpcomputepricing"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -21,7 +22,7 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 
 	disksClient, err := compute.NewDisksRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
-		logrus.WithError(err).Errorf("failed to create compute client")
+		logrus.WithError(err).Errorf("failed to create disks client")
 		return resources, err
 	}
 
@@ -30,13 +31,19 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 	}
 	disks := disksClient.AggregatedList(ctx, req)
 
+	actualPricing, err := gcpcomputepricing.Fetch()
+	if err != nil {
+		logrus.WithError(err).Errorf("failed to fetch actual GCP disks pricing")
+		return resources, err
+	}
+
 	for {
 		disksListPair, err := disks.Next()
 		if err == iterator.Done {
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list instances")
+			logrus.WithError(err).Errorf("failed to list disks")
 			return resources, err
 		}
 		if len(disksListPair.Value.Disks) == 0 {
@@ -55,6 +62,19 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 			}
 
 			zone := utils.GcpExtractZoneFromURL(disk.GetZone())
+			size := disk.GetSizeGb()
+
+			cost, err := gcpcomputepricing.CalculateDiskCost(ctx, client, gcpcomputepricing.CalculateDiskCostData{
+				DiskType:          disk.GetType(),
+				Size:              size,
+				CreationTimestamp: disk.GetCreationTimestamp(),
+				Project:           client.GCPClient.Credentials.ProjectID,
+				Zone:              zone,
+				Pricing:           actualPricing,
+			})
+			if err != nil {
+				logrus.WithError(err).Errorf("failed to calculate disk cost")
+			}
 
 			resources = append(resources, models.Resource{
 				Provider:   "GCP",
@@ -63,6 +83,7 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 				ResourceId: fmt.Sprintf("%d", disk.GetId()),
 				Region:     zone,
 				Name:       disk.GetName(),
+				Cost:       cost,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https://console.cloud.google.com/compute/disksDetail/zones/%s/disks/%s?project=%s", zone, disk.GetName(), client.GCPClient.Credentials.ProjectID),
@@ -73,7 +94,7 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 	logrus.WithFields(logrus.Fields{
 		"provider":  "GCP",
 		"account":   client.Name,
-		"service":   "Compute Engine",
+		"service":   "Compute Disk",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 
