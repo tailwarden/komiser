@@ -21,7 +21,7 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
     >
       <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
         <div>
-          <p className="text-sm font-semibold text-black-900">Cloudsdf map</p>
+          <p className="text-sm font-semibold text-black-900">Cloud map</p>
           <div className="mt-1"></div>
           <p className="text-xs text-black-300">
             Analyze which regions have active resources
