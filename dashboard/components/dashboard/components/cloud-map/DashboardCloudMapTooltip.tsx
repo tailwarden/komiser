@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { DashboardCloudMapTooltipProps } from './hooks/useCloudMapTooltip';
+import LinkIcon from '../../../icons/LinkIcon';
 
 type DashboardCloudMapProps = {
   tooltip: DashboardCloudMapTooltipProps | undefined;
@@ -26,12 +27,10 @@ function DashboardCloudMap({
                 tooltip.resources === 0 ? 'bg-black-300' : 'bg-info-600'
               }`}
             ></div>
-            <span className="font-medium text-white">{tooltip.label}</span>
+            <span className="font-medium text-white">{tooltip.name} </span>
+            <span className="font-medium text-white"> - {tooltip.label}</span>
           </div>
-          <span>
-            Region:{' '}
-            <span className="font-medium text-white">{tooltip.name}</span>
-          </span>
+
           <span>
             Active resources:{' '}
             <span className="font-medium text-white">{tooltip.resources}</span>
@@ -44,7 +43,8 @@ function DashboardCloudMap({
             ).toFixed(1)}%`}</span>
           </span>
           <div className="-mx-3 flex items-center gap-2 border-t border-white/30 px-3 pt-2 pb-1">
-            <span>Click to discover the resources</span>
+            <span className="text-white">Click to discover the resources</span>
+            <LinkIcon className="w-[20px]" />
           </div>
         </div>
       )}
