@@ -55,6 +55,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		dynamodb.Tables,
 		ecs.Clusters,
 		ecs.TaskDefinitions,
+		ecs.ContainerInstances,
 		ecr.Repositories,
 		sns.Topics,
 		ec2.Vpcs,
