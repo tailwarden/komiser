@@ -134,6 +134,7 @@ function InventoryFilterValue({
               error="Please provide a value"
               action={handleValueInput}
               autofocus={true}
+              maxLength={64}
             />
           </div>
         )}

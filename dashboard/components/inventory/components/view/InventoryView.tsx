@@ -152,6 +152,7 @@ function InventoryView({
               value={view.name}
               action={handleChange}
               autofocus={true}
+              maxLength={64}
             />
 
             <div className="ml-auto">
