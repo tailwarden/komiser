@@ -71,7 +71,7 @@ function useCostExplorer() {
       [startDate, endDate] = lastTwelveMonths;
     }
 
-    const granularity = newGranularity.toUpperCase();
+    const granularity = queryGranularity.toUpperCase();
     const payload = {
       group: queryGroup,
       granularity,
