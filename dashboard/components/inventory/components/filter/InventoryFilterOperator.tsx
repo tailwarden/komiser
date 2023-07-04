@@ -72,6 +72,7 @@ function InventoryFilterOperator({
             error="Please provide a tag key"
             action={handleTagKey}
             autofocus={true}
+            maxLength={64}
           />
         </div>
       )}

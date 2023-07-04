@@ -75,6 +75,7 @@ function InventoryLayout({
                 <input
                   placeholder="Search views"
                   value={query}
+                  maxLength={64}
                   onChange={e => setQuery(e.target.value)}
                   className="flex w-full items-center rounded-lg border border-black-200 px-4 py-3 pl-10 text-sm font-medium text-black-400 transition-colors hover:border-black-300 focus-visible:outline-primary"
                 />
