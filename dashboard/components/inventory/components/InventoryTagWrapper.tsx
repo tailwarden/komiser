@@ -22,6 +22,7 @@ function InventoryTagWrapper({
         error="Please provide a valid key name."
         action={handleChange}
         value={tag.key}
+        maxLength={64}
       />
       <Input
         id={id}
@@ -31,6 +32,7 @@ function InventoryTagWrapper({
         error="Please provide a valid value."
         action={handleChange}
         value={tag.value}
+        maxLength={64}
       />
     </div>
   );

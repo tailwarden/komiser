@@ -182,6 +182,7 @@ function InventoryViewAlertsCreateOrEditAlert({
               name="name"
               action={handleChange}
               value={alert.name}
+              maxLength={64}
             />
             <Input
               type="number"
@@ -234,6 +235,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                       handleChange({ endpoint: e.target.value });
                     }}
                     value={alert.endpoint}
+                    maxLength={64}
                     autoComplete="off"
                     data-lpignore="true"
                     data-form-type="other"
