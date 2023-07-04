@@ -15,7 +15,7 @@ function DashboardCloudMap({
     <>
       {tooltip && sumOfResources && (
         <div
-          className="absolute z-20 flex animate-fade-in flex-col gap-2 rounded-lg bg-black-900 py-2 px-3 text-xs text-black-300 opacity-0"
+          className="absolute z-20 flex animate-fade-in flex-col gap-2 rounded-lg bg-[#013220] py-2 px-3 text-xs text-black-300 opacity-0"
           style={{
             top: `${tooltip.y - 60}px`,
             left: `${tooltip.x + 10}px`
