@@ -74,7 +74,7 @@ function Layout({ children }: LayoutProps) {
                 title="We could not find a cloud account"
                 message="Get Started Onboarding"
                 action={() => {
-                  router.push('/onboarding');
+                  router.push('/onboarding/choose-cloud');
                 }}
                 actionLabel="Begin Onboarding"
                 secondaryAction={() => {
