@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import Button from '../../components/button/Button';
@@ -8,10 +9,11 @@ import OnboardingWizardLayout, {
   RightSideLayout
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
 import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
+import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
 
 export default function AWSCredentials() {
   const router = useRouter();
-  const [provider, setProvider] = useState('aws');
+  const [provider, setProvider] = useState('kubernetes');
 
   const handleNext = () => {
     router.push(`/onboarding/${provider}`);
@@ -21,6 +23,19 @@ export default function AWSCredentials() {
     router.replace(
       'https://docs.komiser.io/docs/faqs#how-can-i-request-a-new-feature'
     );
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    // Set Input field to file.name and use temporary file path for the upload value
+    console.log(file);
+  };
 
   return (
     <div>
@@ -120,9 +135,25 @@ export default function AWSCredentials() {
                   </button>
                 </div>
               </div>
-              <div>
-                <input type="file" name="select-file" id="credential-file" />
-              </div>
+              <InputFileSelect
+                type="text"
+                id="file-path-input"
+                label="File path"
+                subLabel="Enter the path or browse the file"
+                placeholder="C:\Documents\Komiser\credentials"
+                icon={
+                  <Image
+                    width={3}
+                    height={3}
+                    alt="Folder Icon"
+                    className="h-6 w-6"
+                    src={'/assets/img/others/folder-2.svg'}
+                  />
+                }
+                fileInputRef={fileInputRef}
+                iconClick={handleButtonClick}
+                handleFileChange={handleFileChange}
+              />
             </div>
           </div>
           <div className="flex justify-between">
