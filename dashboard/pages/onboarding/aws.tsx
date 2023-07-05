@@ -8,7 +8,6 @@ import VariableIcon from '../../components/icons/VariableIcon';
 import DocumentTextIcon from '../../components/icons/DocumentTextIcon';
 import ShieldSecurityIcon from '../../components/icons/ShieldSecurityIcon';
 
-import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
@@ -16,6 +15,7 @@ import OnboardingWizardLayout, {
 import SelectInput from '../../components/onboarding-wizard/SelectInput';
 import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
 import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
+import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
 
 interface SelectOptions {
   icon: ReactNode;
@@ -57,11 +57,6 @@ export default function AWSCredentials() {
   const handleNext = () => {
     router.push(`/onboarding/${provider}`);
   };
-
-  const handleSuggest = () =>
-    router.replace(
-      'https://docs.komiser.io/docs/faqs#how-can-i-request-a-new-feature'
-    );
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleButtonClick = () => {
@@ -120,6 +115,7 @@ export default function AWSCredentials() {
             <div className="flex flex-col space-y-8 rounded-md bg-komiser-100 p-5">
               <div>
                 <SelectInput
+                  icon="Change"
                   label={'Source'}
                   displayValues={options}
                   value={credentialType}
@@ -182,25 +178,7 @@ export default function AWSCredentials() {
               )}
             </div>
           </div>
-          <div className="flex justify-between">
-            <Button
-              onClick={handleSuggest}
-              size="lg"
-              style="text"
-              type="button"
-            >
-              Back
-            </Button>
-            <Button
-              onClick={handleNext}
-              size="lg"
-              style="primary"
-              type="button"
-              disabled={true}
-            >
-              Add a cloud account
-            </Button>
-          </div>
+          <CredentialsButton handleNext={handleNext} />
         </LeftSideLayout>
 
         <RightSideLayout>

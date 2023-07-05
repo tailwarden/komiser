@@ -3,49 +3,21 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import Select from '../../components/select/Select';
 import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
+import SelectInput from '../../components/onboarding-wizard/SelectInput';
 
-const SelectCloud = {
-  'Amazon Web Services': 'aws',
-  'Microsoft Azure': 'azure',
-  'Google Cloud Platform': 'gcp',
-  'Oracle Cloud Infrastructure': 'oci',
-  Kubernetes: 'kubernetes',
-  'Digital Ocean': 'digitalocean',
-  Civo: 'civo',
-  'MongoDB Atlas': 'mongodbatlas',
-  'Tencent Cloud': 'tencent',
-  Scaleway: 'scaleway',
-  'OVH Cloud': 'ovh',
-  Linode: 'linode'
-} as const;
-
-type Clouds = keyof typeof SelectCloud;
-type CloudsValues = (typeof SelectCloud)[Clouds];
-
-const cloudLogo: { [K in CloudsValues]: string } = {
-  aws: '/assets/img/providers/aws.png',
-  azure: '/assets/img/providers/azure.svg',
-  gcp: '/assets/img/providers/gcp.png',
-  oci: '/assets/img/providers/oci.png',
-  civo: '/assets/img/providers/civo.jpeg',
-  tencent: '/assets/img/providers/tencent.jpeg',
-  kubernetes: '/assets/img/providers/kubernetes.png',
-  digitalocean: '/assets/img/providers/digitalocean.png',
-  mongodbatlas: '/assets/img/providers/mongodbatlas.jpg',
-  scaleway: '/assets/img/providers/scaleway.png',
-  ovh: '/assets/img/providers/ovh.jpeg',
-  linode: '/assets/img/providers/linode.png'
-};
+import ProviderCls, {
+  allProviders,
+  Provider
+} from '../../utils/providerHelper';
 
 export default function Onboarding() {
   const router = useRouter();
-  const [provider, setProvider] = useState<CloudsValues>('aws');
+  const [provider, setProvider] = useState<Provider>('aws');
 
   const handleNext = () => {
     router.push(`/onboarding/${provider}`);
@@ -55,6 +27,9 @@ export default function Onboarding() {
     router.replace(
       'https://docs.komiser.io/docs/faqs#how-can-i-request-a-new-feature'
     );
+
+  const handleSelectChange = (newValue: string) =>
+    setProvider(newValue as Provider);
 
   return (
     <div>
@@ -76,12 +51,14 @@ export default function Onboarding() {
             <div>Get started now by connecting your first account.</div>
           </div>
           <div className="py-10">
-            <Select
-              displayValues={Object.keys(SelectCloud)}
-              handleChange={(value: any) => setProvider(value)}
+            <SelectInput
               label="Cloud provider"
               value={provider}
-              values={Object.values(SelectCloud)}
+              values={allProviders}
+              handleChange={handleSelectChange}
+              displayValues={allProviders.map(value => ({
+                label: ProviderCls.providerLabel(value)
+              }))}
             />
           </div>
           <div className="flex justify-between">
@@ -104,24 +81,39 @@ export default function Onboarding() {
           </div>
         </LeftSideLayout>
 
-        <RightSideLayout>
-          <div className="relative">
+        <RightSideLayout
+          isCustom={true}
+          customClasses="flex flex-col justify-center items-center space-y-6"
+        >
+          <div className="relative inline-block">
             <Image
-              src="/assets/img/others/onboarding-padlock.png"
-              alt="Komiser Logo"
+              src="/assets/img/others/onboarding-cloud.svg"
+              alt="Onboarding cloud"
               width={500}
-              height={150}
+              height={120}
             />
-            <div className="absolute top-0 left-0 mt-[10.1rem] ml-[14.55rem] flex h-[75px] w-[77px] items-center justify-center rounded-full border bg-gray-800 p-[0.1rem]">
+            <div className="absolute top-[53%] left-[48%] -translate-x-1/2 -translate-y-1/2 transform rounded-full">
               <Image
-                src={cloudLogo[provider]}
+                src={ProviderCls.providerImg(provider) as string}
                 alt={`${provider} Logo`}
-                className="h-full w-full rounded-full"
-                width={0}
-                height={0}
+                className="rounded-full shadow-md"
+                width={95}
+                height={95}
               />
             </div>
           </div>
+          <Image
+            width={20}
+            height={20}
+            alt="Arrow down"
+            src="/assets/img/others/arrow-down.svg"
+          />
+          <Image
+            alt={`${provider} Logo`}
+            src={'/assets/img/komiser.svg'}
+            width={120}
+            height={120}
+          />
         </RightSideLayout>
       </OnboardingWizardLayout>
     </div>

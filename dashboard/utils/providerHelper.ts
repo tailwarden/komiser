@@ -12,6 +12,21 @@ export type Provider =
   | 'scaleway'
   | 'mongodbatlas';
 
+export const allProviders: Provider[] = [
+  'aws',
+  'gcp',
+  'ovh',
+  'digitalocean',
+  'azure',
+  'civo',
+  'kubernetes',
+  'linode',
+  'tencent',
+  'oci',
+  'scaleway',
+  'mongodbatlas'
+];
+
 const providers = {
   providerLabel(arg: Provider) {
     let label;

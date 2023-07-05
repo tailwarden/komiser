@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import classNames from 'classnames';
+
+import ChevronDownIcon from '../icons/ChevronDownIcon';
 
 export type SelectInputProps = {
   label: string;
   value: string;
   values: string[];
+  icon?: string | ReactNode;
   handleChange: (value: string) => void;
   displayValues: { [key: string]: any }[];
 };
@@ -13,8 +16,9 @@ function SelectInput({
   label,
   value,
   values,
+  handleChange,
   displayValues,
-  handleChange
+  icon = <ChevronDownIcon width={24} height={24} />
 }: SelectInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const index = values.findIndex(currentValue => currentValue === value);
@@ -34,7 +38,7 @@ function SelectInput({
         className="pointer-events-none absolute right-4
         bottom-[1.15rem] text-komiser-600 transition-all"
       >
-        Change
+        {icon}
       </div>
 
       <label className="mb-2 block text-gray-700">{label}</label>
@@ -46,7 +50,7 @@ function SelectInput({
         )}
       >
         <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pt-[0.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900">
-          {displayValues[index].icon}
+          {displayValues[index].icon && displayValues[index].icon}
           {displayValues[index].label}
         </div>
       </button>
@@ -70,8 +74,10 @@ function SelectInput({
                     )}
                     onClick={() => handleClick(item)}
                   >
-                    {displayValues[idx].icon}
-                    <div className="pl-3">{displayValues[idx].label}</div>
+                    {displayValues[idx].icon && displayValues[idx].icon}
+                    <div className={displayValues[idx].icon ? 'pl-3' : ''}>
+                      {displayValues[idx].label}
+                    </div>
                   </button>
                 );
               })}
