@@ -13,6 +13,7 @@ import OnboardingWizardLayout, {
   RightSideLayout
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
 import SelectInput from '../../components/onboarding-wizard/SelectInput';
+import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
 import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
 import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
 import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
@@ -183,7 +184,7 @@ export default function AWSCredentials() {
 
         <RightSideLayout>
           <div className="relative">
-            <p>AWS Video Here</p>
+            <PurplinCloud provider={provider} />
           </div>
         </RightSideLayout>
       </OnboardingWizardLayout>

@@ -4,10 +4,13 @@ import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
+import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
 import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
 import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
 
 export default function AzureCredentials() {
+  const provider = 'azure';
+
   const handleNext = () => {};
 
   return (
@@ -123,13 +126,12 @@ export default function AzureCredentials() {
               />
             </div>
           </div>
-
           <CredentialsButton handleNext={handleNext} />
         </LeftSideLayout>
 
         <RightSideLayout>
           <div className="relative">
-            <p>Azure Video Here</p>
+            <PurplinCloud provider={provider} />
           </div>
         </RightSideLayout>
       </OnboardingWizardLayout>

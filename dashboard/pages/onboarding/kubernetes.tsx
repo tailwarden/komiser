@@ -1,28 +1,24 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
+import Folder2Icon from '../../components/icons/Folder2Icon';
+import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
 import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
 import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
+import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
 
 export default function AWSCredentials() {
+  const provider = 'kubernetes';
   const router = useRouter();
-  const [provider, setProvider] = useState('kubernetes');
 
   const handleNext = () => {
     router.push(`/onboarding/${provider}`);
   };
-
-  const handleSuggest = () =>
-    router.replace(
-      'https://docs.komiser.io/docs/faqs#how-can-i-request-a-new-feature'
-    );
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleButtonClick = () => {
@@ -141,45 +137,19 @@ export default function AWSCredentials() {
                 label="File path"
                 subLabel="Enter the path or browse the file"
                 placeholder="C:\Documents\Komiser\credentials"
-                icon={
-                  <Image
-                    width={3}
-                    height={3}
-                    alt="Folder Icon"
-                    className="h-6 w-6"
-                    src={'/assets/img/others/folder-2.svg'}
-                  />
-                }
+                icon={<Folder2Icon className="h-6 w-6" />}
                 fileInputRef={fileInputRef}
                 iconClick={handleButtonClick}
                 handleFileChange={handleFileChange}
               />
             </div>
           </div>
-          <div className="flex justify-between">
-            <Button
-              onClick={handleSuggest}
-              size="lg"
-              style="text"
-              type="button"
-            >
-              Back
-            </Button>
-            <Button
-              onClick={handleNext}
-              size="lg"
-              style="primary"
-              type="button"
-              disabled={true}
-            >
-              Add a cloud account
-            </Button>
-          </div>
+          <CredentialsButton handleNext={handleNext} />
         </LeftSideLayout>
 
         <RightSideLayout>
           <div className="relative">
-            <p>Kubernetes Video Here</p>
+            <PurplinCloud provider={provider} />
           </div>
         </RightSideLayout>
       </OnboardingWizardLayout>

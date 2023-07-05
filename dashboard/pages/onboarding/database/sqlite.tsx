@@ -1,15 +1,30 @@
 import Head from 'next/head';
+import { useRef } from 'react';
 
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
 } from '../../../components/onboarding-wizard/OnboardingWizardLayout';
-import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
+import Folder2Icon from '../../../components/icons/Folder2Icon';
 import DatabasePurplin from '../../../components/onboarding-wizard/DatabasePurplin';
+import InputFileSelect from '../../../components/onboarding-wizard/InputFileSelect';
 import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
 export default function PostgreSQLCredentials() {
   const handleNext = () => {};
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    // Set Input field to file.name and use temporary file path for the upload value
+    console.log(file);
+  };
 
   return (
     <div>
@@ -33,12 +48,16 @@ export default function PostgreSQLCredentials() {
 
           <div className="flex flex-col space-y-4 py-10">
             <div className="space-y-[0.2]">
-              <LabelledInput
+              <InputFileSelect
                 type="text"
-                id="file-path"
+                id="file-path-input"
                 label="File path"
                 subLabel="Enter the path or browse the file"
                 placeholder="C:\Documents\Komiser\database"
+                icon={<Folder2Icon className="h-6 w-6" />}
+                fileInputRef={fileInputRef}
+                iconClick={handleButtonClick}
+                handleFileChange={handleFileChange}
               />
             </div>
           </div>
