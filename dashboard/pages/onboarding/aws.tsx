@@ -1,6 +1,12 @@
-import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { ReactNode, useRef, useState } from 'react';
+
+import KeyIcon from '../../components/icons/KeyIcon';
+import Folder2Icon from '../../components/icons/Folder2Icon';
+import VariableIcon from '../../components/icons/VariableIcon';
+import DocumentTextIcon from '../../components/icons/DocumentTextIcon';
+import ShieldSecurityIcon from '../../components/icons/ShieldSecurityIcon';
 
 import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
@@ -9,10 +15,44 @@ import OnboardingWizardLayout, {
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
 import SelectInput from '../../components/onboarding-wizard/SelectInput';
 import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
+import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
+
+interface SelectOptions {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}
+
+const options: SelectOptions[] = [
+  {
+    icon: <DocumentTextIcon />,
+    label: 'Credentials File',
+    value: 'credentials-file'
+  },
+  {
+    icon: <KeyIcon />,
+    label: 'Credentials keys',
+    value: 'credentials-keys'
+  },
+  {
+    icon: <VariableIcon />,
+    label: 'Environment Variables',
+    value: 'environment-variables'
+  },
+  {
+    icon: <ShieldSecurityIcon />,
+    label: 'IAM Instance Role',
+    value: 'iam-instance-role'
+  }
+];
 
 export default function AWSCredentials() {
+  const provider = 'aws';
+
   const router = useRouter();
-  const [provider, setProvider] = useState('aws');
+  const [credentialType, setCredentialType] = useState<string>(
+    options[0].value
+  );
 
   const handleNext = () => {
     router.push(`/onboarding/${provider}`);
@@ -22,6 +62,23 @@ export default function AWSCredentials() {
     router.replace(
       'https://docs.komiser.io/docs/faqs#how-can-i-request-a-new-feature'
     );
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    // Set Input field to file.name and use temporary file path for the upload value
+    console.log(file);
+  };
+
+  function handleSelectChange(newValue: string) {
+    setCredentialType(newValue);
+  }
 
   return (
     <div>
@@ -60,82 +117,69 @@ export default function AWSCredentials() {
               label="Account name"
               placeholder="my-aws-account"
             />
-            <div className="flex flex-col space-y-[0.2] rounded-md bg-komiser-100 p-5">
+            <div className="flex flex-col space-y-8 rounded-md bg-komiser-100 p-5">
               <div>
-                <label htmlFor="input-group-1" className="mb-2 block">
-                  Source
-                </label>
-                <div className="relative mb-6">
-                  <div className="pointer-events-none absolute inset-y-0 left-1 flex items-center pl-3">
-                    <svg
-                      width="24"
-                      height="25"
-                      viewBox="0 0 24 25"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                    >
-                      <path
-                        d="M21 7.63184V17.6318C21 20.6318 19.5 22.6318 16 22.6318H8C4.5 22.6318 3 20.6318 3 17.6318V7.63184C3 4.63184 4.5 2.63184 8 2.63184H16C19.5 2.63184 21 4.63184 21 7.63184Z"
-                        stroke="#0C1717"
-                        stroke-width="1.5"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M14.5 5.13184V7.13184C14.5 8.23184 15.4 9.13184 16.5 9.13184H18.5"
-                        stroke="#0C1717"
-                        stroke-width="1.5"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M8 13.6318H12"
-                        stroke="#0C1717"
-                        stroke-width="1.5"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M8 17.6318H16"
-                        stroke="#0C1717"
-                        stroke-width="1.5"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                <SelectInput
+                  label={'Source'}
+                  displayValues={options}
+                  value={credentialType}
+                  handleChange={handleSelectChange}
+                  values={options.map(option => option.value)}
+                />
+                {[options[2].value, options[3].value].includes(
+                  credentialType
+                ) && (
+                  <div className="mt-2 text-sm text-black-400">
+                    {credentialType === options[3].value
+                      ? 'Komiser will fetch the credentials from AWS'
+                      : 'Komiser will load credentials from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.'}
                   </div>
-                  <input
-                    type="text"
-                    id="input-group-1"
-                    className="block w-full rounded border py-4 pl-12 text-sm text-black-900 outline outline-black-200 focus:outline-2 focus:outline-primary"
-                    placeholder="Credentials File"
-                  />
-                  <button className="absolute inset-y-0 right-5 flex items-center pl-3 text-komiser-600">
-                    Change
-                  </button>
-                </div>
+                )}
               </div>
 
-              <SelectInput
-                displayValues={['1']}
-                handleChange={(value: any) => setProvider(value)}
-                label="Cloud provider"
-                value={provider}
-                values={['1']}
-              />
+              {credentialType === options[0].value && (
+                <div>
+                  <InputFileSelect
+                    type="text"
+                    label="File path"
+                    id="file-path-input"
+                    icon={<Folder2Icon />}
+                    subLabel="Enter the path or browse the file"
+                    placeholder="C:\Documents\Komiser\credentials"
+                    fileInputRef={fileInputRef}
+                    iconClick={handleButtonClick}
+                    handleFileChange={handleFileChange}
+                  />
 
-              <LabelledInput
-                type="text"
-                id="profile"
-                label="Profile"
-                subLabel="Name of the section in the credentials file"
-                placeholder="default"
-              />
+                  <LabelledInput
+                    type="text"
+                    id="profile"
+                    label="Profile"
+                    placeholder="default"
+                    subLabel="Name of the section in the credentials file"
+                  />
+                </div>
+              )}
+
+              {credentialType === options[1].value && (
+                <div>
+                  <LabelledInput
+                    type="text"
+                    id="access-key-id"
+                    label="Access key ID"
+                    placeholder="AKIABCDEFGHIJKLMN12"
+                    subLabel="Unique identifier used to access AWS services"
+                  />
+
+                  <LabelledInput
+                    type="text"
+                    id="secret-access-key"
+                    label="Secret access key"
+                    placeholder="AbCdEfGhIjKlMnOpQrStUvWxYz0123456789AbCd"
+                    subLabel="The secret access key is generated by AWS when an access key is created"
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className="flex justify-between">
