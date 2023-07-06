@@ -157,6 +157,7 @@ function SelectCheckbox({
                 placeholder="Search"
                 className="h-10 w-full rounded-md border border-black-200/50 bg-white py-4 pl-10 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
                 autoFocus
+                maxLength={64}
               />
             </div>
             {error && (

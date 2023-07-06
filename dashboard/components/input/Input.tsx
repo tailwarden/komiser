@@ -13,6 +13,7 @@ export type InputProps = {
   value?: string | number | string[];
   autofocus?: boolean;
   min?: number;
+  maxLength?: number;
   positiveNumberOnly?: boolean;
   action: (newData: any, id?: number) => void;
 };
@@ -27,6 +28,7 @@ function Input({
   value,
   autofocus,
   min,
+  maxLength,
   positiveNumberOnly,
   action
 }: InputProps) {
@@ -83,6 +85,7 @@ function Input({
           value={value}
           ref={inputRef}
           min={min}
+          maxLength={maxLength}
           autoComplete="off"
           data-lpignore="true"
           data-form-type="other"
