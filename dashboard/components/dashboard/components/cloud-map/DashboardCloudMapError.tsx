@@ -8,7 +8,7 @@ function DashboardCloudMapError({ fetch }: DashboardCloudMapErrorProps) {
   return (
     <div
       data-testid="error"
-      className="min-h-[396px] w-full rounded-lg bg-white py-4 px-6 pb-6"
+      className="min-h-[396px] w-full rounded-lg bg-white px-6 py-4 pb-6"
     >
       <div className="-mx-6 flex items-center justify-center gap-6 border-b border-black-200/40 px-6 pb-4">
         <p className="text-sm text-black-400">

@@ -13,7 +13,7 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
     <>
       <div
         className={classNames(
-          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg py-4 px-6 text-black-900 opacity-0 shadow-2xl sm:left-8',
+          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg px-6 py-4 text-black-900 opacity-0 shadow-2xl sm:left-8',
           {
             'bg-error-100': hasError,
             'bg-success-100': !hasError
@@ -29,11 +29,11 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
             }
           )}
         ></div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-start">
           <div
             className={classNames({
-              'text-error-600': hasError,
-              'text-success-600': !hasError
+              'mt-4 text-error-600 ': hasError,
+              'mt-4 text-success-600': !hasError
             })}
           >
             {hasError ? (
@@ -42,10 +42,10 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
               <CheckIcon width={24} height={24} />
             )}
           </div>
-          <div>
-            <p className="text-sm font-medium">{title}</p>
+          <div className="p-3">
+            <p className="pb-2 text-sm font-medium">{title}</p>
             <p
-              className="text-sm text-black-900/60"
+              className="text-sm text-black-900/60 "
               dangerouslySetInnerHTML={{ __html: message }}
             />
           </div>

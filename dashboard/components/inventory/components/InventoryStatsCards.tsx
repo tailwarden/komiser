@@ -33,7 +33,7 @@ function InventoryStatsCards({
               router.query.view ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
             } gap-8`}
           >
-            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
               <div className=" rounded-lg bg-komiser-100 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +67,7 @@ function InventoryStatsCards({
               </div>
               <Tooltip>Number of active cloud services</Tooltip>
             </div>
-            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
               <div className=" rounded-lg bg-komiser-100 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +108,7 @@ function InventoryStatsCards({
                 Number of regions where you have active cloud services
               </Tooltip>
             </div>
-            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
               <div className=" rounded-lg bg-komiser-100 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@ function InventoryStatsCards({
               <Tooltip>Up-to-date monthly cost</Tooltip>
             </div>
             {router.query.view && hiddenResources && (
-              <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  py-8  px-6 text-black-900 transition-colors">
+              <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
                 <div className=" rounded-lg bg-komiser-100 p-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
