@@ -18,6 +18,7 @@ type Resource struct {
 	Tags       []Tag             `json:"tags" bun:"tags,default:'[]'"`
 	Link       string            `json:"link" bson:"link"`
 	Value      string            `bun:",scanonly"` //to be deprecated
+	NodeCount  int               `json:"nodeCount"` // Add the NodeCount field
 }
 
 type Tag struct {
