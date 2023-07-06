@@ -104,9 +104,9 @@ func InstancesCost(instanceType string, clusterSize int) (float64, bool) {
 		if clusterSize == 3 {
 			cost *= 3
 
-		return cost, true
+			return cost, true
 		}
-		
+
 	} else if strings.Contains(instanceType, "Shared") {
 		cost, ok := sharedCPUCosts[instanceType]
 		if !ok {
@@ -117,9 +117,9 @@ func InstancesCost(instanceType string, clusterSize int) (float64, bool) {
 		if clusterSize == 3 {
 			cost *= 2.333
 
-		return cost, true
+			return cost, true
 		}
-		
+
 	}
 
 	return 0, false
