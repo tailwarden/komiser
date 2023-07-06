@@ -51,7 +51,7 @@ function InventoryLayout({
         <nav
           className={`fixed ${
             displayBanner ? 'mt-[145px]' : 'mt-[73px]'
-          } left-0 bottom-0 top-0 z-20 flex w-[17rem] flex-col gap-4 bg-white p-6`}
+          } bottom-0 left-0 top-0 z-20 flex w-[17rem] flex-col gap-4 bg-white p-6`}
         >
           <button
             onClick={() => {
@@ -80,7 +80,7 @@ function InventoryLayout({
                   className="flex w-full items-center rounded-lg border border-black-200 px-4 py-3 pl-10 text-sm font-medium text-black-400 transition-colors hover:border-black-300 focus-visible:outline-primary"
                 />
                 <div
-                  className={`absolute top-[0.95rem] left-4 ${
+                  className={`absolute left-4 top-[0.95rem] ${
                     query ? 'cursor-pointer' : ''
                   }`}
                 >

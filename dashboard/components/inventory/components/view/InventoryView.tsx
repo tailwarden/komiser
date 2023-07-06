@@ -163,7 +163,7 @@ function InventoryView({
                 disabled={!view.name}
               >
                 {router.query.view ? 'Update view' : 'Save as a view'}{' '}
-                <span className="flex items-center justify-center rounded-lg bg-black-900/20 py-1 px-2 text-xs">
+                <span className="flex items-center justify-center rounded-lg bg-black-900/20 px-2 py-1 text-xs">
                   {inventoryStats?.resources}
                 </span>
               </Button>
@@ -182,7 +182,7 @@ function InventoryView({
                 <table className="w-full table-auto bg-white text-left text-xs text-gray-900">
                   <thead className="bg-white">
                     <tr className="shadow-[inset_0_-1px_0_0_#cfd7d74d]">
-                      <th className="py-4 px-2">
+                      <th className="px-2 py-4">
                         <div className="flex items-center">
                           <Checkbox
                             checked={bulkSelectCheckbox}
@@ -190,12 +190,12 @@ function InventoryView({
                           />
                         </div>
                       </th>
-                      <th className="py-4 px-2">Cloud</th>
-                      <th className="py-4 px-2">Service</th>
-                      <th className="py-4 px-2">Name</th>
-                      <th className="py-4 px-2">Region</th>
-                      <th className="py-4 px-2">Account</th>
-                      <th className="py-4 px-2 text-right">Cost</th>
+                      <th className="px-2 py-4">Cloud</th>
+                      <th className="px-2 py-4">Service</th>
+                      <th className="px-2 py-4">Name</th>
+                      <th className="px-2 py-4">Region</th>
+                      <th className="px-2 py-4">Account</th>
+                      <th className="px-2 py-4 text-right">Cost</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -209,7 +209,7 @@ function InventoryView({
                             : 'border-black-200/30 bg-white hover:bg-black-100/50'
                         } border-b last:border-none`}
                       >
-                        <td className="py-4 px-2">
+                        <td className="px-2 py-4">
                           <Checkbox
                             checked={
                               bulkItems &&
@@ -234,17 +234,17 @@ function InventoryView({
                             <span>{item.provider}</span>
                           </div>
                         </td>
-                        <td className="py-4 px-2">{item.service}</td>
-                        <td className="py-4 px-2">
+                        <td className="px-2 py-4">{item.service}</td>
+                        <td className="px-2 py-4">
                           <p className="... w-24 truncate">{item.name}</p>
                         </td>
-                        <td className="py-4 px-2">
+                        <td className="px-2 py-4">
                           <p className="... w-24 truncate">{item.region}</p>
                         </td>
-                        <td className="py-4 px-2">
+                        <td className="px-2 py-4">
                           <p className="... w-24 truncate">{item.account}</p>
                         </td>
-                        <td className="py-4 px-2 text-right">
+                        <td className="px-2 py-4 text-right">
                           ${formatNumber(item.cost)}
                         </td>
                       </tr>
@@ -260,7 +260,7 @@ function InventoryView({
                   onClick={unhideResources}
                 >
                   Unhide resources{' '}
-                  <span className="flex items-center justify-center rounded-lg bg-white/10 py-1 px-2 text-xs">
+                  <span className="flex items-center justify-center rounded-lg bg-white/10 px-2 py-1 text-xs">
                     {formatNumber(bulkItems.length)}
                   </span>
                 </Button>

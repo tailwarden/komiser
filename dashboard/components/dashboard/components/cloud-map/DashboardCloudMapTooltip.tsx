@@ -15,7 +15,7 @@ function DashboardCloudMap({
     <>
       {tooltip && sumOfResources && (
         <div
-          className="absolute z-20 flex animate-fade-in flex-col gap-2 rounded-lg bg-[#013220] py-2 px-3 text-xs text-black-300 opacity-0"
+          className="absolute z-20 flex animate-fade-in flex-col gap-2 rounded-lg bg-[#013220] px-3 py-2 text-xs text-black-300 opacity-0"
           style={{
             top: `${tooltip.y - 60}px`,
             left: `${tooltip.x + 10}px`
@@ -42,7 +42,7 @@ function DashboardCloudMap({
               100
             ).toFixed(1)}%`}</span>
           </span>
-          <div className="-mx-3 flex items-center gap-2 border-t border-white/30 px-3 pt-2 pb-1">
+          <div className="-mx-3 flex items-center gap-2 border-t border-white/30 px-3 pb-1 pt-2">
             <span className="text-white">Click to discover the resources</span>
             <LinkIcon className="w-[20px]" />
           </div>

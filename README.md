@@ -16,7 +16,7 @@
 </h4>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
-[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/tailwarden/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
+[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
 Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, Azure, Civo, Digital Ocean, OCI, Linode, Tencent and Scaleway), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
 
@@ -39,9 +39,9 @@ brew install komiser
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [What is Komiser?](#what-is-komiser-)
+- [What is Komiser? 🤷](#what-is-komiser-)
   - [Who is using it?](#who-is-using-it)
-- [Getting started](#getting-started-)
+- [Getting started 👇](#getting-started-)
   - [Download](#download)
   - [Installation on AWS](#installation-on-aws)
     - [Connect Komiser CLI to your AWS account.](#connect-komiser-cli-to-your-aws-account)
@@ -52,14 +52,16 @@ brew install komiser
   - [Installation on OCI](#installation-on-oci)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
   - [Installation on Linode](#installation-on-linode)
-  - [Installation on Tencent](#installation-on-tencent-cloud)
+  - [Installation on Tencent Cloud](#installation-on-tencent-cloud)
   - [Installation on Scaleway](#installation-on-scaleway)
-- [Documentation](#documentation-)
+- [Documentation 📖](#documentation-)
   - [Jump right in:](#jump-right-in)
-- [Bugs and feature requests](#bugs-and-feature-requests-)
-- [Roadmap and Contributing](#roadmap-and-contributing-%EF%B8%8F)
-- [Users](#users-)
-- [Versioning](#versioning-)
+- [Bugs and feature requests 🐞](#bugs-and-feature-requests-)
+- [Roadmap and Contributing 🛣️](#roadmap-and-contributing-️)
+    - [Watch! :](#watch-)
+- [Users 🧑‍🤝‍🧑](#users-)
+- [Versioning 🧮](#versioning-)
+- [Contributors](#contributors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

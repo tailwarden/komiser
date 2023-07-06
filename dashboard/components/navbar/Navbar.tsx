@@ -15,7 +15,7 @@ function Navbar() {
     <nav
       className={`fixed ${
         displayBanner ? 'top-[72px]' : 'top-0'
-      } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white py-4 px-6 xl:pr-8 2xl:pr-24`}
+      } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white px-6 py-4 xl:pr-8 2xl:pr-24`}
     >
       <div className="flex items-center gap-8 text-sm font-semibold text-black-400">
         <Link href="/dashboard">
@@ -136,7 +136,7 @@ function Navbar() {
           Leave feedback
         </a>
         <a
-          className="flex items-center gap-2 rounded-lg bg-[#5865F2] py-2 px-4 text-white transition-colors hover:bg-[#4f5be2]"
+          className="flex items-center gap-2 rounded-lg bg-[#5865F2] px-4 py-2 text-white transition-colors hover:bg-[#4f5be2]"
           href="https://discord.tailwarden.com"
           target="_blank"
           rel="noopener noreferrer"

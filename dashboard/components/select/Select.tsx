@@ -27,8 +27,8 @@ function Select({
   return (
     <div className="relative">
       <div
-        className="pointer-events-none absolute right-4
-        bottom-[1.15rem] text-black-900 transition-all"
+        className="pointer-events-none absolute bottom-[1.15rem]
+        right-4 text-black-900 transition-all"
       >
         <ChevronDownIcon width={24} height={24} />
       </div>
@@ -40,10 +40,10 @@ function Select({
         )}
       >
         <div className="absolute right-0 top-1 h-[50px] w-6"></div>
-        <span className="pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75 select-none font-normal text-black-300">
+        <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-black-300">
           {label}
         </span>
-        <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900">
+        <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pb-[0.75rem] pl-4 pr-16 pt-[1.75rem] text-sm text-black-900">
           {displayValues[index]}
         </div>
       </button>
@@ -62,7 +62,7 @@ function Select({
                   <button
                     key={idx}
                     className={classNames(
-                      'flex items-center justify-between rounded py-2 px-3 text-left text-sm text-black-400 hover:bg-black-150',
+                      'flex items-center justify-between rounded px-3 py-2 text-left text-sm text-black-400 hover:bg-black-150',
                       { 'bg-komiser-150': isActive }
                     )}
                     onClick={() => handleChange(item)}

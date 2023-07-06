@@ -48,7 +48,7 @@ export default function InventoryFilterDropdown({
       {/* Dropdown transparent backdrop */}
       <div
         onClick={toggle}
-        className="fixed top-0 left-0 z-20 hidden h-screen w-screen animate-fade-in bg-transparent opacity-0 sm:block"
+        className="fixed left-0 top-0 z-20 hidden h-screen w-screen animate-fade-in bg-transparent opacity-0 sm:block"
       ></div>
       <div
         className={`absolute ${position} z-[21] inline-flex min-w-[16rem] max-w-[21rem] rounded-lg bg-white p-4 text-sm shadow-xl`}

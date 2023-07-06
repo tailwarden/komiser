@@ -8,7 +8,7 @@ function DashboardResourcesManagerError({
   fetch
 }: DashboardResourcesManagerErrorProps) {
   return (
-    <div className="flex min-h-[360px] w-full flex-col gap-4 overflow-hidden rounded-lg bg-white py-4 px-6 pb-6">
+    <div className="flex min-h-[360px] w-full flex-col gap-4 overflow-hidden rounded-lg bg-white px-6 py-4 pb-6">
       <div className="-mx-6 flex items-center justify-center gap-6 border-b border-black-200/40 px-6 pb-4">
         <p className="text-sm text-black-400">
           There was an error loading the resources manager.
