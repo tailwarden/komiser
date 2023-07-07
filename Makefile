@@ -36,7 +36,6 @@ package:
 test:
 	go test -v $(go list ./... | grep -v /dashboard/)
 
-
 ## version: Show version.
 version:
 	@echo version: $(VERSION)
