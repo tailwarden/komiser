@@ -131,7 +131,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                   key={option.label}
                   onClick={() => changeAlertType(option.type)}
                   className={classNames(
-                    'flex cursor-pointer flex-col items-start justify-center rounded-lg py-4 px-6 outline outline-black-200 hover:outline-black-300',
+                    'flex cursor-pointer flex-col items-start justify-center rounded-lg px-6 py-4 outline outline-black-200 hover:outline-black-300',
                     {
                       'outline-2 outline-primary hover:outline-primary':
                         isActive
@@ -226,7 +226,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                   <input
                     type="text"
                     name="endpoint"
-                    className={`peer mr-6 w-full rounded bg-white pl-4 pr-32 pt-[1.75rem] pb-[0.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${
+                    className={`peer mr-6 w-full rounded bg-white pb-[0.75rem] pl-4 pr-32 pt-[1.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${
                       testResultData?.success === false &&
                       `outline-error-600 focus:outline-error-600`
                     }`}
@@ -240,7 +240,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                     data-lpignore="true"
                     data-form-type="other"
                   />
-                  <span className="pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75 select-none font-normal text-black-300 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
+                  <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-black-300 transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
                     Endpoint
                   </span>
                 </div>

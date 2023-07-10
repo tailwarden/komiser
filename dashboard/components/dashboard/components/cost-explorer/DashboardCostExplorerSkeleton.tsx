@@ -1,7 +1,7 @@
 function DashboardCostExplorerSkeleton() {
   const rows: number[] = Array.from(Array(8).keys());
   return (
-    <div className="w-full animate-pulse rounded-lg bg-white py-4 px-6 pb-6">
+    <div className="w-full animate-pulse rounded-lg bg-white px-6 py-4 pb-6">
       <div className="-mx-6 flex flex-wrap items-center justify-between border-b border-black-200/40">
         <div className="px-6 pb-4">
           <div className="h-3 w-24 rounded-lg bg-komiser-200/50"></div>

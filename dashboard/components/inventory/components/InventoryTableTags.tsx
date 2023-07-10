@@ -17,7 +17,7 @@ function InventoryTableTags({
     <>
       {tags && tags.length > 0 && (
         <div className="group relative">
-          <div className="relative flex items-center gap-1 py-4 px-6">
+          <div className="relative flex items-center gap-1 px-6 py-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -40,7 +40,7 @@ function InventoryTableTags({
               ></path>
             </svg>
             <span
-              className={`text-black-900" absolute top-3 left-[2.375rem] flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold ${
+              className={`text-black-900" absolute left-[2.375rem] top-3 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold ${
                 bulkItems && bulkItems.find(currentId => currentId === id)
                   ? 'bg-komiser-120'
                   : ''
@@ -49,7 +49,7 @@ function InventoryTableTags({
               {tags.length}
             </span>
           </div>
-          <div className="absolute right-6 top-11 z-10 hidden max-w-xs flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 shadow-lg group-hover:flex">
+          <div className="absolute right-6 top-11 z-10 hidden max-w-xs flex-col gap-2 rounded-lg bg-black-900 px-4 py-3 shadow-lg group-hover:flex">
             {tags.map((tag, index) => (
               <div
                 key={index}

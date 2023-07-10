@@ -35,7 +35,7 @@ function DashboardResourcesManagerCard({
     chartData && chartData.labels && chartData.labels.length > 0;
 
   return (
-    <div className="w-full rounded-lg bg-white py-4 px-6 pb-6">
+    <div className="w-full rounded-lg bg-white px-6 py-4 pb-6">
       <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
         <div>
           <p className="text-sm font-semibold text-black-900">

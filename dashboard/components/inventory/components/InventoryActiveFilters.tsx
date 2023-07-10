@@ -28,7 +28,7 @@ function InventoryActiveFilters({
   return (
     <>
       {hasFilters && (
-        <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white py-2 px-6">
+        <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-white px-6 py-2">
           <div className="h-full text-sm text-black-400">Filters</div>
           {displayedFilters &&
             displayedFilters.map((activeFilter, idx) => (

@@ -1,6 +1,6 @@
 function DashboardResourcesManagerSkeleton() {
   return (
-    <div className="flex min-h-[360px] w-full animate-pulse flex-col gap-4 overflow-hidden rounded-lg bg-white py-4 px-6 pb-6">
+    <div className="flex min-h-[360px] w-full animate-pulse flex-col gap-4 overflow-hidden rounded-lg bg-white px-6 py-4 pb-6">
       <div className=" -mx-6 flex items-center justify-between border-b border-black-200/40">
         <div className="px-6 pb-4">
           <div className="h-3 w-48 rounded-lg bg-komiser-200/50"></div>

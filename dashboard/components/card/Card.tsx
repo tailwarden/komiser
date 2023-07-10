@@ -12,7 +12,7 @@ export type CardProps = {
 
 function Card({ label, value, tooltip, icon, formatter }: CardProps) {
   return (
-    <div className="relative flex w-full items-center gap-4 rounded-lg bg-white py-8 px-6 text-black-900 transition-colors">
+    <div className="relative flex w-full items-center gap-4 rounded-lg bg-white px-6 py-8 text-black-900 transition-colors">
       <div className="rounded-lg bg-komiser-100 p-4" data-testid="icon">
         {icon}
       </div>

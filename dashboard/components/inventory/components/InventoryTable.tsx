@@ -79,12 +79,12 @@ function InventoryTable({
                       </div>
                     </th>
                     <th className="pl-2 pr-6">Cloud</th>
-                    <th className="py-4 px-6">Service</th>
-                    <th className="py-4 px-6">Name</th>
-                    <th className="py-4 px-6">Region</th>
-                    <th className="py-4 px-6">Account</th>
-                    <th className="py-4 px-6 text-right">Cost</th>
-                    <th className="py-4 px-6">Tags</th>
+                    <th className="px-6 py-4">Service</th>
+                    <th className="px-6 py-4">Name</th>
+                    <th className="px-6 py-4">Region</th>
+                    <th className="px-6 py-4">Account</th>
+                    <th className="px-6 py-4 text-right">Cost</th>
+                    <th className="px-6 py-4">Tags</th>
                   </tr>
                 </thead>
               )}
@@ -130,37 +130,37 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer py-4 px-6"
+                        className="cursor-pointer px-6 py-4"
                       >
                         <p className="w-12 xl:w-full">{item.service}</p>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="group relative cursor-pointer py-4 px-6"
+                        className="group relative cursor-pointer px-6 py-4"
                       >
                         <div className="peer h-full w-full"></div>
                         <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
-                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 text-xs text-black-200 shadow-lg group-hover:flex">
+                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 px-4 py-3 text-xs text-black-200 shadow-lg group-hover:flex">
                           {item.name}
                         </div>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer py-4 px-6"
+                        className="cursor-pointer px-6 py-4"
                       >
                         {item.region}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer py-4 px-6"
+                        className="cursor-pointer px-6 py-4"
                       >
                         {item.account}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer whitespace-nowrap py-4 px-6 text-right"
+                        className="cursor-pointer whitespace-nowrap px-6 py-4 text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>
@@ -215,37 +215,37 @@ function InventoryTable({
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer py-4 px-6"
+                        className="cursor-pointer px-6 py-4"
                       >
                         <p className="w-12 xl:w-full">{item.service}</p>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="group relative cursor-pointer py-4 px-6"
+                        className="group relative cursor-pointer px-6 py-4"
                       >
                         <div className="peer h-full w-full"></div>
                         <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
-                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 py-3 px-4 text-xs text-black-200 shadow-lg group-hover:flex">
+                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 px-4 py-3 text-xs text-black-200 shadow-lg group-hover:flex">
                           {item.name}
                         </div>
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer py-4 px-6"
+                        className="cursor-pointer px-6 py-4"
                       >
                         {item.region}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer py-4 px-6"
+                        className="cursor-pointer px-6 py-4"
                       >
                         {item.account}
                       </td>
                       <td
                         onClick={() => openModal(item)}
-                        className="cursor-pointer whitespace-nowrap py-4 px-6 text-right"
+                        className="cursor-pointer whitespace-nowrap px-6 py-4 text-right"
                       >
                         ${formatNumber(item.cost)}
                       </td>

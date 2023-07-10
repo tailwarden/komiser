@@ -63,7 +63,7 @@ function InventoryFilterOperator({
     <div className="flex flex-col">
       {/* If field is tag, ask for tag key */}
       {data.field === 'tag' && (
-        <div className="pl-1 pt-2 pb-2">
+        <div className="pb-2 pl-1 pt-2">
           <Input
             type="text"
             name="tagKey"

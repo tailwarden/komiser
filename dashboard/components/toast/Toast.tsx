@@ -13,7 +13,7 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
     <>
       <div
         className={classNames(
-          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg py-4 px-6 text-black-900 opacity-0 shadow-2xl sm:left-8',
+          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg px-6 py-4 text-black-900 opacity-0 shadow-2xl sm:left-8',
           {
             'bg-error-100': hasError,
             'bg-success-100': !hasError

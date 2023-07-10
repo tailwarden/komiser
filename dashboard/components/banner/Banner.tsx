@@ -40,7 +40,7 @@ function Banner({ githubStars }: BannerProps) {
             alt="Github logo"
           />
           <span>Star Komiser</span>
-          <div className="flex h-full items-center justify-center gap-2 border-l border-white/10 bg-white/10 py-2.5 px-3">
+          <div className="flex h-full items-center justify-center gap-2 border-l border-white/10 bg-white/10 px-3 py-2.5">
             <StarIcon
               width={16}
               height={16}
