@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import ChevronDownIcon from '../icons/ChevronDownIcon';
+import Calendar from 'react-calendar';
 import CalendarIcon from '../icons/CalendarIcon';
+import 'react-calendar/dist/Calendar.css';
 
-export type SelectProps = {
+export type CalendarSelectProps = {
   label: string;
   value: string;
   values: string[];
@@ -11,13 +12,13 @@ export type SelectProps = {
   handleChange: (value: string) => void;
 };
 
-function Select({
+function CalendarSelect({
   label,
   value,
   values,
   displayValues,
   handleChange
-}: SelectProps) {
+}: CalendarSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const index = values.findIndex(currentValue => currentValue === value);
 
@@ -31,7 +32,7 @@ function Select({
         className="pointer-events-none absolute right-4
         bottom-[1.15rem] text-black-900 transition-all"
       >
-        <ChevronDownIcon width={24} height={24} />
+        <CalendarIcon width={24} height={24} />
       </div>
       <button
         onClick={toggle}
@@ -72,6 +73,9 @@ function Select({
                   </button>
                 );
               })}
+              <div className="justify-right flex">
+                <Calendar className="" />
+              </div>
             </div>
           </div>
         </>
@@ -80,4 +84,4 @@ function Select({
   );
 }
 
-export default Select;
+export default CalendarSelect;

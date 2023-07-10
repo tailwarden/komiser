@@ -100,14 +100,14 @@ function useCostExplorerChart({
 
   const dateSelect = {
     values: [
+      'thisMonth',
       'lastMonth',
-      'lastThreeMonths',
       'lastSixMonths',
       'lastTwelveMonths'
     ],
     displayValues: [
+      'This month',
       'Last month',
-      'Last 3 months',
       'Last 6 months',
       'Last 12 months'
     ]

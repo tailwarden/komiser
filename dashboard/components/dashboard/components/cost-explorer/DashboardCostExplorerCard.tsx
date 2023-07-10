@@ -19,6 +19,7 @@ import {
   DashboardCostExplorerData
 } from './hooks/useCostExplorer';
 import useCostExplorerChart from './hooks/useCostExplorerChart';
+import CalendarSelect from '../../../calendar-select/CalendarSelect';
 
 ChartJS.register(
   CategoryScale,
@@ -96,14 +97,14 @@ function DashboardCostExplorerCard({
           exclude={exclude}
           setExclude={setExclude}
         />
-        <Select
+        {/* <Select
           label="Granularity"
           value={queryGranularity}
           values={granularitySelect.values}
           displayValues={granularitySelect.displayValues}
           handleChange={newValue => handleFilterChange('granularity', newValue)}
-        />
-        <Select
+        /> */}
+        <CalendarSelect
           label="Period"
           value={queryDate}
           values={dateSelect.values}
