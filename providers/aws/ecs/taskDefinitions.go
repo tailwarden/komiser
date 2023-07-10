@@ -35,17 +35,18 @@ func TaskDefinitions(ctx context.Context, client ProviderClient) ([]Resource, er
 			return resources, err
 		}
 		for _, taskdefinition := range output.TaskDefinitionArns {
-			ecsNameAndRevisition := extractNameAndRevisionFromArn(taskdefinition)
+			ecsNameAndRevision := extractNameAndRevisionFromArn(taskdefinition)
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "ECS Task Definition",
 				ResourceId: taskdefinition,
 				Region:     client.AWSClient.Region,
-				Name:       ecsNameAndRevisition[0],
+				Name:       ecsNameAndRevision[0],
 				Cost:       0,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecs/v2/taskdefinitions?%s", client.AWSClient.Region, taskdefinition),
+
+				Link: fmt.Sprintf("https://%s.console.aws.amazon.com/ecs/v2/task-definitions/%s/%s/containers?region=%s", client.AWSClient.Region, ecsNameAndRevision[0], ecsNameAndRevision[1], client.AWSClient.Region),
 			})
 		}
 
