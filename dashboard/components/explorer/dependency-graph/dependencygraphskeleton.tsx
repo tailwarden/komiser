@@ -1,8 +1,4 @@
-import { useState } from 'react';
-import ReactFlow, { Background } from 'reactflow';
-
 function DependencyGraphSkeleton() {
-  const [variant, setVar] = useState<any>('cross');
   return (
     <>
       <div
@@ -18,11 +14,7 @@ function DependencyGraphSkeleton() {
           <div className="h-[60px]"></div>
         </div>
         <div className="mt-8"></div>
-        <div className="h-screen">
-          <ReactFlow>
-            <Background variant={variant} />
-          </ReactFlow>
-        </div>
+        <div className="h-screen">{/* TODO - Add Skeleton Grpah */}</div>
         <div className="mt-12"></div>
       </div>
     </>

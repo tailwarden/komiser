@@ -7,6 +7,7 @@ export type ReactFlowData = {
 };
 
 // converting the json object into data that reactflow needs
+// TODO - based on selected library
 function GetData(res: any) {
   const d = {
     nodes: [],
