@@ -153,5 +153,12 @@ Another alternative that came to discussion was libraries like [d3-force](https:
 [React-Sigma](https://github.com/sim51/react-sigma) seems to fulfil all our requirements. Still, the work is in progress. In order to contribute to the frontend part, trying react-sigma or any other library of choice would be the best way to start. Make sure to consider the following things while working with a library:
 
 - The library supports large number of nodes and edges
-- Positioning of nodes are in circular form and edges are directed
-- Nodes and edges UI are highly customizable
+- Positioning of nodes is in circular form and edges are directed
+- Nodes and edges UIs are highly customizable
+
+### Steps to follow 
+
+- Fetch the current branch `wip-dep-graph` to your local
+- Checkout a new branch from this branch and make your changes
+- Raise a PR after you're done with changes
+  - Make sure to raise this against `wip-dep-graph` branch itself  
