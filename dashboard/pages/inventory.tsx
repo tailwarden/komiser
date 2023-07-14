@@ -88,21 +88,6 @@ export default function Inventory() {
         searchedInventory={searchedInventory}
       >
         <InventoryHeader isNotCustomView={isNotCustomView}>
-          {/* Custom view header and view management sidepanel */}
-          {hasFilterOrCustomView && (
-            <InventoryView
-              filters={filters}
-              displayedFilters={displayedFilters}
-              setToast={setToast}
-              inventoryStats={inventoryStats}
-              router={router}
-              views={views}
-              getViews={getViews}
-              hiddenResources={hiddenResources}
-              setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
-            />
-          )}
-
           {/* Filter component */}
           {displayFilterIfIsNotCustomView && (
             <InventoryFilter
@@ -117,15 +102,30 @@ export default function Inventory() {
         {/* Active filters skeleton */}
         {loadingFilters && <SkeletonFilters />}
 
-        {/* Active filters */}
-        <InventoryActiveFilters
-          hasFilters={hasFilters}
-          displayedFilters={displayedFilters}
-          isNotCustomView={isNotCustomView}
-          deleteFilter={deleteFilter}
-          router={router}
-        />
-
+        {/*Filters bar containing active filters and view button */}
+        <div className="relative">
+          <InventoryActiveFilters
+            hasFilters={hasFilters}
+            displayedFilters={displayedFilters}
+            isNotCustomView={isNotCustomView}
+            deleteFilter={deleteFilter}
+            router={router}
+          >
+            {hasFilterOrCustomView && (
+              <InventoryView
+                filters={filters}
+                displayedFilters={displayedFilters}
+                setToast={setToast}
+                inventoryStats={inventoryStats}
+                router={router}
+                views={views}
+                getViews={getViews}
+                hiddenResources={hiddenResources}
+                setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
+              />
+            )}
+          </InventoryActiveFilters>
+        </div>
         {/* Inventory stats skeleton */}
         {!error && statsLoading && (
           <SkeletonStats NumOfCards={isNotCustomView ? 3 : 4} />
