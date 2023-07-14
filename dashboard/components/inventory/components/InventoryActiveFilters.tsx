@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { NextRouter } from 'next/router';
 import Button from '../../button/Button';
 import { InventoryFilterData } from '../hooks/useInventory/types/useInventoryTypes';
@@ -13,7 +14,7 @@ type InventoryActiveFiltersProps = {
   isNotCustomView: boolean;
   deleteFilter: (idx: number) => void;
   router: NextRouter;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
 function InventoryActiveFilters({

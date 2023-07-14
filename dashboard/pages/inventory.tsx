@@ -102,7 +102,7 @@ export default function Inventory() {
         {/* Active filters skeleton */}
         {loadingFilters && <SkeletonFilters />}
 
-        {/*Filters bar containing active filters and view button */}
+        {/* Filters bar containing active filters and view button */}
         <div className="relative">
           <InventoryActiveFilters
             hasFilters={hasFilters}
