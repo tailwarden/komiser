@@ -125,3 +125,50 @@ npm run dev
 ```
 go-bindata-assetfs -o template.go dist/ dist/assets/images/
 ```
+
+## About Dependency graph feature
+
+A dependency graph is a graph that aims to show the relationship that exists between individual cloud resources. This feature would help users of Komiser get a better view of their running resources.
+
+### Approach we are following and work done by now
+
+We have decided to divide the entire feature into two different parts, i.e., frontend and backend.
+
+- Backend: The role of the backend is to fetch resources along with their list of relationships that exist. For now, the relationships are manually found, i.e., for individual resources, individual functions are written where relationships are found and returned along with resource data. The frontend can get this data by calling URL/resources/relations`.
+- Frontend: We managed to prepare the skeleton for the feature in the frontend.
+
+### TODO 
+
+For **Backend**:
+Support for more resources. For now, the Komiser backend only returns resources from AWS, specifically Instances and Elastic IPs with relations.
+- To do so, a function needs to be created at the individual resource level that populates the `Relation` array field of the return value `resources` with relationships. For example, refer to AWS Instances and ElasticIp code.
+- Logic written for fetching relations is currently manual work and can be improved if there is a way to do that automatically.
+- Once we have the Relation field populated, the backend will handle the rest of things on its own.
+
+For **Frontend**:
+The initial attempt for the graph was to use [ReactFlow](https://reactflow.dev/docs/quickstart/) to represent resources as nodes and their edges as their relationships with other resources. However, it was found that scalability was a concern, and we were also a bit restricted when it came to UI.
+
+Another alternative that came to discussion was libraries like [d3-force](https://github.com/d3/d3-force), [reaflow](https://github.com/reaviz/reaflow), [sigma js](https://github.com/jacomyal/sigma.js) etc. 
+
+[React-Sigma](https://github.com/sim51/react-sigma) seems to fulfil all our requirements. Still, the work is in progress. In order to contribute to the frontend part, trying react-sigma or any other library of choice would be the best way to start. Make sure to consider the following things while working with a library:
+
+- The library supports large number of nodes and edges
+- Positioning of nodes is in circular form and edges are directed
+- Nodes and edges UIs are highly customizable
+
+### Steps to follow 
+
+- Checkout the `wip-dep-graph` branch from the remote upstream to your local.
+
+```sh
+  git checkout wip-dep-graph
+```
+
+- Now checkout a new branch from this branch and make your changes
+
+```sh
+  git checkout -b <your-branch-name>
+```
+
+- Raise a PR after you're done with changes
+  - Make sure to raise this against `wip-dep-graph` branch itself
