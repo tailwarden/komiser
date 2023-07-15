@@ -158,14 +158,17 @@ Another alternative that came to discussion was libraries like [d3-force](https:
 
 ### Steps to follow 
 
-- Fetch the current branch `wip-dep-graph` to your local. To do so, you can use
-  ```
-  git fetch --all
-  ```
-- Checkout a new branch from this branch and make your changes
-  ```
-  git checkout remotes/upstream/wip-dep-graph // to checkout to the wip-dep-graph-branch
-  git checkout -b <your-branch-name> // to get your new working branch 
-  ```
+- Checkout the `wip-dep-graph` branch from the remote upstream to your local.
+
+```sh
+  git checkout wip-dep-graph
+```
+
+- Now checkout a new branch from this branch and make your changes
+
+```sh
+  git checkout -b <your-branch-name>
+```
+
 - Raise a PR after you're done with changes
-  - Make sure to raise this against `wip-dep-graph` branch itself  
+  - Make sure to raise this against `wip-dep-graph` branch itself
