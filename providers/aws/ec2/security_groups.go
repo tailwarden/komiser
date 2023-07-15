@@ -9,7 +9,6 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
@@ -18,14 +17,6 @@ func SecurityGroups(ctx context.Context, client ProviderClient) ([]Resource, err
 	var config ec2.DescribeSecurityGroupsInput
 	resources := make([]Resource, 0)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
-
-	stsClient := sts.NewFromConfig(*client.AWSClient)
-	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
-	if err != nil {
-		return resources, err
-	}
-
-	accountId := stsOutput.Account
 
 	for {
 		output, err := ec2Client.DescribeSecurityGroups(ctx, &config)
@@ -42,14 +33,12 @@ func SecurityGroups(ctx context.Context, client ProviderClient) ([]Resource, err
 				})
 			}
 
-			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", client.AWSClient.Region, *accountId, *sg.GroupId)
-
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Security Group",
 				Region:     client.AWSClient.Region,
-				ResourceId: resourceArn,
+				ResourceId: *sg.GroupId,
 				Cost:       0,
 				Name:       *sg.GroupName,
 				FetchedAt:  time.Now(),

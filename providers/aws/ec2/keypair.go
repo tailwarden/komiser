@@ -31,7 +31,7 @@ func KeyPairs(ctx context.Context, client providers.ProviderClient) ([]models.Re
 				Value: aws.ToString(tag.Value),
 			})
 		}
-
+			
 		resources = append(resources, models.Resource{
 			Provider:   "AWS",
 			Account:    client.Name,

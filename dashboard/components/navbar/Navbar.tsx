@@ -19,7 +19,8 @@ function Navbar() {
     { label: 'Inventory', href: '/inventory' },
     betaFlagOnboardingWizard
       ? { label: 'Cloud Accounts', href: '/cloud-accounts' }
-      : null
+      : null,
+    { label: 'Explorer', href: '/explorer' }
   ].filter(item => item !== null) as NavItem[];
 
   return (

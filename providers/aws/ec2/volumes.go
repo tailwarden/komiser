@@ -54,8 +54,7 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					Key:   *tag.Key,
 					Value: *tag.Value,
 				})
-			}
-
+			}                
 			startOfMonth := utils.BeginningOfMonth(time.Now())
 			hourlyUsage := 0
 
