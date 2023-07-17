@@ -141,7 +141,7 @@ Connect a local deployment of Komiser CLI to you [**Scaleway**](https://docs.kom
 
 # Documentation 📖
 
-Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io?utm_source=github&utm_medium=social). The source repository for the documentation website is [tailwarden/docs](https://github.com/tailwarden/docs). 
+Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io?utm_source=github&utm_medium=social). The source repository for the documentation website is [tailwarden/docs.komiser.io](https://github.com/tailwarden/docs.komiser.io). 
 
 We know that writing docs isn't usually at the top of too many peoples "What I like to do for fun" list, but if you feel so inclined, by all means, consider [contributing](https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social) to our documentation repository, we will be very grateful. It's built using [Docusaurus](https://docusaurus.io/). 
 
