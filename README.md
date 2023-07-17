@@ -54,6 +54,7 @@ brew install komiser
     - [Deploy Komiser to single account access EKS cluster (Helm chart)](#deploy-komiser-to-single-account-access-eks-cluster-helm-chart)
     - [Deploy Komiser to a multi account access EKS cluster (Helm chart)](#deploy-komiser-to-a-multi-account-access-eks-cluster-helm-chart)
   - [Installation on Azure](#installation-on-azure)
+  - [Installation on GCP](#installation-on-gcp)
   - [Installation on Civo](#installation-on-civo)
   - [Installation on OCI](#installation-on-oci)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
@@ -107,6 +108,10 @@ Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&
 ## Installation on Azure
 
 Connect a local deployment of Komiser CLI to you [**Azure**](https://docs.komiser.io/docs/cloud-providers/azure?utm_source=github&utm_medium=social) account.
+
+## Installation on GCP
+
+Connect a local deployment of Komiser CLI to you [**GCP**](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social) account.
 
 ## Installation on Civo
 
