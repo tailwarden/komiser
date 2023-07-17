@@ -65,7 +65,6 @@ brew install komiser
   - [Jump right in:](#jump-right-in)
 - [Bugs and feature requests 🐞](#bugs-and-feature-requests-)
 - [Roadmap and Contributing 🛣️](#roadmap-and-contributing-️)
-    - [Watch! :](#watch-)
 - [Users 🧑‍🤝‍🧑](#users-)
 - [Versioning 🧮](#versioning-)
 - [Contributors](#contributors)
@@ -159,12 +158,14 @@ Have a bug or a feature request? Please first read the issue guidelines and sear
 
 # Roadmap and Contributing 🛣️
 
-We are very excited about what is in store in the coming weeks and months, take a look at the [public roadmap](https://tailwarden.canny.io/) to stay on top of what's coming down the pipeline. 
+We are very excited about what is in store in the coming weeks and months, take a look at the [public roadmap](https://roadmap.tailwarden.com/) to stay on top of what's coming down the pipeline. 
 
 Komiser is written in `Golang` and is `Elv2 licensed` - contributions are always welcome whether that means providing feedback, be it through GitHub, through the `#feedback` channel on our [Discord server](https://discord.tailwarden.com) or testing existing and new features. Feel free to check out our [contributor guidelines](./CONTRIBUTING.md) and consider becoming a **contributor** today. 
 
-### Watch! :
-Learn how to contribute with this walkthrough [video](https://www.youtube.com/watch?v=Vn5uc2elcVg)
+Learn how to contribute with this walkthrough videos:
+
+- [How to contributor to Komiser engine](https://www.youtube.com/watch?v=Vn5uc2elcVg)
+- [How to contributor to Komiser dashboard](https://www.youtube.com/watch?v=uwxj11-eRt8)
 
 # Users 🧑‍🤝‍🧑
 
