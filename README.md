@@ -6,14 +6,20 @@
 
 <h4 align="center">
     <a href="https://discord.tailwarden.com">Discord</a> |
-    <a href="https://github.com/tailwarden/komiser/discussions">Discussions</a> |
-    <a href="https://komiser.io?utm_source=github&utm_medium=social/">Site</a><br/><br/>
+    <a href="https://cloud.tailwarden.com?utm_source=github&utm_medium=social">Tailwarden Cloud</a> |
+    <a href="https://komiser.io?utm_source=github&utm_medium=social/">Website</a><br/><br/>
     <a href="https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social/">Guide</a> |
     <a href="https://docs.komiser.io/docs/guides/overview?utm_source=github&utm_medium=social">How to Komiser</a> |
-    <a href="https://docs.komiser.io/docs/intro">Docs</a><br/><br/>
+    <a href="https://docs.komiser.io/docs/events">Community Events</a><br/><br/>
     <a href="https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social">Contribute</a> | 
     <a href="https://roadmap.tailwarden.com">Roadmap</a><br/><br/>
 </h4>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Hmerp_HMEf8">
+    <img src=".github/images/deploy-to-aws.png" width="137" />
+  </a>
+</p>
 
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
 [![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
@@ -22,7 +28,7 @@ Komiser is an open-source cloud-agnostic resource manager. It integrates with mu
 
 <h1 align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></h1>
 
-*Cloud version is available in private beta, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)*
+The fastest and most reliable way to get started with Komiser is signing up for free to [Tailwarden Cloud](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)
 
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiserdotio) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/tailwarden/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
@@ -69,7 +75,7 @@ brew install komiser
 Komiser is an open source project created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
 * Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
-* Get a deep understanding of **how you spend** on the AWS, Civo, OVH, DigitalOcean and OCI.
+* Get a deep understanding of **how you spend** on the AWS, Azure, GCP, Civo, OVH, DigitalOcean and OCI.
 
 <h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-wireframe.png?version=latest" alt="Amp Logo"></h1>
 
