@@ -73,9 +73,11 @@ brew install komiser
 
 # What is Komiser? 🤷
 Komiser is an open source project created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
+* Build an inventory of your cloud infrastructure assets.
 * Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
 * Get a deep understanding of **how you spend** on the AWS, Azure, GCP, Civo, OVH, DigitalOcean and OCI.
+* Uncover idle and untagged resources, ensuring that no resource goes unnoticed.
 
 <h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-wireframe.png?version=latest" alt="Amp Logo"></h1>
 
