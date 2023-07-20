@@ -8,7 +8,6 @@ import InventoryLayout from '../components/inventory/components/InventoryLayout'
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
-import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
 import InventoryView from '../components/inventory/components/view/InventoryView';
 import useInventory from '../components/inventory/hooks/useInventory/useInventory';
 import SkeletonFilters from '../components/skeleton/SkeletonFilters';
@@ -87,17 +86,7 @@ export default function Inventory() {
         inventory={inventory}
         searchedInventory={searchedInventory}
       >
-        <InventoryHeader isNotCustomView={isNotCustomView}>
-          {/* Filter component */}
-          {displayFilterIfIsNotCustomView && (
-            <InventoryFilter
-              router={router}
-              setSkippedSearch={setSkippedSearch}
-            />
-          )}
-        </InventoryHeader>
-
-        <VerticalSpacing />
+        <InventoryHeader isNotCustomView={isNotCustomView} />
 
         {/* Active filters skeleton */}
         {loadingFilters && <SkeletonFilters />}

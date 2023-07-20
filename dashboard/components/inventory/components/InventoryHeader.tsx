@@ -2,10 +2,9 @@ import { ReactNode } from 'react';
 
 type InventoryHeaderProps = {
   isNotCustomView: boolean;
-  children: ReactNode;
 };
 
-function InventoryHeader({ isNotCustomView, children }: InventoryHeaderProps) {
+function InventoryHeader({ isNotCustomView }: InventoryHeaderProps) {
   return (
     <div className="flex min-h-[40px] items-center justify-between gap-8">
       {isNotCustomView && (
@@ -13,7 +12,6 @@ function InventoryHeader({ isNotCustomView, children }: InventoryHeaderProps) {
           All Resources
         </p>
       )}
-      <div className="flex flex-shrink-0 items-center gap-4">{children}</div>
     </div>
   );
 }
