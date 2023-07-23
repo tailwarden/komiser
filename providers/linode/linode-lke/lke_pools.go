@@ -1,4 +1,4 @@
-package linode-lke
+package linodelke
 
 import (
 	"context"
