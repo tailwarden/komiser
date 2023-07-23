@@ -26,7 +26,7 @@ func LKENodePools(ctx context.Context, client providers.ProviderClient) ([]model
 	}
 
 	for _, lkeCluster := range lkeClusters {
-		nodePools, err := client.LinodeClient.ListLKEClusterNodePools(ctx, lkeCluster.ID, &linodego.ListOptions{})
+		nodePools, err := client.LinodeClient.ListLKENodePool(ctx, lkeCluster.ID, &linodego.ListOptions{})
 		if err != nil {
 			return resources, err
 		}
