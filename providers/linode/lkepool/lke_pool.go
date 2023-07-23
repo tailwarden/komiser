@@ -62,6 +62,7 @@ lkeClusters, err := client.LinodeClient.ListLKEClusters(ctx, &linodego.ListOptio
 			Link:       fmt.Sprintf("https://cloud.linode.com/kubernetes/clusters/%d", nodePool.ID),
 			// Add any additional fields or data you want to collect here.
 		})
+  }
 	}
 
 	log.WithFields(log.Fields{
