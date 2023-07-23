@@ -1,24 +1,29 @@
 import Head from 'next/head';
 
+import { allProviders } from '../../../utils/providerHelper';
+
+import RecordCircleIcon from '../../../components/icons/RecordCircleIcon';
+
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../../components/onboarding-wizard/OnboardingWizardLayout';
-import RecordCircleIcon from '../../components/icons/RecordCircleIcon';
-import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
-import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
-import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
+} from '../../../components/onboarding-wizard/OnboardingWizardLayout';
+import PurplinCloud from '../../../components/onboarding-wizard/PurplinCloud';
+import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
+import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
-export default function AzureCredentials() {
-  const provider = 'civo';
+export default function CivoCredentials() {
+  const provider = allProviders.CIVO;
 
-  const handleNext = () => {};
+  const handleNext = () => {
+    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
+  };
 
   return (
     <div>
       <Head>
         <title>Setup Civo - Komiser</title>
-        <meta name="description" content="Setup Azure - Komiser" />
+        <meta name="description" content="Setup Civo - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <OnboardingWizardLayout>

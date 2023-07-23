@@ -3,6 +3,11 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import ProviderCls, {
+  allProviders,
+  Provider
+} from '../../utils/providerHelper';
+
 import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
   LeftSideLayout,
@@ -10,17 +15,12 @@ import OnboardingWizardLayout, {
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
 import SelectInput from '../../components/onboarding-wizard/SelectInput';
 
-import ProviderCls, {
-  allProviders,
-  Provider
-} from '../../utils/providerHelper';
-
-export default function Onboarding() {
+export default function ChooseCloud() {
   const router = useRouter();
-  const [provider, setProvider] = useState<Provider>('aws');
+  const [provider, setProvider] = useState<Provider>(allProviders.AWS);
 
   const handleNext = () => {
-    router.push(`/onboarding/${provider}`);
+    router.push(`/onboarding/provider/${provider}`);
   };
 
   const handleSuggest = () =>
@@ -54,9 +54,9 @@ export default function Onboarding() {
             <SelectInput
               label="Cloud provider"
               value={provider}
-              values={allProviders}
+              values={Object.values(allProviders)}
               handleChange={handleSelectChange}
-              displayValues={allProviders.map(value => ({
+              displayValues={Object.values(allProviders).map(value => ({
                 label: ProviderCls.providerLabel(value)
               }))}
             />

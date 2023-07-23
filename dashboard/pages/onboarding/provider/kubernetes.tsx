@@ -2,17 +2,20 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useRef, useState } from 'react';
 
+import { allProviders } from '../../../utils/providerHelper';
+
+import Folder2Icon from '../../../components/icons/Folder2Icon';
+import DocumentTextIcon from '../../../components/icons/DocumentTextIcon';
+
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../../components/onboarding-wizard/OnboardingWizardLayout';
-import Folder2Icon from '../../components/icons/Folder2Icon';
-import DocumentTextIcon from '../../components/icons/DocumentTextIcon';
-import SelectInput from '../../components/onboarding-wizard/SelectInput';
-import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
-import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
-import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
-import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
+} from '../../../components/onboarding-wizard/OnboardingWizardLayout';
+import SelectInput from '../../../components/onboarding-wizard/SelectInput';
+import PurplinCloud from '../../../components/onboarding-wizard/PurplinCloud';
+import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
+import InputFileSelect from '../../../components/onboarding-wizard/InputFileSelect';
+import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
 interface SelectOptions {
   icon: ReactNode;
@@ -28,8 +31,8 @@ const options: SelectOptions[] = [
   },
 ];
 
-export default function AWSCredentials() {
-  const provider = 'kubernetes';
+export default function KubernetesCredentials() {
+  const provider = allProviders.KUBERNETES;
 
   const router = useRouter();
   const [credentialType, setCredentialType] = useState<string>(
@@ -37,6 +40,7 @@ export default function AWSCredentials() {
   );
 
   const handleNext = () => {
+    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
     router.push(`/onboarding/${provider}`);
   };
 
@@ -49,7 +53,7 @@ export default function AWSCredentials() {
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
-    // Set Input field to file.name and use temporary file path for the upload value
+    // TODO: (onboarding-wizard) handle file change and naming. Set Input field to file.name and use temporary file path for the upload value
     console.log(file);
   };
 
@@ -61,7 +65,7 @@ export default function AWSCredentials() {
     <div>
       <Head>
         <title>Setup Kubernetes - Komiser</title>
-        <meta name="description" content="Setup AWS - Komiser" />
+        <meta name="description" content="Setup Kubernetes - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <OnboardingWizardLayout>

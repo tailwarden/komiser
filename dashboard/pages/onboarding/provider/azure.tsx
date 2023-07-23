@@ -1,17 +1,21 @@
 import Head from 'next/head';
 
+import { allProviders } from '../../../utils/providerHelper';
+
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../../components/onboarding-wizard/OnboardingWizardLayout';
-import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
-import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
-import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
+} from '../../../components/onboarding-wizard/OnboardingWizardLayout';
+import PurplinCloud from '../../../components/onboarding-wizard/PurplinCloud';
+import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
+import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
 export default function AzureCredentials() {
-  const provider = 'azure';
+  const provider = allProviders.AZURE;
 
-  const handleNext = () => {};
+  const handleNext = () => {
+    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
+  };
 
   return (
     <div>

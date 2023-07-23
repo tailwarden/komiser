@@ -2,21 +2,23 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useRef, useState } from 'react';
 
-import KeyIcon from '../../components/icons/KeyIcon';
-import Folder2Icon from '../../components/icons/Folder2Icon';
-import VariableIcon from '../../components/icons/VariableIcon';
-import DocumentTextIcon from '../../components/icons/DocumentTextIcon';
-import ShieldSecurityIcon from '../../components/icons/ShieldSecurityIcon';
+import { allProviders } from '../../../utils/providerHelper';
+
+import KeyIcon from '../../../components/icons/KeyIcon';
+import Folder2Icon from '../../../components/icons/Folder2Icon';
+import VariableIcon from '../../../components/icons/VariableIcon';
+import DocumentTextIcon from '../../../components/icons/DocumentTextIcon';
+import ShieldSecurityIcon from '../../../components/icons/ShieldSecurityIcon';
 
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../../components/onboarding-wizard/OnboardingWizardLayout';
-import SelectInput from '../../components/onboarding-wizard/SelectInput';
-import PurplinCloud from '../../components/onboarding-wizard/PurplinCloud';
-import LabelledInput from '../../components/onboarding-wizard/LabelledInput';
-import InputFileSelect from '../../components/onboarding-wizard/InputFileSelect';
-import CredentialsButton from '../../components/onboarding-wizard/CredentialsButton';
+} from '../../../components/onboarding-wizard/OnboardingWizardLayout';
+import SelectInput from '../../../components/onboarding-wizard/SelectInput';
+import PurplinCloud from '../../../components/onboarding-wizard/PurplinCloud';
+import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
+import InputFileSelect from '../../../components/onboarding-wizard/InputFileSelect';
+import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
 interface SelectOptions {
   icon: ReactNode;
@@ -48,7 +50,7 @@ const options: SelectOptions[] = [
 ];
 
 export default function AWSCredentials() {
-  const provider = 'aws';
+  const provider = allProviders.AWS;
 
   const router = useRouter();
   const [credentialType, setCredentialType] = useState<string>(
@@ -56,7 +58,7 @@ export default function AWSCredentials() {
   );
 
   const handleNext = () => {
-    router.push(`/onboarding/${provider}`);
+    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
   };
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -68,8 +70,7 @@ export default function AWSCredentials() {
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
-    // Set Input field to file.name and use temporary file path for the upload value
-    console.log(file);
+    // TODO: (onboarding-wizard) handle file change and naming. Set Input field to file.name and use temporary file path for the upload value
   };
 
   function handleSelectChange(newValue: string) {

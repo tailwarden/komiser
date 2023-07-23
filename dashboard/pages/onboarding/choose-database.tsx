@@ -3,20 +3,20 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import { DBProvider, allDBProviders } from '../../utils/providerHelper';
+
 import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
 } from '../../components/onboarding-wizard/OnboardingWizardLayout';
 
-type DB = 'postgres' | 'sqlite';
-
 interface DatabaseItemProps {
-  value: DB;
-  selected: DB;
+  value: DBProvider;
+  selected: DBProvider;
   label?: string;
   imageUrl: string;
-  handleClick: (db: DB) => void;
+  handleClick: (db: DBProvider) => void;
 }
 
 function DatabaseLeftItem({
@@ -31,9 +31,8 @@ function DatabaseLeftItem({
   return (
     <div
       onClick={onClick}
-      className={`flex flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${
-        selected === value ? 'border-komiser-600' : 'border-gray-200'
-      }`}
+      className={`flex flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${selected === value ? 'border-komiser-600' : 'border-gray-200'
+        }`}
     >
       <Image
         src={imageUrl}
@@ -59,16 +58,14 @@ function DatabaseRightItem({
     <div
       onClick={onClick}
       key={value}
-      className={`flex w-32 items-center justify-center rounded-3xl p-6 ${
-        selected === value ? 'bg-komiser-200' : 'bg-white'
-      }`}
+      className={`flex w-32 items-center justify-center rounded-3xl p-6 ${selected === value ? 'bg-komiser-200' : 'bg-white'
+        }`}
     >
       <Image
         src={imageUrl}
         alt={`${value} Logo`}
-        className={`h-20 w-20 rounded-full ${
-          selected !== value ? 'opacity-[0.6]' : ''
-        }`}
+        className={`h-20 w-20 rounded-full ${selected !== value ? 'opacity-[0.6]' : ''
+          }`}
         width={0}
         height={0}
       />
@@ -76,19 +73,19 @@ function DatabaseRightItem({
   );
 }
 
-export default function Onboarding() {
+export default function ChooseDatabase() {
   const router = useRouter();
-  const [database, setDatabase] = useState<DB>('postgres');
+  const [database, setDatabase] = useState<DBProvider>(allDBProviders.POSTGRES);
 
   const handleNext = () => router.push(`/onboarding/database/${database}`);
 
-  const handleClick = (db: DB) => setDatabase(db);
+  const handleClick = (db: DBProvider) => setDatabase(db);
 
   return (
     <div>
       <Head>
         <title>Select Database - Komiser</title>
-        <meta name="description" content="Onboarding - Komiser" />
+        <meta name="description" content="Select Database - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <OnboardingWizardLayout>
@@ -150,24 +147,23 @@ export default function Onboarding() {
                 alt="Komiser Logo"
                 width={135}
                 height={100}
-                className={`${
-                  database === 'postgres'
-                    ? 'ml-16'
-                    : 'rotate-onboarding-arrow ml-[182px]'
-                }`}
+                className={`${database === allDBProviders.POSTGRES
+                  ? 'ml-16'
+                  : 'rotate-onboarding-arrow ml-[182px]'
+                  }`}
               />
             </div>
 
             <div className="-ml-3 mt-10 grid grid-cols-2 justify-items-center gap-[90px]">
               <DatabaseRightItem
                 imageUrl="/assets/img/database/postgresql.svg"
-                value="postgres"
+                value={allDBProviders.POSTGRES}
                 selected={database}
                 handleClick={handleClick}
               />
               <DatabaseRightItem
                 imageUrl="/assets/img/database/sqlite.svg"
-                value="sqlite"
+                value={allDBProviders.SQLITE}
                 selected={database}
                 handleClick={handleClick}
               />

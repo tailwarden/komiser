@@ -12,20 +12,43 @@ export type Provider =
   | 'scaleway'
   | 'mongodbatlas';
 
-export const allProviders: Provider[] = [
-  'aws',
-  'gcp',
-  'ovh',
-  'digitalocean',
-  'azure',
-  'civo',
-  'kubernetes',
-  'linode',
-  'tencent',
-  'oci',
-  'scaleway',
-  'mongodbatlas'
-];
+type ProviderKey =
+  | 'AWS'
+  | 'GCP'
+  | 'OVH'
+  | 'DIGITAL_OCEAN'
+  | 'AZURE'
+  | 'CIVO'
+  | 'KUBERNETES'
+  | 'LINODE'
+  | 'TENCENT'
+  | 'OCI'
+  | 'SCALE_WAY'
+  | 'MONGODB_ATLAS';
+
+export const allProviders: { [key in ProviderKey]: Provider } = {
+  AWS: 'aws',
+  GCP: 'gcp',
+  OVH: 'ovh',
+  DIGITAL_OCEAN: 'digitalocean',
+  AZURE: 'azure',
+  CIVO: 'civo',
+  KUBERNETES: 'kubernetes',
+  LINODE: 'linode',
+  TENCENT: 'tencent',
+  OCI: 'oci',
+  SCALE_WAY: 'scaleway',
+  MONGODB_ATLAS: 'mongodbatlas'
+};
+
+export type DBProvider = 'postgres' | 'sqlite';
+
+type DBProviderKey = 'POSTGRES' | 'SQLITE';
+
+export const allDBProviders: { [key in DBProviderKey]: DBProvider } = {
+  POSTGRES: 'postgres',
+  SQLITE: 'sqlite'
+};
 
 const providers = {
   providerLabel(arg: Provider) {

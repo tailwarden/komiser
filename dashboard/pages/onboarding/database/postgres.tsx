@@ -1,5 +1,7 @@
 import Head from 'next/head';
 
+import { allDBProviders } from '../../../utils/providerHelper';
+
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
@@ -9,13 +11,17 @@ import DatabasePurplin from '../../../components/onboarding-wizard/DatabasePurpl
 import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
 export default function PostgreSQLCredentials() {
-  const handleNext = () => {};
+  const database = allDBProviders.POSTGRES;
+
+  const handleNext = () => {
+    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
+  };
 
   return (
     <div>
       <Head>
         <title>Configure Postgres - Komiser</title>
-        <meta name="description" content="Setup Azure - Komiser" />
+        <meta name="description" content="Configure Postgres - Komiser" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <OnboardingWizardLayout>
@@ -69,7 +75,7 @@ export default function PostgreSQLCredentials() {
         </LeftSideLayout>
 
         <RightSideLayout>
-          <DatabasePurplin database="postgres" />
+          <DatabasePurplin database={database} />
         </RightSideLayout>
       </OnboardingWizardLayout>
     </div>

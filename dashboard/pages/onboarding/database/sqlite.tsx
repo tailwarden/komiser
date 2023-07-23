@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import { useRef } from 'react';
 
+import { allDBProviders } from '../../../utils/providerHelper';
+
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
@@ -10,8 +12,12 @@ import DatabasePurplin from '../../../components/onboarding-wizard/DatabasePurpl
 import InputFileSelect from '../../../components/onboarding-wizard/InputFileSelect';
 import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
 
-export default function PostgreSQLCredentials() {
-  const handleNext = () => {};
+export default function SqliteCredentials() {
+  const database = allDBProviders.SQLITE;
+
+  const handleNext = () => {
+    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
+  };
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleButtonClick = () => {
@@ -22,8 +28,7 @@ export default function PostgreSQLCredentials() {
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
-    // Set Input field to file.name and use temporary file path for the upload value
-    console.log(file);
+    // TODO: (onboarding-wizard) handle file change and naming. Set Input field to file.name and use temporary file path for the upload value
   };
 
   return (
@@ -66,7 +71,7 @@ export default function PostgreSQLCredentials() {
         </LeftSideLayout>
 
         <RightSideLayout>
-          <DatabasePurplin database="sqlite" />
+          <DatabasePurplin database={database} />
         </RightSideLayout>
       </OnboardingWizardLayout>
     </div>
