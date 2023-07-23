@@ -1,105 +1,114 @@
 {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Sid": "1",
-        "Effect": "Allow",
-        "Action": [
-          "ec2:DescribeInstances",
-          "ec2:DescribeImages",
-          "ec2:DescribeKeyPairs",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeSubnets",
-          "elasticloadbalancing:DescribeLoadBalancers",
-          "autoscaling:DescribeAutoScalingGroups",
-          "s3:ListAllMyBuckets",
-          "s3:GetBucketLocation",
-          "s3:GetBucketAcl",
-          "s3:GetBucketPolicy",
-          "ecs:ListClusters",
-          "ecs:ListServices",
-          "ce:GetCostAndUsage",
-          "ce:GetCostForecast",
-          "apigateway:GET",
-          "dynamodb:DescribeTable",
-          "cloudwatch:DescribeDashboards",
-          "es:ListDomainNames"
-        ],
-        "Resource": "*"
-      },
-      {
-        "Sid": "2",
-        "Effect": "Allow",
-        "Action": [
-          "lambda:ListFunctions",
-          "dynamodb:ListTables",
-          "cloudfront:ListDistributions",
-          "iam:ListRoles",
-          "ecs:DescribeTasks",
-          "glacier:ListVaults",
-          "sqs:ListQueues",
-          "route53:ListHostedZones",
-          ":ListTopics",
-          "s3:GetObject",
-          "logs:DescribeLogGroups"
-        ],
-        "Resource": "*"
-      },
-      {
-        "Sid": "3",
-        "Effect": "Allow",
-        "Action": [
-          "acm:ListCertificates",
-          "mq:ListBrokers",
-          "cloudwatch:GetMetricStatistics",
-          "cloudtrail:LookupEvents",
-          "datapipeline:ListPipelines",
-          "eks:ListClusters",
-          "elasticache:DescribeCacheClusters",
-          "es:ListDomainNames",
-          "rds:DescribeDBInstances",
-          "cloudwatch:DescribeAlarms"
-        ],
-        "Resource": "*"
-      },
-      {
-        "Sid": "4",
-        "Effect": "Allow",
-        "Action": [
-          "glue:GetDatabase",
-          "glue:GetTables",
-          "organizations:DescribeOrganization",
-          "iam:GetUser",
-          "iam:GetRole",
-          "kinesis:ListStreams",
-          "kms:ListKeys",
-          "kms:DescribeKey",
-          "redshift:DescribeClusters",
-          "tag:GetResources",
-          "route53:ListResourceRecordSets",
-          "support:DescribeCases",
-          "swf:ListDomains",
-          "config:BatchGetResourceConfig"
-        ],
-        "Resource": "*"
-      },
-      {
-        "Sid": "5",
-        "Effect": "Allow",
-        "Action": [
-          "sns:ListTopics",
-          "lambda:ListFunctions",
-          "kms:ListKeys",
-          "pricing:GetProducts",
-          "ecr:DescribeRepositories",
-          "elasticfilesystem:DescribeFileSystems",
-          "rds:DescribeDBInstances",
-          "elasticache:ListCacheClusters",
-          "eks:DescribeCluster",
-          "elasticloadbalancing:DescribeTags"
-        ],
-        "Resource": "*"
-      }
-    ]
-  }
-  
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "1",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*",
+        "elasticloadbalancing:Describe*",
+        "autoscaling:Describe*",
+        "s3:Describe*",
+        "ecs:List*",
+        "ce:GetCostAndUsage",
+        "ce:GetCostForecast",
+        "apigateway:GET",
+        "dynamodb:Describe*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "2",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:List*",
+        "dynamodb:List*",
+        "cloudfront:List*",
+        "iam:List*",
+        "ecs:Describe*",
+        "glacier:List*",
+        "sqs:List*",
+        "route53:List*",
+        "sns:List*",
+        "s3:Get*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "3",
+      "Effect": "Allow",
+      "Action": [
+        "acm:List*",
+        "mq:List*",
+        "cloudwatch:Get*",
+        "cloudtrail:LookupEvents",
+        "datapipeline:List*",
+        "eks:List*",
+        "elasticache:Describe*",
+        "es:List*",
+        "logs:Describe*",
+        "rds:Describe*",
+        "cloudwatch:Describe*",
+        "apigateway:List*",
+        "cloudfront:List*",
+        "cloudwatch:List*",
+        "dynamodb:List*",
+        "ec2:List*",
+        "ecr:Describe*",
+        "ecs:Describe*",
+        "efs:Describe*",
+        "eks:Describe*",
+        "elasticache:List*",
+        "elasticloadbalancing:Describe*",
+        "iam:List*",
+        "kinesis:List*",
+        "kms:List*",
+        "lambda:List*",
+        "opensearch:Describe*",
+        "rds:Describe*",
+        "s3:List*",
+        "servicecatalog:List*",
+        "sns:List*",
+        "sqs:List*",
+        "systemsmanager:List*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "4",
+      "Effect": "Allow",
+      "Action": [
+        "glue:Get*",
+        "organizations:Describe*",
+        "iam:Get*",
+        "kinesis:List*",
+        "kms:List*",
+        "kms:Describe*",
+        "redshift:Describe*",
+        "tag:Get*",
+        "route53:List*",
+        "support:Describe*",
+        "swf:List*",
+        "config:BatchGetResourceConfig"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "5",
+      "Effect": "Allow",
+      "Action": [
+        "sns:List*",
+        "lambda:List*",
+        "kms:List*",
+        "pricing:GetProducts",
+        "ecr:Describe*",
+        "elasticfilesystem:Describe*",
+        "rds:Describe*",
+        "elasticache:List*",
+        "eks:Describe*",
+        "elasticloadbalancing:DescribeTags"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
