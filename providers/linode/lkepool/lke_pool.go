@@ -20,11 +20,17 @@ type LinodeLKENodePool struct {
 func LKENodePools(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	nodePools, err := client.LinodeClient.ListLKENodePools(ctx,int, &linodego.ListOptions{})
+	
+lkeClusters, err := client.LinodeClient.ListLKEClusters(ctx, &linodego.ListOptions{})
 	if err != nil {
 		return resources, err
 	}
 
+	for _, lkeCluster := range lkeClusters {
+		nodePools, err := client.LinodeClient.ListLKENodePools(ctx, lkeCluster.ID, &linodego.ListOptions{})
+		if err != nil {
+			return resources, err
+		}
 	for _, nodePool := range nodePools {
 		tags := make([]models.Tag, 0)
 		for _, tag := range nodePool.Tags {
