@@ -3,7 +3,7 @@ package compute
 import (
 	"context"
 	"fmt"
-	"strings"
+	// "strings"
 	"time"
 
 	"github.com/linode/linodego"
@@ -46,10 +46,10 @@ func LKENodePools(ctx context.Context, client providers.ProviderClient) ([]model
 				Provider:   "Linode",
 				Account:    client.Name,
 				Service:    "Linode Kubernetes Engine",
-				Region:     nodePool.Region,
+				// Region:     nodePool.Region,
 				ResourceId: fmt.Sprintf("%d", nodePool.ID),
 				Cost:       0,
-				Name:       nodePool.Label,
+				// Name:       nodePool.Label,
 				FetchedAt:  time.Now(),
 				CreatedAt:  time.Time{}, // Update this with the actual created time.
 				Tags:       tags,
