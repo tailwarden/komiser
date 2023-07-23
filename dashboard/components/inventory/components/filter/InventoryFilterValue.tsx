@@ -125,7 +125,7 @@ function InventoryFilterValue({
         data.operator !== 'IS_NOT_EMPTY' &&
         data.operator !== 'EXISTS' &&
         data.operator !== 'NOT_EXISTS' && (
-          <div className="pl-1 pt-2 pr-4 pb-2">
+          <div className="pb-2 pl-1 pr-4 pt-2">
             <Input
               type="text"
               name="values"
@@ -134,13 +134,14 @@ function InventoryFilterValue({
               error="Please provide a value"
               action={handleValueInput}
               autofocus={true}
+              maxLength={64}
             />
           </div>
         )}
 
       {/* Display input for cost when is equal, greater or less than */}
       {!options && data.field === 'cost' && data.operator !== 'BETWEEN' && (
-        <div className="pl-1 pt-2 pr-4 pb-2">
+        <div className="pb-2 pl-1 pr-4 pt-2">
           <Input
             type="number"
             name="values"
@@ -157,7 +158,7 @@ function InventoryFilterValue({
 
       {/* Display input for cost when is between */}
       {!options && data.field === 'cost' && data.operator === 'BETWEEN' && (
-        <div className="pl-1 pt-2 pr-4 pb-2">
+        <div className="pb-2 pl-1 pr-4 pt-2">
           <div className="grid grid-cols-2 gap-4">
             <Input
               type="number"

@@ -9,3 +9,11 @@ func BeginningOfMonth(date time.Time) time.Time {
 	}
 	return beginningOfMonth
 }
+
+func EndingOfMonth(date time.Time) time.Time {
+	endingOfMonth, err := time.Parse("2006-01-02", date.AddDate(0, 1, -date.Day()+1).Format("2006-01-02"))
+	if err != nil {
+		return time.Now()
+	}
+	return endingOfMonth
+}

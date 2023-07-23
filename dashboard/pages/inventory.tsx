@@ -8,7 +8,6 @@ import InventoryLayout from '../components/inventory/components/InventoryLayout'
 import InventorySidePanel from '../components/inventory/components/InventorySidePanel';
 import InventoryStatsCards from '../components/inventory/components/InventoryStatsCards';
 import InventoryTable from '../components/inventory/components/InventoryTable';
-import InventoryFilter from '../components/inventory/components/filter/InventoryFilter';
 import InventoryView from '../components/inventory/components/view/InventoryView';
 import useInventory from '../components/inventory/hooks/useInventory/useInventory';
 import SkeletonFilters from '../components/skeleton/SkeletonFilters';
@@ -87,46 +86,35 @@ export default function Inventory() {
         inventory={inventory}
         searchedInventory={searchedInventory}
       >
-        <InventoryHeader isNotCustomView={isNotCustomView}>
-          {/* Custom view header and view management sidepanel */}
-          {hasFilterOrCustomView && (
-            <InventoryView
-              filters={filters}
-              displayedFilters={displayedFilters}
-              setToast={setToast}
-              inventoryStats={inventoryStats}
-              router={router}
-              views={views}
-              getViews={getViews}
-              hiddenResources={hiddenResources}
-              setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
-            />
-          )}
-
-          {/* Filter component */}
-          {displayFilterIfIsNotCustomView && (
-            <InventoryFilter
-              router={router}
-              setSkippedSearch={setSkippedSearch}
-              setToast={setToast}
-            />
-          )}
-        </InventoryHeader>
-
-        <VerticalSpacing />
+        <InventoryHeader isNotCustomView={isNotCustomView} />
 
         {/* Active filters skeleton */}
         {loadingFilters && <SkeletonFilters />}
 
-        {/* Active filters */}
-        <InventoryActiveFilters
-          hasFilters={hasFilters}
-          displayedFilters={displayedFilters}
-          isNotCustomView={isNotCustomView}
-          deleteFilter={deleteFilter}
-          router={router}
-        />
-
+        {/* Filters bar containing active filters and view button */}
+        <div className="relative">
+          <InventoryActiveFilters
+            hasFilters={hasFilters}
+            displayedFilters={displayedFilters}
+            isNotCustomView={isNotCustomView}
+            deleteFilter={deleteFilter}
+            router={router}
+          >
+            {hasFilterOrCustomView && (
+              <InventoryView
+                filters={filters}
+                displayedFilters={displayedFilters}
+                setToast={setToast}
+                inventoryStats={inventoryStats}
+                router={router}
+                views={views}
+                getViews={getViews}
+                hiddenResources={hiddenResources}
+                setHideOrUnhideHasUpdate={setHideOrUnhideHasUpdate}
+              />
+            )}
+          </InventoryActiveFilters>
+        </div>
         {/* Inventory stats skeleton */}
         {!error && statsLoading && (
           <SkeletonStats NumOfCards={isNotCustomView ? 3 : 4} />

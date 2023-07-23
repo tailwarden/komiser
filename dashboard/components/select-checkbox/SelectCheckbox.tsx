@@ -65,8 +65,8 @@ function SelectCheckbox({
   return (
     <div className="relative">
       <div
-        className="pointer-events-none absolute right-4
-        bottom-[1.15rem] text-black-900 transition-all"
+        className="pointer-events-none absolute bottom-[1.15rem]
+        right-4 text-black-900 transition-all"
       >
         <ChevronDownIcon width={24} height={24} />
       </div>
@@ -77,21 +77,21 @@ function SelectCheckbox({
         }`}
       >
         <div className="absolute right-0 top-1 h-[50px] w-6 bg-gradient-to-r from-transparent via-white to-white"></div>
-        <span className="pointer-events-none absolute left-4 bottom-[1.925rem] origin-left scale-75 select-none font-normal text-black-300">
+        <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-black-300">
           {label}
         </span>
-        <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pt-[1.75rem] pb-[0.75rem] pl-4 pr-16 text-sm text-black-900">
+        <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pb-[0.75rem] pl-4 pr-16 pt-[1.75rem] text-sm text-black-900">
           {exclude.length > 0 &&
             exclude.slice(0, 3).map((resource, idx) => (
               <p
                 key={idx}
-                className="whitespace-nowrap rounded bg-black-100 py-1 px-3 text-xs"
+                className="whitespace-nowrap rounded bg-black-100 px-3 py-1 text-xs"
               >
                 {resource}
               </p>
             ))}
           {exclude.length > 3 && (
-            <p className="rounded-full bg-black-100 py-1 px-3 text-xs">
+            <p className="rounded-full bg-black-100 px-3 py-1 text-xs">
               +{exclude.length - 3}
             </p>
           )}
@@ -115,7 +115,7 @@ function SelectCheckbox({
                   height="24"
                   fill="none"
                   viewBox="0 0 24 24"
-                  className="absolute top-[0.5rem] left-3"
+                  className="absolute left-3 top-[0.5rem]"
                 >
                   <path
                     d="M17 17L21 21"
@@ -138,7 +138,7 @@ function SelectCheckbox({
                   height="24"
                   fill="none"
                   viewBox="0 0 24 24"
-                  className="absolute top-[0.5rem] left-3 cursor-pointer"
+                  className="absolute left-3 top-[0.5rem] cursor-pointer"
                 >
                   <path
                     stroke="currentColor"
@@ -157,6 +157,7 @@ function SelectCheckbox({
                 placeholder="Search"
                 className="h-10 w-full rounded-md border border-black-200/50 bg-white py-4 pl-10 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
                 autoFocus
+                maxLength={64}
               />
             </div>
             {error && (
@@ -184,8 +185,8 @@ function SelectCheckbox({
                   </div>
                 )}
                 <hr className="m-4 mb-0 h-px border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
-                <div className="scrollbar mt-2 mb-2 mr-3 overflow-auto">
-                  <div className="mt-2 flex max-h-[12rem] flex-col gap-3 p-4 pb-4 pt-0 pl-6">
+                <div className="scrollbar mb-2 mr-3 mt-2 overflow-auto">
+                  <div className="mt-2 flex max-h-[12rem] flex-col gap-3 p-4 pb-4 pl-6 pt-0">
                     {resources.map((resource, idx) => (
                       <div
                         key={idx}

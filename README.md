@@ -6,23 +6,29 @@
 
 <h4 align="center">
     <a href="https://discord.tailwarden.com">Discord</a> |
-    <a href="https://github.com/tailwarden/komiser/discussions">Discussions</a> |
-    <a href="https://komiser.io?utm_source=github&utm_medium=social/">Site</a><br/><br/>
+    <a href="https://cloud.tailwarden.com?utm_source=github&utm_medium=social">Tailwarden Cloud</a> |
+    <a href="https://komiser.io?utm_source=github&utm_medium=social/">Website</a><br/><br/>
     <a href="https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social/">Guide</a> |
     <a href="https://docs.komiser.io/docs/guides/overview?utm_source=github&utm_medium=social">How to Komiser</a> |
-    <a href="https://docs.komiser.io/docs/intro">Docs</a><br/><br/>
+    <a href="https://docs.komiser.io/docs/events">Community Events</a><br/><br/>
     <a href="https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social">Contribute</a> | 
     <a href="https://roadmap.tailwarden.com">Roadmap</a><br/><br/>
 </h4>
 
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Hmerp_HMEf8">
+    <img src=".github/images/deploy-to-aws.png" width="137" />
+  </a>
+</p>
+
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
-[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![CircleCI](https://circleci.com/gh/tailwarden/komiser/tree/master.svg?style=svg&circle-token=d35b1c7447995e60909b24fd316fef0988e76bc8)](https://circleci.com/gh/tailwarden/komiser/tree/master) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
+[![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
 Komiser is an open-source cloud-agnostic resource manager. It integrates with multiple cloud providers (including AWS, Azure, Civo, Digital Ocean, OCI, Linode, Tencent and Scaleway), builds a cloud asset inventory, and helps you break down your cost at the resource level 💰
 
 <h1 align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></h1>
 
-*Cloud version is available in private beta, sign in for free at [https://cloud.tailwarden.com](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)*
+The fastest and most reliable way to get started with Komiser is signing up for free to [Tailwarden Cloud](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)
 
 [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiserdotio) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/tailwarden/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
 
@@ -39,37 +45,41 @@ brew install komiser
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [What is Komiser?](#what-is-komiser-)
+- [What is Komiser? 🤷](#what-is-komiser-)
   - [Who is using it?](#who-is-using-it)
-- [Getting started](#getting-started-)
+- [Getting started 👇](#getting-started-)
   - [Download](#download)
   - [Installation on AWS](#installation-on-aws)
     - [Connect Komiser CLI to your AWS account.](#connect-komiser-cli-to-your-aws-account)
     - [Deploy Komiser to single account access EKS cluster (Helm chart)](#deploy-komiser-to-single-account-access-eks-cluster-helm-chart)
     - [Deploy Komiser to a multi account access EKS cluster (Helm chart)](#deploy-komiser-to-a-multi-account-access-eks-cluster-helm-chart)
   - [Installation on Azure](#installation-on-azure)
+  - [Installation on GCP](#installation-on-gcp)
   - [Installation on Civo](#installation-on-civo)
   - [Installation on OCI](#installation-on-oci)
   - [Installation on Digital Ocean](#installation-on-digital-ocean)
   - [Installation on Linode](#installation-on-linode)
-  - [Installation on Tencent](#installation-on-tencent-cloud)
+  - [Installation on Tencent Cloud](#installation-on-tencent-cloud)
   - [Installation on Scaleway](#installation-on-scaleway)
-- [Documentation](#documentation-)
+- [Documentation 📖](#documentation-)
   - [Jump right in:](#jump-right-in)
-- [Bugs and feature requests](#bugs-and-feature-requests-)
-- [Roadmap and Contributing](#roadmap-and-contributing-%EF%B8%8F)
-- [Users](#users-)
-- [Versioning](#versioning-)
+- [Bugs and feature requests 🐞](#bugs-and-feature-requests-)
+- [Roadmap and Contributing 🛣️](#roadmap-and-contributing-️)
+- [Users 🧑‍🤝‍🧑](#users-)
+- [Versioning 🧮](#versioning-)
+- [Contributors](#contributors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # What is Komiser? 🤷
 Komiser is an open source project created to **analyse** and **manage cloud cost**, **usage**, **security** and **governance** all in one place. With komiser you can also: 
+* Build an inventory of your cloud infrastructure assets.
 * Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
-* Get a deep understanding of **how you spend** on the AWS, Civo, OVH, DigitalOcean and OCI.
+* Get a deep understanding of **how you spend** on the AWS, Azure, GCP, Civo, OVH, DigitalOcean and OCI.
+* Uncover idle and untagged resources, ensuring that no resource goes unnoticed.
 
-<h1 align="center"><img src="https://cdn.komiser.io/images/komiser-readme-wireframe.png?version=latest" alt="Amp Logo"></h1>
+<h1 align="center"><img src=".github/images/dashboard.png" alt="Komiser dashboard"></h1>
 
 ## Who is using it?
 Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE in mind. We understand that tackling cost savings, security improvements and resource usage analyse efforts can be hard, sometimes just knowing where to start, can be the most challenging part at times. Komiser is here to help those cloud practitioners see their cloud resources and accounts much more clearly. Only with clear insight can timely and efficient actions take place.
@@ -97,6 +107,10 @@ Watch the installation [video here](https://www.youtube.com/watch?v=4veDmJpui44&
 ## Installation on Azure
 
 Connect a local deployment of Komiser CLI to you [**Azure**](https://docs.komiser.io/docs/cloud-providers/azure?utm_source=github&utm_medium=social) account.
+
+## Installation on GCP
+
+Connect a local deployment of Komiser CLI to you [**GCP**](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social) account.
 
 ## Installation on Civo
 
@@ -126,7 +140,7 @@ Connect a local deployment of Komiser CLI to you [**Scaleway**](https://docs.kom
 
 # Documentation 📖
 
-Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io?utm_source=github&utm_medium=social). The source repository for the documentation website is [tailwarden/docs](https://github.com/tailwarden/docs). 
+Head over to the official `Komiser` documentation at [docs.komiser.io](https://docs.komiser.io?utm_source=github&utm_medium=social). The source repository for the documentation website is [tailwarden/docs.komiser.io](https://github.com/tailwarden/docs.komiser.io). 
 
 We know that writing docs isn't usually at the top of too many peoples "What I like to do for fun" list, but if you feel so inclined, by all means, consider [contributing](https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social) to our documentation repository, we will be very grateful. It's built using [Docusaurus](https://docusaurus.io/). 
 
@@ -144,12 +158,14 @@ Have a bug or a feature request? Please first read the issue guidelines and sear
 
 # Roadmap and Contributing 🛣️
 
-We are very excited about what is in store in the coming weeks and months, take a look at the [public roadmap](https://tailwarden.canny.io/) to stay on top of what's coming down the pipeline. 
+We are very excited about what is in store in the coming weeks and months, take a look at the [public roadmap](https://roadmap.tailwarden.com/) to stay on top of what's coming down the pipeline. 
 
 Komiser is written in `Golang` and is `Elv2 licensed` - contributions are always welcome whether that means providing feedback, be it through GitHub, through the `#feedback` channel on our [Discord server](https://discord.tailwarden.com) or testing existing and new features. Feel free to check out our [contributor guidelines](./CONTRIBUTING.md) and consider becoming a **contributor** today. 
 
-### Watch! :
-Learn how to contribute with this walkthrough [video](https://www.youtube.com/watch?v=Vn5uc2elcVg)
+Learn how to contribute with this walkthrough videos:
+
+- [How to contributor to Komiser engine](https://www.youtube.com/watch?v=Vn5uc2elcVg)
+- [How to contributor to Komiser dashboard](https://www.youtube.com/watch?v=uwxj11-eRt8)
 
 # Users 🧑‍🤝‍🧑
 

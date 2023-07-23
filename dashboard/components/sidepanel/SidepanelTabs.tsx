@@ -12,7 +12,7 @@ function SidepanelTabs({ goTo, page, tabs }: SidepanelTabsProps) {
           <li key={idx} className="mr-2">
             <a
               onClick={() => goTo(tab.toLowerCase())}
-              className={`inline-block cursor-pointer select-none rounded-t-lg border-b-2 py-4 px-2 sm:p-4 
+              className={`inline-block cursor-pointer select-none rounded-t-lg border-b-2 px-2 py-4 sm:p-4 
                      ${
                        page === tab.toLowerCase()
                          ? 'border-komiser-600 text-komiser-600 hover:text-komiser-600'
