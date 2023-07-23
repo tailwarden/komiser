@@ -20,7 +20,7 @@ type LinodeLKENodePool struct {
 func LKENodePools(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	nodePools, err := client.LinodeClient.ListLKENodePools(ctx, nil)
+	nodePools, err := client.LinodeClient.ListLKENodePools(ctx, &linodego.ListOptions{})
 	if err != nil {
 		return resources, err
 	}
