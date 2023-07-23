@@ -3,6 +3,7 @@ package lkepool
 import (
 	"context"
 	"fmt"
+ "strings"
 	"time"
 
 	"github.com/linode/linodego"
