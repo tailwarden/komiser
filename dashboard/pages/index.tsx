@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+
+import GlobalAppContext from '../components/layout/context/GlobalAppContext';
 
 function Home() {
+  const { betaFlagOnboardingWizard } = useContext(GlobalAppContext);
+
   const router = useRouter();
-  const isBetaFlagOnboardingWizard = true;
 
   useEffect(() => {
-    if (isBetaFlagOnboardingWizard) {
+    if (betaFlagOnboardingWizard) {
       router.push('/onboarding/choose-cloud');
     } else {
       router.push('/dashboard');
