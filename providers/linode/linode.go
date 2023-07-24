@@ -13,6 +13,7 @@ import (
 	"github.com/tailwarden/komiser/providers/linode/sql"
 	"github.com/tailwarden/komiser/providers/linode/postgres"
 	"github.com/tailwarden/komiser/providers/linode/storage"
+	"github.com/tailwarden/komiser/providers/linode/lkepool"
 	"github.com/uptrace/bun"
 )
 
@@ -27,6 +28,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		networking.Firewalls,
 		sql.Instances,
 		postgres.Instances,
+		lkepool.LKENodePools,
 	}
 }
 
