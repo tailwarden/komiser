@@ -126,7 +126,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 						//log.Printf("Hourly cost EC2: %f", hourlyCost)
 
-				    }
+					}
 
 					monthlyCost = float64(hourlyUsage) * hourlyCost
 

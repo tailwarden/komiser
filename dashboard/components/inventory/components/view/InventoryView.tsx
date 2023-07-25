@@ -5,7 +5,6 @@ import providers, { Provider } from '../../../../utils/providerHelper';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import AlertIcon from '../../../icons/AlertIcon';
-import BookmarkIcon from '../../../icons/BookmarkIcon';
 import Input from '../../../input/Input';
 import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
@@ -87,7 +86,7 @@ function InventoryView({
 
       {/* Alerts button */}
       {router.query.view && (
-        <div className="absolute right-0">
+        <div className="w-fit">
           <Button
             style="secondary"
             size="xs"
@@ -105,10 +104,12 @@ function InventoryView({
 
       {/* Save as a view button */}
       {!router.query.view && (
-        <Button size="sm" onClick={() => openModal(filters)}>
-          <BookmarkIcon width={20} height={20} />
-          Save as a view
-        </Button>
+        <div
+          onClick={() => openModal(filters)}
+          className="cursor-pointer font-sans text-[14px] font-semibold text-komiser-600"
+        >
+          Save as view
+        </div>
       )}
 
       {/* Sidepanel */}
