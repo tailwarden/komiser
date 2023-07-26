@@ -72,7 +72,7 @@ function InventoryViewHeader({
   );
 
   return (
-    <div className="relative">
+    <div className="absolute -top-14 left-0">
       {currentView && (
         <>
           <div className="flex items-center gap-2 text-lg font-medium text-black-900">
