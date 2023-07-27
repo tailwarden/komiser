@@ -52,15 +52,12 @@ lkeClusters, err := client.LinodeClient.ListLKEClusters(ctx, &linodego.ListOptio
 			Provider:   "Linode",
 			Account:    client.Name,
 			Service:    "Linode Kubernetes Engine",
-			// Region:     nodePool.Region,
 			ResourceId: fmt.Sprintf("%d", nodePool.ID),
 			Cost:       0,
-			// Name:       nodePool.Label,
 			FetchedAt:  time.Now(),
-			CreatedAt:  time.Time{}, // Update this with the actual created time.
+			CreatedAt:  time.Time{}, 
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/kubernetes/clusters/%d", nodePool.ID),
-			// Add any additional fields or data you want to collect here.
 		})
   }
 	}
