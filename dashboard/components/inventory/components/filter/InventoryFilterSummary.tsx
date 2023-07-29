@@ -52,7 +52,7 @@ function InventoryFilterSummary({
     <div
       className={`${
         bg ? 'bg-white' : 'bg-black-150'
-      }  relative flex h-6 max-w-[calc(100vw-250px)] items-center gap-3 overflow-hidden rounded px-2 text-xs text-black-900/70 md:max-w-[calc(100vw-400px)]`}
+      }  relative flex h-6 w-fit max-w-[calc(100vw-250px)] items-center gap-1 overflow-hidden rounded px-2 text-xs text-black-900/70 md:max-w-[calc(100vw-400px)]`}
     >
       <div className="flex items-center gap-1 whitespace-nowrap">
         <div className="scale-75">{getField('icon')}</div>
@@ -61,9 +61,7 @@ function InventoryFilterSummary({
         {data.operator && (
           <>
             <span>:</span>
-            <span className="font-medium text-black-900">
-              {getOperator(data.operator)}
-            </span>
+            <span className="">{getOperator(data.operator)}</span>
           </>
         )}
         {data.values &&
@@ -76,7 +74,7 @@ function InventoryFilterSummary({
                 {value}
               </span>
               {data.values.length > 1 && idx < data.values.length - 1 && (
-                <span className="ml-1 font-medium text-black-900">
+                <span className="ml-1 ">
                   {data.field === 'cost' && data.operator === 'BETWEEN'
                     ? 'and'
                     : 'or'}
@@ -98,7 +96,7 @@ function InventoryFilterSummary({
               }
             }}
           >
-            <CloseIcon width={20} height={24} />
+            <CloseIcon width={16} height={20} />
           </Button>
         </div>
       )}
