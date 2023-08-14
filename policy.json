@@ -1,25 +1,23 @@
 {
-  "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "1",
-      "Effect": "Allow",
       "Action": [
         "ec2:Describe*",
         "elasticloadbalancing:Describe*",
         "autoscaling:Describe*",
         "s3:Describe*",
+        "s3:List*",
         "ecs:List*",
         "ce:GetCostAndUsage",
         "ce:GetCostForecast",
         "apigateway:GET",
         "dynamodb:Describe*"
       ],
-      "Resource": "*"
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "1"
     },
     {
-      "Sid": "2",
-      "Effect": "Allow",
       "Action": [
         "lambda:List*",
         "dynamodb:List*",
@@ -32,29 +30,32 @@
         "sns:List*",
         "s3:Get*"
       ],
-      "Resource": "*"
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "2"
     },
     {
-      "Sid": "3",
-      "Effect": "Allow",
       "Action": [
         "acm:List*",
         "mq:List*",
         "cloudwatch:Get*",
+        "cloudwatch:List*",
         "cloudtrail:LookupEvents",
         "datapipeline:List*",
         "eks:List*",
         "elasticache:Describe*",
+        "servicecatalog:SearchProductsAsAdmin",
+        "ssm:DescribeMaintenanceWindows",
         "es:List*",
         "logs:Describe*",
         "rds:Describe*",
         "cloudwatch:Describe*"
       ],
-      "Resource": "*"
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "3"
     },
     {
-      "Sid": "4",
-      "Effect": "Allow",
       "Action": [
         "glue:Get*",
         "organizations:Describe*",
@@ -69,11 +70,11 @@
         "swf:List*",
         "config:BatchGetResourceConfig"
       ],
-      "Resource": "*"
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "4"
     },
     {
-      "Sid": "5",
-      "Effect": "Allow",
       "Action": [
         "sns:List*",
         "lambda:List*",
@@ -86,7 +87,10 @@
         "eks:Describe*",
         "elasticloadbalancing:DescribeTags"
       ],
-      "Resource": "*"
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "5"
     }
-  ]
+  ],
+  "Version": "2012-10-17"
 }
