@@ -18,7 +18,7 @@ type LinodeInstance struct {
 	Instance *linodego.Instance
 }
 
-func Linodes(ctx context.Context, client providers.ProviderClient, linodeInstances []LinodeInstance) ([]Resource, error) {
+func LinodesAndDisks(ctx context.Context, client providers.ProviderClient, linodeInstances []LinodeInstance) ([]Resource, error) {
 	resources := make([]Resource, 0)
 
 	for _, linodeInstance := range linodeInstances {
@@ -53,12 +53,32 @@ func Linodes(ctx context.Context, client providers.ProviderClient, linodeInstanc
 			Tags:       tags,
 			Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d", instance.ID),
 		})
+
+		instanceDisks, err := client.LinodeClient.ListInstanceDisks(ctx, instance.ID, &linodego.ListOptions{})
+		if err != nil {
+			return resources, err
+		}
+
+		for _, disk := range instanceDisks {
+			resources = append(resources, models.Resource{
+				Provider:   "Linode",
+				Account:    client.Name,
+				Service:    "Instance Disk",
+				Region:     instance.Region,
+				ResourceId: fmt.Sprintf("%d", disk.ID),
+				Cost:       0,
+				Name:       disk.Label,
+				FetchedAt:  time.Now(),
+				CreatedAt:  *disk.Created,
+				Link:       fmt.Sprintf("https://cloud.linode.com/linodes/%d/storage", instance.ID),
+			})
+		}
 	}
 
 	log.WithFields(log.Fields{
 		"provider":  "Linode",
 		"account":   client.Name,
-		"service":   "Linode",
+		"service":   "Linode and Instance Disk",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
