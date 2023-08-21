@@ -62,7 +62,7 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 			Tags:       tags,
 			CreatedAt:  *loadbalancer.CreatedTime,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#/LoadBalancer:loadBalancerArn=%s", client.AWSClient.Region, client.AWSClient.Region, resourceArn),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#LoadBalancer:loadBalancerArn=%s", client.AWSClient.Region, client.AWSClient.Region, resourceArn),
 		})
 	}
 
