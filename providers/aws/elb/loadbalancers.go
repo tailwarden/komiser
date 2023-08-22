@@ -68,17 +68,14 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 		})
 
 		configListeners.LoadBalancerArn = &resourceArn
-		elblisClient := elasticloadbalancingv2.NewFromConfig(*client.AWSClient)
-
-		output, err := elblisClient.DescribeListeners(ctx, &configListeners)
+		output, err := elbClient.DescribeListeners(ctx, &configListeners)
 		if err != nil {
 			return resources, err
 		}
 
 		for _, listener := range output.Listeners {
 			listenerArn := *listener.ListenerArn
-
-			outputTags, err := elblisClient.DescribeTags(ctx, &elasticloadbalancingv2.DescribeTagsInput{
+			outputTags, err := elbClient.DescribeTags(ctx, &elasticloadbalancingv2.DescribeTagsInput{
 				ResourceArns: []string{listenerArn},
 			})
 			if err != nil {
