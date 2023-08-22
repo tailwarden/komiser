@@ -23,6 +23,8 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 		return resources, err
 	}
 
+	var configListeners elasticloadbalancingv2.DescribeListenersInput
+
 	for _, loadbalancer := range output.LoadBalancers {
 		resourceArn := *loadbalancer.LoadBalancerArn
 		outputTags, err := elbClient.DescribeTags(ctx, &elasticloadbalancingv2.DescribeTagsInput{
@@ -64,6 +66,45 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#LoadBalancer:loadBalancerArn=%s", client.AWSClient.Region, client.AWSClient.Region, resourceArn),
 		})
+
+		configListeners.LoadBalancerArn = &resourceArn
+		output, err := elbClient.DescribeListeners(ctx, &configListeners)
+		if err != nil {
+			return resources, err
+		}
+
+		for _, listener := range output.Listeners {
+			listenerArn := *listener.ListenerArn
+			outputTags, err := elbClient.DescribeTags(ctx, &elasticloadbalancingv2.DescribeTagsInput{
+				ResourceArns: []string{listenerArn},
+			})
+			if err != nil {
+				return resources, err
+			}
+
+			tags := make([]Tag, 0)
+			for _, tagDescription := range outputTags.TagDescriptions {
+				for _, tag := range tagDescription.Tags {
+					tags = append(tags, Tag{
+						Key:   *tag.Key,
+						Value: *tag.Value,
+					})
+				}
+			}
+
+			resources = append(resources, Resource{
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "ELB Listener",
+				ResourceId: listenerArn,
+				Region:     client.AWSClient.Region,
+				Name:       listenerArn,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#ELBListenerV2:listenerArn=%s", client.AWSClient.Region, client.AWSClient.Region, listenerArn),
+			})
+		}
+
 	}
 
 	log.WithFields(log.Fields{
