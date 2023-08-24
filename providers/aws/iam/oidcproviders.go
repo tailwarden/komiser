@@ -3,6 +3,7 @@ package iam
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -49,7 +50,7 @@ func OIDCProviders(ctx context.Context, client ProviderClient) ([]Resource, erro
 			Tags:       tags,
 			CreatedAt:  *outputProvider.CreateDate,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/identity_providers/details/%s", client.AWSClient.Region, client.AWSClient.Region, *oidcprovider.Arn),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/identity_providers/details/OPENID/%s", client.AWSClient.Region, client.AWSClient.Region, url.QueryEscape(*oidcprovider.Arn)),
 		})
 	}
 
