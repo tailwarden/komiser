@@ -10,15 +10,15 @@ import (
 
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/linode/compute"
-	"github.com/tailwarden/komiser/providers/linode/sql"
 	"github.com/tailwarden/komiser/providers/linode/postgres"
+	"github.com/tailwarden/komiser/providers/linode/sql"
 	"github.com/tailwarden/komiser/providers/linode/storage"
 	"github.com/uptrace/bun"
 )
 
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
-		// compute.Linodes,
+		// compute.LinodeInstancesAndInstanceDisks,
 		compute.LKEClusters,
 		storage.Volumes,
 		storage.Databases,

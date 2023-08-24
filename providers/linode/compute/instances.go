@@ -18,7 +18,7 @@ type LinodeInstance struct {
 	Instance *linodego.Instance
 }
 
-func LinodesAndDisks(ctx context.Context, client providers.ProviderClient, linodeInstances []LinodeInstance) ([]Resource, error) {
+func LinodeInstancesAndInstanceDisks(ctx context.Context, client providers.ProviderClient, linodeInstances []LinodeInstance) ([]Resource, error) {
 	resources := make([]Resource, 0)
 
 	for _, linodeInstance := range linodeInstances {
@@ -43,7 +43,7 @@ func LinodesAndDisks(ctx context.Context, client providers.ProviderClient, linod
 		resources = append(resources, models.Resource{
 			Provider:   "Linode",
 			Account:    client.Name,
-			Service:    "Linode",
+			Service:    "Linode Instance",
 			Region:     instance.Region,
 			ResourceId: fmt.Sprintf("%d", instance.ID),
 			Cost:       0,
@@ -63,7 +63,7 @@ func LinodesAndDisks(ctx context.Context, client providers.ProviderClient, linod
 			resources = append(resources, models.Resource{
 				Provider:   "Linode",
 				Account:    client.Name,
-				Service:    "Instance Disk",
+				Service:    "Linode Instance Disk",
 				Region:     instance.Region,
 				ResourceId: fmt.Sprintf("%d", disk.ID),
 				Cost:       0,
@@ -78,7 +78,7 @@ func LinodesAndDisks(ctx context.Context, client providers.ProviderClient, linod
 	log.WithFields(log.Fields{
 		"provider":  "Linode",
 		"account":   client.Name,
-		"service":   "Linode and Instance Disk",
+		"service":   "Linode Instance and Instance Disk",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
