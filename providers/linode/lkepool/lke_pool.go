@@ -54,6 +54,7 @@ lkeClusters, err := client.LinodeClient.ListLKEClusters(ctx, &linodego.ListOptio
 			Service:    "Linode Kubernetes Engine",
 			ResourceId: fmt.Sprintf("%d", nodePool.ID),
 			Cost:       0,	
+			Name:       nodePool.Type,
 			FetchedAt:  time.Now(),
 			CreatedAt:  time.Time{}, 
 			Tags:       tags,
