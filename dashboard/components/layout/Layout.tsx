@@ -37,6 +37,10 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
+  const betaFlagOnboardingWizard = false; // To test the onboarding wizard feature, set this beta-flag to true
+  const isOnboarding =
+    betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
+
   return (
     <GlobalAppContext.Provider
       value={{
@@ -46,56 +50,83 @@ function Layout({ children }: LayoutProps) {
         data,
         error,
         hasNoAccounts,
-        fetch
+        fetch,
+        betaFlagOnboardingWizard
       }}
     >
-      <Banner githubStars={githubStars} />
-      <Navbar />
-      <main
-        className={`relative ${
-          displayBanner
-            ? 'mt-[145px] min-h-[calc(100vh-145px)]'
-            : 'mt-[73px] min-h-[calc(100vh-73px)]'
-        } bg-black-100 p-6 pb-12 xl:px-8 2xl:px-24`}
-      >
-        {canRender && children}
+      {isOnboarding && <>{children}</>}
 
-        {hasNoAccounts && (
-          <EmptyState
-            title="We could not find a cloud account"
-            message="It seems you have not connected a cloud account to Komiser. Connect one right now so you can start managing it from your dashboard"
-            action={() => {
-              router.push(
-                'https://docs.komiser.io/docs/introduction/getting-started?utm_source=komiser&utm_medium=referral&utm_campaign=static'
-              );
-            }}
-            actionLabel="Guide to connect account"
-            secondaryAction={() => {
-              router.push(
-                'https://github.com/tailwarden/komiser/issues/new/choose'
-              );
-            }}
-            secondaryActionLabel="Report an issue"
-            mascotPose="thinking"
-          />
-        )}
+      {!isOnboarding && (
+        <>
+          <Banner githubStars={githubStars} />
+          <Navbar />
+          <main
+            className={`relative ${
+              displayBanner
+                ? 'mt-[145px] min-h-[calc(100vh-145px)]'
+                : 'mt-[73px] min-h-[calc(100vh-73px)]'
+            } bg-black-100 p-6 pb-12 xl:px-8 2xl:px-24`}
+          >
+            {canRender && children}
 
-        {error && (
-          <ErrorState
-            title="Network request error"
-            message="There was an error fetching the cloud accounts. Please refer to the logs for more info and try again."
-            action={
-              <Button
-                size="lg"
-                style="secondary"
-                onClick={() => router.reload()}
-              >
-                Refresh the page
-              </Button>
-            }
-          />
-        )}
-      </main>
+            {hasNoAccounts && betaFlagOnboardingWizard && !isOnboarding && (
+              <EmptyState
+                title="We could not find a cloud account"
+                message="Get Started Onboarding"
+                action={() => {
+                  router.push('/onboarding/choose-cloud');
+                }}
+                actionLabel="Begin Onboarding"
+                secondaryAction={() => {
+                  router.push(
+                    'https://github.com/tailwarden/komiser/issues/new/choose'
+                  );
+                }}
+                secondaryActionLabel="Report an issue"
+                mascotPose="greetings"
+              />
+            )}
+
+            {/* This block would be removed when onboarding Wizard is stable leaving the block above */}
+            {hasNoAccounts && !betaFlagOnboardingWizard && (
+              <EmptyState
+                title="We could not find a cloud account"
+                message="It seems you have not connected a cloud account to Komiser. Connect one right now so you can start managing it from your dashboard"
+                action={() => {
+                  router.push(
+                    'https://docs.komiser.io/docs/introduction/getting-started?utm_source=komiser&utm_medium=referral&utm_campaign=static'
+                  );
+                }}
+                actionLabel="Guide to connect account"
+                secondaryAction={() => {
+                  router.push(
+                    'https://github.com/tailwarden/komiser/issues/new/choose'
+                  );
+                }}
+                secondaryActionLabel="Report an issue"
+                mascotPose="thinking"
+              />
+            )}
+            {/* This block would be removed when onboarding Wizard is stable leaving the block above */}
+
+            {error && (
+              <ErrorState
+                title="Network request error"
+                message="There was an error fetching the cloud accounts. Please refer to the logs for more info and try again."
+                action={
+                  <Button
+                    size="lg"
+                    style="secondary"
+                    onClick={() => router.reload()}
+                  >
+                    Refresh the page
+                  </Button>
+                }
+              />
+            )}
+          </main>
+        </>
+      )}
     </GlobalAppContext.Provider>
   );
 }
