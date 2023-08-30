@@ -90,7 +90,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
-		redshift.EventSubscription,
+		redshift.EventSubscriptions,
 	}
 }
 
