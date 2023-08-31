@@ -3,4 +3,4 @@ updates:
   - package-ecosystem: "npm" 
     directory: "/dashboard"  
     schedule:
-      interval: "daily"
+      interval: "weekly"
