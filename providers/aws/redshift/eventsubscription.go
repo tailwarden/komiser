@@ -36,7 +36,7 @@ func EventSubscriptions(ctx context.Context, client ProviderClient) ([]Resource,
 		for _, eventSubscription := range output.EventSubscriptionsList {
 			if eventSubscription.CustSubscriptionId != nil {
 
-				resourceArn := fmt.Sprintf("arn:aws:redshift:%s:%s:eventsubscripion/%s", client.AWSClient.Region, *accountId, *eventSubscription.CustSubscriptionId) // TODO: is this arn format correct
+				resourceArn := fmt.Sprintf("arn:aws:redshift:%s:%s:eventsubscripion/%s", client.AWSClient.Region, *accountId, *eventSubscription.CustSubscriptionId)
 				outputTags := eventSubscription.Tags
 
 				tags := make([]Tag, 0)
@@ -50,7 +50,7 @@ func EventSubscriptions(ctx context.Context, client ProviderClient) ([]Resource,
 					}
 				}
 
-				monthlyCost := float64(0) // TODO: what is the monthly cost
+				monthlyCost := float64(0)
 
 				resources = append(resources, Resource{
 					Provider:   "AWS",
@@ -62,7 +62,7 @@ func EventSubscriptions(ctx context.Context, client ProviderClient) ([]Resource,
 					Cost:       monthlyCost,
 					Tags:       tags,
 					FetchedAt:  time.Now(),
-					Link:       fmt.Sprintf("https://%s.console.aws.amaxon.com/redshift/home?region=%s/event-subscriptions/%s", client.AWSClient.Region, client.AWSClient.Region, *eventSubscription.CustSubscriptionId), // TODO: verify that the link format is correct
+					Link:       fmt.Sprintf("https://%s.console.aws.amaxon.com/redshift/home?region=%s/event-subscriptions/%s", client.AWSClient.Region, client.AWSClient.Region, *eventSubscription.CustSubscriptionId),
 				})
 			}
 		}
