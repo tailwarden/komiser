@@ -28,37 +28,48 @@ function CloudAccounts() {
       <CloudAccountsLayout router={router}>
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
 
-        {cloudAccounts.map(account => (
-          <div
-            key={account.name}
-            className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-black-170 bg-white p-6 text-black-900 transition-colors"
-          >
-            <Image
-              src={providers.providerImg(account.provider) as string}
-              alt={`${account.name} image`}
-              width={150}
-              height={150}
-              className="h-12 w-12 rounded-full"
-            />
-            <div className="mr-auto">
-              <p className="font-bold">{account.name}</p>
-              <p className="text-black-300">
-                {providers.providerLabel(account.provider)}
-              </p>
-            </div>
+        {cloudAccounts.map(account => {
+          const { provider, name, status } = account;
+
+          return (
             <div
-              className={classNames('rounded-3xl py-1 px-2 text-sm', {
-                'bg-green-200 text-green-600': account.status === 'Connected',
-                'bg-red-200 text-red-600':
-                  account.status === 'Permission Issue',
-                'bg-komiser-200 text-komiser-600': account.status === 'Syncing'
-              })}
+              key={name}
+              className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-black-170 bg-white p-6 text-black-900 transition-colors"
             >
-              {account.status}
+              <Image
+                src={providers.providerImg(provider) as string}
+                alt={`${name} image`}
+                width={150}
+                height={150}
+                className="h-12 w-12 rounded-full"
+              />
+              <div className="mr-auto">
+                <p className="font-bold">{name}</p>
+                <p className="text-black-300">
+                  {providers.providerLabel(provider)}
+                </p>
+              </div>
+              <div
+                className={classNames(
+                  'group relative rounded-3xl py-1 px-2 text-sm',
+                  {
+                    'bg-green-200 text-green-600': status.state === 'Connected',
+                    'bg-red-200 text-red-600':
+                      status.state === 'Permission Issue',
+                    'bg-komiser-200 text-komiser-600':
+                      status.state === 'Syncing'
+                  }
+                )}
+              >
+                <span>{status.state}</span>
+                <div className="pointer-events-none invisible absolute z-10 mt-2 -ml-20 rounded-lg bg-gray-800 p-2 text-xs text-white transition-opacity duration-300 group-hover:visible">
+                  {status.message}
+                </div>
+              </div>
+              <More2Icon className="h-6 w-6" />
             </div>
-            <More2Icon className="h-6 w-6" />
-          </div>
-        ))}
+          );
+        })}
       </CloudAccountsLayout>
 
       {/* Toast component */}
