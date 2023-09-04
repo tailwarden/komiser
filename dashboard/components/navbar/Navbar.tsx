@@ -4,22 +4,29 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import GlobalAppContext from '../layout/context/GlobalAppContext';
 
+interface NavItem {
+  label: string;
+  href: string;
+}
+
 function Navbar() {
-  const { displayBanner, betaFlagOnboardingWizard } = useContext(GlobalAppContext);
+  const { displayBanner, betaFlagOnboardingWizard } =
+    useContext(GlobalAppContext);
   const router = useRouter();
   // TODO: (onboarding-wizard) Remove the betaFlagOnboardingWizard conditional when feature is stable
-  const nav = [
+  const nav: NavItem[] = [
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Inventory', href: '/inventory' },
     betaFlagOnboardingWizard
       ? { label: 'Cloud Accounts', href: '/cloud-accounts' }
       : null
-  ].filter(item => item !== null);
+  ].filter(item => item !== null) as NavItem[];
 
   return (
     <nav
-      className={`fixed ${displayBanner ? 'top-[72px]' : 'top-0'
-        } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white px-6 py-4 xl:pr-8 2xl:pr-24`}
+      className={`fixed ${
+        displayBanner ? 'top-[72px]' : 'top-0'
+      } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white px-6 py-4 xl:pr-8 2xl:pr-24`}
     >
       <div className="flex items-center gap-8 text-sm font-semibold text-black-400">
         <Link href="/dashboard">
