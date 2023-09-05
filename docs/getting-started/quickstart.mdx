@@ -1,0 +1,154 @@
+---
+slug: /introduction/getting-started
+title: Quickstart
+sidebar_label: Quickstart
+---
+
+## Komiser configurations
+Starting from Komiser v3 and beyond, you komiser configuration which holds the credentials to your cloud providers is defined through a **config.toml** file. When you position the config.toml file within the same directory as the Komiser binary, it will be automatically detected. However, if you choose to place it in an alternate location, you can do so and then provide the path using the `--config` flag.
+
+Example `start` command
+```
+komiser start 
+```
+
+## Config.toml file
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/komiser-config-light.png"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/komiser-config-dark.png"
+  alt="Hero Dark"
+/>
+
+Cloud provider account configuration is done through the config.toml file, using either the `ENVIRONMENT_VARIABLES` or `CREDENTIALS_FILE`. Komiser now supports multiple cloud accounts by default. 
+
+### Data persistence
+Once added the credentials to your cloud provider accounts you will want to choose between these two methods of persisting your AWS Account data.
+
+#### Postgres
+**Add to config.toml file**
+```
+[postgres]
+uri="postgres://postgres:komiser@localhost:5432/komiser?sslmode=disable"
+```
+<Tip> For Postgres, Komiser anticipates the existence of a role `postgres` and a database `komiser` on the local Postgres server. </Tip>
+
+#### SQLite
+```
+# Add to config.toml file
+
+[sqlite]
+  file = "komiser.db"
+```
+
+<Note> The reason for this external data persistence is to improve the filtering, sorting and tagging management experience making it faster and smoother. It also serves as a standalone DB which you are free to query and visualize as you see fit. </Note>
+
+### Example config.toml
+```
+[[aws]]
+name="sandbox"
+source="CREDENTIALS_FILE"
+path=./path/to/credentials/file
+profile="default"
+
+[[aws]]
+name="staging"
+source="CREDENTIALS_FILE"
+path=./path/to/credentials/file
+profile="staging-account"
+
+[[gcp]]
+name="production"
+source="ENVIRONMENT_VARIABLES"
+# path=./path/to/credentials/file specify if CREDENTIALS_FILE is used
+profile="production"
+
+[postgres]
+uri="postgres://postgres:komiser@localhost:5432/komiser?sslmode=disable"
+```
+
+### Options
+
+```
+Usage:
+  komiser start [command]
+```
+
+```
+Available Commands:
+  config      Create configuration file
+  help        Help about any command
+  start       Run Komiser server
+  version     Show tool version
+
+Flags:
+  -h, --help   help for komiser
+```
+
+Once you have correctly build your [config.toml file](https://www.youtube.com/watch?v=-jDXVO6NjVk&t=102s), in the same directory, run the command:
+
+```
+komiser start
+```
+
+Point your browser to http://localhost:3000
+
+### Docker
+
+Komiser is also available as a Docker image:
+
+[https://hub.docker.com/r/tailwarden/komiser/tags/](https://hub.docker.com/r/tailwarden/komiser/tags)
+
+Check Docker Hub of the Komiser changelog to find the latest version of Komiser. 
+
+> Note: From Komiser v3 onwards, we natively support multiple cloud account authentication through the `config.toml` file, you will need to mount this fill along with a credentials file (not needed is using ENVIRONMENT_VARIABLES as the auth source) to the Docker container using the `-v` flags as seen in the `Docker run` command below. 
+
+```
+docker run -v /local/path/to/config.toml:/etc/config/config.toml  -v /local/path/to/credentials.yaml:/etc/config/credentials.yaml -d -p 3000:3000 --name komiser  tailwarden/komiser:latest komiser start --config /etc/config/config.toml
+```
+
+### Docker installation tutorial
+<div style={{
+    position: 'relative',
+    paddingBottom: '56.25%',
+    paddingTop:'30px',
+    height:0,
+    overflow:'hidden',
+  }}>
+  <iframe
+    src='https://www.youtube.com/embed/8IJMoH4PKe8'
+    allowFullScreen
+    webkitallowfullscreen="true"
+    frameBorder="0"
+    style={{
+      position: 'absolute',
+      top:0,
+      left:0,
+      width:'100%',
+      height:'100%',
+    }}
+  >
+  </iframe>
+</div>
+
+## Self-hosted
+
+Head over to your cloud provider of choice to learn how to connect your Komiser CLI to your cloud account and to deploy a self hosted version of the tool. 
+
+* [AWS](/docs/cloud-providers/aws)
+* [Azure](/docs/cloud-providers/azure)
+* [Civo](/docs/cloud-providers/civo)
+* [DigitalOcean](/docs/cloud-providers/digital-ocean)
+* [GCP](/docs/cloud-providers/google-cloud-platform)
+* [Kubernetes](/docs/cloud-providers/kubernetes)
+* [Linode](/docs/cloud-providers/linode)
+* [MongoDB](/docs/cloud-providers/mongodb-atlas)
+* [OCI](/docs/cloud-providers/oci)
+* [Scaleway](/docs/cloud-providers/scaleway)
+* [Tencent](/docs/cloud-providers/tencent)
