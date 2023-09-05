@@ -81,7 +81,7 @@
     },
     {
       "group": "Community & Support",
-      "pages": ["/community-support/contributing", "/community-support/events", "/community-support/telemetry", "/community-support/FAQs"]
+      "pages": ["community-support/contributing", "community-support/events", "community-support/telemetry", "community-support/faqs"]
     },
     {
       "group": "API Documentation",
