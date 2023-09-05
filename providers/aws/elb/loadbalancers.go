@@ -36,6 +36,7 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 	}
 
 	var configListeners elasticloadbalancingv2.DescribeListenersInput
+	var configRules elasticloadbalancingv2.DescribeRulesInput
 
 	for _, loadbalancer := range output.LoadBalancers {
 		resourceArn := *loadbalancer.LoadBalancerArn
@@ -109,14 +110,52 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "ELB Listener" + " " + elbValues[resourceType].elbType,
+				Service:    "ELB " + elbValues[resourceType].elbType[:3] + " Listener",
 				ResourceId: listenerArn,
 				Region:     client.AWSClient.Region,
-				Name:       listenerArn,
+				Name:       *loadbalancer.LoadBalancerName,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#ELBListenerV2:listenerArn=%s", client.AWSClient.Region, client.AWSClient.Region, listenerArn),
 			})
+
+			configRules.ListenerArn = &listenerArn
+			output, err := elbClient.DescribeRules(ctx, &configRules)
+			if err != nil {
+				return resources, err
+			}
+
+			for rule_number, rule := range output.Rules {
+				ruleArn := *rule.RuleArn
+				outputTags, err := elbClient.DescribeTags(ctx, &elasticloadbalancingv2.DescribeTagsInput{
+					ResourceArns: []string{ruleArn},
+				})
+				if err != nil {
+					return resources, err
+				}
+
+				tags := make([]Tag, 0)
+				for _, tagDescription := range outputTags.TagDescriptions {
+					for _, tag := range tagDescription.Tags {
+						tags = append(tags, Tag{
+							Key:   *tag.Key,
+							Value: *tag.Value,
+						})
+					}
+				}
+				resources = append(resources, Resource{
+					Provider:   "AWS",
+					Account:    client.Name,
+					Service:    "ELB " + elbValues[resourceType].elbType[:3] + " Listener Rule",
+					ResourceId: ruleArn,
+					Region:     client.AWSClient.Region,
+					Name:       *loadbalancer.LoadBalancerName + " Rule " + fmt.Sprintf("%d", rule_number+1),
+					Tags:       tags,
+					FetchedAt:  time.Now(),
+					Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#ListenerRuleDetails:ruleArn=%s", client.AWSClient.Region, client.AWSClient.Region, ruleArn),
+				})
+			}
+
 		}
 
 	}
