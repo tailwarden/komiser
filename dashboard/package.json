@@ -40,7 +40,7 @@
     "@storybook/nextjs": "^7.0.0-alpha.41",
     "@storybook/react": "^7.0.0-beta.52",
     "@storybook/testing-library": "^0.0.14-next.1",
-    "@storybook/theming": "^7.0.0-beta.52",
+    "@storybook/theming": "^7.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.4.0",
