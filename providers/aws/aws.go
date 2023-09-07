@@ -24,6 +24,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/lambda"
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
+	"github.com/tailwarden/komiser/providers/aws/redshift"
 	"github.com/tailwarden/komiser/providers/aws/s3"
 	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
@@ -69,6 +70,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		rds.ProxyEndpoints,
 		rds.AutoBackups,
 		elb.LoadBalancers,
+		elb.TargetGroups,
 		efs.ElasticFileStorage,
 		apigateway.Apis,
 		elasticache.Clusters,
@@ -88,6 +90,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
+		redshift.EventSubscriptions,
 	}
 }
 

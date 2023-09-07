@@ -162,16 +162,16 @@ We are very excited about what is in store in the coming weeks and months, take 
 
 Komiser is written in `Golang` and is `Elv2 licensed` - contributions are always welcome whether that means providing feedback, be it through GitHub, through the `#feedback` channel on our [Discord server](https://discord.tailwarden.com) or testing existing and new features. Feel free to check out our [contributor guidelines](./CONTRIBUTING.md) and consider becoming a **contributor** today. 
 
-Learn how to contribute with this walkthrough videos:
+Learn how to contribute with these walkthrough videos:
 
-- [How to contributor to Komiser engine](https://www.youtube.com/watch?v=Vn5uc2elcVg)
-- [How to contributor to Komiser dashboard](https://www.youtube.com/watch?v=uwxj11-eRt8)
+- [How to contribute to Komiser engine](https://www.youtube.com/watch?v=Vn5uc2elcVg)
+- [How to contribute to Komiser dashboard](https://www.youtube.com/watch?v=uwxj11-eRt8)
 
 # Users 🧑‍🤝‍🧑
 
 If you'd like to have your company represented and are using `Komiser` please give formal written permission below via email to contact@tailwarden.com.
 
-We will need a URL to a svg or png logo, a text title and a company URL.
+We will need a URL to an SVG or png logo, a text title, and a company URL.
 
 # Versioning 🧮
 
