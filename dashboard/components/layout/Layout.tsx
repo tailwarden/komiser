@@ -37,7 +37,7 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
-  const betaFlagOnboardingWizard = true; // To test the onboarding wizard feature, set this beta-flag to true
+  const betaFlagOnboardingWizard = false; // To test the onboarding wizard feature, set this beta-flag to true
   const isOnboarding =
     betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
 

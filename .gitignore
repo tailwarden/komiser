@@ -6,6 +6,7 @@ tmp
 credentials
 main
 config.toml
+docs/
 _
 out
 bin
