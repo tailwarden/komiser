@@ -35,8 +35,8 @@ function SelectInput({
   return (
     <div className="relative">
       <div
-        className="pointer-events-none absolute right-4
-        bottom-[1.15rem] text-komiser-600 transition-all"
+        className="pointer-events-none absolute bottom-[1.15rem]
+        right-4 text-komiser-600 transition-all"
       >
         {icon}
       </div>
@@ -61,7 +61,7 @@ function SelectInput({
             onClick={toggle}
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
-          <div className="absolute top-[96px] z-[21] max-h-52 w-full overflow-hidden overflow-y-auto rounded-lg border border-black-130 bg-white py-2 px-3 shadow-lg">
+          <div className="absolute top-[96px] z-[21] max-h-52 w-full overflow-hidden overflow-y-auto rounded-lg border border-black-130 bg-white px-3 py-2 shadow-lg">
             <div className="flex w-full flex-col gap-1">
               {values.map((item, idx) => {
                 const isActive = value === item;
@@ -69,7 +69,7 @@ function SelectInput({
                   <button
                     key={idx}
                     className={classNames(
-                      'flex items-center rounded py-2 px-3 text-left text-sm text-black-400 hover:bg-black-150',
+                      'flex items-center rounded px-3 py-2 text-left text-sm text-black-400 hover:bg-black-150',
                       { 'bg-komiser-150': isActive }
                     )}
                     onClick={() => handleClick(item)}
