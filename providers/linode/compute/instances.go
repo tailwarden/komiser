@@ -14,15 +14,18 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-type LinodeInstance struct {
-	Instance *linodego.Instance
-}
+func LinodeInstancesAndInstanceDisks(ctx context.Context, client providers.ProviderClient) ([]Resource, error) {
+	linodeInstances, err := client.LinodeClient.ListInstances(ctx, &linodego.ListOptions{
+		PageOptions: &linodego.PageOptions{},
+		PageSize:    0,
+		Filter:      "",
+	})
+	if err != nil {
+		return nil, err
+	}
 
-func LinodeInstancesAndInstanceDisks(ctx context.Context, client providers.ProviderClient, linodeInstances []LinodeInstance) ([]Resource, error) {
 	resources := make([]Resource, 0)
-
-	for _, linodeInstance := range linodeInstances {
-		instance := linodeInstance.Instance
+	for _, instance := range linodeInstances {
 
 		tags := make([]Tag, 0)
 		for _, tag := range instance.Tags {
