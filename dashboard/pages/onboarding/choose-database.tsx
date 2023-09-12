@@ -31,9 +31,8 @@ function DatabaseLeftItem({
   return (
     <div
       onClick={onClick}
-      className={`flex flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${
-        selected === value ? 'border-komiser-600' : 'border-gray-200'
-      }`}
+      className={`flex flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${selected === value ? 'border-komiser-600' : 'border-gray-200'
+        }`}
     >
       <Image
         src={imageUrl}
@@ -59,16 +58,14 @@ function DatabaseRightItem({
     <div
       onClick={onClick}
       key={value}
-      className={`flex w-32 items-center justify-center rounded-3xl p-6 ${
-        selected === value ? 'bg-komiser-200' : 'bg-white'
-      }`}
+      className={`flex w-32 items-center justify-center rounded-3xl p-6 ${selected === value ? 'bg-komiser-200' : 'bg-white'
+        }`}
     >
       <Image
         src={imageUrl}
         alt={`${value} Logo`}
-        className={`h-20 w-20 rounded-full ${
-          selected !== value ? 'opacity-[0.6]' : ''
-        }`}
+        className={`h-20 w-20 rounded-full ${selected !== value ? 'opacity-[0.6]' : ''
+          }`}
         width={0}
         height={0}
       />
@@ -150,11 +147,10 @@ export default function ChooseDatabase() {
                 alt="Komiser Logo"
                 width={135}
                 height={100}
-                className={`${
-                  database === allDBProviders.POSTGRES
+                className={`${database === allDBProviders.POSTGRES
                     ? 'ml-16'
                     : 'rotate-onboarding-arrow ml-[182px]'
-                }`}
+                  }`}
               />
             </div>
 

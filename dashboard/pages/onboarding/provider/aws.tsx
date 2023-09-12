@@ -127,12 +127,12 @@ export default function AWSCredentials() {
                 {[options[2].value, options[3].value].includes(
                   credentialType
                 ) && (
-                  <div className="mt-2 text-sm text-black-400">
-                    {credentialType === options[3].value
-                      ? 'Komiser will fetch the credentials from AWS'
-                      : 'Komiser will load credentials from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.'}
-                  </div>
-                )}
+                    <div className="mt-2 text-sm text-black-400">
+                      {credentialType === options[3].value
+                        ? 'Komiser will fetch the credentials from AWS'
+                        : 'Komiser will load credentials from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.'}
+                    </div>
+                  )}
               </div>
 
               {credentialType === options[0].value && (

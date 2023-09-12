@@ -1,0 +1,107 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Komiser",
+  "logo": {
+    "dark": "/logo/komiser-logo-tw-dark.png",
+    "light": "/logo/komiser-logo-light.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#697372",
+    "light": "#FFFFFF",
+    "dark": "#33CCCC",
+    "background": {
+      "dark": "#090F19"
+    },
+    "anchors": {
+      "from": "#FF7F57",
+      "to": "#9563FF"
+    }
+  },
+  "topbarCtaButton": {
+      "type": "github",
+      "url": "https://github.com/tailwarden/komiser"
+    },
+    "topbarLinks": [
+    {
+      "name": "Discover cloud version",
+      "url": "https://www.tailwarden.com/"
+    }
+  ],
+
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Join the Community",
+      "icon": "discord",
+      "url": "https://discord.tailwarden.com"
+    },
+    {
+      "name": "GitHub repo",
+      "icon": "github",
+      "url": "https://github.com/tailwarden/komiser"
+    },
+    {
+      "name": "YouTube guides",
+      "icon": "youtube",
+      "url": "https://www.youtube.com/@tailwarden"
+    },
+    {
+      "name": "Blog guides",
+      "icon": "newspaper",
+      "url": "https://www.tailwarden.com/blog"
+    },
+    {
+      "name": "Changelog",
+      "icon": "list",
+      "url": "https://www.tailwarden.com/changelog"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Welcome",
+      "pages": ["welcome/overview"]
+    },
+    {
+      "group": "Getting Started",
+      "pages": ["getting-started/introduction", "getting-started/installation", "getting-started/quickstart"]
+    },
+    {
+      "group": "Configuration",
+      "pages": [{"group": "Cloud Providers", "pages": ["configuration/cloud-providers/aws", "configuration/cloud-providers/azure", "configuration/cloud-providers/civo", "configuration/cloud-providers/digital-ocean", "configuration/cloud-providers/k8s", "configuration/cloud-providers/linode", "configuration/cloud-providers/tencent", "configuration/cloud-providers/scaleway", "configuration/cloud-providers/mongodb-atlas", "configuration/cloud-providers/gcp", "configuration/cloud-providers/oracle"]}]
+    },
+    {
+      "group": "Guides",
+      "pages": ["guides/custom-views", "guides/dashboard", "guides/alerts"]
+    },
+    {
+      "group": "Community & Support",
+      "pages": ["community-support/contributing", "community-support/events", "community-support/telemetry", "community-support/faqs"]
+    },
+    {
+      "group": "API Documentation",
+      "pages": ["api-reference/authentication"]
+    },
+    {
+      "group": "Endpoint Examples",
+      "pages": [
+        "api-reference/endpoint/getting",
+        "api-reference/endpoint/create",
+        "api-reference/endpoint/update",
+        "api-reference/endpoint/delete"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "twitter": "https://twitter.com/komiserdotio",
+    "github": "https://github.com/tailwarden/komiser",
+    "linkedin": "https://www.linkedin.com/company/tailwarden",
+    "youtube": "https://www.youtube.com/@tailwarden"
+  },
+  "backgroundImage": "/images/background-image.png"
+}

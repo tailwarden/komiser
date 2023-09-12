@@ -7,7 +7,7 @@ import PlusIcon from '../../icons/PlusIcon';
 import useFilterWizard from './filter/hooks/useFilterWizard';
 import useInventory from '../hooks/useInventory/useInventory';
 import InventoryFilterDropdown from './InventoryFilterDropdown';
-import ClearFilterIcon from '../../icons/ClearFilterIcon';
+import CloseIcon from '../../icons/CloseIcon';
 
 type InventoryActiveFiltersProps = {
   hasFilters: boolean | undefined;
@@ -65,7 +65,7 @@ function InventoryActiveFilters({
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="cursor-pointer" onClick={toggle}>
-                  <PlusIcon width={16} height={16} />
+                  <PlusIcon className="h-6 w-6 rounded-full border-dashed border-black-200 p-1 hover:border hover:bg-black-400 hover:bg-opacity-10" />
                 </div>
                 {isOpen && (
                   <InventoryFilterDropdown
@@ -77,14 +77,15 @@ function InventoryActiveFilters({
               </div>
 
               <div className="border-x-1 h-7 border"></div>
-              <Button
-                size="xxs"
-                style="ghost"
+              <div
+                className="flex cursor-pointer items-center gap-1 text-black-400 hover:text-black-900"
                 onClick={() => router.push(router.pathname)}
               >
-                <ClearFilterIcon />
-                Clear filters
-              </Button>
+                <span className="font-sans text-[14px] font-semibold ">
+                  Clear filters
+                </span>
+                <CloseIcon className="h-5 w-5 opacity-70" />
+              </div>
             </div>
           )}
         </div>
