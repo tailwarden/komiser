@@ -4,3 +4,9 @@ updates:
     directory: "/dashboard"  
     schedule:
       interval: "weekly"
+      labels:
+      - "npm dependencies"
+      reviewers:
+      - "mlabouardy"
+      - "ShubhamPalriwala"
+      - "AvineshTripathi"
