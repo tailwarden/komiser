@@ -1,0 +1,35 @@
+---
+slug: /telemetry
+title: Telemetry
+sidebar_label: Telemetry
+---
+
+By default, the Komiser CLI collects some anonymous usage data. There are two types of data we collect:
+- **Usage**: features usage, we use this data to understand which providers are being used and how much, which helps guide our roadmap and development efforts.
+- **Errors**: stack traces sent whenever a panic occurs in the CLI. Having this data allows us to be notified when there is a bug that needs to be prioritized.
+
+### We will never:
+
+- Identify or track users.
+- Collect personal information such as IP addresses, email addresses, or website URLs.
+- Store data about your cloud resources or credentials .
+
+## Why collect telemetry data?
+
+We collect telemetry data for only two reasons: 
+
+- In order to create a better product, we need reliable quantitative information. The data we collect helps us fix bugs, evaluate the success of features, and better understand our users' needs.
+
+- We also need to prove that people are actually using Komiser. Usage metrics help us justify our existence to investors so that we can keep this project alive.
+
+## What tools do we use to collect and visualize data?
+
+We use [Segment](https://segment.com/), a platform for data collection and management, to collect usage data. We then feed that data into [Amplitude](https://amplitude.com/), a tool for graphing and highlighting data, so that we can build visualizations according to our needs. As for error collection, we use [Sentry](https://sentry.io/).
+
+## How to disable data collection
+
+Data collection can be disabled at any time by setting a command-line option, then restarting the Komiser instance.
+
+```
+komiser start --telemetry false
+```
