@@ -76,19 +76,6 @@
     {
       "group": "Community & Support",
       "pages": ["community-support/contributing", "community-support/events", "community-support/telemetry", "community-support/faqs"]
-    },
-    {
-      "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/getting",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/update",
-        "api-reference/endpoint/delete"
-      ]
     }
   ],
   "footerSocials": {
