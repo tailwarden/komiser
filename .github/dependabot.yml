@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" 
+    directory: "/dashboard"  
+    schedule:
+      interval: "weekly"
+      labels:
+      - "npm dependencies"
+      reviewers:
+      - "mlabouardy"
+      - "ShubhamPalriwala"
+      - "AvineshTripathi"

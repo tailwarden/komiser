@@ -28,7 +28,7 @@ const options: SelectOptions[] = [
     icon: <DocumentTextIcon />,
     label: 'Credentials File',
     value: 'credentials-file'
-  },
+  }
 ];
 
 export default function KubernetesCredentials() {
