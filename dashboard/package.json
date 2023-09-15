@@ -46,7 +46,7 @@
     "@types/jest": "^29.4.0",
     "@types/react-simple-maps": "^3.0.0",
     "autoprefixer": "^10.4.13",
-    "eslint": "^8.26.0",
+    "eslint": "^8.49.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "13.0.1",
     "eslint-config-prettier": "^8.5.0",
