@@ -14,8 +14,8 @@
       "dark": "#090F19"
     },
     "anchors": {
-      "from": "#FF7F57",
-      "to": "#9563FF"
+      "from": "#008484",
+      "to": "#33CCCC"
     }
   },
   "topbarCtaButton": {
