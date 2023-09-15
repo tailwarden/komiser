@@ -32,12 +32,12 @@
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
 
 .rotate-onboarding-arrow {
-    /* flip horizontally */
-    transform: rotateY(180deg);
+  /* flip horizontally */
+  transform: rotateY(180deg);
 }
