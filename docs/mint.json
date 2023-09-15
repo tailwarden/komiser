@@ -7,8 +7,8 @@
   },
   "favicon": "/favicon.png",
   "colors": {
-    "primary": "#697372",
-    "light": "#FFFFFF",
+    "primary": "#008484",
+    "light": "#33CCCC",
     "dark": "#33CCCC",
     "background": {
       "dark": "#090F19"
@@ -84,5 +84,12 @@
     "linkedin": "https://www.linkedin.com/company/tailwarden",
     "youtube": "https://www.youtube.com/@tailwarden"
   },
-  "backgroundImage": "/images/background-image.png"
+
+  "backgroundImage": "/images/background-image.png",
+
+  "analytics": {
+    "ga4": {
+        "measurementId": "G-PVLRSMWSFG"
+    }
+  }
 }
