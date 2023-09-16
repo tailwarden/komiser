@@ -71,7 +71,7 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 		resources = append(resources, Resource{
 			Provider:   "AWS",
 			Account:    client.Name,
-			Service:    "ELB" + " " + elbValues[resourceType].elbType,
+			Service:    fmt.Sprintf("ELB %s", elbValues[resourceType].elbType),
 			ResourceId: resourceArn,
 			Region:     client.AWSClient.Region,
 			Name:       *loadbalancer.LoadBalancerName,
@@ -110,7 +110,7 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "ELB " + elbValues[resourceType].elbType[:3] + " Listener",
+				Service:    fmt.Sprintf("ELB %s Listener", elbValues[resourceType].elbType),
 				ResourceId: listenerArn,
 				Region:     client.AWSClient.Region,
 				Name:       *loadbalancer.LoadBalancerName,
@@ -146,10 +146,10 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 				resources = append(resources, Resource{
 					Provider:   "AWS",
 					Account:    client.Name,
-					Service:    "ELB " + elbValues[resourceType].elbType[:3] + " Listener Rule",
+					Service:    fmt.Sprintf("ELB %s Listener Rule", elbValues[resourceType].elbType),
 					ResourceId: ruleArn,
 					Region:     client.AWSClient.Region,
-					Name:       *loadbalancer.LoadBalancerName + " Rule " + fmt.Sprintf("%d", rule_number+1),
+					Name:       *loadbalancer.LoadBalancerName + fmt.Sprintf(" Rule %d", rule_number+1),
 					Tags:       tags,
 					FetchedAt:  time.Now(),
 					Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#ListenerRuleDetails:ruleArn=%s", client.AWSClient.Region, client.AWSClient.Region, ruleArn),
