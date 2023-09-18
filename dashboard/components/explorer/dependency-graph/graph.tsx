@@ -19,6 +19,7 @@ import ReactFlow, {
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import Button from '../../button/Button';
 import CustomNode from './nodes/nodes';
+import 'reactflow/dist/style.css';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -76,7 +77,7 @@ type LayoutFlowProps = {
 };
 
 const nodeTypes = {
-  customNode: CustomNode,
+  customNode: CustomNode
 };
 
 const LayoutFlow = ({ data }: LayoutFlowProps) => {
@@ -102,8 +103,8 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
       dagreGraph.setNode(node.id, { width: 150, height: 50 });
     });
 
-    currentEdges.forEach(node => {
-      dagreGraph.setEdge(node.source, node.target);
+    currentEdges.forEach(edge => {
+      dagreGraph.setEdge(edge.source, edge.target);
     });
 
     dagre.layout(dagreGraph);
@@ -131,8 +132,8 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
   };
 
   const changeMarker = () => {
-    setEdges(eds =>
-      eds.map(e => ({
+    setEdges(edges =>
+      edges.map(e => ({
         ...e,
         markerEnd: {
           type:
@@ -193,7 +194,6 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
             nodesDraggable={false}
             nodesConnectable={true}
           >
-
             <Controls />
             {/*<Background variant='lines' gap={24} size={1} />*/}
           </ReactFlow>

@@ -5,6 +5,8 @@ import Tippy from '@tippyjs/react';
 type CircleNodeProps = {
   data: any;
   id: string;
+  sourcePosition: Position;
+  targetPosition: Position;
 };
 
 function getInfo(data: any, id: any) {
@@ -38,13 +40,26 @@ const css = `
         border: 1px solid black;
     }
 `;
-const CustomNode: React.FC<CircleNodeProps> = ({ data, id }) => (
+const CustomNode: React.FC<CircleNodeProps> = ({
+  data,
+  id,
+  targetPosition,
+  sourcePosition
+}) => (
   <>
     <style>{css}</style>
     <Tippy content={<>{getInfo(data, id)}</>}>
       <div className="c flex h-24 w-24 items-center justify-center rounded-[20%] border p-6">
-        <Handle type="target" position={Position.Top} id={`${id}.top`} />
-        <Handle type="source" position={Position.Bottom} id={`${id}.bottom`} />
+        <Handle
+          type="target"
+          position={targetPosition}
+          id={`${id}.targetHandle`}
+        />
+        <Handle
+          type="source"
+          position={sourcePosition}
+          id={`${id}.sourceHandle`}
+        />
         {getLogo(data.resource)}
       </div>
     </Tippy>
