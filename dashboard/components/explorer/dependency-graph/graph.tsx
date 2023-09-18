@@ -13,10 +13,12 @@ import ReactFlow, {
   MarkerType,
   EdgeMarker,
   Panel,
-  useReactFlow
+  useReactFlow,
+  Background
 } from 'reactflow';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import Button from '../../button/Button';
+import CustomNode from './nodes/nodes';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -73,6 +75,10 @@ type LayoutFlowProps = {
   data: ReactFlowData | undefined;
 };
 
+const nodeTypes = {
+  customNode: CustomNode,
+};
+
 const LayoutFlow = ({ data }: LayoutFlowProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -117,6 +123,7 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
     });
 
     setNodes(layoutedNodes);
+    setEdges(currentEdges);
   };
 
   const unselect = () => {
@@ -177,12 +184,18 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
             nodes={nodes}
             edges={edges}
             onConnect={onConnect}
+            nodeTypes={nodeTypes}
             nodeExtent={nodeExtent}
             onInit={() => onLayout('TB')}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onPaneScroll={undefined}
+            nodesDraggable={false}
+            nodesConnectable={true}
           >
+
             <Controls />
+            {/*<Background variant='lines' gap={24} size={1} />*/}
           </ReactFlow>
         </div>
       </div>
