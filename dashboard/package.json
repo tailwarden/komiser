@@ -16,18 +16,20 @@
   "dependencies": {
     "@sentry/react": "^7.41.0",
     "@sentry/tracing": "^7.41.0",
-    "@types/node": "20.5.9",
     "@tippyjs/react": "^4.2.6",
+    "@types/node": "20.5.9",
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
     "chart.js": "^4.2.1",
     "classnames": "^2.3.2",
-    "next": "^13.4.19",
     "d3-selection": "^3.0.0",
+    "dagre": "^0.8.5",
     "elkjs": "^0.8.2",
+    "next": "^13.4.19",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "react-flow-renderer": "^10.3.17",
     "react-simple-maps": "^3.0.0",
     "typescript": "5.2.2"
   },
@@ -46,6 +48,7 @@
     "@storybook/theming": "^7.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
+    "@types/dagre": "^0.7.49",
     "@types/jest": "^29.4.0",
     "@types/react-simple-maps": "^3.0.0",
     "autoprefixer": "^10.4.13",
@@ -62,6 +65,7 @@
     "postcss": "^8.4.18",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.2.2",
+    "reactflow": "^11.8.3",
     "storybook": "^7.0.0-beta.52",
     "tailwindcss": "^3.3.2"
   }

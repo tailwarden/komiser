@@ -1,10 +1,5 @@
-import 'reactflow/dist/style.css';
-import CustomNode from './nodes/nodes';
+import LayoutFlow from './graph';
 import { ReactFlowData } from './hooks/useDependencyGraph';
-
-const nodeTypes = {
-  customNode: CustomNode
-};
 
 export type DashboardDependencyGraphViewProps = {
   data: ReactFlowData | undefined;
@@ -25,8 +20,7 @@ function DependencyGraphView({ data }: DashboardDependencyGraphViewProps) {
         </div>
         <div className="flex h-[60px] items-center"></div>
       </div>
-      <div className="mt-8"></div>
-      <div className="h-[70vh]">{/* TODO - Add Graph */}</div>
+      <LayoutFlow data={data} />
       <div className="flex gap-4 text-xs text-black-300"></div>
     </div>
   );
