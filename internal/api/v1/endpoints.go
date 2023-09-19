@@ -56,6 +56,9 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.POST("/alerts/test", api.TestEndpointHandler)
 
 	router.GET("/telemetry", api.TelemetryHandler)
+	router.GET("/is_onboarded", api.IsOnboardedHandler)
+
+	router.GET("/cloud_accounts", api.ListCloudAccountsHandler)
 
 	router.NoRoute(gin.WrapH(http.FileServer(assetFS())))
 

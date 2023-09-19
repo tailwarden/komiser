@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -61,6 +62,7 @@ var startCmd = &cobra.Command{
 
 		err = internal.Exec(address, port, file, telemetry, analytics, regions, cmd)
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
 
