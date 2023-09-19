@@ -20,7 +20,7 @@ function DependencyGraphView({ data }: DashboardDependencyGraphViewProps) {
         </div>
         <div className="flex h-[60px] items-center"></div>
       </div>
-      <LayoutFlow data={data} />
+      {data && <LayoutFlow data={data} />}
       <div className="flex gap-4 text-xs text-black-300"></div>
     </div>
   );

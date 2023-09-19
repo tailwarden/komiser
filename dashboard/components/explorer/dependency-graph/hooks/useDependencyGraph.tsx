@@ -24,6 +24,7 @@ function GetData(res: any) {
       };
       d.nodes.push(a);
     }
+
     ele.relations.forEach((rel: any) => {
       // check for other node exists
       if (d.nodes.findIndex(element => element.id === rel.ResourceID) === -1) {
@@ -38,7 +39,8 @@ function GetData(res: any) {
       const edge = {
         id: `${ele.resourceId}-${rel.ResourceID}`,
         source: ele.resourceId,
-        target: rel.ResourceID
+        target: rel.ResourceID,
+        type: 'floating'
       };
       d.edges.push(edge);
     });
