@@ -21,6 +21,7 @@
   </a>
 </p>
 
+[![Build and Test komiser](https://github.com/tailwarden/komiser/actions/workflows/build_test.yml/badge.svg)](https://github.com/tailwarden/komiser/actions/workflows/build_test.yml)
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/tailwarden/komiser/blob/master/LICENSE) [![Docker Stars](https://img.shields.io/docker/pulls/mlabouardy/komiser.svg)](https://hub.docker.com/r/mlabouardy/komiser) 
 [![ELv2 License](https://img.shields.io/badge/license-ELv2-green)](LICENSE) [![Docker Stars](https://img.shields.io/github/issues/tailwarden/komiser.svg)](https://github.com/tailwarden/komiser/issues) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.tailwarden.com/)
 
