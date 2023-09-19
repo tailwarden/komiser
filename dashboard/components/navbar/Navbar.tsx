@@ -4,13 +4,24 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import GlobalAppContext from '../layout/context/GlobalAppContext';
 
+interface NavItem {
+  label: string;
+  href: string;
+}
+
 function Navbar() {
-  const { displayBanner } = useContext(GlobalAppContext);
+  const { displayBanner, betaFlagOnboardingWizard } =
+    useContext(GlobalAppContext);
   const router = useRouter();
-  const nav = [
+  // TODO: (onboarding-wizard) Remove the betaFlagOnboardingWizard conditional when feature is stable
+  const nav: NavItem[] = [
     { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Inventory', href: '/inventory' }
-  ];
+    { label: 'Inventory', href: '/inventory' },
+    betaFlagOnboardingWizard
+      ? { label: 'Cloud Accounts', href: '/cloud-accounts' }
+      : null
+  ].filter(item => item !== null) as NavItem[];
+
   return (
     <nav
       className={`fixed ${

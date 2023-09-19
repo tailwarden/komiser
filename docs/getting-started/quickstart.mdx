@@ -47,7 +47,9 @@ uri="postgres://postgres:komiser@localhost:5432/komiser?sslmode=disable"
   file = "komiser.db"
 ```
 
-<Note> The reason for this external data persistence is to improve the filtering, sorting and tagging management experience making it faster and smoother. It also serves as a standalone DB which you are free to query and visualize as you see fit. </Note>
+<Note className="tailwarden style bg-black-50"> 
+The reason for this external data persistence is to improve the filtering, sorting and tagging management experience making it faster and smoother. It also serves as a standalone DB which you are free to query and visualize as you see fit. 
+</Note>
 
 ### Example config.toml
 ```
@@ -121,20 +123,13 @@ docker run -v /local/path/to/config.toml:/etc/config/config.toml  -v /local/path
     height:0,
     overflow:'hidden',
   }}>
-  <iframe
-    src='https://www.youtube.com/embed/8IJMoH4PKe8'
-    allowFullScreen
-    webkitallowfullscreen="true"
-    frameBorder="0"
-    style={{
-      position: 'absolute',
-      top:0,
-      left:0,
-      width:'100%',
-      height:'100%',
-    }}
-  >
-  </iframe>
+<iframe className="tailwind styles absolute top-0 left-0 w-full h-full rounded-2xl"
+  src='https://www.youtube.com/embed/8IJMoH4PKe8'
+  allowFullScreen
+  webkitallowfullscreen="true"
+  frameBorder="0"
+>
+</iframe>
 </div>
 
 ## Self-hosted
@@ -152,3 +147,4 @@ Head over to your cloud provider of choice to learn how to connect your Komiser 
 * [OCI](/configuration/cloud-providers/oci)
 * [Scaleway](/configuration/cloud-providers/scaleway)
 * [Tencent](/configuration/cloud-providers/tencent)
+
