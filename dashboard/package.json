@@ -16,7 +16,7 @@
   "dependencies": {
     "@sentry/react": "^7.41.0",
     "@sentry/tracing": "^7.41.0",
-    "@types/node": "20.5.9",
+    "@types/node": "20.6.2",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.0.8",
     "chart.js": "^4.2.1",
