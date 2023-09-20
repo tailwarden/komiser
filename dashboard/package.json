@@ -22,13 +22,12 @@
     "@types/react-dom": "18.0.8",
     "chart.js": "^4.2.1",
     "classnames": "^2.3.2",
-    "dagre": "^0.8.5",
     "elkjs": "^0.8.2",
     "next": "^13.4.19",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
-    "react-simple-maps": "^3.0.0",
+    "react-simple-maps": "3.0.0",
     "reactflow": "^11.8.3",
     "typescript": "5.2.2"
   },
@@ -66,5 +65,9 @@
     "prettier-plugin-tailwindcss": "^0.2.2",
     "storybook": "^7.0.0-beta.52",
     "tailwindcss": "^3.3.2"
+  },
+  "overrides": {
+    "d3-selection": "^3.0.0",
+    "@types/d3-selection": "^3.0.3"
   }
 }

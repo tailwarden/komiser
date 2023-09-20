@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useLayoutEffect } from 'react';
-import ELK from 'elkjs/lib/elk.bundled.js';
+import ELK, { ElkExtendedEdge, ElkNode } from 'elkjs/lib/elk.bundled.js';
 import ReactFlow, {
   Controls,
   ReactFlowProvider,
@@ -16,12 +16,14 @@ import ReactFlow, {
   useReactFlow,
   Background,
   NodeTypes,
-  EdgeTypes
+  EdgeTypes,
+  Edge,
+  Node,
+  ResizeParamsWithDirection
 } from 'reactflow';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import Button from '../../button/Button';
 import CustomNode from './nodes/nodes';
-import styles from './nodes/nodeStyles.css';
 import 'reactflow/dist/style.css';
 import FloatingEdge from './nodes/FloatingEdge';
 import FloatingConnectionLine from './nodes/FloatingConnectionLine';
@@ -60,7 +62,7 @@ const nodeTypes = {
 
 const edgeTypes = {
   floating: FloatingEdge
-} as EdgeTypes;
+} as unknown as EdgeTypes;
 
 const LayoutFlow = ({ data }: LayoutFlowProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(data.nodes);
@@ -68,27 +70,32 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
   const { fitView } = useReactFlow();
 
   const handleElkLayoutCallback = (layout: ElkNode) => {
-    const nodePositions: { [key: string]: { x: number; y: number } } = {};
+    const nodePositions: { [key: string]: { x?: number; y?: number } } = {};
 
-    layout.children?.forEach((node: ElkNode) => {
+    layout.children?.forEach(node => {
       nodePositions[node.id] = { x: node.x, y: node.y };
     });
 
-    const newNodes = layout.children.map((node: ReactFlowNode) => {
-      const nodePosition = nodePositions[node.id];
-      return {
-        ...node,
-        position: {
-          x: nodePosition?.x || 200,
-          y: nodePosition?.y || 200
-        }
-      };
-    });
+    const newNodes =
+      layout.children?.map(node => {
+        const nodePosition = nodePositions[node.id];
+        return {
+          ...node,
+          position: {
+            x: nodePosition?.x || 200,
+            y: nodePosition?.y || 200
+          }
+        };
+      }) || [];
 
     return { nodes: newNodes, edges: layout.edges };
   };
 
-  const getLayoutedElements = (nodes, edges, options = {}) => {
+  const getLayoutedElements = (
+    nodes: ElkNode[],
+    edges: ElkExtendedEdge[],
+    options = {}
+  ) => {
     const graph = {
       id: 'root',
       layoutOptions: options,
@@ -109,7 +116,7 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
   }, []);
 
   const onConnect = useCallback(
-    params =>
+    (params: Connection) =>
       setEdges(eds =>
         addEdge(
           {
@@ -125,19 +132,25 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
     []
   );
   const onLayout = useCallback(
-    ({ direction, useInitialNodes = false }) => {
+    ({
+      direction,
+      useInitialNodes = false
+    }: {
+      direction: any;
+      useInitialNodes: boolean;
+    }) => {
       const opts = { 'elk.direction': direction, ...elkOptions };
       const ns = data.nodes;
       const es = data.edges;
 
-      getLayoutedElements(ns, es, opts).then(
-        ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
-          setNodes(layoutedNodes);
-          setEdges(layoutedEdges);
+      getLayoutedElements(ns, es, opts).then(elements => {
+        // @ts-ignore
+        setNodes(elements.nodes);
+        // @ts-ignore
+        setEdges(elements.edges);
 
-          window.requestAnimationFrame(() => fitView());
-        }
-      );
+        window.requestAnimationFrame(() => fitView());
+      });
     },
     [data]
   );
@@ -167,8 +180,6 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
             onPaneScroll={undefined}
             nodesDraggable={true}
             nodesConnectable={true}
-            edgeTypes={edgeTypes}
-            connectionLineComponent={FloatingConnectionLine}
           >
             <Controls />
             <Background color="#ccc" style={{ background: '#F4F9F9' }} />

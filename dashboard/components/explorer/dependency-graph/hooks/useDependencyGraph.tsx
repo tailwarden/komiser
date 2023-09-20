@@ -27,19 +27,19 @@ function GetData(res: any) {
 
     ele.relations.forEach((rel: any) => {
       // check for other node exists
-      if (d.nodes.findIndex(element => element.id === rel.ResourceID) === -1) {
+      if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
         const a = {
-          id: rel.ResourceID,
+          id: rel.resourceId,
           type: 'customNode',
-          data: { label: rel.Type, resource: 'AWS' }, // when supporting new provider this could be made dynamic
+          data: { label: rel.type, resource: 'AWS' }, // when supporting new provider this could be made dynamic
           position: { x: 0, y: 0 }
         };
         d.nodes.push(a);
       }
       const edge = {
-        id: `${ele.resourceId}-${rel.ResourceID}`,
+        id: `${ele.resourceId}-${rel.resourceId}`,
         source: ele.resourceId,
-        target: rel.ResourceID,
+        target: rel.resourceId,
         type: 'floating'
       };
       d.edges.push(edge);
