@@ -101,5 +101,5 @@ func (handler *ApiHandler) UpdateCloudAccountHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, alert)
+	c.JSON(http.StatusOK, account)
 }
