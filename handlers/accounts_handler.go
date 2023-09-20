@@ -84,3 +84,22 @@ func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "account has been deleted"})
 }
+
+func (handler *ApiHandler) UpdateCloudAccountHandler(c *gin.Context) {
+	accountId := c.Param("id")
+
+	var account models.Account
+	err := json.NewDecoder(c.Request.Body).Decode(&account)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	_, err = handler.db.NewUpdate().Model(&account).Column("name", "provider", "credentials").Where("id = ?", accountId).Exec(handler.ctx)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, alert)
+}

@@ -61,6 +61,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.GET("/cloud_accounts", api.ListCloudAccountsHandler)
 	router.POST("/cloud_accounts", api.NewCloudAccountHandler)
 	router.DELETE("/cloud_accounts/:id", api.DeleteCloudAccountHandler)
+	router.PUT("/cloud_accounts/:id", api.UpdateCloudAccountHandler)
 
 	router.NoRoute(gin.WrapH(http.FileServer(assetFS())))
 
