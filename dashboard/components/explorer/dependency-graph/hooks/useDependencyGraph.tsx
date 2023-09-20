@@ -18,10 +18,10 @@ function GetData(res: any) {
     if (d.nodes.findIndex(element => element.id === ele.resourceId) === -1) {
       const a = {
         data: {
-          label: ele.service,
-          resource: 'AWS',
-          id: ele.resourceId,
-          type: 'customNode'
+          label: ele.name,
+          service: ele.service,
+          provider: 'AWS',
+          id: ele.resourceId
         }
       };
       d.nodes.push(a);
@@ -33,9 +33,10 @@ function GetData(res: any) {
         const a = {
           data: {
             id: rel.resourceId,
-            type: 'customNode',
-            label: rel.type,
-            resource: 'AWS' // when supporting new provider this could be made dynamic
+            label: rel.name,
+            service: ele.service,
+            type: rel.type,
+            provider: 'AWS' // when supporting new provider this could be made dynamic
           }
         };
         d.nodes.push(a);
@@ -44,7 +45,9 @@ function GetData(res: any) {
         data: {
           id: `${ele.resourceId}-${rel.resourceId}`,
           source: ele.resourceId,
-          target: rel.resourceId
+          target: rel.resourceId,
+          relation: rel.relation,
+          label: rel.type
         }
       };
       d.edges.push(edge);

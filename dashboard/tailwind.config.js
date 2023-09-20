@@ -170,6 +170,9 @@ module.exports = {
         'width-to-fit': 'width-to-fit 5000ms ease-in forwards',
         'wide-pulse': 'wide-pulse 2000ms ease-in infinite',
         scale: 'scale 250ms ease forwards'
+      },
+      backgroundImage: {
+        'dependency-graph': 'radial-gradient(#EDEBEE 2px, transparent 0)'
       }
     }
   },

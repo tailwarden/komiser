@@ -2,19 +2,24 @@
 import React, { useState, memo } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import Cytoscape, { EventObject } from 'cytoscape';
+
+import nodeHtmlLabel, {
+  CytoscapeNodeHtmlParams
+} from 'cytoscape-node-html-label';
+
 // @ts-ignore
 import COSEBilkent from 'cytoscape-cose-bilkent';
 
 import { ReactFlowData } from './hooks/useDependencyGraph';
 
-export type LayoutFlowProps = {
+export type DependencyGraphProps = {
   data: ReactFlowData;
 };
 
 const layout = { name: 'cose-bilkent', animate: true };
 
-Cytoscape.use(COSEBilkent);
-const LayoutFlow = ({ data }: LayoutFlowProps) => {
+nodeHtmlLabel(Cytoscape.use(COSEBilkent));
+const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
 
   const cyActionHandlers = (cy: Cytoscape.Core) => {
@@ -22,12 +27,33 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
       cy.on('click', 'node', (evt: EventObject) => {
         console.info(`Clicked the node with ID ${evt.target.id()}`);
       });
+      // @ts-ignore
+      cy.nodeHtmlLabel([
+        {
+          query: 'node', // cytoscape query selector
+          halign: 'center', // title vertical position. Can be 'left',''center, 'right'
+          valign: 'bottom', // title vertical position. Can be 'top',''center, 'bottom'
+          halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
+          valignBox: 'bottom', // title relative box vertical position. Can be 'top',''center, 'bottom'
+          cssClass: '', // any classes will be as attribute of <div> container for every title
+          tpl(templateData: Cytoscape.NodeDataDefinition) {
+            return `<div>
+              <p style="font-size: 10px;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center">${
+                templateData.label || '&nbsp;'
+              }</p>
+              <p style="font-size: 10px;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin">${
+                templateData.service || '&nbsp;'
+              }</p>
+            </div>`; // your html template here
+          }
+        }
+      ]);
       setInitDone(true);
     }
   };
 
   return (
-    <div className="relative h-full flex-1">
+    <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
       <div className="h-[70vh]">
         <CytoscapeComponent
           className="h-full w-full"
@@ -45,10 +71,10 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
                 width: 40,
                 height: 40,
                 shape: 'ellipse',
-                content: 'data(label)',
+                // content: 'data(label)',
                 'background-color': 'white',
                 'background-image': node =>
-                  node.data('resource') === 'AWS'
+                  node.data('provider') === 'AWS'
                     ? '/assets/img/dependency-graph/aws-node.svg'
                     : '',
                 'background-height': 20,
@@ -62,6 +88,8 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
               style: {
                 width: 1,
                 'line-color': '#008484',
+                'line-style': edge =>
+                  edge.data('relation') === 'USES' ? 'solid' : 'dashed',
                 'curve-style': 'bezier'
               }
             }
@@ -73,4 +101,4 @@ const LayoutFlow = ({ data }: LayoutFlowProps) => {
   );
 };
 
-export default memo(LayoutFlow);
+export default memo(DependencyGraph);
