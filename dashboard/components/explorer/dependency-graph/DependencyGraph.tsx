@@ -48,6 +48,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           }
         }
       ]);
+      cy.nodes().leaves().addClass('leaf');
       setInitDone(true);
     }
   };
@@ -68,8 +69,8 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
             {
               selector: 'node',
               style: {
-                width: 40,
-                height: 40,
+                width: 45,
+                height: 45,
                 shape: 'ellipse',
                 // content: 'data(label)',
                 'background-color': 'white',
@@ -90,7 +91,16 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                 'line-color': '#008484',
                 'line-style': edge =>
                   edge.data('relation') === 'USES' ? 'solid' : 'dashed',
-                'curve-style': 'bezier'
+                'curve-style': 'unbundled-bezier',
+                'control-point-distances': [8, -8],
+                'control-point-weights': [0.15, 0.85]
+              }
+            },
+            {
+              selector: '.leaf',
+              style: {
+                width: 28,
+                height: 28
               }
             }
           ]}
