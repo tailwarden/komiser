@@ -9,8 +9,11 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
-	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	cloudwatchTypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
+	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
+	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
@@ -33,15 +36,15 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Invocations"),
 				Namespace:  aws.String("AWS/Lambda"),
-				Dimensions: []types.Dimension{
+				Dimensions: []cloudwatchTypes.Dimension{
 					{
 						Name:  aws.String("FunctionName"),
 						Value: o.FunctionName,
 					},
 				},
 				Period: aws.Int32(3600),
-				Statistics: []types.Statistic{
-					types.StatisticSum,
+				Statistics: []cloudwatchTypes.Statistic{
+					cloudwatchTypes.StatisticSum,
 				},
 			})
 
@@ -59,15 +62,15 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Duration"),
 				Namespace:  aws.String("AWS/Lambda"),
-				Dimensions: []types.Dimension{
+				Dimensions: []cloudwatchTypes.Dimension{
 					{
 						Name:  aws.String("FunctionName"),
 						Value: o.FunctionName,
 					},
 				},
 				Period: aws.Int32(3600),
-				Statistics: []types.Statistic{
-					types.StatisticAverage,
+				Statistics: []cloudwatchTypes.Statistic{
+					cloudwatchTypes.StatisticAverage,
 				},
 			})
 			if err != nil {
@@ -97,6 +100,8 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				}
 			}
 
+			relations := getLambdaRelations(*client.AWSClient, o)
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -108,6 +113,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Metadata: map[string]string{
 					"runtime": string(o.Runtime),
 				},
+				Relations: relations,
 				FetchedAt: time.Now(),
 				Tags:      tags,
 				Link:      fmt.Sprintf("https://%s.console.aws.amazon.com/lambda/home?region=%s#/functions/%s", client.AWSClient.Region, client.AWSClient.Region, *o.FunctionName),
@@ -128,4 +134,25 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getLambdaRelations(config aws.Config, lambda types.FunctionConfiguration) (rel []models.Link) {
+	// Get associated IAM roles
+	if lambda.Role != nil {
+		iamClient := iam.NewFromConfig(config)
+		roleOutput, err := iamClient.GetRole(context.Background(), &iam.GetRoleInput{
+			RoleName: lambda.Role,
+		})
+		if err != nil {
+			return rel
+		}
+
+		rel = append(rel, models.Link{
+			ResourceID: *roleOutput.Role.RoleId,
+			Type:       "IAM Role",
+			Name:       *roleOutput.Role.Arn,
+			Relation:   "USES",
+		})
+	}
+	return rel
 }

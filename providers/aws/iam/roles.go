@@ -9,6 +9,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/aws/aws-sdk-go-v2/service/iam/types"
+	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
@@ -22,28 +24,31 @@ func Roles(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
-	for _, o := range output.Roles {
+	for _, role := range output.Roles {
 		tags := make([]Tag, 0)
 
-		for _, t := range o.Tags {
+		for _, t := range role.Tags {
 			tags = append(tags, Tag{
 				Key:   *t.Key,
 				Value: *t.Value,
 			})
 		}
 
+		relations := getIAMRoleRelations(iamClient, role)
+
 		resources = append(resources, Resource{
 			Provider:   "AWS",
 			Account:    client.Name,
 			Service:    "IAM Role",
-			ResourceId: *o.Arn,
+			ResourceId: *role.Arn,
 			Region:     client.AWSClient.Region,
-			Name:       *o.RoleName,
+			Name:       *role.RoleName,
 			Cost:       0,
-			CreatedAt:  *o.CreateDate,
+			CreatedAt:  *role.CreateDate,
+			Relations:  relations,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/roles/details/%s", client.AWSClient.Region, client.AWSClient.Region, *o.RoleName),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/iamv2/home?region=%s#/roles/details/%s", client.AWSClient.Region, client.AWSClient.Region, *role.RoleName),
 		})
 
 		if aws.ToString(output.Marker) == "" {
@@ -60,4 +65,25 @@ func Roles(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getIAMRoleRelations(iamClient *iam.Client, role types.Role) (rel []models.Link) {
+	// Get associated IAM roles
+	output, err := iamClient.ListAttachedRolePolicies(context.Background(), &iam.ListAttachedRolePoliciesInput{
+		RoleName: role.RoleName,
+	})
+	if err != nil {
+		return rel
+	}
+
+	for _, policy := range output.AttachedPolicies {
+		rel = append(rel, models.Link{
+			ResourceID: *policy.PolicyArn,
+			Name:       *policy.PolicyName,
+			Type:       "IAM Policy",
+			Relation:   "USES",
+		})
+	}
+
+	return rel
 }
