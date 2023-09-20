@@ -17,10 +17,12 @@ function GetData(res: any) {
     // check if node exist already
     if (d.nodes.findIndex(element => element.id === ele.resourceId) === -1) {
       const a = {
-        id: ele.resourceId,
-        type: 'customNode',
-        data: { label: ele.service, resource: 'AWS' },
-        position: { x: 0, y: 0 }
+        data: {
+          label: ele.service,
+          resource: 'AWS',
+          id: ele.resourceId,
+          type: 'customNode'
+        }
       };
       d.nodes.push(a);
     }
@@ -29,18 +31,21 @@ function GetData(res: any) {
       // check for other node exists
       if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
         const a = {
-          id: rel.resourceId,
-          type: 'customNode',
-          data: { label: rel.type, resource: 'AWS' }, // when supporting new provider this could be made dynamic
-          position: { x: 0, y: 0 }
+          data: {
+            id: rel.resourceId,
+            type: 'customNode',
+            label: rel.type,
+            resource: 'AWS' // when supporting new provider this could be made dynamic
+          }
         };
         d.nodes.push(a);
       }
       const edge = {
-        id: `${ele.resourceId}-${rel.resourceId}`,
-        source: ele.resourceId,
-        target: rel.resourceId,
-        type: 'floating'
+        data: {
+          id: `${ele.resourceId}-${rel.resourceId}`,
+          source: ele.resourceId,
+          target: rel.resourceId
+        }
       };
       d.edges.push(edge);
     });
