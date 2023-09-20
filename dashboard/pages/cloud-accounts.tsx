@@ -51,7 +51,7 @@ function CloudAccounts() {
               </div>
               <div
                 className={classNames(
-                  'group relative rounded-3xl py-1 px-2 text-sm',
+                  'group relative rounded-3xl px-2 py-1 text-sm',
                   {
                     'bg-green-200 text-green-600': status.state === 'Connected',
                     'bg-red-200 text-red-600':
@@ -62,7 +62,7 @@ function CloudAccounts() {
                 )}
               >
                 <span>{status.state}</span>
-                <div className="pointer-events-none invisible absolute z-10 mt-2 -ml-20 rounded-lg bg-gray-800 p-2 text-xs text-white transition-opacity duration-300 group-hover:visible">
+                <div className="pointer-events-none invisible absolute z-10 -ml-20 mt-2 rounded-lg bg-gray-800 p-2 text-xs text-white transition-opacity duration-300 group-hover:visible">
                   {status.message}
                 </div>
               </div>

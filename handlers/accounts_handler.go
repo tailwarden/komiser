@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,4 +42,32 @@ func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, accounts)
+}
+
+func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
+	var account models.Account
+
+	err := json.NewDecoder(c.Request.Body).Decode(&account)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := handler.db.NewInsert().Model(&account).Exec(context.Background())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	accountId, _ := result.LastInsertId()
+	account.Id = accountId
+
+	if handler.telemetry {
+		handler.analytics.TrackEvent("creating_alert", map[string]interface{}{
+			"type":     len(account.Credentials),
+			"provider": account.Provider,
+		})
+	}
+
+	c.JSON(http.StatusCreated, account)
 }
