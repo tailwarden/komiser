@@ -61,12 +61,12 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 
 	ctx := context.Background()
 
-	cfg, clients, err := config.Load(configPath, telemetry, analytics)
+	cfg, clients, accounts, err := config.Load(configPath, telemetry, analytics, db)
 	if err != nil {
 		return err
 	}
 
-	err = setupSchema(cfg)
+	err = setupSchema(cfg, accounts)
 	if err != nil {
 		return err
 	}
@@ -179,7 +179,7 @@ func runServer(address string, port int, telemetry bool, cfg models.Config) erro
 	return nil
 }
 
-func setupSchema(c *models.Config) error {
+func setupSchema(c *models.Config, accounts []models.Account) error {
 	var sqldb *sql.DB
 	var err error
 
@@ -214,6 +214,18 @@ func setupSchema(c *models.Config) error {
 	_, err = db.NewCreateTable().Model((*models.Alert)(nil)).IfNotExists().Exec(context.Background())
 	if err != nil {
 		return err
+	}
+
+	_, err = db.NewCreateTable().Model((*models.Account)(nil)).IfNotExists().Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, account := range accounts {
+		_, err = db.NewInsert().Model(&account).Exec(context.Background())
+		if err != nil {
+			log.Warnf("%s account cannot be inserted to database", account.Provider)
+		}
 	}
 
 	// Created pre-defined views

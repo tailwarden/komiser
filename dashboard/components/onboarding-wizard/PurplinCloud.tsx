@@ -12,7 +12,7 @@ function PurplinCloud({ provider }: { provider: Provider }) {
         width={500}
         height={120}
       />
-      <div className="absolute top-[53%] left-[48%] -translate-x-1/2 -translate-y-1/2 transform rounded-full">
+      <div className="absolute left-[48%] top-[53%] -translate-x-1/2 -translate-y-1/2 transform rounded-full">
         <Image
           src={ProviderCls.providerImg(provider) as string}
           alt={`${provider} Logo`}

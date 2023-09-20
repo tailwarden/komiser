@@ -7,7 +7,7 @@ interface DatabasePurplinProps {
 function DatabasePurplin({ database }: DatabasePurplinProps) {
   return (
     <div className="relative">
-      <div className="-ml-12 -mb-14 flex w-24 items-center justify-center rounded-3xl bg-komiser-200 p-4">
+      <div className="-mb-14 -ml-12 flex w-24 items-center justify-center rounded-3xl bg-komiser-200 p-4">
         <Image
           src={`/assets/img/database/${
             database === 'postgres' ? 'postgresql' : 'sqlite'
