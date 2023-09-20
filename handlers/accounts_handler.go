@@ -2,12 +2,20 @@ package handlers
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/dialect/sqlitedialect"
+	"github.com/uptrace/bun/driver/pgdriver"
+	"github.com/uptrace/bun/driver/sqliteshim"
 )
 
 func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
@@ -15,6 +23,10 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 		Onboarded bool `json:"onboarded"`
 	}{
 		Onboarded: false,
+	}
+
+	if handler.db != nil {
+		c.JSON(http.StatusOK, output)
 	}
 
 	accounts := make([]models.Account, 0)
@@ -102,4 +114,34 @@ func (handler *ApiHandler) UpdateCloudAccountHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, account)
+}
+
+func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
+	var db models.DatabaseConfig
+	err := json.NewDecoder(c.Request.Body).Decode(&db)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if db.Type == "SQLITE" {
+		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.File))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		sqldb.SetMaxIdleConns(1000)
+		sqldb.SetConnMaxLifetime(0)
+
+		handler.db = bun.NewDB(sqldb, sqlitedialect.New())
+		log.Println("Data will be stored in SQLite")
+	} else {
+		uri := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", db.Username, db.Password, db.Hostname, db.Database)
+		sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(uri)))
+		handler.db = bun.NewDB(sqldb, pgdialect.New())
+
+		log.Println("Data will be stored in PostgreSQL")
+	}
+
+	c.JSON(http.StatusOK, map[string]string{"message": "database has been configured"})
 }
