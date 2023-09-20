@@ -222,6 +222,7 @@ func setupSchema(c *models.Config, accounts []models.Account) error {
 	}
 
 	for _, account := range accounts {
+		account.Status = "CONNECTED"
 		_, err = db.NewInsert().Model(&account).Exec(context.Background())
 		if err != nil {
 			log.Warnf("%s account cannot be inserted to database", account.Provider)

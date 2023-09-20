@@ -53,6 +53,22 @@ func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 		return
 	}
 
+	for i, account := range accounts {
+		output := struct {
+			Total int `bun:"total" json:"total"`
+		}{}
+		err = handler.db.NewRaw(fmt.Sprintf("SELECT COUNT(*) as total FROM resources WHERE provider='%s' AND account='%s'", account.Provider, account.Name)).Scan(handler.ctx, &output)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
+			return
+		}
+		accounts[i].Resources = output.Total
+
+		if account.Status == "" {
+			accounts[i].Status = "CONNECTED"
+		}
+	}
+
 	c.JSON(http.StatusOK, accounts)
 }
 

@@ -5,4 +5,6 @@ type Account struct {
 	Provider    string            `json:"provider"`
 	Name        string            `json:"name"`
 	Credentials map[string]string `json:"credentials" bun:"credentials,unique"`
+	Status      string            `json:"status"`
+	Resources   int               `json:"resources" bun:",scanonly"`
 }
