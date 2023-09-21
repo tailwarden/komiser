@@ -35,7 +35,8 @@ function CloudAccounts() {
     toast,
     setToast,
     dismissToast,
-    isNotCustomView
+    isNotCustomView,
+    isLoading
   } = useCloudAccount();
 
   useEffect(() => {
@@ -68,7 +69,7 @@ function CloudAccounts() {
     setIsDeleteModalOpen(false);
   };
 
-  if (!cloudAccounts) return null;
+  if (!cloudAccounts || isLoading) return null;
 
   return (
     <>

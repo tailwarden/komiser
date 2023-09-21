@@ -27,26 +27,37 @@ function useCloudAccount() {
   const [cloudAccounts, setCloudAccounts] = useState<CloudAccount[]>([]);
   const [cloudAccountItem, setCloudAccountItem] = useState<CloudAccount>();
   const isNotCustomView = !router.query.view;
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
+    if (!isLoading) {
+      setIsLoading(true);
+    }
+
+    settingsService
+      .getOnboardingStatus()
+      .then(res => {
+        if (
+          res !== Error &&
+          res.onboarded === false &&
+          res.status === 'PENDING_DATABASE'
+        ) {
+          router.push('/onboarding/choose-database');
+        } else {
+          router.push('/onboarding/choose-cloud');
+        }
+      })
+      .finally(() => setIsLoading(false));
+
     settingsService.getCloudAccounts().then(res => {
-      if (!loading) {
-        setLoading(true);
-      }
-
-      if (error) {
-        setError(false);
-      }
-
       if (res === Error) {
-        setLoading(false);
-        setError(true);
+        setHasError(true);
       } else {
-        setLoading(false);
         setCloudAccounts(res);
       }
+
+      setIsLoading(false);
     });
   }, []);
 
@@ -67,11 +78,13 @@ function useCloudAccount() {
     setCloudAccountItem,
     goTo,
     toast,
+    hasError,
     setToast,
     dismissToast,
     cloudAccounts,
     setCloudAccounts,
-    isNotCustomView
+    isNotCustomView,
+    isLoading
   };
 }
 
