@@ -301,27 +301,28 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
-	
+
 	output := make([]models.Resource, 0)
 
-	query := "SELECT DISTINCT resources.resource_id, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)"
+	query := "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)"
 	if handler.db.Dialect().Name() == dialect.SQLite {
-		query = "SELECT DISTINCT resources.resource_id, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)"
+		query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)"
 	}
 	err := handler.db.NewRaw(query).Scan(handler.ctx, &output)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return 
+		return
 	}
-	out := make([]models.OutputRelationResponse,0)
+	out := make([]models.OutputRelationResponse, 0)
 	for _, ele := range output {
 		out = append(out, models.OutputRelationResponse{
 			ResourceID: ele.ResourceId,
-			Type: ele.Service,
-			Link: ele.Relations,
+			Name:       ele.Name,
+			Type:       ele.Service,
+			Link:       ele.Relations,
 		})
 	}
 
 	c.JSON(http.StatusOK, out)
-	
+
 }
