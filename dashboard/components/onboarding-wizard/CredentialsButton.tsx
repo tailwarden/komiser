@@ -16,20 +16,14 @@ function CredentialsButton({
   return (
     <div className="flex justify-between">
       <Button
-        onClick={() => router.back()}
+        onClick={() => router.push('/onboarding/choose-database/')}
         size="lg"
         style="text"
         type="button"
       >
         Back
       </Button>
-      <Button
-        onClick={handleNext}
-        size="lg"
-        style="primary"
-        type="button"
-        disabled={true}
-      >
+      <Button onClick={handleNext} size="lg" style="primary" type="submit">
         {nextLabel}
       </Button>
     </div>
