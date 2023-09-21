@@ -79,6 +79,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                     ? '/assets/img/dependency-graph/aws-node.svg'
                     : '',
                 'background-height': 20,
+                'background-width': 20,
                 'border-color': '#EDEBEE',
                 'border-width': 1,
                 'border-style': 'solid'
