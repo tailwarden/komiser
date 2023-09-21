@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ChangeEvent } from 'react';
 
 interface LabelledInputProps {
   id: string;
@@ -9,6 +9,7 @@ interface LabelledInputProps {
   subLabel?: string;
   disabled?: boolean;
   placeholder?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function LabelledInput({
@@ -19,7 +20,8 @@ function LabelledInput({
   value,
   subLabel,
   placeholder,
-  disabled = false
+  disabled = false,
+  onChange
 }: LabelledInputProps) {
   return (
     <div>
@@ -49,6 +51,7 @@ function LabelledInput({
           className={`block w-full rounded py-[14.5px] text-sm text-black-900 outline outline-black-200 focus:outline-2 focus:outline-primary ${
             icon ? 'pl-10' : 'pl-3'
           }`}
+          onChange={onChange}
         />
       </div>
     </div>

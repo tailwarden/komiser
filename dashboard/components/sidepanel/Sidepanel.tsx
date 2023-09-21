@@ -32,7 +32,7 @@ function Sidepanel({ isOpen, closeModal, children, noScroll }: SidepanelProps) {
             className="fixed inset-0 z-30 hidden animate-fade-in bg-black-900/10 opacity-0 sm:block"
           ></div>
           <div
-            className={`fixed inset-0 z-30 flex w-full animate-fade-in-up flex-col gap-4 overflow-auto bg-white p-6 opacity-0 shadow-2xl sm:bottom-4 sm:left-auto sm:right-4 sm:top-4 sm:w-[38rem] sm:animate-fade-in-left sm:rounded-lg ${
+            className={`fixed inset-0 z-30 flex w-full animate-fade-in-up flex-col gap-4 overflow-auto bg-white p-4 opacity-0 shadow-2xl sm:bottom-4 sm:left-auto sm:right-4 sm:top-4 sm:w-[38rem] sm:animate-fade-in-left sm:rounded-lg ${
               noScroll ? 'overflow-hidden' : 'overflow-auto'
             }`}
           >
