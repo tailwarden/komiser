@@ -155,7 +155,10 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                 'line-style': edge =>
                   edge.data('relation') === 'USES' ? 'solid' : 'dashed',
                 'curve-style': 'unbundled-bezier',
-                'control-point-distances': [2, -2],
+                'control-point-distances': [
+                  Math.floor(Math.random() * 20),
+                  Math.floor(Math.random() * 21) - 20
+                ],
                 'control-point-weights': [0.15, 0.85]
               }
             },
