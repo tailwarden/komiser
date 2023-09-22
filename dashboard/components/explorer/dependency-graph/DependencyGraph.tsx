@@ -20,7 +20,8 @@ const layout = {
   name: 'cose-bilkent',
   animate: 'end',
   nodeRepulsion: 10000,
-  idealEdgeLength: 100
+  idealEdgeLength: 100,
+  nodeSeparation: 100
 };
 
 nodeHtmlLabel(Cytoscape.use(COSEBilkent));
@@ -34,8 +35,8 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         easing: 'linear',
         style: {
           'line-dash-offset': 24,
-          'line-dash-pattern': [4, 4],
-          'line-gradient-stop-positions': [0.1, 0.9]
+          'line-dash-pattern': [4, 4]
+          // 'line-gradient-stop-colors': 'antiquewhite'
         }
       },
       {
@@ -85,25 +86,25 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       ]);
       // Add class to leave nodes so we can make them smaller
       cy.nodes().leaves().addClass('leaf');
-      // Animate edges?
+      cy.nodes().roots().addClass('root');
+      // Animate edges
       cy.edges().forEach(loopAnimation);
       cy.on('zoom', event => {
-        const currentZoomLevel = cy.zoom();
-        const dim = 100 / currentZoomLevel;
-        const edgeWidth = 10 / currentZoomLevel;
+        const opacity = cy.zoom() <= 1.5 ? 0 : 1;
         cy.$('edge').css({
-          opacity: currentZoomLevel <= 1.5 ? 0 : 1
+          opacity
         });
         cy.$('.leaf').css({
-          opacity: currentZoomLevel <= 1.5 ? 0 : 1
+          opacity
+        });
+
+        cy.$('.root').css({
+          content: opacity ? 'data(label)' : ''
         });
 
         Array.from(
           document.querySelectorAll('.dependency-graph-node-label'),
-          e =>
-            currentZoomLevel <= 1.5
-              ? (e.style.opacity = 0)
-              : (e.style.opacity = 1)
+          e => (e.style.opacity = opacity)
         );
       });
       // Make sure to tell we inited successfully and prevent another init
@@ -151,14 +152,12 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
               style: {
                 width: 1,
                 'line-fill': 'linear-gradient',
-                'line-gradient-stop-colors': 'yellow green',
+                'line-gradient-stop-colors': ['#008484', '#33CCCC'],
                 'line-style': edge =>
                   edge.data('relation') === 'USES' ? 'solid' : 'dashed',
                 'curve-style': 'unbundled-bezier',
-                'control-point-distances': [
-                  Math.floor(Math.random() * 20),
-                  Math.floor(Math.random() * 21) - 20
-                ],
+                'control-point-distances': edge =>
+                  edge.data('controlPointDistances'),
                 'control-point-weights': [0.15, 0.85]
               }
             },

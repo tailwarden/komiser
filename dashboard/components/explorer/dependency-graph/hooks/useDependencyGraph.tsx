@@ -49,7 +49,11 @@ function GetData(res: any) {
           source: ele.resourceId,
           target: rel.resourceId,
           relation: rel.relation,
-          label: rel.type
+          label: rel.type,
+          controlPointDistances: [
+            Math.floor(Math.random() * 20),
+            Math.floor(Math.random() * 21) - 20
+          ]
         }
       };
       d.edges.push(edge);
@@ -76,7 +80,11 @@ function GetData(res: any) {
           source: `${ele.resourceId}`,
           target: `${rel.resourceId}-1337`,
           relation: rel.relation,
-          label: rel.type
+          label: rel.type,
+          controlPointDistances: [
+            Math.floor(Math.random() * 20),
+            Math.floor(Math.random() * 21) - 20
+          ]
         }
       };
       d.edges.push(edge);
@@ -103,7 +111,11 @@ function GetData(res: any) {
           source: `${ele.resourceId}`,
           target: `${rel.resourceId}-1338`,
           relation: rel.relation,
-          label: rel.type
+          label: rel.type,
+          controlPointDistances: [
+            Math.floor(Math.random() * 20),
+            Math.floor(Math.random() * 21) - 20
+          ]
         }
       };
       d.edges.push(edge);
@@ -130,7 +142,11 @@ function GetData(res: any) {
           source: `${ele.resourceId}`,
           target: `${rel.resourceId}-1339`,
           relation: rel.relation,
-          label: rel.type
+          label: rel.type,
+          controlPointDistances: [
+            Math.floor(Math.random() * 20),
+            Math.floor(Math.random() * 21) - 20
+          ]
         }
       };
       d.edges.push(edge);
@@ -157,7 +173,11 @@ function GetData(res: any) {
           source: `${ele.resourceId}`,
           target: `${rel.resourceId}-1336`,
           relation: rel.relation,
-          label: rel.type
+          label: rel.type,
+          controlPointDistances: [
+            Math.floor(Math.random() * 20),
+            Math.floor(Math.random() * 21) - 20
+          ]
         }
       };
       d.edges.push(edge);
@@ -184,7 +204,11 @@ function GetData(res: any) {
           source: `${ele.resourceId}`,
           target: `${rel.resourceId}-1335`,
           relation: rel.relation,
-          label: rel.type
+          label: rel.type,
+          controlPointDistances: [
+            Math.floor(Math.random() * 20),
+            Math.floor(Math.random() * 21) - 20
+          ]
         }
       };
       d.edges.push(edge);
