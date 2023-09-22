@@ -91,15 +91,20 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       cy.edges().forEach(loopAnimation);
       cy.on('zoom', event => {
         const opacity = cy.zoom() <= 1.5 ? 0 : 1;
+
+        // Hide edges
         cy.$('edge').css({
           opacity
         });
+
+        // Hide leaf nodes
         cy.$('.leaf').css({
           opacity
         });
 
-        cy.$('.root').css({
-          content: opacity ? 'data(label)' : ''
+        // Show native labels on root nodes
+        cy.$('.root').style({
+          'text-opacity': opacity ? 0 : 1
         });
 
         Array.from(
@@ -131,7 +136,9 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                 width: 45,
                 height: 45,
                 shape: 'ellipse',
-                // content: 'data(label)',
+                'text-opacity': 0,
+                'font-size': 17,
+                content: 'data(label)',
                 'background-color': 'white',
                 'background-image': node =>
                   node.data('provider') === 'AWS'
