@@ -1,5 +1,19 @@
-import { useState } from 'react';
-import providers from '../../../utils/providerHelper';
+import { FormEvent, useState } from 'react';
+import AzureAccountDetails from '@components/account-details/AzureAccountDetails';
+import GcpAccountDetails from '@components/account-details/GcpAccountDetails';
+import DigitalOceanAccountDetails from '@components/account-details/DigitalOceanAccountDetails';
+import CivoAccountDetails from '@components/account-details/CivoAccountDetails';
+import LinodeAccountDetails from '@components/account-details/LinodeAccountDetails';
+import KubernetesAccountDetails from '@components/account-details/KubernetesAccountDetails';
+import TencentAccountDetails from '@components/account-details/TencentAccountDetails';
+import MongoDbAtlasAccountDetails from '@components/account-details/MongoDBAtlasAccountDetails';
+import OciAccountDetails from '@components/account-details/OciAccountDetails';
+import ScalewayAccountDetails from '@components/account-details/ScalewayAccountDetails';
+import { getPayloadFromForm } from '@utils/cloudAccountHelpers';
+import providers, {
+  allProviders,
+  Provider
+} from '../../../utils/providerHelper';
 import AwsAccountDetails from '../../account-details/AwsAccountDetails';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
@@ -24,6 +38,39 @@ interface CloudAccountsSidePanelProps {
   setToast: (toast: ToastProps) => void;
 }
 
+function AccountDetails({
+  cloudAccountData
+}: {
+  cloudAccountData: CloudAccount;
+}) {
+  switch (cloudAccountData.provider.toLocaleLowerCase()) {
+    case allProviders.AWS:
+      return <AwsAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.GCP:
+      return <GcpAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.DIGITAL_OCEAN:
+      return <DigitalOceanAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.AZURE:
+      return <AzureAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.CIVO:
+      return <CivoAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.KUBERNETES:
+      return <KubernetesAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.LINODE:
+      return <LinodeAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.TENCENT:
+      return <TencentAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.OCI:
+      return <OciAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.SCALE_WAY:
+      return <ScalewayAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.MONGODB_ATLAS:
+      return <MongoDbAtlasAccountDetails cloudAccountData={cloudAccountData} />;
+    default:
+      return null;
+  }
+}
+
 function CloudAccountsSidePanel({
   isOpen,
   closeModal,
@@ -36,40 +83,41 @@ function CloudAccountsSidePanel({
 }: CloudAccountsSidePanelProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [cloudAccountData, setCloudAccountData] =
-    useState<CloudAccount>(cloudAccount);
 
-  const handleEditCloudAccount = () => {
-    if (!cloudAccountData.id) return false;
+  const handleEditCloudAccount = (
+    event: FormEvent<HTMLFormElement>,
+    id: number | undefined,
+    provider: Provider
+  ) => {
+    event.preventDefault();
+    if (!id) return false;
 
     setLoading(true);
-    const payloadJson = JSON.stringify(cloudAccountData);
-    settingsService
-      .editCloudAccount(cloudAccountData.id, payloadJson)
-      .then(res => {
-        if (res === Error || res.error) {
-          setLoading(false);
-          setToast({
-            hasError: true,
-            title: 'Cloud account not edited',
-            message:
-              'There was an error editing this cloud account. Refer to the logs and try again.'
-          });
-        } else {
-          setLoading(false);
-          setToast({
-            hasError: false,
-            title: 'Cloud account edited',
-            message: `The cloud account was successfully edited!`
-          });
-          setCloudAccounts(
-            cloudAccounts.map(c =>
-              c.id === cloudAccountData.id ? cloudAccountData : c
-            )
-          );
-          closeModal();
-        }
-      });
+    const payloadJson = JSON.stringify(
+      getPayloadFromForm(new FormData(event.currentTarget), provider)
+    );
+    settingsService.editCloudAccount(id, payloadJson).then(res => {
+      if (res === Error || res.error) {
+        setLoading(false);
+        setToast({
+          hasError: true,
+          title: 'Cloud account not edited',
+          message:
+            'There was an error editing this cloud account. Refer to the logs and try again.'
+        });
+      } else {
+        setLoading(false);
+        setToast({
+          hasError: false,
+          title: 'Cloud account edited',
+          message: `The cloud account was successfully edited!`
+        });
+        setCloudAccounts(
+          cloudAccounts.map(c => (c.id === cloudAccount.id ? res : c))
+        );
+        closeModal();
+      }
+    });
 
     return true;
   };
@@ -77,7 +125,7 @@ function CloudAccountsSidePanel({
   return (
     <>
       <Sidepanel isOpen={isOpen} closeModal={closeModal}>
-        <div className="flex max-h-full flex-col">
+        <div className="flex h-full flex-col">
           {/* Modal headers */}
           <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
             {cloudAccount && (
@@ -95,28 +143,6 @@ function CloudAccountsSidePanel({
                     <p className="truncate font-medium text-black-900">
                       {cloudAccount.name}
                     </p>
-                    {/* <a
-                    target="_blank"
-                    href={data.link}
-                    rel="noreferrer"
-                    className="cursor-pointer hover:text-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.5"
-                        d="M13 11l8.2-8.2M22 6.8V2h-4.8M11 2H9C4 2 2 4 2 9v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2"
-                      ></path>
-                    </svg>
-                  </a> */}
                   </div>
                   <p className="flex items-center gap-2 text-xs text-black-300">
                     {cloudAccount.resources} resources in this cloud account
@@ -164,32 +190,33 @@ function CloudAccountsSidePanel({
               {/* Cloud account details */}
 
               {page === 'cloud account details' && (
-                <>
-                  <div className="-mx-4 min-h-0 overflow-y-auto px-4">
+                <form
+                  onSubmit={event =>
+                    handleEditCloudAccount(
+                      event,
+                      cloudAccount.id,
+                      cloudAccount.provider
+                    )
+                  }
+                >
+                  <input type="hidden" name="test" value="test" />
+                  <div className="-mx-4 min-h-0 flex-grow overflow-y-auto px-4">
                     <label className="mb-2 mt-6 block text-gray-700">
                       Status
                     </label>
-
                     <CloudAccountStatus status={cloudAccount?.status} />
-                    <AwsAccountDetails
-                      cloudAccountData={cloudAccountData}
-                      setCloudAccountData={setCloudAccountData}
-                    />
+                    <AccountDetails cloudAccountData={cloudAccount} />
                   </div>
                   <div className="-mx-4 mb-4 h-px bg-black-200"></div>
-                  <div className="flex flex-shrink-0 items-center justify-end gap-6">
+                  <div className="mb-4 flex flex-shrink-0 items-center justify-end gap-6">
                     <Button size="lg" style="ghost" onClick={closeModal}>
                       Cancel
                     </Button>
-                    <Button
-                      size="lg"
-                      loading={loading}
-                      onClick={handleEditCloudAccount}
-                    >
+                    <Button size="lg" type="submit" loading={loading}>
                       Save changes
                     </Button>
                   </div>
-                </>
+                </form>
               )}
             </>
           )}

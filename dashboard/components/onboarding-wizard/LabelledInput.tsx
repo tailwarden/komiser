@@ -2,6 +2,7 @@ import { ReactNode, ChangeEvent } from 'react';
 
 interface LabelledInputProps {
   id: string;
+  name?: string;
   value?: any;
   type: string;
   label: string;
@@ -15,6 +16,7 @@ interface LabelledInputProps {
 
 function LabelledInput({
   id,
+  name,
   icon,
   type,
   label,
@@ -47,7 +49,7 @@ function LabelledInput({
         <input
           id={id}
           type={type}
-          value={value}
+          name={name ?? id}
           disabled={disabled}
           placeholder={placeholder}
           required={required}
@@ -55,6 +57,7 @@ function LabelledInput({
             icon ? 'pl-10' : 'pl-3'
           }`}
           onChange={onChange}
+          defaultValue={value}
         />
       </div>
     </div>

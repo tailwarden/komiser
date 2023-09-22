@@ -1,6 +1,7 @@
+import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import providers from '../utils/providerHelper';
 
@@ -16,6 +17,7 @@ import useCloudAccount from '../components/cloud-account/hooks/useCloudAccounts/
 import CloudAccountsSidePanel from '../components/cloud-account/components/CloudAccountsSidePanel';
 import CloudAccountStatus from '../components/cloud-account/components/CloudAccountStatus';
 import CloudAccountDeleteContents from '../components/cloud-account/components/CloudAccountDeleteContents';
+import useToast from '../components/toast/hooks/useToast';
 
 function CloudAccounts() {
   const optionsRef = useRef<HTMLDivElement | null>(null);
@@ -23,8 +25,12 @@ function CloudAccounts() {
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
+  const { toast, setToast, dismissToast } = useToast();
+  const router = useRouter();
+
+  const currentViewProvider = router.query.view as string;
+
   const {
-    router,
     cloudAccounts,
     setCloudAccounts,
     openModal,
@@ -32,12 +38,23 @@ function CloudAccounts() {
     setCloudAccountItem,
     page,
     goTo,
-    toast,
-    setToast,
-    dismissToast,
     isNotCustomView,
     isLoading
   } = useCloudAccount();
+
+  const [filteredCloudAccounts, setFilteredCloudAccounts] =
+    useState(cloudAccounts);
+
+  useEffect(() => {
+    if (!currentViewProvider) setFilteredCloudAccounts(cloudAccounts);
+    else {
+      setFilteredCloudAccounts(
+        cloudAccounts.filter(
+          account => account.provider === currentViewProvider
+        )
+      );
+    }
+  }, [currentViewProvider, cloudAccounts]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -80,10 +97,10 @@ function CloudAccounts() {
       </Head>
 
       {/* Wraps the cloud account page and handles the custom views sidebar */}
-      <CloudAccountsLayout router={router}>
+      <CloudAccountsLayout router={router} cloudAccounts={cloudAccounts}>
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
 
-        {cloudAccounts.map(account => {
+        {filteredCloudAccounts.map(account => {
           const { provider, name, status } = account;
           const isOpen = clickedItemId === name;
 

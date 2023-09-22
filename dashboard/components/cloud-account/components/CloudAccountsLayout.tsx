@@ -3,13 +3,19 @@ import { ReactNode, useContext } from 'react';
 
 import GlobalAppContext from '../../layout/context/GlobalAppContext';
 import Providers, { allProviders } from '../../../utils/providerHelper';
+import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 
 type CloudAccountsLayoutProps = {
+  cloudAccounts: CloudAccount[];
   children: ReactNode;
   router: NextRouter;
 };
 
-function CloudAccountsLayout({ children, router }: CloudAccountsLayoutProps) {
+function CloudAccountsLayout({
+  cloudAccounts,
+  children,
+  router
+}: CloudAccountsLayoutProps) {
   const { displayBanner } = useContext(GlobalAppContext);
 
   const cloudProviders = Object.values(allProviders);
@@ -38,16 +44,17 @@ function CloudAccountsLayout({ children, router }: CloudAccountsLayoutProps) {
           </div>
         </button>
 
-        {cloudProviders && cloudProviders.length > 0 && (
+        {cloudAccounts && cloudAccounts.length > 0 && (
           <div className="-mx-4 -mr-6 flex flex-col gap-4 overflow-auto px-4 pr-6">
-            {cloudProviders.map(view => {
-              const isActive = router.query.view === view;
+            {cloudAccounts.map(account => {
+              const { provider } = account;
+              const isActive = router.query.view === provider;
               return (
                 <button
-                  key={view}
+                  key={provider}
                   onClick={() => {
                     if (isActive) return;
-                    router.push(`?view=${view}`);
+                    router.push(`?view=${provider}`);
                   }}
                   className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
@@ -59,7 +66,7 @@ function CloudAccountsLayout({ children, router }: CloudAccountsLayoutProps) {
                 >
                   <div className={isActive ? 'ml-[-2px]' : ''}>
                     <p className="w-[188px] truncate">
-                      {Providers.providerLabel(view)}
+                      {Providers.providerLabel(provider)}
                     </p>
                   </div>
                 </button>
