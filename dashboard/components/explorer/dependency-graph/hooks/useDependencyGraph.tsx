@@ -21,7 +21,8 @@ function GetData(res: any) {
           label: ele.name,
           service: ele.service,
           provider: 'AWS',
-          id: ele.resourceId
+          id: ele.resourceId,
+          isRoot: true
         }
       };
       d.nodes.push(a);
@@ -36,7 +37,8 @@ function GetData(res: any) {
             label: rel.name,
             service: ele.service,
             type: rel.type,
-            provider: 'AWS' // when supporting new provider this could be made dynamic
+            provider: 'AWS', // when supporting new provider this could be made dynamic
+            isRoot: false
           }
         };
         d.nodes.push(a);
@@ -46,6 +48,141 @@ function GetData(res: any) {
           id: `${ele.resourceId}-${rel.resourceId}`,
           source: ele.resourceId,
           target: rel.resourceId,
+          relation: rel.relation,
+          label: rel.type
+        }
+      };
+      d.edges.push(edge);
+    });
+
+    ele.relations.forEach((rel: any) => {
+      // check for other node exists
+      if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
+        const a = {
+          data: {
+            id: `${rel.resourceId}-1337`,
+            label: rel.name,
+            service: ele.service,
+            type: rel.type,
+            provider: 'AWS', // when supporting new provider this could be made dynamic
+            isRoot: false
+          }
+        };
+        d.nodes.push(a);
+      }
+      const edge = {
+        data: {
+          id: `${ele.resourceId}-${rel.resourceId}-1337`,
+          source: `${ele.resourceId}`,
+          target: `${rel.resourceId}-1337`,
+          relation: rel.relation,
+          label: rel.type
+        }
+      };
+      d.edges.push(edge);
+    });
+
+    ele.relations.forEach((rel: any) => {
+      // check for other node exists
+      if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
+        const a = {
+          data: {
+            id: `${rel.resourceId}-1338`,
+            label: rel.name,
+            service: ele.service,
+            type: rel.type,
+            provider: 'AWS', // when supporting new provider this could be made dynamic
+            isRoot: false
+          }
+        };
+        d.nodes.push(a);
+      }
+      const edge = {
+        data: {
+          id: `${ele.resourceId}-${rel.resourceId}-1338`,
+          source: `${ele.resourceId}`,
+          target: `${rel.resourceId}-1338`,
+          relation: rel.relation,
+          label: rel.type
+        }
+      };
+      d.edges.push(edge);
+    });
+
+    ele.relations.forEach((rel: any) => {
+      // check for other node exists
+      if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
+        const a = {
+          data: {
+            id: `${rel.resourceId}-1339`,
+            label: rel.name,
+            service: ele.service,
+            type: rel.type,
+            provider: 'AWS', // when supporting new provider this could be made dynamic
+            isRoot: false
+          }
+        };
+        d.nodes.push(a);
+      }
+      const edge = {
+        data: {
+          id: `${ele.resourceId}-${rel.resourceId}-1339`,
+          source: `${ele.resourceId}`,
+          target: `${rel.resourceId}-1339`,
+          relation: rel.relation,
+          label: rel.type
+        }
+      };
+      d.edges.push(edge);
+    });
+
+    ele.relations.forEach((rel: any) => {
+      // check for other node exists
+      if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
+        const a = {
+          data: {
+            id: `${rel.resourceId}-1336`,
+            label: rel.name,
+            service: ele.service,
+            type: rel.type,
+            provider: 'AWS', // when supporting new provider this could be made dynamic,
+            isRoot: false
+          }
+        };
+        d.nodes.push(a);
+      }
+      const edge = {
+        data: {
+          id: `${ele.resourceId}-${rel.resourceId}-1336`,
+          source: `${ele.resourceId}`,
+          target: `${rel.resourceId}-1336`,
+          relation: rel.relation,
+          label: rel.type
+        }
+      };
+      d.edges.push(edge);
+    });
+
+    ele.relations.forEach((rel: any) => {
+      // check for other node exists
+      if (d.nodes.findIndex(element => element.id === rel.resourceId) === -1) {
+        const a = {
+          data: {
+            id: `${rel.resourceId}-1335`,
+            label: rel.name,
+            service: ele.service,
+            type: rel.type,
+            provider: 'AWS', // when supporting new provider this could be made dynamic
+            isRoot: false
+          }
+        };
+        d.nodes.push(a);
+      }
+      const edge = {
+        data: {
+          id: `${ele.resourceId}-${rel.resourceId}-1335`,
+          source: `${ele.resourceId}`,
+          target: `${rel.resourceId}-1335`,
           relation: rel.relation,
           label: rel.type
         }

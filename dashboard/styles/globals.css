@@ -41,3 +41,8 @@
   /* flip horizontally */
   transform: rotateY(180deg);
 }
+
+.dependency-graph-node-label {
+  transition: opacity 0.2s linear;
+  opacity: 0;
+}
