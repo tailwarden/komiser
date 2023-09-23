@@ -2,20 +2,21 @@ package handlers
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 func (handler *ApiHandler) NewFeedbackHandler(c *gin.Context) {
 
-	err := c.Request.ParseMultipartForm(1000 << 20)
+	err := c.Request.ParseMultipartForm(100 << 20)
 	if err != nil {
-		logrus.WithError(err).Error("Unable to parse form")
+		log.WithError(err).Error("Unable to parse form")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to parse form"})
 		return
 	}
@@ -31,8 +32,25 @@ func (handler *ApiHandler) NewFeedbackHandler(c *gin.Context) {
 	var requestBody bytes.Buffer
 	writer := multipart.NewWriter(&requestBody)
 
-	_ = writer.WriteField("Email", email)
-	_ = writer.WriteField("Description", description)
+	payloadField, _ := writer.CreateFormField("payload_json")
+	payloadJSON := fmt.Sprintf(`{
+		"content": "",
+		"embeds": [
+			{
+				"title": "Feedback",
+				"description": "%s",
+				"fields": [
+					{
+						"name": "Email",
+						"value": "%s",
+						"inline": true
+					}
+				]
+			}
+		]
+	}`, description, email)
+
+	payloadField.Write([]byte(payloadJSON))
 
 	imagePart, err := writer.CreateFormFile("files[0]", filepath.Base("temp-image"))
 	if err != nil {
@@ -47,11 +65,11 @@ func (handler *ApiHandler) NewFeedbackHandler(c *gin.Context) {
 
 	resp, err := http.Post(url, writer.FormDataContentType(), &requestBody)
 	if err != nil {
-		logrus.WithError(err).Error("scan failed")
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
+		log.WithError(err).Error("scan failed")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed sending data to discord"})
 		return
 	}
 	defer resp.Body.Close()
 
-	c.JSON(http.StatusOK, resp.Body)
+	c.JSON(http.StatusOK, gin.H{"Response": "Feedback submitted"})
 }
