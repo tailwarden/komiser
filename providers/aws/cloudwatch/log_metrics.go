@@ -20,10 +20,6 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-const (
-	metricUpdateRateCode = "VJDTMA8S4PDEWU6J.JRTCKXETXF.6YS6EN2CT7"
-)
-
 func getRate(pricingOutput *pricing.GetProductsOutput) (float64, error) {
 	costPerMonth := 0.0
 
@@ -39,15 +35,12 @@ func getRate(pricingOutput *pricing.GetProductsOutput) (float64, error) {
 			for _, details := range onDemand.(map[string]interface{}) {
 				if priceDetails, ok := details.(map[string]interface{})["priceDimensions"].(map[string]interface{}); ok {
 					for _, price := range priceDetails {
-						rateCode := price.(map[string]interface{})["rateCode"].(string)
-						if rateCode == metricUpdateRateCode {
-							usdPrice := price.(map[string]interface{})["pricePerUnit"].(map[string]interface{})["USD"].(string)
-							costPerMonth, err = strconv.ParseFloat(usdPrice, 64)
-							if err != nil {
-								return 0, fmt.Errorf("failed to parse cost per month: %w", err)
-							}
-							break
+						usdPrice := price.(map[string]interface{})["pricePerUnit"].(map[string]interface{})["USD"].(string)
+						costPerMonth, err = strconv.ParseFloat(usdPrice, 64)
+						if err != nil {
+							return 0, fmt.Errorf("failed to parse cost per month: %w", err)
 						}
+						break
 					}
 				}
 			}
