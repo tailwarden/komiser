@@ -18,6 +18,10 @@
       "to": "#33CCCC"
     }
   },
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": false
+  },
   "topbarCtaButton": {
       "type": "github",
       "url": "https://github.com/tailwarden/komiser"
@@ -84,9 +88,7 @@
     "linkedin": "https://www.linkedin.com/company/tailwarden",
     "youtube": "https://www.youtube.com/@tailwarden"
   },
-
   "backgroundImage": "/images/background-image.png",
-
   "analytics": {
     "ga4": {
         "measurementId": "G-PVLRSMWSFG"
