@@ -39,6 +39,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.23.4
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.20.0
 	github.com/aws/aws-sdk-go-v2/service/rds v1.30.1
+	github.com/aws/aws-sdk-go-v2/service/redshift v1.29.5
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1
 	github.com/aws/aws-sdk-go-v2/service/sns v1.18.3
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.19.12
@@ -81,7 +82,6 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/redshift v1.29.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.14.12 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 )
