@@ -20,9 +20,11 @@ import (
 
 func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	output := struct {
-		Onboarded bool `json:"onboarded"`
+		Onboarded bool   `json:"onboarded"`
+		Status    string `json:"status"`
 	}{
 		Onboarded: false,
+		Status:    "COMPLETE",
 	}
 
 	if handler.db != nil {
