@@ -17,7 +17,7 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]Resource, err
 	var config metav1.ListOptions
 
 	for {
-		res, err := client.K8sClient.CoreV1().Pods("").List(ctx, config)
+		res, err := client.K8sClient.Client.CoreV1().Pods("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}

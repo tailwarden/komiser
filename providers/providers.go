@@ -24,7 +24,7 @@ type ProviderClient struct {
 	DigitalOceanClient *godo.Client
 	OciClient          common.ConfigurationProvider
 	CivoClient         *civogo.Client
-	K8sClient          *kubernetes.Clientset
+	K8sClient          *K8sClient
 	LinodeClient       *linodego.Client
 	TencentClient      *tccvm.Client
 	AzureClient        *AzureClient
@@ -41,4 +41,9 @@ type AzureClient struct {
 
 type GCPClient struct {
 	Credentials *google.Credentials
+}
+
+type K8sClient struct {
+	Client          *kubernetes.Clientset
+	OpencostBaseUrl string
 }

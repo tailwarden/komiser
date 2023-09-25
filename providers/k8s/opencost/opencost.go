@@ -65,8 +65,8 @@ type pvInfo struct {
 	Cost      float64 `json:"cost"`
 }
 
-func GetOpencostInfo(aggregate string) (map[string]costData, error) {
-	apiURL := fmt.Sprintf("http://%s:%d/allocation/compute", "127.0.0.1", 9003)
+func GetOpencostInfo(ocBaseUrl string, aggregate string) (map[string]costData, error) {
+	apiURL := fmt.Sprintf("http://%s/allocation/compute", ocBaseUrl)
 
 	httpClient := &http.Client{}
 	req, err := http.NewRequest("GET", apiURL, nil)
