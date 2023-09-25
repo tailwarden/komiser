@@ -6,6 +6,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ import (
 
 func (handler *ApiHandler) NewFeedbackHandler(c *gin.Context) {
 
+	url := os.Getenv("DISCORD_FEEDBACK_URL")
 	err := c.Request.ParseMultipartForm(100 << 20)
 	if err != nil {
 		log.WithError(err).Error("Unable to parse form")
@@ -60,8 +62,6 @@ func (handler *ApiHandler) NewFeedbackHandler(c *gin.Context) {
 	_, _ = io.Copy(imagePart, imageFile)
 
 	writer.Close()
-
-	var url = ""
 
 	resp, err := http.Post(url, writer.FormDataContentType(), &requestBody)
 	if err != nil {
