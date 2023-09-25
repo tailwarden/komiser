@@ -11,38 +11,29 @@ import nodeHtmlLabel, {
 import COSEBilkent from 'cytoscape-cose-bilkent';
 
 import { ReactFlowData } from './hooks/useDependencyGraph';
+import {
+  edgeAnimationConfig,
+  edgeStyleConfig,
+  graphLayoutConfig,
+  leafStyleConfig,
+  maxZoom,
+  minZoom,
+  nodeHTMLLabelConfig,
+  nodeStyeConfig,
+  zoomLevelBreakpoint
+} from './config';
 
 export type DependencyGraphProps = {
   data: ReactFlowData;
-};
-
-const layout = {
-  name: 'cose-bilkent',
-  animate: 'end',
-  nodeRepulsion: 10000,
-  idealEdgeLength: 100,
-  nodeSeparation: 100
 };
 
 nodeHtmlLabel(Cytoscape.use(COSEBilkent));
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
 
-  const loopAnimation = eles => {
-    const ani = eles.animation(
-      {
-        zoom: { level: 1 },
-        easing: 'linear',
-        style: {
-          'line-dash-offset': 24,
-          'line-dash-pattern': [4, 4]
-          // 'line-gradient-stop-colors': 'antiquewhite'
-        }
-      },
-      {
-        duration: 4000
-      }
-    );
+  // Type technically is Cytoscape.EdgeCollection but that throws an unexpected error
+  const loopAnimation = (eles: any) => {
+    const ani = eles.animation(edgeAnimationConfig[0], edgeAnimationConfig[1]);
 
     ani
       .reverse()
@@ -54,20 +45,11 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const cyActionHandlers = (cy: Cytoscape.Core) => {
     // make sure we did n ot init already, otherwise this will be bound more than once
     if (!initDone) {
-      // Add click handler per node
-      cy.on('click', 'node', (evt: EventObject) => {
-        console.info(`Clicked the node with ID ${evt.target.id()}`);
-      });
       // Add HTML labels for better flexibility
       // @ts-ignore
       cy.nodeHtmlLabel([
         {
-          query: 'node', // cytoscape query selector
-          halign: 'center', // title vertical position. Can be 'left',''center, 'right'
-          valign: 'bottom', // title vertical position. Can be 'top',''center, 'bottom'
-          halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
-          valignBox: 'bottom', // title relative box vertical position. Can be 'top',''center, 'bottom'
-          cssClass: 'dependency-graph-node-label', // any classes will be as attribute of <div> container for every title
+          ...nodeHTMLLabelConfig,
           tpl(templateData: Cytoscape.NodeDataDefinition) {
             return `<div><p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
@@ -87,29 +69,21 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       // Add class to leave nodes so we can make them smaller
       cy.nodes().leaves().addClass('leaf');
       cy.nodes().roots().addClass('root');
+
       // Animate edges
       cy.edges().forEach(loopAnimation);
+
+      // Hide labels when being zoomed out
       cy.on('zoom', event => {
-        const opacity = cy.zoom() <= 1.5 ? 0 : 1;
-
-        // Hide edges
-        cy.$('edge').css({
-          opacity
-        });
-
-        // Hide leaf nodes
-        cy.$('.leaf').css({
-          opacity
-        });
-
-        // Show native labels on root nodes
-        cy.$('.root').style({
-          'text-opacity': opacity ? 0 : 1
-        });
+        const opacity = cy.zoom() <= zoomLevelBreakpoint ? 0 : 1;
 
         Array.from(
           document.querySelectorAll('.dependency-graph-node-label'),
-          e => (e.style.opacity = opacity)
+          e => {
+            // @ts-ignore
+            e.style.opacity = opacity;
+            return e;
+          }
         );
       });
       // Make sure to tell we inited successfully and prevent another init
@@ -126,55 +100,21 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
             nodes: data.nodes,
             edges: data.edges
           })}
-          maxZoom={4}
-          minZoom={0.25}
-          layout={layout}
+          maxZoom={maxZoom}
+          minZoom={minZoom}
+          layout={graphLayoutConfig}
           stylesheet={[
             {
               selector: 'node',
-              style: {
-                width: 45,
-                height: 45,
-                shape: 'ellipse',
-                'text-opacity': 0,
-                'font-size': 17,
-                content: 'data(label)',
-                'background-color': 'white',
-                'background-image': node =>
-                  node.data('provider') === 'AWS'
-                    ? '/assets/img/dependency-graph/aws-node.svg'
-                    : '',
-                'background-height': 20,
-                'background-width': 20,
-                'border-color': '#EDEBEE',
-                'border-width': 1,
-                'border-style': 'solid',
-                'transition-property': 'opacity',
-                'transition-duration': 0.2,
-                'transition-timing-function': 'linear'
-              }
+              style: nodeStyeConfig
             },
             {
               selector: 'edge',
-              style: {
-                width: 1,
-                'line-fill': 'linear-gradient',
-                'line-gradient-stop-colors': ['#008484', '#33CCCC'],
-                'line-style': edge =>
-                  edge.data('relation') === 'USES' ? 'solid' : 'dashed',
-                'curve-style': 'unbundled-bezier',
-                'control-point-distances': edge =>
-                  edge.data('controlPointDistances'),
-                'control-point-weights': [0.15, 0.85]
-              }
+              style: edgeStyleConfig
             },
             {
               selector: '.leaf',
-              style: {
-                width: 28,
-                height: 28,
-                opacity: 0
-              }
+              style: leafStyleConfig
             }
           ]}
           cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
