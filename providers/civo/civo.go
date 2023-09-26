@@ -56,7 +56,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 				}
 				if telemetry {
 					analytics.TrackEvent("discovered_resources", map[string]interface{}{
-						"provider":  "Azure",
+						"provider":  "Civo",
 						"resources": len(resources),
 					})
 				}
