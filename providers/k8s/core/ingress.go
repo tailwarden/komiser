@@ -17,7 +17,7 @@ func Ingress(ctx context.Context, client providers.ProviderClient) ([]Resource, 
 	var config metav1.ListOptions
 
 	for {
-		res, err := client.K8sClient.NetworkingV1().Ingresses("").List(ctx, config)
+		res, err := client.K8sClient.Client.NetworkingV1().Ingresses("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}

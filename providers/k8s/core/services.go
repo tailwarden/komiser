@@ -17,7 +17,7 @@ func Services(ctx context.Context, client providers.ProviderClient) ([]Resource,
 	var config metav1.ListOptions
 
 	for {
-		res, err := client.K8sClient.CoreV1().Services("").List(ctx, config)
+		res, err := client.K8sClient.Client.CoreV1().Services("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}

@@ -385,6 +385,42 @@ const settingsService = {
     return window.location.replace(
       `${BASE_URL}/resources/export-csv${id ? `/${id}` : ''}`
     );
+  },
+
+  async getCloudAccounts() {
+    try {
+      const res = await fetch(`${BASE_URL}/cloud_accounts`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async editCloudAccount(id: number, payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/cloud_accounts/${id}`,
+        settings('PUT', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async deleteCloudAccount(id: number) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/cloud_accounts/${id}`,
+        settings('DELETE')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

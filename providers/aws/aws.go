@@ -50,6 +50,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		iam.SamlProviders,
 		iam.Groups,
 		iam.Policies,
+		iam.Users,
 		sqs.Queues,
 		s3.Buckets,
 		ec2.Instances,
