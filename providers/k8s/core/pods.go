@@ -17,10 +17,12 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 
 	var config metav1.ListOptions
 
+	opencostEnabled := true
 	podsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "pod")
 	if err != nil {
-		log.Printf("ERROR: Couldn't get pods info from OpenCost: %v", err)
-		return resources, err
+		log.Errorf("ERROR: Couldn't get pods info from OpenCost: %v", err)
+		log.Warn("Opencost disabled")
+		opencostEnabled = false
 	}
 
 	for {
@@ -39,6 +41,11 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 				})
 			}
 
+			cost := 0.0
+			if opencostEnabled {
+				cost = podsCost[pod.Name].TotalCost
+			}
+
 			resources = append(resources, models.Resource{
 				Provider:   "Kubernetes",
 				Account:    client.Name,
@@ -46,7 +53,7 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 				ResourceId: string(pod.UID),
 				Name:       pod.Name,
 				Region:     pod.Namespace,
-				Cost:       podsCost[pod.Name].TotalCost,
+				Cost:       cost,
 				CreatedAt:  pod.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
