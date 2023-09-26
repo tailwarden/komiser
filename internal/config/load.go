@@ -233,13 +233,18 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.
 				log.Fatal(err)
 			}
 
-			client, err := kubernetes.NewForConfig(kubeConfig)
+			k8sClient, err := kubernetes.NewForConfig(kubeConfig)
 			if err != nil {
 				log.Fatal(err)
 			}
 
+			client := providers.K8sClient{
+				Client:          k8sClient,
+				OpencostBaseUrl: account.OpencostBaseUrl,
+			}
+
 			clients = append(clients, providers.ProviderClient{
-				K8sClient: client,
+				K8sClient: &client,
 				Name:      account.Name,
 			})
 		}
