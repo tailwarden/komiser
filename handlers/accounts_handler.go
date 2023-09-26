@@ -28,7 +28,9 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	}
 
 	if handler.db != nil {
+		output.Status = "PENDING_DATABASE"
 		c.JSON(http.StatusOK, output)
+		return
 	}
 
 	accounts := make([]models.Account, 0)
@@ -41,6 +43,8 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 
 	if len(accounts) > 0 {
 		output.Onboarded = true
+	} else {
+		output.Status = "PENDING_ACCOUNTS"
 	}
 
 	c.JSON(http.StatusOK, output)
