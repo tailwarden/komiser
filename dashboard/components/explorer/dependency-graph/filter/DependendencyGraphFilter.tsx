@@ -1,13 +1,13 @@
 import { ReactNode, useState } from 'react';
 import { NextRouter } from 'next/router';
-import InventoryFilterSummary from '@components/inventory/components/filter/InventoryFilterSummary';
 import useFilterWizard from '@components/inventory/components/filter/hooks/useFilterWizard';
 import useInventory from '@components/inventory/hooks/useInventory/useInventory';
-import InventoryFilterDropdown from '@components/inventory/components/InventoryFilterDropdown';
 import { InventoryFilterData } from '@components/inventory/hooks/useInventory/types/useInventoryTypes';
-import PlusIcon from '../../icons/PlusIcon';
-import Button from '../../button/Button';
-import CloseIcon from '../../icons/CloseIcon';
+import PlusIcon from '@components/icons/PlusIcon';
+import Button from '@components/button/Button';
+import CloseIcon from '@components/icons/CloseIcon';
+import DependencyGraphFilterSummary from './DependencyGraphFilterSummary';
+import DependencyGraphFilterDropdown from './DependencyGraphFilterDropdown';
 
 type DependendencyGraphFilterProps = {
   hasFilters: boolean | undefined;
@@ -39,7 +39,7 @@ function DependendencyGraphFilter({
             <span className="font-sans text-sm text-black-400">Filter</span>
           </div>
           {isOpen && (
-            <InventoryFilterDropdown
+            <DependencyGraphFilterDropdown
               position={'top-10'}
               toggle={toggle}
               closeDropdownAfterAdd={true}
@@ -51,7 +51,7 @@ function DependendencyGraphFilter({
           <div className="h-full text-sm text-black-400">Filters</div>
           {displayedFilters &&
             displayedFilters.map((activeFilter, idx) => (
-              <InventoryFilterSummary
+              <DependencyGraphFilterSummary
                 key={idx}
                 id={idx}
                 data={activeFilter}
@@ -65,7 +65,7 @@ function DependendencyGraphFilter({
                 <PlusIcon className="h-6 w-6 rounded-full border-dashed border-black-200 p-1 hover:border hover:bg-black-400 hover:bg-opacity-10" />
               </div>
               {isOpen && (
-                <InventoryFilterDropdown
+                <DependencyGraphFilterDropdown
                   position={'top-10'}
                   toggle={toggle}
                   closeDropdownAfterAdd={false}

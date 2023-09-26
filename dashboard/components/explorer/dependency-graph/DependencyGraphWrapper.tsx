@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import parseURLParams from '@components/inventory/hooks/useInventory/helpers/parseURLParams';
 import { InventoryFilterData } from '@components/inventory/hooks/useInventory/types/useInventoryTypes';
 import DependencyGraphLoader from './DependencyGraphLoader';
-import DependendencyGraphFilter from './DependendencyGraphFilter';
+import DependendencyGraphFilter from './filter/DependendencyGraphFilter';
 import useDependencyGraph from './hooks/useDependencyGraph';
 
 function DependencyGraphWrapper() {
@@ -49,7 +49,6 @@ function DependencyGraphWrapper() {
     Object.keys(router.query).length > 0 &&
     displayedFilters &&
     displayedFilters.length > 0;
-  console.log(hasFilters, 'hasFilters');
 
   return (
     <>
