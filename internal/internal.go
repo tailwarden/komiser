@@ -293,8 +293,8 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 
 	defer func() {
 		err := recover()
-		log.WithField("err", err).Error(fmt.Sprintf("error fetching %s resources", provider))
 		if err != nil {
+			log.WithField("err", err).Error(fmt.Sprintf("error fetching %s resources", provider))
 			localHub.CaptureException(err.(error))
 			localHub.Flush(2 * time.Second)
 		}
