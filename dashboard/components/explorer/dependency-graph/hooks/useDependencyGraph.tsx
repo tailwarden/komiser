@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
+import { InventoryFilterData } from 'components/inventory/hooks/useInventory/types/useInventoryTypes';
 import settingsService from '../../../../services/settingsService';
 
 export type ReactFlowData = {
@@ -221,6 +224,11 @@ function useDependencyGraph() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ReactFlowData>();
   const [error, setError] = useState(false);
+  const [filters, setFilters] = useState<InventoryFilterData[]>([]);
+  const [displayedFilters, setDisplayedFilters] =
+    useState<InventoryFilterData[]>();
+
+  const router = useRouter();
 
   function fetch() {
     if (!loading) {
@@ -231,7 +239,7 @@ function useDependencyGraph() {
       setError(false);
     }
 
-    settingsService.getRelations().then(res => {
+    settingsService.getRelations(filters).then(res => {
       if (res === Error) {
         setLoading(false);
         setError(true);
@@ -241,6 +249,28 @@ function useDependencyGraph() {
       }
     });
   }
+
+  function deleteFilter(idx: number) {
+    const updatedFilters: InventoryFilterData[] = [...filters!];
+    updatedFilters.splice(idx, 1);
+    const url = updatedFilters
+      .map(
+        filter =>
+          `${filter.field}${`:${filter.operator}`}${
+            filter.values.length > 0 ? `:${filter.values}` : ''
+          }`
+      )
+      .join('&');
+    router.push(url ? `?${url}` : '', undefined, { shallow: true });
+  }
+
+  const loadingFilters =
+    Object.keys(router.query).length > 0 && !displayedFilters && !error;
+
+  const hasFilters =
+    Object.keys(router.query).length > 0 &&
+    displayedFilters &&
+    displayedFilters.length > 0;
 
   useEffect(() => {
     fetch();

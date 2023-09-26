@@ -27,7 +27,7 @@ function Navbar() {
     <nav
       className={`fixed ${
         displayBanner ? 'top-[72px]' : 'top-0'
-      } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white px-6 py-4 xl:pr-8 2xl:pr-24`}
+      } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white px-6 py-4 shadow-[0_2px_9px_rgba(105,115,114,0.16)] xl:pr-8 2xl:pr-24`}
     >
       <div className="flex items-center gap-8 text-sm font-semibold text-black-400">
         <Link href="/dashboard">
