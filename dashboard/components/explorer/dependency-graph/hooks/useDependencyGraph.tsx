@@ -276,7 +276,21 @@ function useDependencyGraph() {
     fetch();
   }, []);
 
-  return { loading, data, error, fetch };
+  useEffect(() => {
+    fetch();
+  }, [filters, displayedFilters]);
+
+  return {
+    loading,
+    data,
+    error,
+    fetch,
+    filters,
+    displayedFilters,
+    setDisplayedFilters,
+    deleteFilter,
+    setFilters
+  };
 }
 
 export default useDependencyGraph;

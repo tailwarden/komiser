@@ -16,9 +16,13 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@utils/*": ["utils/*"]
+      "@components/*": ["components/*"],
+      "@services/*": ["services/*"],
+      "@environments/*": ["environments/*"],
+      "@utils/*": ["utils/*"],
+      "@styles/*": ["styles/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types/cytoscape.d.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

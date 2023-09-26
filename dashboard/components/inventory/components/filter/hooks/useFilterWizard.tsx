@@ -144,6 +144,16 @@ function useFilterWizard({ router, setSkippedSearch }: InventoryFilterProps) {
         undefined,
         { shallow: true }
       );
+    } else if (router.asPath === '/explorer/') {
+      router.push(
+        `?${data.field === 'tag' ? `tag:${data.tagKey}` : data.field}:${
+          data.operator
+        }${
+          data.values.length > 0 ? `:${data.values.map(value => value)}` : ''
+        }`,
+        undefined,
+        { shallow: true }
+      );
     } else {
       router.push(
         `${router.asPath}&${
