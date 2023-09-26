@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/pricing"
-	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	"strconv"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/service/pricing"
+	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 
 	log "github.com/sirupsen/logrus"
 
@@ -18,7 +19,6 @@ import (
 )
 
 const (
-	RateCode             = "JRTCKXETXF.6YS6EN2CT7"
 	AverageHoursPerMonth = 730
 )
 
@@ -127,16 +127,14 @@ func calculateCostPerMonth(pricingOutput *pricing.GetProductsOutput) (float64, e
 			for _, details := range onDemand.(map[string]interface{}) {
 				if priceDetails, ok := details.(map[string]interface{})["priceDimensions"].(map[string]interface{}); ok {
 					for _, price := range priceDetails {
-						rateCode := price.(map[string]interface{})["rateCode"].(string)
-						if rateCode == RateCode {
-							usdPrice := price.(map[string]interface{})["pricePerUnit"].(map[string]interface{})["USD"].(string)
-							cost, err := strconv.ParseFloat(usdPrice, 64)
-							if err != nil {
-								return 0, fmt.Errorf("failed to parse cost per month: %w", err)
-							}
-							costPerMonth = cost * AverageHoursPerMonth
-							break
+						usdPrice := price.(map[string]interface{})["pricePerUnit"].(map[string]interface{})["USD"].(string)
+						cost, err := strconv.ParseFloat(usdPrice, 64)
+						if err != nil {
+							return 0, fmt.Errorf("failed to parse cost per month: %w", err)
 						}
+						costPerMonth = cost * AverageHoursPerMonth
+						break
+
 					}
 				}
 			}
