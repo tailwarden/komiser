@@ -9,7 +9,9 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
@@ -55,7 +57,6 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					Value: *tag.Value,
 				})
 			}
-
 			startOfMonth := utils.BeginningOfMonth(time.Now())
 			hourlyUsage := 0
 
@@ -83,12 +84,15 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:volume/%s", client.AWSClient.Region, *accountId, *volume.VolumeId)
 
+			relations := getEBSRelations(ec2Client, volume)
+
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "EBS",
 				Region:     client.AWSClient.Region,
 				ResourceId: resourceArn,
+				Relations:  relations,
 				Cost:       instanceCost,
 				Name:       *volume.VolumeId,
 				CreatedAt:  *volume.CreateTime,
@@ -111,4 +115,31 @@ func Volumes(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getEBSRelations(ec2Client *ec2.Client, volume types.Volume) (rel []models.Link) {
+	// Get associated snapshots
+	outputSnapshots, err := ec2Client.DescribeSnapshots(context.Background(), &ec2.DescribeSnapshotsInput{
+		Filters: []types.Filter{
+			types.Filter{
+				Name:   aws.String("volume-id"),
+				Values: []string{*volume.VolumeId},
+			},
+		},
+	})
+	if err != nil {
+		return rel
+	}
+
+	for _, snapshot := range outputSnapshots.Snapshots {
+
+		rel = append(rel, models.Link{
+			ResourceID: *snapshot.VolumeId,
+			Type:       "Elastic Block Storage",
+			Name:       *snapshot.VolumeId,
+			Relation:   "BACKUP",
+		})
+	}
+
+	return rel
 }

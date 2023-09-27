@@ -1,4 +1,5 @@
 import environment from '../environments/environment';
+import { InventoryFilterData } from '../components/inventory/hooks/useInventory/types/useInventoryTypes';
 
 const BASE_URL = environment.API_URL;
 
@@ -75,6 +76,19 @@ const settingsService = {
   async getGlobalLocations() {
     try {
       const res = await fetch(`${BASE_URL}/global/locations`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async getRelations(payload: InventoryFilterData[]) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources/relations`,
+        settings('POST', JSON.stringify(payload))
+      );
       const data = await res.json();
       return data;
     } catch (error) {

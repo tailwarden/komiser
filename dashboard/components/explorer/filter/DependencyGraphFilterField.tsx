@@ -1,14 +1,16 @@
 import Button from '@components/button/Button';
-import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
+import DependencyGraphFilterFieldOptions from './DependencyGraphFilterOptions';
 
-type InventoryFilterFieldProps = {
+type DependencyGraphFilterFieldProps = {
   handleField: (field: string) => void;
 };
 
-function InventoryFilterField({ handleField }: InventoryFilterFieldProps) {
+function DependencyGraphFilterField({
+  handleField
+}: DependencyGraphFilterFieldProps) {
   return (
     <>
-      {inventoryFilterFieldOptions.map((option, idx) => (
+      {DependencyGraphFilterFieldOptions.map((option, idx) => (
         <Button
           key={idx}
           size="sm"
@@ -25,4 +27,4 @@ function InventoryFilterField({ handleField }: InventoryFilterFieldProps) {
   );
 }
 
-export default InventoryFilterField;
+export default DependencyGraphFilterField;
