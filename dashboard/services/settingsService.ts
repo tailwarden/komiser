@@ -435,6 +435,16 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async getOnboardingStatus() {
+    try {
+      const res = await fetch(`${BASE_URL}/is_onboarded`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 
