@@ -28,7 +28,7 @@ function DependendencyGraphFilter({
   const { toggle, isOpen } = useFilterWizard({ router, setSkippedSearch });
 
   return (
-    <div className="my-5 flex items-center justify-between rounded-lg bg-white px-6 py-2">
+    <div className="flex h-full items-center justify-between rounded-lg bg-white px-6 py-2">
       {!hasFilters ? (
         <>
           <div
