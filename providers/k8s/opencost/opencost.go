@@ -16,12 +16,18 @@ type OpenCostResponse struct {
 
 type costData struct {
 	Properties struct {
-		Cluster string `json:"cluster"`
-		Node    string `json:"node"`
+		Cluster        string `json:"cluster"`
+		Node           string `json:"node"`
+		Controller     string `json:"controller"`
+		Pod            string `json:"pod"`
+		ProviderID     string `json:"providerID"`
+		Namespace      string `json:"namespace"`
+		ControllerKind string `json:"controllerKind"`
 	} `json:"properties"`
+	Window             Window            `json:"window"`
 	Start              time.Time         `json:"start"`
 	End                time.Time         `json:"end"`
-	Minutes            int               `json:"minutes"`
+	Minutes            float64           `json:"minutes"`
 	CPUCores           float64           `json:"cpuCores"`
 	CPUCoreRequestAvg  float64           `json:"cpuCoreRequestAverage"`
 	CPUCoreUsageAvg    float64           `json:"cpuCoreUsageAverage"`
@@ -29,12 +35,12 @@ type costData struct {
 	CPUCost            float64           `json:"cpuCost"`
 	CPUCostAdjustment  float64           `json:"cpuCostAdjustment"`
 	CPUEfficiency      float64           `json:"cpuEfficiency"`
-	GPUCount           int               `json:"gpuCount"`
-	GPUHours           int               `json:"gpuHours"`
+	GPUCount           float64           `json:"gpuCount"`
+	GPUHours           float64           `json:"gpuHours"`
 	GPUCost            float64           `json:"gpuCost"`
 	GPUCostAdjustment  float64           `json:"gpuCostAdjustment"`
-	NetworkTransfer    int64             `json:"networkTransferBytes"`
-	NetworkReceive     int64             `json:"networkReceiveBytes"`
+	NetworkTransfer    float64           `json:"networkTransferBytes"`
+	NetworkReceive     float64           `json:"networkReceiveBytes"`
 	NetworkCost        float64           `json:"networkCost"`
 	NetworkCrossZone   float64           `json:"networkCrossZoneCost"`
 	NetworkCrossRegion float64           `json:"networkCrossRegionCost"`
@@ -42,14 +48,14 @@ type costData struct {
 	NetworkAdjustment  float64           `json:"networkCostAdjustment"`
 	LoadBalancerCost   float64           `json:"loadBalancerCost"`
 	LBCostAdjustment   float64           `json:"loadBalancerCostAdjustment"`
-	PVBytes            int64             `json:"pvBytes"`
+	PVBytes            float64           `json:"pvBytes"`
 	PVByteHours        float64           `json:"pvByteHours"`
 	PVCost             float64           `json:"pvCost"`
 	PVs                map[string]pvInfo `json:"pvs"`
 	PVCostAdjustment   float64           `json:"pvCostAdjustment"`
-	RAMBytes           int64             `json:"ramBytes"`
-	RAMByteRequestAvg  int64             `json:"ramByteRequestAverage"`
-	RAMByteUsageAvg    int64             `json:"ramByteUsageAverage"`
+	RAMBytes           float64           `json:"ramBytes"`
+	RAMByteRequestAvg  float64           `json:"ramByteRequestAverage"`
+	RAMByteUsageAvg    float64           `json:"ramByteUsageAverage"`
 	RAMByteHours       float64           `json:"ramByteHours"`
 	RAMCost            float64           `json:"ramCost"`
 	RAMCostAdjustment  float64           `json:"ramCostAdjustment"`
@@ -58,6 +64,11 @@ type costData struct {
 	SharedCost         float64           `json:"sharedCost"`
 	TotalCost          float64           `json:"totalCost"`
 	TotalEfficiency    float64           `json:"totalEfficiency"`
+}
+
+type Window struct {
+	Start string `json:"start"`
+	End   string `json:"end"`
 }
 
 type pvInfo struct {
