@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+// Opencost reference for the structs defined here
+//
+// Swagger: https://github.com/opencost/opencost/blob/develop/docs/swagger.json
+// Go struct: https://github.com/opencost/opencost/blob/6a7d9ada3cd0422701c90b5df214b8bf322b0e62/pkg/kubecost/allocation_json.go#L13
+//
+
 type OpenCostResponse struct {
 	Code   int                   `json:"code"`
 	Status string                `json:"status"`
