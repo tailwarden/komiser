@@ -4,6 +4,12 @@ const dateHelper = {
     return date.toJSON().slice(0, 10);
   },
 
+  getFirstDayOfThisMonth() {
+    const date = new Date();
+    date.setDate(1);
+    return date.toJSON().slice(0, 10);
+  },
+
   getLastMonth() {
     const date = new Date();
     date.setDate(1);
@@ -71,7 +77,10 @@ export function dateFormatter(dateParam: string, granularity: string) {
   }
   return formattedDate;
 }
-
+export const thisMonth = [
+  dateHelper.getFirstDayOfThisMonth(),
+  dateHelper.getToday()
+];
 export const lastMonth = [
   dateHelper.getLastMonth(),
   dateHelper.getLastDayOfLastMonth()
@@ -82,7 +91,7 @@ export const lastThreeMonths = [
 ];
 export const lastSixMonths = [
   dateHelper.getLastSixMonths(),
-  dateHelper.getToday()
+  dateHelper.getLastDayOfLastMonth()
 ];
 export const lastTwelveMonths = [
   dateHelper.getLastTwelveMonths(),
