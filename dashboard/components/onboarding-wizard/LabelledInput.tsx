@@ -9,6 +9,7 @@ interface LabelledInputProps {
   subLabel?: string;
   disabled?: boolean;
   placeholder?: string;
+  required?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,6 +21,7 @@ function LabelledInput({
   value,
   subLabel,
   placeholder,
+  required = false,
   disabled = false,
   onChange
 }: LabelledInputProps) {
@@ -48,6 +50,7 @@ function LabelledInput({
           value={value}
           disabled={disabled}
           placeholder={placeholder}
+          required={required}
           className={`block w-full rounded py-[14.5px] text-sm text-black-900 outline outline-black-200 focus:outline-2 focus:outline-primary ${
             icon ? 'pl-10' : 'pl-3'
           }`}

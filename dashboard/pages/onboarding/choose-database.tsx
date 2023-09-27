@@ -31,8 +31,10 @@ function DatabaseLeftItem({
   return (
     <div
       onClick={onClick}
-      className={`flex flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${
-        selected === value ? 'border-komiser-600' : 'border-gray-200'
+      className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${
+        selected === value
+          ? 'border-komiser-600'
+          : 'border-gray-200 hover:border-komiser-400'
       }`}
     >
       <Image

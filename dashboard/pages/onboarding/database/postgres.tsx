@@ -1,3 +1,4 @@
+import { FormEvent, useState } from 'react';
 import Head from 'next/head';
 
 import { allDBProviders } from '../../../utils/providerHelper';
@@ -9,12 +10,47 @@ import OnboardingWizardLayout, {
 import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
 import DatabasePurplin from '../../../components/onboarding-wizard/DatabasePurplin';
 import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
+import settingsService from '../../../services/settingsService';
+import useToast from '../../../components/toast/hooks/useToast';
+import Toast from '../../../components/toast/Toast';
+import DatabaseErrorMessage from '../../../components/onboarding-wizard/DatabaseErrorMessage';
 
 export default function PostgreSQLCredentials() {
-  const database = allDBProviders.POSTGRES;
+  const databaseProvider = allDBProviders.POSTGRES;
 
-  const handleNext = () => {
-    // TODO: (onboarding-wizard) complete form inputs, validation, submission and navigation
+  const { toast, setToast, dismissToast } = useToast();
+
+  const [isError, setIsError] = useState<boolean>(false);
+  const [hostname, setHostname] = useState<string>('');
+  const [database, setDatabase] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const handleNext = (e: FormEvent) => {
+    e.preventDefault();
+
+    const payload = JSON.stringify({
+      type: 'POSTGRES',
+      hostname,
+      database,
+      username,
+      password
+    });
+
+    settingsService.saveDatabaseConfig(payload).then(res => {
+      setIsError(false);
+
+      if (res === Error) {
+        setIsError(true);
+      } else {
+        setToast({
+          hasError: false,
+          title: 'Database connected',
+          message:
+            'Your Postgres database has been successfully connected to Komiser.'
+        });
+      }
+    });
   };
 
   return (
@@ -38,45 +74,63 @@ export default function PostgreSQLCredentials() {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-4 py-10">
-            <div className="space-y-[0.2]">
-              <LabelledInput
-                type="text"
-                id="hostname"
-                label="Hostname"
-                subLabel="The server where the Postgres server is hosted"
-                placeholder="my-postgres-server"
-              />
-              <LabelledInput
-                type="text"
-                id="database"
-                label="Database"
-                subLabel="The name of the database where Komiser will insert/save the data"
-                placeholder="my_database"
-              />
-              <LabelledInput
-                type="text"
-                id="username"
-                label="Username"
-                subLabel="The Postgres username"
-                placeholder="user"
-              />
-              <LabelledInput
-                type="text"
-                id="password"
-                label="Password"
-                subLabel="The Postgres password"
-                placeholder="Example0000*"
-              />
-            </div>
-          </div>
+          {isError && <DatabaseErrorMessage />}
 
-          <CredentialsButton handleNext={handleNext} nextLabel="Add database" />
+          <form onSubmit={handleNext}>
+            <div className="flex flex-col space-y-4 py-10">
+              <div className="space-y-[0.2]">
+                <LabelledInput
+                  type="text"
+                  id="hostname"
+                  label="Hostname"
+                  required
+                  value={hostname}
+                  onChange={e => setHostname(e.target.value)}
+                  subLabel="The server where the Postgres server is hosted"
+                  placeholder="my-postgres-server"
+                />
+                <LabelledInput
+                  type="text"
+                  id="database"
+                  label="Database"
+                  required
+                  value={database}
+                  onChange={e => setDatabase(e.target.value)}
+                  subLabel="The name of the database where Komiser will insert/save the data"
+                  placeholder="my_database"
+                />
+                <LabelledInput
+                  type="text"
+                  id="username"
+                  label="Username"
+                  required
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  subLabel="The Postgres username"
+                  placeholder="user"
+                />
+                <LabelledInput
+                  type="password"
+                  id="password"
+                  label="Password"
+                  required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  subLabel="The Postgres password"
+                  placeholder="Example0000*"
+                />
+              </div>
+            </div>
+            <CredentialsButton nextLabel="Add database" />
+          </form>
         </LeftSideLayout>
 
         <RightSideLayout>
-          <DatabasePurplin database={database} />
+          <DatabasePurplin database={databaseProvider} />
         </RightSideLayout>
+
+        {/* Toast component */}
+        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </OnboardingWizardLayout>
     </div>
   );
