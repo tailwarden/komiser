@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import DependencyGraphError from './DependencyGraphError';
 import DependencyGraphSkeleton from './DependencyGraphSkeleton';
 import DependencyGraphView from './DependencyGraph';
@@ -25,4 +26,4 @@ function DependencyGraphLoader({
   return null;
 }
 
-export default DependencyGraphLoader;
+export default memo(DependencyGraphLoader);

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import DashboardDependencyGraphWrapper from '../components/explorer/dependency-graph/DependencyGraphWrapper';
+import DashboardDependencyGraphWrapper from '../components/explorer/DependencyGraphWrapper';
 
 function Explorer() {
   return (

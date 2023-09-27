@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { InventoryFilterData } from 'components/inventory/hooks/useInventory/types/useInventoryTypes';
-import settingsService from '../../../../services/settingsService';
+import { InventoryFilterData } from '@components/inventory/hooks/useInventory/types/useInventoryTypes';
+import settingsService from '@services/settingsService';
 
 export type ReactFlowData = {
   nodes: any[];
