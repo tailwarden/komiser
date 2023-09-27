@@ -55,10 +55,10 @@ export const graphLayoutConfig = {
 
 export const nodeStyeConfig = {
   width(node) {
-    return Math.max(1, Math.ceil(node.degree(false) / 2)) * 20;
+    return Math.max(2, Math.ceil(node.degree(false) / 2)) * 20;
   },
   height(node) {
-    return Math.max(1, Math.ceil(node.degree(false) / 2)) * 20;
+    return Math.max(2, Math.ceil(node.degree(false) / 2)) * 20;
   },
   shape: 'ellipse',
   'text-opacity': 1,
