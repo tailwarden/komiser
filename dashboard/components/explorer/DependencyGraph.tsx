@@ -43,7 +43,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
   };
 
   const cyActionHandlers = (cy: Cytoscape.Core) => {
-    // make sure we did n ot init already, otherwise this will be bound more than once
+    // make sure we did not init already, otherwise this will be bound more than once
     if (!initDone) {
       // Add HTML labels for better flexibility
       // @ts-ignore
@@ -62,14 +62,14 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin">${
                    templateData.service || '&nbsp;'
-                 }</p></div>`; // your html template here
+                 }</p></div>`;
           }
         }
       ]);
       // Add class to leave nodes so we can make them smaller
       cy.nodes().leaves().addClass('leaf');
+      // same for root notes
       cy.nodes().roots().addClass('root');
-
       // Animate edges
       cy.edges().forEach(loopAnimation);
 
