@@ -91,7 +91,7 @@ export const lastThreeMonths = [
 ];
 export const lastSixMonths = [
   dateHelper.getLastSixMonths(),
-  dateHelper.getToday()
+  dateHelper.getLastDayOfLastMonth()
 ];
 export const lastTwelveMonths = [
   dateHelper.getLastTwelveMonths(),
