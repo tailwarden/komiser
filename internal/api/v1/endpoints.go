@@ -68,5 +68,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 
 	router.NoRoute(gin.WrapH(http.FileServer(assetFS())))
 
+	router.POST("/feedback", api.NewFeedbackHandler)
+
 	return router
 }
