@@ -11,7 +11,7 @@ export const graphLayoutConfig = {
   // - "proof" slow cooling rate
   quality: 'default',
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
-  nodeDimensionsIncludeLabels: false,
+  nodeDimensionsIncludeLabels: true,
   // number of ticks per frame; higher is faster but more jerky
   refresh: 30,
   // Whether to fit the network view after when done
@@ -54,8 +54,12 @@ export const graphLayoutConfig = {
 };
 
 export const nodeStyeConfig = {
-  width: 45,
-  height: 45,
+  width(node) {
+    return Math.max(1, Math.ceil(node.degree(false) / 2)) * 20;
+  },
+  height(node) {
+    return Math.max(1, Math.ceil(node.degree(false) / 2)) * 20;
+  },
   shape: 'ellipse',
   'text-opacity': 1,
   'font-size': 17,
