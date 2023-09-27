@@ -5,6 +5,7 @@ import Cytoscape, { EventObject } from 'cytoscape';
 
 import nodeHtmlLabel, {
   CytoscapeNodeHtmlParams
+  // @ts-ignore
 } from 'cytoscape-node-html-label';
 
 // @ts-ignore
