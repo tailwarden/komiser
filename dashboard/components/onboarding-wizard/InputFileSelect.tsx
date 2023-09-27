@@ -1,4 +1,8 @@
 import { MutableRefObject, ReactNode } from 'react';
+import classNames from 'classnames';
+import AlertCircleIcon from '../icons/AlertCircleIcon';
+import AlertIcon from '../icons/AlertIcon';
+import AlertCircleIconFilled from '../icons/AlertCircleIconFilled';
 
 interface InputFileSelectProps {
   id: string;
@@ -8,6 +12,8 @@ interface InputFileSelectProps {
   icon?: ReactNode;
   subLabel?: string;
   disabled?: boolean;
+  hasError?: boolean;
+  errorMessage?: string;
   placeholder?: string;
   iconClick?: () => void;
   handleFileChange: (event: any) => void;
@@ -25,10 +31,12 @@ function InputFileSelect({
   placeholder,
   fileInputRef,
   handleFileChange,
-  disabled = false
+  disabled = false,
+  hasError = false,
+  errorMessage = ''
 }: InputFileSelectProps) {
   return (
-    <div>
+    <div className="relative mb-6">
       <label htmlFor={id} className="mb-2 block text-gray-700">
         {label}
       </label>
@@ -39,7 +47,7 @@ function InputFileSelect({
         </span>
       )}
 
-      <div className="relative mb-6">
+      <div className="relative">
         <input
           type="file"
           className="hidden"
@@ -53,7 +61,12 @@ function InputFileSelect({
           value={value}
           disabled={disabled}
           placeholder={placeholder}
-          className="block w-full rounded border py-4 pl-5 text-sm text-black-900 outline outline-black-200 focus:outline-2 focus:outline-primary"
+          className={classNames(
+            hasError
+              ? 'outline-error-600 focus:outline-error-700'
+              : 'outline-gray-200 focus:outline-primary',
+            'block w-full rounded border py-4 pl-5 text-sm text-black-900 outline focus:outline-2 '
+          )}
         />
 
         {icon && (
@@ -65,6 +78,12 @@ function InputFileSelect({
           </button>
         )}
       </div>
+      {hasError && errorMessage && (
+        <div className="mt-2 flex items-center text-sm text-error-600">
+          <AlertCircleIconFilled className="mr-1 inline-block h-4 w-4" />
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }
