@@ -37,8 +37,8 @@ func GetCost(pds []PriceDimensions, v float64) float64 {
 		if pd.BeginRange < v {
 			if pd.EndRange != "Inf" {
 				endRange, _ := strconv.ParseFloat(pd.EndRange, 64)
-				if v < endRange {
-					applicableRange = v
+				if v > endRange {
+					applicableRange = endRange
 				}
 			}
 			total += (applicableRange - pd.BeginRange) * pd.PricePerUnit.USD
