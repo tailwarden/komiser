@@ -12,18 +12,48 @@ import (
 	cloudwatchTypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
-	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
+	lambdaTypes "github.com/aws/aws-sdk-go-v2/service/lambda/types"
+	"github.com/aws/aws-sdk-go-v2/service/pricing"
+	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
-func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
+const (
+	freeTierInvocations = 1000000
+	freeTierDuration    = 400000
+)
+
+func Functions(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config lambda.ListFunctionsInput
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	lambdaClient := lambda.NewFromConfig(*client.AWSClient)
+	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+
+	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
+		ServiceCode: aws.String("AWSLambda"),
+		Filters: []types.Filter{
+			{
+				Field: aws.String("regionCode"),
+				Value: aws.String(client.AWSClient.Region),
+				Type:  types.FilterTypeTermMatch,
+			},
+		},
+	})
+	if err != nil {
+		log.Errorf("ERROR: Couldn't fetch pricing info for AWS Lambda: %v", err)
+		return resources, err
+	}
+
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput)
+	if err != nil {
+		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+		return resources, err
+	}
+
 	for {
 		output, err := lambdaClient.ListFunctions(context.Background(), &config)
 		if err != nil {
@@ -31,6 +61,11 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, o := range output.Functions {
+			archSuffix := ""
+			if o.Architectures[0] == lambdaTypes.ArchitectureArm64 {
+				archSuffix = "-ARM"
+			}
+
 			metricsInvocationsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
@@ -49,12 +84,15 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warnf("Couldn't fetch invocations metric for %s", *o.FunctionName)
+				log.Warnf("Couldn't fetch invocations metric for %s: %v", *o.FunctionName, err)
 			}
 
 			invocations := 0.0
 			if metricsInvocationsOutput != nil && len(metricsInvocationsOutput.Datapoints) > 0 {
 				invocations = *metricsInvocationsOutput.Datapoints[0].Sum
+			}
+			if invocations > freeTierInvocations {
+				invocations -= freeTierInvocations
 			}
 
 			metricsDurationOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
@@ -74,26 +112,30 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				},
 			})
 			if err != nil {
-				log.Warnf("Couldn't fetch duration metric for %s", *o.FunctionName)
+				log.Warnf("Couldn't fetch duration metric for %s: %v", *o.FunctionName, err)
 			}
 
 			duration := 0.0
 			if metricsDurationOutput != nil && len(metricsDurationOutput.Datapoints) > 0 {
 				duration = *metricsDurationOutput.Datapoints[0].Average
 			}
+			totalDuration := ((invocations * duration) * (float64(*o.MemorySize))) / (1024 * 1024)
+			if totalDuration < freeTierDuration {
+				totalDuration -= freeTierDuration
+			}
 
-			computeCharges := (((invocations * duration) * (float64(*o.MemorySize))) / 1024) * 0.0000000083
-			requestCharges := invocations * 0.2
+			computeCharges := awsUtils.GetCost(priceMap["AWS-Lambda-Duration"+archSuffix], totalDuration)
+			requestCharges := awsUtils.GetCost(priceMap["AWS-Lambda-Requests"+archSuffix], invocations)
 			monthlyCost := computeCharges + requestCharges
 
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 			tagsResp, err := lambdaClient.ListTags(context.Background(), &lambda.ListTagsInput{
 				Resource: o.FunctionArn,
 			})
 
 			if err == nil {
 				for key, value := range tagsResp.Tags {
-					tags = append(tags, Tag{
+					tags = append(tags, models.Tag{
 						Key:   key,
 						Value: value,
 					})
@@ -102,7 +144,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 			relations := getLambdaRelations(*client.AWSClient, o)
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Lambda",
@@ -136,7 +178,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	return resources, nil
 }
 
-func getLambdaRelations(config aws.Config, lambda types.FunctionConfiguration) (rel []models.Link) {
+func getLambdaRelations(config aws.Config, lambda lambdaTypes.FunctionConfiguration) (rel []models.Link) {
 	// Get associated IAM roles
 	if lambda.Role != nil {
 		iamClient := iam.NewFromConfig(config)
