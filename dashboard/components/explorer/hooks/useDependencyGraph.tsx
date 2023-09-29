@@ -54,8 +54,8 @@ function GetData(res: any) {
           relation: rel.relation,
           label: rel.type,
           controlPointDistances: [
-            Math.floor(Math.random() * 20),
-            Math.floor(Math.random() * 21) - 20
+            Math.floor(Math.random() * 30),
+            Math.floor(Math.random() * 31) - 30
           ]
         }
       };
