@@ -48,10 +48,9 @@
 }
 
 .popper-div {
-  text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;
+  text-shadow: 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9;
   position: relative;
   color: #000;
   font-size: 16px;
