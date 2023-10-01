@@ -2,6 +2,8 @@
 import React, { useState, memo } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import Cytoscape, { EventObject } from 'cytoscape';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import popper from 'cytoscape-popper';
 
 import nodeHtmlLabel, {
   CytoscapeNodeHtmlParams
@@ -29,6 +31,7 @@ export type DependencyGraphProps = {
 };
 
 nodeHtmlLabel(Cytoscape.use(COSEBilkent));
+Cytoscape.use(popper);
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
 
@@ -73,6 +76,30 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       cy.nodes().roots().addClass('root');
       // Animate edges
       cy.edges().forEach(loopAnimation);
+
+      // Add hover tooltip on edges
+      cy.edges().bind('mouseover', event => {
+        if (cy.zoom() >= zoomLevelBreakpoint) {
+          // eslint-disable-next-line no-param-reassign
+          event.target.popperRefObj = event.target.popper({
+            content: () => {
+              const content = document.createElement('div');
+              content.classList.add('popper-div');
+              content.innerHTML = event.target.data('label');
+
+              document.body.appendChild(content);
+              return content;
+            }
+          });
+        }
+      });
+      // Hide Edges tooltip on mouseout
+      cy.edges().bind('mouseout', event => {
+        if (cy.zoom() >= zoomLevelBreakpoint && event.target.popperRefObj) {
+          event.target.popperRefObj.state.elements.popper.remove();
+          event.target.popperRefObj.destroy();
+        }
+      });
 
       // Hide labels when being zoomed out
       cy.on('zoom', event => {
@@ -119,6 +146,9 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         ]}
         cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
       />
+      <div className="absolute bottom-0 left-0 bg-black-100 text-black-400">
+        {data?.nodes?.length} Resources
+      </div>
     </div>
   );
 };

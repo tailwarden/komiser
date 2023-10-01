@@ -52,7 +52,8 @@ function GetData(res: any) {
           source: ele.resourceId,
           target: rel.resourceId,
           relation: rel.relation,
-          label: rel.type,
+          label: rel.name,
+          type: rel.type,
           controlPointDistances: [
             Math.floor(Math.random() * 30),
             Math.floor(Math.random() * 31) - 30
