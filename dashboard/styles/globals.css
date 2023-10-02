@@ -46,3 +46,13 @@
   transition: opacity 0.2s linear;
   opacity: 0;
 }
+
+.popper-div {
+  text-shadow: 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9;
+  position: relative;
+  color: #000;
+  font-size: 16px;
+  padding: 5px 9px;
+}

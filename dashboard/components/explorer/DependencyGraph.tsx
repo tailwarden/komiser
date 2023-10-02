@@ -2,6 +2,7 @@
 import React, { useState, memo } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import Cytoscape, { EventObject } from 'cytoscape';
+import popper from 'cytoscape-popper';
 
 import nodeHtmlLabel, {
   CytoscapeNodeHtmlParams
@@ -11,6 +12,8 @@ import nodeHtmlLabel, {
 // @ts-ignore
 import COSEBilkent from 'cytoscape-cose-bilkent';
 
+import Tooltip from '@components/tooltip/Tooltip';
+import WarningIcon from '@components/icons/WarningIcon';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import {
   edgeAnimationConfig,
@@ -29,6 +32,7 @@ export type DependencyGraphProps = {
 };
 
 nodeHtmlLabel(Cytoscape.use(COSEBilkent));
+Cytoscape.use(popper);
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
 
@@ -55,15 +59,15 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
             return `<div><p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center">${
-                   templateData.label || '&nbsp;'
-                 }</p>
+                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center" title="${
+                   templateData.label
+                 }">${templateData.label || '&nbsp;'}</p>
               <p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin">${
-                   templateData.service || '&nbsp;'
-                 }</p></div>`;
+                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin" title="${
+                   templateData.label
+                 }">${templateData.service || '&nbsp;'}</p></div>`;
           }
         }
       ]);
@@ -73,6 +77,30 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       cy.nodes().roots().addClass('root');
       // Animate edges
       cy.edges().forEach(loopAnimation);
+
+      // Add hover tooltip on edges
+      cy.edges().bind('mouseover', event => {
+        if (cy.zoom() >= zoomLevelBreakpoint) {
+          // eslint-disable-next-line no-param-reassign
+          event.target.popperRefObj = event.target.popper({
+            content: () => {
+              const content = document.createElement('div');
+              content.classList.add('popper-div');
+              content.innerHTML = event.target.data('label');
+
+              document.body.appendChild(content);
+              return content;
+            }
+          });
+        }
+      });
+      // Hide Edges tooltip on mouseout
+      cy.edges().bind('mouseout', event => {
+        if (cy.zoom() >= zoomLevelBreakpoint && event.target.popperRefObj) {
+          event.target.popperRefObj.state.elements.popper.remove();
+          event.target.popperRefObj.destroy();
+        }
+      });
 
       // Hide labels when being zoomed out
       cy.on('zoom', event => {
@@ -119,6 +147,15 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         ]}
         cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
       />
+      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible overflow-visible bg-black-100 text-black-400">
+        {data?.nodes?.length} Resources
+        <div className="relative">
+          <WarningIcon className="peer" height="16" width="16" />
+          <Tooltip top="sm" align="right" width="lg">
+            Only AWS resources are currently supported on the explorer.
+          </Tooltip>
+        </div>
+      </div>
     </div>
   );
 };

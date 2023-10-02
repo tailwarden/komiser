@@ -57,7 +57,9 @@ function DependencyGraphWrapper() {
     <>
       <div className="flex h-[calc(100vh-145px)] w-full flex-col">
         <div className="flex flex-row justify-between gap-2">
-          <p className="text-lg font-medium text-black-900">Graph View</p>
+          <p className="text-lg font-medium text-black-900">
+            Resources Explorer
+          </p>
           <div
             className={cn(
               'absolute -top-1 right-24 z-20 flex translate-y-0 cursor-pointer items-center justify-start gap-4 rounded-b-[4px] border-x border-b border-black-170 bg-white px-4 py-2 text-sm transition',
