@@ -2,7 +2,6 @@
 import React, { useState, memo } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import Cytoscape, { EventObject } from 'cytoscape';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import popper from 'cytoscape-popper';
 
 import nodeHtmlLabel, {
