@@ -60,15 +60,15 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
             return `<div><p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center">${
-                   templateData.label || '&nbsp;'
-                 }</p>
+                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center" title="${
+                   templateData.label
+                 }">${templateData.label || '&nbsp;'}</p>
               <p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin">${
-                   templateData.service || '&nbsp;'
-                 }</p></div>`;
+                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin" title="${
+                   templateData.label
+                 }">${templateData.service || '&nbsp;'}</p></div>`;
           }
         }
       ]);
