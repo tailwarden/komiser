@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { BrowserTracing } from '@sentry/tracing';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
+import settingsService from '@services/settingsService';
 import environment from '../../environments/environment';
 import Banner from '../banner/Banner';
 import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
@@ -26,6 +27,16 @@ function Layout({ children }: LayoutProps) {
   const canRender = !error && !hasNoAccounts;
 
   useEffect(() => {
+    settingsService.getOnboardingStatus().then(res => {
+      if (res.onboarded === false && res.status === 'PENDING_DATABASE') {
+        router.replace('/onboarding/choose-database');
+      } else if (res.onboarded === false && res.status === 'PENDING_ACCOUNTS') {
+        router.replace('/onboarding/choose-cloud');
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (telemetry?.telemetry_enabled && environment.production) {
       Sentry.init({
         dsn: environment.SENTRY_URL,
@@ -38,7 +49,7 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
-  const betaFlagOnboardingWizard = true; // To test the onboarding wizard feature, set this beta-flag to true
+  const betaFlagOnboardingWizard = true;
   const isOnboarding =
     betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
 

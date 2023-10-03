@@ -1,4 +1,5 @@
 import { FormEvent } from 'react';
+import router from 'next/router';
 import { allProviders, Provider } from './providerHelper';
 import settingsService from '@services/settingsService';
 
@@ -198,6 +199,7 @@ export const configureAccount = (
         title: 'Cloud account added',
         message: 'The cloud account was successfully added!'
       });
+      router.push('/onboarding/choose-cloud/');
     }
   });
 

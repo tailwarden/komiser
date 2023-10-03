@@ -37,21 +37,6 @@ function useCloudAccount() {
       setIsLoading(true);
     }
 
-    settingsService
-      .getOnboardingStatus()
-      .then(res => {
-        if (
-          res !== Error &&
-          res.onboarded === false &&
-          res.status === 'PENDING_DATABASE'
-        ) {
-          router.push('/onboarding/choose-database');
-        } else {
-          router.push('/onboarding/choose-cloud');
-        }
-      })
-      .finally(() => setIsLoading(false));
-
     settingsService.getCloudAccounts().then(res => {
       if (res === Error) {
         setHasError(true);

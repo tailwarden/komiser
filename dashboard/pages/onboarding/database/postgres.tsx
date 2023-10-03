@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import router from 'next/router';
 import Head from 'next/head';
 
 import { allDBProviders } from '@utils/providerHelper';
@@ -49,6 +50,7 @@ export default function PostgreSQLCredentials() {
           message:
             'Your Postgres database has been successfully connected to Komiser.'
         });
+        router.push('/onboarding/complete/');
       }
     });
   };

@@ -64,7 +64,9 @@ export default function CloudAccounts() {
                   <picture className="flex-shrink-0">
                     <Image
                       src={String(providers.providerImg(account.provider))}
-                      className="h-10 w-10 rounded-full"
+                      className="rounded-full"
+                      height={40}
+                      width={40}
                       alt={account.provider}
                     />
                   </picture>
@@ -108,10 +110,12 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200">
-              <div className="relative bottom-3 left-3 scale-110 overflow-clip rounded-lg shadow-xl">
+              <div className="relative bottom-3 left-3 h-full w-full scale-110 overflow-clip rounded-lg shadow-xl">
                 <Image
                   src={String(providers.providerImg('aws'))}
-                  className="h-full w-full"
+                  layout="fill"
+                  objectFit="cover"
+                  className="object-center"
                   alt="AWS"
                 />
               </div>
@@ -124,10 +128,12 @@ export default function CloudAccounts() {
             {/* Row 3 */}
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200">
-              <div className="overflow-clip rounded-lg shadow-xl">
+              <div className="relative h-full w-full overflow-clip rounded-lg shadow-xl">
                 <Image
                   src={String(providers.providerImg('civo'))}
-                  className="h-full w-full"
+                  layout="fill"
+                  objectFit="cover"
+                  className="object-center"
                   alt="Civo"
                 />
               </div>
@@ -142,10 +148,12 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-400">
-              <div className="overflow-clip rounded-lg bg-white p-2 shadow-xl">
+              <div className="relative h-full w-full overflow-clip rounded-lg bg-white shadow-xl">
                 <Image
                   src={String(providers.providerImg('gcp'))}
-                  className="h-full w-full"
+                  layout="fill"
+                  objectFit="cover"
+                  className="object-center p-2"
                   alt="GCP"
                 />
               </div>
@@ -160,10 +168,12 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-400"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200">
-              <div className="relative left-3 top-3 overflow-clip rounded-lg bg-black-800 p-5 shadow-xl">
+              <div className="relative left-3 top-3  h-full w-full overflow-clip rounded-lg bg-black-800 shadow-xl">
                 <Image
                   src={String(providers.providerImg('azure'))}
-                  className="h-full w-full"
+                  layout="fill"
+                  objectFit="cover"
+                  className="object-center p-5"
                   alt="Azure"
                 />
               </div>
