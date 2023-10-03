@@ -199,7 +199,7 @@ export const configureAccount = (
         title: 'Cloud account added',
         message: 'The cloud account was successfully added!'
       });
-      router.push('/onboarding/choose-cloud/');
+      router.push('/onboarding/cloud-accounts/');
     }
   });
 

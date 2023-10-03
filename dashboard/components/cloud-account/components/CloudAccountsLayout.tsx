@@ -44,34 +44,41 @@ function CloudAccountsLayout({
           </div>
         </button>
 
-        {cloudAccounts && cloudAccounts.length > 0 && (
+        {cloudProviders && cloudProviders.length > 0 && (
           <div className="-mx-4 -mr-6 flex flex-col gap-4 overflow-auto px-4 pr-6">
-            {cloudAccounts.map(account => {
-              const { provider } = account;
-              const isActive = router.query.view === provider;
-              return (
-                <button
-                  key={provider}
-                  onClick={() => {
-                    if (isActive) return;
-                    router.push(`?view=${provider}`);
-                  }}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
+            {cloudProviders
+              .filter(provider =>
+                cloudAccounts.some(
+                  account =>
+                    account.provider.toLowerCase() ===
+                    provider.toLocaleLowerCase()
+                )
+              )
+              .map(provider => {
+                const isActive = router.query.view === provider;
+                return (
+                  <button
+                    key={provider}
+                    onClick={() => {
+                      if (isActive) return;
+                      router.push(`?view=${provider}`);
+                    }}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 isActive
                   ? 'border-l-2 border-primary bg-komiser-150 text-primary'
                   : 'text-black-400 transition-colors hover:bg-komiser-100'
               }
             `}
-                >
-                  <div className={isActive ? 'ml-[-2px]' : ''}>
-                    <p className="w-[188px] truncate">
-                      {Providers.providerLabel(provider)}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+                  >
+                    <div className={isActive ? 'ml-[-2px]' : ''}>
+                      <p className="w-[188px] truncate">
+                        {Providers.providerLabel(provider)}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
           </div>
         )}
       </nav>

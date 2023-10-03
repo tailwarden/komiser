@@ -50,7 +50,8 @@ function CloudAccounts() {
     else {
       setFilteredCloudAccounts(
         cloudAccounts.filter(
-          account => account.provider === currentViewProvider
+          account =>
+            account.provider.toLowerCase() === currentViewProvider.toLowerCase()
         )
       );
     }
