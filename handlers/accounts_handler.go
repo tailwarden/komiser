@@ -27,7 +27,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 		Status:    "COMPLETE",
 	}
 
-	if handler.db != nil {
+	if handler.db == nil {
 		output.Status = "PENDING_DATABASE"
 		c.JSON(http.StatusOK, output)
 		return
