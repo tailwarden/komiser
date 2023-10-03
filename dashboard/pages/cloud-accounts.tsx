@@ -21,7 +21,7 @@ import useToast from '../components/toast/hooks/useToast';
 
 function CloudAccounts() {
   const optionsRef = useRef<HTMLDivElement | null>(null);
-  const [clickedItemId, setClickedItemId] = useState<string | null>(null);
+  const [clickedItemId, setClickedItemId] = useState<number | null>(null);
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
@@ -74,7 +74,7 @@ function CloudAccounts() {
     };
   }, []);
 
-  const toggleOptions = (itemId: string) => {
+  const toggleOptions = (itemId: number) => {
     setClickedItemId(prevClickedItemId => {
       if (prevClickedItemId === itemId) {
         return null; // Close on Clicking the same item's icon
@@ -102,12 +102,14 @@ function CloudAccounts() {
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
 
         {filteredCloudAccounts.map(account => {
-          const { provider, name, status } = account;
-          const isOpen = clickedItemId === name;
+          const { id, provider, name, status } = account;
+          const isOpen = clickedItemId === id;
+
+          if (!id) return null;
 
           return (
             <div
-              key={name}
+              key={id}
               onClick={() => openModal(account)}
               className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-black-170 bg-white p-6 text-black-900 transition-colors"
             >
@@ -130,7 +132,7 @@ function CloudAccounts() {
 
               <More2Icon
                 className="h-6 w-6 cursor-pointer"
-                onClick={() => toggleOptions(name)}
+                onClick={() => toggleOptions(id)}
               />
 
               {isOpen && (
