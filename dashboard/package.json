@@ -44,7 +44,7 @@
     "@storybook/nextjs": "^7.0.0-alpha.41",
     "@storybook/react": "^7.0.0-beta.52",
     "@storybook/testing-library": "^0.2.2",
-    "@storybook/theming": "^7.4.0",
+    "@storybook/theming": "^7.4.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/cytoscape": "^3.19.11",
