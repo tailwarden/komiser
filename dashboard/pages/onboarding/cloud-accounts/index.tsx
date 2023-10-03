@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import router from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,6 +15,7 @@ import CloudAccountDeleteContents from '@components/cloud-account/components/Clo
 import Toast from '@components/toast/Toast';
 import useToast from '@components/toast/hooks/useToast';
 import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
+import Button from '@components/button/Button';
 
 export default function CloudAccounts() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -47,7 +49,7 @@ export default function CloudAccounts() {
               ones, before moving to the next step.
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="mb-4 space-y-4">
             <Link
               href={'/onboarding/choose-cloud/'}
               className="flex w-full items-center rounded border-[1.5px] border-primary bg-transparent p-6 text-primary hover:bg-komiser-130"
@@ -92,6 +94,11 @@ export default function CloudAccounts() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="fixed bottom-0 -mx-20 flex w-[calc(100%*6/11)] justify-end border-t border-black-200 bg-white px-20 py-4">
+            <Button onClick={() => router.push('/onboarding/choose-database')}>
+              Next
+            </Button>
           </div>
         </LeftSideLayout>
 
