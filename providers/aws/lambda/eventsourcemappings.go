@@ -37,7 +37,7 @@ func EventSourceMappings(ctx context.Context, client providers.ProviderClient) (
                         Name:       *mapping.UUID,
                         Cost:       0.0,
                         Metadata: map[string]string{
-                                "lambda": *mapping.EventSourceArn,
+                                "lambda": *mapping.FunctionArn,
                                 "source": *mapping.EventSourceArn,
                         },
                         FetchedAt: time.Now(),
