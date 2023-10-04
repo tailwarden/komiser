@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
@@ -163,6 +164,13 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 		handler.db = bun.NewDB(sqldb, pgdialect.New())
 
 		log.Println("Data will be stored in PostgreSQL")
+	}
+
+	err = utils.SetupSchema(handler.db, &handler.cfg, []models.Account{})
+	fmt.Println(err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]string{"message": "database has been configured"})

@@ -15,6 +15,18 @@ import (
 )
 
 func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
+	output := struct {
+		Resources int     `json:"resources"`
+		Regions   int     `json:"regions"`
+		Costs     float64 `json:"costs"`
+		Accounts  int     `json:"accounts"`
+	}{}
+
+	if handler.db == nil {
+		c.JSON(http.StatusInternalServerError, map[string]string{"message": "database isn't configured yet"})
+		return
+	}
+
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
@@ -51,7 +63,7 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		logrus.WithError(err).Error("scan failed")
 	}
 
-	output := struct {
+	output = struct {
 		Resources int     `json:"resources"`
 		Regions   int     `json:"regions"`
 		Costs     float64 `json:"costs"`
@@ -121,6 +133,11 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(c *gin.Context) {
 func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
 	groups := make([]models.OutputResources, 0)
 
+	if handler.db == nil {
+		c.JSON(http.StatusInternalServerError, []models.OutputLocations{})
+		return
+	}
+
 	err := handler.db.NewRaw("SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;").Scan(handler.ctx, &groups)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
@@ -148,6 +165,11 @@ func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
 
 func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 	input := models.InputCostBreakdown{}
+
+	if handler.db == nil {
+		c.JSON(http.StatusInternalServerError, []models.OutputCostBreakdown{})
+		return
+	}
 
 	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {
