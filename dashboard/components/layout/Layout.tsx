@@ -28,7 +28,9 @@ function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     settingsService.getOnboardingStatus().then(res => {
-      if (res.onboarded === false && res.status === 'PENDING_DATABASE') {
+      if (res.onboarded === true && res.status === 'COMPLETE') {
+        router.replace('/dashboard/');
+      } else if (res.onboarded === false && res.status === 'PENDING_DATABASE') {
         router.replace('/onboarding/choose-database');
       } else if (res.onboarded === false && res.status === 'PENDING_ACCOUNTS') {
         router.replace('/onboarding/choose-cloud');
