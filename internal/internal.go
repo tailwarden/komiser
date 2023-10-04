@@ -119,7 +119,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 
 	go checkUpgrade()
 
-	err = runServer(address, port, telemetry, *cfg)
+	err = runServer(address, port, telemetry, *cfg, accounts)
 	if err != nil {
 		return err
 	}
@@ -164,10 +164,10 @@ func loggingMiddleware() gin.HandlerFunc {
 	}
 }
 
-func runServer(address string, port int, telemetry bool, cfg models.Config) error {
+func runServer(address string, port int, telemetry bool, cfg models.Config, accounts []models.Account) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg)
+	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg, accounts)
 
 	r.Use(loggingMiddleware())
 

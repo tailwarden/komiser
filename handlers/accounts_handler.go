@@ -5,11 +5,11 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -166,7 +166,7 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 		log.Println("Data will be stored in PostgreSQL")
 	}
 
-	err = utils.SetupSchema(handler.db, &handler.cfg, []models.Account{})
+	err = utils.SetupSchema(handler.db, &handler.cfg, handler.accounts)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
