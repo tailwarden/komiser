@@ -18,3 +18,5 @@ dist/
 *.go-e
 .idea
 vendor
+dashboard/public/assets/img/providers/azure.svg
+dashboard/public/favicon.ico
