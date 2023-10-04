@@ -151,7 +151,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         {data?.nodes?.length} Resources
         <div className="relative">
           <WarningIcon className="peer" height="16" width="16" />
-          <Tooltip top="sm" align="right" width="lg">
+          <Tooltip bottom="xs" align="left" width="lg">
             Only AWS resources are currently supported on the explorer.
           </Tooltip>
         </div>
