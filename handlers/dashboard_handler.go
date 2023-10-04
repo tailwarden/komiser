@@ -23,7 +23,7 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 	}{}
 
 	if handler.db == nil {
-		c.JSON(http.StatusInternalServerError, map[string]string{"message": "database isn't configured yet"})
+		c.JSON(http.StatusInternalServerError, output)
 		return
 	}
 
@@ -89,6 +89,11 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 
 func (handler *ApiHandler) ResourcesBreakdownStatsHandler(c *gin.Context) {
 	input := models.InputResources{}
+
+	if handler.db == nil {
+		c.JSON(http.StatusInternalServerError, []models.OutputResources{})
+		return
+	}
 
 	err := json.NewDecoder(c.Request.Body).Decode(&input)
 	if err != nil {

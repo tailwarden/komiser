@@ -148,7 +148,7 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 	}
 
 	if db.Type == "SQLITE" {
-		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.File))
+		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.FilePath))
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -167,7 +167,6 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 	}
 
 	err = utils.SetupSchema(handler.db, &handler.cfg, []models.Account{})
-	fmt.Println(err)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
