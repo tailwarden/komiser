@@ -5,9 +5,10 @@ import (
         "fmt"
         "strings"
         "time"
-
-        "github.com/aws/aws-sdk-go-v2/service/lambda"
+        
         log "github.com/sirupsen/logrus"
+        
+        "github.com/aws/aws-sdk-go-v2/service/lambda"
         "github.com/tailwarden/komiser/models"
         "github.com/tailwarden/komiser/providers"
 )
