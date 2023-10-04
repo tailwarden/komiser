@@ -12,6 +12,7 @@ import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/us
 import CloudAccountsSidePanel from '@components/cloud-account/components/CloudAccountsSidePanel';
 import CloudAccountDeleteContents from '@components/cloud-account/components/CloudAccountDeleteContents';
 import useToast from '@components/toast/hooks/useToast';
+import EmptyState from '@components/empty-state/EmptyState';
 
 function CloudAccounts() {
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
@@ -84,6 +85,26 @@ function CloudAccounts() {
             setEditCloudAccount={setEditCloudAccount}
           />
         ))}
+
+        {!cloudAccounts.length && (
+          <div className="mt-12">
+            <EmptyState
+              title="We could not find a cloud account"
+              message="It seems you have not connected a cloud account to Komiser, connect one right now so you can start managing it with more ease"
+              action={() => {
+                router.push('/onboarding/choose-cloud');
+              }}
+              actionLabel="Connect a cloud account"
+              secondaryAction={() => {
+                router.push(
+                  'https://github.com/tailwarden/komiser/issues/new/choose'
+                );
+              }}
+              secondaryActionLabel="Report an issue"
+              mascotPose="thinking"
+            />
+          </div>
+        )}
       </CloudAccountsLayout>
 
       {/* Delete Modal */}
