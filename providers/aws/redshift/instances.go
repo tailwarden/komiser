@@ -8,8 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/service/redshift"
-	. "github.com/mlabouardy/komiser/models"
-	. "github.com/mlabouardy/komiser/providers"
+	
 )
 
 func RedshiftClusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
