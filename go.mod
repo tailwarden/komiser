@@ -1,6 +1,6 @@
 module github.com/tailwarden/komiser
 
-go 1.20
+go 1.21
 
 require (
 	cloud.google.com/go/bigquery v1.49.0
@@ -18,7 +18,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/sql/armsql v1.0.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/storage/armstorage v1.2.0
 	github.com/BurntSushi/toml v1.2.1
-	github.com/aws/aws-sdk-go-v2 v1.18.1
+	github.com/aws/aws-sdk-go-v2 v1.21.0
 	github.com/aws/aws-sdk-go-v2/config v1.18.27
 	github.com/aws/aws-sdk-go-v2/service/apigateway v1.16.0
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.27.2
@@ -39,6 +39,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.23.4
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.20.0
 	github.com/aws/aws-sdk-go-v2/service/rds v1.30.1
+	github.com/aws/aws-sdk-go-v2/service/redshift v1.29.5
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1
 	github.com/aws/aws-sdk-go-v2/service/sns v1.18.3
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.19.12
@@ -97,8 +98,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.10 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.26 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.13.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.34 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.28 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.41 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.35 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.35 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.20.9
@@ -111,7 +112,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/servicecatalog v1.18.2
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.36.2
 	github.com/aws/aws-sdk-go-v2/service/sso v1.12.12 // indirect
-	github.com/aws/smithy-go v1.13.5 // indirect
+	github.com/aws/smithy-go v1.14.2 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect

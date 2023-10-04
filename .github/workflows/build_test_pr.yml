@@ -5,7 +5,7 @@ jobs:
   build_test_dashboard:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v3
         with:
@@ -28,14 +28,14 @@ jobs:
   build_test_cli:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           cache: true
           cache-dependency-path: go.sum
-          go-version: 1.20.2
+          go-version: 1.21
 
       # FIXME: https://github.com/golangci/golangci-lint-action/issues/677
       # - name: golangci-lint

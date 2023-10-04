@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
 import dateHelper, {
+  thisMonth,
   lastMonth,
   lastSixMonths,
   lastThreeMonths,
@@ -23,6 +24,7 @@ export type CostExplorerQueryGroupProps =
   | 'view';
 export type CostExplorerQueryGranularityProps = 'monthly' | 'daily';
 export type CostExplorerQueryDateProps =
+  | 'thisMonth'
   | 'lastMonth'
   | 'lastThreeMonths'
   | 'lastSixMonths'
@@ -58,6 +60,9 @@ function useCostExplorer() {
     let startDate = '';
     let endDate = '';
 
+    if (queryDate === 'thisMonth') {
+      [startDate, endDate] = thisMonth;
+    }
     if (queryDate === 'lastMonth') {
       [startDate, endDate] = lastMonth;
     }

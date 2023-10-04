@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const withTM = require('next-transpile-modules')(['react-cytoscapejs']);
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -8,4 +10,4 @@ const nextConfig = {
   trailingSlash: true
 };
 
-module.exports = nextConfig;
+module.exports = withTM(nextConfig);

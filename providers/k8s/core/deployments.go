@@ -16,7 +16,7 @@ func Deployments(ctx context.Context, client providers.ProviderClient) ([]Resour
 	var config metav1.ListOptions
 
 	for {
-		res, err := client.K8sClient.AppsV1().Deployments("").List(ctx, config)
+		res, err := client.K8sClient.Client.AppsV1().Deployments("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}

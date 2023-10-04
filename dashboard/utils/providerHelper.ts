@@ -1,7 +1,6 @@
 export type Provider =
   | 'aws'
   | 'gcp'
-  | 'ovh'
   | 'digitalocean'
   | 'azure'
   | 'civo'
@@ -11,6 +10,42 @@ export type Provider =
   | 'oci'
   | 'scaleway'
   | 'mongodbatlas';
+
+type ProviderKey =
+  | 'AWS'
+  | 'GCP'
+  | 'DIGITAL_OCEAN'
+  | 'AZURE'
+  | 'CIVO'
+  | 'KUBERNETES'
+  | 'LINODE'
+  | 'TENCENT'
+  | 'OCI'
+  | 'SCALE_WAY'
+  | 'MONGODB_ATLAS';
+
+export const allProviders: { [key in ProviderKey]: Provider } = {
+  AWS: 'aws',
+  GCP: 'gcp',
+  DIGITAL_OCEAN: 'digitalocean',
+  AZURE: 'azure',
+  CIVO: 'civo',
+  KUBERNETES: 'kubernetes',
+  LINODE: 'linode',
+  TENCENT: 'tencent',
+  OCI: 'oci',
+  SCALE_WAY: 'scaleway',
+  MONGODB_ATLAS: 'mongodbatlas'
+};
+
+export type DBProvider = 'postgres' | 'sqlite';
+
+type DBProviderKey = 'POSTGRES' | 'SQLITE';
+
+export const allDBProviders: { [key in DBProviderKey]: DBProvider } = {
+  POSTGRES: 'postgres',
+  SQLITE: 'sqlite'
+};
 
 const providers = {
   providerLabel(arg: Provider) {
@@ -23,11 +58,6 @@ const providers = {
     if (arg.toLowerCase() === 'gcp') {
       label = 'Google Cloud Platform';
     }
-
-    if (arg.toLowerCase() === 'ovh') {
-      label = 'OVH';
-    }
-
     if (arg.toLowerCase() === 'digitalocean') {
       label = 'DigitalOcean';
     }
@@ -75,10 +105,6 @@ const providers = {
 
     if (arg.toLowerCase() === 'gcp') {
       img = '/assets/img/providers/gcp.png';
-    }
-
-    if (arg.toLowerCase() === 'ovh') {
-      img = '/assets/img/providers/ovh.jpeg';
     }
 
     if (arg.toLowerCase() === 'digitalocean') {

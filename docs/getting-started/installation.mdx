@@ -1,0 +1,69 @@
+---
+slug: /introduction/getting-started
+title: Installation
+sidebar_label: Installation
+---
+
+You can install the CLI with a `curl` utility script or by downloading the binary from the releases page. Once installed you'll get the `komiser` command.
+
+### Linux
+
+```
+wget https://cli.komiser.io/latest/komiser_Linux_x86_64 -O komiser
+```
+
+### Windows
+
+```
+wget https://cli.komiser.io/latest/komiser_Windows_x86_64.zip
+tar -xf komiser_Windows_x86_64.zip
+```
+
+### Mac OS X
+
+For ARM architecture (M1 & M2 Chip)
+
+```
+wget https://cli.komiser.io/latest/komiser_Darwin_arm64 -O komiser
+```
+
+For AMD architecture (Intel Chip)
+
+```
+wget https://cli.komiser.io/latest/komiser_Darwin_x86_64 -O komiser
+```
+
+> Note
+    Make sure to add the execution permission to Komiser `chmod +x komiser`.
+
+
+### Homebrew installation
+
+```
+brew update
+brew tap tailwarden/komiser
+brew install komiser
+
+# Make sure you are running the newest version of Komiser:
+brew update
+brew reinstall komiser
+```
+
+### Komiser CLI installation video
+
+<div style={{
+    position: 'relative',
+    paddingBottom: '56.25%',
+    paddingTop:'30px',
+    height:0,
+    overflow:'hidden',
+  }}>
+<iframe className="tailwind styles absolute top-0 left-0 w-full h-full rounded-2xl"
+  src='https://www.youtube.com/embed/csWeTzfPCEo?si=BvD7oF1ARz4ZAWCk'
+  allowFullScreen
+  webkitallowfullscreen="true"
+  frameBorder="0"
+>
+</iframe>
+</div>
+

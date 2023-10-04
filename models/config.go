@@ -45,9 +45,10 @@ type ScalewayConfig struct {
 }
 
 type KubernetesConfig struct {
-	Name     string   `toml:"name"`
-	Path     string   `toml:"path"`
-	Contexts []string `toml:"contexts"`
+	Name            string   `toml:"name"`
+	Path            string   `toml:"path"`
+	Contexts        []string `toml:"contexts"`
+	OpencostBaseUrl string   `toml:"opencostBaseUrl"`
 }
 
 type LinodeConfig struct {

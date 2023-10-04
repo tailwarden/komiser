@@ -23,15 +23,17 @@ type ApiHandler struct {
 	telemetry bool
 	cfg       models.Config
 	analytics utils.Analytics
+	accounts  []models.Account
 }
 
-func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config) *ApiHandler {
+func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, accounts []models.Account) *ApiHandler {
 	handler := ApiHandler{
 		db:        db,
 		ctx:       ctx,
 		telemetry: telemetry,
 		cfg:       cfg,
 		analytics: analytics,
+		accounts:  accounts,
 	}
 	return &handler
 }
@@ -298,4 +300,132 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, resources)
+}
+
+func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
+	var filters []Filter
+
+	err := json.NewDecoder(c.Request.Body).Decode(&filters)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	whereQueries := make([]string, 0)
+	for _, filter := range filters {
+		if filter.Field == "region" || filter.Field == "service" || filter.Field == "provider" {
+			switch filter.Operator {
+			case "IS":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("(resources.%s IN (%s))", filter.Field, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "IS_NOT":
+				for i := 0; i < len(filter.Values); i++ {
+					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+				}
+				query := fmt.Sprintf("(resources.%s NOT IN (%s))", filter.Field, strings.Join(filter.Values, ","))
+				whereQueries = append(whereQueries, query)
+			case "CONTAINS":
+				queries := make([]string, 0)
+				specialChar := "%"
+				for i := 0; i < len(filter.Values); i++ {
+					queries = append(queries, fmt.Sprintf("(resources.%s LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " OR ")))
+			case "NOT_CONTAINS":
+				queries := make([]string, 0)
+				specialChar := "%"
+				for i := 0; i < len(filter.Values); i++ {
+					queries = append(queries, fmt.Sprintf("(resources.%s NOT LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
+				}
+				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " AND ")))
+			case "IS_EMPTY":
+				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(resources.%s, '') = ''))", filter.Field))
+			case "IS_NOT_EMPTY":
+				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(resources.%s, '') != ''))", filter.Field))
+			default:
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
+				return
+			}
+		} else if filter.Field == "relations" {
+			switch filter.Operator {
+			case "EQUAL":
+				relations, err := strconv.Atoi(filter.Values[0])
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
+				}
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("json_array_length(resources.relations) = %d", relations))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("jsonb_array_length(resources.relations) = %d", relations))
+				}
+			case "GREATER_THAN":
+				relations, err := strconv.Atoi(filter.Values[0])
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
+				}
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("json_array_length(resources.relations) > %d", relations))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("jsonb_array_length(resources.relations) > %d", relations))
+				}
+			case "LESS_THAN":
+				relations, err := strconv.Atoi(filter.Values[0])
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+					return
+				}
+				if handler.db.Dialect().Name() == dialect.SQLite {
+					whereQueries = append(whereQueries, fmt.Sprintf("json_array_length(resources.relations) < %d", relations))
+				} else {
+					whereQueries = append(whereQueries, fmt.Sprintf("jsonb_array_length(resources.relations) < %d", relations))
+				}
+			default:
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
+				return
+			}
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "field is invalid or not supported"})
+			return
+		}
+	}
+
+	whereClause := strings.Join(whereQueries, " AND ")
+
+	output := make([]models.Resource, 0)
+
+	query := ""
+	if len(filters) == 0 {
+		query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)"
+		if handler.db.Dialect().Name() == dialect.SQLite {
+			query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)"
+		}
+	} else {
+		query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0) AND " + whereClause
+		if handler.db.Dialect().Name() == dialect.SQLite {
+			query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0) AND " + whereClause
+		}
+	}
+
+	err = handler.db.NewRaw(query).Scan(handler.ctx, &output)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	out := make([]models.OutputRelationResponse, 0)
+	for _, ele := range output {
+		out = append(out, models.OutputRelationResponse{
+			ResourceID: ele.ResourceId,
+			Name:       ele.Name,
+			Type:       ele.Service,
+			Link:       ele.Relations,
+		})
+	}
+
+	c.JSON(http.StatusOK, out)
+
 }

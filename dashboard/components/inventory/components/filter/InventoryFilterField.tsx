@@ -1,4 +1,4 @@
-import Button from '../../../button/Button';
+import Button from '@components/button/Button';
 import inventoryFilterFieldOptions from './InventoryFilterFieldOptions';
 
 type InventoryFilterFieldProps = {

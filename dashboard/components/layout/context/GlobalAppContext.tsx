@@ -15,6 +15,7 @@ export type GlobalAppContextProps = {
   error: boolean;
   hasNoAccounts: boolean;
   fetch: () => void;
+  betaFlagOnboardingWizard: boolean;
 };
 
 export const initialContext = {
@@ -24,7 +25,8 @@ export const initialContext = {
   data: undefined,
   error: false,
   hasNoAccounts: false,
-  fetch: () => {}
+  fetch: () => {},
+  betaFlagOnboardingWizard: false
 };
 
 const GlobalAppContext = createContext<GlobalAppContextProps>(initialContext);

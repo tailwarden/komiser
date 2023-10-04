@@ -24,3 +24,35 @@
     background: #95a3a3;
   }
 }
+
+@variants responsive {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+.rotate-onboarding-arrow {
+  /* flip horizontally */
+  transform: rotateY(180deg);
+}
+
+.dependency-graph-node-label {
+  transition: opacity 0.2s linear;
+  opacity: 0;
+}
+
+.popper-div {
+  text-shadow: 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9;
+  position: relative;
+  color: #000;
+  font-size: 16px;
+  padding: 5px 9px;
+}

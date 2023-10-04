@@ -121,6 +121,7 @@ function InventoryFilterValue({
       {/* Display input for resource name and tag values */}
       {!options &&
         data.field !== 'cost' &&
+        data.field !== 'relations' &&
         data.operator !== 'IS_EMPTY' &&
         data.operator !== 'IS_NOT_EMPTY' &&
         data.operator !== 'EXISTS' &&
@@ -140,21 +141,23 @@ function InventoryFilterValue({
         )}
 
       {/* Display input for cost when is equal, greater or less than */}
-      {!options && data.field === 'cost' && data.operator !== 'BETWEEN' && (
-        <div className="pb-2 pl-1 pr-4 pt-2">
-          <Input
-            type="number"
-            name="values"
-            label="Value"
-            value={data.values}
-            error="Value must be higher than 0."
-            action={handleValueInput}
-            autofocus={true}
-            min={0}
-            positiveNumberOnly={true}
-          />
-        </div>
-      )}
+      {!options &&
+        (data.field === 'cost' || data.field === 'relations') &&
+        data.operator !== 'BETWEEN' && (
+          <div className="pb-2 pl-1 pr-4 pt-2">
+            <Input
+              type="number"
+              name="values"
+              label="Value"
+              value={data.values}
+              error="Value must be higher than 0."
+              action={handleValueInput}
+              autofocus={true}
+              min={0}
+              positiveNumberOnly={true}
+            />
+          </div>
+        )}
 
       {/* Display input for cost when is between */}
       {!options && data.field === 'cost' && data.operator === 'BETWEEN' && (

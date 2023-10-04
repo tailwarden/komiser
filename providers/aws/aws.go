@@ -24,6 +24,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/lambda"
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
+	"github.com/tailwarden/komiser/providers/aws/redshift"
 	"github.com/tailwarden/komiser/providers/aws/s3"
 	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
@@ -35,6 +36,8 @@ import (
 
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
+		ec2.Instances,
+		ec2.ElasticIps,
 		lambda.Functions,
 		ec2.Acls,
 		ec2.Subnets,
@@ -47,6 +50,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		iam.SamlProviders,
 		iam.Groups,
 		iam.Policies,
+		iam.Users,
 		sqs.Queues,
 		s3.Buckets,
 		ec2.Instances,
@@ -69,6 +73,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		rds.ProxyEndpoints,
 		rds.AutoBackups,
 		elb.LoadBalancers,
+		elb.TargetGroups,
 		efs.ElasticFileStorage,
 		apigateway.Apis,
 		elasticache.Clusters,
@@ -88,6 +93,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
+		redshift.EventSubscriptions,
 	}
 }
 
@@ -106,7 +112,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 				log.Warnf("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+				_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
 					if err != nil {
 						log.WithError(err).Errorf("db trigger failed")
 					}

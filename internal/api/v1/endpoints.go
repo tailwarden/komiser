@@ -12,7 +12,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config) *gin.Engine {
+func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, accounts []models.Account) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.New()
@@ -20,13 +20,14 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 
 	router.Use(cors.Default())
 
-	api := handlers.NewApiHandler(ctx, telemetry, analytics, db, cfg)
+	api := handlers.NewApiHandler(ctx, telemetry, analytics, db, cfg, accounts)
 
 	router.POST("/resources/search", api.FilterResourcesHandler)
 	router.POST("/resources/tags", api.BulkUpdateTagsHandler)
 	router.POST("/resources/:id/tags", api.UpdateTagsHandler)
 	router.GET("/resources/export-csv", api.DownloadInventoryCSV)
 	router.GET("/resources/export-csv/:viewId", api.DownloadInventoryCSVForView)
+	router.POST("/resources/relations", api.RelationStatsHandler)
 
 	router.GET("/views", api.ListViewsHandler)
 	router.POST("/views", api.NewViewHandler)
@@ -56,8 +57,18 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.POST("/alerts/test", api.TestEndpointHandler)
 
 	router.GET("/telemetry", api.TelemetryHandler)
+	router.GET("/is_onboarded", api.IsOnboardedHandler)
+
+	router.GET("/cloud_accounts", api.ListCloudAccountsHandler)
+	router.POST("/cloud_accounts", api.NewCloudAccountHandler)
+	router.DELETE("/cloud_accounts/:id", api.DeleteCloudAccountHandler)
+	router.PUT("/cloud_accounts/:id", api.UpdateCloudAccountHandler)
+
+	router.POST("/databases", api.ConfigureDatabaseHandler)
 
 	router.NoRoute(gin.WrapH(http.FileServer(assetFS())))
+
+	router.POST("/feedback", api.NewFeedbackHandler)
 
 	return router
 }

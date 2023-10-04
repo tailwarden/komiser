@@ -17,7 +17,7 @@ func PersistentVolumeClaims(ctx context.Context, client providers.ProviderClient
 	var config metav1.ListOptions
 
 	for {
-		res, err := client.K8sClient.CoreV1().PersistentVolumeClaims("").List(ctx, config)
+		res, err := client.K8sClient.Client.CoreV1().PersistentVolumeClaims("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}
