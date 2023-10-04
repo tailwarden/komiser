@@ -4,17 +4,12 @@ import (
 	"context"
 
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect"
 )
 
 func init() {
 	Migrations.MustRegister(func(ctx context.Context, db *bun.DB) error {
 		// adding new column relation for migration
-		if db.Dialect().Name() == dialect.SQLite {
-			db.ExecContext(ctx, "ALTER TABLE resources ADD COLUMN relations TEXT DEFAULT '[]';")
-		} else {
-			db.ExecContext(ctx, "ALTER TABLE resources ADD COLUMN relations JSONB DEFAULT '[]'::jsonb;")
-		}
+		db.ExecContext(ctx, "ALTER TABLE accounts ADD COLUMN status TEXT;")
 		return nil
 	}, func(ctx context.Context, db *bun.DB) error {
 		// No rollback needed

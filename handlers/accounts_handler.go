@@ -5,12 +5,13 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
@@ -27,7 +28,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 		Status:    "COMPLETE",
 	}
 
-	if handler.db != nil {
+	if handler.db == nil {
 		output.Status = "PENDING_DATABASE"
 		c.JSON(http.StatusOK, output)
 		return
@@ -147,7 +148,7 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 	}
 
 	if db.Type == "SQLITE" {
-		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.File))
+		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.FilePath))
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -163,6 +164,12 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 		handler.db = bun.NewDB(sqldb, pgdialect.New())
 
 		log.Println("Data will be stored in PostgreSQL")
+	}
+
+	err = utils.SetupSchema(handler.db, &handler.cfg, handler.accounts)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]string{"message": "database has been configured"})

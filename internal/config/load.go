@@ -71,9 +71,9 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.
 		return nil, nil, nil, err
 	}
 
-	if len(config.SQLite.File) == 0 && config.Postgres.URI == "" {
+	/*if len(config.SQLite.File) == 0 && config.Postgres.URI == "" {
 		return nil, nil, nil, errors.New("postgres URI or sqlite file is missing")
-	}
+	}*/
 
 	clients := make([]providers.ProviderClient, 0)
 	accounts := make([]models.Account, 0)

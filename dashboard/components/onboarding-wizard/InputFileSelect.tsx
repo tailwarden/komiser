@@ -6,6 +6,7 @@ import AlertCircleIconFilled from '../icons/AlertCircleIconFilled';
 
 interface InputFileSelectProps {
   id: string;
+  name?: string;
   value?: any;
   type: string;
   label: string;
@@ -17,11 +18,13 @@ interface InputFileSelectProps {
   placeholder?: string;
   iconClick?: () => void;
   handleFileChange: (event: any) => void;
+  handleInputChange: (event: any) => void;
   fileInputRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 function InputFileSelect({
   id,
+  name,
   icon,
   type,
   label,
@@ -31,6 +34,7 @@ function InputFileSelect({
   placeholder,
   fileInputRef,
   handleFileChange,
+  handleInputChange,
   disabled = false,
   hasError = false,
   errorMessage = ''
@@ -57,6 +61,7 @@ function InputFileSelect({
 
         <input
           id={id}
+          name={name ?? id}
           type={type}
           value={value}
           disabled={disabled}
@@ -67,6 +72,7 @@ function InputFileSelect({
               : 'outline-gray-200 focus:outline-primary',
             'block w-full rounded border py-4 pl-5 text-sm text-black-900 outline focus:outline-2 '
           )}
+          onChange={handleInputChange}
         />
 
         {icon && (

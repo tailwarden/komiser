@@ -10,6 +10,14 @@
     "jest/globals": true
   },
   "plugins": ["jest", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "rules": {
     "react-hooks/exhaustive-deps": "off",
     "prettier/prettier": [

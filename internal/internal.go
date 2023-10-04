@@ -24,12 +24,10 @@ import (
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/pgdriver"
 	"github.com/uptrace/bun/driver/sqliteshim"
-	"github.com/uptrace/bun/migrate"
 
 	"github.com/spf13/cobra"
 	v1 "github.com/tailwarden/komiser/internal/api/v1"
 	"github.com/tailwarden/komiser/internal/config"
-	"github.com/tailwarden/komiser/migrations"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
@@ -66,60 +64,62 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 		return err
 	}
 
-	err = setupSchema(cfg, accounts)
+	err = setupDBConnection(cfg)
 	if err != nil {
 		return err
 	}
 
-	err = doMigrations(ctx)
-	if err != nil {
-		return err
-	}
-
-	cron := gocron.NewScheduler(time.UTC)
-
-	_, err = cron.Every(1).Hours().Do(func() {
-		log.Info("Fetching resources workflow has started")
-		err = fetchResources(ctx, clients, regions, telemetry)
+	if db != nil {
+		err = utils.SetupSchema(db, cfg, accounts)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
-	})
 
-	if err != nil {
-		log.WithError(err).Error("setting up cron job failed")
-	}
+		cron := gocron.NewScheduler(time.UTC)
 
-	_, err = cron.Every(1).Hours().Do(func() {
-		alertsExist, alerts := checkIfAlertsExist(ctx)
+		_, err = cron.Every(1).Hours().Do(func() {
+			log.Info("Fetching resources workflow has started")
+			err = fetchResources(ctx, clients, regions, telemetry)
+			if err != nil {
+				log.Fatal(err)
+			}
+		})
 
-		if alertsExist {
-			log.Info("Checking Alerts")
-			checkingAlerts(ctx, *cfg, telemetry, port, alerts)
+		if err != nil {
+			log.WithError(err).Error("setting up cron job failed")
 		}
-	})
 
-	if err != nil {
-		log.WithError(err).Error("setting up cron job failed")
-	}
+		_, err = cron.Every(1).Hours().Do(func() {
+			alertsExist, alerts := checkIfAlertsExist(ctx)
 
-	_, err = cron.Every(1).Friday().At("09:00").Do(func() {
-		if len(cfg.Slack.Webhook) > 0 && cfg.Slack.Reporting {
-			log.Info("Sending weekly reporting")
-			sendTagsCoverageReport(ctx, *cfg)
-			sendCostBreakdownReport(ctx, *cfg)
+			if alertsExist {
+				log.Info("Checking Alerts")
+				checkingAlerts(ctx, *cfg, telemetry, port, alerts)
+			}
+		})
+
+		if err != nil {
+			log.WithError(err).Error("setting up cron job failed")
 		}
-	})
 
-	if err != nil {
-		log.WithError(err).Error("setting up cron job failed")
+		_, err = cron.Every(1).Friday().At("09:00").Do(func() {
+			if len(cfg.Slack.Webhook) > 0 && cfg.Slack.Reporting {
+				log.Info("Sending weekly reporting")
+				sendTagsCoverageReport(ctx, *cfg)
+				sendCostBreakdownReport(ctx, *cfg)
+			}
+		})
+
+		if err != nil {
+			log.WithError(err).Error("setting up cron job failed")
+		}
+
+		cron.StartAsync()
 	}
-
-	cron.StartAsync()
 
 	go checkUpgrade()
 
-	err = runServer(address, port, telemetry, *cfg)
+	err = runServer(address, port, telemetry, *cfg, accounts)
 	if err != nil {
 		return err
 	}
@@ -137,6 +137,7 @@ func checkIfAlertsExist(ctx context.Context) (bool, []models.Alert) {
 	if len(alerts) > 0 {
 		return true, alerts
 	}
+
 	return false, alerts
 }
 
@@ -163,10 +164,10 @@ func loggingMiddleware() gin.HandlerFunc {
 	}
 }
 
-func runServer(address string, port int, telemetry bool, cfg models.Config) error {
+func runServer(address string, port int, telemetry bool, cfg models.Config, accounts []models.Account) error {
 	log.Infof("Komiser version: %s, commit: %s, buildt: %s", Version, Commit, Buildtime)
 
-	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg)
+	r := v1.Endpoints(context.Background(), telemetry, analytics, db, cfg, accounts)
 
 	r.Use(loggingMiddleware())
 
@@ -179,9 +180,14 @@ func runServer(address string, port int, telemetry bool, cfg models.Config) erro
 	return nil
 }
 
-func setupSchema(c *models.Config, accounts []models.Account) error {
+func setupDBConnection(c *models.Config) error {
 	var sqldb *sql.DB
 	var err error
+
+	if len(c.SQLite.File) == 0 && len(c.Postgres.URI) == 0 {
+		log.Println("Database wasn't configured yet")
+		return nil
+	}
 
 	if len(c.SQLite.File) > 0 {
 		sqldb, err = sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", c.SQLite.File))
@@ -197,94 +203,9 @@ func setupSchema(c *models.Config, accounts []models.Account) error {
 	} else {
 		sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
 		db = bun.NewDB(sqldb, pgdialect.New())
-
 		log.Println("Data will be stored in PostgreSQL")
 	}
 
-	_, err = db.NewCreateTable().Model((*models.Resource)(nil)).IfNotExists().Exec(context.Background())
-	if err != nil {
-		return err
-	}
-
-	_, err = db.NewCreateTable().Model((*models.View)(nil)).IfNotExists().Exec(context.Background())
-	if err != nil {
-		return err
-	}
-
-	_, err = db.NewCreateTable().Model((*models.Alert)(nil)).IfNotExists().Exec(context.Background())
-	if err != nil {
-		return err
-	}
-
-	_, err = db.NewCreateTable().Model((*models.Account)(nil)).IfNotExists().Exec(context.Background())
-	if err != nil {
-		return err
-	}
-
-	for _, account := range accounts {
-		account.Status = "CONNECTED"
-		_, err = db.NewInsert().Model(&account).Exec(context.Background())
-		if err != nil {
-			log.Warnf("%s account cannot be inserted to database", account.Provider)
-		}
-	}
-
-	// Created pre-defined views
-	untaggedResourcesView := models.View{
-		Name: "Untagged resources",
-		Filters: []models.Filter{
-			{
-				Field:    "tags",
-				Operator: "IS_EMPTY",
-				Values:   []string{},
-			},
-		},
-	}
-
-	count, _ := db.NewSelect().Model(&untaggedResourcesView).Where("name = ?", untaggedResourcesView.Name).ScanAndCount(context.Background())
-	if count == 0 {
-		_, err = db.NewInsert().Model(&untaggedResourcesView).Exec(context.Background())
-		if err != nil {
-			return err
-		}
-	}
-
-	expensiveResourcesView := models.View{
-		Name: "Expensive resources",
-		Filters: []models.Filter{
-			{
-				Field:    "cost",
-				Operator: "GREATER_THAN",
-				Values:   []string{"0"},
-			},
-		},
-	}
-
-	count, _ = db.NewSelect().Model(&expensiveResourcesView).Where("name = ?", expensiveResourcesView.Name).ScanAndCount(context.Background())
-	if count == 0 {
-		_, err = db.NewInsert().Model(&expensiveResourcesView).Exec(context.Background())
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func doMigrations(ctx context.Context) error {
-	migrator := migrate.NewMigrator(db, migrations.Migrations)
-
-	migrator.Init(ctx)
-
-	group, err := migrator.Migrate(ctx)
-	if err != nil {
-		return err
-	}
-	if group.IsZero() {
-		log.Infof("there are no new migrations to run (database is up to date)\n")
-		return nil
-	}
-	log.Infof("migrated to %s\n", group)
 	return nil
 }
 

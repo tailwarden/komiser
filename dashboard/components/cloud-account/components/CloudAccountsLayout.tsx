@@ -3,13 +3,19 @@ import { ReactNode, useContext } from 'react';
 
 import GlobalAppContext from '../../layout/context/GlobalAppContext';
 import Providers, { allProviders } from '../../../utils/providerHelper';
+import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 
 type CloudAccountsLayoutProps = {
+  cloudAccounts: CloudAccount[];
   children: ReactNode;
   router: NextRouter;
 };
 
-function CloudAccountsLayout({ children, router }: CloudAccountsLayoutProps) {
+function CloudAccountsLayout({
+  cloudAccounts,
+  children,
+  router
+}: CloudAccountsLayoutProps) {
   const { displayBanner } = useContext(GlobalAppContext);
 
   const cloudProviders = Object.values(allProviders);
@@ -40,31 +46,39 @@ function CloudAccountsLayout({ children, router }: CloudAccountsLayoutProps) {
 
         {cloudProviders && cloudProviders.length > 0 && (
           <div className="-mx-4 -mr-6 flex flex-col gap-4 overflow-auto px-4 pr-6">
-            {cloudProviders.map(view => {
-              const isActive = router.query.view === view;
-              return (
-                <button
-                  key={view}
-                  onClick={() => {
-                    if (isActive) return;
-                    router.push(`?view=${view}`);
-                  }}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
+            {cloudProviders
+              .filter(provider =>
+                cloudAccounts.some(
+                  account =>
+                    account.provider.toLowerCase() ===
+                    provider.toLocaleLowerCase()
+                )
+              )
+              .map(provider => {
+                const isActive = router.query.view === provider;
+                return (
+                  <button
+                    key={provider}
+                    onClick={() => {
+                      if (isActive) return;
+                      router.push(`?view=${provider}`);
+                    }}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 isActive
                   ? 'border-l-2 border-primary bg-komiser-150 text-primary'
                   : 'text-black-400 transition-colors hover:bg-komiser-100'
               }
             `}
-                >
-                  <div className={isActive ? 'ml-[-2px]' : ''}>
-                    <p className="w-[188px] truncate">
-                      {Providers.providerLabel(view)}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+                  >
+                    <div className={isActive ? 'ml-[-2px]' : ''}>
+                      <p className="w-[188px] truncate">
+                        {Providers.providerLabel(provider)}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
           </div>
         )}
       </nav>

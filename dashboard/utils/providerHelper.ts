@@ -1,7 +1,6 @@
 export type Provider =
   | 'aws'
   | 'gcp'
-  | 'ovh'
   | 'digitalocean'
   | 'azure'
   | 'civo'
@@ -15,7 +14,6 @@ export type Provider =
 type ProviderKey =
   | 'AWS'
   | 'GCP'
-  | 'OVH'
   | 'DIGITAL_OCEAN'
   | 'AZURE'
   | 'CIVO'
@@ -29,7 +27,6 @@ type ProviderKey =
 export const allProviders: { [key in ProviderKey]: Provider } = {
   AWS: 'aws',
   GCP: 'gcp',
-  OVH: 'ovh',
   DIGITAL_OCEAN: 'digitalocean',
   AZURE: 'azure',
   CIVO: 'civo',
@@ -61,11 +58,6 @@ const providers = {
     if (arg.toLowerCase() === 'gcp') {
       label = 'Google Cloud Platform';
     }
-
-    if (arg.toLowerCase() === 'ovh') {
-      label = 'OVH';
-    }
-
     if (arg.toLowerCase() === 'digitalocean') {
       label = 'DigitalOcean';
     }
@@ -113,10 +105,6 @@ const providers = {
 
     if (arg.toLowerCase() === 'gcp') {
       img = '/assets/img/providers/gcp.png';
-    }
-
-    if (arg.toLowerCase() === 'ovh') {
-      img = '/assets/img/providers/ovh.jpeg';
     }
 
     if (arg.toLowerCase() === 'digitalocean') {

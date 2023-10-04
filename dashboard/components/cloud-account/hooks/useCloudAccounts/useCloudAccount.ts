@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import useToast from '../../../toast/hooks/useToast';
+import { Credentials } from '@utils/cloudAccountHelpers';
+
 import { Provider } from '../../../../utils/providerHelper';
 import settingsService from '../../../../services/settingsService';
 
 export interface CloudAccount {
-  credentials: {
-    path: string;
-    profile: string;
-    source: string;
-  };
+  credentials: Credentials;
   id?: number;
   name: string;
   provider: Provider;
@@ -18,11 +15,16 @@ export interface CloudAccount {
   status?: 'CONNECTED' | 'INTEGRATION_ISSUE' | 'PERMISSION_ISSUE';
 }
 
+export interface CloudAccountPayload<T extends Credentials> {
+  name: string;
+  provider: Provider;
+  credentials: T;
+}
+
 export type CloudAccountsPage = 'cloud account details';
 
 function useCloudAccount() {
   const router = useRouter();
-  const { toast, setToast, dismissToast } = useToast();
   const [page, setPage] = useState<CloudAccountsPage>('cloud account details');
   const [cloudAccounts, setCloudAccounts] = useState<CloudAccount[]>([]);
   const [cloudAccountItem, setCloudAccountItem] = useState<CloudAccount>();
@@ -34,21 +36,6 @@ function useCloudAccount() {
     if (!isLoading) {
       setIsLoading(true);
     }
-
-    settingsService
-      .getOnboardingStatus()
-      .then(res => {
-        if (
-          res !== Error &&
-          res.onboarded === false &&
-          res.status === 'PENDING_DATABASE'
-        ) {
-          router.push('/onboarding/choose-database');
-        } else {
-          router.push('/onboarding/choose-cloud');
-        }
-      })
-      .finally(() => setIsLoading(false));
 
     settingsService.getCloudAccounts().then(res => {
       if (res === Error) {
@@ -71,16 +58,12 @@ function useCloudAccount() {
   }
 
   return {
-    router,
     openModal,
     page,
     cloudAccountItem,
     setCloudAccountItem,
     goTo,
-    toast,
     hasError,
-    setToast,
-    dismissToast,
     cloudAccounts,
     setCloudAccounts,
     isNotCustomView,
