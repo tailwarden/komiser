@@ -22,8 +22,12 @@ export default function CloudAccounts() {
 
   const { toast, setToast, dismissToast } = useToast();
 
-  const { cloudAccounts, cloudAccountItem, setCloudAccountItem } =
-    useCloudAccount();
+  const {
+    cloudAccounts,
+    setCloudAccounts,
+    cloudAccountItem,
+    setCloudAccountItem
+  } = useCloudAccount();
 
   const closeRemoveModal = () => {
     setIsDeleteModalOpen(false);
@@ -32,6 +36,13 @@ export default function CloudAccounts() {
   const handleDelete = (account: any) => {
     setCloudAccountItem(account);
     setIsDeleteModalOpen(true);
+  };
+
+  const handleAfterDelete = (account: any) => {
+    setCloudAccounts(
+      cloudAccounts.filter((item: any) => item.id !== account.id)
+    );
+    setIsDeleteModalOpen(false);
   };
 
   return (
@@ -217,6 +228,7 @@ export default function CloudAccounts() {
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
               setToast={setToast}
+              handleAfterDelete={handleAfterDelete}
             />
           )}
         </div>

@@ -33,6 +33,7 @@ interface CloudAccountsSidePanelProps {
   cloudAccount: CloudAccount;
   cloudAccounts: CloudAccount[];
   setCloudAccounts: (cloudAccounts: CloudAccount[]) => void;
+  handleAfterDelete: (account: CloudAccount) => void;
   page: CloudAccountsPage;
   goTo: (page: CloudAccountsPage) => void;
   setToast: (toast: ToastProps) => void;
@@ -77,6 +78,7 @@ function CloudAccountsSidePanel({
   cloudAccount,
   cloudAccounts,
   setCloudAccounts,
+  handleAfterDelete,
   page,
   goTo,
   setToast
@@ -175,6 +177,11 @@ function CloudAccountsSidePanel({
               <CloudAccountDeleteContents
                 cloudAccount={cloudAccount}
                 onCancel={() => setIsDeleteOpen(false)}
+                handleAfterDelete={(account: CloudAccount) => {
+                  handleAfterDelete(account);
+                  setIsDeleteOpen(false);
+                  closeModal();
+                }}
                 setToast={setToast}
               />
             </div>

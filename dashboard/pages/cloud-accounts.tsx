@@ -53,6 +53,13 @@ function CloudAccounts() {
     setIsDeleteModalOpen(false);
   };
 
+  const handleAfterDelete = (account: any) => {
+    setCloudAccounts(
+      cloudAccounts.filter((item: any) => item.id !== account.id)
+    );
+    closeRemoveModal();
+  };
+
   if (!cloudAccounts || isLoading) return null;
 
   return (
@@ -87,6 +94,7 @@ function CloudAccounts() {
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
               setToast={setToast}
+              handleAfterDelete={handleAfterDelete}
             />
           )}
         </div>
@@ -99,6 +107,7 @@ function CloudAccounts() {
           cloudAccount={cloudAccountItem}
           cloudAccounts={cloudAccounts}
           setCloudAccounts={setCloudAccounts}
+          handleAfterDelete={handleAfterDelete}
           setToast={setToast}
           page={page}
           goTo={goTo}
