@@ -6,8 +6,6 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
-
-	"github.com/aws/aws-sdk-go-v2/service/redshift"
 	
 )
 
