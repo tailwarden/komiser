@@ -6,6 +6,8 @@
 
 Komiser is an open-source cloud-agnostic resource manager designed to analyze and manage cloud cost, usage, security, and governance all in one place. It integrates seamlessly with multiple cloud providers, including AWS, Azure, Civo, Digital Ocean, OCI, Linode, Tencent, Scaleway and [more](#supported-cloud-providers). Interested? read more about Komiser on our [website](https://komiser.io?utm_source=github&utm_medium=social).
 
+If you’re using Komiser or if you like the project, please ⭐ this repository to show your support! 🤩
+
 <p align="center">
     
 <a href="https://discord.tailwarden.com">
@@ -22,6 +24,8 @@ Komiser is an open-source cloud-agnostic resource manager designed to analyze an
 
 </p>
 
+<p align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></p>
+
 <h4 align="center">
     <a href="https://cloud.tailwarden.com?utm_source=github&utm_medium=social">Tailwarden Cloud</a> |
     <a href="https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social/">Guide</a> |
@@ -30,28 +34,6 @@ Komiser is an open-source cloud-agnostic resource manager designed to analyze an
     <a href="https://docs.komiser.io/docs/contributing/contribute?utm_source=github&utm_medium=social">Contribute</a> | 
     <a href="https://roadmap.tailwarden.com">Roadmap</a><br/><br/>
 </h4>
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=Hmerp_HMEf8">
-    <img src=".github/images/deploy-to-aws.png" width="137" />
-  </a>
-</p>
-
-
-<h1 align="center"><img src="https://cdn.komiser.io/gifs/readme-komiser-repo.gif?version=latest" alt="Komiser gif"></h1>
-
-The fastest and most reliable way to get started with Komiser is signing up for free to [Tailwarden Cloud](https://cloud.tailwarden.com?utm_source=github&utm_medium=social)
-
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40Komiser)](https://twitter.com/komiserdotio) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Optimize%20Cost%20and%20Security%20on%20AWS&url=https://github.com/tailwarden/komiser&via=mlabouardy&hashtags=komiser,aws,gcp,cloud,serverless,devops) 
-
-## Komiser CLI, try it out! 🚀
----
-The easiest way to get started with Komiser is to install the [Komiser CLI](https://docs.komiser.io/docs/introduction/getting-started?utm_source=github&utm_medium=social) by running the `Homebrew` commands below. Don't have Homebrew? Install it [here](https://docs.brew.sh/Installation).
-
-```
-brew tap tailwarden/komiser
-brew install komiser
-```
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -96,11 +78,13 @@ Komiser is an open source project created to **analyse** and **manage cloud cost
 ## Who is using it?
 Komiser was built with every Cloud Engineer, Developer, DevOps engineer and SRE in mind. We understand that tackling cost savings, security improvements and resource usage analyse efforts can be hard, sometimes just knowing where to start, can be the most challenging part at times. Komiser is here to help those cloud practitioners see their cloud resources and accounts much more clearly. Only with clear insight can timely and efficient actions take place.
 
-## Supported cloud providers
-
 ## Getting started
 
 ### Installation
+
+#### Tailwarden Cloud (Free & Recommended)
+
+Head over to [Tailwarden](https://cloud.tailwarden.com?utm_source=github&utm_medium=social&utm_campaign=readme).
 
 #### Linux
 
@@ -142,10 +126,10 @@ brew reinstall komiser
 
 | Providers                                                                                                          | Documentation                                                                                                                                                    | Video |
 | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-| [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Kubernetes documentation link](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=social&utm_campaign=readme) | |
-| [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [AWS documentation link ](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Kubernetes documentation link](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=social&utm_campaign=readme) | [Komiser + k8s](https://youtu.be/hSiVFjD0u3I) |
+| [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [AWS documentation link ](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=social&utm_campaign=readme)           | [Komiser + AWS EKS](https://youtu.be/4veDmJpui44) |
 | [![Azure](https://img.shields.io/badge/azure-%230078D4.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/azure?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Azure documentation link](https://docs.komiser.io/configuration/cloud-providers/azure?utm_source=github&utm_medium=social&utm_campaign=readme) | |
-| [![Civo](https://img.shields.io/badge/Civo-%23239DFF.svg?style=for-the-badge&logo=civo&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [Civo documentation link](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![Civo](https://img.shields.io/badge/Civo-%23239DFF.svg?style=for-the-badge&logo=civo&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [Civo documentation link](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=social&utm_campaign=readme)           | [Komiser + Civo](https://youtu.be/NBbEpoW-kVs) |
 | [![Digital Ocean](https://img.shields.io/badge/DigitalOcean-%230080FF.svg?style=for-the-badge&logo=digitalocean&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/digital-ocean?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Digital Ocean documentation link](https://docs.komiser.io/configuration/cloud-providers/digital-ocean?utm_source=github&utm_medium=social&utm_campaign=readme) | |
 | [![Akamai (Linode)](https://img.shields.io/badge/Akamai-%230096D6.svg?style=for-the-badge&logo=akamai&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [Akamai (Linode) documentation link](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
 | [![GCP](https://img.shields.io/badge/GCP-%234285F4.svg?style=for-the-badge&logo=googlecloud&logoColor=white)](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [GCP documentation link](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
