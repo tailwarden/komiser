@@ -28,7 +28,7 @@ func EventSourceMappings(ctx context.Context, client providers.ProviderClient) (
 
         for paginator.HasMorePages() {
                 
-                output, err := paginator.NextPage(context.Background())
+                output, err := paginator.NextPage(ctx)
                 if err != nil {
                         log.Errorf("ERROR: Error occurred while retrieving EventSourceMappings page: %v", err)
                         return resources, err
