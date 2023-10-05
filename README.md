@@ -140,38 +140,25 @@ brew reinstall komiser
 
 ### Configuration
 
-| Providers                                                                                                          | Documentation                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=organic&utm_campaign=readme)        | [Kubernetes documentation link](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=organic&utm_campaign=readme) |
-| [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=organic&utm_campaign=readme)                      | [AWS documentation link ](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=organic&utm_campaign=readme)           |
-| [![Azure](https://img.shields.io/badge/azure-%230078D4.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/azure?utm_source=github&utm_medium=organic&utm_campaign=readme)        | [Azure documentation link](https://docs.komiser.io/configuration/cloud-providers/azure?utm_source=github&utm_medium=organic&utm_campaign=readme) |
-| [![Civo](https://img.shields.io/badge/Civo-%23239DFF.svg?style=for-the-badge&logo=civo&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=organic&utm_campaign=readme)                      | [Civo documentation link](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=organic&utm_campaign=readme)           |
-| [![Digital Ocean](https://img.shields.io/badge/DigitalOcean-%230080FF.svg?style=for-the-badge&logo=digitalocean&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/digital-ocean?utm_source=github&utm_medium=organic&utm_campaign=readme)        | [Digital Ocean documentation link](https://docs.komiser.io/configuration/cloud-providers/digital-ocean?utm_source=github&utm_medium=organic&utm_campaign=readme) |
-| [![Akamai (Linode)](https://img.shields.io/badge/Akamai-%230096D6.svg?style=for-the-badge&logo=akamai&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=organic&utm_campaign=readme)                      | [Akamai (Linode) documentation link](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=organic&utm_campaign=readme)           |
-
-
-
-
-## Installation on GCP
-
-Connect a local deployment of Komiser CLI to you [**GCP**](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social) account.
-
-## Installation on OCI
-
-Connect a local deployment of Komiser CLI to your [**OCI**](https://docs.komiser.io/docs/cloud-providers/oci?utm_source=github&utm_medium=social) account.
-
-## Installation on Tencent Cloud
-
-Connect a local deployment of Komiser CLI to you [**Tencent**](https://docs.komiser.io/docs/cloud-providers/tencent?utm_source=github&utm_medium=social) account.
-
-## Installation on Scaleway
-
-Connect a local deployment of Komiser CLI to you [**Scaleway**](https://docs.komiser.io/docs/cloud-providers/scaleway?utm_source=github&utm_medium=social) account.
+| Providers                                                                                                          | Documentation                                                                                                                                                    | Video |
+| ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Kubernetes documentation link](https://docs.komiser.io/configuration/cloud-providers/k8s?utm_source=github&utm_medium=social&utm_campaign=readme) | |
+| [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [AWS documentation link ](https://docs.komiser.io/configuration/cloud-providers/aws?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![Azure](https://img.shields.io/badge/azure-%230078D4.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/azure?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Azure documentation link](https://docs.komiser.io/configuration/cloud-providers/azure?utm_source=github&utm_medium=social&utm_campaign=readme) | |
+| [![Civo](https://img.shields.io/badge/Civo-%23239DFF.svg?style=for-the-badge&logo=civo&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [Civo documentation link](https://docs.komiser.io/configuration/cloud-providers/civo?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![Digital Ocean](https://img.shields.io/badge/DigitalOcean-%230080FF.svg?style=for-the-badge&logo=digitalocean&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/digital-ocean?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Digital Ocean documentation link](https://docs.komiser.io/configuration/cloud-providers/digital-ocean?utm_source=github&utm_medium=social&utm_campaign=readme) | |
+| [![Akamai (Linode)](https://img.shields.io/badge/Akamai-%230096D6.svg?style=for-the-badge&logo=akamai&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [Akamai (Linode) documentation link](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![GCP](https://img.shields.io/badge/GCP-%234285F4.svg?style=for-the-badge&logo=googlecloud&logoColor=white)](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [GCP documentation link](https://docs.komiser.io/docs/cloud-providers/google-cloud-platform?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![OCI](https://img.shields.io/badge/OCI-%23F80000.svg?style=for-the-badge&logo=oracle&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/oracle?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Oracle Cloud Infrastructure documentation link](https://docs.komiser.io/configuration/cloud-providers/oracle?utm_source=github&utm_medium=social&utm_campaign=readme) | |
+| [![Tencent Cloud](https://img.shields.io/badge/Tencent-%230096D6.svg?style=for-the-badge&logo=tencentcloud&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [Tencent Cloud documentation link](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
+| [![Scaleway](https://img.shields.io/badge/Scaleway-%234F0599.svg?style=for-the-badge&logo=scaleway&logoColor=white)](https://docs.komiser.io/docs/cloud-providers/scaleway?utm_source=github&utm_medium=social&utm_campaign=readme)        | [Scaleway documentation link](https://docs.komiser.io/docs/cloud-providers/scaleway?utm_source=github&utm_medium=social&utm_campaign=readme) | |
+| [![MongoDB Atlas](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)                      | [MongoDB Atlas documentation link](https://docs.komiser.io/configuration/cloud-providers/linode?utm_source=github&utm_medium=social&utm_campaign=readme)           | |
 
 
 ## Resources 📖
 
 * [Documentation](https://docs.komiser.io?utm_source=github&utm_medium=social)
+* [Videos](https://www.youtube.com/@tailwarden/videos)
 
 
 ## Bugs and feature requests 🐞
