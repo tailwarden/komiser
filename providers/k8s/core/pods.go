@@ -12,7 +12,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Pods(ctx context.Context, client providers.ProviderClient, namespace string) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	var config metav1.ListOptions
@@ -25,8 +25,10 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 		opencostEnabled = false
 	}
 
+	config.Namespace = namespace // Set the namespace to filter pods by
+
 	for {
-		res, err := client.K8sClient.Client.CoreV1().Pods("").List(ctx, config)
+		res, err := client.K8sClient.Client.CoreV1().Pods(namespace).List(ctx, config) // Filter pods by namespace
 		if err != nil {
 			return nil, err
 		}
@@ -52,7 +54,7 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 				Service:    "Pod",
 				ResourceId: string(pod.UID),
 				Name:       pod.Name,
-				Region:     pod.Namespace,
+				Region:     pod.Namespace, // Use the pod's namespace as the region
 				Cost:       cost,
 				CreatedAt:  pod.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
