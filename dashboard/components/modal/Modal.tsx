@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 
-type ModalProps = {
+export type ModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   children: ReactNode;
