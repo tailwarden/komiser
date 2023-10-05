@@ -1,7 +1,9 @@
 import * as Sentry from '@sentry/react';
+import classNames from 'classnames';
 import { BrowserTracing } from '@sentry/tracing';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
+import settingsService from '@services/settingsService';
 import environment from '../../environments/environment';
 import Banner from '../banner/Banner';
 import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
@@ -25,6 +27,22 @@ function Layout({ children }: LayoutProps) {
   const canRender = !error && !hasNoAccounts;
 
   useEffect(() => {
+    settingsService.getOnboardingStatus().then(res => {
+      if (
+        res.onboarded === true &&
+        res.status === 'COMPLETE' &&
+        router.asPath.includes('/onboarding/')
+      ) {
+        router.replace('/dashboard/');
+      } else if (res.onboarded === false && res.status === 'PENDING_DATABASE') {
+        router.replace('/onboarding/choose-database');
+      } else if (res.onboarded === false && res.status === 'PENDING_ACCOUNTS') {
+        router.replace('/onboarding/choose-cloud');
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (telemetry?.telemetry_enabled && environment.production) {
       Sentry.init({
         dsn: environment.SENTRY_URL,
@@ -37,7 +55,7 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
-  const betaFlagOnboardingWizard = false; // To test the onboarding wizard feature, set this beta-flag to true
+  const betaFlagOnboardingWizard = true;
   const isOnboarding =
     betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
 
@@ -61,11 +79,12 @@ function Layout({ children }: LayoutProps) {
           <Banner githubStars={githubStars} />
           <Navbar />
           <main
-            className={`relative ${
+            className={classNames(
+              'relative bg-black-100 p-6 pb-12 xl:px-8 2xl:px-24',
               displayBanner
                 ? 'mt-[145px] min-h-[calc(100vh-145px)]'
                 : 'mt-[73px] min-h-[calc(100vh-73px)]'
-            } bg-black-100 p-6 pb-12 xl:px-8 2xl:px-24`}
+            )}
           >
             {canRender && children}
 

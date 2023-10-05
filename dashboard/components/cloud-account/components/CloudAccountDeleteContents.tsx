@@ -8,12 +8,14 @@ import { ToastProps } from '../../toast/hooks/useToast';
 interface CloudAccountDeleteContentsProps {
   cloudAccount: CloudAccount;
   onCancel: () => void;
+  handleAfterDelete: (account: CloudAccount) => void;
   setToast: (toast: ToastProps) => void;
 }
 
 function CloudAccountDeleteContents({
   cloudAccount,
   onCancel,
+  handleAfterDelete,
   setToast
 }: CloudAccountDeleteContentsProps) {
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,7 @@ function CloudAccountDeleteContents({
           title: 'Cloud account deleted',
           message: `The cloud account was successfully deleted!`
         });
+        handleAfterDelete(cloudAccount);
       }
     });
 

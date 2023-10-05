@@ -1,19 +1,20 @@
 import { FormEvent, useState } from 'react';
+import router from 'next/router';
 import Head from 'next/head';
 
-import { allDBProviders } from '../../../utils/providerHelper';
+import { allDBProviders } from '@utils/providerHelper';
 
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../../../components/onboarding-wizard/OnboardingWizardLayout';
-import LabelledInput from '../../../components/onboarding-wizard/LabelledInput';
-import DatabasePurplin from '../../../components/onboarding-wizard/DatabasePurplin';
-import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
-import settingsService from '../../../services/settingsService';
-import useToast from '../../../components/toast/hooks/useToast';
-import Toast from '../../../components/toast/Toast';
-import DatabaseErrorMessage from '../../../components/onboarding-wizard/DatabaseErrorMessage';
+} from '@components/onboarding-wizard/OnboardingWizardLayout';
+import LabelledInput from '@components/onboarding-wizard/LabelledInput';
+import DatabasePurplin from '@components/onboarding-wizard/DatabasePurplin';
+import CredentialsButton from '@components/onboarding-wizard/CredentialsButton';
+import settingsService from '@services/settingsService';
+import useToast from '@components/toast/hooks/useToast';
+import Toast from '@components/toast/Toast';
+import DatabaseErrorMessage from '@components/onboarding-wizard/DatabaseErrorMessage';
 
 export default function PostgreSQLCredentials() {
   const databaseProvider = allDBProviders.POSTGRES;
@@ -49,6 +50,7 @@ export default function PostgreSQLCredentials() {
           message:
             'Your Postgres database has been successfully connected to Komiser.'
         });
+        router.push('/onboarding/complete/');
       }
     });
   };

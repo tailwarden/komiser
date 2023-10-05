@@ -6,5 +6,5 @@ type DatabaseConfig struct {
 	Database string `json:"database"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-	File     string `json:"file"`
+	FilePath string `json:"filePath"`
 }
