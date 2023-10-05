@@ -101,28 +101,37 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		listOfSupportedRegions = regions
 	}
 
+	// need to discuss 
+	numWorkers := 60
+	wp := providers.NewWorkerPool(numWorkers)
+    wp.Start() 
+
 	for _, region := range listOfSupportedRegions {
 		client.AWSClient.Region = region
 		for _, fetchResources := range listOfSupportedServices() {
-			resources, err := fetchResources(ctx, client)
-			if err != nil {
-				log.Warnf("[%s][AWS] %s", client.Name, err)
-			} else {
-				for _, resource := range resources {
-					_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
-					if err != nil {
-						log.WithError(err).Errorf("db trigger failed")
+			
+			wp.SubmitTask(func() {
+				resources, err := fetchResources(ctx, client)
+				if err != nil {
+					log.Warnf("[%s][AWS] %s", client.Name, err)
+				} else {
+					for _, resource := range resources {
+						_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+						if err != nil {
+							log.WithError(err).Errorf("db trigger failed")
+						}
+					}
+					if telemetry {
+						analytics.TrackEvent("discovered_resources", map[string]interface{}{
+							"provider":  "AWS",
+							"resources": len(resources),
+						})
 					}
 				}
-				if telemetry {
-					analytics.TrackEvent("discovered_resources", map[string]interface{}{
-						"provider":  "AWS",
-						"resources": len(resources),
-					})
-				}
-			}
+			})
 		}
 	}
+	wp.Wait()
 }
 
 func getRegions() []string {
