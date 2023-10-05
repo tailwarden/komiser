@@ -10,11 +10,11 @@ We are thrilled to have you as part of our community and looking forward to your
 
 ## Before You Get Started!
 
-Before diving into contributions, here are a few things to keep in mind:
+Before getting started with your first contribution, here are a few things to keep in mind:
 
 ### For Major Feature Enhancements
 
-**Planning to work on adding a major feature enhancement?** That's amazing and we always recommend discussing your plans with the team first. 
+**Planning to work on adding a major feature enhancement?** That's amazing we always encourage ambitious contributions. **Keep in mind though that we always recommend discussing your plans with the team first.**
 
 This provides an opportunity for fellow contributors to - **guide you in the right direction**, **offer feedback on your design**, and **potentially identify if another contributor is already working on a similar task**. 
 
@@ -55,7 +55,7 @@ Following these steps will ensure that your contributions are well-received, rev
     - For feature/enchancements, use: **`feature/xxxx-name_of_feature`**
     - For bug fixes, use: **`fix/xxxx-name_of_bug`** <br><br>
 
-    > Here, **`xxxx`** is the issue number associate with the bug/feature!
+    > Here, **`xxxx`** is the issue number associated with the bug/feature!
 
     For example:
     ```bash
@@ -67,7 +67,7 @@ Following these steps will ensure that your contributions are well-received, rev
     git commit -m "nice_commit_description"
     git push origin feature/1022-kubecost-integration
     ```
-6. While submitting Pull Request, **make sure to change the base branch from**: [master](https://github.com/tailwarden/komiser/tree/master) to [develop](v). This will ensure to keep your Pull Request away from any conflicts!
+6. While submitting Pull Request, **make sure to change the base branch from**: [master](https://github.com/tailwarden/komiser/tree/master) to [develop](v). Making sure to avoid any possible merge conflicts
 
 > ### Keeping your Fork Up-to-Date
 > 
@@ -107,11 +107,11 @@ The core Komiser Engine is written in Go (Golang) and leverages Go Modules. Foll
 
 **Step 1: Installing Komiser CLI**
 
-You may follow the instructions given in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI**, according to your operating system.
+Follow the instructions given in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI**, according to your operating system.
 
 **Step 2: Connect to a Cloud Account** 
 
-In order to deploy a **self-hosted (local) instance** of Komiser, the next step would be to connect your Komiser CLI to a cloud account of YOUR CHOICE. You may refer the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws) and follow the instructions using any one (Let's say AWS).
+In order to deploy a **self-hosted (local) instance** of Komiser, the next step would be to connect your Komiser CLI to a cloud account of your choice. You may refer the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws) and follow the instructions using any one (Let's say AWS).
 
 **Step 3: Accessing the Komiser UI**
 
@@ -124,11 +124,11 @@ Once the local Komiser instance is running, you can access the dashboard UI on *
 
 Komiser is an open source cloud-agnostic resource manager which helps you break down your cloud resources cost at the resource level.
 
-As the tool is **cloud-agnostic**, we are always looking to add more number of **cloud providers** to the [existing list](https://docs.komiser.io/configuration/cloud-providers/aws) and a variety of different services/resources.
+Due to the nature of Komiser, a cloud-agnostic cloud management tool, our work is never really done! There are always more providers and cloud services that can be added, updated and cost calculated.
 
 Therefore, there are mainly three ways you can contribute to the Komiser Engine:
 
-#### 1. Adding a new Cloud Provider
+### 1. Adding a new Cloud Provider
 
 Here are the general steps to integrate a new cloud provider in Komiser:
 
@@ -209,7 +209,7 @@ profile="production"
 ```
 
 **Step 5:**
-Build a new Komiser binary with the latest code changes using:
+Build a new Komiser binary with the latest code changes by running:
 
 ```
 go build
@@ -224,7 +224,7 @@ Start a new Komiser development server using this new binary:
 
 **If everything goes well, you'll see a new cloud provider added in the Komiser Dashboard!**
 
-#### 2. Adding a new Cloud Service/Resource
+### 2. Adding a new Cloud Service/Resource
 
 Here are the general steps to add a new service/resource for a cloud provider in Komiser:
 
