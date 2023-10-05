@@ -20,7 +20,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		core.PersistentVolumes,
 		core.PersistentVolumeClaims,
 		core.ServiceAccounts,
-		core.Deployments,
+		core.Nodes,
 	}
 }
 
