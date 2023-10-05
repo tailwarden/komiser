@@ -143,6 +143,7 @@ brew reinstall komiser
 
 * [Documentation](https://docs.komiser.io?utm_source=github&utm_medium=social)
 * [Videos](https://www.youtube.com/@tailwarden/videos)
+* [Blog](https://www.tailwarden.com/blog)
 
 
 ## Bugs and feature requests 🐞
