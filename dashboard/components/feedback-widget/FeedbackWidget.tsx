@@ -1,0 +1,198 @@
+import { useState, useRef, useCallback, memo, SyntheticEvent } from 'react';
+import { toBlob } from 'html-to-image';
+import Image from 'next/image';
+
+import Modal from '@components/modal/Modal';
+import Input from '@components/input/Input';
+import settingsService from '@services/settingsService';
+import Button from '@components/button/Button';
+
+// We define the placeholder here for convenience
+// It's difficult to read when passed inline
+const textAreaPlaceholder = `Example:
+Steps to Reproduce
+1. Describe the actions you took leading to the bug.
+2. Include any specific settings or options you selected.
+
+Expected Behavior
+1. Explain what you expected to happen.
+2. Detail how the feature or function should work.
+
+Outcome
+1. Describe what actually happened.
+2. Include any error messages or unexpected behavior.`;
+
+const useFeedbackWidget = (defaultState: boolean = false) => {
+  const [showFeedbackModel, setShowFeedbackModal] = useState(defaultState);
+  const FEEDBACK_MODAL_ID = 'feedback-modal';
+
+  function openFeedbackModal() {
+    setShowFeedbackModal(true);
+  }
+
+  function closeFeedbackModal() {
+    setShowFeedbackModal(false);
+  }
+
+  function toggleFeedbackModal() {
+    setShowFeedbackModal(!showFeedbackModel);
+  }
+
+  const filter = (node: HTMLElement) => !node.id?.startsWith(FEEDBACK_MODAL_ID);
+
+  const FeedbackModal = () => {
+    const [email, updateEmail] = useState('');
+    const [description, updateDescription] = useState('');
+    const [imageBlob, setImageBlob] = useState<Blob | null>();
+    const [dragActive, setDragActive] = useState(false);
+
+    const takeScreenshot = () => {
+      if (document.documentElement === null) {
+        return;
+      }
+
+      toBlob(document.documentElement, { cacheBust: true, filter })
+        .then(blob => setImageBlob(blob))
+        .catch(err => {
+          console.log(err);
+        });
+    };
+
+    async function uploadFeedback(e: SyntheticEvent) {
+      e.preventDefault();
+      const formData = new FormData();
+
+      formData.append('description', description);
+      if (email) formData.append('email', email);
+      if (imageBlob && imageBlob !== null) formData.append('image', imageBlob);
+      console.log(formData);
+
+      settingsService
+        .sendFeedback(formData)
+        .then(result => {
+          console.log(result);
+        })
+        .catch(error => {
+          console.log(error, 'error happened');
+        });
+    }
+
+    return (
+      <Modal
+        isOpen={showFeedbackModel}
+        closeModal={() => closeFeedbackModal()}
+        id={FEEDBACK_MODAL_ID}
+      >
+        <div className="w-96">
+          <h3 className="text-lg font-bold text-black-900">
+            Describe your issue
+          </h3>
+          <p className="text-base text-black-400">
+            By providing details of the issue you’ve encountered and outlining
+            the steps to reproduce it, we’ll be able to give you better support.
+          </p>
+          <form onSubmit={uploadFeedback} className="mt-4">
+            <Input
+              type="email"
+              label="Your email (optional)"
+              name="email"
+              action={change => {
+                updateEmail(change.email);
+              }}
+              value={email}
+            />
+            <textarea
+              rows={15}
+              placeholder={textAreaPlaceholder}
+              className="peer mt-4 w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-black-900 caret-primary outline outline-[0.063rem] outline-black-200 focus:outline-[0.12rem] focus:outline-primary"
+              onChange={event => updateDescription(event?.target?.value)}
+              value={description}
+              required
+            />
+            <div className="mt-4 flex justify-between">
+              {(!imageBlob || imageBlob === null) && (
+                <a
+                  className="cursor-pointer text-center"
+                  onClick={() => takeScreenshot()}
+                >
+                  <svg
+                    className="inline-block"
+                    width="25"
+                    height="24"
+                    viewBox="0 0 25 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2.5 9V6.5C2.5 4.01 4.51 2 7 2H9.5"
+                      stroke="#0C1717"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M15.5 2H18C20.49 2 22.5 4.01 22.5 6.5V9"
+                      stroke="#0C1717"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M22.5 16V17.5C22.5 19.99 20.49 22 18 22H16.5"
+                      stroke="#0C1717"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9.5 22H7C4.51 22 2.5 19.99 2.5 17.5V15"
+                      stroke="#0C1717"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <br />
+                  Capture current screen
+                </a>
+              )}
+              {imageBlob && imageBlob !== null && (
+                <div>
+                  <Image
+                    src={URL.createObjectURL(imageBlob)}
+                    alt="attached screenshot"
+                    width="217"
+                    height="76"
+                  />
+                  <a onClick={() => setImageBlob(null)}>x</a>
+                </div>
+              )}
+              <div>Upload File</div>
+            </div>
+            <div className="mt-4 flex justify-between">
+              <p className="text-xs text-black-400">
+                Need in depth assistance?
+                <br />
+                Email us at{' '}
+                <a href="mailto:support@tailwarden.com">
+                  support@tailwarden.com
+                </a>
+                .
+              </p>
+              <Button type="submit">Send Feedback</Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
+    );
+  };
+
+  return {
+    openFeedbackModal,
+    closeFeedbackModal,
+    toggleFeedbackModal,
+    FeedbackModal: memo(FeedbackModal)
+  };
+};
+
+export default useFeedbackWidget;

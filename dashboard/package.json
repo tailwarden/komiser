@@ -23,6 +23,7 @@
     "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-node-html-label": "^1.2.2",
     "cytoscape-popper": "^2.0.0",
+    "html-to-image": "^1.11.11",
     "next": "^13.5.3",
     "next-transpile-modules": "^10.0.1",
     "react": "18.2.0",
