@@ -39,6 +39,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Instances,
 		ec2.ElasticIps,
 		lambda.Functions,
+		lambda.EventSourceMappings,
 		ec2.Acls,
 		ec2.Subnets,
 		ec2.SecurityGroups,
