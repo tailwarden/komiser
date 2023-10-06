@@ -45,9 +45,10 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [description, updateDescription] = useState('');
     const [imageBlob, setImageBlob] = useState<Blob | null>();
     const [dragActive, setDragActive] = useState(false);
+    const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
     const takeScreenshot = () => {
-      if (document.documentElement === null) {
+      if (document.documentElement === null || isSendingFeedback) {
         return;
       }
 
@@ -59,22 +60,30 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     };
 
     async function uploadFeedback(e: SyntheticEvent) {
-      e.preventDefault();
-      const formData = new FormData();
+      if (!isSendingFeedback) {
+        try {
+          setIsSendingFeedback(true);
+          e.preventDefault();
+          const formData = new FormData();
 
-      formData.append('description', description);
-      if (email) formData.append('email', email);
-      if (imageBlob && imageBlob !== null) formData.append('image', imageBlob);
-      console.log(formData);
+          formData.append('description', description);
+          if (email) formData.append('email', email);
+          if (imageBlob && imageBlob !== null)
+            formData.append('image', imageBlob);
 
-      settingsService
-        .sendFeedback(formData)
-        .then(result => {
-          console.log(result);
-        })
-        .catch(error => {
-          console.log(error, 'error happened');
-        });
+          settingsService
+            .sendFeedback(formData)
+            .then(result => {
+              console.log(result);
+            })
+            .catch(error => {
+              console.log(error, 'error happened');
+            })
+            .finally(() => setIsSendingFeedback(false));
+        } catch {
+          setIsSendingFeedback(false);
+        }
+      }
     }
 
     return (
@@ -93,6 +102,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           </p>
           <form onSubmit={uploadFeedback} className="mt-4">
             <Input
+              disabled={isSendingFeedback}
               type="email"
               label="Your email (optional)"
               name="email"
@@ -102,6 +112,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
               value={email}
             />
             <textarea
+              disabled={isSendingFeedback}
               rows={15}
               placeholder={textAreaPlaceholder}
               className="peer mt-4 w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-black-900 caret-primary outline outline-[0.063rem] outline-black-200 focus:outline-[0.12rem] focus:outline-primary"
@@ -157,14 +168,19 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 </a>
               )}
               {imageBlob && imageBlob !== null && (
-                <div>
+                <div className="relative h-[76px] w-[217px]">
                   <Image
                     src={URL.createObjectURL(imageBlob)}
                     alt="attached screenshot"
                     width="217"
                     height="76"
                   />
-                  <a onClick={() => setImageBlob(null)}>x</a>
+                  <a
+                    onClick={() => !isSendingFeedback && setImageBlob(null)}
+                    className="absolute right-4 top-4 cursor-pointer"
+                  >
+                    x
+                  </a>
                 </div>
               )}
               <div>Upload File</div>
@@ -179,7 +195,9 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 </a>
                 .
               </p>
-              <Button type="submit">Send Feedback</Button>
+              <Button type="submit" disabled={isSendingFeedback}>
+                {isSendingFeedback ? `Sending...` : `Send Feedback`}
+              </Button>
             </div>
           </form>
         </div>
