@@ -204,7 +204,7 @@ An example configuration entry for configuring a Google Cloud account in the **`
 [[gcp]]
 name="production"
 source="ENVIRONMENT_VARIABLES"
-# path=./path/to/credentials/file specify if 'CREDENTIALS_FILE' is used as source
+# path="./path/to/credentials/file" specify if 'CREDENTIALS_FILE' is used as source
 profile="production"
 ```
 
