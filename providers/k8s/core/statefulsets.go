@@ -12,29 +12,29 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func DaemonSets(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func StatefulSets(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	var config metav1.ListOptions
 
 	opencostEnabled := true
-	daemonsetsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "daemonset")
+	statefulsetsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "statefulset")
 	if err != nil {
-		log.Errorf("ERROR: Couldn't get daemonsets info from OpenCost: %v", err)
+		log.Errorf("ERROR: Couldn't get statefulsets info from OpenCost: %v", err)
 		log.Warn("Opencost disabled")
 		opencostEnabled = false
 	}
 
 	for {
-		res, err := client.K8sClient.Client.AppsV1().DaemonSets("").List(ctx, config)
+		res, err := client.K8sClient.Client.AppsV1().StatefulSets("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}
 
-		for _, daemonset := range res.Items {
+		for _, statefulset := range res.Items {
 			tags := make([]models.Tag, 0)
 
-			for key, value := range daemonset.Labels {
+			for key, value := range statefulset.Labels {
 				tags = append(tags, models.Tag{
 					Key:   key,
 					Value: value,
@@ -43,18 +43,18 @@ func DaemonSets(ctx context.Context, client providers.ProviderClient) ([]models.
 
 			cost := 0.0
 			if opencostEnabled {
-				cost = daemonsetsCost[daemonset.Name].TotalCost
+				cost = statefulsetsCost[statefulset.Name].TotalCost
 			}
 
 			resources = append(resources, models.Resource{
 				Provider:   "Kubernetes",
 				Account:    client.Name,
-				Service:    "DaemonSet",
-				ResourceId: string(daemonset.UID),
-				Name:       daemonset.Name,
-				Region:     daemonset.Namespace,
+				Service:    "StatefulSet",
+				ResourceId: string(statefulset.UID),
+				Name:       statefulset.Name,
+				Region:     statefulset.Namespace,
 				Cost:       cost,
-				CreatedAt:  daemonset.CreationTimestamp.Time,
+				CreatedAt:  statefulset.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 			})
@@ -70,7 +70,7 @@ func DaemonSets(ctx context.Context, client providers.ProviderClient) ([]models.
 	log.WithFields(log.Fields{
 		"provider":  "Kubernetes",
 		"account":   client.Name,
-		"service":   "DaemonSet",
+		"service":   "StatefulSet",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil

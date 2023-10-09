@@ -22,6 +22,8 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		core.ServiceAccounts,
 		core.Nodes,
 		core.Namespaces,
+		core.DaemonSets,
+		core.StatefulSets,
 	}
 }
 
