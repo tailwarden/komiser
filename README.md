@@ -65,7 +65,7 @@ Komiser is an open source project created to **analyse** and **manage cloud cost
 * Build an inventory of your cloud infrastructure assets.
 * Control your **resource usage** and gain visibility across all used services to achieve maximum cost-effectiveness.
 * Detect **potential vulnerabilities** that could put your cloud environment at risk.
-* Get a deep understanding of **how you spend** on the AWS, Azure, GCP, Civo, OVH, DigitalOcean and OCI.
+* Get a deep understanding of **how you spend** on the AWS, Azure, GCP, Civo, DigitalOcean and OCI.
 * Uncover idle and untagged resources, ensuring that no resource goes unnoticed.
 
 <h1 align="center"><img src=".github/images/dashboard.png" alt="Komiser dashboard"></h1>
