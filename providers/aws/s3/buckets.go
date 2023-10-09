@@ -34,7 +34,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		ServiceCode: aws.String("AmazonS3"),
 		Filters: []types.Filter{
 			{
-				Field: aws.String("regionCode"), // Filter by region
+				Field: aws.String("regionCode"),
 				Value: aws.String(client.AWSClient.Region),
 				Type:  types.FilterTypeTermMatch,
 			},
@@ -51,14 +51,12 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
-	// ---------------------------------------------------------------
 	output, err := s3Client.ListBuckets(context.Background(), &config)
 	if err != nil {
 		return resources, err
 	}
 
 	for _, bucket := range output.Buckets {
-		// metrics for bucket size
 		metricsBucketSizebytesOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 			EndTime:    aws.Time(time.Now()),
@@ -86,8 +84,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		sizeInTB := ConvertBytesToTerabytes(int64(bucketSize))
 
-		// metrics for bucket usage
-
 		metricsUsageOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 			EndTime:    aws.Time(time.Now()),
@@ -113,12 +109,11 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		if metricsUsageOutput != nil && len(metricsUsageOutput.Datapoints) > 0 {
 			requestCount = *metricsUsageOutput.Datapoints[0].Sum
 		}
-		// requestCost := (requestCount / 1000) * 0.0004
 
 		monthlyCost := 0.0
 
-		storageCharges := awsUtils.GetCost(priceMap["AWS-S3-Storage"], sizeInTB*1024)      // charges per GB
-		requestCharges := awsUtils.GetCost(priceMap["AWS-S3-Requests"], requestCount/1000) // charges per 1000 request
+		storageCharges := awsUtils.GetCost(priceMap["AWS-S3-Storage"], sizeInTB*1024)
+		requestCharges := awsUtils.GetCost(priceMap["AWS-S3-Requests"], requestCount/1000)
 		monthlyCost = storageCharges + requestCharges
 		tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
 			Bucket: bucket.Name,
