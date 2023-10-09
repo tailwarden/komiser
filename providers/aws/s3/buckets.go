@@ -113,7 +113,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		monthlyCost := 0.0
 
 		storageCharges := awsUtils.GetCost(priceMap["AWS-S3-Storage"], sizeInTB*1024)
-		requestCharges := awsUtils.GetCost(priceMap["AWS-S3-Requests"], requestCount/1000)
+		requestCharges := awsUtils.GetCost(priceMap["S3-API-Tier1"], requestCount/1000)
 		monthlyCost = storageCharges + requestCharges
 		tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
 			Bucket: bucket.Name,
