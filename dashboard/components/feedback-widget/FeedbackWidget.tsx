@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, memo, SyntheticEvent } from 'react';
+import { FileUploader } from 'react-drag-drop-files';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { toBlob } from 'html-to-image';
 import Image from 'next/image';
@@ -27,6 +28,8 @@ Outcome
 
 const useFeedbackWidget = (defaultState: boolean = false) => {
   const [showFeedbackModel, setShowFeedbackModal] = useState(defaultState);
+
+  const FILE_TYPES = ['JPG', 'PNG', 'GIF', 'TXT', 'LOG'];
   const FEEDBACK_MODAL_ID = 'feedback-modal';
 
   function openFeedbackModal() {
@@ -46,7 +49,8 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
   const FeedbackModal = () => {
     const [email, updateEmail] = useState('');
     const [description, updateDescription] = useState('');
-    const [imageBlob, setImageBlob] = useState<Blob | null>();
+    const [screenshotBlob, setScreenshotBlob] = useState<Blob | null>(null);
+    const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [dragActive, setDragActive] = useState(false);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const { toast, setToast, dismissToast } = useToast();
@@ -58,7 +62,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
 
       toBlob(document.documentElement, { cacheBust: true, filter })
         .then(blob => {
-          setImageBlob(blob);
+          setScreenshotBlob(blob);
           setToast({
             hasError: false,
             title: 'Screen capture',
@@ -77,7 +81,8 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     };
 
     function clearFeedbackForm() {
-      setImageBlob(null);
+      setScreenshotBlob(null);
+      setFileAttachement(null);
       updateDescription('');
       updateEmail('');
     }
@@ -91,8 +96,14 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
 
           formData.append('description', description);
           if (email) formData.append('email', email);
-          if (imageBlob && imageBlob !== null)
-            formData.append('image', imageBlob);
+          if (screenshotBlob && screenshotBlob !== null)
+            formData.append('image', screenshotBlob);
+          if (
+            screenshotBlob === null &&
+            fileAttachement &&
+            fileAttachement !== null
+          )
+            formData.append('image', fileAttachement);
 
           settingsService
             .sendFeedback(formData)
@@ -121,6 +132,10 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
         }
       }
     }
+
+    const uploadFile = (attachement: File) => {
+      setFileAttachement(attachement);
+    };
 
     return (
       <>
@@ -158,14 +173,14 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 value={description}
                 required
               />
-              <div className="mt-4 flex justify-between">
-                {(!imageBlob || imageBlob === null) && (
+              <div className="mt-4 flex justify-between gap-2">
+                {(!screenshotBlob || screenshotBlob === null) && (
                   <a
-                    className="cursor-pointer text-center"
+                    className="w-[50%] cursor-pointer border border-black-170 px-6 py-5 text-center text-xs transition hover:border-primary"
                     onClick={() => takeScreenshot()}
                   >
                     <svg
-                      className="inline-block"
+                      className="m-4 inline-block"
                       width="25"
                       height="24"
                       viewBox="0 0 25 24"
@@ -205,23 +220,144 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                     Capture current screen
                   </a>
                 )}
-                {imageBlob && imageBlob !== null && (
+                {screenshotBlob && screenshotBlob !== null && (
                   <div className="relative h-[76px] w-[217px]">
                     <Image
-                      src={URL.createObjectURL(imageBlob)}
+                      src={URL.createObjectURL(screenshotBlob)}
                       alt="attached screenshot"
                       width="217"
                       height="76"
                     />
                     <a
-                      onClick={() => !isSendingFeedback && setImageBlob(null)}
+                      onClick={() =>
+                        !isSendingFeedback && setScreenshotBlob(null)
+                      }
                       className="absolute right-4 top-4 cursor-pointer"
                     >
                       x
                     </a>
                   </div>
                 )}
-                <div>Upload File</div>
+                <div className="relative">
+                  <FileUploader
+                    handleChange={uploadFile}
+                    name="attachement"
+                    types={FILE_TYPES}
+                    fileOrFiles={fileAttachement}
+                    onTypeError={(err: string) =>
+                      setToast({
+                        hasError: true,
+                        title: 'File upload failed',
+                        message: err
+                      })
+                    }
+                    onSizeError={(err: string) =>
+                      setToast({
+                        hasError: true,
+                        title: 'File upload failed',
+                        message: err
+                      })
+                    }
+                  >
+                    {fileAttachement === null && (
+                      <div className="cursor-pointer border border-dashed border-black-170 px-6 py-5 text-center text-xs transition hover:border-primary">
+                        <svg
+                          className="m-4 inline-block"
+                          width="25"
+                          height="24"
+                          viewBox="0 0 25 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.5 17V11L7.5 13"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M9.5 11L11.5 13"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M22.5 10V15C22.5 20 20.5 22 15.5 22H9.5C4.5 22 2.5 20 2.5 15V9C2.5 4 4.5 2 9.5 2H14.5"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M22.5 10H18.5C15.5 10 14.5 9 14.5 6V2L22.5 10Z"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <br />
+                        Drag and drop or chose a file
+                      </div>
+                    )}
+                    {fileAttachement !== null && (
+                      <div className="relative h-[76px] w-[217px]">
+                        <svg
+                          width="40"
+                          height="40"
+                          viewBox="0 0 40 40"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M35 11.6666V28.3333C35 33.3333 32.5 36.6666 26.6667 36.6666H13.3333C7.5 36.6666 5 33.3333 5 28.3333V11.6666C5 6.66659 7.5 3.33325 13.3333 3.33325H26.6667C32.5 3.33325 35 6.66659 35 11.6666Z"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M24.167 7.5V10.8333C24.167 12.6667 25.667 14.1667 27.5003 14.1667H30.8337"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M13.333 21.6667H19.9997"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M13.333 28.3333H26.6663"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <a
+                          onClick={e => {
+                            e.preventDefault();
+                            if (!isSendingFeedback) setFileAttachement(null);
+                            return false;
+                          }}
+                          className="absolute right-4 top-4 cursor-pointer"
+                        >
+                          x
+                        </a>
+                      </div>
+                    )}
+                  </FileUploader>
+                </div>
               </div>
               <div className="mt-4 flex justify-between">
                 <p className="text-xs text-black-400">
