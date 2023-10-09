@@ -108,7 +108,7 @@ func getDiskMonthly(p *Pricing, opts Opts, tg typeDiskGetter) (uint64, error) {
 			capacityPricePerRegion = region.Prices[0].Nanos
 		}
 	} else {
-		return 0, errors.New(fmt.Sprintf("capacity price not found for %q region", opts.Region))
+		return 0, fmt.Errorf("capacity price not found for %q region", opts.Region)
 	}
 
 	var sum uint64 = 0

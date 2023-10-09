@@ -136,9 +136,7 @@ func typeGetterE2(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmente2CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmente2RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -161,9 +159,7 @@ func typeGetterC3(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.C3.Commitmentc3CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.C3.Commitmentc3RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -185,9 +181,7 @@ func typeGetterN2(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentn2CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentn2RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -209,9 +203,7 @@ func typeGetterN2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentn2Dcpu3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentn2Dram3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -227,9 +219,7 @@ func typeGetterT2A(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.T2A.Vmimagepreemptiblet2Astandardcore
 		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.T2A.Vmimagepreemptiblet2Astandardram
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -251,9 +241,7 @@ func typeGetterT2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentt2Dcpu3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentt2Dram3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -269,9 +257,7 @@ func typeGetterN1(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.Vmimagepreemptiblen1Standardcore
 		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.Vmimagepreemptiblen1Standardram
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -293,9 +279,7 @@ func typeGetterC2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentc2Dcpu3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentc2Dram3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -317,9 +301,7 @@ func typeGetterM3(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.M3.Commitmentm3CPU3Yv1
 		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.M3.Commitmentm3RAM3Yv1
 	default:
-		return Subtype{}, Subtype{}, errors.New(
-			fmt.Sprintf("commitment %q not supported", opts.Commitment),
-		)
+		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
 	return core, memory, nil
 }
@@ -336,9 +318,7 @@ func getHourly(p *Pricing, opts Opts, tg typeMachineGetter) (uint64, error) {
 			corePricePerRegion = region.Prices[0].Nanos
 		}
 	} else {
-		return 0, errors.New(
-			fmt.Sprintf("core price not found for %q region", opts.Region),
-		)
+		return 0, fmt.Errorf("core price not found for %q region", opts.Region)
 	}
 
 	var memoryPricePerRegion uint64 = 0
@@ -347,9 +327,7 @@ func getHourly(p *Pricing, opts Opts, tg typeMachineGetter) (uint64, error) {
 			memoryPricePerRegion = region.Prices[0].Nanos
 		}
 	} else {
-		return 0, errors.New(
-			fmt.Sprintf("memory not found for %q region", opts.Region),
-		)
+		return 0, fmt.Errorf("memory not found for %q region", opts.Region)
 	}
 
 	var sum uint64 = 0

@@ -89,7 +89,9 @@ func SetupSchema(db *bun.DB, c *models.Config, accounts []models.Account) error 
 func doMigrations(db *bun.DB, ctx context.Context) error {
 	migrator := migrate.NewMigrator(db, migrations.Migrations)
 
-	migrator.Init(ctx)
+	if err := migrator.Init(ctx); err != nil {
+		return err
+	}
 
 	group, err := migrator.Migrate(ctx)
 	if err != nil {
