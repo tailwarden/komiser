@@ -38,11 +38,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Value: aws.String(client.AWSClient.Region),
 				Type:  types.FilterTypeTermMatch,
 			},
-			{
-				Field: aws.String("productFamily"),
-				Value: aws.String("Storage"),
-				Type:  types.FilterTypeTermMatch,
-			},
 		},
 	})
 	if err != nil {
@@ -74,10 +69,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					Name:  aws.String("BucketName"),
 					Value: bucket.Name,
 				},
-				{
-					Name:  aws.String("StorageType"),
-					Value: aws.String("StandardStorage"),
-				},
 			},
 			Unit:   cloudwatchTypes.StandardUnitBytes,
 			Period: aws.Int32(3600),
@@ -94,15 +85,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		sizeInTB := ConvertBytesToTerabytes(int64(bucketSize))
-		storageCostPerGB := 0.0
-
-		if sizeInTB <= 50 {
-			storageCostPerGB = (sizeInTB * 1024) * 0.023
-		} else if sizeInTB <= 450 {
-			storageCostPerGB = (sizeInTB * 1024) * 0.022
-		} else {
-			storageCostPerGB = (sizeInTB * 1024) * 0.021
-		}
 
 		// metrics for bucket usage
 
@@ -115,10 +97,6 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				{
 					Name:  aws.String("BucketName"),
 					Value: bucket.Name,
-				},
-				{
-					Name:  aws.String("StorageType"),
-					Value: aws.String("StandardStorage"),
 				},
 			},
 			Unit:   cloudwatchTypes.StandardUnitCount,
@@ -139,8 +117,9 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		monthlyCost := 0.0
 
+		storageCharges := awsUtils.GetCost(priceMap["AWS-S3-Storage"], sizeInTB*1024)      // charges per GB
 		requestCharges := awsUtils.GetCost(priceMap["AWS-S3-Requests"], requestCount/1000) // charges per 1000 request
-		monthlyCost = storageCostPerGB + requestCharges
+		monthlyCost = storageCharges + requestCharges
 		tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
 			Bucket: bucket.Name,
 		})
