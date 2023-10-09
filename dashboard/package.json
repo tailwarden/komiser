@@ -42,7 +42,7 @@
     "@storybook/addons": "^7.0.0-beta.52",
     "@storybook/blocks": "^7.4.5",
     "@storybook/nextjs": "^7.0.0-alpha.41",
-    "@storybook/react": "^7.0.0-beta.52",
+    "@storybook/react": "^7.4.6",
     "@storybook/testing-library": "^0.2.2",
     "@storybook/theming": "^7.4.5",
     "@testing-library/jest-dom": "^5.16.5",
