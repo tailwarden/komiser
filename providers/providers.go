@@ -52,7 +52,7 @@ type K8sClient struct {
 type WorkerPool struct {
 	numWorkers int
 	tasks      chan func()
-	wg         sync.WaitGroup
+	Wg         sync.WaitGroup
 }
 
 func NewWorkerPool(numWorkers int) *WorkerPool {
@@ -64,23 +64,23 @@ func NewWorkerPool(numWorkers int) *WorkerPool {
 
 func (wp *WorkerPool) Start() {
 	for i := 0; i < wp.numWorkers; i++ {
-		wp.wg.Add(1)
 		go wp.worker()
 	}
 }
 
 func (wp *WorkerPool) SubmitTask(task func()) {
+	wp.Wg.Add(1)
 	wp.tasks <- task
 }
 
 func (wp *WorkerPool) Wait() {
+	wp.Wg.Wait()
 	close(wp.tasks)
-	wp.wg.Wait()
 }
 
 func (wp *WorkerPool) worker() {
-	defer wp.wg.Done()
 	for task := range wp.tasks {
 		task()
+		wp.Wg.Done()
 	}
 }

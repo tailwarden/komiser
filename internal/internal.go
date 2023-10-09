@@ -82,6 +82,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 
 			numWorkers := 64
 			wp := providers.NewWorkerPool(numWorkers)
+			wp.Start()
 			err = fetchResources(ctx, clients, regions, telemetry, wp)
 			if err != nil {
 				log.Fatal(err)
@@ -262,29 +263,38 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 }
 
 func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool, wp *providers.WorkerPool) error {
+
+	workflowTrigger := func(client providers.ProviderClient, provider string) {
+		wp.Wg.Add(1)
+		go func() {
+			defer wp.Wg.Done()
+			triggerFetchingWorfklow(ctx, client, provider, telemetry, regions, wp)
+		}()
+	}
+
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "AWS", telemetry, regions, wp)
+			workflowTrigger(client, "AWS")
 		} else if client.DigitalOceanClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "DigitalOcean", telemetry, regions, wp)
+			workflowTrigger(client, "DigitalOcean")
 		} else if client.OciClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "OCI", telemetry, regions, wp)
+			workflowTrigger(client, "OCI")
 		} else if client.CivoClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Civo", telemetry, regions, wp)
+			workflowTrigger(client, "Civo")
 		} else if client.K8sClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Kubernetes", telemetry, regions, wp)
+			workflowTrigger(client, "Kubernetes")
 		} else if client.LinodeClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Linode", telemetry, regions, wp)
+			workflowTrigger(client, "Linode")
 		} else if client.TencentClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Tencent", telemetry, regions, wp)
+			workflowTrigger(client, "Tencent")
 		} else if client.AzureClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Azure", telemetry, regions, wp)
+			workflowTrigger(client, "Azure")
 		} else if client.ScalewayClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Scaleway", telemetry, regions, wp)
+			workflowTrigger(client, "Scaleway")
 		} else if client.MongoDBAtlasClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "MongoDBAtlas", telemetry, regions, wp)
+			workflowTrigger(client, "MongoDBAtlas")
 		} else if client.GCPClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "GCP", telemetry, regions, wp)
+			workflowTrigger(client, "GCP")
 		}
 	}
 	return nil
