@@ -238,7 +238,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                     </a>
                   </div>
                 )}
-                <div className="relative">
+                <div className="relative h-full w-[50%]">
                   <FileUploader
                     handleChange={uploadFile}
                     name="attachement"
@@ -260,7 +260,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                     }
                   >
                     {fileAttachement === null && (
-                      <div className="cursor-pointer border border-dashed border-black-170 px-6 py-5 text-center text-xs transition hover:border-primary">
+                      <div className="h-full w-full cursor-pointer border border-dashed border-black-170 px-6 py-5 text-center text-xs transition hover:border-primary">
                         <svg
                           className="m-4 inline-block"
                           width="25"
@@ -303,7 +303,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                       </div>
                     )}
                     {fileAttachement !== null && (
-                      <div className="relative h-[76px] w-[217px]">
+                      <div className="relative h-full w-full flex-1 border border-primary px-6 py-5 text-center text-xs transition">
                         <svg
                           width="40"
                           height="40"
