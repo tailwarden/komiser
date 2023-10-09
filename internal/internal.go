@@ -79,10 +79,14 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 
 		_, err = cron.Every(1).Hours().Do(func() {
 			log.Info("Fetching resources workflow has started")
-			err = fetchResources(ctx, clients, regions, telemetry)
+
+			numWorkers := 64
+			wp := providers.NewWorkerPool(numWorkers)
+			err = fetchResources(ctx, clients, regions, telemetry, wp)
 			if err != nil {
 				log.Fatal(err)
 			}
+			wp.Wait()
 		})
 
 		if err != nil {
@@ -209,7 +213,7 @@ func setupDBConnection(c *models.Config) error {
 	return nil
 }
 
-func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string) {
+func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string, wp *providers.WorkerPool) {
 	localHub := sentry.CurrentHub().Clone()
 
 	defer func() {
@@ -233,7 +237,7 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 
 	switch provider {
 	case "AWS":
-		aws.FetchResources(ctx, client, regions, db, telemetry, analytics)
+		aws.FetchResources(ctx, client, regions, db, telemetry, analytics, wp)
 	case "DigitalOcean":
 		do.FetchResources(ctx, client, db, telemetry, analytics)
 	case "OCI":
@@ -257,30 +261,30 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	}
 }
 
-func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) error {
+func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool, wp *providers.WorkerPool) error {
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "AWS", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "AWS", telemetry, regions, wp)
 		} else if client.DigitalOceanClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "DigitalOcean", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "DigitalOcean", telemetry, regions, wp)
 		} else if client.OciClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "OCI", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "OCI", telemetry, regions, wp)
 		} else if client.CivoClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Civo", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "Civo", telemetry, regions, wp)
 		} else if client.K8sClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Kubernetes", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "Kubernetes", telemetry, regions, wp)
 		} else if client.LinodeClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Linode", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "Linode", telemetry, regions, wp)
 		} else if client.TencentClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Tencent", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "Tencent", telemetry, regions, wp)
 		} else if client.AzureClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Azure", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "Azure", telemetry, regions, wp)
 		} else if client.ScalewayClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Scaleway", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "Scaleway", telemetry, regions, wp)
 		} else if client.MongoDBAtlasClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "MongoDBAtlas", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "MongoDBAtlas", telemetry, regions, wp)
 		} else if client.GCPClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "GCP", telemetry, regions)
+			go triggerFetchingWorfklow(ctx, client, "GCP", telemetry, regions, wp)
 		}
 	}
 	return nil
