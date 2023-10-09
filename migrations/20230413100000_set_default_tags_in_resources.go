@@ -11,7 +11,7 @@ func init() {
 		// Set default value for tags in resources table, because sometimes it was 'null'
 		// The Resources model was updated to set the default value to []string{}, but all older instances
 		// of Komiser didn't have that default value set, so we need to update the database
-		db.NewUpdate().
+		_, _ = db.NewUpdate().
 			Table("resources").
 			Set("tags = ?", []string{}).
 			Where("tags = 'null'").
