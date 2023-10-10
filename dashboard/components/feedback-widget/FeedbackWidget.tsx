@@ -29,8 +29,9 @@ Outcome
 const useFeedbackWidget = (defaultState: boolean = false) => {
   const [showFeedbackModel, setShowFeedbackModal] = useState(defaultState);
 
-  const FILE_TYPES = ['JPG', 'PNG', 'GIF', 'TXT', 'LOG'];
+  const FILE_TYPES = ['JPG', 'PNG', 'GIF', 'TXT', 'LOG', 'MP4', 'AVI', 'MOV'];
   const FEEDBACK_MODAL_ID = 'feedback-modal';
+  const MAX_FILE_SIZE_MB = 37;
 
   function openFeedbackModal() {
     setShowFeedbackModal(true);
@@ -50,14 +51,20 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
   const FeedbackModal = () => {
     const [email, updateEmail] = useState('');
     const [description, updateDescription] = useState('');
+    const [isTakingScreenCapture, setIsTakingScreenCapture] = useState(false);
     const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const { toast, setToast, dismissToast } = useToast();
 
     const takeScreenshot = async () => {
-      if (document.documentElement === null || isSendingFeedback) {
+      if (
+        document.documentElement === null ||
+        isSendingFeedback ||
+        isTakingScreenCapture
+      ) {
         return;
       }
+      setIsTakingScreenCapture(true);
 
       toBlob(document.documentElement, {
         cacheBust: true,
@@ -76,7 +83,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
 
             setFileAttachement(screenSHotFile);
           }
-
+          setIsTakingScreenCapture(false);
           setToast({
             hasError: false,
             title: 'Screen capture',
@@ -85,7 +92,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           });
         })
         .catch(err => {
-          console.log(err);
+          setIsTakingScreenCapture(false);
           setToast({
             hasError: true,
             title: 'Screen capture failed',
@@ -182,7 +189,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 value={description}
                 required
               />
-              <div className="relative mt-4 flex-1">
+              <div className="mt-4 w-full flex-1">
                 <a
                   className="mb-1 block w-32 cursor-pointer text-xs text-primary"
                   onClick={() => takeScreenshot()}
@@ -190,11 +197,17 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   Take a screenshot
                 </a>
                 <FileUploader
-                  disabled={fileAttachement !== null}
+                  disabled={
+                    fileAttachement !== null ||
+                    isSendingFeedback ||
+                    isTakingScreenCapture
+                  }
                   handleChange={uploadFile}
                   name="attachement"
                   types={FILE_TYPES}
                   fileOrFiles={fileAttachement}
+                  hoverTitle="drop here"
+                  maxSize={MAX_FILE_SIZE_MB}
                   onTypeError={(err: string) =>
                     setToast({
                       hasError: true,
@@ -209,11 +222,25 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                       message: err
                     })
                   }
+                  dropMessageStyle={{
+                    width: '508px',
+                    height: '96px',
+                    position: 'absolute',
+                    background: '#F4F9F9',
+                    top: 20,
+                    left: 2,
+                    display: 'flex',
+                    flexGrow: 2,
+                    opacity: 1,
+                    zIndex: 20,
+                    color: '#008484',
+                    fontSize: 14
+                  }}
                 >
                   {fileAttachement === null && (
-                    <div className="h-full w-full cursor-pointer border-2 border-dashed border-black-170 px-6 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100">
+                    <div className="h-full w-full cursor-pointer rounded border-2 border-dashed border-black-170 px-6 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100">
                       <svg
-                        className="mb-4 inline-block"
+                        className="mb-2 inline-block"
                         width="25"
                         height="24"
                         viewBox="0 0 25 24"
@@ -249,16 +276,20 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                           stroke-linejoin="round"
                         />
                       </svg>
-                      <p>
-                        Drag and drop or{' '}
-                        <span className="cursor-pointer text-primary">
-                          choose a file
-                        </span>
-                      </p>
+                      {isTakingScreenCapture ? (
+                        <p>Taking screencapture...</p>
+                      ) : (
+                        <p>
+                          Drag and drop or{' '}
+                          <span className="cursor-pointer text-primary">
+                            choose a file
+                          </span>
+                        </p>
+                      )}
                     </div>
                   )}
                   {fileAttachement !== null && (
-                    <div className="relative h-full w-full flex-1 border-2 border-[#B6EAEA] px-6 py-5 text-center text-xs transition">
+                    <div className="relative h-full w-full flex-1 rounded border-2 border-[#B6EAEA] px-6 py-5 text-center text-xs transition">
                       <div className="flex h-full w-full items-center justify-items-center gap-2">
                         <svg
                           width="40"
@@ -301,16 +332,24 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                           />
                         </svg>
                         <div className="flex-1 text-left">
-                          <span>{fileAttachement.name}</span>
+                          <p>{fileAttachement.name}</p>
+                          <p className="text-black-400">
+                            {(fileAttachement.size / (1024 * 1024)).toFixed(2)}
+                            MB
+                          </p>
                         </div>
                       </div>
                       <a
                         onClick={e => {
                           e.preventDefault();
-                          if (!isSendingFeedback) setFileAttachement(null);
+                          if (!isSendingFeedback && !isTakingScreenCapture)
+                            setFileAttachement(null);
                           return false;
                         }}
                         className="absolute right-4 top-4 block h-4 w-4 cursor-pointer"
+                        aria-disabled={
+                          isTakingScreenCapture || isSendingFeedback
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
