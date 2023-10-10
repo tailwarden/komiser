@@ -45,7 +45,7 @@ func Jobs(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 				// we use the owner kind of first owner only as the owner tag
 				ownerTags := []models.Tag{
 					{
-						Key:   "owner",
+						Key:   "owner_kind",
 						Value: job.OwnerReferences[0].Kind,
 					},
 					{
