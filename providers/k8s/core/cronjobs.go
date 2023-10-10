@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -32,10 +31,10 @@ func CronJobs(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			return nil, err
 		}
 
-		for _, cronjob := range res.Items {
+		for _, cronJob := range res.Items {
 			tags := make([]models.Tag, 0)
 
-			for key, value := range cronjob.Labels {
+			for key, value := range cronJob.Labels {
 				tags = append(tags, models.Tag{
 					Key:   key,
 					Value: value,
@@ -44,22 +43,21 @@ func CronJobs(ctx context.Context, client providers.ProviderClient) ([]models.Re
 
 			cost := 0.0
 			if opencostEnabled {
-				cost = cronjobsCost[cronjob.Name].TotalCost
+				cost = cronjobsCost[cronJob.Name].TotalCost
 			}
 
 			resources = append(resources, models.Resource{
 				Provider:   "Kubernetes",
 				Account:    client.Name,
 				Service:    "CronJob",
-				ResourceId: string(cronjob.UID),
-				Name:       cronjob.Name,
-				Region:     cronjob.Namespace,
+				ResourceId: string(cronJob.UID),
+				Name:       cronJob.Name,
+				Region:     cronJob.Namespace,
 				Cost:       cost,
-				CreatedAt:  cronjob.CreationTimestamp.Time,
+				CreatedAt:  cronJob.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 			})
-			fmt.Printf("%+v", cronjob)
 		}
 
 		if res.GetContinue() == "" {
