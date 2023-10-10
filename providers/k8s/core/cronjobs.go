@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -12,29 +13,29 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func Jobs(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func CronJobs(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	var config metav1.ListOptions
 
 	opencostEnabled := true
-	jobsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "job")
+	cronjobsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "cronjob")
 	if err != nil {
-		log.Errorf("ERROR: Couldn't get jobs info from OpenCost: %v", err)
+		log.Errorf("ERROR: Couldn't get cronjobs info from OpenCost: %v", err)
 		log.Warn("Opencost disabled")
 		opencostEnabled = false
 	}
 
 	for {
-		res, err := client.K8sClient.Client.BatchV1().Jobs("").List(ctx, config)
+		res, err := client.K8sClient.Client.BatchV1().CronJobs("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}
 
-		for _, job := range res.Items {
+		for _, cronjob := range res.Items {
 			tags := make([]models.Tag, 0)
 
-			for key, value := range job.Labels {
+			for key, value := range cronjob.Labels {
 				tags = append(tags, models.Tag{
 					Key:   key,
 					Value: value,
@@ -43,21 +44,22 @@ func Jobs(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 
 			cost := 0.0
 			if opencostEnabled {
-				cost = jobsCost[job.Name].TotalCost
+				cost = cronjobsCost[cronjob.Name].TotalCost
 			}
 
 			resources = append(resources, models.Resource{
 				Provider:   "Kubernetes",
 				Account:    client.Name,
-				Service:    "Job",
-				ResourceId: string(job.UID),
-				Name:       job.Name,
-				Region:     job.Namespace,
+				Service:    "CronJob",
+				ResourceId: string(cronjob.UID),
+				Name:       cronjob.Name,
+				Region:     cronjob.Namespace,
 				Cost:       cost,
-				CreatedAt:  job.CreationTimestamp.Time,
+				CreatedAt:  cronjob.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 			})
+			fmt.Printf("%+v", cronjob)
 		}
 
 		if res.GetContinue() == "" {
@@ -65,12 +67,13 @@ func Jobs(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 		}
 
 		config.Continue = res.GetContinue()
+
 	}
 
 	log.WithFields(log.Fields{
 		"provider":  "Kubernetes",
 		"account":   client.Name,
-		"service":   "Job",
+		"service":   "CronJob",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
