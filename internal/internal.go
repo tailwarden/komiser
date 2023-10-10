@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -54,7 +55,7 @@ var Arch = runtime.GOARCH
 var db *bun.DB
 var analytics utils.Analytics
 
-func Exec(address string, port int, configPath string, telemetry bool, a utils.Analytics, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, a utils.Analytics, regions []string, _ *cobra.Command) error {
 	analytics = a
 
 	ctx := context.Background()
@@ -264,10 +265,11 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 
 func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool, wp *providers.WorkerPool) error {
 
+	var wwg sync.WaitGroup
 	workflowTrigger := func(client providers.ProviderClient, provider string) {
-		wp.Wg.Add(1)
+		wwg.Add(1)
 		go func() {
-			defer wp.Wg.Done()
+			defer wwg.Done()
 			triggerFetchingWorfklow(ctx, client, provider, telemetry, regions, wp)
 		}()
 	}
@@ -297,6 +299,8 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 			workflowTrigger(client, "GCP")
 		}
 	}
+
+	wwg.Wait()
 	return nil
 }
 
