@@ -56,11 +56,12 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const { toast, setToast, dismissToast } = useToast();
 
-    const takeScreenshot = async () => {
+    async function takeScreenshot() {
       if (
         document.documentElement === null ||
         isSendingFeedback ||
-        isTakingScreenCapture
+        isTakingScreenCapture ||
+        fileAttachement !== null
       ) {
         return;
       }
@@ -73,7 +74,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
         .then(async blob => {
           // setScreenshotBlob(blob);
           if (blob !== null) {
-            const screenSHotFile = new File(
+            const screenShotFile = new File(
               [blob],
               'Automated screen capture',
               {
@@ -81,9 +82,9 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
               }
             );
 
-            setFileAttachement(screenSHotFile);
+            setFileAttachement(screenShotFile);
           }
-          setIsTakingScreenCapture(false);
+
           setToast({
             hasError: false,
             title: 'Screen capture',
@@ -92,15 +93,17 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           });
         })
         .catch(err => {
-          setIsTakingScreenCapture(false);
           setToast({
             hasError: true,
             title: 'Screen capture failed',
             message:
               'The capture of your current page on Komiser couldn’t be saved. Please try again or upload a screenshot manually. Our support is also happy to help you!'
           });
+        })
+        .finally(() => {
+          setIsTakingScreenCapture(false);
         });
-    };
+    }
 
     function clearFeedbackForm() {
       setFileAttachement(null);
@@ -148,9 +151,9 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
       }
     }
 
-    const uploadFile = (attachement: File) => {
+    function uploadFile(attachement: File) {
       setFileAttachement(attachement);
-    };
+    }
 
     return (
       <>
