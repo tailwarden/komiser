@@ -41,6 +41,22 @@ func Jobs(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 				})
 			}
 
+			if len(job.OwnerReferences) > 0 {
+				// we use the owner kind of first owner only as the owner tag
+				ownerTags := []models.Tag{
+					{
+						Key:   "owner",
+						Value: job.OwnerReferences[0].Kind,
+					},
+					{
+						Key:   "owner_name",
+						Value: job.OwnerReferences[0].Name,
+					},
+				}
+				tags = append(tags, ownerTags...)
+
+			}
+
 			cost := 0.0
 			if opencostEnabled {
 				cost = jobsCost[job.Name].TotalCost

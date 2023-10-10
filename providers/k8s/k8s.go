@@ -25,7 +25,6 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		core.DaemonSets,
 		core.StatefulSets,
 		core.Jobs,
-		core.CronJobs,
 	}
 }
 
