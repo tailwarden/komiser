@@ -9,6 +9,7 @@ import (
 	"github.com/digitalocean/godo"
 	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
+	"github.com/ovh/go-ovh/ovh"
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	. "github.com/tailwarden/komiser/models"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -31,6 +32,7 @@ type ProviderClient struct {
 	ScalewayClient     *scw.Client
 	MongoDBAtlasClient *mongodbatlas.Client
 	GCPClient          *GCPClient
+	OVHClient          *ovh.Client
 	Name               string
 }
 

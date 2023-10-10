@@ -56,6 +56,7 @@ require (
 	github.com/linode/linodego v1.12.0
 	github.com/mongodb-forks/digest v1.0.4
 	github.com/oracle/oci-go-sdk v24.3.0+incompatible
+	github.com/ovh/go-ovh v1.4.3
 	github.com/rs/xid v1.4.0
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.13
 	github.com/segmentio/analytics-go v3.1.0+incompatible
