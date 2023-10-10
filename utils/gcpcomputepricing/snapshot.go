@@ -2,7 +2,6 @@ package gcpcomputepricing
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -47,9 +46,8 @@ func CalculateSnapshotCost(ctx context.Context, client providers.ProviderClient,
 }
 
 func typeSnapshotGetter(p *Pricing, opts Opts) (Subtype, error) {
-	var capacity Subtype
 	// TODO: switch by snapshot type
-	capacity = p.Gcp.Compute.PersistentDisk.Snapshots.Storageregionalstandardsnapshotearlydeletion
+	capacity := p.Gcp.Compute.PersistentDisk.Snapshots.Storageregionalstandardsnapshotearlydeletion
 
 	return capacity, nil
 }
@@ -66,10 +64,7 @@ func getSnapshotMonthly(p *Pricing, opts Opts, tg func(*Pricing, Opts) (Subtype,
 			capacityPricePerRegion = region.Prices[0].Nanos
 		}
 	} else {
-		return 0, errors.New(fmt.Sprintf(
-			"capacity price not found for %q region",
-			opts.Region,
-		))
+		return 0, fmt.Errorf("capacity price not found for %q region", opts.Region)
 	}
 
 	normalizedSize := uint64(storageBytes) / 1024 / 1024 / 1024

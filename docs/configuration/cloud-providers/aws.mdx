@@ -98,19 +98,19 @@ Add to config.toml file
 [[aws]]
 name="sandbox"
 source="CREDENTIALS_FILE"
-path=./path/to/credentials/file
+path="./path/to/credentials/file"
 profile="default"
 
 [[aws]]
 name="staging"
 source="CREDENTIALS_FILE"
-path=./path/to/credentials/file
+path="./path/to/credentials/file"
 profile="staging-account"
 
 [[gcp]]
 name="production"
 source="ENVIRONMENT_VARIABLES"
-# path=./path/to/credentials/file specify if CREDENTIALS_FILE is used
+# path="./path/to/credentials/file" specify if CREDENTIALS_FILE is used
 profile="production"
 
 [postgres]
@@ -137,7 +137,7 @@ profile="production"
 [[aws]]
 name="sandbox"
 source="CREDENTIALS_FILE"
-path=./path/to/credentials/file
+path="./path/to/credentials/file"
 profile="default"
 ```
 ### Credentials file
