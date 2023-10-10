@@ -40,7 +40,7 @@
     "@storybook/addon-interactions": "^7.0.0-beta.52",
     "@storybook/addon-links": "^7.0.0-beta.52",
     "@storybook/addons": "^7.0.0-beta.52",
-    "@storybook/blocks": "^7.4.5",
+    "@storybook/blocks": "^7.4.6",
     "@storybook/nextjs": "^7.0.0-alpha.41",
     "@storybook/react": "^7.4.6",
     "@storybook/testing-library": "^0.2.2",
