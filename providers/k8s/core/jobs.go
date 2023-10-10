@@ -54,7 +54,6 @@ func Jobs(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 					},
 				}
 				tags = append(tags, ownerTags...)
-
 			}
 
 			cost := 0.0
