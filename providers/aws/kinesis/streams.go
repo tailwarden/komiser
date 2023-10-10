@@ -9,9 +9,14 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
+
+type KinesisClient interface {
+	ListStreamConsumers(ctx context.Context, params *kinesis.ListStreamConsumersInput, optFns ...func(*kinesis.Options)) (*kinesis.ListStreamConsumersOutput, error)
+}
 
 func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -37,6 +42,11 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/kinesis/home?region=%s#/streams/details/%s", client.AWSClient.Region, client.AWSClient.Region, *stream.StreamName),
 			})
+			consumers, err := getStreamConsumers(kinesisClient, stream, client.Name, client.AWSClient.Region)
+			if err != nil {
+				return resources, err
+			}
+			resources = append(resources, consumers...)
 		}
 
 		if aws.ToString(output.NextToken) == "" {
@@ -53,6 +63,42 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"service":   "Kinesis Stream",
 		"resources": len(resources),
 	}).Info("Fetched resources")
+
+	return resources, nil
+}
+
+func getStreamConsumers(kinesisClient KinesisClient, stream types.StreamSummary, clientName, region string) ([]Resource, error) {
+	resources := make([]Resource, 0)
+	config := kinesis.ListStreamConsumersInput{
+		StreamARN: aws.String(aws.ToString(stream.StreamARN)),
+	}
+
+	for {
+		output, err := kinesisClient.ListStreamConsumers(context.Background(), &config)
+		if err != nil {
+			return resources, err
+		}
+
+		for _, consumer := range output.Consumers {
+			resources = append(resources, Resource{
+				Provider:   "AWS",
+				Account:    clientName,
+				Service:    "Kinesis EFO Consumer",
+				ResourceId: *consumer.ConsumerARN,
+				Region:     region,
+				Name:       *consumer.ConsumerName,
+				Cost:       0,
+				CreatedAt:  *consumer.ConsumerCreationTimestamp,
+				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/kinesis/home?region=%s#/streams/details/%s/registeredConsumers/%s", region, region, aws.ToString(stream.StreamName), *consumer.ConsumerName),
+			})
+		}
+
+		if aws.ToString(output.NextToken) == "" {
+			break
+		}
+		config.NextToken = output.NextToken
+	}
 
 	return resources, nil
 }
