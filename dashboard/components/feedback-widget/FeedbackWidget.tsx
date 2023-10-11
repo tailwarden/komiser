@@ -162,7 +162,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           closeModal={() => closeFeedbackModal()}
           id={FEEDBACK_MODAL_ID}
         >
-          <div className="w-[32rem]">
+          <div className="w-[546px]">
             <h3 className="text-lg font-bold text-black-900">
               Describe your issue
             </h3>
