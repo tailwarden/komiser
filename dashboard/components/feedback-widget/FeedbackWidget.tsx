@@ -211,30 +211,30 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                           <path
                             d="M2.25 9V6.5C2.25 4.01 4.26 2 6.75 2H9.25"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M15.25 2H17.75C20.24 2 22.25 4.01 22.25 6.5V9"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M22.25 16V17.5C22.25 19.99 20.24 22 17.75 22H16.25"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M9.25 22H6.75C4.26 22 2.25 19.99 2.25 17.5V15"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
 
@@ -309,30 +309,30 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                           <path
                             d="M9.5 17V11L7.5 13"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M9.5 11L11.5 13"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M22.5 10V15C22.5 20 20.5 22 15.5 22H9.5C4.5 22 2.5 20 2.5 15V9C2.5 4 4.5 2 9.5 2H14.5"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M22.5 10H18.5C15.5 10 14.5 9 14.5 6V2L22.5 10Z"
                             stroke="#0C1717"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                         <p>
