@@ -1,16 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useArgs, useState, useEffect } from '@storybook/preview-api';
 
 import Modal, { ModalProps } from './Modal';
 
 function ModalWrapper({
   children,
-  isOpen
-}: Pick<ModalProps, 'children' | 'isOpen'>) {
-  const [_, updateArgs] = useArgs();
+  isOpen,
+  closeModal
+}: Pick<ModalProps, 'children' | 'isOpen'> & { closeModal: () => void }) {
   return (
-    <Modal isOpen={isOpen} closeModal={() => updateArgs({ isOpen: !isOpen })}>
+    <Modal isOpen={isOpen} closeModal={() => closeModal()}>
       {children}
     </Modal>
   );
@@ -20,12 +18,7 @@ const meta: Meta<typeof Modal> = {
   title: 'Komiser/Modal',
   component: ModalWrapper,
   decorators: [
-    Story => (
-      <div style={{ margin: '3em' }}>
-        {/* 👇 Decorators in Storybook also accept a function. Replace <Story/> with Story() to enable it  */}
-        {Story()}
-      </div>
-    )
+    Story => <div style={{ margin: '3em', height: '200px' }}>{Story()}</div>
   ],
   tags: ['autodocs'],
   argTypes: {
