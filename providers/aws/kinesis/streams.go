@@ -42,7 +42,7 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/kinesis/home?region=%s#/streams/details/%s", client.AWSClient.Region, client.AWSClient.Region, *stream.StreamName),
 			})
-			consumers, err := getStreamConsumers(kinesisClient, stream, client.Name, client.AWSClient.Region)
+			consumers, err := getStreamConsumers(ctx, kinesisClient, stream, client.Name, client.AWSClient.Region)
 			if err != nil {
 				return resources, err
 			}
@@ -67,14 +67,14 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	return resources, nil
 }
 
-func getStreamConsumers(kinesisClient KinesisClient, stream types.StreamSummary, clientName, region string) ([]Resource, error) {
+func getStreamConsumers(ctx context.Context, kinesisClient KinesisClient, stream types.StreamSummary, clientName, region string) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	config := kinesis.ListStreamConsumersInput{
 		StreamARN: aws.String(aws.ToString(stream.StreamARN)),
 	}
 
 	for {
-		output, err := kinesisClient.ListStreamConsumers(context.Background(), &config)
+		output, err := kinesisClient.ListStreamConsumers(ctx, &config)
 		if err != nil {
 			return resources, err
 		}
