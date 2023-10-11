@@ -192,63 +192,68 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 value={description}
                 required
               />
-              <div className="mt-4 h-full w-full">
-                <div className="flex basis-1/2 items-stretch justify-stretch gap-2">
+              <div className="mt-4 h-[96px] max-h-[96px] w-full">
+                <div className="flex h-full basis-1/2 items-stretch justify-stretch gap-2">
                   {fileAttachement === null && (
-                    <div
-                      onClick={() => takeScreenshot()}
-                      className="w-[50%] grow cursor-pointer rounded border-2 border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100"
-                    >
-                      <svg
-                        className="mb-2 inline-block"
-                        width="25"
-                        height="24"
-                        viewBox="0 0 25 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                    <>
+                      <div
+                        onClick={() => takeScreenshot()}
+                        className="w-[50%] grow cursor-pointer rounded border-2 border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100"
                       >
-                        <path
-                          d="M2.25 9V6.5C2.25 4.01 4.26 2 6.75 2H9.25"
-                          stroke="#0C1717"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M15.25 2H17.75C20.24 2 22.25 4.01 22.25 6.5V9"
-                          stroke="#0C1717"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M22.25 16V17.5C22.25 19.99 20.24 22 17.75 22H16.25"
-                          stroke="#0C1717"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M9.25 22H6.75C4.26 22 2.25 19.99 2.25 17.5V15"
-                          stroke="#0C1717"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
+                        <svg
+                          className="mb-2 inline-block"
+                          width="25"
+                          height="24"
+                          viewBox="0 0 25 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.25 9V6.5C2.25 4.01 4.26 2 6.75 2H9.25"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M15.25 2H17.75C20.24 2 22.25 4.01 22.25 6.5V9"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M22.25 16V17.5C22.25 19.99 20.24 22 17.75 22H16.25"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M9.25 22H6.75C4.26 22 2.25 19.99 2.25 17.5V15"
+                            stroke="#0C1717"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
 
-                      <p>
-                        {isTakingScreenCapture
-                          ? 'Taking screencapture...'
-                          : 'Capture current screen'}
-                      </p>
-                    </div>
+                        <p>
+                          {isTakingScreenCapture
+                            ? 'Taking screencapture...'
+                            : 'Capture current screen'}
+                        </p>
+                      </div>
+                      <span className="self-center justify-self-center text-sm text-black-400">
+                        or
+                      </span>
+                    </>
                   )}
                   <FileUploader
                     classes={
                       fileAttachement === null
                         ? `grow cursor-pointer rounded border-2 border-dashed border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100 w-[50%]`
-                        : ` flex-1 rounded border-2 border-[#B6EAEA] px-6 py-5 text-center text-xs transition w-full`
+                        : `grow min-h-full flex-1 rounded border-2 border-[#B6EAEA] text-center text-xs transition w-full`
                     }
                     disabled={
                       fileAttachement !== null ||
@@ -339,7 +344,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                       </div>
                     )}
                     {fileAttachement !== null && (
-                      <div className="relative h-full w-full">
+                      <div className="relative h-full w-full px-6 py-5">
                         <div className="flex h-full w-full items-center justify-items-center gap-2">
                           <svg
                             width="40"
@@ -442,9 +447,14 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   </a>
                   .
                 </p>
-                <Button type="submit" size="xs" disabled={isSendingFeedback}>
-                  {isSendingFeedback ? `Sending...` : `Send Feedback`}
-                </Button>
+                <div className="flex gap-2">
+                  <Button size="xs" disabled={isSendingFeedback} style="ghost">
+                    Cancel
+                  </Button>
+                  <Button type="submit" size="xs" disabled={isSendingFeedback}>
+                    {isSendingFeedback ? `Sending...` : `Send Feedback`}
+                  </Button>
+                </div>
               </div>
             </form>
           </div>
