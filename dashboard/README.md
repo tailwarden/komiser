@@ -60,7 +60,7 @@ In the same directory as your component, create a Storybook story:
 - Create a story file: component name in `UpperCamelCase.stories.*`.
 
 Here's a basic story format:
-\```typescript
+```typescript
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
@@ -77,17 +77,17 @@ export const Default = Template.bind({});
 Default.args = {
 // default props here...
 };
-\```
+```
 
 ### 2. **Add Variations**:
 
 You can create multiple variations of your component by replicating the `Default` pattern. For example, if your component has a variation for a "disabled" state:
-\```typescript
+```typescript
 export const Disabled = Template.bind({});
 Disabled.args = {
 // props to set the component to its disabled state...
 };
-\```
+```
 
 ### 3. **Mock Data**:
 
@@ -96,15 +96,15 @@ If your component requires mock data, create a mock file: component name in `Upp
 ### 4. **Visual Check**:
 
 Run Storybook:
-\```bash
+```bash
 npm run storybook
-\```
+```
 Your component should now appear in the Storybook UI. Navigate to it, and verify all the variations display correctly.
 
 ### 5. **Documentation**:
 
 Add a brief description and any notes on your component's functionality within the Storybook UI. Use the `parameters` object in your default export:
-\```typescript
+```typescript
 export default {
 title: 'Path/To/YourComponent',
 component: YourComponent,
@@ -116,7 +116,7 @@ component: 'Your description here...',
 },
 },
 } as ComponentMeta<typeof YourComponent>;
-\```
+```
 
 ---
 
@@ -136,8 +136,7 @@ Testing convention:
 Testing examples:
 
 - Simple Jest unit test example (snippet from `/utils/formatNumber.test.ts`):
-
-```Typescript
+```typescript
 import formatNumber from './formatNumber';
 
 describe('formatNumber outputs', () => {
@@ -152,8 +151,7 @@ describe('formatNumber outputs', () => {
 ```
 
 - Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
-
-```Typescript
+```typescript
 import { render, screen } from '@testing-library/react';
 import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
