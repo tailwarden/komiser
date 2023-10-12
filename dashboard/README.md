@@ -4,7 +4,9 @@ Full frontend stack: `Next.js`, `Typescript`, `Tailwind`, `Storybook`, `Jest` & 
 
 ## Getting Started
 
-First, run the development server:
+Follow the [Contribution Guide](https://github.com/tailwarden/komiser/blob/develop/CONTRIBUTING.md#contributing-to-komiser-dashboard-ui) first if you haven't done so already. Then come back here and follow the next steps:
+
+1. run the development server:
 
 ```bash
 # From the Komiser root folder start the Komiser server, run:
@@ -17,11 +19,11 @@ NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
+2. open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
 <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
 
-If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
-<img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png">
+> If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
+> <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png">
 
 ## Components
 
@@ -60,6 +62,7 @@ In the same directory as your component, create a Storybook story:
 - Create a story file: component name in `UpperCamelCase.stories.*`.
 
 Here's a basic story format:
+
 ```typescript
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -67,25 +70,28 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import YourComponent from './YourComponent';
 
 export default {
-title: 'Path/To/YourComponent',
-component: YourComponent,
+  title: 'Path/To/YourComponent',
+  component: YourComponent
 } as ComponentMeta<typeof YourComponent>;
 
-const Template: ComponentStory<typeof YourComponent> = (args) => <YourComponent {...args} />;
+const Template: ComponentStory<typeof YourComponent> = args => (
+  <YourComponent {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {
-// default props here...
+  // default props here...
 };
 ```
 
 ### 2. **Add Variations**:
 
 You can create multiple variations of your component by replicating the `Default` pattern. For example, if your component has a variation for a "disabled" state:
+
 ```typescript
 export const Disabled = Template.bind({});
 Disabled.args = {
-// props to set the component to its disabled state...
+  // props to set the component to its disabled state...
 };
 ```
 
@@ -96,25 +102,28 @@ If your component requires mock data, create a mock file: component name in `Upp
 ### 4. **Visual Check**:
 
 Run Storybook:
+
 ```bash
 npm run storybook
 ```
+
 Your component should now appear in the Storybook UI. Navigate to it, and verify all the variations display correctly.
 
 ### 5. **Documentation**:
 
 Add a brief description and any notes on your component's functionality within the Storybook UI. Use the `parameters` object in your default export:
+
 ```typescript
 export default {
-title: 'Path/To/YourComponent',
-component: YourComponent,
-parameters: {
-docs: {
-description: {
-component: 'Your description here...',
-},
-},
-},
+  title: 'Path/To/YourComponent',
+  component: YourComponent,
+  parameters: {
+    docs: {
+      description: {
+        component: 'Your description here...'
+      }
+    }
+  }
 } as ComponentMeta<typeof YourComponent>;
 ```
 
@@ -136,6 +145,7 @@ Testing convention:
 Testing examples:
 
 - Simple Jest unit test example (snippet from `/utils/formatNumber.test.ts`):
+
 ```typescript
 import formatNumber from './formatNumber';
 
@@ -151,6 +161,7 @@ describe('formatNumber outputs', () => {
 ```
 
 - Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
+
 ```typescript
 import { render, screen } from '@testing-library/react';
 import RefreshIcon from '../icons/RefreshIcon';

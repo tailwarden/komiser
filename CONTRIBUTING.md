@@ -410,7 +410,9 @@ go-bindata-assetfs -o template.go dist/ dist/assets/images/
 
 ## Contributing Best Practices
 
-Here are some best practices to follow during the development process to make your changes more structured and making it easier for us to review:
+> For frontend you can also follow the [Getting Started Guide](https://github.com/tailwarden/komiser/tree/develop/dashboard#getting-started) in the `/dashboard` README.
+
+Here are some best practices to follow during the backend development process to make your changes more structured and making it easier for us to review:
 
 1. **Write Comprehensive Unit Tests:**   
         
