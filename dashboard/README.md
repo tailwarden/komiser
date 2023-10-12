@@ -6,7 +6,7 @@ Full frontend stack: `Next.js`, `Typescript`, `Tailwind`, `Storybook`, `Jest` & 
 
 Follow the [Contribution Guide](https://github.com/tailwarden/komiser/blob/develop/CONTRIBUTING.md#contributing-to-komiser-dashboard-ui) first if you haven't done so already. Then come back here and follow the next steps:
 
-1. run the development server:
+1. Run the development server:
 
 ```bash
 # From the Komiser root folder start the Komiser server, run:
@@ -19,7 +19,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-2. open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
+2. Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
    <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
 
 > If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
