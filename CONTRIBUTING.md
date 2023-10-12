@@ -65,8 +65,8 @@ Make sure to follow the following branch naming conventions:
 4️⃣ Implement the changes or additions you intend to contribute. Whether it's **bug fixes**, **new features**, or **enhancements**, this is where you put your coding skills to use.
 
 5️⃣ Once your changes are ready, you may then commit and push the changes from your working branch:
-```
-git commit -m "nice_commit_description"
+```bash
+git commit -m "fix(xxxx-name_of_bug): nice commit description"
 git push origin feature/1022-kubecost-integration
 ```
 
@@ -125,43 +125,15 @@ Access the dashboard UI at **`http://localhost:3002`** once the local Komiser in
 
 ---
 
-# 🚀 Contributing to Komiser Engine
-
-The core Komiser Engine is written in Go (Golang) and leverages Go Modules. Here are the prerequisites to run Komiser on your local machine:
-
-1. 🌐 **Go Version**:
-   - Latest Go version (currently its **`1.19`**) must be installed if you want to build and/or make changes to the existing code. The binary **`go1.19`** should be available in your path.
-     > 💡 If you wish to keep multiple versions of Go in your system and don't want to disturb the existing ones, refer [the guide](https://go.dev/doc/manage-install).
-
-2. 🔧 **GOPATH**:
-   - Ensure that the **`GOPATH`** environment variable is configured appropriately.
-
----
-
-## 🛠️ Komiser Installation
-
-### **Step 1: Installing Komiser CLI**
-Follow the instructions in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI** for your operating system.
-
-### **Step 2: Connect to a Cloud Account**
-To deploy a **self-hosted (local) instance** of Komiser, connect your Komiser CLI to a cloud account of your choice. Refer to the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws).
-
-### **Step 3: Accessing the Komiser UI**
-Access the dashboard UI at **`http://localhost:3002`** once the local Komiser instance is running.
-
-![komiser-dashboard](https://hackmd.io/_uploads/Syo0bMtgT.png)
-
----
-
 ## 🌟 Ways to Contribute to Komiser Engine
 
 Komiser is an open-source cloud-agnostic resource manager. It helps you break down cloud resource costs at the resource level. As a cloud-agnostic cloud management tool, we always have more providers and cloud services to add, update, and cost-calculate.
 
 ### 1️⃣ Adding a new Cloud Provider
 
-- **Step 1:** Create **`provider_name.go`** in **`providers/provider_name`** directory.
+- Step 1: Create **`provider_name.go`** in **`providers/provider_name`** directory.
 
-- **Step 2:** Add the following boilerplate:
+- Step 2: Add the following boilerplate:
 
 ```go
 package PROVIDER_NAME
@@ -192,7 +164,7 @@ func FetchProviderData(ctx context.Context, client ProviderClient, db *bun.DB) {
 }
 ```
 
-- **Step 3:** Add SDK client details in [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go):
+- Step 3: Add SDK client details in [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go):
 
 ```go
 type ProviderClient struct {
@@ -325,12 +297,12 @@ Komiser Dashboard utilizes a modern tech stack. Here's a brief about it:
 
 Let's get your hands dirty by setting up the Komiser dashboard:
 
-### Step 0: Grab the Go Dependencies
+### 1️⃣ Grab the Go Dependencies
 ```bash
 go mod download
 ```
 
-### Step 1: Configure `config.toml`
+### 2️⃣ Configure `config.toml`
 
 If it doesn't exist, create `config.toml` in the root and use this template:
 
@@ -361,25 +333,25 @@ If it doesn't exist, create `config.toml` in the root and use this template:
 
 Now, craft your credentials. Check out the guides [here](https://docs.komiser.io/getting-started/quickstart#self-hosted) to tailor the config for your needs.
 
-### Step 2: Boot Up the Komiser Backend
+### 3️⃣ Boot Up the Komiser Backend
 ```bash
 go run *.go start --config ./config.toml
 ```
 
 > 🖥️ This fires up the dashboard at [`http://localhost:3002/`](http://localhost:3002). However, it mirrors the **`master`** branch. Let's make it reflect your development branch!
 
-### Step 3: Navigate to the Dashboard Directory
+### 4️⃣ Navigate to the Dashboard Directory
 ```bash
 cd dashboard
 ```
 
-### Step 4: Set up Environment Variables
+### 5️⃣ Set up Environment Variables
 Create or update the **`.env`** file:
 ```
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-### Step 5: Spin up the Dev Server
+### 6️⃣ Spin up the Dev Server
 Install dependencies and fire up the dev server:
 ```bash
 npm install
