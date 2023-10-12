@@ -69,32 +69,29 @@ Following these steps will ensure that your contributions are well-received, rev
     ```
 6. While submitting Pull Request, **make sure to change the base branch from**: [master](https://github.com/tailwarden/komiser/tree/master) to [develop](v). Making sure to avoid any possible merge conflicts
 
-> ### Keeping your Fork Up-to-Date
-> 
-> If you plan on doing anything more than just a tiny quick fix, you’ll want to **make sure you keep your fork up to date** by tracking the original [“upstream” repo](https://github.com/tailwarden/komiser) that you forked. 
->
-> Follow the steps given below to do so: 
-> 
-> 1. Add the 'upstream' repo to list of remotes:
-> 
-> ```bash
-> git remote add upstream https://github.com/tailwarden/komiser.git
-> ```
-> 
-> 2. Fetch upstream repo’s branches and latest commits:
-> 
-> ```bash
-> git fetch upstream
-> ```
-> 
-> 3. Checkout to the **`develop`** branch and merge the upstream:
-> 
-> ```bash
-> git checkout develop
-> git merge upstream/develop
-> ```
-> 
-> **Now, your local 'develop' branch is up-to-date with everything modified upstream!**
+### Keeping your Fork Up-to-Date
+
+If you plan on doing anything more than just a tiny quick fix, you’ll want to **make sure you keep your fork up to date** by tracking the original [“upstream” repo](https://github.com/tailwarden/komiser) that you forked.
+
+Follow the steps given below to do so:
+
+1. Add the 'upstream' repo to list of remotes:
+		```bash
+		git remote add upstream https://github.com/tailwarden/komiser.git
+```
+
+2. Fetch upstream repo’s branches and latest commits:
+		```bash
+		git fetch upstream
+		```
+
+3. Checkout to the **`develop`** branch and merge the upstream:
+		```bash
+		git checkout develop
+		git merge upstream/develop
+		```
+
+**Now, your local 'develop' branch is up-to-date with everything modified upstream!**
 
 ## Contributing to Komiser Engine
 
@@ -137,7 +134,6 @@ Create a new **`provider_name.go`** file under **`providers/provider_name`** dir
 
 **Step 2:** 
 Add the following boilerplate code, which defines the structure of any new provider to be added:
-
 ```go
 package PROVIDER_NAME
 
@@ -171,7 +167,6 @@ Then, the main task is writing the code to fetch all the resources/services usin
 
 **Step 3:**
 Add the information about the appropriate provider's SDK client in [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go) file:
-
 ```go
 
 type ProviderClient struct {
@@ -200,7 +195,7 @@ type AzureClient struct {
 Add the provider configuration in TOML format in your **`config.toml`** file, which will be used by Komiser to configure your account with the CLI.
 
 An example configuration entry for configuring a Google Cloud account in the **`config.toml`** file would look like this:
-```
+```toml
 [[gcp]]
 name="production"
 source="ENVIRONMENT_VARIABLES"
@@ -210,15 +205,13 @@ profile="production"
 
 **Step 5:**
 Build a new Komiser binary with the latest code changes by running:
-
-```
+```bash
 go build
 ```
 
 **Step 6:**
 Start a new Komiser development server using this new binary:
-
-```
+```bash
 ./komiser start
 ```
 
@@ -233,7 +226,6 @@ Create a new file **`servicename.go`** under the path **`providers/provider_name
 
 **Step 2:**
 Add the following boilerplate code, which defines the structure of any new service/resource to be added for a cloud provider:
-
 ```go
 package service
 
@@ -312,7 +304,7 @@ Here are the steps to setup and access the Komiser dashboard:
 **Step 0:**
 
 Install the necessary Go dependencies using the following command:
-```
+```bash
 go mod download
 ```
 
@@ -343,7 +335,8 @@ Paste in the following example content:
   file="komiser.db"
 ```
 
-You can find more options in our [Quickstart Guide](https://docs.komiser.io/getting-started/quickstart). It shows you how to connect to PostreSQL and other things.
+> You can find more options in our [Quickstart Guide](https://docs.komiser.io/getting-started/quickstart).
+> For example it shows you how to connect to PostreSQL and other things.
 
 **Edit the config**
 
@@ -356,13 +349,10 @@ From the root folder, start the Komiser backend server using the following comma
 go run *.go start --config ./config.toml
 ```
 
-> As soon as you run this, you'll be able to access the dashboard at `http://localhost:3002`.
->
+> As soon as you run this, you'll be able to access the dashboard at [`http://localhost:3002/`](http://localhost:3002).
 > An important point to note here is, this dashboard only reflects the changes from the **`master`** branch.
-> 
-> For our purpose, we certainly need changes to be reflected from our development branch! 
+> For our purpose, we certainly need changes to be reflected from our development branch!
 > Follow the steps given below to do so 👇
->
 
 **Step 3:**
 Head over to the **`dashboard`** directory:
@@ -386,7 +376,7 @@ npm run dev
 
 The official supported NodeJS version is the latest `18.x.x` LTS release.
 
-You'll be able to access the dashboard at **`http://localhost:3002/`**
+You'll be able to access the dashboard at [**`http://localhost:3002/`**](http://localhost:3002)
 
 ![](https://hackmd.io/_uploads/ryvOPmFla.png)
 

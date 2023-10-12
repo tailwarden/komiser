@@ -20,7 +20,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
 2. open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
-<img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
+   <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
 
 > If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
 > <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png">
