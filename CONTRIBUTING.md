@@ -302,10 +302,10 @@ Komiser Dashboard is built on **Typescript** and **Next.js**. The entire fronten
 - **React Testing Library**
 
 Following are the pre-requisites needed to setup a Dev environment of Komiser dashboard:
-- In nearly all cases, while contributing to Komiser UI, you will need to build and run the Komiser Server as well, using the CLI. Make sure to follow the steps mentioned in the **"Komiser Installation"** section above.
+- In nearly all cases, while contributing to Komiser UI, you will need to build and run the Komiser Server as well, using the CLI. Make sure to follow the steps mentioned in the [**"Komiser Installation"**](#komiser-installation) section above.
 - Make sure to have all the **latest versions** of the frontend stack listed above.
 
-### Setup a local Developement Server
+### Setup a local Development Server
 
 Here are the steps to setup and access the Komiser dashboard:
 
@@ -317,9 +317,43 @@ go mod download
 ```
 
 **Step 1:**
-From the root folder, start the Komiser backend server using the following command:
+Generate a `config.toml` file in the root folder if you haven't done so already.
+Paste in the following example content:
+
+```toml
+[[aws]]
+	name="sandbox"
+	source="CREDENTIALS_FILE"
+	path="./path/to/credentials/file"
+	profile="default"
+
+[[aws]]
+	name="staging"
+	source="CREDENTIALS_FILE"
+	path="./path/to/credentials/file"
+	profile="staging-account"
+
+[[gcp]]
+	name="production"
+	source="ENVIRONMENT_VARIABLES"
+	# path="./path/to/credentials/file" specify if CREDENTIALS_FILE is used
+	profile="production"
+
+[sqlite]
+  file="komiser.db"
 ```
-go run *.go start --config /path/to/config.toml
+
+You can find more options in our [Quickstart Guide](https://docs.komiser.io/getting-started/quickstart). It shows you how to connect to PostreSQL and other things.
+
+**Edit the config**
+
+Then you also need to create your credentials file for any of your providers. Head over [here](https://docs.komiser.io/getting-started/quickstart#self-hosted) to have a list of guides to chose from.
+Update the above config following one of the guides and remove the integrations you don't need.
+
+**Step 2:**
+From the root folder, start the Komiser backend server using the following command:
+```bash
+go run *.go start --config ./config.toml
 ```
 
 > As soon as you run this, you'll be able to access the dashboard at `http://localhost:3000`. 
@@ -330,25 +364,27 @@ go run *.go start --config /path/to/config.toml
 > Follow the steps given below to do so 👇
 >
 
-**Step 2:**
+**Step 3:**
 Head over to the **`dashboard`** directory:
 
-```
+```bash
 cd dashboard
 ```
 
-**Step 3:**
+**Step 4:**
 Create a new environment variable in the **`.env`** file:
 ```
-EXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-**Step 4:**
+**Step 5:**
 Install the necessary **`npm`** dependencies and start the dev server using the following command:
-```
+```bash
 npm install
 npm run dev
 ```
+
+The official supported NodeJS version is the latest `18.x.x` LTS release.
 
 You'll be able to access the dashboard at **`http://localhost:3002/`**
 
