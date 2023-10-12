@@ -42,31 +42,34 @@ Following these steps will ensure that your contributions are well-received, rev
 ### Fork and Pull Request Flow
 
 1. Head over to the [Komiser GitHub repo](https://github.com/tailwarden/komiser) and "fork it" into your own GitHub account.
+
 2. Clone your fork to your local machine, using the following command:
-    ```bash
-    git clone git@github.com:USERNAME/FORKED-PROJECT.git 
-    ```
+	```bash
+	git clone git@github.com:USERNAME/FORKED-PROJECT.git
+	```
+
 3. Create a new branch based-off **`develop`** branch:
-    ```bash
-    git checkout develop
-    git checkout -b fix/XXX-something develop
-    ```
-    Make sure to follow the following branch naming conventions:
-    - For feature/enchancements, use: **`feature/xxxx-name_of_feature`**
-    - For bug fixes, use: **`fix/xxxx-name_of_bug`** <br><br>
+	```bash
+	git checkout develop
+	git checkout -b fix/XXX-something develop
+	```
+	Make sure to follow the following branch naming conventions:
+	- For feature/enchancements, use: **`feature/xxxx-name_of_feature`**
+	- For bug fixes, use: **`fix/xxxx-name_of_bug`** <br><br>
+	> Here, **`xxxx`** is the issue number associated with the bug/feature!
+	> For example:
+	> ```bash
+	> git checkout -b feature/1022-kubecost-integration develop
+	> ```
 
-    > Here, **`xxxx`** is the issue number associated with the bug/feature!
-
-    For example:
-    ```bash
-    git checkout -b feature/1022-kubecost-integration develop
-    ```
 4. Implement the changes or additions you intend to contribute. Whether it's **bug fixes**, **new features**, or **enhancements**, this is where you put your coding skills to use.
+
 5. Once your changes are ready, you may then commit and push the changes from your working branch:
-    ```bash
-    git commit -m "nice_commit_description"
-    git push origin feature/1022-kubecost-integration
-    ```
+	```bash
+	git commit -m "nice_commit_description"
+	git push origin feature/1022-kubecost-integration
+	```
+
 6. While submitting Pull Request, **make sure to change the base branch from**: [master](https://github.com/tailwarden/komiser/tree/master) to [develop](v). Making sure to avoid any possible merge conflicts
 
 ### Keeping your Fork Up-to-Date
@@ -76,20 +79,20 @@ If you plan on doing anything more than just a tiny quick fix, you’ll want to 
 Follow the steps given below to do so:
 
 1. Add the 'upstream' repo to list of remotes:
-		```bash
-		git remote add upstream https://github.com/tailwarden/komiser.git
-```
+	```bash
+	git remote add upstream https://github.com/tailwarden/komiser.git
+	```
 
 2. Fetch upstream repo’s branches and latest commits:
-		```bash
-		git fetch upstream
-		```
+	```bash
+	git fetch upstream
+	```
 
 3. Checkout to the **`develop`** branch and merge the upstream:
-		```bash
-		git checkout develop
-		git merge upstream/develop
-		```
+	```bash
+	git checkout develop
+	git merge upstream/develop
+	```
 
 **Now, your local 'develop' branch is up-to-date with everything modified upstream!**
 
@@ -286,12 +289,12 @@ Additionally, [here](https://youtu.be/Vn5uc2elcVg?feature=shared) is a video tut
 ## Contributing to Komiser Dashboard UI
 
 Komiser Dashboard is built on **Typescript** and **Next.js**. The entire frontend stack used is as follows:
-- **Next.js**
-- **Typescript**
-- **Tailwind**
-- **Storybook**
-- **Jest** 
-- **React Testing Library**
+- [**Next.js**](https://nextjs.org/)
+- [**Typescript**](https://www.typescriptlang.org/)
+- [**Tailwind**](https://tailwindcss.com/)
+- [**Storybook**](https://storybook.js.org/docs/react/get-started/why-storybook)
+- [**Jest** ](https://jestjs.io/)
+- [**React Testing Library**](https://testing-library.com/docs/react-testing-library/intro/)
 
 Following are the pre-requisites needed to setup a Dev environment of Komiser dashboard:
 - In nearly all cases, while contributing to Komiser UI, you will need to build and run the Komiser Server as well, using the CLI. Make sure to follow the steps mentioned in the [**"Komiser Installation"**](#komiser-installation) section above.
