@@ -52,7 +52,7 @@ func (handler *ApiHandler) NewFeedbackHandler(c *gin.Context) {
 		]
 	}`, description, email)
 
-	payloadField.Write([]byte(payloadJSON))
+	_, _ = payloadField.Write([]byte(payloadJSON))
 
 	imagePart, err := writer.CreateFormFile("files[0]", filepath.Base("temp-image"))
 	if err != nil {

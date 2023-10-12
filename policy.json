@@ -55,6 +55,7 @@
 				"iam:ListSAMLProviders",
 				"iam:ListSAMLProviderTags",
 				"kinesis:ListStreams",
+				"kinesis:ListStreamConsumers",
 				"kms:ListKeys",
 				"kms:ListResourceTags",
 				"kms:DescribeKey",

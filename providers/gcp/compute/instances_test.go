@@ -3,7 +3,7 @@ package compute
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/tailwarden/komiser/providers"
@@ -13,7 +13,7 @@ import (
 func TestInstances(t *testing.T) {
 	t.Skip("Only for local development because it is using a Google Cloud connection")
 	// Replace the empty string with a SA or credentials file location
-	data, err := ioutil.ReadFile("")
+	data, err := os.ReadFile("")
 	if err != nil {
 		t.Fatal(err)
 	}

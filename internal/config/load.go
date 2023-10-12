@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -46,7 +45,7 @@ func loadConfigFromFile(path string) (*Config, error) {
 		return nil, fmt.Errorf("no such file %s", filename)
 	}
 
-	yamlFile, err := ioutil.ReadFile(filename)
+	yamlFile, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -436,7 +435,7 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.
 
 			accounts = append(accounts, cloudAccount)
 
-			data, err := ioutil.ReadFile(account.ServiceAccountKeyPath)
+			data, err := os.ReadFile(account.ServiceAccountKeyPath)
 			if err != nil {
 				log.Fatal(err)
 			}
