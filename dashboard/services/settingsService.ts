@@ -458,6 +458,19 @@ const settingsService = {
     } catch (error) {
       return Error;
     }
+  },
+
+  async sendFeedback(payload: FormData) {
+    try {
+      const res = await fetch(`${BASE_URL}/feedback`, {
+        method: 'POST',
+        body: payload
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
   }
 };
 

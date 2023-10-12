@@ -12,64 +12,49 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func DaemonSets(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	var config metav1.ListOptions
 
 	opencostEnabled := true
-	podsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "pod")
+	daemonsetsCost, err := oc.GetOpencostInfo(client.K8sClient.OpencostBaseUrl, "daemonset")
 	if err != nil {
-		log.Errorf("ERROR: Couldn't get pods info from OpenCost: %v", err)
+		log.Errorf("ERROR: Couldn't get daemonsets info from OpenCost: %v", err)
 		log.Warn("Opencost disabled")
 		opencostEnabled = false
 	}
 
 	for {
-		res, err := client.K8sClient.Client.CoreV1().Pods("").List(ctx, config)
+		res, err := client.K8sClient.Client.AppsV1().DaemonSets("").List(ctx, config)
 		if err != nil {
 			return nil, err
 		}
 
-		for _, pod := range res.Items {
+		for _, daemonset := range res.Items {
 			tags := make([]models.Tag, 0)
 
-			for key, value := range pod.Labels {
+			for key, value := range daemonset.Labels {
 				tags = append(tags, models.Tag{
 					Key:   key,
 					Value: value,
 				})
 			}
 
-			if len(pod.OwnerReferences) > 0 {
-				// we use the owner kind of first owner only as the owner tag
-				ownerTags := []models.Tag{
-					{
-						Key:   "owner_kind",
-						Value: pod.OwnerReferences[0].Kind,
-					},
-					{
-						Key:   "owner_name",
-						Value: pod.OwnerReferences[0].Name,
-					},
-				}
-				tags = append(tags, ownerTags...)
-			}
-
 			cost := 0.0
 			if opencostEnabled {
-				cost = podsCost[pod.Name].TotalCost
+				cost = daemonsetsCost[daemonset.Name].TotalCost
 			}
 
 			resources = append(resources, models.Resource{
 				Provider:   "Kubernetes",
 				Account:    client.Name,
-				Service:    "Pod",
-				ResourceId: string(pod.UID),
-				Name:       pod.Name,
-				Region:     pod.Namespace,
+				Service:    "DaemonSet",
+				ResourceId: string(daemonset.UID),
+				Name:       daemonset.Name,
+				Region:     daemonset.Namespace,
 				Cost:       cost,
-				CreatedAt:  pod.CreationTimestamp.Time,
+				CreatedAt:  daemonset.CreationTimestamp.Time,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 			})
@@ -85,7 +70,7 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 	log.WithFields(log.Fields{
 		"provider":  "Kubernetes",
 		"account":   client.Name,
-		"service":   "Pod",
+		"service":   "DaemonSet",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
