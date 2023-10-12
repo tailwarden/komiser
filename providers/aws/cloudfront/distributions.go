@@ -2,7 +2,10 @@ package cloudfront
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -27,6 +30,45 @@ const (
 
 func ConvertBytesToTerabytes(bytes int64) float64 {
 	return float64(bytes) / 1099511627776
+}
+
+func getRate(pricingOutput *pricing.GetProductsOutput, groupDescriptionNameOne string, groupDescriptionNameTwo string) (float64, error) {
+	costPerMonth := 0.0
+
+	if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
+		var priceList interface{}
+		err := json.Unmarshal([]byte(pricingOutput.PriceList[0]), &priceList)
+		if err != nil {
+			return 0, fmt.Errorf("failed to unmarshal JSON: %w", err)
+		}
+
+		priceListMap := priceList.(map[string]interface{})
+		if attribute, ok := priceListMap["product"].(map[string]interface{})["attributes"]; ok {
+			for _, attb := range attribute.(map[string]interface{}) {
+				if description, ok := attb.(map[string]string)["groupDescription"]; ok {
+					if strings.Contains(description, groupDescriptionNameOne) || strings.Contains(description, groupDescriptionNameTwo) {
+						if onDemand, ok := priceListMap["terms"].(map[string]interface{})["OnDemand"]; ok {
+							for _, details := range onDemand.(map[string]interface{}) {
+								if priceDetails, ok := details.(map[string]interface{})["priceDimensions"].(map[string]interface{}); ok {
+									for _, price := range priceDetails {
+										usdPrice := price.(map[string]interface{})["pricePerUnit"].(map[string]interface{})["USD"].(string)
+										costPerMonth, err = strconv.ParseFloat(usdPrice, 64)
+										if err != nil {
+											return 0, fmt.Errorf("failed to parse cost per month: %w", err)
+										}
+										break
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	return costPerMonth, nil
 }
 
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -246,7 +288,9 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 
 			lambdaEdgeRequestsCost := awsUtils.GetCost(priceMap["AWS-Lambda-Edge-Requests"], lambdaEdgeRequests/10000000)
 
-			functionInvocationsCost := awsUtils.GetCost(priceMap["AWS-CloudFront-FunctionInvocation"], functionInvocation)
+			functionInvocationsRate, _ := getRate(pricingOutput, "CloudFront Function Invocation", "function invocation")
+
+			functionInvocationsCost := functionInvocationsRate * functionInvocation
 
 			monthlyCost := dataTransferToInternetCost + dataTransferToOriginCost + requestsCost + lambdaEdgeDurationCost + lambdaEdgeRequestsCost + functionInvocationsCost
 
