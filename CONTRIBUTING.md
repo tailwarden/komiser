@@ -115,7 +115,7 @@ In order to deploy a **self-hosted (local) instance** of Komiser, the next step 
 
 **Step 3: Accessing the Komiser UI**
 
-Once the local Komiser instance is running, you can access the dashboard UI on **`http://localhost:3000`**
+Once the local Komiser instance is running, you can access the dashboard UI on **`http://localhost:3002`**
 
 ![komiser-dashboard](https://hackmd.io/_uploads/Syo0bMtgT.png)
 
@@ -356,7 +356,7 @@ From the root folder, start the Komiser backend server using the following comma
 go run *.go start --config ./config.toml
 ```
 
-> As soon as you run this, you'll be able to access the dashboard at `http://localhost:3000`. 
+> As soon as you run this, you'll be able to access the dashboard at `http://localhost:3002`.
 >
 > An important point to note here is, this dashboard only reflects the changes from the **`master`** branch.
 > 
