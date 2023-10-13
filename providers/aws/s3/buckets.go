@@ -45,7 +45,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
-	priceMap, err := awsUtils.GetPriceMap(pricingOutput)
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
 	if err != nil {
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
 		return resources, err
