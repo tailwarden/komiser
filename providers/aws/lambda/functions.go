@@ -48,7 +48,7 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 		return resources, err
 	}
 
-	priceMap, err := awsUtils.GetPriceMap(pricingOutput)
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
 	if err != nil {
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
 		return resources, err
