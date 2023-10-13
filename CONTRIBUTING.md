@@ -2,11 +2,11 @@
 
 ## Welcome
 
-**Want to contribute to Komiser, but not sure where to start?** We've got you covered!
+🎉 **Want to contribute to Komiser, but not sure where to start?** We've got you covered!
 
 **Welcome to the Komiser Contributing Guide** where you'll find everything you need to get started with contributing to Komiser.
 
-We are thrilled to have you as part of our community and looking forward to your valuable contributions!
+We are thrilled to have you as part of our community and looking forward to your valuable contributions! 🌟
 
 ## Before You Get Started!
 
@@ -14,9 +14,9 @@ Before getting started with your first contribution, here are a few things to ke
 
 ### For Major Feature Enhancements
 
-**Planning to work on adding a major feature enhancement?** That's amazing we always encourage ambitious contributions. **Keep in mind though that we always recommend discussing your plans with the team first.**
+🚀 **Planning to work on adding a major feature enhancement?** That's amazing we always encourage ambitious contributions. **Keep in mind though that we always recommend discussing your plans with the team first.**
 
-This provides an opportunity for fellow contributors to - **guide you in the right direction**, **offer feedback on your design**, and **potentially identify if another contributor is already working on a similar task**. 
+This provides an opportunity for fellow contributors to - **guide you in the right direction**, **offer feedback on your design**, and **potentially identify if another contributor is already working on a similar task**.
 
 Here's how to reach out:
 
@@ -25,118 +25,115 @@ Here's how to reach out:
 
 ### For Bug Reports and Minor Fixes
 
-**Found a bug and wish to fix it?** Each and every contribution matters regardless of its size!
+🐞 **Found a bug and wish to fix it?** Each and every contribution matters regardless of its size!
 
 Here are a few things to keep in mind in this case:
 
 - Before creating a new issue, please make sure to check for an already [existing issue](https://github.com/tailwarden/komiser/issues) for that bug.
-- If an issue doesn't exist, [create a new issue](https://github.com/tailwarden/komiser/issues/new/choose) of **`type: Bug Report`** and make sure to provide as much detail as possible.
+- If an issue doesn't exist, [create a new issue](https://github.com/tailwarden/komiser/issues/new/choose) of **\`type: Bug Report\`** and make sure to provide as much detail as possible.
 - Feel free to reach out to us on **#contributors** or **#feedback** channel on our Discord Server, if you need any assistance or have questions.
 
 ## General Contribution Flow
 
 This section covers the **general contribution flow** when contributing to any area of **Komiser (Engine or the UI)** and some best practices to follow along the way.
 
-Following these steps will ensure that your contributions are well-received, reviewed, and integrated effectively into Komiser's codebase. 
+Following these steps will ensure that your contributions are well-received, reviewed, and integrated effectively into Komiser's codebase.
 
 ### Fork and Pull Request Flow
 
-1. Head over to the [Komiser GitHub repo](https://github.com/tailwarden/komiser) and "fork it" into your own GitHub account.
-2. Clone your fork to your local machine, using the following command:
-    ```bash
-    git clone git@github.com:USERNAME/FORKED-PROJECT.git 
-    ```
-3. Create a new branch based-off **`develop`** branch:
-    ```bash
-    git checkout develop
-    git checkout -b fix/XXX-something develop
-    ```
-    Make sure to follow the following branch naming conventions:
-    - For feature/enchancements, use: **`feature/xxxx-name_of_feature`**
-    - For bug fixes, use: **`fix/xxxx-name_of_bug`** <br><br>
+1️⃣ Head over to the [Komiser GitHub repo](https://github.com/tailwarden/komiser) and "fork it" into your own GitHub account.
 
-    > Here, **`xxxx`** is the issue number associated with the bug/feature!
+2️⃣ Clone your fork to your local machine, using the following command:
+```bash
+git clone git@github.com:USERNAME/FORKED-PROJECT.git
+```
 
-    For example:
-    ```bash
-    git checkout -b feature/1022-kubecost-integration develop
-    ```
-4. Implement the changes or additions you intend to contribute. Whether it's **bug fixes**, **new features**, or **enhancements**, this is where you put your coding skills to use.
-5. Once your changes are ready, you may then commit and push the changes from your working branch:
-    ```bash
-    git commit -m "nice_commit_description"
-    git push origin feature/1022-kubecost-integration
-    ```
-6. While submitting Pull Request, **make sure to change the base branch from**: [master](https://github.com/tailwarden/komiser/tree/master) to [develop](v). Making sure to avoid any possible merge conflicts
-
-> ### Keeping your Fork Up-to-Date
-> 
-> If you plan on doing anything more than just a tiny quick fix, you’ll want to **make sure you keep your fork up to date** by tracking the original [“upstream” repo](https://github.com/tailwarden/komiser) that you forked. 
->
-> Follow the steps given below to do so: 
-> 
-> 1. Add the 'upstream' repo to list of remotes:
-> 
+3️⃣ Create a new branch based-off **\`develop\`** branch:
+```bash
+git checkout develop
+git checkout -b fix/XXX-something develop
+```
+Make sure to follow the following branch naming conventions:
+- For feature/enchancements, use: **\`feature/xxxx-name_of_feature\`**
+- For bug fixes, use: **\`fix/xxxx-name_of_bug\`**
+> Here, **\`xxxx\`** is the issue number associated with the bug/feature!
+> For example:
 > ```bash
-> git remote add upstream https://github.com/tailwarden/komiser.git
+> git checkout -b feature/1022-kubecost-integration develop
 > ```
-> 
-> 2. Fetch upstream repo’s branches and latest commits:
-> 
-> ```bash
-> git fetch upstream
-> ```
-> 
-> 3. Checkout to the **`develop`** branch and merge the upstream:
-> 
-> ```bash
-> git checkout develop
-> git merge upstream/develop
-> ```
-> 
-> **Now, your local 'develop' branch is up-to-date with everything modified upstream!**
 
-## Contributing to Komiser Engine
+4️⃣ Implement the changes or additions you intend to contribute. Whether it's **bug fixes**, **new features**, or **enhancements**, this is where you put your coding skills to use.
 
-The core Komiser Engine is written in Go (Golang) and leverages Go Modules. Following are the pre-requisistes needed to run Komiser on your local machine:
-1. Latest Go version (currently its **`1.19`**) must be installed if you want to build and/or make changes to the existing code. The binary **`go1.19`** should be available in your path. <br><br>
-    > If you wish to keep multiple versions of Go in your system and don't want to disturb the existing ones, refer [the guide](https://go.dev/doc/manage-install).
-2. Make sure that the **`GOPATH`** environment variable is configured appropriately. 
+5️⃣ Once your changes are ready, you may then commit and push the changes from your working branch:
+```bash
+git commit -m "fix(xxxx-name_of_bug): nice commit description"
+git push origin feature/1022-kubecost-integration
+```
 
-### Komiser Installation
+6️⃣ While submitting Pull Request, **make sure to change the base branch from**: [master](https://github.com/tailwarden/komiser/tree/master) to [develop](v). Making sure to avoid any possible merge conflicts
 
-**Step 1: Installing Komiser CLI**
+### Keeping your Fork Up-to-Date
 
-Follow the instructions given in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI**, according to your operating system.
+If you plan on doing anything more than just a tiny quick fix, you’ll want to **make sure you keep your fork up to date** by tracking the original [“upstream” repo](https://github.com/tailwarden/komiser) that you forked.
 
-**Step 2: Connect to a Cloud Account** 
+Follow the steps given below to do so:
 
-In order to deploy a **self-hosted (local) instance** of Komiser, the next step would be to connect your Komiser CLI to a cloud account of your choice. You may refer the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws) and follow the instructions using any one (Let's say AWS).
+1️⃣ Add the 'upstream' repo to list of remotes:
+```bash
+git remote add upstream https://github.com/tailwarden/komiser.git
+```
 
-**Step 3: Accessing the Komiser UI**
+2️⃣ Fetch upstream repo’s branches and latest commits:
+```bash
+git fetch upstream
+```
 
-Once the local Komiser instance is running, you can access the dashboard UI on **`http://localhost:3000`**
+3️⃣ Checkout to the **\`develop\`** branch and merge the upstream:
+```bash
+git checkout develop
+git merge upstream/develop
+```
+
+**Now, your local 'develop' branch is up-to-date with everything modified upstream!**
+
+
+# 🚀 Contributing to Komiser Engine
+
+The core Komiser Engine is written in Go (Golang) and leverages Go Modules. Here are the prerequisites to run Komiser on your local machine:
+
+1. 🌐 **Go Version**:
+   - Latest Go version (currently its **`1.19`**) must be installed if you want to build and/or make changes to the existing code. The binary **`go1.19`** should be available in your path.
+     > 💡 If you wish to keep multiple versions of Go in your system and don't want to disturb the existing ones, refer [the guide](https://go.dev/doc/manage-install).
+
+2. 🔧 **GOPATH**:
+   - Ensure that the **`GOPATH`** environment variable is configured appropriately.
+
+---
+
+## 🛠️ Komiser Installation
+
+### **Step 1: Installing Komiser CLI**
+Follow the instructions in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI** for your operating system.
+
+### **Step 2: Connect to a Cloud Account**
+To deploy a **self-hosted (local) instance** of Komiser, connect your Komiser CLI to a cloud account of your choice. Refer to the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws).
+
+### **Step 3: Accessing the Komiser UI**
+Access the dashboard UI at **`http://localhost:3002`** once the local Komiser instance is running.
 
 ![komiser-dashboard](https://hackmd.io/_uploads/Syo0bMtgT.png)
 
-### Ways to Contribute in Komiser Engine
+---
 
+## 🌟 Ways to Contribute to Komiser Engine
 
-Komiser is an open source cloud-agnostic resource manager which helps you break down your cloud resources cost at the resource level.
+Komiser is an open-source cloud-agnostic resource manager. It helps you break down cloud resource costs at the resource level. As a cloud-agnostic cloud management tool, we always have more providers and cloud services to add, update, and cost-calculate.
 
-Due to the nature of Komiser, a cloud-agnostic cloud management tool, our work is never really done! There are always more providers and cloud services that can be added, updated and cost calculated.
+### 1️⃣ Adding a new Cloud Provider
 
-Therefore, there are mainly three ways you can contribute to the Komiser Engine:
+- Step 1: Create **`provider_name.go`** in **`providers/provider_name`** directory.
 
-### 1. Adding a new Cloud Provider
-
-Here are the general steps to integrate a new cloud provider in Komiser:
-
-**Step 1:** 
-Create a new **`provider_name.go`** file under **`providers/provider_name`** directory.
-
-**Step 2:** 
-Add the following boilerplate code, which defines the structure of any new provider to be added:
+- Step 2: Add the following boilerplate:
 
 ```go
 package PROVIDER_NAME
@@ -167,13 +164,9 @@ func FetchProviderData(ctx context.Context, client ProviderClient, db *bun.DB) {
 }
 ```
 
-Then, the main task is writing the code to fetch all the resources/services using the provider's Go client SDK. You may refer any [existing examples](https://github.com/tailwarden/komiser/tree/develop/providers) to understand better.
-
-**Step 3:**
-Add the information about the appropriate provider's SDK client in [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go) file:
+- Step 3: Add SDK client details in [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go):
 
 ```go
-
 type ProviderClient struct {
 	AWSClient          *aws.Config
 	DigitalOceanClient *godo.Client
@@ -193,14 +186,11 @@ type AzureClient struct {
 	Credentials    *azidentity.ClientSecretCredential
 	SubscriptionId string
 }
-
 ```
 
-**Step 4:**
-Add the provider configuration in TOML format in your **`config.toml`** file, which will be used by Komiser to configure your account with the CLI.
+- **Step 4:** Add provider configuration in TOML format in **`config.toml`**:
 
-An example configuration entry for configuring a Google Cloud account in the **`config.toml`** file would look like this:
-```
+```toml
 [[gcp]]
 name="production"
 source="ENVIRONMENT_VARIABLES"
@@ -208,23 +198,19 @@ source="ENVIRONMENT_VARIABLES"
 profile="production"
 ```
 
-**Step 5:**
-Build a new Komiser binary with the latest code changes by running:
+- **Step 5:** Compile a new Komiser binary:
 
-```
+```bash
 go build
 ```
 
-**Step 6:**
-Start a new Komiser development server using this new binary:
+- **Step 6:** Start a new Komiser development server:
 
-```
+```bash
 ./komiser start
 ```
 
-**If everything goes well, you'll see a new cloud provider added in the Komiser Dashboard!**
-
-### 2. Adding a new Cloud Service/Resource
+### 2️⃣ Adding a new Cloud Service/Resource
 
 Here are the general steps to add a new service/resource for a cloud provider in Komiser:
 
@@ -233,7 +219,6 @@ Create a new file **`servicename.go`** under the path **`providers/provider_name
 
 **Step 2:**
 Add the following boilerplate code, which defines the structure of any new service/resource to be added for a cloud provider:
-
 ```go
 package service
 
@@ -287,125 +272,151 @@ Repeat steps **`4,5,6`** accordingly and you'll see a new resource/service added
 
 Additionally, [here](https://youtu.be/Vn5uc2elcVg?feature=shared) is a video tutorial of the entire process for your reference.
 
-#### 3. Enhance existing Cloud service/resource
+### 3️⃣ Enhance existing Cloud service/resource
 
 **So, you wish to improve the code quality of an existing cloud service/resource?** Feel free to discuss your ideas with us on our [Discord Server](https://discord.tailwarden.com) and [open a new issue](https://github.com/tailwarden/komiser/issues).
 
-## Contributing to Komiser Dashboard UI
+# 🚀 Contributing to Komiser Dashboard UI
 
-Komiser Dashboard is built on **Typescript** and **Next.js**. The entire frontend stack used is as follows:
-- **Next.js**
-- **Typescript**
-- **Tailwind**
-- **Storybook**
-- **Jest** 
-- **React Testing Library**
+Komiser Dashboard utilizes a modern tech stack. Here's a brief about it:
 
-Following are the pre-requisites needed to setup a Dev environment of Komiser dashboard:
-- In nearly all cases, while contributing to Komiser UI, you will need to build and run the Komiser Server as well, using the CLI. Make sure to follow the steps mentioned in the **"Komiser Installation"** section above.
-- Make sure to have all the **latest versions** of the frontend stack listed above.
+- **Framework**: [**Next.js**](https://nextjs.org/)
+- **Language**: [**Typescript**](https://www.typescriptlang.org/)
+- **CSS**: [**Tailwind**](https://tailwindcss.com/)
+- **Component Library**: [**Storybook**](https://storybook.js.org/docs/react/get-started/why-storybook)
+- **Testing**:
+  - [**Jest**](https://jestjs.io/)
+  - [**React Testing Library**](https://testing-library.com/docs/react-testing-library/intro/)
 
-### Setup a local Developement Server
+## 🧩 Prerequisites
 
-Here are the steps to setup and access the Komiser dashboard:
+1. While working on Komiser UI, you'd typically need the Komiser Server as well. Follow the instructions in the [**Komiser Installation**](#komiser-installation) section above.
+2. Ensure you're using the **latest versions** of the tech stack mentioned above.
 
-**Step 0:**
+## 🛠 Setup a Local Development Server
 
-Install the necessary Go dependencies using the following command:
-```
+Let's get your hands dirty by setting up the Komiser dashboard:
+
+### 1️⃣ Grab the Go Dependencies
+```bash
 go mod download
 ```
 
-**Step 1:**
-From the root folder, start the Komiser backend server using the following command:
-```
-go run *.go start --config /path/to/config.toml
+### 2️⃣ Configure `config.toml`
+
+If it doesn't exist, create `config.toml` in the root and use this template:
+
+```toml
+[[aws]]
+	name="sandbox"
+	source="CREDENTIALS_FILE"
+	path="./path/to/credentials/file"
+	profile="default"
+
+[[aws]]
+	name="staging"
+	source="CREDENTIALS_FILE"
+	path="./path/to/credentials/file"
+	profile="staging-account"
+
+[[gcp]]
+	name="production"
+	source="ENVIRONMENT_VARIABLES"
+	# path="./path/to/credentials/file" specify if CREDENTIALS_FILE is used
+	profile="production"
+
+[sqlite]
+  file="komiser.db"
 ```
 
-> As soon as you run this, you'll be able to access the dashboard at `http://localhost:3000`. 
->
-> An important point to note here is, this dashboard only reflects the changes from the **`master`** branch.
-> 
-> For our purpose, we certainly need changes to be reflected from our development branch! 
-> Follow the steps given below to do so 👇
->
+> 📘 Dive deeper in our [Quickstart Guide](https://docs.komiser.io/getting-started/quickstart) for more configurations like connecting to PostgreSQL.
 
-**Step 2:**
-Head over to the **`dashboard`** directory:
+Now, craft your credentials. Check out the guides [here](https://docs.komiser.io/getting-started/quickstart#self-hosted) to tailor the config for your needs.
 
+### 3️⃣ Boot Up the Komiser Backend
+```bash
+go run *.go start --config ./config.toml
 ```
+
+> 🖥️ This fires up the dashboard at [`http://localhost:3002/`](http://localhost:3002). However, it mirrors the **`master`** branch. Let's make it reflect your development branch!
+
+### 4️⃣ Navigate to the Dashboard Directory
+```bash
 cd dashboard
 ```
 
-**Step 3:**
-Create a new environment variable in the **`.env`** file:
+### 5️⃣ Set up Environment Variables
+Create or update the **`.env`** file:
 ```
-EXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-**Step 4:**
-Install the necessary **`npm`** dependencies and start the dev server using the following command:
-```
+### 6️⃣ Spin up the Dev Server
+Install dependencies and fire up the dev server:
+```bash
 npm install
 npm run dev
 ```
 
-You'll be able to access the dashboard at **`http://localhost:3002/`**
+> 🟢 NodeJS: Ensure you're on the `18.x.x` LTS release.
 
-![](https://hackmd.io/_uploads/ryvOPmFla.png)
+Once done, open up [**`http://localhost:3002/`**](http://localhost:3002)
 
-To understand the installation process in a bit more detail, you may refer the [video walkthrough](https://youtu.be/uwxj11-eRt8?feature=shared).
+![Komiser Dashboard](https://hackmd.io/_uploads/ryvOPmFla.png)
 
-### Understanding the UI components
+📺 For a more detailed walkthrough, check the [video tutorial](https://youtu.be/uwxj11-eRt8?feature=shared).
 
-The Komiser UI components are being handled and organised using [Storybook](https://storybook.js.org/).
-Refer the [components section](https://github.com/tailwarden/komiser/tree/develop/dashboard#components) of the dashboard README to understand the component conventions used.
+## 🎨 Understanding the UI Components
 
-### Testing Your Changes
+Komiser's UI elegance is sculpted using [Storybook](https://storybook.js.org/). Dive deep into the [components section](https://github.com/tailwarden/komiser/tree/develop/dashboard#components) to grasp our conventions.
 
-The Komiser dashboard uses **Jest** and **React Testing Library** for unit tests. Refer the [testing section](https://github.com/tailwarden/komiser/tree/develop/dashboard#testing) of the dashboard README to understand how you can write simple unit tests, to validate your changes.
+## 🧪 Testing Your Changes
 
-### Building a Go Artifact
+We leverage **Jest** and **React Testing Library** for unit tests. Navigate to the [testing section](https://github.com/tailwarden/komiser/tree/develop/dashboard#testing) for insights on writing tests.
 
-Once you have implemented the necessary frontend changes, make sure to build a new Go artifact using the following command:
+## 📦 Building a Go Artifact
+
+After refining the frontend, craft a new Go artifact:
 ```
 go-bindata-assetfs -o template.go dist/ dist/assets/images/
 ```
 
-## Contributing Best Practices
 
-Here are some best practices to follow during the development process to make your changes more structured and making it easier for us to review:
+# 📚 Contributing Best Practices
 
-1. **Write Comprehensive Unit Tests:**   
-        
-    - When making code changes, be sure to include well-structured unit tests. 
-    - Utilize [Go's built-in testing framework](https://pkg.go.dev/testing) for this purpose. 
-    - Take inspiration from existing tests in the project. 
-    - Before submitting your pull request, run the full test suite on your development branch to ensure your changes are thoroughly validated.
+> 📘 For frontend endeavors, do explore the [Getting Started Guide](https://github.com/tailwarden/komiser/tree/develop/dashboard#getting-started) in the `/dashboard` README.
 
-2. **Keep Documentation Updated:**
+Embarking on backend development? Here are golden practices to streamline your contributions and facilitate our review process:
 
-    - Ensure relevant documentation is updated or added, according to new features being added or modified. 
+### 1. 🧪 Write Comprehensive Unit Tests
+- Every code change craves well-thought-out unit tests.
+- Leverage [Go's built-in testing framework](https://pkg.go.dev/testing) for this.
+- Seek inspiration from tests already enhancing the project.
+- 🚀 Before firing that pull request, run the entire test suite on your branch ensuring robust validation of your changes.
 
-3. **Prioritize Clean Code:**
+### 2. 📖 Keep Documentation Updated
+- Newly added or tinkered features? Ensure the documentation mirrors your magic.
 
-    - Make sure to use **`go fmt`** to ensure uniform code formatting before committing your changes. 
-    - Using IDEs and code editors like **VSCode** makes this easy, as they offer plugins that automate the formatting process.
+### 3. 🎨 Prioritize Clean Code
+- Seal your changes with **`go fmt`** for a consistent code style.
+- Tools like **VSCode** come handy with plugins automating this formatting quest.
 
-4. **Mindful Code Comments:**
+### 4. 🖊 Mindful Code Comments
+- Complex logic? Esoteric algorithms? Or just proud of your intricate code snippet? Comment them.
+- Thoughtful comments pave way for an insightful review, letting others decipher your masterpiece with ease.
 
-    - Use comments to explain complex logic, algorithms, or any non-obvious parts of your code. 
-    - Well-placed comments will make your code more accessible to others and will ultimately help in a smoother review process of your changes.
+---
 
+# 🌟 Ending Note
 
-## Ending Note
+We trust this guide lights up your contribution path. Diving into Komiser's codebase should now be thrilling and engaging.
 
-We hope this guide proves to be helpful and makes contributing to Komiser an exciting and fun process for you all.
+In wrapping up, a **MASSIVE THANK YOU** echoes for your invaluable time and efforts. You're making Komiser even more radiant and welcoming for the community.
 
-At the end, we wanna give you a **HUGE THANK YOU** for taking out your time in contributing and making Komiser better and more accessible to the community!
+> 📞 Need a chat? Have queries buzzing? Buzz us on our [Discord Server](https://discord.tailwarden.com).
 
-Feel free to reach out to us on our [Discord Server](https://discord.tailwarden.com) if you need any assistance or have any questions.
+---
 
-## License
+# 📜 License
 
-Komiser is an open-source software released under the [Elastic License 2.0 (ELv2)](https://github.com/tailwarden/komiser/blob/develop/LICENSE). 
+Komiser, an emblem of open-source, basks under the [Elastic License 2.0 (ELv2)](https://github.com/tailwarden/komiser/blob/develop/LICENSE).
