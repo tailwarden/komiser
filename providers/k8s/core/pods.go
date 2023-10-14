@@ -41,6 +41,21 @@ func Pods(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 				})
 			}
 
+			if len(pod.OwnerReferences) > 0 {
+				// we use the owner kind of first owner only as the owner tag
+				ownerTags := []models.Tag{
+					{
+						Key:   "owner_kind",
+						Value: pod.OwnerReferences[0].Kind,
+					},
+					{
+						Key:   "owner_name",
+						Value: pod.OwnerReferences[0].Name,
+					},
+				}
+				tags = append(tags, ownerTags...)
+			}
+
 			cost := 0.0
 			if opencostEnabled {
 				cost = podsCost[pod.Name].TotalCost

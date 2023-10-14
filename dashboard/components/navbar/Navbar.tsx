@@ -1,7 +1,9 @@
+import { useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+
+import useFeedbackWidget from '@components/feedback-widget/FeedbackWidget';
 import GlobalAppContext from '../layout/context/GlobalAppContext';
 
 interface NavItem {
@@ -13,6 +15,8 @@ function Navbar() {
   const { displayBanner, betaFlagOnboardingWizard } =
     useContext(GlobalAppContext);
   const router = useRouter();
+  const { openFeedbackModal, FeedbackModal } = useFeedbackWidget();
+
   // TODO: (onboarding-wizard) Remove the betaFlagOnboardingWizard conditional when feature is stable
   const nav: NavItem[] = [
     { label: 'Dashboard', href: '/dashboard' },
@@ -117,10 +121,9 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
-          href="https://tally.so/r/mZjY40"
-          target="_blank"
+          className="hidden cursor-pointer items-center gap-2 transition-colors hover:text-primary md:flex"
           rel="noopener noreferrer"
+          onClick={() => openFeedbackModal()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -168,6 +171,7 @@ function Navbar() {
           Join our Discord
         </a>
       </div>
+      <FeedbackModal />
     </nav>
   );
 }

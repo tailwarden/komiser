@@ -178,6 +178,7 @@ function InventoryViewAlertsCreateOrEditAlert({
         {selected === 'BUDGET' && (
           <Grid gap="sm">
             <Input
+              type="text"
               label="Name"
               name="name"
               action={handleChange}
@@ -199,6 +200,7 @@ function InventoryViewAlertsCreateOrEditAlert({
         {selected === 'USAGE' && (
           <Grid gap="sm">
             <Input
+              type="text"
               label="Name"
               name="name"
               action={handleChange}
@@ -284,6 +286,7 @@ function InventoryViewAlertsCreateOrEditAlert({
             )}
 
             <Input
+              type="text"
               label="Secret (optional)"
               name="secret"
               action={handleChange}
