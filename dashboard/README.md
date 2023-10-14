@@ -4,7 +4,9 @@ Full frontend stack: `Next.js`, `Typescript`, `Tailwind`, `Storybook`, `Jest` & 
 
 ## Getting Started
 
-First, run the development server:
+Follow the [Contribution Guide](https://github.com/tailwarden/komiser/blob/develop/CONTRIBUTING.md#contributing-to-komiser-dashboard-ui) first if you haven't done so already. Then come back here and follow the next steps:
+
+1. Run the development server:
 
 ```bash
 # From the Komiser root folder start the Komiser server, run:
@@ -17,15 +19,18 @@ NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
-<img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
+2. Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, congrats! It's all up and running correctly.
+   <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png">
 
-If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
-<img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png">
+> If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
+> <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png">
 
 ## Components
 
 Komiser components are documented under `/components`
+
+You can find all the shared Components also inside [Storybook](https://storybook.komiser.io/). If you're implementing a new Story, please check for existing or new components with Storybook.
+We will require a story for new shared components like icons, inputs or similar.
 
 Component convention:
 
@@ -40,11 +45,91 @@ Component convention:
 
 Additional instructions:
 
-- To view this component on Storybook, run: `npm run storybook`, then pick `Card`
+- To view this component on Storybook locally, run: `npm run storybook`, then pick `Card`
   <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png">
 
 - To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
   <img width="668" alt="image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png">
+
+## Adding to Storybook
+
+[**Storybook**](https://storybook.komiser.io/) is a tool for UI development. It makes development faster by isolating components. This allows you to work on one component at a time. If you create a new shared component or want to visualize variations of an existing one, follow these steps:
+
+### 1. **Create the Story**:
+
+In the same directory as your component, create a Storybook story:
+
+- Create a story file: component name in `UpperCamelCase.stories.*`.
+
+Here's a basic story format:
+
+```typescript
+import React from 'react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
+
+import YourComponent from './YourComponent';
+
+export default {
+  title: 'Path/To/YourComponent',
+  component: YourComponent
+} as ComponentMeta<typeof YourComponent>;
+
+const Template: ComponentStory<typeof YourComponent> = args => (
+  <YourComponent {...args} />
+);
+
+export const Default = Template.bind({});
+Default.args = {
+  // default props here...
+};
+```
+
+### 2. **Add Variations**:
+
+You can create multiple variations of your component by replicating the `Default` pattern. For example, if your component has a variation for a "disabled" state:
+
+```typescript
+export const Disabled = Template.bind({});
+Disabled.args = {
+  // props to set the component to its disabled state...
+};
+```
+
+### 3. **Mock Data**:
+
+If your component requires mock data, create a mock file: component name in `UpperCamelCase.mocks.*`. Import this data into your story file to use with your component variations.
+
+### 4. **Visual Check**:
+
+Run Storybook:
+
+```bash
+npm run storybook
+```
+
+Your component should now appear in the Storybook UI. Navigate to it, and verify all the variations display correctly.
+
+### 5. **Documentation**:
+
+Add a brief description and any notes on your component's functionality within the Storybook UI. Use the `parameters` object in your default export:
+
+```typescript
+export default {
+  title: 'Path/To/YourComponent',
+  component: YourComponent,
+  parameters: {
+    docs: {
+      description: {
+        component: 'Your description here...'
+      }
+    }
+  }
+} as ComponentMeta<typeof YourComponent>;
+```
+
+---
+
+Remember: Storybook is not just a tool but also a way to document components. Ensure you provide meaningful names, descriptions, and use cases to help other developers understand the use and purpose of each component.
 
 ## Testing
 
@@ -61,7 +146,7 @@ Testing examples:
 
 - Simple Jest unit test example (snippet from `/utils/formatNumber.test.ts`):
 
-```Typescript
+```typescript
 import formatNumber from './formatNumber';
 
 describe('formatNumber outputs', () => {
@@ -77,7 +162,7 @@ describe('formatNumber outputs', () => {
 
 - Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
 
-```Typescript
+```typescript
 import { render, screen } from '@testing-library/react';
 import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
