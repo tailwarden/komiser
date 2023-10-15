@@ -81,14 +81,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 		_, err = cron.Every(1).Hours().Do(func() {
 			log.Info("Fetching resources workflow has started")
 
-			numWorkers := 64
-			wp := providers.NewWorkerPool(numWorkers)
-			wp.Start()
-			err = fetchResources(ctx, clients, regions, telemetry, wp)
-			if err != nil {
-				log.Fatal(err)
-			}
-			wp.Wait()
+			fetchResources(ctx, clients, regions, telemetry)
 		})
 
 		if err != nil {
@@ -263,7 +256,10 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	}
 }
 
-func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool, wp *providers.WorkerPool) error {
+func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) {
+	numWorkers := 64
+	wp := providers.NewWorkerPool(numWorkers)
+	wp.Start()
 
 	var wwg sync.WaitGroup
 	workflowTrigger := func(client providers.ProviderClient, provider string) {
@@ -301,7 +297,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 	}
 
 	wwg.Wait()
-	return nil
+	wp.Wait()
 }
 
 func checkUpgrade() {
