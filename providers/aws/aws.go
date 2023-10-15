@@ -6,6 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
@@ -113,20 +114,29 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 				log.Warnf("[%s][AWS] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-				_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
+					_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
 					if err != nil {
 						log.WithError(err).Errorf("db trigger failed")
 					}
 				}
 				if telemetry {
 					analytics.TrackEvent("discovered_resources", map[string]interface{}{
-						"provider":  "AWS",
-						"resources": len(resources),
+						"provider":     "AWS",
+						"resources":    len(resources),
+						"dependencies": calculateDependencies(resources),
 					})
 				}
 			}
 		}
 	}
+}
+
+func calculateDependencies(resources []models.Resource) int {
+	total := 0
+	for _, resource := range resources {
+		total += len(resource.Relations)
+	}
+	return total
 }
 
 func getRegions() []string {
