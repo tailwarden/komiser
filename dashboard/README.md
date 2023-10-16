@@ -38,20 +38,20 @@ Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, 
 ❗ If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
 ![Error Image](https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png)
 
-
 ## 🧩 Components
 
 Komiser components are documented under `/components`
 
 > 💡 **Hint:**
 > We have the following import aliases defined in `tsconfig.json`
+>
 > ```json
 > {
-> "@components/": "/dashboard/components/",
-> "@services/": "/dashboard/services/",
-> "@environments/": "/dashboard/environments/",
-> "@utils/": "/dashboard/utils/",
-> "@styles/": "/dashboard/styles/"
+>   "@components/": "/dashboard/components/",
+>   "@services/": "/dashboard/services/",
+>   "@environments/": "/dashboard/environments/",
+>   "@utils/": "/dashboard/utils/",
+>   "@styles/": "/dashboard/styles/"
 > }
 > ```
 
@@ -85,7 +85,6 @@ We use Jest & React Testing Library for our unit tests.
 
 - To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
   <img width="668" alt="image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png">
-
 
 **Testing convention:**
 
@@ -146,14 +145,15 @@ describe('Card', () => {
 ```
 
 If you're looking for an example with event firing and state updates, have a look at `components/select-checkbox/SelectCheckbox.test.tsx`:
+
 ```typescript
 it('opens the dropdown when clicked', () => {
   const { getByRole, getByText } = render(
     <SelectCheckbox
-    label="Test Label"
-    query="provider"
-    exclude={[]}
-    setExclude={() => {}}
+      label="Test Label"
+      query="provider"
+      exclude={[]}
+      setExclude={() => {}}
     />
   );
 
@@ -247,7 +247,6 @@ export default {
 ---
 
 > Remember: Storybook is not just a tool but also a way to document components. Ensure you provide meaningful names, descriptions, and use cases to help other developers understand the use and purpose of each component.
-
 
 ## 🤝 Contributing
 
