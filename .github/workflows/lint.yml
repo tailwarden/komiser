@@ -18,3 +18,4 @@ jobs:
         with:
           args: --timeout=10m
           version: v1.54.2
+          skip-pkg-cache: true
