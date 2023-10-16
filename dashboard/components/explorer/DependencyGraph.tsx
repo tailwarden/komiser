@@ -147,7 +147,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         ]}
         cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
       />
-      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible overflow-visible bg-black-100 text-black-400">
+      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible bg-black-100 text-black-400">
         {data?.nodes?.length} Resources
         <div className="relative">
           <WarningIcon className="peer" height="16" width="16" />
