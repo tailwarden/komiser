@@ -3,6 +3,7 @@
 Komiser dashboard is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 **Full frontend stack:**
+
 - 🖥 `Next.js`
 - 📜 `Typescript`
 - 🎨 `Tailwind`
@@ -14,16 +15,20 @@ Komiser dashboard is a [Next.js](https://nextjs.org/) project bootstrapped with 
 
 First, run the development server:
 
-\```
+```shell
+
 # From the Komiser root folder start the Komiser server, run:
-go run *.go start --config /path/to/config.toml
+
+go run \*.go start --config /path/to/config.toml
 
 # In a different terminal tab in the dashboard folder, run:
+
 NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
 
 # Alternatively, you can create an .env file with it:
+
 NEXT_PUBLIC_API_URL=http://localhost:3000
-\```
+```
 
 Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, 🎉 congrats! It's all up and running correctly.
 ![Dashboard Image](https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png)
@@ -37,36 +42,39 @@ Komiser components are documented under `/components`
 
 > 💡 **Hint:**
 > We have the following import aliases defined in `tsconfig.json`
-\```
-{
-"@components/": "/dashboard/components/",
-"@services/": "/dashboard/services/",
-"@environments/": "/dashboard/environments/",
-"@utils/": "/dashboard/utils/",
-"@styles/": "/dashboard/styles/"
-}
-\```
+> ```json
+> {
+> "@components/": "/dashboard/components/",
+> "@services/": "/dashboard/services/",
+> "@environments/": "/dashboard/environments/",
+> "@utils/": "/dashboard/utils/",
+> "@styles/": "/dashboard/styles/"
+> }
+> ```
 
 **Component convention:**
+
 - 📁 Component folder: component name in `kebab-case`
 - 📄 Component file: component name in `UpperCamelCase.*`
 - 📖 Component story: component name in `UpperCamelCase.stories.*`
 - 🎭 Component story mock (if needed): component name in `UpperCamelCase.mocks.*`
 - 🧪 Component unit test: component name in `UpperCamelCase.test.*`
 - 🧐 Check `Card` example for more details:
-![Component Example](https://user-images.githubusercontent.com/13384559/224307211-2ce62245-de24-4ee7-a156-fb54d8d34b4f.png)
+  ![Component Example](https://user-images.githubusercontent.com/13384559/224307211-2ce62245-de24-4ee7-a156-fb54d8d34b4f.png)
 
 **Additional instructions:**
+
 - 📖 To view this component on Storybook, run: `npm run storybook`, then pick `Card`
-![Storybook Image](https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png)
+  ![Storybook Image](https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png)
 - 🧪 To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
-![Unit Test Image](https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png)
+  ![Unit Test Image](https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png)
 
 ## 🧪 Testing
 
 We use Jest & React Testing Library for our unit tests.
 
 **Testing convention:**
+
 - ✅ All new Utils need to be tested. Existing ones when being changed
 - ✅ All tests should be wrapped in a `describe`
 - ✅ If it's a unit test for a function: `describe('[replace with function name]', () => { ... })`
@@ -78,7 +86,7 @@ We use Jest & React Testing Library for our unit tests.
 
 - Simple Jest unit test example (snippet from `/utils/formatNumber.test.ts`):
 
-\```
+```typescript
 import formatNumber from './formatNumber';
 
 describe('formatNumber util', () => {
@@ -86,15 +94,13 @@ describe('formatNumber util', () => {
     const result = formatNumber(12345);
     expect(result).toBe('12K');
   });
-
   ...
-
 });
-\```
+```
 
 - Jest & Testing library example (snippet from `/components/card/Card.test.tsx`):
 
-\```
+```typescript
 import { render, screen } from '@testing-library/react';
 import RefreshIcon from '../icons/RefreshIcon';
 import Card from './Card';
@@ -103,9 +109,9 @@ describe('Card', () => {
   it('should render card component without crashing', () => {
     render(
       <Card
-        label="Test card"
-        value={500}
-        icon={<RefreshIcon width={24} height={24} />}
+      label="Test card"
+      value={500}
+      icon={<RefreshIcon width={24} height={24} />}
       />
     );
   });
@@ -113,29 +119,27 @@ describe('Card', () => {
   it('should display the value formatted', () => {
     render(
       <Card
-        label="Test card"
-        value={5000}
-        icon={<RefreshIcon width={24} height={24} />}
+      label="Test card"
+      value={5000}
+      icon={<RefreshIcon width={24} height={24} />}
       />
     );
     const formattedNumber = screen.getByTestId('formattedNumber');
     expect(formattedNumber).toHaveTextContent('5K');
   });
-
   ...
-
 });
-\```
+```
 
 If you're looking for an example with event firing and state updates, have a look at `components/select-checkbox/SelectCheckbox.test.tsx`:
-\```
+```typescript
 it('opens the dropdown when clicked', () => {
   const { getByRole, getByText } = render(
     <SelectCheckbox
-      label="Test Label"
-      query="provider"
-      exclude={[]}
-      setExclude={() => {}}
+    label="Test Label"
+    query="provider"
+    exclude={[]}
+    setExclude={() => {}}
     />
   );
 
@@ -145,19 +149,21 @@ it('opens the dropdown when clicked', () => {
   expect(getByText('Item 2')).toBeInTheDocument();
   expect(getByText('Item 3')).toBeInTheDocument();
 });
-\```
+```
 
 ## 🤝 Contributing
 
 We welcome all contributors to join us on the mission of improving Komiser, especially when it comes to writing tests and adding documentation.
 
 Not sure where to start?
+
 - 📖 Read the [contributor guidelines](https://docs.komiser.io/docs/introduction/community)
 - 💬 [Join our Discord](https://discord.tailwarden.com/) and hang with us on #contributors channel.
 
 ## 📚 Learn More
 
 To learn more about our stack, take a look at the following resources:
+
 - [Next.js documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 - [Tailwind documentation](https://tailwindcss.com/docs/)
