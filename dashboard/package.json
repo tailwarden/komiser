@@ -7,6 +7,7 @@
     "build": "next build && next export",
     "start": "next start -p 3002",
     "lint": "next lint",
+    "format": "prettier --write \"**/*.{ts,tsx,json,css,scss,md}\"",
     "prepare": "cd .. && husky install dashboard/.husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

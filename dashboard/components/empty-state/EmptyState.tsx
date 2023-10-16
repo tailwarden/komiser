@@ -21,7 +21,8 @@ type Poses =
   | 'shirt'
   | 'whiteboard'
   | 'thinking'
-  | 'working';
+  | 'working'
+  | 'tablet';
 
 export type EmptyStateProps = {
   title: string;
