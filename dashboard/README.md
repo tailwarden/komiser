@@ -58,8 +58,6 @@ Komiser components are documented under `/components`
 You can find all the shared Components also inside [Storybook](https://storybook.komiser.io/). If you're implementing a new Story, please check for existing or new components with Storybook.
 We will require a story for new shared components like icons, inputs or similar.
 
-Component convention:
-
 **Component convention:**
 
 - 📁 Component folder: component name in `kebab-case`
