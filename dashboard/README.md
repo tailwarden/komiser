@@ -15,28 +15,39 @@ Komiser dashboard is a [Next.js](https://nextjs.org/) project bootstrapped with 
 
 Follow the [Contribution Guide](https://github.com/tailwarden/komiser/blob/develop/CONTRIBUTING.md#contributing-to-komiser-dashboard-ui) first if you haven't done so already. Then come back here and follow the next steps:
 
-1. Run the development server:
+#### 1. Run the development server:
 
+From the Komiser root folder start the Komiser server by running:
 ```shell
-
-# From the Komiser root folder start the Komiser server, run:
-
 go run \*.go start --config /path/to/config.toml
-
-# In a different terminal tab in the dashboard folder, run:
-
-NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
-
-# Alternatively, you can create an .env file with it:
-
-NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, 🎉 congrats! It's all up and running correctly.
-![Dashboard Image](https://user-images.githubusercontent.com/13384559/224318056-3d2c68bc-aa56-49c8-841a-bb297e380dc9.png)
+In a different terminal tab navigate to the `/dashboard` folder:
+```shell
+cd dashboard
+```
+
+and run:
+
+```shell
+npm install
+
+NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
+```
+
+Alternatively, you can create an .env file with it, either manually or by running:
+```shell
+echo "NEXT_PUBLIC_API_URL=http://localhost:3000" > .env
+```
+and simply run:
+```shell
+npm run dev
+```
+
+#### 2. Open [http://localhost:3002/](http://localhost:3002). If you see the dashboard, 🎉 congrats! It's all up and running correctly.
 
 ❗ If you get an error page such as this, please refer to the logs and our [docs](https://docs.komiser.io/docs/introduction/getting-started).
-![Error Image](https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png)
+<img alt="Error Image" src="https://user-images.githubusercontent.com/13384559/224320642-0bf6814b-d97a-4ad9-95a0-ca82e353c5d0.png" width="600"/>
 
 ## 🧩 Components
 
@@ -67,22 +78,22 @@ We will require a story for new shared components like icons, inputs or similar.
 - 🧪 Component unit test: component name in `UpperCamelCase.test.*`
 - 🧐 Check `Card` example for more details:
 
-  ![Component Example](https://user-images.githubusercontent.com/13384559/224307211-2ce62245-de24-4ee7-a156-fb54d8d34b4f.png)
+  <img alt="Component Example" src="https://user-images.githubusercontent.com/13384559/224307211-2ce62245-de24-4ee7-a156-fb54d8d34b4f.png" width="200"/>
 
 **Additional instructions:**
 
 - 📖 To view this component on Storybook, run: `npm run storybook`, then pick `Card`
-  ![Storybook Image](https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png)
+  <img alt="Storybook Image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png" width="600"/>
 - 🧪 To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
 
-  ![Unit Test Image](https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png)
+  <img alt="Unit Test Image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png" width="400"/>
 
 ## 🧪 Testing
 
 We use Jest & React Testing Library for our unit tests.
 
 - To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
-  <img width="668" alt="image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png">
+  <img width="400" alt="image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png">
 
 **Testing convention:**
 
@@ -168,7 +179,7 @@ it('opens the dropdown when clicked', () => {
 [**Storybook**](https://storybook.komiser.io/) is a tool for UI development. It makes development faster by isolating components. This allows you to work on one component at a time. If you create a new shared component or want to visualize variations of an existing one, follow these steps:
 
 - To view this component on Storybook locally, run: `npm run storybook`, then pick an example (`Card`) or your new component story
-  <img width="1411" alt="image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png">
+  <img width="600" alt="image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png">
 
 ### 1. **Create the Story**:
 
