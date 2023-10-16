@@ -88,8 +88,10 @@ We will require a story for new shared components like icons, inputs or similar.
 **Additional instructions:**
 
 - 📖 To view this component on Storybook, run: `npm run storybook`, then pick `Card`
+
   <img alt="Storybook Image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png" width="600"/>
 - 🧪 To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
+
   <img alt="Unit Test Image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png" width="400"/>
 
 ## 🧪 Testing
@@ -182,7 +184,7 @@ it('opens the dropdown when clicked', () => {
 [**Storybook**](https://storybook.komiser.io/) is a tool for UI development. It makes development faster by isolating components. This allows you to work on one component at a time. If you create a new shared component or want to visualize variations of an existing one, follow these steps:
 
 - To view this component on Storybook locally, run: `npm run storybook`, then pick an example (`Card`) or your new component story
-<img width="600" alt="image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png">
+  <img width="600" alt="image" src="https://user-images.githubusercontent.com/13384559/224320112-e21d2ed4-1e22-4a33-adb3-6c236c4d4208.png">
 
 ### 1. **Create the Story**:
 
