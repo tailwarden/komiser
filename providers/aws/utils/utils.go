@@ -11,8 +11,12 @@ import (
 type ProductEntry struct {
 	Product struct {
 		Attributes struct {
-			Group     string `json:"group"`
-			Operation string `json:"operation"`
+			Group              string `json:"group"`
+			Operation          string `json:"operation"`
+			GroupDescription   string `json:"groupDescription"`
+			RequestDescription string `json:"requestDescription"`
+			InstanceType       string `json:"instanceType"`
+			InstanceTypeFamily string `json:"instanceTypeFamily"`
 		} `json:"attributes"`
 	} `json:"product"`
 	Terms struct {
@@ -47,7 +51,7 @@ func GetCost(pds []PriceDimensions, v float64) float64 {
 	return total
 }
 
-func GetPriceMap(pricingOutput *pricing.GetProductsOutput) (map[string][]PriceDimensions, error) {
+func GetPriceMap(pricingOutput *pricing.GetProductsOutput, field string) (map[string][]PriceDimensions, error) {
 	priceMap := make(map[string][]PriceDimensions)
 
 	if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
@@ -58,7 +62,22 @@ func GetPriceMap(pricingOutput *pricing.GetProductsOutput) (map[string][]PriceDi
 				return nil, fmt.Errorf("failed to unmarshal JSON: %w", err)
 			}
 
-			group := price.Product.Attributes.Group
+			var key string
+			switch field {
+			case "group":
+				key = price.Product.Attributes.Group
+			case "operation":
+				key = price.Product.Attributes.Operation
+			case "groupDescription":
+				key = price.Product.Attributes.GroupDescription
+			case "requestDescription":
+				key = price.Product.Attributes.RequestDescription
+			case "instanceType":
+				key = price.Product.Attributes.InstanceType
+			case "instanceTypeFamily":
+				key = price.Product.Attributes.InstanceTypeFamily
+			}
+
 			unitPrices := []PriceDimensions{}
 			for _, pd := range price.Terms.OnDemand {
 				for _, p := range pd.PriceDimensions {
@@ -66,7 +85,7 @@ func GetPriceMap(pricingOutput *pricing.GetProductsOutput) (map[string][]PriceDi
 				}
 			}
 
-			priceMap[group] = unitPrices
+			priceMap[key] = unitPrices
 		}
 	}
 
