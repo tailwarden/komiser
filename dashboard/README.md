@@ -18,11 +18,13 @@ Follow the [Contribution Guide](https://github.com/tailwarden/komiser/blob/devel
 #### 1. Run the development server:
 
 From the Komiser root folder start the Komiser server by running:
+
 ```shell
 go run \*.go start --config /path/to/config.toml
 ```
 
 In a different terminal tab navigate to the `/dashboard` folder:
+
 ```shell
 cd dashboard
 ```
@@ -36,10 +38,13 @@ NEXT_PUBLIC_API_URL=http://localhost:3000 npm run dev
 ```
 
 Alternatively, you can create an .env file with it, either manually or by running:
+
 ```shell
 echo "NEXT_PUBLIC_API_URL=http://localhost:3000" > .env
 ```
+
 and simply run:
+
 ```shell
 npm run dev
 ```
@@ -92,8 +97,7 @@ We will require a story for new shared components like icons, inputs or similar.
 
 We use Jest & React Testing Library for our unit tests.
 
-- To run the unit tests, run: `npm run test:watch`, hit `p`, then `card`
-  <img width="400" alt="image" src="https://user-images.githubusercontent.com/13384559/224320260-19b1359e-1bfb-4db5-8379-918dacd7da44.png">
+- To run the unit tests, run: `npm run test`
 
 **Testing convention:**
 
