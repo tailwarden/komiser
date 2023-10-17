@@ -1,6 +1,5 @@
 name: Lint
-on:
-  push:
+on: pull_request
 
 jobs:
   lint:
@@ -8,12 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup go
         uses: actions/setup-go@v4
         with:
           go-version-file: go.mod
+      
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           args: --timeout=10m
           version: v1.54.2
+          skip-pkg-cache: true

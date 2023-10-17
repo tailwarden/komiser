@@ -1,6 +1,6 @@
 import formatNumber from './formatNumber';
 
-describe('formatNumber outputs', () => {
+describe('formatNumber util', () => {
   it('should format number (over a thousand) in short notation', () => {
     const result = formatNumber(12345);
     expect(result).toBe('12K');
