@@ -43,7 +43,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	})
 
 	if err != nil {
-		log.Errorf("ERROR: Couldn't fetch pricing info for AWS Lambda: %v", err)
+		log.Errorf("ERROR: Couldn't fetch pricing info for AWS DynamoDB: %v", err)
 		return resources, err
 	}
 
