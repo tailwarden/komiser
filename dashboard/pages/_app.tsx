@@ -28,7 +28,7 @@ if (typeof window !== 'undefined') {
   formbricks.init({
     environmentId: 'clnmmpeg01ci3o50fu5wy89zn',
     apiHost: 'https://app.formbricks.com',
-    debug: true // remove when in production
+    debug: false // remove when in production
   });
 }
 
