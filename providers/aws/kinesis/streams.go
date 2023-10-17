@@ -41,6 +41,8 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 						Value: aws.ToString(t.Value),
 					})
 				}
+			} else {
+				log.Warn("Failed to fetch tags for kinesis streams")
 			}
 			resources = append(resources, Resource{
 				Provider:   "AWS",
