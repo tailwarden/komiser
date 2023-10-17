@@ -21,7 +21,12 @@
       "@environments/*": ["environments/*"],
       "@utils/*": ["utils/*"],
       "@styles/*": ["styles/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
