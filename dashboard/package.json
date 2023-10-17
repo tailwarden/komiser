@@ -43,7 +43,7 @@
     "@storybook/addon-essentials": "^7.4.6",
     "@storybook/addon-interactions": "^7.0.0-beta.52",
     "@storybook/addon-links": "^7.0.0-beta.52",
-    "@storybook/addons": "^7.0.0-beta.52",
+    "@storybook/addons": "^7.4.6",
     "@storybook/blocks": "^7.4.5",
     "@storybook/nextjs": "^7.0.0-alpha.41",
     "@storybook/preview-api": "^7.4.6",
