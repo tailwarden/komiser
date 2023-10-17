@@ -13,7 +13,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
-	// "github.com/tailwarden/komiser/utils"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 )
@@ -90,6 +89,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		})
 
 		if err != nil {
+			log.Errorf("ERROR: Failed to query DynamoDB table details: %v", err)
 			return resources, err
 		}
 
@@ -99,12 +99,14 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		if tableDetails != nil && tableDetails.Table != nil && tableDetails.Table.ProvisionedThroughput != nil {
 			provisionedRCUs = tableDetails.Table.ProvisionedThroughput.ReadCapacityUnits
 			provisionedWCUs = tableDetails.Table.ProvisionedThroughput.WriteCapacityUnits
+		} else {
+			log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+			return resources, err
 		}
-
-		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
 
 		RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], int64PtrToFloat64(provisionedRCUs))
 		PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], int64PtrToFloat64(provisionedWCUs))
+
 		monthlyCost := RCUCharges + PWUCharges
 
 		resources = append(resources, Resource{
