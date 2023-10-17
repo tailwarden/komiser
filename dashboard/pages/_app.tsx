@@ -1,5 +1,8 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
+import formbricks from '@formbricks/js';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 
 const printHiringMessage = () => {
@@ -22,9 +25,25 @@ const printHiringMessage = () => {
 
 if (typeof window !== 'undefined') {
   printHiringMessage();
+  formbricks.init({
+    environmentId: 'clnmmpeg01ci3o50fu5wy89zn',
+    apiHost: 'https://app.formbricks.com',
+    debug: true // remove when in production
+  });
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Connect next.js router to Formbricks
+    const handleRouteChange = formbricks?.registerRouteChange;
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, []);
   return (
     <Layout>
       <Component {...pageProps} />
