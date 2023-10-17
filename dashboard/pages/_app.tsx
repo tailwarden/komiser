@@ -4,6 +4,7 @@ import formbricks from '@formbricks/js';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
+import environment from '../environments/environment';
 
 const printHiringMessage = () => {
   // eslint-disable-next-line no-console
@@ -26,7 +27,7 @@ const printHiringMessage = () => {
 if (typeof window !== 'undefined') {
   printHiringMessage();
   formbricks.init({
-    environmentId: 'clnmmpeg01ci3o50fu5wy89zn',
+    environmentId: environment.FORMBRICKS_ENV_ID,
     apiHost: 'https://app.formbricks.com',
     debug: false // remove when in production
   });
