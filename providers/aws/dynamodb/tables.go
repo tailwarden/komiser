@@ -17,7 +17,7 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func int64PtrToFloat64(i *int64) float64 {
+func Int64PtrToFloat64(i *int64) float64 {
     if i == nil {
         return 0.0  // or any default value you prefer
     }
@@ -55,6 +55,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 
 	output, err := dynamodbClient.ListTables(ctx, &config)
+
 	if err != nil {
 		return resources, err
 	}
@@ -104,8 +105,8 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			return resources, err
 		}
 
-		RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], int64PtrToFloat64(provisionedRCUs))
-		PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], int64PtrToFloat64(provisionedWCUs))
+		RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], Int64PtrToFloat64(provisionedRCUs))
+		PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], Int64PtrToFloat64(provisionedWCUs))
 
 		monthlyCost := RCUCharges + PWUCharges
 
