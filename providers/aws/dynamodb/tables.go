@@ -101,8 +101,8 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			return resources, err
 		}
 
-		RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], Int64PtrToFloat64(provisionedRCUs))
-		PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], Int64PtrToFloat64(provisionedWCUs))
+		RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], awsUtils.Int64PtrToFloat64(provisionedRCUs))
+		PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], awsUtils.Int64PtrToFloat64(provisionedWCUs))
 
 		monthlyCost := RCUCharges + PWUCharges
 
