@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import { ChangeEvent, useEffect, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
 import Checkbox from '../../../checkbox/Checkbox';

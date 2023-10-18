@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';

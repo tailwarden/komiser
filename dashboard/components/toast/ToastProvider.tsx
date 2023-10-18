@@ -6,12 +6,7 @@ import React, {
   FC,
   ReactNode
 } from 'react';
-
-export type ToastProps = {
-  hasError: boolean;
-  title: string;
-  message: string;
-};
+import Toast, { ToastProps } from './Toast';
 
 type ToastContextType = {
   showToast: (newToast: ToastProps) => void;
@@ -42,6 +37,7 @@ export const ToastProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ToastContext.Provider value={{ toast, showToast, dismissToast }}>
       {children}
+      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </ToastContext.Provider>
   );
 };

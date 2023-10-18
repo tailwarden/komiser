@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import Image from 'next/image';
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';

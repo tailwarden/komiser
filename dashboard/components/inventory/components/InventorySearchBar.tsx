@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import ExportCSV from '../../export-csv/ExportCSV';
 import CloseIcon from '../../icons/CloseIcon';
 import SearchIcon from '../../icons/SearchIcon';

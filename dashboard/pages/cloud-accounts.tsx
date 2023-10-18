@@ -135,9 +135,6 @@ function CloudAccounts() {
           goTo={goTo}
         />
       )}
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </>
   );
 }

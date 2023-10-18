@@ -131,9 +131,6 @@ export default function PostgreSQLCredentials() {
         <RightSideLayout>
           <DatabasePurplin database={databaseProvider} />
         </RightSideLayout>
-
-        {/* Toast component */}
-        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </OnboardingWizardLayout>
     </div>
   );

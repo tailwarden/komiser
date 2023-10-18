@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';

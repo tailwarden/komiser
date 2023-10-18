@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import Image from 'next/image';
 import Button from '../../../../button/Button';
 import { AlertMethod, Alert } from './hooks/useAlerts';

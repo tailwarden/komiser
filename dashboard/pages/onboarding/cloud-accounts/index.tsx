@@ -234,9 +234,6 @@ export default function CloudAccounts() {
           )}
         </div>
       </Modal>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }

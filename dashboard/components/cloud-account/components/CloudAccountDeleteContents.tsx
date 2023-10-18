@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import AlertCircleIcon from '../../icons/AlertCircleIcon';
 import Button from '../../button/Button';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';

@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import useAlerts from './hooks/useAlerts';
 import InventoryViewAlertsDeleteAlert from './InventoryViewAlertsDeleteAlert';
 import InventoryViewAlertDisplayAlerts from './InventoryViewAlertsDisplay';

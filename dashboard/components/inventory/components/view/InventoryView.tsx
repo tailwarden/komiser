@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { NextRouter } from 'next/router';
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import formatNumber from '../../../../utils/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
 import Button from '../../../button/Button';

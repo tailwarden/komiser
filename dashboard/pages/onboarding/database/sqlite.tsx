@@ -137,9 +137,6 @@ export default function SqliteCredentials() {
         <RightSideLayout>
           <DatabasePurplin database={database} />
         </RightSideLayout>
-
-        {/* Toast component */}
-        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </OnboardingWizardLayout>
     </div>
   );

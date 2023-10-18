@@ -3,7 +3,12 @@ import Button from '../button/Button';
 
 import ErrorIcon from '../icons/ErrorIcon';
 import CheckIcon from '../icons/CheckIcon';
-import { ToastProps } from './ToastProvider';
+
+export type ToastProps = {
+  hasError: boolean;
+  title: string;
+  message: string;
+};
 
 type ToastProp = ToastProps & {
   dismissToast: () => void;

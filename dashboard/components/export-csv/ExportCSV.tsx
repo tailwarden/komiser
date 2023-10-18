@@ -1,4 +1,4 @@
-import { ToastProps } from '@components/toast/ToastProvider';
+import { ToastProps } from '@components/toast/Toast';
 import { useRouter } from 'next/router';
 import settingsService from '../../services/settingsService';
 import ExportCSVButton from './ExportCSVButton';

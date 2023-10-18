@@ -80,9 +80,6 @@ export default function ProviderContent({
           </div>
         </RightSideLayout>
       </OnboardingWizardLayout>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }

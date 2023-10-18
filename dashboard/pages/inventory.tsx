@@ -207,9 +207,6 @@ export default function Inventory() {
           />
         )}
       </InventoryLayout>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }
