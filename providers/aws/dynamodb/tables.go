@@ -29,7 +29,10 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config dynamodb.ListTablesInput
 	dynamodbClient := dynamodb.NewFromConfig(*client.AWSClient)
+	oldRegion := client.AWSClient.Region
+	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = oldRegion
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 	    ServiceCode: aws.String("AmazonDynamoDB"),
