@@ -33,7 +33,6 @@ export const ToastProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     let timeout: any;
-    console.log('here', toast);
     if (toast) {
       timeout = setTimeout(dismissToast, 5000);
     }
