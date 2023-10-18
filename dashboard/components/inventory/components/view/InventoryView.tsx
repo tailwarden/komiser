@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { NextRouter } from 'next/router';
+import { ToastProps } from '@components/toast/ToastProvider';
 import formatNumber from '../../../../utils/formatNumber';
 import providers, { Provider } from '../../../../utils/providerHelper';
 import Button from '../../../button/Button';
@@ -10,7 +11,6 @@ import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
 import SidepanelPage from '../../../sidepanel/SidepanelPage';
 import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
-import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   HiddenResource,
   InventoryFilterData,

@@ -1,10 +1,10 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { ToastProps } from '../../toast/hooks/useToast';
 import {
   InventoryItem,
   InventoryStats

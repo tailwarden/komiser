@@ -1,8 +1,8 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import { ChangeEvent, useEffect, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
 import Checkbox from '../../../checkbox/Checkbox';
 import Input from '../../../input/Input';
-import { ToastProps } from '../../../toast/hooks/useToast';
 import { InventoryFilterData } from '../../hooks/useInventory/types/useInventoryTypes';
 import { CostBetween } from './hooks/useFilterWizard';
 

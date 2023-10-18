@@ -1,6 +1,6 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import { useRouter } from 'next/router';
 import settingsService from '../../services/settingsService';
-import { ToastProps } from '../toast/hooks/useToast';
 import ExportCSVButton from './ExportCSVButton';
 
 type ExportCSVProps = {

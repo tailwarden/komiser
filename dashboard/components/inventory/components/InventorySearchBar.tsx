@@ -1,7 +1,7 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import ExportCSV from '../../export-csv/ExportCSV';
 import CloseIcon from '../../icons/CloseIcon';
 import SearchIcon from '../../icons/SearchIcon';
-import { ToastProps } from '../../toast/hooks/useToast';
 
 type InventorySearchBarProps = {
   query: string;

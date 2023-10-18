@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import Image from 'next/image';
+import { ToastProps } from '@components/toast/ToastProvider';
 import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
 import Input from '../../../../input/Input';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import useEditAlerts from './hooks/useEditAlerts';
 import { AlertMethod, Alert } from './hooks/useAlerts';
 import settingsService from '../../../../../services/settingsService';

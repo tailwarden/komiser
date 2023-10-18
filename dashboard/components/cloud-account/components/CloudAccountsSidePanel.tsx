@@ -10,6 +10,7 @@ import MongoDbAtlasAccountDetails from '@components/account-details/MongoDBAtlas
 import OciAccountDetails from '@components/account-details/OciAccountDetails';
 import ScalewayAccountDetails from '@components/account-details/ScalewayAccountDetails';
 import { getPayloadFromForm } from '@utils/cloudAccountHelpers';
+import { ToastProps } from '@components/toast/ToastProvider';
 import providers, {
   allProviders,
   Provider
@@ -24,7 +25,6 @@ import {
   CloudAccount,
   CloudAccountsPage
 } from '../hooks/useCloudAccounts/useCloudAccount';
-import { ToastProps } from '../../toast/hooks/useToast';
 import settingsService from '../../../services/settingsService';
 
 interface CloudAccountsSidePanelProps {

@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { ToastProps } from '@components/toast/ToastProvider';
 import AlertCircleIcon from '../../icons/AlertCircleIcon';
 import Button from '../../button/Button';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 import settingsService from '../../../services/settingsService';
-import { ToastProps } from '../../toast/hooks/useToast';
 
 interface CloudAccountDeleteContentsProps {
   cloudAccount: CloudAccount;

@@ -1,6 +1,6 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import { SetStateAction } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import { InventoryFilterData, InventoryItem } from '../types/useInventoryTypes';
 
 type InfiniteScrollFilteredListProps = {

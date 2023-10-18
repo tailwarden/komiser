@@ -1,6 +1,6 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import { FormEvent, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
-import { ToastProps } from '../../../../../toast/hooks/useToast';
 import { AlertMethod, Alert } from './useAlerts';
 
 type AlertType = 'BUDGET' | 'USAGE';

@@ -1,3 +1,4 @@
+import { ToastProps } from '@components/toast/ToastProvider';
 import { NextRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import Button from '../../../button/Button';
@@ -10,7 +11,6 @@ import EditIcon from '../../../icons/EditIcon';
 import LinkIcon from '../../../icons/LinkIcon';
 import WarningIcon from '../../../icons/WarningIcon';
 import Modal from '../../../modal/Modal';
-import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   InventoryFilterData,
   View
