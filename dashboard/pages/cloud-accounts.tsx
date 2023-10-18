@@ -11,7 +11,8 @@ import CloudAccountsLayout from '@components/cloud-account/components/CloudAccou
 import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
 import CloudAccountsSidePanel from '@components/cloud-account/components/CloudAccountsSidePanel';
 import CloudAccountDeleteContents from '@components/cloud-account/components/CloudAccountDeleteContents';
-import useToast from '@components/toast/hooks/useToast';
+import { useToast } from '@components/toast/ToastProvider';
+
 import EmptyState from '@components/empty-state/EmptyState';
 
 function CloudAccounts() {

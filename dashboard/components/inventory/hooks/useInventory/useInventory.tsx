@@ -1,7 +1,7 @@
+import { useToast } from '@components/toast/ToastProvider';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import settingsService from '../../../../services/settingsService';
-import useToast from '../../../toast/hooks/useToast';
 import useIsVisible from '../useIsVisible/useIsVisible';
 import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
 import getInventoryListAndStats from './helpers/getInventoryListAndStats';

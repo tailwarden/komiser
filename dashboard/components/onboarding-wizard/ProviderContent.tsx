@@ -10,9 +10,9 @@ import OnboardingWizardLayout, {
 import PurplinCloud from '@components/onboarding-wizard/PurplinCloud';
 import CredentialsButton from '@components/onboarding-wizard/CredentialsButton';
 import Toast from '@components/toast/Toast';
-import useToast from '@components/toast/hooks/useToast';
 import { Provider } from '@utils/providerHelper';
 import { CloudAccountPayload } from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
+import { useToast } from '@components/toast/ToastProvider';
 
 interface ChildProps {
   cloudAccountData?: CloudAccountPayload<Credentials>;

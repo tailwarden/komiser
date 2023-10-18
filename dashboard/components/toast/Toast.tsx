@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import Button from '../button/Button';
-import { ToastProps } from './hooks/useToast';
+
 import ErrorIcon from '../icons/ErrorIcon';
 import CheckIcon from '../icons/CheckIcon';
+import { ToastProps } from './ToastProvider';
 
 type ToastProp = ToastProps & {
   dismissToast: () => void;

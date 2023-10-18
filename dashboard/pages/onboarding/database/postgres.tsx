@@ -12,9 +12,10 @@ import LabelledInput from '@components/onboarding-wizard/LabelledInput';
 import DatabasePurplin from '@components/onboarding-wizard/DatabasePurplin';
 import CredentialsButton from '@components/onboarding-wizard/CredentialsButton';
 import settingsService from '@services/settingsService';
-import useToast from '@components/toast/hooks/useToast';
+
 import Toast from '@components/toast/Toast';
 import DatabaseErrorMessage from '@components/onboarding-wizard/DatabaseErrorMessage';
+import { useToast } from '@components/toast/ToastProvider';
 
 export default function PostgreSQLCredentials() {
   const databaseProvider = allDBProviders.POSTGRES;

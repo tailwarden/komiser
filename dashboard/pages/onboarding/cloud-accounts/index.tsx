@@ -13,9 +13,10 @@ import DeleteIcon from '@components/icons/DeleteIcon';
 import Modal from '@components/modal/Modal';
 import CloudAccountDeleteContents from '@components/cloud-account/components/CloudAccountDeleteContents';
 import Toast from '@components/toast/Toast';
-import useToast from '@components/toast/hooks/useToast';
+
 import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
 import Button from '@components/button/Button';
+import { useToast } from '@components/toast/ToastProvider';
 
 export default function CloudAccounts() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);

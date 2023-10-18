@@ -13,9 +13,10 @@ import DatabasePurplin from '@components/onboarding-wizard/DatabasePurplin';
 import InputFileSelect from '@components/onboarding-wizard/InputFileSelect';
 import CredentialsButton from '@components/onboarding-wizard/CredentialsButton';
 import settingsService from '@services/settingsService';
-import useToast from '@components/toast/hooks/useToast';
+
 import Toast from '@components/toast/Toast';
 import DatabaseErrorMessage from '@components/onboarding-wizard/DatabaseErrorMessage';
+import { useToast } from '@components/toast/ToastProvider';
 
 export default function SqliteCredentials() {
   const database = allDBProviders.SQLITE;
