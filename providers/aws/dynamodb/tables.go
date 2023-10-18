@@ -24,7 +24,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	dynamodbClient := dynamodb.NewFromConfig(*client.AWSClient)
 
 	var monthlyCost float64 = 0.0
-	// there is something strange going on when using pricing client with reagions other than us-east-1
+	// there is something strange going on when using pricing client with regions other than us-east-1
 	// https://discord.com/channels/932683789384183808/1117721764957536318/1162338171435090032
 	oldRegion := client.AWSClient.Region
 	client.AWSClient.Region = "us-east-1"
