@@ -17,13 +17,6 @@ import (
 	. "github.com/tailwarden/komiser/providers"
 )
 
-func Int64PtrToFloat64(i *int64) float64 {
-    if i == nil {
-        return 0.0  // or any default value you prefer
-    }
-    return float64(*i)
-}
-
 
 func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -52,7 +45,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
 	if err != nil {
-		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+		log.Errorf("ERROR: Failed to fetch pricing map: %v", err)
 		return resources, err
 	}
 
