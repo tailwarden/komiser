@@ -22,6 +22,10 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config dynamodb.ListTablesInput
 	dynamodbClient := dynamodb.NewFromConfig(*client.AWSClient)
+
+	var monthlyCost float64 = 0.0
+	// there is something strange going on when using pricing client with reagions other than us-east-1
+	// https://discord.com/channels/932683789384183808/1117721764957536318/1162338171435090032
 	oldRegion := client.AWSClient.Region
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
@@ -40,13 +44,12 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 	if err != nil {
 		log.Errorf("ERROR: Couldn't fetch pricing info for AWS DynamoDB: %v", err)
-		return resources, err
 	}
 
 	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
+
 	if err != nil {
 		log.Errorf("ERROR: Failed to fetch pricing map: %v", err)
-		return resources, err
 	}
 
 
@@ -87,24 +90,17 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		if err != nil {
 			log.Errorf("ERROR: Failed to query DynamoDB table details: %v", err)
-			return resources, err
 		}
-
-		var provisionedRCUs *int64
-		var provisionedWCUs *int64
 
 		if tableDetails != nil && tableDetails.Table != nil && tableDetails.Table.ProvisionedThroughput != nil {
-			provisionedRCUs = tableDetails.Table.ProvisionedThroughput.ReadCapacityUnits
-			provisionedWCUs = tableDetails.Table.ProvisionedThroughput.WriteCapacityUnits
-		} else {
-			log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
-			return resources, err
+			provisionedRCUs := tableDetails.Table.ProvisionedThroughput.ReadCapacityUnits
+			provisionedWCUs := tableDetails.Table.ProvisionedThroughput.WriteCapacityUnits
+
+			RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], awsUtils.Int64PtrToFloat64(provisionedRCUs))
+			PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], awsUtils.Int64PtrToFloat64(provisionedWCUs))
+
+			monthlyCost = RCUCharges + PWUCharges
 		}
-
-		RCUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedReadCapacityUnits"], awsUtils.Int64PtrToFloat64(provisionedRCUs))
-		PWUCharges := awsUtils.GetCost(priceMap["AWS-DynamoDB-ProvisionedWriteCapacityUnits"], awsUtils.Int64PtrToFloat64(provisionedWCUs))
-
-		monthlyCost := RCUCharges + PWUCharges
 
 		resources = append(resources, Resource{
 			Provider:   "AWS",
