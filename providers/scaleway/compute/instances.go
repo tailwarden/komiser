@@ -11,6 +11,7 @@ import (
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
 
 const createdLayout = "2006-01-02 15:04:05 +0000 +0000"
@@ -56,13 +57,13 @@ func Servers(_ context.Context, client providers.ProviderClient) ([]models.Resou
 				currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
 				var creationDate time.Time
 				if inst.CreationDate != nil {
-					creationDate = *inst.CreationDate
-				} else {
-					log.Warnln("nil server creation date")
 					creationDate, err = time.Parse(createdLayout, inst.CreationDate.String())
 					if err != nil {
 						return nil, err
 					}
+				} else {
+					log.Warnln("nil server creation date, assuming created at the beggining of this month")
+					creationDate = utils.BeginningOfMonth(currentTime)
 				}
 
 				var duration time.Duration
