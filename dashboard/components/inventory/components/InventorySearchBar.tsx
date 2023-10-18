@@ -7,14 +7,14 @@ type InventorySearchBarProps = {
   query: string;
   setQuery: (query: string) => void;
   error: boolean;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 function InventorySearchBar({
   query,
   setQuery,
   error,
-  setToast
+  showToast
 }: InventorySearchBarProps) {
   return (
     <>
@@ -45,7 +45,7 @@ function InventorySearchBar({
             maxLength={64}
           />
           <div className="absolute right-4 top-[14px]">
-            <ExportCSV setToast={setToast} />
+            <ExportCSV showToast={showToast} />
           </div>
         </div>
       )}

@@ -19,7 +19,7 @@ function CloudAccounts() {
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
   const router = useRouter();
 
   const currentViewProvider = router.query.view as string;
@@ -115,7 +115,7 @@ function CloudAccounts() {
             <CloudAccountDeleteContents
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
-              setToast={setToast}
+              showToast={showToast}
               handleAfterDelete={handleAfterDelete}
             />
           )}
@@ -130,7 +130,7 @@ function CloudAccounts() {
           cloudAccounts={cloudAccounts}
           setCloudAccounts={setCloudAccounts}
           handleAfterDelete={handleAfterDelete}
-          setToast={setToast}
+          showToast={showToast}
           page={page}
           goTo={goTo}
         />

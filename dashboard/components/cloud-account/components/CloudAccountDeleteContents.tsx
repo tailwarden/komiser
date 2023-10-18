@@ -9,14 +9,14 @@ interface CloudAccountDeleteContentsProps {
   cloudAccount: CloudAccount;
   onCancel: () => void;
   handleAfterDelete: (account: CloudAccount) => void;
-  setToast: (toast: ToastProps) => void;
+  showToast: (toast: ToastProps) => void;
 }
 
 function CloudAccountDeleteContents({
   cloudAccount,
   onCancel,
   handleAfterDelete,
-  setToast
+  showToast
 }: CloudAccountDeleteContentsProps) {
   const [loading, setLoading] = useState(false);
 
@@ -28,14 +28,14 @@ function CloudAccountDeleteContents({
     settingsService.deleteCloudAccount(cloudAccount.id).then(res => {
       setLoading(false);
       if (res === Error) {
-        setToast({
+        showToast({
           hasError: true,
           title: 'Cloud account was not deleted',
           message:
             'There was an error deleting this cloud account. Please try again.'
         });
       } else {
-        setToast({
+        showToast({
           hasError: false,
           title: 'Cloud account deleted',
           message: `The cloud account was successfully deleted!`

@@ -32,7 +32,7 @@ export default function ProviderContent({
   description,
   children
 }: ProviderContentProps) {
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const [hasError, setHasError] = useState(false);
 
@@ -64,7 +64,7 @@ export default function ProviderContent({
           </div>
           <form
             onSubmit={event =>
-              configureAccount(event, provider, setToast, setHasError)
+              configureAccount(event, provider, showToast, setHasError)
             }
           >
             {React.isValidElement(children)

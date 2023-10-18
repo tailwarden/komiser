@@ -8,7 +8,7 @@ type InventoryViewAlertsDeleteAlertProps = {
   alertMethod: AlertMethod;
   closeAlert: (action?: 'hasChanges' | undefined) => void;
   viewId: number;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
   viewControllerOnCancelButton: () => void;
   currentAlert: Alert | undefined;
 };
@@ -17,7 +17,7 @@ function InventoryViewAlertsDeleteAlert({
   alertMethod,
   viewId,
   closeAlert,
-  setToast,
+  showToast,
   viewControllerOnCancelButton,
   currentAlert
 }: InventoryViewAlertsDeleteAlertProps) {
@@ -26,7 +26,7 @@ function InventoryViewAlertsDeleteAlert({
     currentAlert,
     viewId,
     closeAlert,
-    setToast
+    showToast
   });
   return (
     <div className="rounded-lg bg-komiser-100 p-6">

@@ -4,9 +4,7 @@ import React, {
   useState,
   useEffect,
   FC,
-  ReactNode,
-  Dispatch,
-  SetStateAction
+  ReactNode
 } from 'react';
 
 export type ToastProps = {
@@ -16,7 +14,7 @@ export type ToastProps = {
 };
 
 type ToastContextType = {
-  setToast: Dispatch<SetStateAction<ToastProps | null>>;
+  showToast: (newToast: ToastProps) => void;
   dismissToast: () => void;
   toast: ToastProps | null;
 };
@@ -29,9 +27,13 @@ export const ToastProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const dismissToast = () => {
     setToast(null);
   };
+  const showToast = (newToast: ToastProps) => {
+    setToast(newToast);
+  };
 
   useEffect(() => {
     let timeout: any;
+    console.log('here', toast);
     if (toast) {
       timeout = setTimeout(dismissToast, 5000);
     }
@@ -39,7 +41,7 @@ export const ToastProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [toast]);
 
   return (
-    <ToastContext.Provider value={{ toast, setToast, dismissToast }}>
+    <ToastContext.Provider value={{ toast, showToast, dismissToast }}>
       {children}
     </ToastContext.Provider>
   );

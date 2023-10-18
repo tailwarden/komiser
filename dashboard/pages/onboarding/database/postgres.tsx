@@ -20,7 +20,7 @@ import { useToast } from '@components/toast/ToastProvider';
 export default function PostgreSQLCredentials() {
   const databaseProvider = allDBProviders.POSTGRES;
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const [isError, setIsError] = useState<boolean>(false);
   const [hostname, setHostname] = useState<string>('');
@@ -45,7 +45,7 @@ export default function PostgreSQLCredentials() {
       if (res === Error) {
         setIsError(true);
       } else {
-        setToast({
+        showToast({
           hasError: false,
           title: 'Database connected',
           message:

@@ -19,7 +19,7 @@ type InventoryViewAlertsCreateOrEditAlertProps = {
   currentAlert: Alert | undefined;
   closeAlert: (action?: 'hasChanges' | undefined) => void;
   viewId: number;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 function InventoryViewAlertsCreateOrEditAlert({
@@ -30,7 +30,7 @@ function InventoryViewAlertsCreateOrEditAlert({
   currentAlert,
   closeAlert,
   viewId,
-  setToast
+  showToast
 }: InventoryViewAlertsCreateOrEditAlertProps) {
   const {
     selected,
@@ -46,7 +46,7 @@ function InventoryViewAlertsCreateOrEditAlert({
     currentAlert,
     viewId,
     closeAlert,
-    setToast
+    showToast
   });
 
   const [testingEndpoint, setTestingEndpoint] = useState(false);

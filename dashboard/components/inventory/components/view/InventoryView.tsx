@@ -25,7 +25,7 @@ import useViews from './hooks/useViews';
 type InventoryViewProps = {
   filters: InventoryFilterData[] | undefined;
   displayedFilters: InventoryFilterData[] | undefined;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
   inventoryStats: InventoryStats | undefined;
   router: NextRouter;
   views: View[] | undefined;
@@ -36,7 +36,7 @@ type InventoryViewProps = {
 function InventoryView({
   filters,
   displayedFilters,
-  setToast,
+  showToast,
   inventoryStats,
   router,
   views,
@@ -63,7 +63,7 @@ function InventoryView({
     unhideResources,
     deleteLoading
   } = useViews({
-    setToast,
+    showToast,
     views,
     router,
     getViews,
@@ -78,7 +78,7 @@ function InventoryView({
         views={views}
         router={router}
         saveView={saveView}
-        setToast={setToast}
+        showToast={showToast}
         loading={loading}
         deleteView={deleteView}
         deleteLoading={deleteLoading}
@@ -173,7 +173,7 @@ function InventoryView({
         </SidepanelPage>
 
         <SidepanelPage page={page} param="alerts">
-          <InventoryViewAlerts viewId={view.id} setToast={setToast} />
+          <InventoryViewAlerts viewId={view.id} showToast={showToast} />
         </SidepanelPage>
 
         <SidepanelPage page={page} param="hidden resources">

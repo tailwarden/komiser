@@ -21,7 +21,7 @@ import { useToast } from '@components/toast/ToastProvider';
 export default function SqliteCredentials() {
   const database = allDBProviders.SQLITE;
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const [filePath, setFilePath] = useState<string>('');
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
@@ -44,7 +44,7 @@ export default function SqliteCredentials() {
       if (res === Error) {
         setIsError(true);
       } else {
-        setToast({
+        showToast({
           hasError: false,
           title: 'Database connected',
           message:

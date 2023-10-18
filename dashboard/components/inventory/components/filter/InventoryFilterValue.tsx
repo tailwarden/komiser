@@ -14,7 +14,7 @@ type InventoryFilterValueProps = {
   ) => void;
   handleValueInput: (newValue: { values: string }) => void;
   cleanValues: () => void;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
   costBetween: CostBetween;
   handleCostBetween: (newValue: Partial<CostBetween>) => void;
 };
@@ -26,7 +26,7 @@ function InventoryFilterValue({
   handleValueCheck,
   handleValueInput,
   cleanValues,
-  setToast,
+  showToast,
   costBetween,
   handleCostBetween
 }: InventoryFilterValueProps) {
@@ -45,7 +45,7 @@ function InventoryFilterValue({
       if (data.field === 'provider') {
         settingsService.getProviders().then(res => {
           if (res === Error) {
-            setToast({
+            showToast({
               hasError: true,
               title: `There was an error when fetching the cloud providers`,
               message: `Please refresh the page and try again.`
@@ -59,7 +59,7 @@ function InventoryFilterValue({
       if (data.field === 'account') {
         settingsService.getAccounts().then(res => {
           if (res === Error) {
-            setToast({
+            showToast({
               hasError: true,
               title: `There was an error when fetching the cloud accounts`,
               message: `Please refresh the page and try again.`
@@ -73,7 +73,7 @@ function InventoryFilterValue({
       if (data.field === 'region') {
         settingsService.getRegions().then(res => {
           if (res === Error) {
-            setToast({
+            showToast({
               hasError: true,
               title: `There was an error when fetching the cloud regions`,
               message: `Please refresh the page and try again.`
@@ -87,7 +87,7 @@ function InventoryFilterValue({
       if (data.field === 'service') {
         settingsService.getServices().then(res => {
           if (res === Error) {
-            setToast({
+            showToast({
               hasError: true,
               title: `There was an error when fetching the cloud services`,
               message: `Please refresh the page and try again.`

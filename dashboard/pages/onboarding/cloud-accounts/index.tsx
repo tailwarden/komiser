@@ -21,7 +21,7 @@ import { useToast } from '@components/toast/ToastProvider';
 export default function CloudAccounts() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const {
     cloudAccounts,
@@ -228,7 +228,7 @@ export default function CloudAccounts() {
             <CloudAccountDeleteContents
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
-              setToast={setToast}
+              showToast={showToast}
               handleAfterDelete={handleAfterDelete}
             />
           )}

@@ -12,7 +12,7 @@ type InfiniteScrollCustomViewListProps = {
   query: string;
   batchSize: number;
   skippedSearch: number;
-  setToast: (value: SetStateAction<ToastProps | undefined>) => void;
+  showToast: (value: ToastProps) => void;
   setSearchedInventory: (
     value: SetStateAction<InventoryItem[] | undefined>
   ) => void;
@@ -29,7 +29,7 @@ function infiniteScrollCustomViewList({
   query,
   batchSize,
   skippedSearch,
-  setToast,
+  showToast,
   setSearchedInventory,
   setShouldFetchMore,
   setSkippedSearch
@@ -55,7 +55,7 @@ function infiniteScrollCustomViewList({
         )
         .then(res => {
           if (res.error) {
-            setToast({
+            showToast({
               hasError: true,
               title: `There was an error fetching more resources!`,
               message: `Please refresh the page and try again.`
