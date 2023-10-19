@@ -92,7 +92,7 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			log.Errorf("ERROR: Failed to query DynamoDB table details: %v", err)
 		}
 
-		if tableDetails != nil && tableDetails.Table != nil && tableDetails.Table.ProvisionedThroughput != nil {
+		if tableDetails.Table != nil && tableDetails.Table.ProvisionedThroughput != nil {
 			provisionedRCUs := tableDetails.Table.ProvisionedThroughput.ReadCapacityUnits
 			provisionedWCUs := tableDetails.Table.ProvisionedThroughput.WriteCapacityUnits
 
