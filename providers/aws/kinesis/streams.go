@@ -30,6 +30,20 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, stream := range output.StreamSummaries {
+			tags := make([]Tag, 0)
+			tagsResp, err := kinesisClient.ListTagsForStream(context.Background(), &kinesis.ListTagsForStreamInput{
+				StreamARN: stream.StreamARN,
+			})
+			if err == nil {
+				for _, t := range tagsResp.Tags {
+					tags = append(tags, Tag{
+						Key:   aws.ToString(t.Key),
+						Value: aws.ToString(t.Value),
+					})
+				}
+			} else {
+				log.Warn("Failed to fetch tags for kinesis streams")
+			}
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -40,6 +54,7 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Cost:       0,
 				CreatedAt:  *stream.StreamCreationTimestamp,
 				FetchedAt:  time.Now(),
+				Tags:       tags,
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/kinesis/home?region=%s#/streams/details/%s", client.AWSClient.Region, client.AWSClient.Region, *stream.StreamName),
 			})
 			consumers, err := getStreamConsumers(ctx, kinesisClient, stream, client.Name, client.AWSClient.Region)

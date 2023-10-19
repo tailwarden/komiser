@@ -22,7 +22,8 @@ type Poses =
   | 'whiteboard'
   | 'thinking'
   | 'working'
-  | 'devops';
+  | 'devops'
+  | 'tablet';
 
 export type EmptyStateProps = {
   title: string;

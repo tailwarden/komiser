@@ -19,7 +19,7 @@ export default function InventoryFilterDropdown({
   toggle,
   closeDropdownAfterAdd
 }: InventoryFilterDropdownProps) {
-  const { setSkippedSearch, router, setToast } = useInventory();
+  const { setSkippedSearch, router, showToast } = useInventory();
 
   const {
     // toggle,
@@ -91,7 +91,7 @@ export default function InventoryFilterDropdown({
                   handleValueCheck={handleValueCheck}
                   handleValueInput={handleValueInput}
                   cleanValues={cleanValues}
-                  setToast={setToast}
+                  showToast={showToast}
                   costBetween={costBetween}
                   handleCostBetween={handleCostBetween}
                 />

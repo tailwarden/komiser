@@ -2,7 +2,7 @@
 
 ---
 
-<h1 align="center"><img src="https://cdn.komiser.io/images/readme-komiser-header.png?version=latest" alt="Amp Logo"></h1>
+<h1 align="center"><a href="https://www.producthunt.com/posts/komiser-2" target="_blank"><img src="https://cdn.komiser.io/images/Readme-min.png" alt="Amp Logo"></a></h1>
 
 Komiser is an open-source cloud-agnostic resource manager designed to analyze and manage cloud cost, usage, security, and governance all in one place. It integrates seamlessly with multiple cloud providers, including AWS, Azure, Civo, Digital Ocean, OCI, Linode, Tencent, Scaleway and [more](#supported-cloud-providers). Interested? read more about Komiser on our [website](https://komiser.io?utm_source=github&utm_medium=social).
 
