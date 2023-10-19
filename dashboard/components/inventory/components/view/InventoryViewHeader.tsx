@@ -1,3 +1,4 @@
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import Button from '../../../button/Button';
@@ -10,7 +11,6 @@ import EditIcon from '../../../icons/EditIcon';
 import LinkIcon from '../../../icons/LinkIcon';
 import WarningIcon from '../../../icons/WarningIcon';
 import Modal from '../../../modal/Modal';
-import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   InventoryFilterData,
   View
@@ -35,7 +35,7 @@ type InventoryViewHeaderProps = {
     dropdown?: boolean | undefined,
     viewToBeDeleted?: View | undefined
   ) => void;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 function InventoryViewHeader({
@@ -46,7 +46,7 @@ function InventoryViewHeader({
   loading,
   deleteView,
   deleteLoading,
-  setToast
+  showToast
 }: InventoryViewHeaderProps) {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -134,7 +134,7 @@ function InventoryViewHeader({
                     transition={false}
                     onClick={() => {
                       navigator.clipboard.writeText(document.URL);
-                      setToast({
+                      showToast({
                         hasError: false,
                         title: 'Link copied!',
                         message: `${document.URL} has been copied to your clipboard.`
@@ -144,7 +144,7 @@ function InventoryViewHeader({
                     <LinkIcon width={24} height={24} />
                     Copy view link
                   </Button>
-                  <ExportCSV setToast={setToast} />
+                  <ExportCSV showToast={showToast} />
                   <span className="m-2 -mx-4 border-b border-black-200/40"></span>
                   <Button
                     style="dropdown"

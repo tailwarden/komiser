@@ -1,6 +1,6 @@
+import { ToastProps } from '@components/toast/Toast';
 import { SetStateAction } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import { InventoryFilterData, InventoryItem } from '../types/useInventoryTypes';
 
 type InfiniteScrollFilteredListProps = {
@@ -10,7 +10,7 @@ type InfiniteScrollFilteredListProps = {
   query: string;
   batchSize: number;
   skippedSearch: number;
-  setToast: (value: SetStateAction<ToastProps | undefined>) => void;
+  showToast: (value: ToastProps) => void;
   setQuery: (value: SetStateAction<string>) => void;
   setSearchedInventory: (
     value: SetStateAction<InventoryItem[] | undefined>
@@ -27,7 +27,7 @@ function infiniteScrollFilteredList({
   query,
   batchSize,
   skippedSearch,
-  setToast,
+  showToast,
   setQuery,
   setSearchedInventory,
   setShouldFetchMore,
@@ -39,7 +39,7 @@ function infiniteScrollFilteredList({
       .getInventory(`?limit=${batchSize}&skip=${skippedSearch}`, payloadJson)
       .then(res => {
         if (res.error) {
-          setToast({
+          showToast({
             hasError: true,
             title: `There was an error fetching more resources!`,
             message: `Please refresh the page and try again.`
