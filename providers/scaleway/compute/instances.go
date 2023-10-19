@@ -59,7 +59,7 @@ func Servers(_ context.Context, client providers.ProviderClient) ([]models.Resou
 				if inst.CreationDate != nil {
 					creationDate, err = time.Parse(createdLayout, inst.CreationDate.String())
 					if err != nil {
-						return nil, err
+						log.Errorln("failed to parse server creation date")
 					}
 				} else {
 					log.Warnln("nil server creation date, assuming created at the beggining of this month")
