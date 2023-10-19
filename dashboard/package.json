@@ -65,7 +65,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "13.5.4",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-jest": "^27.4.0",
+    "eslint-plugin-jest": "^27.4.2",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-storybook": "^0.6.15",
     "husky": "^8.0.0",
