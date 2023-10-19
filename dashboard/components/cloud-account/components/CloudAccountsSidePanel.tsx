@@ -10,6 +10,7 @@ import MongoDbAtlasAccountDetails from '@components/account-details/MongoDBAtlas
 import OciAccountDetails from '@components/account-details/OciAccountDetails';
 import ScalewayAccountDetails from '@components/account-details/ScalewayAccountDetails';
 import { getPayloadFromForm } from '@utils/cloudAccountHelpers';
+import { ToastProps } from '@components/toast/Toast';
 import providers, {
   allProviders,
   Provider
@@ -24,7 +25,6 @@ import {
   CloudAccount,
   CloudAccountsPage
 } from '../hooks/useCloudAccounts/useCloudAccount';
-import { ToastProps } from '../../toast/hooks/useToast';
 import settingsService from '../../../services/settingsService';
 
 interface CloudAccountsSidePanelProps {
@@ -36,7 +36,7 @@ interface CloudAccountsSidePanelProps {
   handleAfterDelete: (account: CloudAccount) => void;
   page: CloudAccountsPage;
   goTo: (page: CloudAccountsPage) => void;
-  setToast: (toast: ToastProps) => void;
+  showToast: (toast: ToastProps) => void;
 }
 
 function AccountDetails({
@@ -81,7 +81,7 @@ function CloudAccountsSidePanel({
   handleAfterDelete,
   page,
   goTo,
-  setToast
+  showToast
 }: CloudAccountsSidePanelProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -101,7 +101,7 @@ function CloudAccountsSidePanel({
     settingsService.editCloudAccount(id, payloadJson).then(res => {
       if (res === Error || res.error) {
         setLoading(false);
-        setToast({
+        showToast({
           hasError: true,
           title: 'Cloud account not edited',
           message:
@@ -109,7 +109,7 @@ function CloudAccountsSidePanel({
         });
       } else {
         setLoading(false);
-        setToast({
+        showToast({
           hasError: false,
           title: 'Cloud account edited',
           message: `The cloud account was successfully edited!`
@@ -182,7 +182,7 @@ function CloudAccountsSidePanel({
                   setIsDeleteOpen(false);
                   closeModal();
                 }}
-                setToast={setToast}
+                showToast={showToast}
               />
             </div>
           ) : (

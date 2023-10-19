@@ -7,6 +7,7 @@
     "build": "next build && next export",
     "start": "next start -p 3002",
     "lint": "next lint",
+    "format": "prettier --write \"**/*.{ts,tsx,json,css,scss,md}\"",
     "prepare": "cd .. && husky install dashboard/.husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -14,6 +15,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@formbricks/js": "^1.1.2",
     "@sentry/react": "^7.41.0",
     "@sentry/tracing": "^7.41.0",
     "@tippyjs/react": "^4.2.6",
@@ -41,7 +43,7 @@
     "@storybook/addon-essentials": "^7.4.6",
     "@storybook/addon-interactions": "^7.0.0-beta.52",
     "@storybook/addon-links": "^7.0.0-beta.52",
-    "@storybook/addons": "^7.0.0-beta.52",
+    "@storybook/addons": "^7.4.6",
     "@storybook/blocks": "^7.4.5",
     "@storybook/nextjs": "^7.0.0-alpha.41",
     "@storybook/preview-api": "^7.4.6",

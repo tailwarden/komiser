@@ -1,7 +1,7 @@
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { SetStateAction } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
   HiddenResource,
   InventoryFilterData,
@@ -16,7 +16,7 @@ type getCustomViewInventoryListAndStatsProps = {
   views: View[] | undefined;
   setSearchedLoading: (searchedLoading: boolean) => void;
   setStatsLoading: (statsLoading: boolean) => void;
-  setToast: (value: SetStateAction<ToastProps | undefined>) => void;
+  showToast: (value: ToastProps) => void;
   setError: (error: boolean) => void;
   setHiddenResources: (
     value: SetStateAction<HiddenResource[] | undefined>
@@ -43,7 +43,7 @@ function getCustomViewInventoryListAndStats({
   views,
   setSearchedLoading,
   setStatsLoading,
-  setToast,
+  showToast,
   setError,
   setHiddenResources,
   setInventoryStats,
@@ -85,7 +85,7 @@ function getCustomViewInventoryListAndStats({
         .getInventory(`?limit=${batchSize}&skip=0&view=${id}`, payloadJson)
         .then(res => {
           if (res.error) {
-            setToast({
+            showToast({
               hasError: true,
               title: `Filter could not be applied!`,
               message: `Please refresh the page and try again.`
@@ -112,7 +112,7 @@ function getCustomViewInventoryListAndStats({
         });
     } else {
       setTimeout(() => router.push(router.pathname), 5000);
-      return setToast({
+      return showToast({
         hasError: true,
         title: `Invalid view`,
         message: `We couldn't find this view. Redirecting back to home...`

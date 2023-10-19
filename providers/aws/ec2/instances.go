@@ -212,12 +212,14 @@ func getEC2Relations(inst *etype.Instance, resourceArn string) (rel []models.Lin
 	})
 
 	// Get associated Keypair
-	rel = append(rel, models.Link{
-		ResourceID: *inst.KeyName,
-		Name:       *inst.KeyName,
-		Type:       "Key Pair",
-		Relation:   "USES",
-	})
+	if inst.KeyName != nil {
+		rel = append(rel, models.Link{
+			ResourceID: *inst.KeyName,
+			Name:       *inst.KeyName,
+			Type:       "Key Pair",
+			Relation:   "USES",
+		})
+	}
 
 	// Get associated IAM roles
 	if inst.IamInstanceProfile != nil {

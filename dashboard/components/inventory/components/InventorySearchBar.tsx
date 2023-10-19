@@ -1,20 +1,20 @@
+import { ToastProps } from '@components/toast/Toast';
 import ExportCSV from '../../export-csv/ExportCSV';
 import CloseIcon from '../../icons/CloseIcon';
 import SearchIcon from '../../icons/SearchIcon';
-import { ToastProps } from '../../toast/hooks/useToast';
 
 type InventorySearchBarProps = {
   query: string;
   setQuery: (query: string) => void;
   error: boolean;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 function InventorySearchBar({
   query,
   setQuery,
   error,
-  setToast
+  showToast
 }: InventorySearchBarProps) {
   return (
     <>
@@ -45,7 +45,7 @@ function InventorySearchBar({
             maxLength={64}
           />
           <div className="absolute right-4 top-[14px]">
-            <ExportCSV setToast={setToast} />
+            <ExportCSV showToast={showToast} />
           </div>
         </div>
       )}
