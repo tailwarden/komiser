@@ -1,7 +1,7 @@
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
   HiddenResource,
   InventoryFilterData,
@@ -9,7 +9,7 @@ import {
 } from '../../../hooks/useInventory/types/useInventoryTypes';
 
 type useViewsProps = {
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
   views: View[] | undefined;
   router: NextRouter;
   getViews: (
@@ -36,7 +36,7 @@ export type ViewsPages =
   | 'alerts';
 
 function useViews({
-  setToast,
+  showToast,
   views,
   router,
   getViews,
@@ -111,7 +111,7 @@ function useViews({
         settingsService.updateView(id.toString(), payloadJson).then(res => {
           if (res === Error) {
             setLoading(false);
-            setToast({
+            showToast({
               hasError: true,
               title: `${view.name} could not be saved.`,
               message: `There was an error saving this custom view. Please refer to the logs and try again!`
@@ -119,7 +119,7 @@ function useViews({
           } else {
             setLoading(false);
             getViews(true, view.id.toString());
-            setToast({
+            showToast({
               hasError: false,
               title: `${view.name} has been saved.`,
               message: `The custom view has been successfully saved.`
@@ -131,7 +131,7 @@ function useViews({
         settingsService.saveView(payloadJson).then(res => {
           if (res === Error) {
             setLoading(false);
-            setToast({
+            showToast({
               hasError: true,
               title: `${view.name} could not be created.`,
               message: `There was an error creating this custom view. Please refer to the logs and try again!`
@@ -139,7 +139,7 @@ function useViews({
           } else {
             setLoading(false);
             getViews(false, undefined, true);
-            setToast({
+            showToast({
               hasError: false,
               title: `${view.name} has been created.`,
               message: `The custom view will now be accessible from the side navigation.`
@@ -159,7 +159,7 @@ function useViews({
       settingsService.saveView(payloadJson).then(res => {
         if (res === Error) {
           setLoading(false);
-          setToast({
+          showToast({
             hasError: true,
             title: `${viewToBeDuplicated.name} could not be duplicated.`,
             message: `There was an error duplicating this custom view. Please refer to the logs and try again!`
@@ -167,7 +167,7 @@ function useViews({
         } else {
           setLoading(false);
           getViews(false, undefined, true);
-          setToast({
+          showToast({
             hasError: false,
             title: `${viewToBeDuplicated.name} has been duplicated.`,
             message: `The custom view will now be accessible from the side navigation.`
@@ -186,7 +186,7 @@ function useViews({
       settingsService.deleteView(id.toString()).then(res => {
         if (res === Error) {
           setLoading(false);
-          setToast({
+          showToast({
             hasError: true,
             title: `${view.name} could not be deleted.`,
             message: `There was an error deleting this custom view. Please refer to the logs and try again!`
@@ -194,7 +194,7 @@ function useViews({
         } else {
           getViews();
           setLoading(false);
-          setToast({
+          showToast({
             hasError: false,
             title: `${view.name} has been deleted.`,
             message: `The custom view has been successfully deleted.`
@@ -212,7 +212,7 @@ function useViews({
       settingsService.deleteView(id.toString()).then(res => {
         if (res === Error) {
           setDeleteLoading(false);
-          setToast({
+          showToast({
             hasError: true,
             title: `${viewToBeDeleted.name} could not be deleted.`,
             message: `There was an error deleting this custom view. Please refer to the logs and try again!`
@@ -220,7 +220,7 @@ function useViews({
         } else {
           getViews();
           setDeleteLoading(false);
-          setToast({
+          showToast({
             hasError: false,
             title: `${viewToBeDeleted.name} has been deleted.`,
             message: `The custom view has been successfully deleted.`
@@ -272,7 +272,7 @@ function useViews({
     settingsService.unhideResourceFromView(viewId, payload).then(res => {
       if (res === Error) {
         setUnhideLoading(false);
-        setToast({
+        showToast({
           hasError: true,
           title: 'Resources could not be unhid.',
           message:
@@ -280,7 +280,7 @@ function useViews({
         });
       } else {
         setUnhideLoading(false);
-        setToast({
+        showToast({
           hasError: false,
           title: 'Resources are now unhidden.',
           message: 'The resources were successfully unhidden.'

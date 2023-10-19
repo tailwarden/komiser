@@ -1,7 +1,7 @@
 import { FormEvent } from 'react';
 import router from 'next/router';
-import { allProviders, Provider } from './providerHelper';
 import settingsService from '@services/settingsService';
+import { allProviders, Provider } from './providerHelper';
 
 export type Credentials = {};
 
@@ -71,7 +71,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.AWS:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           source: data.source,
           path: data.path,
@@ -83,7 +83,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.AZURE:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           source: data.source,
           tenantId: data.tenantId,
@@ -95,7 +95,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.CIVO:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           source: data.source,
           token: data.token
@@ -104,7 +104,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.DIGITAL_OCEAN:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           source: data.source,
           token: data.token
@@ -113,7 +113,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.KUBERNETES:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           source: data.source,
           file: data.file
@@ -122,7 +122,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.LINODE:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           token: data.token
         }
@@ -130,7 +130,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.TENCENT:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           token: data.token
         }
@@ -138,7 +138,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.SCALE_WAY:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           accessKey: data.accessKey,
           secretKey: data.secretKey,
@@ -148,7 +148,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.MONGODB_ATLAS:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           publicApiKey: data.publicApiKey,
           privateApiKey: data.privateApiKey,
@@ -158,7 +158,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.GCP:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           serviceAccountKeyPath: data.serviceAccountKeyPath
         }
@@ -166,7 +166,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
     case allProviders.OCI:
       return {
         name: data.name,
-        provider: provider,
+        provider,
         credentials: {
           path: data.path
         }
@@ -177,7 +177,7 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
 export const configureAccount = (
   e: FormEvent<HTMLFormElement>,
   provider: Provider,
-  setToast: (toast: {
+  showToast: (toast: {
     hasError: boolean;
     title: string;
     message: string;
@@ -194,7 +194,7 @@ export const configureAccount = (
     if (res === Error || res.error) {
       if (setHasError) setHasError(true);
     } else {
-      setToast({
+      showToast({
         hasError: false,
         title: 'Cloud account added',
         message: 'The cloud account was successfully added!'
