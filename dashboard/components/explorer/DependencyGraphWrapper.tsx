@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import parseURLParams from '@components/inventory/hooks/useInventory/helpers/parseURLParams';
 import { InventoryFilterData } from '@components/inventory/hooks/useInventory/types/useInventoryTypes';
 import ArrowDownIcon from '@components/icons/ArrowDownIcon';
+import EmptyState from '@components/empty-state/EmptyState';
 import DependencyGraphLoader from './DependencyGraphLoader';
 import DependendencyGraphFilter from './filter/DependendencyGraphFilter';
 import useDependencyGraph from './hooks/useDependencyGraph';
@@ -95,12 +96,32 @@ function DependencyGraphWrapper() {
             deleteFilter={deleteFilter}
           />
         </div>
-        <DependencyGraphLoader
-          loading={loading}
-          data={data}
-          error={error}
-          fetch={fetch}
-        />
+        {!data?.nodes.length && !data?.edges.length ? (
+          <div className="mt-24">
+            <EmptyState
+              title="We could not find any resources"
+              message="It seems like you have no AWS cloud resources associated with your cloud accounts"
+              mascotPose="devops"
+              secondaryActionLabel="Report an issue"
+              actionLabel="Check cloud account"
+              secondaryAction={() => {
+                router.push(
+                  'https://github.com/tailwarden/komiser/issues/new/choose'
+                );
+              }}
+              action={() => {
+                router.push('/');
+              }}
+            />
+          </div>
+        ) : (
+          <DependencyGraphLoader
+            loading={loading}
+            data={data}
+            error={error}
+            fetch={fetch}
+          />
+        )}
       </div>
     </>
   );
