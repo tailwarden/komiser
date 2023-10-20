@@ -108,33 +108,30 @@ The core Komiser Engine is written in Go (Golang) and leverages Go Modules. Here
 2. 🔧 **GOPATH**:
    - Ensure that the **`GOPATH`** environment variable is configured appropriately.
 
----
 
 ## 🛠️ Komiser Installation
 
-### **Step 1: Installing Komiser CLI**
+### ** 1️⃣ Installing Komiser CLI**
 Follow the instructions in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI** for your operating system.
 
-### **Step 2: Connect to a Cloud Account**
+### ** 2️⃣ Connect to a Cloud Account**
 To deploy a **self-hosted (local) instance** of Komiser, connect your Komiser CLI to a cloud account of your choice. Refer to the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws).
 
-### **Step 3: Accessing the Komiser UI**
+### ** 3️⃣ Accessing the Komiser UI**
 Access the dashboard UI at **`http://localhost:3002`** once the local Komiser instance is running.
 
-![komiser-dashboard](https://hackmd.io/_uploads/Syo0bMtgT.png)
-
----
+<img alt="Komiser Dashboard" src="https://hackmd.io/_uploads/Syo0bMtgT.png" width="600"/>
 
 ## 🌟 Ways to Contribute to Komiser Engine
 
 Komiser is an open-source cloud-agnostic resource manager. It helps you break down cloud resource costs at the resource level. As a cloud-agnostic cloud management tool, we always have more providers and cloud services to add, update, and cost-calculate.
 
-### 1️⃣ Adding a new Cloud Provider
+### ☁️ Adding a new Cloud Provider
 
-- Step 1: Create **`provider_name.go`** in **`providers/provider_name`** directory.
+#### 1️⃣ Create provider.
+Create **`provider_name.go`** in **`providers/provider_name`** directory.
 
-- Step 2: Add the following boilerplate:
-
+#### 2️⃣  Add the following boilerplate:
 ```go
 package PROVIDER_NAME
 
@@ -164,7 +161,8 @@ func FetchProviderData(ctx context.Context, client ProviderClient, db *bun.DB) {
 }
 ```
 
-- Step 3: Add SDK client details in [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go):
+#### 3️⃣ Add SDK client details:
+Add your client details to [**`providers/provider.go`**](https://github.com/tailwarden/komiser/blob/develop/providers/providers.go)
 
 ```go
 type ProviderClient struct {
@@ -188,7 +186,8 @@ type AzureClient struct {
 }
 ```
 
-- **Step 4:** Add provider configuration in TOML format in **`config.toml`**:
+#### 4️⃣ Add provider configuration:
+Add provider configuration in TOML format in **`config.toml`**
 
 ```toml
 [[gcp]]
@@ -198,27 +197,27 @@ source="ENVIRONMENT_VARIABLES"
 profile="production"
 ```
 
-- **Step 5:** Compile a new Komiser binary:
-
+#### 5️⃣ Compile a new Komiser binary:
 ```bash
 go build
 ```
 
-- **Step 6:** Start a new Komiser development server:
+#### 6️⃣ Start a new Komiser development server:
 
 ```bash
 ./komiser start
 ```
 
-### 2️⃣ Adding a new Cloud Service/Resource
+### 🔋 Adding a new Cloud Service/Resource
 
 Here are the general steps to add a new service/resource for a cloud provider in Komiser:
 
-**Step 1:**
+#### 1️⃣ Create Service
 Create a new file **`servicename.go`** under the path **`providers/provider_name/servicename`**
 
-**Step 2:**
+#### 2️⃣ Add boilerplate
 Add the following boilerplate code, which defines the structure of any new service/resource to be added for a cloud provider:
+
 ```go
 package service
 
@@ -243,10 +242,10 @@ func MyServiceResources(ctx context.Context, client ProviderClient) ([]Resource,
 
 To understand how to write the required logic, you may refer any [existing examples](https://github.com/tailwarden/komiser/tree/develop/providers/aws) for inspiration!
 
-**Step 3:**
+#### 3️⃣ Edit Provider
 Call the **`MyServiceResources()`** function from the above file, by adding it to **`providers/providername/provider.go`** file's **`listOfSupportedServices()`** function. 
 
-```
+```go
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		ec2.Instances,
@@ -267,10 +266,12 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 .
 ```
 
-**Step 4:**
-Repeat steps **`4,5,6`** accordingly and you'll see a new resource/service added to Komiser, in the dashboard!
+#### 4️⃣
+Do above mentioned steps **`[4](#1️⃣-create-provider),[5](#5️⃣-compile-a-new-komiser-binary),[6](#6️⃣-start-a-new-komiser-development-server)`** and you'll see a new resource/service added to Komiser, in the dashboard!
 
 Additionally, [here](https://youtu.be/Vn5uc2elcVg?feature=shared) is a video tutorial of the entire process for your reference.
+
+> 💡 Tip: you can also start the server via `go run *.go start --config ./config.toml` if you do want to skip the compile step!
 
 ### 3️⃣ Enhance existing Cloud service/resource
 
