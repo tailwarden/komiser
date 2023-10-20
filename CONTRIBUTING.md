@@ -109,19 +109,6 @@ The core Komiser Engine is written in Go (Golang) and leverages Go Modules. Here
    - Ensure that the **`GOPATH`** environment variable is configured appropriately.
 
 
-## 🛠️ Komiser Installation
-
-### 1️⃣ Installing Komiser CLI
-Follow the instructions in the [documentation](https://docs.komiser.io/getting-started/installation) to install the **Komiser CLI** for your operating system.
-
-### 2️⃣ Connect to a Cloud Account
-To deploy a **self-hosted (local) instance** of Komiser, connect your Komiser CLI to a cloud account of your choice. Refer to the documentation of the [supported cloud providers](https://docs.komiser.io/configuration/cloud-providers/aws).
-
-### 3️⃣ Accessing the Komiser UI
-Access the dashboard UI at `http://localhost:3002` once the local Komiser instance is running.
-
-<img alt="Komiser Dashboard" src="https://hackmd.io/_uploads/Syo0bMtgT.png" width="600"/>
-
 ## 🌟 Ways to Contribute to Komiser Engine
 
 Komiser is an open-source cloud-agnostic resource manager. It helps you break down cloud resource costs at the resource level. As a cloud-agnostic cloud management tool, we always have more providers and cloud services to add, update, and cost-calculate.
