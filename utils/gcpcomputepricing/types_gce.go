@@ -61,7 +61,7 @@ type VmsOnDemandMemoryPerGb struct {
 	Vmimagelargeram                              Subtype                   `json:"vmimagelargeram"`
 	Vmimagelargerammemoryoptimizedupgradepremium Subtype                   `json:"vmimagelargerammemoryoptimizedupgradepremium"`
 	M3                                           VmsOnDemandMemoryPerGbM3  `json:"m3"`
-	Vmimagen1Standardram                         Subtype                   `json:"vmimagen1standardram"`
+	N1                         					 Vmimagen1StandardramN1    `json:"n1"`
 	Vmimagen2Customextendedram                   Subtype                   `json:"vmimagen2customextendedram"`
 	Vmimagen2Customram                           Subtype                   `json:"vmimagen2customram"`
 	Vmimagen2Dcustomextendedram                  Subtype                   `json:"vmimagen2dcustomextendedram"`
@@ -75,6 +75,10 @@ type VmsOnDemandMemoryPerGb struct {
 	Vmimagesoletenancyramsoletenancypremium      Subtype                   `json:"vmimagesoletenancyramsoletenancypremium"`
 	T2A                                          VmsOnDemandMemoryPerGbT2A `json:"t2a"`
 	T2D                        					 Vmimaget2DstandardramT2D  `json:"t2d"`
+}
+
+type Vmimagen1StandardramN1 struct {
+	Vmimagen1Standardram Subtype `json:"vmimagen1standardram"`
 }
 
 type Vmimagen2DstandardramN2D struct {
@@ -129,7 +133,7 @@ type VmsOnDemandCoresPerCore struct {
 	Vmimagelargecore                              Subtype                    `json:"vmimagelargecore"`
 	Vmimagelargecorememoryoptimizedupgradepremium Subtype                    `json:"vmimagelargecorememoryoptimizedupgradepremium"`
 	M3                                            VmsOnDemandCoresPerCoreM3  `json:"m3"`
-	Vmimagen1Standardcore                         Subtype                    `json:"vmimagen1standardcore"`
+	N1                         					  Vmimagen1StandardcoreN1    `json:"n1"`
 	Vmimagen2Customcore                           Subtype                    `json:"vmimagen2customcore"`
 	Vmimagen2Customextendedcore                   Subtype                    `json:"vmimagen2customextendedcore"`
 	Vmimagen2Dcustomcore                          Subtype                    `json:"vmimagen2dcustomcore"`
@@ -143,6 +147,10 @@ type VmsOnDemandCoresPerCore struct {
 	Vmimagesoletenancycoresoletenancypremium      Subtype                    `json:"vmimagesoletenancycoresoletenancypremium"`
 	T2A                                           VmsOnDemandCoresPerCoreT2A `json:"t2a"`
 	T2D                        					  Vmimaget2DstandardcoreT2D  `json:"t2d"`
+}
+
+type Vmimagen1StandardcoreN1 struct {
+	Vmimagen1Standardcore Subtype `json:"vmimagen1standardcore"`
 }
 
 type Vmimagen2DstandardcoreN2D struct {
@@ -217,7 +225,7 @@ type VmsPreemptibleMemoryPerGb struct {
 	G2                                     VmsPreemptibleMemoryPerGbG2  	   `json:"g2"`
 	Vmimagepreemptiblelargeram             Subtype                      	   `json:"vmimagepreemptiblelargeram"`
 	M3                                     VmsPreemptibleMemoryPerGbM3  	   `json:"m3"`
-	Vmimagepreemptiblen1Standardram        Subtype                      	   `json:"vmimagepreemptiblen1standardram"`
+	N1        							   Vmimagepreemptiblen1StandardramN1   `json:"vmimagepreemptiblen1standardram"`
 	Vmimagepreemptiblen2Customextendedram  Subtype                      	   `json:"vmimagepreemptiblen2customextendedram"`
 	Vmimagepreemptiblen2Customram          Subtype                      	   `json:"vmimagepreemptiblen2customram"`
 	Vmimagepreemptiblen2Dcustomextendedram Subtype                      	   `json:"vmimagepreemptiblen2dcustomextendedram"`
@@ -226,6 +234,10 @@ type VmsPreemptibleMemoryPerGb struct {
 	N2        							   Vmimagepreemptiblen2StandardramN2   `json:"n2"`
 	T2A                                    VmsPreemptibleMemoryPerGbT2A 	   `json:"t2a"`
 	T2D       							   Vmimagepreemptiblet2DstandardramT2D `json:"t2d"`
+}
+
+type Vmimagepreemptiblen1StandardramN1 struct {
+	Vmimagepreemptiblen1Standardram Subtype `json:"vmimagepreemptiblen1standardram"`
 }
 
 type Vmimagepreemptiblen2DstandardramN2D struct {
@@ -273,7 +285,7 @@ type VmsPreemptibleCoresPerCore struct {
 	G2                                     VmsPreemptibleCoresPerCoreG2  	    `json:"g2"`
 	Vmimagepreemptiblelargecore            Subtype                       	    `json:"vmimagepreemptiblelargecore"`
 	M3                                     VmsPreemptibleCoresPerCoreM3  	    `json:"m3"`
-	Vmimagepreemptiblen1Standardcore       Subtype                       	    `json:"vmimagepreemptiblen1standardcore"`
+	N1       							   Vmimagepreemptiblen1StandardcoreN1  `json:"n1"`
 	Vmimagepreemptiblen2Customcore         Subtype                       	    `json:"vmimagepreemptiblen2customcore"`
 	Vmimagepreemptiblen2Customextendedcore Subtype                       	    `json:"vmimagepreemptiblen2customextendedcore"`
 	Vmimagepreemptiblen2Dcustomcore        Subtype                       	    `json:"vmimagepreemptiblen2dcustomcore"`
@@ -283,6 +295,9 @@ type VmsPreemptibleCoresPerCore struct {
 	T2D      							   Vmimagepreemptiblet2DstandardcoreT2D `json:"t2d"`
 }
 
+type Vmimagepreemptiblen1StandardcoreN1 struct {
+	Vmimagepreemptiblen1Standardcore Subtype `json:"vmimagepreemptiblen1standardcore"`
+}
 type Vmimagepreemptiblen2DstandardcoreN2D struct {
 	Vmimagepreemptiblen2Dstandardcore Subtype `json:"vmimagepreemptiblen2dstandardcore"`
 }

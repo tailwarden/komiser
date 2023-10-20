@@ -251,11 +251,11 @@ func typeGetterN1(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 	var memory Subtype
 	switch opts.Commitment {
 	case OnDemand:
-		core = p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.Vmimagen1Standardcore
-		memory = p.Gcp.Compute.GCE.VmsOnDemand.MemoryPerGb.Vmimagen1Standardram
+		core = p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.N1.Vmimagen1Standardcore
+		memory = p.Gcp.Compute.GCE.VmsOnDemand.MemoryPerGb.N1.Vmimagen1Standardram
 	case Spot:
-		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.Vmimagepreemptiblen1Standardcore
-		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.Vmimagepreemptiblen1Standardram
+		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.N1.Vmimagepreemptiblen1Standardcore
+		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.N1.Vmimagepreemptiblen1Standardram
 	default:
 		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
