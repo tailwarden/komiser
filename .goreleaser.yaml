@@ -1,8 +1,8 @@
 before:
   hooks:
-    - go mod tidy
-    - go-bindata-assetfs -o internal/api/v1/template.go out/...
-    - sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
+    #- go mod tidy
+    #- go-bindata-assetfs -o internal/api/v1/template.go out/...
+    #- sed -i -e 's/package main/package v1/g' internal/api/v1/template.go
 builds:
   - env:
       - CGO_ENABLED=0
