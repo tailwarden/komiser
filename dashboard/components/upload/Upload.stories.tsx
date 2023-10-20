@@ -28,6 +28,9 @@ function UploadWrapper({
   };
 
   return (
+    // it's impossible to define a true/false type in storybook
+    // so we ignore the next type error because true|false != boolean for some reason \o/
+    // @ts-ignore
     <Upload
       multiple={multiple}
       fileOrFiles={selectedFile}
