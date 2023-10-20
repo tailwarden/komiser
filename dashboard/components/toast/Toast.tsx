@@ -1,8 +1,14 @@
 import classNames from 'classnames';
 import Button from '../button/Button';
-import { ToastProps } from './hooks/useToast';
+
 import ErrorIcon from '../icons/ErrorIcon';
 import CheckIcon from '../icons/CheckIcon';
+
+export type ToastProps = {
+  hasError: boolean;
+  title: string;
+  message: string;
+};
 
 type ToastProp = ToastProps & {
   dismissToast: () => void;
