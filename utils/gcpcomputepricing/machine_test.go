@@ -4,63 +4,88 @@ import (
 	"testing"
 )
 
-func TestGetE2standard2OnDemand(t *testing.T) {
-	hourlyRate := getter(t, 2, 8)
-
-	if hourlyRate != 67011420 {
-		t.Errorf("Hourly rate should be 67011420, instead of %d", hourlyRate)
+func TestCalculateMachineHourly(t *testing.T) {
+	var tests = []struct {
+		name   string
+		inputs []interface{}
+		ans    uint64
+	}{
+		{
+			"TestGetE2standard2OnDemand",
+			[]interface{}{E2, uint64(2), uint64(8)},
+			67011420,
+		},
+		{
+			"TestGetE2standard4OnDemand",
+			[]interface{}{E2, uint64(4), uint64(16)},
+			134022840,
+		},
+		{
+			"TestGetE2standard8OnDemand",
+			[]interface{}{E2, uint64(8), uint64(32)},
+			268045680,
+		},
+		{
+			"TestGetE2standard16OnDemand",
+			[]interface{}{E2, uint64(16), uint64(64)},
+			536091360,
+		},
+		{
+			"TestGetE2standard32OnDemand",
+			[]interface{}{E2, uint64(32), uint64(128)},
+			1072182720,
+		},
+		{
+			"TestGetN2standard2OnDemand",
+			[]interface{}{N2, uint64(2), uint64(8)},
+			97118000,
+		},
+				{
+			"TestGetN2standard4OnDemand",
+			[]interface{}{N2, uint64(4), uint64(16)},
+			194236000,
+		},
+				{
+			"TestGetN2standard8OnDemand",
+			[]interface{}{N2, uint64(8), uint64(32)},
+			388472000,
+		},
+				{
+			"TestGetN2standard16OnDemand",
+			[]interface{}{N2, uint64(16), uint64(64)},
+			776944000,
+		},
+				{
+			"TestGetN2standard32OnDemand",
+			[]interface{}{N2, uint64(32), uint64(128)},
+			1553888000,
+		},
 	}
-}
 
-func TestGetE2standard4OnDemand(t *testing.T) {
-	hourlyRate := getter(t, 4, 16)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p, err := Fetch()
 
-	if hourlyRate != 134022840 {
-		t.Errorf("Hourly rate should be 134022840, instead of %d", hourlyRate)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := calculateMachineHourly(p, Opts{
+				Type:        tt.inputs[0].(string),
+				Commitment:  OnDemand,
+				Region:      "us-west1",
+				NumOfCPU:    tt.inputs[1].(uint64),
+				NumOfMemory: tt.inputs[2].(uint64),
+			})
+			exp := tt.ans
+
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if got != exp {
+				t.Errorf("Hourly rate should be %d, instead of %d", exp, got)
+			}
+		})
+
 	}
-}
-
-func TestGetE2standard8OnDemand(t *testing.T) {
-	hourlyRate := getter(t, 8, 32)
-
-	if hourlyRate != 268045680 {
-		t.Errorf("Hourly rate should be 268045680, instead of %d", hourlyRate)
-	}
-}
-
-func TestGetE2standard16OnDemand(t *testing.T) {
-	hourlyRate := getter(t, 16, 64)
-
-	if hourlyRate != 536091360 {
-		t.Errorf("Hourly rate should be 536091360, instead of %d", hourlyRate)
-	}
-}
-
-func TestGetE2standard32OnDemand(t *testing.T) {
-	hourlyRate := getter(t, 32, 128)
-
-	if hourlyRate != 1072182720 {
-		t.Errorf("Hourly rate should be 1072182720, instead of %d", hourlyRate)
-	}
-}
-
-func getter(t *testing.T, cpu, memory uint64) uint64 {
-	p, err := Fetch()
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	hourlyRate, err := calculateMachineHourly(p, Opts{
-		Type:        E2,
-		Commitment:  OnDemand,
-		Region:      "us-west1",
-		NumOfCPU:    cpu,
-		NumOfMemory: memory,
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	return hourlyRate
 }
