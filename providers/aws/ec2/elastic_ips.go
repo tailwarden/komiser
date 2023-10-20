@@ -26,7 +26,7 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
 	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
-		return resources, err                                                                                                                                                                                                                                                                                                                                                                   
+		return resources, err
 	}
 
 	accountId := stsOutput.Account
@@ -45,9 +45,9 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 					Value: *tag.Value,
 				})
 			}
-			
+
 			cost := 0.0
-			
+
 			resourceConfig, err := configClient.BatchGetResourceConfig(ctx, &configservice.BatchGetResourceConfigInput{
 				ResourceKeys: []types.ResourceKey{
 					{
@@ -86,7 +86,6 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 
 				}
 			}
-			
 
 			resourceArn := fmt.Sprintf("arn:aws:ec2:%s:%s:elastic-ip/%s", client.AWSClient.Region, *accountId, *elasticIps.AllocationId)
 			relations := getEIPRelations(&elasticIps, fmt.Sprintf("arn:aws:ec2:%s:%s", client.AWSClient.Region, *accountId))
@@ -101,33 +100,34 @@ func ElasticIps(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/ec2/home?region=%s#ElasticIpDetails:AllocationId=%s", client.AWSClient.Region, client.AWSClient.Region, *elasticIps.AllocationId),
-				Relations: relations,
+				Relations:  relations,
 			})
 		}
-		
+
 		log.WithFields(log.Fields{
 			"provider":  "AWS",
 			"account":   client.Name,
 			"region":    client.AWSClient.Region,
 			"service":   "Elastic IP",
 			"resources": len(resources),
-		}).Info("Fetched resources")	
+		}).Info("Fetched resources")
+
+		// nolint:staticcheck  // SA4004 ignore this
 		return resources, nil
 	}
 }
 
-
 func getEIPRelations(ip *etype.Address, resourceArn string) (rel []models.Link) {
-	
+
 	if ip.InstanceId != nil {
 		id := fmt.Sprintf("%s:instance/%s", resourceArn, *ip.InstanceId)
 		rel = append(rel, models.Link{
 			ResourceID: id,
-			Type: "EC2",
-			Relation:  "USES",
+			Type:       "EC2",
+			Relation:   "USES",
 		})
 	}
-	return 
+	return
 }
 
 func hoursSince(t time.Time) float64 {

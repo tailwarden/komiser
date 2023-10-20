@@ -49,6 +49,7 @@ func TestGetCost(t *testing.T) {
 func TestGetPriceMap(t *testing.T) {
 	testCases := []struct {
 		inputPriceList       []string
+		field                string
 		expectedNumProducts  int
 		expectedNumPriceDims map[string]int
 	}{
@@ -77,6 +78,7 @@ func TestGetPriceMap(t *testing.T) {
 						}
 					}
 				}`},
+			field:                "group",
 			expectedNumProducts:  1,
 			expectedNumPriceDims: map[string]int{"TestGroup": 1},
 		},
@@ -153,8 +155,38 @@ func TestGetPriceMap(t *testing.T) {
 					}
 				}`,
 			},
+			field:                "group",
 			expectedNumProducts:  2,
 			expectedNumPriceDims: map[string]int{"TestGroup1": 2, "TestGroup2": 3},
+		},
+		// Minimal valid JSON input with a single product, one price dimension & "instanceType" attribute
+		{
+			inputPriceList: []string{`
+				{
+					"product": {
+						"attributes": {
+							"instanceType": "TestInstanceType"
+						}
+					},
+					"terms": {
+						"OnDemand": {
+							"test_term": {
+								"priceDimensions": {
+									"test_price_dimension": {
+										"beginRange": "0",
+										"endRange": "Inf",
+										"pricePerUnit": {
+											"USD": "0.1"
+										}
+									}
+								}
+							}
+						}
+					}
+				}`},
+			field:                "instanceType",
+			expectedNumProducts:  1,
+			expectedNumPriceDims: map[string]int{"TestInstanceType": 1},
 		},
 	}
 	for i, testCase := range testCases {
@@ -162,7 +194,7 @@ func TestGetPriceMap(t *testing.T) {
 			output := pricing.GetProductsOutput{
 				PriceList: testCase.inputPriceList,
 			}
-			priceMap, err := GetPriceMap(&output)
+			priceMap, err := GetPriceMap(&output, "group")
 			if err != nil {
 				t.Errorf("Expected no error, but got: %v", err)
 			}
@@ -186,7 +218,7 @@ func TestGetPriceMap_InvalidJSON(t *testing.T) {
 	output := pricing.GetProductsOutput{
 		PriceList: []string{invalidJSON},
 	}
-	_, err := GetPriceMap(&output)
+	_, err := GetPriceMap(&output, "group")
 	if err == nil {
 		t.Error("Expected an error, but got nil")
 	}
@@ -194,7 +226,7 @@ func TestGetPriceMap_InvalidJSON(t *testing.T) {
 
 func TestGetPriceMap_NoPricingOutput(t *testing.T) {
 	// PricingOutput is nil
-	priceMap, err := GetPriceMap(nil)
+	priceMap, err := GetPriceMap(nil, "group")
 	if err != nil {
 		t.Errorf("Expected no error, but got: %v", err)
 	}
@@ -202,3 +234,24 @@ func TestGetPriceMap_NoPricingOutput(t *testing.T) {
 		t.Errorf("Expected an empty priceMap, but got %v", priceMap)
 	}
 }
+
+func TestInt64PtrToFloat64_ValidInput(t *testing.T) {
+    var number int64 = 1
+    pointer := &number
+
+    returnValue := Int64PtrToFloat64(pointer)
+    var expected float64 = 1.0
+    if returnValue != expected {
+        t.Errorf("Expected return value: %f, but got: %f", expected, returnValue)
+    }
+}
+
+func TestInt64PtrToFloat64_NilInput(t *testing.T) {
+    // nil input
+    returnValue := Int64PtrToFloat64(nil)
+    var expected float64 = 0.0
+    if returnValue != expected {
+        t.Errorf("Expected return value: %f, but got: %f", expected, returnValue)
+    }
+}
+

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import Cytoscape, { EventObject } from 'cytoscape';
 import popper from 'cytoscape-popper';
@@ -11,6 +11,8 @@ import nodeHtmlLabel, {
 
 // @ts-ignore
 import COSEBilkent from 'cytoscape-cose-bilkent';
+
+import EmptyState from '@components/empty-state/EmptyState';
 
 import Tooltip from '@components/tooltip/Tooltip';
 import WarningIcon from '@components/icons/WarningIcon';
@@ -35,6 +37,8 @@ nodeHtmlLabel(Cytoscape.use(COSEBilkent));
 Cytoscape.use(popper);
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
+
+  const dataIsEmpty: boolean = data.nodes.length === 0;
 
   // Type technically is Cytoscape.EdgeCollection but that throws an unexpected error
   const loopAnimation = (eles: any) => {
@@ -147,14 +151,55 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         ]}
         cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
       />
-      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible overflow-visible bg-black-100 text-black-400">
+      {dataIsEmpty ? (
+        <>
+          <div className="translate-y-[201px]">
+            <EmptyState
+              title="No results for this filter"
+              message="It seems like you have no cloud resources matching the filters you added"
+              mascotPose="tablet"
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <CytoscapeComponent
+            className="h-full w-full"
+            elements={CytoscapeComponent.normalizeElements({
+              nodes: data.nodes,
+              edges: data.edges
+            })}
+            maxZoom={maxZoom}
+            minZoom={minZoom}
+            layout={graphLayoutConfig}
+            stylesheet={[
+              {
+                selector: 'node',
+                style: nodeStyeConfig
+              },
+              {
+                selector: 'edge',
+                style: edgeStyleConfig
+              },
+              {
+                selector: '.leaf',
+                style: leafStyleConfig
+              }
+            ]}
+            cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
+          />
+        </>
+      )}
+      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible bg-black-100 text-black-400">
         {data?.nodes?.length} Resources
-        <div className="relative">
-          <WarningIcon className="peer" height="16" width="16" />
-          <Tooltip bottom="xs" align="left" width="lg">
-            Only AWS resources are currently supported on the explorer.
-          </Tooltip>
-        </div>
+        {!dataIsEmpty && (
+          <div className="relative">
+            <WarningIcon className="peer" height="16" width="16" />
+            <Tooltip bottom="xs" align="left" width="lg">
+              Only AWS resources are currently supported on the explorer.
+            </Tooltip>
+          </div>
+        )}
       </div>
     </div>
   );

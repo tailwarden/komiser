@@ -81,7 +81,7 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					MaxResults: aws.Int32(1),
 				})
 				if err != nil {
-					log.Warnf("Couldn't fetch pricing information for %s", cluster)
+					log.Warnf("Couldn't fetch pricing information for %s", *cluster.ARN)
 				}
 
 				hourlyCost := 0.0

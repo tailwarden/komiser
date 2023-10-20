@@ -9,15 +9,18 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
-	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	cloudwatchTypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	"github.com/aws/aws-sdk-go-v2/service/pricing"
+	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
 func ConvertBytesToTerabytes(bytes int64) float64 {
-	return float64(bytes) / 1000000000000
+	return float64(bytes) / 1099511627776
 }
 
 func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -25,6 +28,29 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config s3.ListBucketsInput
 	s3Client := s3.NewFromConfig(*client.AWSClient)
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+
+	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
+		ServiceCode: aws.String("AmazonS3"),
+		Filters: []types.Filter{
+			{
+				Field: aws.String("regionCode"),
+				Value: aws.String(client.AWSClient.Region),
+				Type:  types.FilterTypeTermMatch,
+			},
+		},
+	})
+	if err != nil {
+		log.Errorf("ERROR: Couldn't fetch pricing info for AWS S3: %v", err)
+		return resources, err
+	}
+
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
+	if err != nil {
+		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+		return resources, err
+	}
+
 	output, err := s3Client.ListBuckets(context.Background(), &config)
 	if err != nil {
 		return resources, err
@@ -36,42 +62,59 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			EndTime:    aws.Time(time.Now()),
 			MetricName: aws.String("BucketSizeBytes"),
 			Namespace:  aws.String("AWS/S3"),
-			Dimensions: []types.Dimension{
-				types.Dimension{
+			Dimensions: []cloudwatchTypes.Dimension{
+				{
 					Name:  aws.String("BucketName"),
 					Value: bucket.Name,
 				},
-				types.Dimension{
-					Name:  aws.String("StorageType"),
-					Value: aws.String("StandardStorage"),
-				},
 			},
-			Unit:   types.StandardUnitBytes,
+			Unit:   cloudwatchTypes.StandardUnitBytes,
 			Period: aws.Int32(3600),
-			Statistics: []types.Statistic{
-				types.StatisticAverage,
+			Statistics: []cloudwatchTypes.Statistic{
+				cloudwatchTypes.StatisticAverage,
 			},
 		})
 		if err != nil {
 			log.Warnf("Couldn't fetch invocations metric for %s", *bucket.Name)
 		}
-
 		bucketSize := 0.0
 		if metricsBucketSizebytesOutput != nil && len(metricsBucketSizebytesOutput.Datapoints) > 0 {
 			bucketSize = *metricsBucketSizebytesOutput.Datapoints[0].Average
 		}
 
 		sizeInTB := ConvertBytesToTerabytes(int64(bucketSize))
-		monthlyCost := 0.0
 
-		if sizeInTB <= 50 {
-			monthlyCost = (sizeInTB * 1000) * 0.023
-		} else if sizeInTB <= 450 {
-			monthlyCost = (sizeInTB * 1000) * 0.022
-		} else {
-			monthlyCost = (sizeInTB * 1000) * 0.021
+		metricsUsageOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
+			EndTime:    aws.Time(time.Now()),
+			MetricName: aws.String("AllRequests"),
+			Namespace:  aws.String("AWS/S3"),
+			Dimensions: []cloudwatchTypes.Dimension{
+				{
+					Name:  aws.String("BucketName"),
+					Value: bucket.Name,
+				},
+			},
+			Unit:   cloudwatchTypes.StandardUnitCount,
+			Period: aws.Int32(3600),
+			Statistics: []cloudwatchTypes.Statistic{
+				cloudwatchTypes.StatisticSum,
+			},
+		})
+		if err != nil {
+			log.Warnf("Couldn't fetch usage metric for %s", *bucket.Name)
 		}
 
+		requestCount := 0.0
+		if metricsUsageOutput != nil && len(metricsUsageOutput.Datapoints) > 0 {
+			requestCount = *metricsUsageOutput.Datapoints[0].Sum
+		}
+
+		monthlyCost := 0.0
+
+		storageCharges := awsUtils.GetCost(priceMap["AWS-S3-Storage"], sizeInTB*1024)
+		requestCharges := awsUtils.GetCost(priceMap["S3-API-Tier1"], requestCount/1000)
+		monthlyCost = storageCharges + requestCharges
 		tagsResp, err := s3Client.GetBucketTagging(context.Background(), &s3.GetBucketTaggingInput{
 			Bucket: bucket.Name,
 		})
