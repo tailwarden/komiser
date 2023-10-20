@@ -101,7 +101,7 @@ func TestCalculateMachineHourly(t *testing.T) {
 			"TestGetT2Astandard8OnDemand",
 			[]interface{}{T2A, 8, 32},
 		},
-				{
+		{
 			"TestGetT2Astandard16OnDemand",
 			[]interface{}{T2A, 16, 64},
 		},
@@ -109,8 +109,7 @@ func TestCalculateMachineHourly(t *testing.T) {
 			"TestGetT2Astandard32OnDemand",
 			[]interface{}{T2A, 32, 128},
 		},
-
-				{
+		{
 			"TestGetT2Dstandard2OnDemand",
 			[]interface{}{T2D, 2, 8},
 		},
