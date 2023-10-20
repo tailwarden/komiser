@@ -276,6 +276,29 @@ Additionally, [here](https://youtu.be/Vn5uc2elcVg?feature=shared) is a video tut
 
 **So, you wish to improve the code quality of an existing cloud service/resource?** Feel free to discuss your ideas with us on our [Discord Server](https://discord.tailwarden.com) and [open a new issue](https://github.com/tailwarden/komiser/issues).
 
+## 🧪 Testing Your Changes
+
+We leverage the [testing](https://pkg.go.dev/testing) package for tests. Test names follow the `TestXxx(*testing.T)` format where Xxx does not start with a lowercase letter. The function name serves to identify the test routine.
+For creating a new test you create a `[name]_test.go` next to the file you'd like to test and replace `[name]` with your filename of the implementation. Look at any of the `*_test.go` files for an example or read the [official docs](https://pkg.go.dev/testing).
+You then can run it with `go test /path/to/your/folder/where/the/test/is`. You can run all of our engine tests with `make tests`. You should see something similar to this:
+
+```logtalk
+go test ./... | grep -v /dashboard/
+...
+ok  	github.com/tailwarden/komiser/internal	(cached) [no tests to run]
+?   	github.com/tailwarden/komiser/providers/aws/ecr	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/ecs	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/efs	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/eks	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/elasticache	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/elb	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/iam	[no test files]
+ok  	github.com/tailwarden/komiser/providers/aws/ec2	(cached)
+?   	github.com/tailwarden/komiser/providers/aws/kms	[no test files]
+?   	github.com/tailwarden/komiser/providers/aws/lambda	[no test file
+...
+```
+
 # 🚀 Contributing to Komiser Dashboard UI
 
 Komiser Dashboard utilizes a modern tech stack. Here's a brief about it:
