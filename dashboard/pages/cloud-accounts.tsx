@@ -11,14 +11,15 @@ import CloudAccountsLayout from '@components/cloud-account/components/CloudAccou
 import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
 import CloudAccountsSidePanel from '@components/cloud-account/components/CloudAccountsSidePanel';
 import CloudAccountDeleteContents from '@components/cloud-account/components/CloudAccountDeleteContents';
-import useToast from '@components/toast/hooks/useToast';
+import { useToast } from '@components/toast/ToastProvider';
+
 import EmptyState from '@components/empty-state/EmptyState';
 
 function CloudAccounts() {
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
   const router = useRouter();
 
   const currentViewProvider = router.query.view as string;
@@ -114,7 +115,7 @@ function CloudAccounts() {
             <CloudAccountDeleteContents
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
-              setToast={setToast}
+              showToast={showToast}
               handleAfterDelete={handleAfterDelete}
             />
           )}
@@ -129,14 +130,11 @@ function CloudAccounts() {
           cloudAccounts={cloudAccounts}
           setCloudAccounts={setCloudAccounts}
           handleAfterDelete={handleAfterDelete}
-          setToast={setToast}
+          showToast={showToast}
           page={page}
           goTo={goTo}
         />
       )}
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </>
   );
 }
