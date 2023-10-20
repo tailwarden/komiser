@@ -191,17 +191,17 @@ func typeGetterN2D(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 	var memory Subtype
 	switch opts.Commitment {
 	case OnDemand:
-		core = p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.Vmimagen2Dstandardcore
-		memory = p.Gcp.Compute.GCE.VmsOnDemand.MemoryPerGb.Vmimagen2Dstandardram
+		core = p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.N2D.Vmimagen2Dstandardcore
+		memory = p.Gcp.Compute.GCE.VmsOnDemand.MemoryPerGb.N2D.Vmimagen2Dstandardram
 	case Spot:
-		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.Vmimagepreemptiblen2Dstandardcore
-		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.Vmimagepreemptiblen2Dstandardram
+		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.N2D.Vmimagepreemptiblen2Dstandardcore
+		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.N2D.Vmimagepreemptiblen2Dstandardram
 	case Commitment1YearResource:
-		core = p.Gcp.Compute.GCE.VmsCommit1Year.CoresPerCore.Commitmentn2Dcpu1Yv1
-		memory = p.Gcp.Compute.GCE.VmsCommit1Year.MemoryPerGb.Commitmentn2Dram1Yv1
+		core = p.Gcp.Compute.GCE.VmsCommit1Year.CoresPerCore.N2D.Commitmentn2Dcpu1Yv1
+		memory = p.Gcp.Compute.GCE.VmsCommit1Year.MemoryPerGb.N2D.Commitmentn2Dram1Yv1
 	case Commitment3YearResource:
-		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.Commitmentn2Dcpu3Yv1
-		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.Commitmentn2Dram3Yv1
+		core = p.Gcp.Compute.GCE.VmsCommit3Year.CoresPerCore.N2D.Commitmentn2Dcpu3Yv1
+		memory = p.Gcp.Compute.GCE.VmsCommit3Year.MemoryPerGb.N2D.Commitmentn2Dram3Yv1
 	default:
 		return Subtype{}, Subtype{}, fmt.Errorf("commitment %q not supported", opts.Commitment)
 	}
