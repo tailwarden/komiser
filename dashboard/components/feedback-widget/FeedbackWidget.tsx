@@ -249,6 +249,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   )}
                   <div className="flex-1 grow">
                     <Upload
+                      multiple={false}
                       fileOrFiles={fileAttachement}
                       handleChange={uploadFile}
                       onClose={() => setFileAttachement(null)}
@@ -289,7 +290,12 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   .
                 </p>
                 <div className="flex gap-2">
-                  <Button size="xs" disabled={isSendingFeedback} style="ghost">
+                  <Button
+                    size="xs"
+                    disabled={isSendingFeedback}
+                    style="ghost"
+                    onClick={() => closeFeedbackModal()}
+                  >
                     Cancel
                   </Button>
                   <Button type="submit" size="xs" disabled={isSendingFeedback}>
