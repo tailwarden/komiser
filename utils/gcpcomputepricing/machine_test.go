@@ -12,52 +12,52 @@ func TestCalculateMachineHourly(t *testing.T) {
 	}{
 		{
 			"TestGetE2standard2OnDemand",
-			[]interface{}{E2, uint64(2), uint64(8)},
+			[]interface{}{E2, 2, 8},
 			67011420,
 		},
 		{
 			"TestGetE2standard4OnDemand",
-			[]interface{}{E2, uint64(4), uint64(16)},
+			[]interface{}{E2, 4, 16},
 			134022840,
 		},
 		{
 			"TestGetE2standard8OnDemand",
-			[]interface{}{E2, uint64(8), uint64(32)},
+			[]interface{}{E2, 8, 32},
 			268045680,
 		},
 		{
 			"TestGetE2standard16OnDemand",
-			[]interface{}{E2, uint64(16), uint64(64)},
+			[]interface{}{E2, 16, 64},
 			536091360,
 		},
 		{
 			"TestGetE2standard32OnDemand",
-			[]interface{}{E2, uint64(32), uint64(128)},
+			[]interface{}{E2, 32, 128},
 			1072182720,
 		},
 		{
 			"TestGetN2standard2OnDemand",
-			[]interface{}{N2, uint64(2), uint64(8)},
+			[]interface{}{N2, 2, 8},
 			97118000,
 		},
 				{
 			"TestGetN2standard4OnDemand",
-			[]interface{}{N2, uint64(4), uint64(16)},
+			[]interface{}{N2, 4, 16},
 			194236000,
 		},
 				{
 			"TestGetN2standard8OnDemand",
-			[]interface{}{N2, uint64(8), uint64(32)},
+			[]interface{}{N2, 8, 32},
 			388472000,
 		},
 				{
 			"TestGetN2standard16OnDemand",
-			[]interface{}{N2, uint64(16), uint64(64)},
+			[]interface{}{N2, 16, 64},
 			776944000,
 		},
 				{
 			"TestGetN2standard32OnDemand",
-			[]interface{}{N2, uint64(32), uint64(128)},
+			[]interface{}{N2, 32, 128},
 			1553888000,
 		},
 	}
@@ -73,8 +73,8 @@ func TestCalculateMachineHourly(t *testing.T) {
 				Type:        tt.inputs[0].(string),
 				Commitment:  OnDemand,
 				Region:      "us-west1",
-				NumOfCPU:    tt.inputs[1].(uint64),
-				NumOfMemory: tt.inputs[2].(uint64),
+				NumOfCPU:    uint64(tt.inputs[1].(int)),
+				NumOfMemory: uint64(tt.inputs[2].(int)),
 			})
 			exp := tt.ans
 
