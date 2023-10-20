@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"encoding/json"
 	"strings"
 	"time"
 
@@ -124,8 +125,10 @@ func typeGetterE2(p *Pricing, opts Opts) (Subtype, Subtype, error) {
 	var memory Subtype
 	switch opts.Commitment {
 	case OnDemand:
-		core = p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.Vmimagee2Core
-		memory = p.Gcp.Compute.GCE.VmsOnDemand.MemoryPerGb.Vmimagee2RAM
+		bs, _ := json.Marshal(p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.E2)
+    	fmt.Println(string(bs))
+		core = p.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.E2.Vmimagee2Core
+		memory = p.Gcp.Compute.GCE.VmsOnDemand.MemoryPerGb.E2.Vmimagee2RAM
 	case Spot:
 		core = p.Gcp.Compute.GCE.VmsPreemptible.CoresPerCore.Vmimagepreemptiblee2Core
 		memory = p.Gcp.Compute.GCE.VmsPreemptible.MemoryPerGb.Vmimagepreemptiblee2RAM
@@ -313,6 +316,8 @@ func getHourly(p *Pricing, opts Opts, tg typeMachineGetter) (uint64, error) {
 	}
 
 	var corePricePerRegion uint64 = 0
+	// bs, _ := json.Marshal(core.Regions)
+    // fmt.Println(string(bs))
 	if region, ok := core.Regions[opts.Region]; ok {
 		if len(region.Prices) > 0 {
 			corePricePerRegion = region.Prices[0].Nanos

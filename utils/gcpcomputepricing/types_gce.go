@@ -56,6 +56,7 @@ type VmsOnDemandMemoryPerGb struct {
 	Vmimagecomputeoptimizedram                   Subtype                   `json:"vmimagecomputeoptimizedram"`
 	Vmimagecustomextendedram                     Subtype                   `json:"vmimagecustomextendedram"`
 	Vmimagecustomram                             Subtype                   `json:"vmimagecustomram"`
+	E2                                           Vmimagee2RAME2            `json:"e2"`
 	Vmimagee2RAM                                 Subtype                   `json:"vmimagee2ram"`
 	G2                                           VmsOnDemandMemoryPerGbG2  `json:"g2"`
 	Vmimagelargeram                              Subtype                   `json:"vmimagelargeram"`
@@ -75,6 +76,10 @@ type VmsOnDemandMemoryPerGb struct {
 	Vmimagesoletenancyramsoletenancypremium      Subtype                   `json:"vmimagesoletenancyramsoletenancypremium"`
 	T2A                                          VmsOnDemandMemoryPerGbT2A `json:"t2a"`
 	Vmimaget2Dstandardram                        Subtype                   `json:"vmimaget2dstandardram"`
+}
+
+type Vmimagee2RAME2 struct {
+	Vmimagee2RAM                                 Subtype                   `json:"vmimagee2ram"`
 }
 
 type VmsOnDemandMemoryPerGbC3 struct {
@@ -104,6 +109,7 @@ type VmsOnDemandCoresPerCore struct {
 	Vmimagec2Dcustomcore                          Subtype                    `json:"vmimagec2dcustomcore"`
 	Vmimagec2Dstandardcore                        Subtype                    `json:"vmimagec2dstandardcore"`
 	C3                                            VmsOnDemandCoresPerCoreC3  `json:"c3"`
+	E2											  Vmimagee2CoreE2            `json:"e2"`
 	Vmimagecomputeoptimizedcore                   Subtype                    `json:"vmimagecomputeoptimizedcore"`
 	Vmimagecustomcore                             Subtype                    `json:"vmimagecustomcore"`
 	Vmimagee2Core                                 Subtype                    `json:"vmimagee2core"`
@@ -127,6 +133,10 @@ type VmsOnDemandCoresPerCore struct {
 	Vmimagesoletenancycoresoletenancypremium      Subtype                    `json:"vmimagesoletenancycoresoletenancypremium"`
 	T2A                                           VmsOnDemandCoresPerCoreT2A `json:"t2a"`
 	Vmimaget2Dstandardcore                        Subtype                    `json:"vmimaget2dstandardcore"`
+}
+
+type Vmimagee2CoreE2 struct {
+	Vmimagee2Core                                 Subtype                    `json:"vmimagee2core"`
 }
 
 type VmsOnDemandCoresPerCoreC3 struct {

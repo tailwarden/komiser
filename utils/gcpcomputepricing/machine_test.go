@@ -46,6 +46,7 @@ func TestGetE2standard32OnDemand(t *testing.T) {
 
 func getter(t *testing.T, cpu, memory uint64) uint64 {
 	p, err := Fetch()
+
 	if err != nil {
 		t.Fatal(err)
 	}
