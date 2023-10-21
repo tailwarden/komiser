@@ -9,7 +9,9 @@ export type Provider =
   | 'tencent'
   | 'oci'
   | 'scaleway'
-  | 'mongodbatlas';
+  | 'mongodbatlas'
+  | 'pulumi'
+  | 'terraform';
 
 type ProviderKey =
   | 'AWS'
@@ -22,7 +24,9 @@ type ProviderKey =
   | 'TENCENT'
   | 'OCI'
   | 'SCALE_WAY'
-  | 'MONGODB_ATLAS';
+  | 'MONGODB_ATLAS'
+  | 'PULUMI'
+  | 'TERRAFORM';
 
 export const allProviders: { [key in ProviderKey]: Provider } = {
   AWS: 'aws',
@@ -35,11 +39,20 @@ export const allProviders: { [key in ProviderKey]: Provider } = {
   TENCENT: 'tencent',
   OCI: 'oci',
   SCALE_WAY: 'scaleway',
-  MONGODB_ATLAS: 'mongodbatlas'
+  MONGODB_ATLAS: 'mongodbatlas',
+  TERRAFORM: 'terraform',
+  PULUMI: 'pulumi'
+};
+
+export type Integration = 'slack' | 'webhook';
+type IntegrationsKey = 'SLACK' | 'WEBHOOK';
+
+export const allIntegrations: { [key in IntegrationsKey]: Integration } = {
+  SLACK: 'slack',
+  WEBHOOK: 'webhook'
 };
 
 export type DBProvider = 'postgres' | 'sqlite';
-
 type DBProviderKey = 'POSTGRES' | 'SQLITE';
 
 export const allDBProviders: { [key in DBProviderKey]: DBProvider } = {
@@ -47,104 +60,102 @@ export const allDBProviders: { [key in DBProviderKey]: DBProvider } = {
   SQLITE: 'sqlite'
 };
 
-const providers = {
-  providerLabel(arg: Provider) {
-    let label;
+type PlatformItem = {
+  label: string;
+  imgSrc: string;
+};
 
-    if (arg.toLowerCase() === 'aws') {
-      label = 'Amazon Web Services';
-    }
+export type Platform = {
+  provider: Record<string, PlatformItem>;
+  integration: Record<string, PlatformItem>;
+  getImgSrc: (platformName: Provider | Integration) => string;
+};
 
-    if (arg.toLowerCase() === 'gcp') {
-      label = 'Google Cloud Platform';
+const platform: Platform = {
+  provider: {
+    aws: {
+      label: 'Amazon Web Services',
+      imgSrc: '/assets/img/providers/aws.png'
+    },
+    gcp: {
+      label: 'Google Cloud Platform',
+      imgSrc: '/assets/img/providers/gcp.png'
+    },
+    digitalocean: {
+      label: 'DigitalOcean',
+      imgSrc: '/assets/img/providers/digitalocean.png'
+    },
+    azure: {
+      label: 'Azure',
+      imgSrc: '/assets/img/providers/azure.png'
+    },
+    civo: {
+      label: 'Civo',
+      imgSrc: '/assets/img/providers/civo.png'
+    },
+    kubernetes: {
+      label: 'Kubernetes',
+      imgSrc: '/assets/img/providers/kubernetes.png'
+    },
+    linode: {
+      label: 'Linode',
+      imgSrc: '/assets/img/providers/linode.png'
+    },
+    tencent: {
+      label: 'Tencent',
+      imgSrc: '/assets/img/providers/tencent.png'
+    },
+    oci: {
+      label: 'OCI',
+      imgSrc: '/assets/img/providers/oci.png'
+    },
+    scaleway: {
+      label: 'Scaleway',
+      imgSrc: '/assets/img/providers/scaleway.png'
+    },
+    mongodbatlas: {
+      label: 'MongoDB Atlas',
+      imgSrc: '/assets/img/providers/mongodbatlas.png'
+    },
+    terraform: {
+      label: 'Terraform',
+      imgSrc: '/assets/img/providers/terraform.png'
+    },
+    pulumi: {
+      label: 'Pulumi',
+      imgSrc: '/assets/img/providers/pulumi.png'
     }
-    if (arg.toLowerCase() === 'digitalocean') {
-      label = 'DigitalOcean';
-    }
-
-    if (arg.toLowerCase() === 'azure') {
-      label = 'Azure';
-    }
-
-    if (arg.toLowerCase() === 'tencent') {
-      label = 'Tencent';
-    }
-
-    if (arg.toLowerCase() === 'civo') {
-      label = 'Civo';
-    }
-
-    if (arg.toLowerCase() === 'kubernetes') {
-      label = 'Kubernetes';
-    }
-
-    if (arg.toLowerCase() === 'linode') {
-      label = 'Linode';
-    }
-
-    if (arg.toLowerCase() === 'oci') {
-      label = 'OCI';
-    }
-
-    if (arg.toLowerCase() === 'scaleway') {
-      label = 'Scaleway';
-    }
-
-    if (arg.toLowerCase() === 'mongodbatlas') {
-      label = 'MongoDB Atlas';
-    }
-
-    return label;
   },
-  providerImg(arg: Provider) {
-    let img;
-
-    if (arg.toLowerCase() === 'aws') {
-      img = '/assets/img/providers/aws.png';
+  integration: {
+    slack: {
+      label: 'Slack',
+      imgSrc: '/assets/img/integrations/slack.png'
+    },
+    webhook: {
+      label: 'Custom Web-Hook',
+      imgSrc: '/assets/img/integrations/webhook.png'
     }
+  },
+  getImgSrc(platformName) {
+    // check if img exists in '/assets/img/providers'
+    if (this.provider[platformName]) return this.provider[platformName].imgSrc;
 
-    if (arg.toLowerCase() === 'gcp') {
-      img = '/assets/img/providers/gcp.png';
-    }
+    // check if img exists in '/assets/img/integrations'
+    if (this.integration[platformName])
+      return this.integration[platformName].imgSrc;
 
-    if (arg.toLowerCase() === 'digitalocean') {
-      img = '/assets/img/providers/digitalocean.png';
-    }
-
-    if (arg.toLowerCase() === 'azure') {
-      img = '/assets/img/providers/azure.svg';
-    }
-
-    if (arg.toLowerCase() === 'civo') {
-      img = '/assets/img/providers/civo.jpeg';
-    }
-
-    if (arg.toLowerCase() === 'kubernetes') {
-      img = '/assets/img/providers/kubernetes.png';
-    }
-
-    if (arg.toLowerCase() === 'linode') {
-      img = '/assets/img/providers/linode.png';
-    }
-
-    if (arg.toLowerCase() === 'tencent') {
-      img = '/assets/img/providers/tencent.jpeg';
-    }
-
-    if (arg.toLowerCase() === 'oci') {
-      img = '/assets/img/providers/oci.png';
-    }
-
-    if (arg.toLowerCase() === 'scaleway') {
-      img = '/assets/img/providers/scaleway.png';
-    }
-
-    if (arg.toLowerCase() === 'mongodbatlas') {
-      img = '/assets/img/providers/mongodbatlas.jpg';
-    }
-
-    return img;
+    return '';
   }
 };
 
-export default providers;
+/* search these 3:
+providers
+providerLabel
+providerImg */
+export default platform;
+/* // todo:
+// - refactor platform in this file
+//- add Avatar component
+// - write story
+ - replace and refactor all instances of Avatar 
+ */
