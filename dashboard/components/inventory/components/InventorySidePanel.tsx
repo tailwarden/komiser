@@ -1,5 +1,5 @@
+import Avatar from '@components/avatar/Avatar';
 import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
 import Button from '../../button/Button';
 import CloseIcon from '../../icons/CloseIcon';
 import PlusIcon from '../../icons/PlusIcon';
@@ -52,14 +52,7 @@ function InventorySidePanel({
         <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
           {data && (
             <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
-              <picture className="flex-shrink-0">
-                <img
-                  src={providers.providerImg(data.provider)}
-                  className="h-8 w-8 rounded-full"
-                  alt={data.provider}
-                />
-              </picture>
-
+              <Avatar avatarName={data.provider} size={48} />
               <div className="flex flex-col gap-1 py-1">
                 <p className="... w-48 truncate font-medium text-black-900">
                   {data.service}

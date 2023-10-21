@@ -69,6 +69,7 @@ export type Platform = {
   provider: Record<string, PlatformItem>;
   integration: Record<string, PlatformItem>;
   getImgSrc: (platformName: Provider | Integration) => string;
+  getLabel: (platformName: Provider | Integration) => string;
 };
 
 const platform: Platform = {
@@ -136,26 +137,19 @@ const platform: Platform = {
       imgSrc: '/assets/img/integrations/webhook.png'
     }
   },
+
   getImgSrc(platformName) {
-    // check if img exists in '/assets/img/providers'
-    if (this.provider[platformName]) return this.provider[platformName].imgSrc;
-
-    // check if img exists in '/assets/img/integrations'
-    if (this.integration[platformName])
-      return this.integration[platformName].imgSrc;
-
+    const key = platformName.toLowerCase();
+    if (key in this.provider) return this.provider[key].imgSrc;
+    if (key in this.integration) return this.integration[key].imgSrc;
+    return '';
+  },
+  getLabel(platformName) {
+    const key = platformName.toLowerCase();
+    if (key in this.provider) return this.provider[key].label;
+    if (key in this.integration) return this.integration[key].label;
     return '';
   }
 };
 
-/* search these 3:
-providers
-providerLabel
-providerImg */
 export default platform;
-/* // todo:
-// - refactor platform in this file
-//- add Avatar component
-// - write story
- - replace and refactor all instances of Avatar 
- */

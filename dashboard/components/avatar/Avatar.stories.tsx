@@ -14,12 +14,14 @@ type Story = StoryObj<typeof Avatar>;
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const CloudProviders: Story = {
   args: {
-    avatarName: 'aws'
+    avatarName: 'aws',
+    size: 48
   }
 };
 
 export const Integrations: Story = {
   args: {
-    avatarName: 'slack'
+    avatarName: 'slack',
+    size: 48
   }
 };
