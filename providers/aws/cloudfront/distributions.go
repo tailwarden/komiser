@@ -24,10 +24,6 @@ const (
 	freeTierUpload   = 1099511627776
 )
 
-func ConvertBytesToTerabytes(bytes int64) float64 {
-	return float64(bytes) / 1099511627776
-}
-
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config cloudfront.ListDistributionsInput
@@ -99,8 +95,6 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				bytesDownloaded = *metricsBytesDownloadedOutput.Datapoints[0].Sum
 			}
 
-			sizeInTBDownload := ConvertBytesToTerabytes(int64(bytesDownloaded))
-
 			metricsBytesUploadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
@@ -129,8 +123,6 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			if bytesUploaded > freeTierUpload {
 				bytesUploaded -= freeTierUpload
 			}
-
-			sizeInTBUpload := ConvertBytesToTerabytes(int64(bytesUploaded))
 
 			metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
@@ -161,9 +153,9 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				requests -= freeTierRequests
 			}
 
-			dataTransferToInternetCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-In-Bytes"], sizeInTBUpload*1024)
+			dataTransferToInternetCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-In-Bytes"], (float64(bytesUploaded) / 1099511627776)*1024)
 
-			dataTransferToOriginCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-Out-Bytes"], sizeInTBDownload*1024)
+			dataTransferToOriginCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-Out-Bytes"], (float64(bytesDownloaded) / 1099511627776)*1024)
 
 			requestsCost := awsUtils.GetCost(priceMapForRequest["CloudFront-Request-Origin-Shield"], requests/10000)
 
