@@ -11,10 +11,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudfront"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	"github.com/aws/aws-sdk-go-v2/service/pricing"
+	pricingTypes "github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
+
+const (
+	freeTierRequests = 10000000
+	freeTierUpload   = 1099511627776
+)
+
+func ConvertBytesToTerabytes(bytes int64) float64 {
+	return float64(bytes) / 1099511627776
+}
 
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
@@ -25,6 +37,34 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 	client.AWSClient.Region = "us-east-1"
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = tempRegion
+	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+
+	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
+		ServiceCode: aws.String("AmazonCloudFront"),
+		Filters: []pricingTypes.Filter{
+			{
+				Field: aws.String("regionCode"),
+				Value: aws.String(client.AWSClient.Region),
+				Type:  pricingTypes.FilterTypeTermMatch,
+			},
+		},
+	})
+	if err != nil {
+		log.Errorf("ERROR: Couldn't fetch pricing info for AWS CloudFront: %v", err)
+		return resources, err
+	}
+
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
+	if err != nil {
+		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+		return resources, err
+	}
+
+	priceMapForRequest, err := awsUtils.GetPriceMap(pricingOutput, "requestType")
+	if err != nil {
+		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+		return resources, err
+	}
 
 	for {
 		output, err := cloudfrontClient.ListDistributions(ctx, &config)
@@ -39,7 +79,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				MetricName: aws.String("BytesDownloaded"),
 				Namespace:  aws.String("AWS/CloudFront"),
 				Dimensions: []types.Dimension{
-					types.Dimension{
+					{
 						Name:  aws.String("DistributionId"),
 						Value: distribution.Id,
 					},
@@ -59,13 +99,15 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				bytesDownloaded = *metricsBytesDownloadedOutput.Datapoints[0].Sum
 			}
 
+			sizeInTBDownload := ConvertBytesToTerabytes(int64(bytesDownloaded))
+
 			metricsBytesUploadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("BytesUploaded"),
 				Namespace:  aws.String("AWS/CloudFront"),
 				Dimensions: []types.Dimension{
-					types.Dimension{
+					{
 						Name:  aws.String("DistributionId"),
 						Value: distribution.Id,
 					},
@@ -84,6 +126,11 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			if metricsBytesUploadedOutput != nil && len(metricsBytesUploadedOutput.Datapoints) > 0 {
 				bytesUploaded = *metricsBytesUploadedOutput.Datapoints[0].Sum
 			}
+			if bytesUploaded > freeTierUpload {
+				bytesUploaded -= freeTierUpload
+			}
+
+			sizeInTBUpload := ConvertBytesToTerabytes(int64(bytesUploaded))
 
 			metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
@@ -91,7 +138,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				MetricName: aws.String("Requests"),
 				Namespace:  aws.String("AWS/CloudFront"),
 				Dimensions: []types.Dimension{
-					types.Dimension{
+					{
 						Name:  aws.String("DistributionId"),
 						Value: distribution.Id,
 					},
@@ -110,17 +157,17 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 			if metricsRequestsOutput != nil && len(metricsRequestsOutput.Datapoints) > 0 {
 				requests = *metricsRequestsOutput.Datapoints[0].Sum
 			}
+			if requests > freeTierRequests {
+				requests -= freeTierRequests
+			}
 
-			// calculate region data transfer out to internet
-			dataTransferToInternet := (bytesUploaded / 1000000000) * 0.085
+			dataTransferToInternetCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-In-Bytes"], sizeInTBUpload*1024)
 
-			// calculate region data transfer out to origin
-			dataTransferToOrigin := (bytesDownloaded / 1000000000) * 0.02
+			dataTransferToOriginCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-Out-Bytes"], sizeInTBDownload*1024)
 
-			// calculate requests cost
-			requestsCost := requests * 0.000001
+			requestsCost := awsUtils.GetCost(priceMapForRequest["CloudFront-Request-Origin-Shield"], requests/10000)
 
-			monthlyCost := dataTransferToInternet + dataTransferToOrigin + requestsCost
+			monthlyCost := dataTransferToInternetCost + dataTransferToOriginCost + requestsCost
 
 			outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
 				Resource: distribution.ARN,
