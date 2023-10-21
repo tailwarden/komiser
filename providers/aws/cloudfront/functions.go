@@ -76,7 +76,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warnf("Couldn't fetch Lambda@Edge Duration metric for %s", *&function.Name)
+				log.Warnf("Couldn't fetch Lambda@Edge Duration metric for %s", *function.Name)
 			}
 
 			lambdaEdgeDuration := 0.0
@@ -102,7 +102,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			})
 
 			if err != nil {
-				log.Warnf("Couldn't fetch Lambda@Edge Requests metric for %s", *&function.Name)
+				log.Warnf("Couldn't fetch Lambda@Edge Requests metric for %s", *function.Name)
 			}
 
 			lambdaEdgeRequests := 0.0
