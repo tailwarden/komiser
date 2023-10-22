@@ -3,7 +3,9 @@ package aws
 import (
 	"context"
 	"strings"
+	"sync"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
@@ -99,7 +101,65 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 	}
 }
 
+func processResources(
+	ctx context.Context,
+	client providers.ProviderClient,
+	wgResources *sync.WaitGroup,
+	fetchResources providers.FetchDataFunction,
+	db *bun.DB,
+	telemetry bool,
+	analytics utils.Analytics,
+) {
+	defer wgResources.Done()
+	resources, err := fetchResources(ctx, client)
+	log.Debugf("Now Processing Client: %s in Region %s", client.Name, client.AWSClient.Region)
+	if err != nil {
+		log.Warnf("[%s][AWS] %s", client.Name, err)
+	} else {
+		for _, resource := range resources {
+			_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
+			if err != nil {
+				log.WithError(err).Errorf("db trigger failed")
+			}
+		}
+		if telemetry {
+			analytics.TrackEvent("discovered_resources", map[string]interface{}{
+				"provider":     "AWS",
+				"resources":    len(resources),
+				"dependencies": calculateDependencies(resources),
+			})
+		}
+	}
+}
+
+func processPerRegions(
+	ctx context.Context,
+	client providers.ProviderClient,
+	region string,
+	wgRegions *sync.WaitGroup,
+	db *bun.DB,
+	telemetry bool,
+	analytics utils.Analytics,
+) {
+	defer wgRegions.Done()
+	log.Debugf("Setting Client: %s to Region %s", client.Name, region)
+
+	client.AWSClient.Region = region
+	var wgResources sync.WaitGroup
+
+	for _, fetchResources := range listOfSupportedServices() {
+		wgResources.Add(1)
+
+		go func(fetchResources providers.FetchDataFunction) {
+			processResources(ctx, client, &wgResources, fetchResources, db, telemetry, analytics)
+		}(fetchResources)
+	}
+	wgResources.Wait()
+}
+
 func FetchResources(ctx context.Context, client providers.ProviderClient, regions []string, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
+	var wgRegions sync.WaitGroup
+
 	listOfSupportedRegions := getRegions()
 	if len(regions) > 0 {
 		log.Infof("Komiser will fetch resources from the following regions: %s", strings.Join(regions, ","))
@@ -107,30 +167,21 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 	}
 
 	for _, region := range listOfSupportedRegions {
-		client.AWSClient.Region = region
-		for _, fetchResources := range listOfSupportedServices() {
-			wp.SubmitTask(func() {
-				resources, err := fetchResources(ctx, client)
-				if err != nil {
-					log.Warnf("[%s][AWS] %s", client.Name, err)
-				} else {
-					for _, resource := range resources {
-						_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
-						if err != nil {
-							log.WithError(err).Errorf("db trigger failed")
-						}
-					}
-					if telemetry {
-						analytics.TrackEvent("discovered_resources", map[string]interface{}{
-							"provider":     "AWS",
-							"resources":    len(resources),
-							"dependencies": calculateDependencies(resources),
-						})
-					}
-				}
-			})
+		wgRegions.Add(1)
+
+		// Create a copy of the client for each goroutine
+		clientCopy := providers.ProviderClient{
+			Name: client.Name,
+			// Add other fields as necessary
+			AWSClient: &aws.Config{
+				Region:      region,
+				Credentials: client.AWSClient.Credentials,
+			},
 		}
+		go processPerRegions(ctx, clientCopy, region, &wgRegions, db, telemetry, analytics)
+
 	}
+	wgRegions.Wait()
 }
 
 func calculateDependencies(resources []models.Resource) int {
