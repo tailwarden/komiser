@@ -52,7 +52,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [isTakingScreenCapture, setIsTakingScreenCapture] = useState(false);
     const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-    const { toast, setToast, dismissToast } = useToast();
+    const { toast, dismissToast } = useToast();
 
     async function takeScreenshot() {
       if (
