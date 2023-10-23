@@ -24,13 +24,13 @@ type BaseUploadProps = {
 
 export type SingleUploadProps = BaseUploadProps & {
   multiple: false;
-  fileOrFiles: File | null;
+  fileOrFiles: File[] | null;
   handleChange: (file: File | null) => void;
 };
 
 export type MultipleUploadProps = BaseUploadProps & {
   multiple: true;
-  fileOrFiles: File[] | null;
+  fileOrFiles: File | null;
   handleChange: (files: File[] | null) => void;
 };
 
@@ -57,7 +57,7 @@ const defaultDropMessageStyle: React.CSSProperties = {
 
 function Upload({
   name = 'attachment',
-  multiple,
+  multiple = false,
   label,
   required,
   disabled,
@@ -152,7 +152,7 @@ function Upload({
         {fileOrFiles !== null && (
           <div className="flex h-full flex-col gap-2">
             {multiple ? (
-              fileOrFiles?.map((file: File, index: number) => (
+              (fileOrFiles as File[])?.map((file: File, index: number) => (
                 <div className="relative h-full w-full px-6 py-5" key={index}>
                   {/* Render the multiple files */}
                   <div className="flex h-full w-full items-center justify-items-center gap-2">
@@ -279,9 +279,9 @@ function Upload({
                     />
                   </svg>
                   <div className="flex-1 text-left">
-                    <p>{fileOrFiles.name}</p>
+                    <p>{(fileOrFiles as File).name}</p>
                     <p className="text-black-400">
-                      {(fileOrFiles.size / (1024 * 1024)).toFixed(2)}
+                      {((fileOrFiles as File).size / (1024 * 1024)).toFixed(2)}
                       MB
                     </p>
                   </div>
