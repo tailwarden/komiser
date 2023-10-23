@@ -32,7 +32,8 @@ function DependendencyGraphFilter({
       {!hasFilters ? (
         <>
           <div
-            className="overflow-hidden·rounded-md·border-2·border-dashed·border-black-200·border-opacity-60·px-3·py-1·flex·w-fit·cursor-pointer·items-center·gap"
+
+            className="flex w-fit cursor-pointer items-center gap-1 overflow-hidden rounded-md border-2 border-dashed border-black-200 border-opacity-60 px-3 py-1"
             onClick={toggle}
           >
             <PlusIcon width={16} height={16} />
