@@ -126,6 +126,31 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
+      <CytoscapeComponent
+        className="h-full w-full"
+        elements={CytoscapeComponent.normalizeElements({
+          nodes: data.nodes,
+          edges: data.edges
+        })}
+        maxZoom={maxZoom}
+        minZoom={minZoom}
+        layout={graphLayoutConfig}
+        stylesheet={[
+          {
+            selector: 'node',
+            style: nodeStyeConfig
+          },
+          {
+            selector: 'edge',
+            style: edgeStyleConfig
+          },
+          {
+            selector: '.leaf',
+            style: leafStyleConfig
+          }
+        ]}
+        cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
+      />
       {dataIsEmpty ? (
         <>
           <div className="translate-y-[201px]">
