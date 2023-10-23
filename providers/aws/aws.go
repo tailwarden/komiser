@@ -107,7 +107,12 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 	}
 
 	for _, region := range listOfSupportedRegions {
-		client.AWSClient.Region = region
+		c := client.AWSClient.Copy()
+		c.Region = region
+		client = providers.ProviderClient{
+			AWSClient: &c,
+			Name:      client.Name,
+		}
 		for _, fetchResources := range listOfSupportedServices() {
 			wp.SubmitTask(func() {
 				resources, err := fetchResources(ctx, client)
