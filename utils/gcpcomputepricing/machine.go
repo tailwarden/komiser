@@ -313,8 +313,6 @@ func getHourly(p *Pricing, opts Opts, tg typeMachineGetter) (uint64, error) {
 	}
 
 	var corePricePerRegion uint64 = 0
-	// bs, _ := json.Marshal(core.Regions)
-    // fmt.Println(string(bs))
 	if region, ok := core.Regions[opts.Region]; ok {
 		if len(region.Prices) > 0 {
 			corePricePerRegion = region.Prices[0].Nanos
