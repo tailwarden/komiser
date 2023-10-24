@@ -300,7 +300,6 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
             </form>
           </div>
         </Modal>
-        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </>
     );
   };

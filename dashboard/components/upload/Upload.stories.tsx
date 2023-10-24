@@ -105,6 +105,7 @@ type Story = StoryObj<typeof Upload>;
 export const SingleFile: Story = {
   args: {
     name: 'attachment',
+    multiple: false,
     disabled: false,
     hoverTitle: 'drop here',
     maxSize: 37,
