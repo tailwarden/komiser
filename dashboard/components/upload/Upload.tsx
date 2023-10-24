@@ -24,13 +24,13 @@ type BaseUploadProps = {
 
 export type SingleUploadProps = BaseUploadProps & {
   multiple: false;
-  fileOrFiles: File[] | null;
+  fileOrFiles: File | null;
   handleChange: (file: File | null) => void;
 };
 
 export type MultipleUploadProps = BaseUploadProps & {
   multiple: true;
-  fileOrFiles: File | null;
+  fileOrFiles: File[] | null;
   handleChange: (files: File[] | null) => void;
 };
 
