@@ -19,6 +19,9 @@ import (
 	"github.com/tailwarden/komiser/utils"
 )
 
+const (
+	perOneMillonRequest = 1000000
+)
 func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config cloudfront.ListFunctionsInput
@@ -42,13 +45,11 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	})
 	if err != nil {
 		log.Errorf("ERROR: Couldn't fetch pricing info for AWS CloudFront: %v", err)
-		return resources, err
 	}
 
 	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
 	if err != nil {
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
-		return resources, err
 	}
 
 	for {
@@ -112,7 +113,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 			lambdaEdgeDurationCost := awsUtils.GetCost(priceMap["AWS-Lambda-Edge-Duration"], lambdaEdgeDuration)
 
-			lambdaEdgeRequestsCost := awsUtils.GetCost(priceMap["AWS-Lambda-Edge-Requests"], lambdaEdgeRequests/10000000)
+			lambdaEdgeRequestsCost := awsUtils.GetCost(priceMap["AWS-Lambda-Edge-Requests"], lambdaEdgeRequests/perOneMillonRequest)
 
 			monthlyCost := lambdaEdgeDurationCost + lambdaEdgeRequestsCost
 

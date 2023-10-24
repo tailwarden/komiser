@@ -12,7 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
-	pricingTypes "github.com/aws/aws-sdk-go-v2/service/pricing/types"
+	// pricingTypes "github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
 	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
@@ -22,6 +22,7 @@ import (
 const (
 	freeTierRequests = 10000000
 	freeTierUpload   = 1099511627776
+	per10kRequest = 10000
 )
 
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -37,29 +38,19 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 		ServiceCode: aws.String("AmazonCloudFront"),
-		Filters: []pricingTypes.Filter{
-			{
-				Field: aws.String("regionCode"),
-				Value: aws.String(client.AWSClient.Region),
-				Type:  pricingTypes.FilterTypeTermMatch,
-			},
-		},
 	})
 	if err != nil {
 		log.Errorf("ERROR: Couldn't fetch pricing info for AWS CloudFront: %v", err)
-		return resources, err
 	}
 
-	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
+	priceMapForDataTransfer, err := awsUtils.GetPriceMap(pricingOutput, "transferType")
 	if err != nil {
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
-		return resources, err
 	}
 
 	priceMapForRequest, err := awsUtils.GetPriceMap(pricingOutput, "requestType")
 	if err != nil {
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
-		return resources, err
 	}
 
 	for {
@@ -95,35 +86,6 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				bytesDownloaded = *metricsBytesDownloadedOutput.Datapoints[0].Sum
 			}
 
-			metricsBytesUploadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
-				EndTime:    aws.Time(time.Now()),
-				MetricName: aws.String("BytesUploaded"),
-				Namespace:  aws.String("AWS/CloudFront"),
-				Dimensions: []types.Dimension{
-					{
-						Name:  aws.String("DistributionId"),
-						Value: distribution.Id,
-					},
-				},
-				Period: aws.Int32(86400),
-				Statistics: []types.Statistic{
-					types.StatisticSum,
-				},
-			})
-
-			if err != nil {
-				log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
-			}
-
-			bytesUploaded := 0.0
-			if metricsBytesUploadedOutput != nil && len(metricsBytesUploadedOutput.Datapoints) > 0 {
-				bytesUploaded = *metricsBytesUploadedOutput.Datapoints[0].Sum
-			}
-			if bytesUploaded > freeTierUpload {
-				bytesUploaded -= freeTierUpload
-			}
-
 			metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
@@ -153,13 +115,11 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				requests -= freeTierRequests
 			}
 
-			dataTransferToInternetCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-In-Bytes"], (float64(bytesUploaded) / 1099511627776)*1024)
+			dataTransferToOriginCost := awsUtils.GetCost(priceMapForDataTransfer["CloudFront to Origin"], (float64(bytesDownloaded) / 1099511627776)*1024)
 
-			dataTransferToOriginCost := awsUtils.GetCost(priceMap["AWS-CloudFront-DataTransfer-Out-Bytes"], (float64(bytesDownloaded) / 1099511627776)*1024)
+			requestsCost := awsUtils.GetCost(priceMapForRequest["CloudFront-Request-HTTP-Proxy"], requests/per10kRequest)
 
-			requestsCost := awsUtils.GetCost(priceMapForRequest["CloudFront-Request-Origin-Shield"], requests/10000)
-
-			monthlyCost := dataTransferToInternetCost + dataTransferToOriginCost + requestsCost
+			monthlyCost := dataTransferToOriginCost + requestsCost
 
 			outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
 				Resource: distribution.ARN,
