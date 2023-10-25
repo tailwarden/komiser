@@ -8,6 +8,7 @@ import Input from '@components/input/Input';
 import settingsService from '@services/settingsService';
 import Button from '@components/button/Button';
 import { useToast } from '@components/toast/ToastProvider';
+import Toast from '@components/toast/Toast';
 import Upload from '@components/upload/Upload';
 
 // We define the placeholder here for convenience
@@ -51,7 +52,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [isTakingScreenCapture, setIsTakingScreenCapture] = useState(false);
     const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-    const { showToast } = useToast();
+    const { toast, showToast, dismissToast } = useToast();
 
     async function takeScreenshot() {
       if (
