@@ -7,7 +7,7 @@ import Modal from '@components/modal/Modal';
 import Input from '@components/input/Input';
 import settingsService from '@services/settingsService';
 import Button from '@components/button/Button';
-import useToast from '@components/toast/hooks/useToast';
+import { useToast } from '@components/toast/ToastProvider';
 import Toast from '@components/toast/Toast';
 import Upload from '@components/upload/Upload';
 
@@ -52,7 +52,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [isTakingScreenCapture, setIsTakingScreenCapture] = useState(false);
     const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-    const { toast, setToast, dismissToast } = useToast();
+    const { toast, showToast, dismissToast } = useToast();
 
     async function takeScreenshot() {
       if (
@@ -83,7 +83,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
             setFileAttachement(screenShotFile);
           }
 
-          setToast({
+          showToast({
             hasError: false,
             title: 'Screen capture',
             message:
@@ -91,7 +91,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           });
         })
         .catch(err => {
-          setToast({
+          showToast({
             hasError: true,
             title: 'Screen capture failed',
             message:
@@ -124,7 +124,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           settingsService
             .sendFeedback(formData)
             .then(result => {
-              setToast({
+              showToast({
                 hasError: false,
                 title: 'Feedback sent',
                 message:
@@ -134,7 +134,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
               clearFeedbackForm();
             })
             .catch(error => {
-              setToast({
+              showToast({
                 hasError: true,
                 title: 'Feedback',
                 message: 'An Error happened. Maybe try again please!'
@@ -258,14 +258,14 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                         isTakingScreenCapture
                       }
                       onTypeError={(err: string) =>
-                        setToast({
+                        showToast({
                           hasError: true,
                           title: 'File upload failed',
                           message: err
                         })
                       }
                       onSizeError={(err: string) =>
-                        setToast({
+                        showToast({
                           hasError: true,
                           title: 'File upload failed',
                           message: err
@@ -300,7 +300,6 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
             </form>
           </div>
         </Modal>
-        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </>
     );
   };

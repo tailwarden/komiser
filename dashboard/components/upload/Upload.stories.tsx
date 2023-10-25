@@ -10,24 +10,35 @@ function UploadWrapper({
   onClose,
   ...otherProps
 }: UploadProps) {
-  const [selectedFile, setSelectedFile] = useState<File | File[] | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[] | null>(null);
 
   useEffect(() => {
     setSelectedFile(null);
+    setSelectedFiles(null);
   }, [multiple]);
 
   const uploadFile = (file: File | File[] | null): void => {
     if (file instanceof FileList) {
       const filesArray = Array.from(file);
-      setSelectedFile(filesArray);
+      setSelectedFiles(filesArray);
     } else if (file instanceof File) {
       setSelectedFile(file);
     } else {
       setSelectedFile(null);
+      setSelectedFiles(null);
     }
   };
 
-  return (
+  return multiple ? (
+    <Upload
+      multiple={multiple}
+      fileOrFiles={selectedFiles}
+      handleChange={uploadFile}
+      onClose={() => setSelectedFiles(null)}
+      {...otherProps}
+    />
+  ) : (
     <Upload
       multiple={multiple}
       fileOrFiles={selectedFile}
@@ -39,7 +50,7 @@ function UploadWrapper({
 }
 
 const meta: Meta<typeof Upload> = {
-  title: 'Komiser/FileUpload',
+  title: 'Komiser/Upload',
   component: UploadWrapper,
   decorators: [
     Story => (
@@ -94,6 +105,7 @@ type Story = StoryObj<typeof Upload>;
 export const SingleFile: Story = {
   args: {
     name: 'attachment',
+    multiple: false,
     disabled: false,
     hoverTitle: 'drop here',
     maxSize: 37,
