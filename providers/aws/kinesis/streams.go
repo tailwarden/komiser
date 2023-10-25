@@ -201,7 +201,7 @@ func retrievePutRecords(ctx context.Context, cloudwatchClient CloudwatchClient, 
 }
 
 func calculateCostOfKinesisDataStream(summary *types.StreamDescriptionSummary, totalPutRecords float64, priceMap map[string][]awsUtils.PriceDimensions) (float64, error) {
-	if isProvisionedMode(summary) {
+	if summary.StreamModeDetails.StreamMode == types.StreamModeProvisioned {
 		startOfMonth := utils.BeginningOfMonth(time.Now())
 		hourlyUsage := int32(0)
 		if (*summary.StreamCreationTimestamp).Before(startOfMonth) {
@@ -217,8 +217,4 @@ func calculateCostOfKinesisDataStream(summary *types.StreamDescriptionSummary, t
 		return shardCost + putRecordsCost, nil
 	}
 	return 0.0, nil
-}
-
-func isProvisionedMode(summary *types.StreamDescriptionSummary) bool {
-	return summary.StreamModeDetails != nil && summary.StreamModeDetails.StreamMode == types.StreamModeProvisioned
 }
