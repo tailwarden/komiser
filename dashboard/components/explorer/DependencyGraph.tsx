@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo, useEffect, useRef } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import Cytoscape, { EdgeSingular, EventObject } from 'cytoscape';
 import popper from 'cytoscape-popper';
@@ -16,6 +16,10 @@ import EmptyState from '@components/empty-state/EmptyState';
 
 import Tooltip from '@components/tooltip/Tooltip';
 import WarningIcon from '@components/icons/WarningIcon';
+import PlusIcon from '@components/icons/PlusIcon';
+import MinusIcon from '@components/icons/MinusIcon';
+import SlashIcon from '@components/icons/SlashIcon';
+import DragIcon from '@components/icons/DragIcon';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import {
   edgeAnimationConfig,
@@ -26,6 +30,7 @@ import {
   minZoom,
   nodeHTMLLabelConfig,
   nodeStyeConfig,
+  // popperStyleConfig,
   zoomLevelBreakpoint
 } from './config';
 
@@ -37,8 +42,16 @@ nodeHtmlLabel(Cytoscape.use(COSEBilkent));
 Cytoscape.use(popper);
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
-
   const dataIsEmpty: boolean = data.nodes.length === 0;
+
+  const [zoomLevel, setZoomLevel] = useState(minZoom);
+  const [zoomVal, setZoomVal] = useState(minZoom); // debounced zoom state
+
+  const percentageZoomChange = ((maxZoom - minZoom) / 100) * 5; // increase or decrease by 5%
+
+  const [isNodeDraggingEnabled, setNodeDraggingEnabled] = useState(true);
+
+  const cyRef = useRef<Cytoscape.Core | null>(null);
 
   // Type technically is Cytoscape.EdgeCollection but that throws an unexpected error
   const loopAnimation = (eles: any) => {
@@ -109,7 +122,10 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
 
       // Hide labels when being zoomed out
       cy.on('zoom', event => {
-        if (cy.zoom() <= zoomLevelBreakpoint) {
+        const newZoomLevel = event.cy.zoom();
+        // setZoomLevel(newZoomLevel);
+
+        if (newZoomLevel <= zoomLevelBreakpoint) {
           interface ExtendedEdgeSingular extends EdgeSingular {
             popperRefObj?: any;
           }
@@ -123,10 +139,13 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           });
         }
 
+        // update state with new zoom level
+        setZoomLevel(newZoomLevel);
+
         const opacity = cy.zoom() <= zoomLevelBreakpoint ? 0 : 1;
 
         Array.from(
-          document.querySelectorAll('.dependency-graph-node-label'),
+          document.querySelectorAll('.dependency-graph-nodeLabel'),
           e => {
             // @ts-ignore
             e.style.opacity = opacity;
@@ -136,6 +155,38 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       });
       // Make sure to tell we inited successfully and prevent another init
       setInitDone(true);
+    }
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setZoomVal(zoomLevel);
+    }, 100); // 100ms debounce
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [zoomLevel]);
+
+  const toggleNodeDragging = () => {
+    if (cyRef.current) {
+      if (isNodeDraggingEnabled) {
+        // to disable node dragging in Cytoscape
+        cyRef.current.nodes().ungrabify();
+      } else {
+        // to enable node dragging in Cytoscape
+        cyRef.current.nodes().grabify();
+      }
+      setNodeDraggingEnabled(!isNodeDraggingEnabled);
+    }
+  };
+
+  const handleZoomChange = (zoomLevelNo: number) => {
+    let newZoomLevel = zoomLevelNo;
+    if (newZoomLevel < minZoom) newZoomLevel = minZoom;
+    if (newZoomLevel > maxZoom) newZoomLevel = maxZoom;
+    if (cyRef.current) {
+      cyRef.current.zoom(newZoomLevel);
+      setZoomLevel(newZoomLevel);
     }
   };
 
@@ -201,20 +252,61 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                 style: leafStyleConfig
               }
             ]}
-            cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
+            cy={(cy: Cytoscape.Core) => {
+              cyActionHandlers(cy);
+              cyRef.current = cy;
+            }}
           />
         </>
       )}
-      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible bg-black-100 text-black-400">
-        {data?.nodes?.length} Resources
-        {!dataIsEmpty && (
-          <div className="relative">
-            <WarningIcon className="peer" height="16" width="16" />
-            <Tooltip bottom="xs" align="left" width="lg">
-              Only AWS resources are currently supported on the explorer.
-            </Tooltip>
+      <div className="absolute bottom-0 w-full">
+        <div className="flex w-full flex-col items-center gap-2 sm:flex-row sm:justify-between">
+          <div className="flex gap-2 overflow-visible bg-black-100 text-black-400">
+            {data?.nodes?.length} Resources
+            {!dataIsEmpty && (
+              <div className="relative">
+                <WarningIcon className="peer" height="16" width="16" />
+                <Tooltip bottom="xs" align="left" width="lg">
+                  Only AWS resources are currently supported on the explorer.
+                </Tooltip>
+              </div>
+            )}
           </div>
-        )}
+          <div className="flex h-11 gap-4 overflow-visible bg-black-100 text-black-400">
+            <button
+              className="peer relative flex items-center rounded border bg-white p-3"
+              onClick={toggleNodeDragging}
+            >
+              <DragIcon />
+              {isNodeDraggingEnabled && (
+                <SlashIcon className="absolute left-0 text-black-800" />
+              )}
+            </button>
+            <Tooltip align="center" bottom="sm">
+              {isNodeDraggingEnabled
+                ? 'Disable node dragging'
+                : 'Enable node dragging'}
+            </Tooltip>
+
+            <div className="flex">
+              <button
+                className="flex items-center rounded-l border bg-white p-3 shadow-sm"
+                onClick={() => handleZoomChange(zoomVal - percentageZoomChange)}
+              >
+                <MinusIcon />
+              </button>
+              <div className="flex w-20 items-center justify-center border-b border-t bg-white px-5 py-3 shadow-sm">
+                {Math.round(((zoomVal - minZoom) / (maxZoom - minZoom)) * 100)}%
+              </div>
+              <button
+                className="flex items-center rounded-r border bg-white p-3 shadow-sm"
+                onClick={() => handleZoomChange(zoomVal + percentageZoomChange)}
+              >
+                <PlusIcon />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
