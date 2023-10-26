@@ -432,7 +432,7 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 
 func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 	resourceId := c.Query("resourceId")
-	fmt.Println(resourceId)
+
 	var resource Resource
 
 	err := handler.db.NewSelect().Model(&resource).Where("resource_id = ?", resourceId).Scan(handler.ctx)
