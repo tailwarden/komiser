@@ -10,20 +10,23 @@ function UploadWrapper({
   onClose,
   ...otherProps
 }: UploadProps) {
-  const [selectedFile, setSelectedFile] = useState<File | File[] | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[] | null>(null);
 
   useEffect(() => {
     setSelectedFile(null);
+    setSelectedFiles(null);
   }, [multiple]);
 
   const uploadFile = (file: File | File[] | null): void => {
     if (file instanceof FileList) {
       const filesArray = Array.from(file);
-      setSelectedFile(filesArray);
+      setSelectedFiles(filesArray);
     } else if (file instanceof File) {
       setSelectedFile(file);
     } else {
       setSelectedFile(null);
+      setSelectedFiles(null);
     }
   };
 
@@ -31,18 +34,28 @@ function UploadWrapper({
     // it's impossible to define a true/false type in storybook
     // so we ignore the next type error because true|false != boolean for some reason \o/
     // @ts-ignore
-    <Upload
-      multiple={multiple}
-      fileOrFiles={selectedFile}
-      handleChange={uploadFile}
-      onClose={() => setSelectedFile(null)}
-      {...otherProps}
-    />
+    multiple ? (
+      <Upload
+        multiple={multiple}
+        fileOrFiles={selectedFiles}
+        handleChange={uploadFile}
+        onClose={() => setSelectedFiles(null)}
+        {...otherProps}
+      />
+    ) : (
+      <Upload
+        multiple={multiple}
+        fileOrFiles={selectedFile}
+        handleChange={uploadFile}
+        onClose={() => setSelectedFile(null)}
+        {...otherProps}
+      />
+    )
   );
 }
 
 const meta: Meta<typeof Upload> = {
-  title: 'Komiser/FileUpload',
+  title: 'Komiser/Upload',
   component: UploadWrapper,
   decorators: [
     Story => (
