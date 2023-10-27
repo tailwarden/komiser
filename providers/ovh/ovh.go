@@ -6,6 +6,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers/ovh/alerting"
+	"github.com/tailwarden/komiser/providers/ovh/image"
+	"github.com/tailwarden/komiser/providers/ovh/instance"
 	"github.com/tailwarden/komiser/utils"
 
 	"github.com/tailwarden/komiser/providers"
@@ -15,6 +17,8 @@ import (
 func listOfSupportedServices() []providers.FetchDataFunction {
 	return []providers.FetchDataFunction{
 		alerting.Alerts,
+		image.Images,
+		instance.Instances,
 	}
 }
 
@@ -22,7 +26,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 	for _, fetchResources := range listOfSupportedServices() {
 		resources, err := fetchResources(ctx, client)
 		if err != nil {
-			log.Printf("[%s][Scaleway] %s", client.Name, err)
+			log.Printf("[%s][OVH] %s", client.Name, err)
 		} else {
 			for _, resource := range resources {
 				_, err := db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
@@ -32,7 +36,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 			}
 			if telemetry {
 				analytics.TrackEvent("discovered_resources", map[string]interface{}{
-					"provider":  "Scaleway",
+					"provider":  "OVH",
 					"resources": len(resources),
 				})
 			}
