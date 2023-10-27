@@ -53,7 +53,7 @@
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@types/cytoscape": "^3.19.11",
-    "@types/cytoscape-popper": "^2.0.2",
+    "@types/cytoscape-popper": "^2.0.3",
     "@types/jest": "^29.5.6",
     "@types/node": "20.7.0",
     "@types/react": "18.2.22",
