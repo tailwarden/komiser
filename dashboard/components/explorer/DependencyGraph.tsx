@@ -1,24 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
-import Cytoscape, { EventObject } from 'cytoscape';
+import Cytoscape from 'cytoscape';
 import popper from 'cytoscape-popper';
-
-import nodeHtmlLabel, {
-  CytoscapeNodeHtmlParams
-  // @ts-ignore
-} from 'cytoscape-node-html-label';
-
+// @ts-ignore
+import nodeHtmlLabel from 'cytoscape-node-html-label';
 // @ts-ignore
 import COSEBilkent from 'cytoscape-cose-bilkent';
-
 import EmptyState from '@components/empty-state/EmptyState';
-
 import Tooltip from '@components/tooltip/Tooltip';
 import WarningIcon from '@components/icons/WarningIcon';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import {
-  edgeAnimationConfig,
   edgeStyleConfig,
   graphLayoutConfig,
   leafStyleConfig,
@@ -28,6 +20,7 @@ import {
   nodeStyeConfig,
   zoomLevelBreakpoint
 } from './config';
+import { animateEdges } from './animateEdge';
 
 export type DependencyGraphProps = {
   data: ReactFlowData;
@@ -39,17 +32,6 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
 
   const dataIsEmpty: boolean = data.nodes.length === 0;
-
-  // Type technically is Cytoscape.EdgeCollection but that throws an unexpected error
-  const loopAnimation = (eles: any) => {
-    const ani = eles.animation(edgeAnimationConfig[0], edgeAnimationConfig[1]);
-
-    ani
-      .reverse()
-      .play()
-      .promise('complete')
-      .then(() => loopAnimation(eles));
-  };
 
   const cyActionHandlers = (cy: Cytoscape.Core) => {
     // make sure we did not init already, otherwise this will be bound more than once
@@ -79,8 +61,6 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       cy.nodes().leaves().addClass('leaf');
       // same for root notes
       cy.nodes().roots().addClass('root');
-      // Animate edges
-      cy.edges().forEach(loopAnimation);
 
       // Add hover tooltip on edges
       cy.edges().bind('mouseover', event => {
@@ -107,50 +87,37 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       });
 
       // Hide labels when being zoomed out
-      cy.on('zoom', event => {
+      cy.on('zoom', () => {
         const opacity = cy.zoom() <= zoomLevelBreakpoint ? 0 : 1;
 
         Array.from(
-          document.querySelectorAll('.dependency-graph-node-label'),
+          document.querySelectorAll<HTMLDivElement>(
+            '.dependency-graph-node-label'
+          ),
           e => {
-            // @ts-ignore
-            e.style.opacity = opacity;
+            e.style.opacity = opacity.toString();
             return e;
           }
         );
       });
       // Make sure to tell we inited successfully and prevent another init
       setInitDone(true);
+    } else {
+      // Because the animation requires the DOM, we need to wait until the DOM is ready
+      animateEdges(
+        {
+          direction: 'alternate',
+          mode: 'speed',
+          modeValue: 0.2,
+          randomOffset: true
+        },
+        cy
+      );
     }
   };
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
-      <CytoscapeComponent
-        className="h-full w-full"
-        elements={CytoscapeComponent.normalizeElements({
-          nodes: data.nodes,
-          edges: data.edges
-        })}
-        maxZoom={maxZoom}
-        minZoom={minZoom}
-        layout={graphLayoutConfig}
-        stylesheet={[
-          {
-            selector: 'node',
-            style: nodeStyeConfig
-          },
-          {
-            selector: 'edge',
-            style: edgeStyleConfig
-          },
-          {
-            selector: '.leaf',
-            style: leafStyleConfig
-          }
-        ]}
-        cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
-      />
       {dataIsEmpty ? (
         <>
           <div className="translate-y-[201px]">

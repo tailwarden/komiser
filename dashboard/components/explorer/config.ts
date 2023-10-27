@@ -94,19 +94,14 @@ export const leafStyleConfig = {
   opacity: 1
 } as Cytoscape.Css.Node;
 
-export const edgeAnimationConfig = [
-  {
-    zoom: { level: 1 },
-    easing: 'linear',
-    style: {
-      'line-dash-offset': 24,
-      'line-dash-pattern': [4, 4]
-    }
+export const edgeAnimationConfig = {
+  easing: 'linear',
+  style: {
+    'line-dash-offset': 24,
+    'line-dash-pattern': [4, 4]
   },
-  {
-    duration: 4000
-  }
-];
+  duration: 4000
+};
 
 export const nodeHTMLLabelConfig = {
   query: 'node', // cytoscape query selector

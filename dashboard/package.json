@@ -23,6 +23,7 @@
     "classnames": "^2.3.2",
     "cytoscape": "^3.26.0",
     "cytoscape-cose-bilkent": "^4.1.0",
+    "cytoscape-layers": "^2.4.2",
     "cytoscape-node-html-label": "^1.2.2",
     "cytoscape-popper": "^2.0.0",
     "html-to-image": "^1.11.11",
