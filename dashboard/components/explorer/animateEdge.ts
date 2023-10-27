@@ -86,6 +86,7 @@ export const animateEdges = async (options: Options, cy: Core) => {
   }
 
   if (typeof window !== 'undefined') {
+    // Modified but mainly taken from: https://github.com/sgratzl/cytoscape.js-layers/blob/main/samples/animatedEdges.ts
     const cytoLayersModule = await import('cytoscape-layers');
     cyLayers = cytoLayersModule.layers(cy);
     const animationLayer = cyLayers.nodeLayer.insertBefore('canvas');
