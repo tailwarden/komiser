@@ -30,22 +30,27 @@ function UploadWrapper({
     }
   };
 
-  return multiple ? (
-    <Upload
-      multiple={multiple}
-      fileOrFiles={selectedFiles}
-      handleChange={uploadFile}
-      onClose={() => setSelectedFiles(null)}
-      {...otherProps}
-    />
-  ) : (
-    <Upload
-      multiple={multiple}
-      fileOrFiles={selectedFile}
-      handleChange={uploadFile}
-      onClose={() => setSelectedFile(null)}
-      {...otherProps}
-    />
+  return (
+    // it's impossible to define a true/false type in storybook
+    // so we ignore the next type error because true|false != boolean for some reason \o/
+    // @ts-ignore
+    multiple ? (
+      <Upload
+        multiple={multiple}
+        fileOrFiles={selectedFiles}
+        handleChange={uploadFile}
+        onClose={() => setSelectedFiles(null)}
+        {...otherProps}
+      />
+    ) : (
+      <Upload
+        multiple={multiple}
+        fileOrFiles={selectedFile}
+        handleChange={uploadFile}
+        onClose={() => setSelectedFile(null)}
+        {...otherProps}
+      />
+    )
   );
 }
 
