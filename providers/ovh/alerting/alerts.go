@@ -9,13 +9,13 @@ import (
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/ovh/utils"
 )
 
 func Alerts(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
-	resources := make([]models.Resource, 0)
+	resources := []models.Resource{}
 
-	projectIds := []string{}
-	err := client.OVHClient.Get("/v2/cloud/project", projectIds)
+	projectIds, err := utils.GetProjects(client)
 	if err != nil {
 		return resources, err
 	}
