@@ -1,4 +1,16 @@
 run:
-  timeout: 5m
+  timeout: 10m
   skip-dirs:
     - dashboard
+    - docs
+
+linters:
+  # Enable specific linter
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
+  enable:
+    - bodyclose
+    - goerr113
+    - gosec
+    - gosmopolitan
+    - prealloc
+    - reassign

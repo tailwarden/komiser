@@ -16,6 +16,6 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          args: --timeout=10m
+          args: --config=.golangci.yml
           version: v1.54.2
           skip-pkg-cache: true
