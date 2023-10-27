@@ -23,6 +23,13 @@
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #95a3a3;
   }
+
+  /* Remove the default browser styles */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @variants responsive {

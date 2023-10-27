@@ -16,10 +16,8 @@ import EmptyState from '@components/empty-state/EmptyState';
 
 import Tooltip from '@components/tooltip/Tooltip';
 import WarningIcon from '@components/icons/WarningIcon';
-import PlusIcon from '@components/icons/PlusIcon';
-import MinusIcon from '@components/icons/MinusIcon';
-import SlashIcon from '@components/icons/SlashIcon';
 import DragIcon from '@components/icons/DragIcon';
+import NumberInput from '@components/number-input/NumberInput';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import {
   edgeAnimationConfig,
@@ -45,9 +43,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const dataIsEmpty: boolean = data.nodes.length === 0;
 
   const [zoomLevel, setZoomLevel] = useState(minZoom);
-  const [zoomVal, setZoomVal] = useState(minZoom); // debounced zoom state
-
-  const percentageZoomChange = ((maxZoom - minZoom) / 100) * 5; // increase or decrease by 5%
+  const [zoomVal, setZoomVal] = useState(0); // debounced zoom state to display percentage
 
   const [isNodeDraggingEnabled, setNodeDraggingEnabled] = useState(true);
 
@@ -159,8 +155,11 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
   };
 
   useEffect(() => {
+    const zoomPercentage = Math.round(
+      ((zoomLevel - minZoom) / (maxZoom - minZoom)) * 100
+    );
     const handler = setTimeout(() => {
-      setZoomVal(zoomLevel);
+      setZoomVal(zoomPercentage);
     }, 100); // 100ms debounce
     return () => {
       clearTimeout(handler);
@@ -180,8 +179,8 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
     }
   };
 
-  const handleZoomChange = (zoomLevelNo: number) => {
-    let newZoomLevel = zoomLevelNo;
+  const handleZoomChange = (zoomPercentage: number) => {
+    let newZoomLevel = minZoom + zoomPercentage * ((maxZoom - minZoom) / 100);
     if (newZoomLevel < minZoom) newZoomLevel = minZoom;
     if (newZoomLevel > maxZoom) newZoomLevel = maxZoom;
     if (cyRef.current) {
@@ -189,6 +188,16 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       setZoomLevel(newZoomLevel);
     }
   };
+
+  let translateXClass;
+
+  if (zoomVal < 10) {
+    translateXClass = 'translate-x-1';
+  } else if (zoomVal >= 10 && zoomVal < 100) {
+    translateXClass = 'translate-x-2';
+  } else {
+    translateXClass = 'translate-x-3';
+  }
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
@@ -272,15 +281,14 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
               </div>
             )}
           </div>
-          <div className="flex h-11 gap-4 overflow-visible bg-black-100 text-black-400">
+          <div className="flex max-h-11 gap-4">
             <button
-              className="peer relative flex items-center rounded border bg-white p-3"
+              className={`peer relative flex items-center rounded border-[1.2px] border-black-200 bg-white p-2.5 ${
+                isNodeDraggingEnabled && 'border-primary'
+              }`}
               onClick={toggleNodeDragging}
             >
-              <DragIcon />
-              {isNodeDraggingEnabled && (
-                <SlashIcon className="absolute left-0 text-black-800" />
-              )}
+              <DragIcon className="h-6 w-6" />
             </button>
             <Tooltip align="center" bottom="sm">
               {isNodeDraggingEnabled
@@ -288,22 +296,20 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                 : 'Enable node dragging'}
             </Tooltip>
 
-            <div className="flex">
-              <button
-                className="flex items-center rounded-l border bg-white p-3 shadow-sm"
-                onClick={() => handleZoomChange(zoomVal - percentageZoomChange)}
+            <div className="relative w-40">
+              <NumberInput
+                name="zoom"
+                value={zoomVal}
+                action={zoomData => handleZoomChange(Number(zoomData.zoom))}
+                handleValueChange={handleZoomChange} // increment or decrement input value
+                step={5} // percentage change in zoom
+                maxLength={3}
+              />
+              <span
+                className={`absolute left-1/2 top-1/2 ${translateXClass} -translate-y-1/2 text-sm text-neutral-900`}
               >
-                <MinusIcon />
-              </button>
-              <div className="flex w-20 items-center justify-center border-b border-t bg-white px-5 py-3 shadow-sm">
-                {Math.round(((zoomVal - minZoom) / (maxZoom - minZoom)) * 100)}%
-              </div>
-              <button
-                className="flex items-center rounded-r border bg-white p-3 shadow-sm"
-                onClick={() => handleZoomChange(zoomVal + percentageZoomChange)}
-              >
-                <PlusIcon />
-              </button>
+                %
+              </span>
             </div>
           </div>
         </div>
