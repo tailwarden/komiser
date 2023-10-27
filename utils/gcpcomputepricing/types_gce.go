@@ -51,30 +51,54 @@ type VmsOnDemandMemoryPerGb struct {
 	Vmimagea2Highgpuram                          Subtype                   `json:"vmimagea2highgpuram"`
 	Vmimagec2Dcustomextendedram                  Subtype                   `json:"vmimagec2dcustomextendedram"`
 	Vmimagec2Dcustomram                          Subtype                   `json:"vmimagec2dcustomram"`
-	Vmimagec2Dstandardram                        Subtype                   `json:"vmimagec2dstandardram"`
+	C2D                        					 Vmimagec2DstandardramC2D  `json:"c2d"`
 	C3                                           VmsOnDemandMemoryPerGbC3  `json:"c3"`
 	Vmimagecomputeoptimizedram                   Subtype                   `json:"vmimagecomputeoptimizedram"`
 	Vmimagecustomextendedram                     Subtype                   `json:"vmimagecustomextendedram"`
 	Vmimagecustomram                             Subtype                   `json:"vmimagecustomram"`
-	Vmimagee2RAM                                 Subtype                   `json:"vmimagee2ram"`
+	E2                                           Vmimagee2RAME2            `json:"e2"`
 	G2                                           VmsOnDemandMemoryPerGbG2  `json:"g2"`
 	Vmimagelargeram                              Subtype                   `json:"vmimagelargeram"`
 	Vmimagelargerammemoryoptimizedupgradepremium Subtype                   `json:"vmimagelargerammemoryoptimizedupgradepremium"`
 	M3                                           VmsOnDemandMemoryPerGbM3  `json:"m3"`
-	Vmimagen1Standardram                         Subtype                   `json:"vmimagen1standardram"`
+	N1                         					 Vmimagen1StandardramN1    `json:"n1"`
 	Vmimagen2Customextendedram                   Subtype                   `json:"vmimagen2customextendedram"`
 	Vmimagen2Customram                           Subtype                   `json:"vmimagen2customram"`
 	Vmimagen2Dcustomextendedram                  Subtype                   `json:"vmimagen2dcustomextendedram"`
 	Vmimagen2Dcustomram                          Subtype                   `json:"vmimagen2dcustomram"`
 	Vmimagen2Dsoletenancyram                     Subtype                   `json:"vmimagen2dsoletenancyram"`
 	Vmimagen2Dsoletenancyramsoletenancypremium   Subtype                   `json:"vmimagen2dsoletenancyramsoletenancypremium"`
-	Vmimagen2Dstandardram                        Subtype                   `json:"vmimagen2dstandardram"`
+	N2D                        					 Vmimagen2DstandardramN2D  `json:"n2d"`
 	Vmimagen2Soletenancyram                      Subtype                   `json:"vmimagen2soletenancyram"`
-	Vmimagen2Standardram                         Subtype                   `json:"vmimagen2standardram"`
+	N2                         					 Vmimagen2StandardramN2    `json:"n2"`
 	Vmimagesoletenancyram                        Subtype                   `json:"vmimagesoletenancyram"`
 	Vmimagesoletenancyramsoletenancypremium      Subtype                   `json:"vmimagesoletenancyramsoletenancypremium"`
 	T2A                                          VmsOnDemandMemoryPerGbT2A `json:"t2a"`
-	Vmimaget2Dstandardram                        Subtype                   `json:"vmimaget2dstandardram"`
+	T2D                        					 Vmimaget2DstandardramT2D  `json:"t2d"`
+}
+
+type Vmimagec2DstandardramC2D struct {
+	Vmimagec2Dstandardram Subtype `json:"vmimagec2dstandardram"`
+}
+
+type Vmimagen1StandardramN1 struct {
+	Vmimagen1Standardram Subtype `json:"vmimagen1standardram"`
+}
+
+type Vmimagen2DstandardramN2D struct {
+	Vmimagen2Dstandardram Subtype `json:"vmimagen2dstandardram"`
+}
+
+type Vmimaget2DstandardramT2D struct {
+	Vmimaget2Dstandardram Subtype `json:"vmimaget2dstandardram"`
+}
+
+type Vmimagen2StandardramN2 struct {
+	Vmimagen2Standardram Subtype `json:"vmimagen2standardram"`
+}
+
+type Vmimagee2RAME2 struct {
+	Vmimagee2RAM Subtype `json:"vmimagee2ram"`
 }
 
 type VmsOnDemandMemoryPerGbC3 struct {
@@ -102,31 +126,55 @@ type VmsOnDemandMemoryPerGbT2A struct {
 type VmsOnDemandCoresPerCore struct {
 	Vmimagea2Highgpucore                          Subtype                    `json:"vmimagea2highgpucore"`
 	Vmimagec2Dcustomcore                          Subtype                    `json:"vmimagec2dcustomcore"`
-	Vmimagec2Dstandardcore                        Subtype                    `json:"vmimagec2dstandardcore"`
+	C2D                        					  Vmimagec2DstandardcoreC2D  `json:"c2d"`
 	C3                                            VmsOnDemandCoresPerCoreC3  `json:"c3"`
+	E2											  Vmimagee2CoreE2            `json:"e2"`
 	Vmimagecomputeoptimizedcore                   Subtype                    `json:"vmimagecomputeoptimizedcore"`
 	Vmimagecustomcore                             Subtype                    `json:"vmimagecustomcore"`
-	Vmimagee2Core                                 Subtype                    `json:"vmimagee2core"`
 	Vmimagef1Micro                                Subtype                    `json:"vmimagef1micro"`
 	Vmimageg1Small                                Subtype                    `json:"vmimageg1small"`
 	G2                                            VmsOnDemandCoresPerCoreG2  `json:"g2"`
 	Vmimagelargecore                              Subtype                    `json:"vmimagelargecore"`
 	Vmimagelargecorememoryoptimizedupgradepremium Subtype                    `json:"vmimagelargecorememoryoptimizedupgradepremium"`
 	M3                                            VmsOnDemandCoresPerCoreM3  `json:"m3"`
-	Vmimagen1Standardcore                         Subtype                    `json:"vmimagen1standardcore"`
+	N1                         					  Vmimagen1StandardcoreN1    `json:"n1"`
 	Vmimagen2Customcore                           Subtype                    `json:"vmimagen2customcore"`
 	Vmimagen2Customextendedcore                   Subtype                    `json:"vmimagen2customextendedcore"`
 	Vmimagen2Dcustomcore                          Subtype                    `json:"vmimagen2dcustomcore"`
 	Vmimagen2Dsoletenancycore                     Subtype                    `json:"vmimagen2dsoletenancycore"`
 	Vmimagen2Dsoletenancycoresoletenancypremium   Subtype                    `json:"vmimagen2dsoletenancycoresoletenancypremium"`
-	Vmimagen2Dstandardcore                        Subtype                    `json:"vmimagen2dstandardcore"`
+	N2D                        					  Vmimagen2DstandardcoreN2D  `json:"n2d"`
 	Vmimagen2Soletenancycore                      Subtype                    `json:"vmimagen2soletenancycore"`
 	Vmimagen2Soletenancycoresoletenancypremium    Subtype                    `json:"vmimagen2soletenancycoresoletenancypremium"`
-	Vmimagen2Standardcore                         Subtype                    `json:"vmimagen2standardcore"`
+	N2                         					  Vmimagen2StandardcoreN2    `json:"n2"`
 	Vmimagesoletenancycore                        Subtype                    `json:"vmimagesoletenancycore"`
 	Vmimagesoletenancycoresoletenancypremium      Subtype                    `json:"vmimagesoletenancycoresoletenancypremium"`
 	T2A                                           VmsOnDemandCoresPerCoreT2A `json:"t2a"`
-	Vmimaget2Dstandardcore                        Subtype                    `json:"vmimaget2dstandardcore"`
+	T2D                        					  Vmimaget2DstandardcoreT2D  `json:"t2d"`
+}
+
+type Vmimagec2DstandardcoreC2D struct {
+	Vmimagec2Dstandardcore Subtype `json:"vmimagec2dstandardcore"`
+}
+
+type Vmimagen1StandardcoreN1 struct {
+	Vmimagen1Standardcore Subtype `json:"vmimagen1standardcore"`
+}
+
+type Vmimagen2DstandardcoreN2D struct {
+	Vmimagen2Dstandardcore Subtype `json:"vmimagen2dstandardcore"`
+}
+
+type Vmimaget2DstandardcoreT2D struct {
+	Vmimaget2Dstandardcore  Subtype `json:"vmimaget2dstandardcore"`
+}
+
+type Vmimagen2StandardcoreN2 struct {
+	Vmimagen2Standardcore Subtype `json:"vmimagen2standardcore"`
+}
+
+type Vmimagee2CoreE2 struct {
+	Vmimagee2Core Subtype `json:"vmimagee2core"`
 }
 
 type VmsOnDemandCoresPerCoreC3 struct {
@@ -173,27 +221,51 @@ type VmsPreemptibleHighcpu struct {
 }
 
 type VmsPreemptibleMemoryPerGb struct {
-	Vmimagepreemptiblea2Highgpuram         Subtype                      `json:"vmimagepreemptiblea2highgpuram"`
-	Vmimagepreemptiblec2Dcustomextendedram Subtype                      `json:"vmimagepreemptiblec2dcustomextendedram"`
-	Vmimagepreemptiblec2Dcustomram         Subtype                      `json:"vmimagepreemptiblec2dcustomram"`
-	Vmimagepreemptiblec2Dstandardram       Subtype                      `json:"vmimagepreemptiblec2dstandardram"`
-	C3                                     VmsPreemptibleMemoryPerGbC3  `json:"c3"`
-	Vmimagepreemptiblecomputeoptimizedram  Subtype                      `json:"vmimagepreemptiblecomputeoptimizedram"`
-	Vmimagepreemptiblecustomextendedram    Subtype                      `json:"vmimagepreemptiblecustomextendedram"`
-	Vmimagepreemptiblecustomram            Subtype                      `json:"vmimagepreemptiblecustomram"`
-	Vmimagepreemptiblee2RAM                Subtype                      `json:"vmimagepreemptiblee2ram"`
-	G2                                     VmsPreemptibleMemoryPerGbG2  `json:"g2"`
-	Vmimagepreemptiblelargeram             Subtype                      `json:"vmimagepreemptiblelargeram"`
-	M3                                     VmsPreemptibleMemoryPerGbM3  `json:"m3"`
-	Vmimagepreemptiblen1Standardram        Subtype                      `json:"vmimagepreemptiblen1standardram"`
-	Vmimagepreemptiblen2Customextendedram  Subtype                      `json:"vmimagepreemptiblen2customextendedram"`
-	Vmimagepreemptiblen2Customram          Subtype                      `json:"vmimagepreemptiblen2customram"`
-	Vmimagepreemptiblen2Dcustomextendedram Subtype                      `json:"vmimagepreemptiblen2dcustomextendedram"`
-	Vmimagepreemptiblen2Dcustomram         Subtype                      `json:"vmimagepreemptiblen2dcustomram"`
-	Vmimagepreemptiblen2Dstandardram       Subtype                      `json:"vmimagepreemptiblen2dstandardram"`
-	Vmimagepreemptiblen2Standardram        Subtype                      `json:"vmimagepreemptiblen2standardram"`
-	T2A                                    VmsPreemptibleMemoryPerGbT2A `json:"t2a"`
-	Vmimagepreemptiblet2Dstandardram       Subtype                      `json:"vmimagepreemptiblet2dstandardram"`
+	Vmimagepreemptiblea2Highgpuram         Subtype                      	   `json:"vmimagepreemptiblea2highgpuram"`
+	Vmimagepreemptiblec2Dcustomextendedram Subtype                      	   `json:"vmimagepreemptiblec2dcustomextendedram"`
+	Vmimagepreemptiblec2Dcustomram         Subtype                      	   `json:"vmimagepreemptiblec2dcustomram"`
+	C2D       							   Vmimagepreemptiblec2DstandardramC2D `json:"c2d"`
+	C3                                     VmsPreemptibleMemoryPerGbC3  	   `json:"c3"`
+	Vmimagepreemptiblecomputeoptimizedram  Subtype                      	   `json:"vmimagepreemptiblecomputeoptimizedram"`
+	Vmimagepreemptiblecustomextendedram    Subtype                      	   `json:"vmimagepreemptiblecustomextendedram"`
+	Vmimagepreemptiblecustomram            Subtype                      	   `json:"vmimagepreemptiblecustomram"`
+	E2                                     Vmimagepreemptiblee2RAME2    	   `json:"e2"`
+	G2                                     VmsPreemptibleMemoryPerGbG2  	   `json:"g2"`
+	Vmimagepreemptiblelargeram             Subtype                      	   `json:"vmimagepreemptiblelargeram"`
+	M3                                     VmsPreemptibleMemoryPerGbM3  	   `json:"m3"`
+	N1        							   Vmimagepreemptiblen1StandardramN1   `json:"vmimagepreemptiblen1standardram"`
+	Vmimagepreemptiblen2Customextendedram  Subtype                      	   `json:"vmimagepreemptiblen2customextendedram"`
+	Vmimagepreemptiblen2Customram          Subtype                      	   `json:"vmimagepreemptiblen2customram"`
+	Vmimagepreemptiblen2Dcustomextendedram Subtype                      	   `json:"vmimagepreemptiblen2dcustomextendedram"`
+	Vmimagepreemptiblen2Dcustomram         Subtype                      	   `json:"vmimagepreemptiblen2dcustomram"`
+	N2D       							   Vmimagepreemptiblen2DstandardramN2D `json:"n2d"`
+	N2        							   Vmimagepreemptiblen2StandardramN2   `json:"n2"`
+	T2A                                    VmsPreemptibleMemoryPerGbT2A 	   `json:"t2a"`
+	T2D       							   Vmimagepreemptiblet2DstandardramT2D `json:"t2d"`
+}
+
+type Vmimagepreemptiblec2DstandardramC2D struct {
+	Vmimagepreemptiblec2Dstandardram Subtype `json:"vmimagepreemptiblec2dstandardram"`
+}
+
+type Vmimagepreemptiblen1StandardramN1 struct {
+	Vmimagepreemptiblen1Standardram Subtype `json:"vmimagepreemptiblen1standardram"`
+}
+
+type Vmimagepreemptiblen2DstandardramN2D struct {
+	Vmimagepreemptiblen2Dstandardram Subtype `json:"vmimagepreemptiblen2dstandardram"`
+}
+
+type Vmimagepreemptiblet2DstandardramT2D struct {
+	Vmimagepreemptiblet2Dstandardram Subtype `json:"vmimagepreemptiblet2dstandardram"`
+}
+
+type Vmimagepreemptiblen2StandardramN2 struct {
+	Vmimagepreemptiblen2Standardram Subtype `json:"vmimagepreemptiblen2standardram"`
+}
+
+type Vmimagepreemptiblee2RAME2 struct {
+	Vmimagepreemptiblee2RAM Subtype `json:"vmimagepreemptiblee2ram"`
 }
 
 type VmsPreemptibleMemoryPerGbC3 struct {
@@ -213,26 +285,49 @@ type VmsPreemptibleMemoryPerGbT2A struct {
 }
 
 type VmsPreemptibleCoresPerCore struct {
-	Vmimagepreemptiblec2Dcustomcore        Subtype                       `json:"vmimagepreemptiblec2dcustomcore"`
-	Vmimagepreemptiblec2Dstandardcore      Subtype                       `json:"vmimagepreemptiblec2dstandardcore"`
-	C3                                     VmsPreemptibleCoresPerCoreC3  `json:"c3"`
-	Vmimagepreemptiblecomputeoptimizedcore Subtype                       `json:"vmimagepreemptiblecomputeoptimizedcore"`
-	Vmimagepreemptiblecustomcore           Subtype                       `json:"vmimagepreemptiblecustomcore"`
-	Vmimagepreemptiblecustomextendedcore   Subtype                       `json:"vmimagepreemptiblecustomextendedcore"`
-	Vmimagepreemptiblee2Core               Subtype                       `json:"vmimagepreemptiblee2core"`
-	Vmimagepreemptiblef1Micro              Subtype                       `json:"vmimagepreemptiblef1micro"`
-	Vmimagepreemptibleg1Small              Subtype                       `json:"vmimagepreemptibleg1small"`
-	G2                                     VmsPreemptibleCoresPerCoreG2  `json:"g2"`
-	Vmimagepreemptiblelargecore            Subtype                       `json:"vmimagepreemptiblelargecore"`
-	M3                                     VmsPreemptibleCoresPerCoreM3  `json:"m3"`
-	Vmimagepreemptiblen1Standardcore       Subtype                       `json:"vmimagepreemptiblen1standardcore"`
-	Vmimagepreemptiblen2Customcore         Subtype                       `json:"vmimagepreemptiblen2customcore"`
-	Vmimagepreemptiblen2Customextendedcore Subtype                       `json:"vmimagepreemptiblen2customextendedcore"`
-	Vmimagepreemptiblen2Dcustomcore        Subtype                       `json:"vmimagepreemptiblen2dcustomcore"`
-	Vmimagepreemptiblen2Dstandardcore      Subtype                       `json:"vmimagepreemptiblen2dstandardcore"`
-	Vmimagepreemptiblen2Standardcore       Subtype                       `json:"vmimagepreemptiblen2standardcore"`
-	T2A                                    VmsPreemptibleCoresPerCoreT2A `json:"t2a"`
-	Vmimagepreemptiblet2Dstandardcore      Subtype                       `json:"vmimagepreemptiblet2dstandardcore"`
+	Vmimagepreemptiblec2Dcustomcore        Subtype                       	    `json:"vmimagepreemptiblec2dcustomcore"`
+	C2D      							   Vmimagepreemptiblec2DstandardcoreC2D `json:"c2d"`
+	C3                                     VmsPreemptibleCoresPerCoreC3  	    `json:"c3"`
+	Vmimagepreemptiblecomputeoptimizedcore Subtype                       	    `json:"vmimagepreemptiblecomputeoptimizedcore"`
+	Vmimagepreemptiblecustomcore           Subtype                       	    `json:"vmimagepreemptiblecustomcore"`
+	Vmimagepreemptiblecustomextendedcore   Subtype                       	    `json:"vmimagepreemptiblecustomextendedcore"`
+	E2                                     Vmimagepreemptiblee2CoreC2    	    `json:"e2"`
+	Vmimagepreemptiblef1Micro              Subtype                       	    `json:"vmimagepreemptiblef1micro"`
+	Vmimagepreemptibleg1Small              Subtype                       	    `json:"vmimagepreemptibleg1small"`
+	G2                                     VmsPreemptibleCoresPerCoreG2  	    `json:"g2"`
+	Vmimagepreemptiblelargecore            Subtype                       	    `json:"vmimagepreemptiblelargecore"`
+	M3                                     VmsPreemptibleCoresPerCoreM3  	    `json:"m3"`
+	N1       							   Vmimagepreemptiblen1StandardcoreN1  `json:"n1"`
+	Vmimagepreemptiblen2Customcore         Subtype                       	    `json:"vmimagepreemptiblen2customcore"`
+	Vmimagepreemptiblen2Customextendedcore Subtype                       	    `json:"vmimagepreemptiblen2customextendedcore"`
+	Vmimagepreemptiblen2Dcustomcore        Subtype                       	    `json:"vmimagepreemptiblen2dcustomcore"`
+	N2D      							   Vmimagepreemptiblen2DstandardcoreN2D `json:"n2d"`
+	N2       							   Vmimagepreemptiblen2StandardcoreN2   `json:"n2"`
+	T2A                                    VmsPreemptibleCoresPerCoreT2A 	    `json:"t2a"`
+	T2D      							   Vmimagepreemptiblet2DstandardcoreT2D `json:"t2d"`
+}
+
+type Vmimagepreemptiblec2DstandardcoreC2D struct {
+	Vmimagepreemptiblec2Dstandardcore Subtype `json:"vmimagepreemptiblec2dstandardcore"`
+}
+
+type Vmimagepreemptiblen1StandardcoreN1 struct {
+	Vmimagepreemptiblen1Standardcore Subtype `json:"vmimagepreemptiblen1standardcore"`
+}
+type Vmimagepreemptiblen2DstandardcoreN2D struct {
+	Vmimagepreemptiblen2Dstandardcore Subtype `json:"vmimagepreemptiblen2dstandardcore"`
+}
+
+type Vmimagepreemptiblet2DstandardcoreT2D struct {
+	Vmimagepreemptiblet2Dstandardcore Subtype `json:"vmimagepreemptiblet2dstandardcore"`
+}
+
+type Vmimagepreemptiblen2StandardcoreN2 struct {
+	Vmimagepreemptiblen2Standardcore Subtype `json:"vmimagepreemptiblen2standardcore"`
+}
+
+type Vmimagepreemptiblee2CoreC2 struct {
+	Vmimagepreemptiblee2Core Subtype `json:"vmimagepreemptiblee2core"`
 }
 
 type VmsPreemptibleCoresPerCoreC3 struct {
@@ -259,17 +354,38 @@ type VmsCommit1Year struct {
 
 type VmsCommit1YearCoresPerCore struct {
 	Commitmenta2Highgpucpu1Yv1        Subtype                      `json:"commitmenta2highgpucpu1yv1"`
-	Commitmentc2Dcpu1Yv1              Subtype                      `json:"commitmentc2dcpu1yv1"`
+	C2D              				  Commitmentc2Dcpu1Yv1C2D      `json:"c2d"`
 	C3                                VmsCommit1YearCoresPerCoreC3 `json:"c3"`
 	Commitmentcpucomputeoptimized1Yv1 Subtype                      `json:"commitmentcpucomputeoptimized1yv1"`
 	Commitmentcpulargeinstance1Yv1    Subtype                      `json:"commitmentcpulargeinstance1yv1"`
 	Commitmentcpu1Yv1                 Subtype                      `json:"commitmentcpu1yv1"`
-	Commitmente2CPU1Yv1               Subtype                      `json:"commitmente2cpu1yv1"`
+	N2D			  					  Commitmentn2Dcpu1Yv1N2D      `json:"n2d"`
+	E2               				  Commitmente2CPU1Yv1E2        `json:"e2"`
 	G2                                VmsCommit1YearCoresPerCoreG2 `json:"g2"`
 	M3                                VmsCommit1YearCoresPerCoreM3 `json:"m3"`
-	Commitmentn2CPU1Yv1               Subtype                      `json:"commitmentn2cpu1yv1"`
-	Commitmentn2Dcpu1Yv1              Subtype                      `json:"commitmentn2dcpu1yv1"`
-	Commitmentt2Dcpu1Yv1              Subtype                      `json:"commitmentt2dcpu1yv1"`
+	N2               				  Commitmentn2CPU1Yv1N2        `json:"n2"`
+	T2D              			      Commitmentt2Dcpu1Yv1T2D      `json:"t2d"`
+
+}
+
+type Commitmentc2Dcpu1Yv1C2D struct {
+	Commitmentc2Dcpu1Yv1 Subtype `json:"commitmentc2dcpu1yv1"`
+}
+
+type Commitmentn2Dcpu1Yv1N2D struct {
+	Commitmentn2Dcpu1Yv1 Subtype `json:"commitment2dcpu1yv1"`
+}
+
+type Commitmentt2Dcpu1Yv1T2D struct {
+	Commitmentt2Dcpu1Yv1 Subtype `json:"commitmentt2dcpu1yv1"`
+}
+
+type Commitmentn2CPU1Yv1N2 struct {
+	Commitmentn2CPU1Yv1 Subtype `json:"commitmentn2cpu1yv1"`
+}
+
+type Commitmente2CPU1Yv1E2 struct {
+	Commitmente2CPU1Yv1 Subtype `json:"commitmente2cpu1yv1"`
 }
 
 type VmsCommit1YearCoresPerCoreC3 struct {
@@ -286,17 +402,37 @@ type VmsCommit1YearCoresPerCoreM3 struct {
 
 type VmsCommit1YearMemoryPerGb struct {
 	Commitmenta2Highgpuram1Yv1        Subtype                     `json:"commitmenta2highgpuram1yv1"`
-	Commitmentc2Dram1Yv1              Subtype                     `json:"commitmentc2dram1yv1"`
+	C2D								  Commitmentc2Dram1Yv1C2D 	  `json:"c2d"`
 	C3                                VmsCommit1YearMemoryPerGbC3 `json:"c3"`
-	Commitmente2RAM1Yv1               Subtype                     `json:"commitmente2ram1yv1"`
+	E2               				  Commitmente2RAM1Yv1E2       `json:"e2"`
 	G2                                VmsCommit1YearMemoryPerGbG2 `json:"g2"`
 	M3                                VmsCommit1YearMemoryPerGbM3 `json:"m3"`
-	Commitmentn2Dram1Yv1              Subtype                     `json:"commitmentn2dram1yv1"`
-	Commitmentn2RAM1Yv1               Subtype                     `json:"commitmentn2ram1yv1"`
+	N2D              				  Commitmentn2Dram1Yv1N2D     `json:"n2d"`
+	N2               				  Commitmentn2RAM1Yv1N2       `json:"n2"`
 	Commitmentramcomputeoptimized1Yv1 Subtype                     `json:"commitmentramcomputeoptimized1yv1"`
 	Commitmentramlargeinstance1Yv1    Subtype                     `json:"commitmentramlargeinstance1yv1"`
 	Commitmentram1Yv1                 Subtype                     `json:"commitmentram1yv1"`
-	Commitmentt2Dram1Yv1              Subtype                     `json:"commitmentt2dram1yv1"`
+	T2D              				  Commitmentt2Dram1Yv1T2D     `json:"t2d"`
+}
+
+type Commitmentc2Dram1Yv1C2D struct {
+	Commitmentc2Dram1Yv1 Subtype `json:"commitmentc2dram1yv1"`
+}
+
+type Commitmentn2Dram1Yv1N2D struct {
+	Commitmentn2Dram1Yv1 Subtype `json:"commitmentn2dram1yv1"`
+}
+
+type Commitmentt2Dram1Yv1T2D struct {
+	Commitmentt2Dram1Yv1 Subtype `json:"commitmentt2dram1yv1"`
+}
+
+type Commitmentn2RAM1Yv1N2 struct {
+	Commitmentn2RAM1Yv1 Subtype `json:"commitmentn2ram1yv1"`
+}
+
+type Commitmente2RAM1Yv1E2 struct {
+	Commitmente2RAM1Yv1 Subtype `json:"commitmente2ram1yv1"`
 }
 
 type VmsCommit1YearMemoryPerGbC3 struct {
@@ -319,18 +455,38 @@ type VmsCommit3Year struct {
 
 type VmsCommit3YearCoresPerCore struct {
 	Commitmenta2Highgpucpu3Yv1        Subtype                      `json:"commitmenta2highgpucpu3yv1"`
-	Commitmentc2Dcpu3Yv1              Subtype                      `json:"commitmentc2dcpu3yv1"`
+	C2D              				  Commitmentc2Dcpu3Yv1C2D      `json:"c2d"`
 	C3                                VmsCommit3YearCoresPerCoreC3 `json:"c3"`
 	Commitmentcpucomputeoptimized3Yv1 Subtype                      `json:"commitmentcpucomputeoptimized3yv1"`
 	Commitmentcpulargeinstance1Yv1    Subtype                      `json:"commitmentcpulargeinstance1yv1"`
 	Commitmentcpulargeinstance3Yv1    Subtype                      `json:"commitmentcpulargeinstance3yv1"`
 	Commitmentcpu3Yv1                 Subtype                      `json:"commitmentcpu3yv1"`
-	Commitmente2CPU3Yv1               Subtype                      `json:"commitmente2cpu3yv1"`
+	E2               				  Commitmente2CPU3Yv1E2        `json:"e2"`
 	G2                                VmsCommit3YearCoresPerCoreG2 `json:"g2"`
 	M3                                VmsCommit3YearCoresPerCoreM3 `json:"m3"`
-	Commitmentn2CPU3Yv1               Subtype                      `json:"commitmentn2cpu3yv1"`
-	Commitmentn2Dcpu3Yv1              Subtype                      `json:"commitmentn2dcpu3yv1"`
-	Commitmentt2Dcpu3Yv1              Subtype                      `json:"commitmentt2dcpu3yv1"`
+	N2               				  Commitmentn2CPU3Yv1N2        `json:"n2"`
+	N2D              				  Commitmentn2Dcpu3Yv1N2D      `json:"n2d"`
+	T2D              				  Commitmentt2Dcpu3Yv1T2D      `json:"t2d"`
+}
+
+type Commitmentc2Dcpu3Yv1C2D struct {
+	Commitmentc2Dcpu3Yv1 Subtype `json:"commitmentc2dcpu3yv1"`
+}
+
+type Commitmentn2Dcpu3Yv1N2D struct {
+	Commitmentn2Dcpu3Yv1 Subtype `json:"commitmentn2dcpu3yv1"`
+}
+
+type Commitmentt2Dcpu3Yv1T2D struct {
+	Commitmentt2Dcpu3Yv1 Subtype `json:"commitmentt2dcpu3yv1"`
+}
+
+type Commitmentn2CPU3Yv1N2 struct {
+	Commitmentn2CPU3Yv1 Subtype `json:"commitmentn2cpu3yv1"`
+}
+
+type Commitmente2CPU3Yv1E2 struct {
+	Commitmente2CPU3Yv1 Subtype `json:"commitmente2cpu3yv1"`
 }
 
 type VmsCommit3YearCoresPerCoreC3 struct {
@@ -347,17 +503,37 @@ type VmsCommit3YearCoresPerCoreM3 struct {
 
 type VmsCommit3YearMemoryPerGb struct {
 	Commitmenta2Highgpuram3Yv1        Subtype                     `json:"commitmenta2highgpuram3yv1"`
-	Commitmentc2Dram3Yv1              Subtype                     `json:"commitmentc2dram3yv1"`
+	C2D              				  Commitmentc2Dram3Yv1C2D     `json:"c2d"`
 	C3                                VmsCommit3YearMemoryPerGbC3 `json:"c3"`
-	Commitmente2RAM3Yv1               Subtype                     `json:"commitmente2ram3yv1"`
+	E2               				  Commitmente2RAM3Yv1E2       `json:"e2"`
 	G2                                VmsCommit3YearMemoryPerGbG2 `json:"g2"`
 	M3                                VmsCommit3YearMemoryPerGbM3 `json:"m3"`
-	Commitmentn2Dram3Yv1              Subtype                     `json:"commitmentn2dram3yv1"`
-	Commitmentn2RAM3Yv1               Subtype                     `json:"commitmentn2ram3yv1"`
+	N2D              				  Commitmentn2Dram3Yv1N2D     `json:"n2d"`
+	N2               				  Commitmentn2RAM3Yv1N2       `json:"commitmentn2ram3yv1"`
 	Commitmentramcomputeoptimized3Yv1 Subtype                     `json:"commitmentramcomputeoptimized3yv1"`
 	Commitmentramlargeinstance3Yv1    Subtype                     `json:"commitmentramlargeinstance3yv1"`
 	Commitmentram3Yv1                 Subtype                     `json:"commitmentram3yv1"`
-	Commitmentt2Dram3Yv1              Subtype                     `json:"commitmentt2dram3yv1"`
+	T2D              				  Commitmentt2Dram3Yv1T2D     `json:"commitmentt2dram3yv1"`
+}
+
+type Commitmentc2Dram3Yv1C2D struct {
+	Commitmentc2Dram3Yv1 Subtype `json:"commitmentc2dram3yv1"`
+}
+
+type Commitmentn2Dram3Yv1N2D struct {
+	Commitmentn2Dram3Yv1 Subtype `json:"commitmentn2dram3yv1"`
+}
+
+type Commitmentt2Dram3Yv1T2D struct {
+	Commitmentt2Dram3Yv1 Subtype `json:"commitmentt2dram3yv1"`
+}
+
+type Commitmentn2RAM3Yv1N2 struct {
+	Commitmentn2RAM3Yv1 Subtype `json:"commitmentn2ram3yv1"`
+}
+
+type Commitmente2RAM3Yv1E2 struct {
+	Commitmente2RAM3Yv1 Subtype `json:"commitmente2ram3yv1"`
 }
 
 type VmsCommit3YearMemoryPerGbC3 struct {
