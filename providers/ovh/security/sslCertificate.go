@@ -6,20 +6,19 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
-
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/ovh/utils"
 )
 
-type sshKey struct {
+type sslCert struct {
 	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
+		ServiceName string `json:"serviceName"`
+		CN          string `json:"commonName"`
 	} `json:"properties"`
 }
 
-func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func SSLCertificates(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := []models.Resource{}
 
 	projectIds, err := utils.GetProjects(client)
@@ -28,21 +27,21 @@ func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resou
 	}
 
 	for _, projectId := range projectIds {
-		sshKeys := []sshKey{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/sshkey", projectId), &sshKeys)
+		sslCertIds := []sslCert{}
+		err := client.OVHClient.Get(fmt.Sprintf("/v2/ssl/%s", projectId), &sslCertIds)
 		if err != nil {
 			return resources, err
 		}
 
-		for _, sshKey := range sshKeys {
+		for _, sslCert := range sslCertIds {
 			resources = append(resources, models.Resource{
 				Provider:   "OVH",
 				Account:    client.Name,
 				Service:    "Instance",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: sshKey.Properties.Id,
+				ResourceId: sslCert.Properties.ServiceName,
 				Cost:       0,
-				Name:       sshKey.Properties.Name,
+				Name:       sslCert.Properties.CN,
 				FetchedAt:  time.Now(),
 			})
 		}
