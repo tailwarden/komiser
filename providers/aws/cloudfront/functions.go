@@ -87,7 +87,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "CloudFront Functions",
+				Service:    "CloudFront",
 				ResourceId: *function.FunctionMetadata.FunctionARN,
 				Region:     client.AWSClient.Region,
 				Name:       *function.Name,
