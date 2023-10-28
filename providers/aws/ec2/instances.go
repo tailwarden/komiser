@@ -4,6 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	cloudwatchTypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"strconv"
 	"time"
 
@@ -18,6 +22,9 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
+
+	. "github.com/tailwarden/komiser/models"
+	. "github.com/tailwarden/komiser/providers"
 )
 
 func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -171,6 +178,134 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+// AIM : simple use the list of SSM managed instances to generate respective resources. You may fetch metric and calculate the cost
+// in aws s3 bucket price is calculated per request so we need to calculate the cost per month
+//  but for ec2 it is calculated per hour so we need to calculate the cost per hour
+
+func ConvertBytesToTerabytes(bytes int64) float64 {
+	return float64(bytes) / 1099511627776
+}
+
+func getMangedEc2(ctx context.Context, client ProviderClient) ([]Resource, error) {
+
+	resources := make([]Resource, 0)
+	var config = ssm.DescribeInstanceInformationInput{
+		MaxResults: aws.Int32(100),
+	}
+	ssmClient := ssm.NewFromConfig(*client.AWSClient)
+	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+
+	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
+		ServiceCode: aws.String("AmazonEC2"),
+		Filters: []types.Filter{
+			{
+				Field: aws.String("regionCode"),
+				Value: aws.String(client.AWSClient.Region),
+				Type:  types.FilterTypeTermMatch,
+			},
+		},
+	})
+
+	if err != nil {
+		log.Errorf("ERROR: Couldn't fetch pricing info for AWS EC2: %v", err)
+		return resources, err
+	}
+
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
+	if err != nil {
+		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
+		return resources, err
+	}
+
+	output, err := ssmClient.DescribeInstanceInformation(ctx, &config)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, ec2 := range output.InstanceInformationList {
+		metricesEc2sizebyOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
+			EndTime:    aws.Time(time.Now()),
+			MetricName: aws.String("EC2SizeBytes"),
+			Namespace:  aws.String("AWS/EC2"),
+			Dimensions: []cloudwatchTypes.Dimension{
+				{
+					Name:  aws.String("InstanceName"),
+					Value: ec2.Name,
+				},
+			},
+			Unit:   cloudwatchTypes.StandardUnitBytes,
+			Period: aws.Int32(3600),
+			Statistics: []cloudwatchTypes.Statistic{
+				cloudwatchTypes.StatisticAverage,
+			},
+		})
+
+		if err != nil {
+			log.Warnf("Couldn't fetch invocations metric for %s", *bucket.Name)
+		}
+
+		instanceType := ""
+		if ec2.InstanceType != nil {
+			instanceType = *ec2.InstanceType
+		}
+
+
+
+		sizeInTB := 0.0
+		if ec2.Ins
+
+		metricesUsesOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
+			EndTime:    aws.Time(time.Now()),
+			MetricName: aws.String("AllRequests"),
+			Namespace:  aws.String("AWS/EC2"),
+			Dimensions: []cloudwatchTypes.Dimension{
+				{
+					Name:  aws.String("InstanceName"),
+					Value: ec2.Name,
+				},
+			},
+			Unit:   cloudwatchTypes.StandardUnitCount,
+			Period: aws.Int32(3600),
+			Statistics: []cloudwatchTypes.Statistic{
+				cloudwatchTypes.StatisticAverage,
+			},
+		})
+
+		if err != nil {
+			log.Warnf("Couldn't fetch usage metric for %s", *bucket.Name)
+		}
+
+		
+
+		sizeCharges := 0.0
+		if metricesUsesOutput != nil && len(metricesUsesOutput.Datapoints) > 0 {
+			sizeCharges = *metricesUsesOutput.Datapoints[0].Average
+		}
+
+		monthlyCost := sizeCharges * priceMap[*ec2.PlatformName]
+
+		resources = append(resources, Resource{
+			Provider:   "AWS",
+			Account:    client.Name,
+			Service:    "EC2",
+			Region:     client.AWSClient.Region,
+			ResourceId: *ec2.InstanceId,
+			Name:       *ec2.Name,
+			Cost:       monthlyCost,
+			CreatedAt:  *ec2.RegistrationDate,
+			Tags: tags
+			FetchedAt:  time.Now(),
+			Link: 	 fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s", client.AWSClient.Region, client.AWSClient.Region, *ec2.InstanceId),
+		})
+
+	}
+
+	return nil, nil
 }
 
 func getEC2Relations(inst *etype.Instance, resourceArn string) (rel []models.Link) {
