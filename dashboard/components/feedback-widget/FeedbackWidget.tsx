@@ -8,6 +8,7 @@ import Input from '@components/input/Input';
 import settingsService from '@services/settingsService';
 import Button from '@components/button/Button';
 import { useToast } from '@components/toast/ToastProvider';
+import Toast from '@components/toast/Toast';
 import Upload from '@components/upload/Upload';
 
 // We define the placeholder here for convenience
@@ -51,7 +52,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [isTakingScreenCapture, setIsTakingScreenCapture] = useState(false);
     const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-    const { showToast } = useToast();
+    const { toast, showToast, dismissToast } = useToast();
 
     async function takeScreenshot() {
       if (
@@ -248,6 +249,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   )}
                   <div className="flex-1 grow">
                     <Upload
+                      multiple={false}
                       fileOrFiles={fileAttachement}
                       handleChange={uploadFile}
                       onClose={() => setFileAttachement(null)}
@@ -288,7 +290,12 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   .
                 </p>
                 <div className="flex gap-2">
-                  <Button size="xs" disabled={isSendingFeedback} style="ghost">
+                  <Button
+                    size="xs"
+                    disabled={isSendingFeedback}
+                    style="ghost"
+                    onClick={() => closeFeedbackModal()}
+                  >
                     Cancel
                   </Button>
                   <Button type="submit" size="xs" disabled={isSendingFeedback}>
