@@ -107,7 +107,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "CloudFront Functions",
+		"service":   "CloudFront",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
