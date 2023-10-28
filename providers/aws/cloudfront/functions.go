@@ -40,7 +40,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			metricsInvocationsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
-				MetricName: aws.String("Invocations"),
+				MetricName: aws.String("FunctionInvocations"),
 				Namespace:  aws.String("AWS/CloudFront"),
 				Dimensions: []types.Dimension{
 					types.Dimension{
