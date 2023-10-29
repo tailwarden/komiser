@@ -22,7 +22,7 @@ import (
 const (
 	perOneMillonRequest = 1000000
 )
-func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func LambdaEdgeFunctions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config cloudfront.ListFunctionsInput
 	cloudfrontClient := cloudfront.NewFromConfig(*client.AWSClient)
@@ -63,7 +63,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Duration"),
-				Namespace:  aws.String("AWS/LambdaEdge"),
+				Namespace:  aws.String("AWS/CloudFront"),
 				Dimensions: []types.Dimension{
 					{
 						Name:  aws.String("FunctionName"),
@@ -89,7 +89,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
 				EndTime:    aws.Time(time.Now()),
 				MetricName: aws.String("Requests"),
-				Namespace:  aws.String("AWS/LambdaEdge"),
+				Namespace:  aws.String("AWS/CloudFront"),
 				Dimensions: []types.Dimension{
 					{
 						Name:  aws.String("FunctionName"),

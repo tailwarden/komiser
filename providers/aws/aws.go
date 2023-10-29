@@ -58,7 +58,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Instances,
 		eks.KubernetesClusters,
 		cloudfront.Distributions,
-		cloudfront.Functions,
+		cloudfront.LambdaEdgeFunctions,
 		dynamodb.Tables,
 		ecs.Clusters,
 		ecs.TaskDefinitions,

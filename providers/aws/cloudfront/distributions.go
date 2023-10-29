@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
+
 	// pricingTypes "github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
@@ -22,7 +23,7 @@ import (
 const (
 	freeTierRequests = 10000000
 	freeTierUpload   = 1099511627776
-	per10kRequest = 10000
+	per10kRequest    = 10000
 )
 
 func Distributions(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -115,7 +116,7 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				requests -= freeTierRequests
 			}
 
-			dataTransferToOriginCost := awsUtils.GetCost(priceMapForDataTransfer["CloudFront to Origin"], (float64(bytesDownloaded) / 1099511627776)*1024)
+			dataTransferToOriginCost := awsUtils.GetCost(priceMapForDataTransfer["CloudFront to Origin"], (float64(bytesDownloaded)/1099511627776)*1024)
 
 			requestsCost := awsUtils.GetCost(priceMapForRequest["CloudFront-Request-HTTP-Proxy"], requests/per10kRequest)
 
@@ -163,4 +164,23 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getCloudFrontDistributionLocation(distributionID string,cloudfrontClient *cloudfront.Client) (string, error) {
+   
+
+    // Specify the CloudFront distribution ID for which you want to fetch the regional location
+    input := &cloudfront.GetDistributionConfigInput{
+        Id: &distributionID,
+    }
+
+    // Fetch the distribution configuration
+    resp, err := cloudfrontClient.GetDistributionConfig(context.TODO(), input)
+    if err != nil {
+        return "", err
+    }
+
+    // Extract the regional location from the distribution configuration
+    location := resp.DistributionConfig.Aliases.Items[0]
+    return location, nil
 }
