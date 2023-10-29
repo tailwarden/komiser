@@ -4,13 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
-	cloudwatchTypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
-	"github.com/aws/aws-sdk-go-v2/service/ssm"
-	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"strconv"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -184,10 +181,6 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 // in aws s3 bucket price is calculated per request so we need to calculate the cost per month
 //  but for ec2 it is calculated per hour so we need to calculate the cost per hour
 
-func ConvertBytesToTerabytes(bytes int64) float64 {
-	return float64(bytes) / 1099511627776
-}
-
 func getMangedEc2(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 	resources := make([]Resource, 0)
@@ -195,117 +188,192 @@ func getMangedEc2(ctx context.Context, client ProviderClient) ([]Resource, error
 		MaxResults: aws.Int32(100),
 	}
 	ssmClient := ssm.NewFromConfig(*client.AWSClient)
-	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+	//cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
-
-	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
-		ServiceCode: aws.String("AmazonEC2"),
-		Filters: []types.Filter{
-			{
-				Field: aws.String("regionCode"),
-				Value: aws.String(client.AWSClient.Region),
-				Type:  types.FilterTypeTermMatch,
-			},
-		},
-	})
-
-	if err != nil {
-		log.Errorf("ERROR: Couldn't fetch pricing info for AWS EC2: %v", err)
-		return resources, err
-	}
-
-	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
-	if err != nil {
-		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
-		return resources, err
-	}
 
 	output, err := ssmClient.DescribeInstanceInformation(ctx, &config)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, ec2 := range output.InstanceInformationList {
-		metricesEc2sizebyOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
-			EndTime:    aws.Time(time.Now()),
-			MetricName: aws.String("EC2SizeBytes"),
-			Namespace:  aws.String("AWS/EC2"),
-			Dimensions: []cloudwatchTypes.Dimension{
-				{
-					Name:  aws.String("InstanceName"),
-					Value: ec2.Name,
-				},
-			},
-			Unit:   cloudwatchTypes.StandardUnitBytes,
-			Period: aws.Int32(3600),
-			Statistics: []cloudwatchTypes.Statistic{
-				cloudwatchTypes.StatisticAverage,
-			},
-		})
-
+	for _, ec2instance := range output.InstanceInformationList {
+		running, err := isRunning(ctx, *ec2instance.InstanceId, client)
 		if err != nil {
-			log.Warnf("Couldn't fetch invocations metric for %s", *bucket.Name)
+			return nil, err
 		}
 
-		instanceType := ""
-		if ec2.InstanceType != nil {
-			instanceType = *ec2.InstanceType
-		}
+		if running {
 
+			startOfMonth := utils.BeginningOfMonth(time.Now())
+			hourlyUsage := 0
 
+			hourlyUsage, err := getHourlyUses(ctx, *ec2instance.InstanceId, client, startOfMonth)
+			if err != nil {
+				return nil, err
+			}
 
-		sizeInTB := 0.0
-		if ec2.Ins
+			instancetype, err := getInstanceType(ctx, *ec2instance.InstanceId, client)
+			if err != nil {
+				return nil, err
+			}
 
-		metricesUsesOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-			StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
-			EndTime:    aws.Time(time.Now()),
-			MetricName: aws.String("AllRequests"),
-			Namespace:  aws.String("AWS/EC2"),
-			Dimensions: []cloudwatchTypes.Dimension{
-				{
-					Name:  aws.String("InstanceName"),
-					Value: ec2.Name,
+			pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
+				ServiceCode: aws.String("AmazonEC2"),
+				Filters: []types.Filter{
+					{
+						Field: aws.String("operatingSystem"),
+						Value: aws.String("linux"),
+						Type:  types.FilterTypeTermMatch,
+					},
+					{
+						Field: aws.String("instanceType"),
+						Value: aws.String(instancetype),
+						Type:  types.FilterTypeTermMatch,
+					},
+					{
+						Field: aws.String("regionCode"),
+						Value: aws.String(client.AWSClient.Region),
+						Type:  types.FilterTypeTermMatch,
+					},
+					{
+						Field: aws.String("capacitystatus"),
+						Value: aws.String("Used"),
+						Type:  types.FilterTypeTermMatch,
+					},
 				},
-			},
-			Unit:   cloudwatchTypes.StandardUnitCount,
-			Period: aws.Int32(3600),
-			Statistics: []cloudwatchTypes.Statistic{
-				cloudwatchTypes.StatisticAverage,
-			},
-		})
+				MaxResults: aws.Int32(1),
+			})
+			if err != nil {
+				log.Warnf("Couldn't fetch invocations metric for %s", ec2instance.Name)
+			}
 
-		if err != nil {
-			log.Warnf("Couldn't fetch usage metric for %s", *bucket.Name)
+			log.Warnf("Couldn't fetch invocations metric for %s", ec2instance.Name)
+
+			hourlyCost := 0.0
+			montlyCost := 0.0
+
+			if pricingOutput != nil && len(pricingOutput.PriceList) > 0 {
+
+				pricingResult := models.PricingResult{}
+				err := json.Unmarshal([]byte(pricingOutput.PriceList[0]), &pricingResult)
+				if err != nil {
+					log.Fatalf("Failed to unmarshal JSON: %v", err)
+				}
+
+				for _, onDemand := range pricingResult.Terms.OnDemand {
+					for _, priceDimension := range onDemand.PriceDimensions {
+						hourlyCost, err = strconv.ParseFloat(priceDimension.PricePerUnit.USD, 64)
+						if err != nil {
+							log.Fatalf("Failed to parse hourly cost: %v", err)
+						}
+						break
+					}
+					break
+				}
+			}
+
+			montlyCost = float64(hourlyUsage) * hourlyCost
+
+			tagsResp, err := ssmClient.ListTagsForResource(ctx, &ssm.ListTagsForResourceInput{
+				ResourceId: ec2instance.InstanceId,
+			})
+
+			tags := make([]Tag, 0)
+			if err == nil {
+				for _, t := range tagsResp.TagList {
+					tags = append(tags, Tag{
+						Key:   *t.Key,
+						Value: *t.Value,
+					})
+				}
+			}
+
+			resources = append(resources, Resource{
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "EC2",
+				Region:     client.AWSClient.Region,
+				ResourceId: *ec2instance.InstanceId,
+				Name:       *ec2instance.Name,
+				Cost:       montlyCost,
+				CreatedAt:  *ec2instance.RegistrationDate,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s", client.AWSClient.Region, client.AWSClient.Region, *ec2instance.InstanceId),
+			})
 		}
-
-		
-
-		sizeCharges := 0.0
-		if metricesUsesOutput != nil && len(metricesUsesOutput.Datapoints) > 0 {
-			sizeCharges = *metricesUsesOutput.Datapoints[0].Average
-		}
-
-		monthlyCost := sizeCharges * priceMap[*ec2.PlatformName]
-
-		resources = append(resources, Resource{
-			Provider:   "AWS",
-			Account:    client.Name,
-			Service:    "EC2",
-			Region:     client.AWSClient.Region,
-			ResourceId: *ec2.InstanceId,
-			Name:       *ec2.Name,
-			Cost:       monthlyCost,
-			CreatedAt:  *ec2.RegistrationDate,
-			Tags: tags
-			FetchedAt:  time.Now(),
-			Link: 	 fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s", client.AWSClient.Region, client.AWSClient.Region, *ec2.InstanceId),
-		})
 
 	}
 
-	return nil, nil
+	return resources, nil
+}
+
+func getInstanceType(ctx context.Context, instanceId string, client ProviderClient) (instanceType string, err error) {
+	var config = ec2.DescribeInstancesInput{
+		InstanceIds: []string{instanceId},
+		MaxResults:  aws.Int32(1),
+	}
+	ec2Client := ec2.NewFromConfig(*client.AWSClient)
+
+	output, err := ec2Client.DescribeInstances(ctx, &config)
+	if err != nil {
+		return "", err
+	}
+	for _, reservations := range output.Reservations {
+		for _, instance := range reservations.Instances {
+			instanceType := string(instance.InstanceType)
+			return instanceType, nil
+		}
+	}
+	return "", nil
+}
+
+func isRunning(ctx context.Context, instanceId string, client ProviderClient) (running bool, err error) {
+	var config = ec2.DescribeInstancesInput{
+		InstanceIds: []string{instanceId},
+		MaxResults:  aws.Int32(1),
+	}
+	ec2Client := ec2.NewFromConfig(*client.AWSClient)
+
+	output, err := ec2Client.DescribeInstances(ctx, &config)
+	if err != nil {
+		return false, err
+	}
+	for _, reservations := range output.Reservations {
+		for _, instance := range reservations.Instances {
+			if instance.State.Name != "stopped" {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
+func getHourlyUses(ctx context.Context, instanceID string, client ProviderClient, startOfMonth time.Time) (hourlyUsage int, err error) {
+	var config = ec2.DescribeInstancesInput{
+		InstanceIds: []string{instanceID},
+		MaxResults:  aws.Int32(1),
+	}
+	ec2Client := ec2.NewFromConfig(*client.AWSClient)
+
+	output, err := ec2Client.DescribeInstances(ctx, &config)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, reservations := range output.Reservations {
+		for _, instance := range reservations.Instances {
+			if instance.LaunchTime.Before(startOfMonth) {
+				hourlyUsage = int(time.Since(startOfMonth).Hours())
+				return hourlyUsage, nil
+			} else {
+				hourlyUsage = int(time.Since(*instance.LaunchTime).Hours())
+				return hourlyUsage, nil
+			}
+		}
+	}
+
+	return 0, nil
 }
 
 func getEC2Relations(inst *etype.Instance, resourceArn string) (rel []models.Link) {
