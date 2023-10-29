@@ -68,7 +68,7 @@ func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				invocations -= freeTierInvocations
 			}
 
-			monthlyCost := invocations * 0.0000001
+			monthlyCost := invocations * costPerInvocation
 
 			outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
 				Resource: function.FunctionMetadata.FunctionARN,
