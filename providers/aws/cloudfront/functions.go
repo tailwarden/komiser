@@ -18,6 +18,7 @@ import (
 
 const (
 	freeTierInvocations = 2000000
+	costPerInvocation = 0.0000001
 )
 
 func Functions(ctx context.Context, client ProviderClient) ([]Resource, error) {
