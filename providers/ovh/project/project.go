@@ -38,7 +38,7 @@ func Projects(_ context.Context, client providers.ProviderClient) ([]models.Reso
 			resources = append(resources, models.Resource{
 				Provider:   "OVH",
 				Account:    client.Name,
-				Service:    "Instance",
+				Service:    "Project",
 				Region:     client.OVHClient.Endpoint(),
 				ResourceId: project.Properties.ProjectId,
 				Cost:       0,

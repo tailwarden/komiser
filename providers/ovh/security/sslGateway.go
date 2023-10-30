@@ -37,7 +37,7 @@ func SSLGateways(_ context.Context, client providers.ProviderClient) ([]models.R
 			resources = append(resources, models.Resource{
 				Provider:   "OVH",
 				Account:    client.Name,
-				Service:    "Instance",
+				Service:    "SSL",
 				Region:     client.OVHClient.Endpoint(),
 				ResourceId: sslGateway.Properties.ServiceName,
 				Cost:       0,
@@ -50,7 +50,7 @@ func SSLGateways(_ context.Context, client providers.ProviderClient) ([]models.R
 	log.WithFields(log.Fields{
 		"provider":  "OVH",
 		"account":   client.Name,
-		"service":   "Project",
+		"service":   "SSL",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil

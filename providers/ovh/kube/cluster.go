@@ -31,7 +31,7 @@ func Clusters(_ context.Context, client providers.ProviderClient) ([]models.Reso
 			resources = append(resources, models.Resource{
 				Provider:   "OVH",
 				Account:    client.Name,
-				Service:    "Instance",
+				Service:    "Kube",
 				Region:     client.OVHClient.Endpoint(),
 				ResourceId: clusterId,
 				Cost:       0,
@@ -44,7 +44,7 @@ func Clusters(_ context.Context, client providers.ProviderClient) ([]models.Reso
 	log.WithFields(log.Fields{
 		"provider":  "OVH",
 		"account":   client.Name,
-		"service":   "Instance",
+		"service":   "Kube",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil

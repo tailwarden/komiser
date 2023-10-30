@@ -45,7 +45,7 @@ func Nodes(_ context.Context, client providers.ProviderClient) ([]models.Resourc
 				resources = append(resources, models.Resource{
 					Provider:   "OVH",
 					Account:    client.Name,
-					Service:    "Instance",
+					Service:    "Kube",
 					Region:     client.OVHClient.Endpoint(),
 					ResourceId: node.Properties.Id,
 					Cost:       0,
@@ -59,7 +59,7 @@ func Nodes(_ context.Context, client providers.ProviderClient) ([]models.Resourc
 	log.WithFields(log.Fields{
 		"provider":  "OVH",
 		"account":   client.Name,
-		"service":   "Instance",
+		"service":   "Kube",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil

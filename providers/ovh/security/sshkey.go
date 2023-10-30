@@ -38,7 +38,7 @@ func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resou
 			resources = append(resources, models.Resource{
 				Provider:   "OVH",
 				Account:    client.Name,
-				Service:    "Instance",
+				Service:    "SSH",
 				Region:     client.OVHClient.Endpoint(),
 				ResourceId: sshKey.Properties.Id,
 				Cost:       0,
@@ -51,7 +51,7 @@ func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resou
 	log.WithFields(log.Fields{
 		"provider":  "OVH",
 		"account":   client.Name,
-		"service":   "Project",
+		"service":   "SSH",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
