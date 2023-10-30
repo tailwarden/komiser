@@ -8,6 +8,12 @@ import (
 	"github.com/tailwarden/komiser/providers/ovh/alerting"
 	"github.com/tailwarden/komiser/providers/ovh/image"
 	"github.com/tailwarden/komiser/providers/ovh/instance"
+	"github.com/tailwarden/komiser/providers/ovh/kube"
+	"github.com/tailwarden/komiser/providers/ovh/networking"
+	"github.com/tailwarden/komiser/providers/ovh/project"
+	"github.com/tailwarden/komiser/providers/ovh/security"
+	"github.com/tailwarden/komiser/providers/ovh/storage"
+	"github.com/tailwarden/komiser/providers/ovh/user"
 	"github.com/tailwarden/komiser/utils"
 
 	"github.com/tailwarden/komiser/providers"
@@ -19,6 +25,20 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		alerting.Alerts,
 		image.Images,
 		instance.Instances,
+		kube.Clusters,
+		kube.Nodes,
+		networking.FailoverIPs,
+		networking.IPs,
+		networking.PrivateNetworks,
+		networking.PublicNetworks,
+		networking.Vracks,
+		project.Projects,
+		security.SSHKeys,
+		security.SSLCertificates,
+		security.SSLGateways,
+		storage.Containers,
+		storage.Volumes,
+		user.Users,
 	}
 }
 

@@ -19,7 +19,7 @@ type user struct {
 	} `json:"properties"`
 }
 
-func Instances(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Users(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := []models.Resource{}
 
 	projectIds, err := utils.GetProjects(client)
