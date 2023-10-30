@@ -15,8 +15,12 @@ type ProductEntry struct {
 			Operation          string `json:"operation"`
 			GroupDescription   string `json:"groupDescription"`
 			RequestDescription string `json:"requestDescription"`
+			RequestType        string `json:"requestType"`
 			InstanceType       string `json:"instanceType"`
 			InstanceTypeFamily string `json:"instanceTypeFamily"`
+			TransferType       string `json:"transferType"`
+			FromLocation       string `json:"fromLocation"`
+			RequestLocation    string `json:"location"`
 		} `json:"attributes"`
 	} `json:"product"`
 	Terms struct {
@@ -93,8 +97,8 @@ func GetPriceMap(pricingOutput *pricing.GetProductsOutput, field string) (map[st
 }
 
 func Int64PtrToFloat64(i *int64) float64 {
-    if i == nil {
-        return 0.0  // or any default value you prefer
-    }
-    return float64(*i)
+	if i == nil {
+		return 0.0 // or any default value you prefer
+	}
+	return float64(*i)
 }
