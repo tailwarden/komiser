@@ -16,7 +16,7 @@ function CredentialsButton({
   return (
     <div className="flex justify-between">
       <Button
-        onClick={() => router.push('/onboarding/choose-database/')}
+        onClick={() => router.back()}
         size="lg"
         style="text"
         type="button"

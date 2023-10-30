@@ -1,18 +1,18 @@
+import { ToastProps } from '@components/toast/Toast';
 import { useRouter } from 'next/router';
 import settingsService from '../../services/settingsService';
-import { ToastProps } from '../toast/hooks/useToast';
 import ExportCSVButton from './ExportCSVButton';
 
 type ExportCSVProps = {
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
-function ExportCSV({ setToast }: ExportCSVProps) {
+function ExportCSV({ showToast }: ExportCSVProps) {
   const router = useRouter();
 
   function exportCSV(id?: string) {
     settingsService.exportCSV(id);
-    setToast({
+    showToast({
       hasError: false,
       title: 'CSV exported',
       message: 'The download of the CSV file should begin shortly.'

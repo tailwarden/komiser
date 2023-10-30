@@ -11,11 +11,12 @@ import (
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/utils"
 )
 
 const createdLayout = "2006-01-02 15:04:05 +0000 +0000"
 
-func Servers(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Servers(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	instanceSvc := instance.NewAPI(client.ScalewayClient)
@@ -39,20 +40,37 @@ func Servers(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			}
 
 			for _, inst := range output.Servers {
+				if inst == nil {
+					log.Warnln("nil server instance")
+					continue
+				}
 				serverType := serversTypes.Servers[inst.CommercialType]
-				hourlyPrice := serverType.HourlyPrice
+				var hourlyPrice float32
+				if serverType != nil {
+					hourlyPrice = serverType.HourlyPrice
+				} else {
+					log.Warnln("nil server type, assuming 0 hourly rate")
+					hourlyPrice = 0
+				}
+
 				currentTime := time.Now()
 				currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
-				created, err := time.Parse(createdLayout, inst.CreationDate.String())
-				if err != nil {
-					return nil, err
+				var creationDate time.Time
+				if inst.CreationDate != nil {
+					creationDate, err = time.Parse(createdLayout, inst.CreationDate.String())
+					if err != nil {
+						log.Errorln("failed to parse server creation date")
+					}
+				} else {
+					log.Warnln("nil server creation date, assuming created at the beggining of this month")
+					creationDate = utils.BeginningOfMonth(currentTime)
 				}
 
 				var duration time.Duration
-				if created.Before(currentMonth) {
+				if creationDate.Before(currentMonth) {
 					duration = currentTime.Sub(currentMonth)
 				} else {
-					duration = currentTime.Sub(created)
+					duration = currentTime.Sub(creationDate)
 				}
 
 				monthlyCost := hourlyPrice * float32(duration.Hours())

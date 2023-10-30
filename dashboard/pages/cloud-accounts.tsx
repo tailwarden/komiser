@@ -1,30 +1,30 @@
-import Head from 'next/head';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 
-import providers from '../utils/providerHelper';
+import CloudAccountItem from '@components/cloud-account/components/CloudAccountItem';
+import Toast from '@components/toast/Toast';
+import Modal from '@components/modal/Modal';
+import CloudAccountsHeader from '@components/cloud-account/components/CloudAccountsHeader';
+import CloudAccountsLayout from '@components/cloud-account/components/CloudAccountsLayout';
 
-import Toast from '../components/toast/Toast';
-import Modal from '../components/modal/Modal';
-import EditIcon from '../components/icons/EditIcon';
-import More2Icon from '../components/icons/More2Icon';
-import DeleteIcon from '../components/icons/DeleteIcon';
-import CloudAccountsHeader from '../components/cloud-account/components/CloudAccountsHeader';
-import CloudAccountsLayout from '../components/cloud-account/components/CloudAccountsLayout';
+import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
+import CloudAccountsSidePanel from '@components/cloud-account/components/CloudAccountsSidePanel';
+import CloudAccountDeleteContents from '@components/cloud-account/components/CloudAccountDeleteContents';
+import { useToast } from '@components/toast/ToastProvider';
 
-import useCloudAccount from '../components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
-import CloudAccountsSidePanel from '../components/cloud-account/components/CloudAccountsSidePanel';
-import CloudAccountStatus from '../components/cloud-account/components/CloudAccountStatus';
-import CloudAccountDeleteContents from '../components/cloud-account/components/CloudAccountDeleteContents';
+import EmptyState from '@components/empty-state/EmptyState';
 
 function CloudAccounts() {
-  const optionsRef = useRef<HTMLDivElement | null>(null);
-  const [clickedItemId, setClickedItemId] = useState<string | null>(null);
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
+  const { toast, showToast, dismissToast } = useToast();
+  const router = useRouter();
+
+  const currentViewProvider = router.query.view as string;
+
   const {
-    router,
     cloudAccounts,
     setCloudAccounts,
     openModal,
@@ -32,41 +32,34 @@ function CloudAccounts() {
     setCloudAccountItem,
     page,
     goTo,
-    toast,
-    setToast,
-    dismissToast,
     isNotCustomView,
     isLoading
   } = useCloudAccount();
 
+  const [filteredCloudAccounts, setFilteredCloudAccounts] =
+    useState(cloudAccounts);
+
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        optionsRef.current &&
-        !optionsRef.current.contains(event.target as Node)
-      ) {
-        setClickedItemId(null); // Close the options if clicked outside
-      }
-    };
-
-    document.addEventListener('mousedown', handleOutsideClick);
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
-
-  const toggleOptions = (itemId: string) => {
-    setClickedItemId(prevClickedItemId => {
-      if (prevClickedItemId === itemId) {
-        return null; // Close on Clicking the same item's icon
-      }
-      return itemId;
-    });
-  };
+    if (!currentViewProvider) setFilteredCloudAccounts(cloudAccounts);
+    else {
+      setFilteredCloudAccounts(
+        cloudAccounts.filter(
+          account =>
+            account.provider.toLowerCase() === currentViewProvider.toLowerCase()
+        )
+      );
+    }
+  }, [currentViewProvider, cloudAccounts]);
 
   const closeRemoveModal = () => {
     setIsDeleteModalOpen(false);
+  };
+
+  const handleAfterDelete = (account: any) => {
+    setCloudAccounts(
+      cloudAccounts.filter((item: any) => item.id !== account.id)
+    );
+    closeRemoveModal();
   };
 
   if (!cloudAccounts || isLoading) return null;
@@ -80,73 +73,39 @@ function CloudAccounts() {
       </Head>
 
       {/* Wraps the cloud account page and handles the custom views sidebar */}
-      <CloudAccountsLayout router={router}>
+      <CloudAccountsLayout router={router} cloudAccounts={cloudAccounts}>
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
 
-        {cloudAccounts.map(account => {
-          const { provider, name, status } = account;
-          const isOpen = clickedItemId === name;
+        {filteredCloudAccounts.map(account => (
+          <CloudAccountItem
+            key={account.id}
+            account={account}
+            openModal={openModal}
+            setCloudAccountItem={setCloudAccountItem}
+            setIsDeleteModalOpen={setIsDeleteModalOpen}
+            setEditCloudAccount={setEditCloudAccount}
+          />
+        ))}
 
-          return (
-            <div
-              key={name}
-              onClick={() => openModal(account)}
-              className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-black-170 bg-white p-6 text-black-900 transition-colors"
-            >
-              <Image
-                src={providers.providerImg(provider) as string}
-                alt={`${name} image`}
-                width={150}
-                height={150}
-                className="h-12 w-12 rounded-full"
-              />
-
-              <div className="mr-auto">
-                <p className="font-bold">{name}</p>
-                <p className="text-black-300">
-                  {providers.providerLabel(provider)}
-                </p>
-              </div>
-
-              <CloudAccountStatus status={status} />
-
-              <More2Icon
-                className="h-6 w-6 cursor-pointer"
-                onClick={() => toggleOptions(name)}
-              />
-
-              {isOpen && (
-                <div
-                  ref={optionsRef}
-                  className="absolute right-0 top-0 mr-5 mt-[70px] items-center rounded-md border border-black-130 bg-white p-4 shadow-xl"
-                  style={{ zIndex: 1000 }}
-                >
-                  <button
-                    className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-black-400 hover:bg-black-150"
-                    onClick={() => {
-                      setEditCloudAccount(true);
-                      setClickedItemId(null);
-                    }}
-                  >
-                    <EditIcon className="mr-2 h-6 w-6" />
-                    Edit cloud account
-                  </button>
-                  <button
-                    className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-error-600 hover:bg-black-150"
-                    onClick={() => {
-                      setIsDeleteModalOpen(true);
-                      setCloudAccountItem(account);
-                      setClickedItemId(null);
-                    }}
-                  >
-                    <DeleteIcon className="mr-2 h-6 w-6" />
-                    Remove account
-                  </button>
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {!cloudAccounts.length && (
+          <div className="mt-12">
+            <EmptyState
+              title="We could not find a cloud account"
+              message="It seems you have not connected a cloud account to Komiser, connect one right now so you can start managing it with more ease"
+              action={() => {
+                router.push('/onboarding/choose-cloud');
+              }}
+              actionLabel="Connect a cloud account"
+              secondaryAction={() => {
+                router.push(
+                  'https://github.com/tailwarden/komiser/issues/new/choose'
+                );
+              }}
+              secondaryActionLabel="Report an issue"
+              mascotPose="thinking"
+            />
+          </div>
+        )}
       </CloudAccountsLayout>
 
       {/* Delete Modal */}
@@ -156,7 +115,8 @@ function CloudAccounts() {
             <CloudAccountDeleteContents
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
-              setToast={setToast}
+              showToast={showToast}
+              handleAfterDelete={handleAfterDelete}
             />
           )}
         </div>
@@ -169,14 +129,12 @@ function CloudAccounts() {
           cloudAccount={cloudAccountItem}
           cloudAccounts={cloudAccounts}
           setCloudAccounts={setCloudAccounts}
-          setToast={setToast}
+          handleAfterDelete={handleAfterDelete}
+          showToast={showToast}
           page={page}
           goTo={goTo}
         />
       )}
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </>
   );
 }

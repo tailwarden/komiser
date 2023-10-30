@@ -78,6 +78,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
           PURPLIN_BOT: ${{ secrets.PURPLIN_BOT }}
+          DISCORD_FEEDBACK_URL: ${{ secrets.DISCORD_FEEDBACK_URL }}
 
       - uses: actions/checkout@v3
         with:

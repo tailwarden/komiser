@@ -173,8 +173,10 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	return resources, nil
 }
 
-func getEC2Relations(inst *etype.Instance, resourceArn string) (rel []models.Link) {
-	// Get associated security groups
+func getEC2Relations(inst *etype.Instance, resourceArn string) []models.Link {
+	
+	var rel []models.Link
+	// Get associated security groups	
 	for _, sgrp := range inst.SecurityGroups {
 		rel = append(rel, models.Link{
 			ResourceID: *sgrp.GroupId,
@@ -212,12 +214,14 @@ func getEC2Relations(inst *etype.Instance, resourceArn string) (rel []models.Lin
 	})
 
 	// Get associated Keypair
-	rel = append(rel, models.Link{
-		ResourceID: *inst.KeyName,
-		Name:       *inst.KeyName,
-		Type:       "Key Pair",
-		Relation:   "USES",
-	})
+	if inst.KeyName != nil {
+		rel = append(rel, models.Link{
+			ResourceID: *inst.KeyName,
+			Name:       *inst.KeyName,
+			Type:       "Key Pair",
+			Relation:   "USES",
+		})
+	}
 
 	// Get associated IAM roles
 	if inst.IamInstanceProfile != nil {

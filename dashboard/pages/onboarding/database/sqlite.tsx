@@ -1,25 +1,27 @@
 import Head from 'next/head';
 import { ChangeEvent, useRef, useState, FormEvent } from 'react';
+import router from 'next/router';
 
-import { allDBProviders } from '../../../utils/providerHelper';
+import { allDBProviders } from '@utils/providerHelper';
 
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
-} from '../../../components/onboarding-wizard/OnboardingWizardLayout';
-import Folder2Icon from '../../../components/icons/Folder2Icon';
-import DatabasePurplin from '../../../components/onboarding-wizard/DatabasePurplin';
-import InputFileSelect from '../../../components/onboarding-wizard/InputFileSelect';
-import CredentialsButton from '../../../components/onboarding-wizard/CredentialsButton';
-import settingsService from '../../../services/settingsService';
-import useToast from '../../../components/toast/hooks/useToast';
-import Toast from '../../../components/toast/Toast';
-import DatabaseErrorMessage from '../../../components/onboarding-wizard/DatabaseErrorMessage';
+} from '@components/onboarding-wizard/OnboardingWizardLayout';
+import Folder2Icon from '@components/icons/Folder2Icon';
+import DatabasePurplin from '@components/onboarding-wizard/DatabasePurplin';
+import InputFileSelect from '@components/onboarding-wizard/InputFileSelect';
+import CredentialsButton from '@components/onboarding-wizard/CredentialsButton';
+import settingsService from '@services/settingsService';
+
+import Toast from '@components/toast/Toast';
+import DatabaseErrorMessage from '@components/onboarding-wizard/DatabaseErrorMessage';
+import { useToast } from '@components/toast/ToastProvider';
 
 export default function SqliteCredentials() {
   const database = allDBProviders.SQLITE;
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const [filePath, setFilePath] = useState<string>('');
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
@@ -42,12 +44,13 @@ export default function SqliteCredentials() {
       if (res === Error) {
         setIsError(true);
       } else {
-        setToast({
+        showToast({
           hasError: false,
           title: 'Database connected',
           message:
             'Your Postgres database has been successfully connected to Komiser.'
         });
+        router.push('/onboarding/complete/');
       }
     });
   };
@@ -119,6 +122,7 @@ export default function SqliteCredentials() {
                   hasError={isValidationError}
                   errorMessage={errorMessage}
                   handleFileChange={handleFileChange}
+                  handleInputChange={e => setFilePath(e.target.value)}
                 />
               </div>
             </div>
@@ -133,9 +137,6 @@ export default function SqliteCredentials() {
         <RightSideLayout>
           <DatabasePurplin database={database} />
         </RightSideLayout>
-
-        {/* Toast component */}
-        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </OnboardingWizardLayout>
     </div>
   );

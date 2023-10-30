@@ -16,7 +16,7 @@ var configCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		c := models.Config{
 			AWS: []models.AWSConfig{
-				models.AWSConfig{
+				{
 					Name:    "Demo",
 					Source:  "CREDENTIALS_FILE",
 					Profile: "default",

@@ -5,6 +5,7 @@ import ChevronDownIcon from '../icons/ChevronDownIcon';
 
 export type SelectInputProps = {
   label: string;
+  name?: string;
   value: string;
   values: string[];
   icon?: string | ReactNode;
@@ -14,6 +15,7 @@ export type SelectInputProps = {
 
 function SelectInput({
   label,
+  name,
   value,
   values,
   handleChange,
@@ -40,6 +42,8 @@ function SelectInput({
       >
         {icon}
       </div>
+
+      <input type="hidden" name={name} value={value} readOnly />
 
       <label className="mb-2 block text-gray-700">{label}</label>
       <button

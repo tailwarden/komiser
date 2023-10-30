@@ -9,7 +9,7 @@ export const graphLayoutConfig = {
   // - 'draft' fast cooling rate
   // - 'default' moderate cooling rate
   // - "proof" slow cooling rate
-  quality: 'default',
+  quality: 'proof',
   // Whether to include labels in node dimensions. Useful for avoiding label overlap
   nodeDimensionsIncludeLabels: true,
   // number of ticks per frame; higher is faster but more jerky
@@ -17,17 +17,17 @@ export const graphLayoutConfig = {
   // Whether to fit the network view after when done
   fit: true,
   // Padding on fit
-  padding: 10,
+  padding: 5,
   // Whether to enable incremental mode
   randomize: true,
   // Node repulsion (non overlapping) multiplier
-  nodeRepulsion: 10000,
+  nodeRepulsion: 4500,
   // Ideal (intra-graph) edge length
-  idealEdgeLength: 100,
+  idealEdgeLength: 75,
   // Divisor to compute edge forces
   edgeElasticity: 0.45,
   // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
-  nestingFactor: 0.1,
+  nestingFactor: 1,
   // Gravity force (constant)
   gravity: 0.25,
   // Maximum number of iterations to perform
@@ -39,9 +39,9 @@ export const graphLayoutConfig = {
   // Duration for animate:end
   animationDuration: 500,
   // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
-  tilingPaddingVertical: 10,
+  tilingPaddingVertical: 100,
   // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
-  tilingPaddingHorizontal: 10,
+  tilingPaddingHorizontal: 100,
   // Gravity range (constant) for compounds
   gravityRangeCompound: 1.5,
   // Gravity force (constant) for compounds
@@ -85,7 +85,7 @@ export const edgeStyleConfig = {
   'line-style': edge => (edge.data('relation') === 'USES' ? 'solid' : 'dashed'),
   'curve-style': 'unbundled-bezier',
   'control-point-distances': edge => edge.data('controlPointDistances'),
-  'control-point-weights': [0.15, 0.85]
+  'control-point-weights': [0.25, 0.75]
 } as Cytoscape.Css.Edge;
 
 export const leafStyleConfig = {

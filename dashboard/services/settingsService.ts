@@ -398,6 +398,19 @@ const settingsService = {
     }
   },
 
+  async addCloudAccount(payload: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/cloud_accounts`,
+        settings('POST', payload)
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async editCloudAccount(id: number, payload: string) {
     try {
       const res = await fetch(
@@ -440,6 +453,19 @@ const settingsService = {
   async getOnboardingStatus() {
     try {
       const res = await fetch(`${BASE_URL}/is_onboarded`, settings('GET'));
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
+  async sendFeedback(payload: FormData) {
+    try {
+      const res = await fetch(`${BASE_URL}/feedback`, {
+        method: 'POST',
+        body: payload
+      });
       const data = await res.json();
       return data;
     } catch (error) {

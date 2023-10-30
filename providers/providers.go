@@ -2,6 +2,7 @@ package providers
 
 import (
 	"context"
+	"sync"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -48,4 +49,40 @@ type GCPClient struct {
 type K8sClient struct {
 	Client          *kubernetes.Clientset
 	OpencostBaseUrl string
+}
+
+type WorkerPool struct {
+	numWorkers int
+	tasks      chan func()
+	wg         sync.WaitGroup
+}
+
+func NewWorkerPool(numWorkers int) *WorkerPool {
+	return &WorkerPool{
+		numWorkers: numWorkers,
+		tasks:      make(chan func()),
+	}
+}
+
+func (wp *WorkerPool) Start() {
+	for i := 0; i < wp.numWorkers; i++ {
+		go wp.worker()
+	}
+}
+
+func (wp *WorkerPool) SubmitTask(task func()) {
+	wp.wg.Add(1)
+	wp.tasks <- task
+}
+
+func (wp *WorkerPool) Wait() {
+	wp.wg.Wait()
+	close(wp.tasks)
+}
+
+func (wp *WorkerPool) worker() {
+	for task := range wp.tasks {
+		task()
+		wp.wg.Done()
+	}
 }

@@ -341,6 +341,11 @@ func (handler *ApiHandler) ListProvidersHandler(c *gin.Context) {
 		Provider string `bun:"provider" json:"provider"`
 	}
 
+	if handler.db == nil {
+		c.JSON(http.StatusInternalServerError, []string{})
+		return
+	}
+
 	outputs := make([]Output, 0)
 
 	err := handler.db.NewRaw("SELECT DISTINCT(provider) FROM resources").Scan(handler.ctx, &outputs)
@@ -381,6 +386,11 @@ func (handler *ApiHandler) ListServicesHandler(c *gin.Context) {
 func (handler *ApiHandler) ListAccountsHandler(c *gin.Context) {
 	type Output struct {
 		Account string `bun:"account" json:"account"`
+	}
+
+	if handler.db == nil {
+		c.JSON(http.StatusInternalServerError, []string{})
+		return
 	}
 
 	outputs := make([]Output, 0)

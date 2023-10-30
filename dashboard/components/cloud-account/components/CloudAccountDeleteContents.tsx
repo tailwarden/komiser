@@ -1,20 +1,22 @@
 import { useState } from 'react';
+import { ToastProps } from '@components/toast/Toast';
 import AlertCircleIcon from '../../icons/AlertCircleIcon';
 import Button from '../../button/Button';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 import settingsService from '../../../services/settingsService';
-import { ToastProps } from '../../toast/hooks/useToast';
 
 interface CloudAccountDeleteContentsProps {
   cloudAccount: CloudAccount;
   onCancel: () => void;
-  setToast: (toast: ToastProps) => void;
+  handleAfterDelete: (account: CloudAccount) => void;
+  showToast: (toast: ToastProps) => void;
 }
 
 function CloudAccountDeleteContents({
   cloudAccount,
   onCancel,
-  setToast
+  handleAfterDelete,
+  showToast
 }: CloudAccountDeleteContentsProps) {
   const [loading, setLoading] = useState(false);
 
@@ -26,18 +28,19 @@ function CloudAccountDeleteContents({
     settingsService.deleteCloudAccount(cloudAccount.id).then(res => {
       setLoading(false);
       if (res === Error) {
-        setToast({
+        showToast({
           hasError: true,
           title: 'Cloud account was not deleted',
           message:
             'There was an error deleting this cloud account. Please try again.'
         });
       } else {
-        setToast({
+        showToast({
           hasError: false,
           title: 'Cloud account deleted',
           message: `The cloud account was successfully deleted!`
         });
+        handleAfterDelete(cloudAccount);
       }
     });
 

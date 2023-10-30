@@ -1,4 +1,6 @@
 import { ChangeEvent, ReactNode, useRef, useState } from 'react';
+import classNames from 'classnames';
+import { AWSCredentials } from '@utils/cloudAccountHelpers';
 import Folder2Icon from '../icons/Folder2Icon';
 import SelectInput from '../onboarding-wizard/SelectInput';
 import LabelledInput from '../onboarding-wizard/LabelledInput';
@@ -7,7 +9,7 @@ import KeyIcon from '../icons/KeyIcon';
 import VariableIcon from '../icons/VariableIcon';
 import DocumentTextIcon from '../icons/DocumentTextIcon';
 import ShieldSecurityIcon from '../icons/ShieldSecurityIcon';
-import { CloudAccount } from '../cloud-account/hooks/useCloudAccounts/useCloudAccount';
+import { CloudAccountPayload } from '../cloud-account/hooks/useCloudAccounts/useCloudAccount';
 
 interface SelectOptions {
   icon: ReactNode;
@@ -16,8 +18,8 @@ interface SelectOptions {
 }
 
 interface AwsAccountDetailsProps {
-  cloudAccountData: CloudAccount;
-  setCloudAccountData: (formData: CloudAccount) => void;
+  cloudAccountData?: CloudAccountPayload<AWSCredentials>;
+  hasError?: boolean;
 }
 
 const options: SelectOptions[] = [
@@ -45,11 +47,17 @@ const options: SelectOptions[] = [
 
 function AwsAccountDetails({
   cloudAccountData,
-  setCloudAccountData
+  hasError = false
 }: AwsAccountDetailsProps) {
   const [credentialType, setCredentialType] = useState<string>(
-    options.find(option => option.value === cloudAccountData.credentials.source)
-      ?.value ?? options[0].value
+    options.find(
+      option => option.value === cloudAccountData?.credentials.source
+    )?.value ?? options[0].value
+  );
+  const [isValidationError, setIsValidationError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [file, setFile] = useState<string>(
+    cloudAccountData?.credentials.path || ''
   );
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -59,65 +67,50 @@ function AwsAccountDetails({
     }
   };
 
-  function handleNameChange(event: ChangeEvent<HTMLInputElement>) {
-    setCloudAccountData({
-      ...cloudAccountData,
-      name: event?.target.value
-    });
-  }
-
   function handleSelectChange(newValue: string) {
     setCredentialType(newValue);
-
-    setCloudAccountData({
-      ...cloudAccountData,
-      credentials: {
-        ...cloudAccountData.credentials,
-        source: newValue
-      }
-    });
-  }
-
-  function handleProfileChange(event: ChangeEvent<HTMLInputElement>) {
-    setCloudAccountData({
-      ...cloudAccountData,
-      credentials: {
-        ...cloudAccountData.credentials,
-        profile: event?.target.value
-      }
-    });
   }
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const fileName = event.target.files?.[0]?.name;
 
-    if (!file) return;
-
-    setCloudAccountData({
-      ...cloudAccountData,
-      credentials: {
-        ...cloudAccountData.credentials,
-        path: file.name
+    if (fileName) {
+      setFile(fileName);
+      if (!fileName.endsWith('.db')) {
+        setIsValidationError(true);
+        setErrorMessage(
+          'The chosen file is not supported. Please choose a different file for the credentials.'
+        );
       }
-    });
+    } else {
+      setIsValidationError(true);
+      setErrorMessage('Please choose a file.');
+    }
   };
 
   return (
-    <div className="flex flex-col space-y-8 py-10">
+    <div className="flex flex-col space-y-4 py-10">
       <LabelledInput
         type="text"
         id="account-name"
+        name="name"
         label="Account name"
         placeholder="my-aws-account"
-        value={cloudAccountData.name}
-        onChange={handleNameChange}
+        required
+        value={cloudAccountData?.name}
       />
 
-      <div className="flex flex-col space-y-8 rounded-md bg-komiser-100 p-5">
+      <div
+        className={classNames(
+          'flex flex-col space-y-8 rounded-md p-5',
+          hasError ? 'bg-error-100' : 'bg-komiser-100'
+        )}
+      >
         <div>
           <SelectInput
             icon="Change"
-            label={'Source'}
+            name="source"
+            label="Source"
             displayValues={options}
             value={credentialType}
             handleChange={handleSelectChange}
@@ -138,22 +131,27 @@ function AwsAccountDetails({
               type="text"
               label="File path"
               id="file-path-input"
+              name="path"
               icon={<Folder2Icon />}
               subLabel="Enter the path or browse the file"
               placeholder="C:\Documents\Komiser\credentials"
               fileInputRef={fileInputRef}
               iconClick={handleButtonClick}
               handleFileChange={handleFileChange}
-              value={cloudAccountData.credentials.path}
+              handleInputChange={e => setFile(e.target.value)}
+              value={file}
+              hasError={isValidationError}
+              errorMessage={errorMessage}
             />
             <LabelledInput
               type="text"
               id="profile"
+              name="profile"
               label="Profile"
               placeholder="default"
               subLabel="Name of the section in the credentials file"
-              value={cloudAccountData.credentials.profile}
-              onChange={handleProfileChange}
+              value={cloudAccountData?.credentials.profile}
+              required
             />
           </div>
         )}
@@ -163,20 +161,30 @@ function AwsAccountDetails({
             <LabelledInput
               type="text"
               id="access-key-id"
+              name="aws_access_key_id"
               label="Access key ID"
               placeholder="AKIABCDEFGHIJKLMN12"
               subLabel="Unique identifier used to access AWS services"
+              required
             />
             <LabelledInput
               type="text"
               id="secret-access-key"
+              name="aws_secret_access_key"
               label="Secret access key"
               placeholder="AbCdEfGhIjKlMnOpQrStUvWxYz0123456789AbCd"
               subLabel="The secret access key is generated by AWS when an access key is created"
+              required
             />
           </div>
         )}
       </div>
+      {hasError && (
+        <div className="text-sm text-error-600">
+          We couldn&apos;t connect to your AWS account. Please check if the file
+          is correct.
+        </div>
+      )}
     </div>
   );
 }

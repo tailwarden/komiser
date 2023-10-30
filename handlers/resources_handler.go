@@ -23,15 +23,17 @@ type ApiHandler struct {
 	telemetry bool
 	cfg       models.Config
 	analytics utils.Analytics
+	accounts  []models.Account
 }
 
-func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config) *ApiHandler {
+func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, accounts []models.Account) *ApiHandler {
 	handler := ApiHandler{
 		db:        db,
 		ctx:       ctx,
 		telemetry: telemetry,
 		cfg:       cfg,
 		analytics: analytics,
+		accounts:  accounts,
 	}
 	return &handler
 }
@@ -426,4 +428,17 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, out)
 
+}
+
+func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
+	resourceId := c.Query("resourceId")
+
+	var resource Resource
+
+	err := handler.db.NewSelect().Model(&resource).Where("resource_id = ?", resourceId).Scan(handler.ctx)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
+	}
+
+	c.JSON(http.StatusOK, resource)
 }

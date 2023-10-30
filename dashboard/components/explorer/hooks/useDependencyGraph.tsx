@@ -52,10 +52,11 @@ function GetData(res: any) {
           source: ele.resourceId,
           target: rel.resourceId,
           relation: rel.relation,
-          label: rel.type,
+          label: `${rel.relation.toLowerCase()} ${rel.type}`,
+          type: rel.type,
           controlPointDistances: [
-            Math.floor(Math.random() * 20),
-            Math.floor(Math.random() * 21) - 20
+            Math.floor(Math.random() * 30),
+            Math.floor(Math.random() * 31) - 30
           ]
         }
       };
