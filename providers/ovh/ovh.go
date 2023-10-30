@@ -1,4 +1,4 @@
-package scaleway
+package ovh
 
 import (
 	"context"
