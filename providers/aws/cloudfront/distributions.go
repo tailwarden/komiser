@@ -33,7 +33,11 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 	resources := make([]Resource, 0)
 	var config cloudfront.ListDistributionsInput
 	cloudfrontClient := cloudfront.NewFromConfig(*client.AWSClient)
+	tempRegion := client.AWSClient.Region
+	client.AWSClient.Region = "us-east-1"
+	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = tempRegion
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 		ServiceCode: aws.String("AmazonCloudFront"),
@@ -52,144 +56,150 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
 	}
 
+	getRegions := getRegionMapping()
 	for {
-		getRegions := getRegionMapping()
-		for region, locations := range getRegions {
-			client.AWSClient.Region = region
-			for _, edgelocation := range locations {
-				output, err := cloudfrontClient.ListDistributions(ctx, &config)
-				if err != nil {
-					return resources, err
+		for region, edgelocation := range getRegions {
+			if client.AWSClient.Region == region {
+				log.Println("matched region--------------------------", region)
+				if priceMapForDataTransfer[edgelocation] != nil && priceMapForRequest[edgelocation] != nil {
+					EdgeLocation = edgelocation
 				}
 
-				cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
-
-				for _, distribution := range output.DistributionList.Items {
-					metricsBytesDownloadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-						StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
-						EndTime:    aws.Time(time.Now()),
-						MetricName: aws.String("BytesDownloaded"),
-						Namespace:  aws.String("AWS/CloudFront"),
-						Dimensions: []types.Dimension{
-							{
-								Name:  aws.String("DistributionId"),
-								Value: distribution.Id,
-							},
-						},
-						Period: aws.Int32(86400),
-						Statistics: []types.Statistic{
-							types.StatisticSum,
-						},
-					})
-
-					if err != nil {
-						log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
-					}
-
-					bytesDownloaded := 0.0
-					if metricsBytesDownloadedOutput != nil && len(metricsBytesDownloadedOutput.Datapoints) > 0 {
-						bytesDownloaded = *metricsBytesDownloadedOutput.Datapoints[0].Sum
-					}
-
-					metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
-						StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
-						EndTime:    aws.Time(time.Now()),
-						MetricName: aws.String("Requests"),
-						Namespace:  aws.String("AWS/CloudFront"),
-						Dimensions: []types.Dimension{
-							{
-								Name:  aws.String("DistributionId"),
-								Value: distribution.Id,
-							},
-						},
-						Period: aws.Int32(86400),
-						Statistics: []types.Statistic{
-							types.StatisticSum,
-						},
-					})
-
-					if err != nil {
-						log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
-					}
-
-					requests := 0.0
-					if metricsRequestsOutput != nil && len(metricsRequestsOutput.Datapoints) > 0 {
-						requests = *metricsRequestsOutput.Datapoints[0].Sum
-					}
-					if requests > freeTierRequests {
-						requests -= freeTierRequests
-					}
-
-					if priceMapForDataTransfer[edgelocation] != nil {
-						EdgeLocation = edgelocation
-						break
-					}
-					dataTransferToOriginCost := awsUtils.GetCost(priceMapForDataTransfer[EdgeLocation], (float64(bytesDownloaded)/1099511627776)*1024)
-
-					requestsCost := awsUtils.GetCost(priceMapForRequest[EdgeLocation], requests/per10kRequest)
-
-					monthlyCost := dataTransferToOriginCost + requestsCost
-
-					outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
-						Resource: distribution.ARN,
-					})
-
-					tags := make([]Tag, 0)
-
-					if err == nil {
-						for _, tag := range outputTags.Tags.Items {
-							tags = append(tags, Tag{
-								Key:   *tag.Key,
-								Value: *tag.Value,
-							})
-						}
-					}
-
-					resources = append(resources, Resource{
-						Provider:   "AWS",
-						Account:    client.Name,
-						Service:    "CloudFront",
-						ResourceId: *distribution.ARN,
-						Region:     client.AWSClient.Region,
-						Name:       *distribution.DomainName,
-						Cost:       monthlyCost,
-						Tags:       tags,
-						FetchedAt:  time.Now(),
-						Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudfront/v3/home?region=%s#/distributions/%s", client.AWSClient.Region, client.AWSClient.Region, *distribution.Id),
-					})
-				}
-
-				if aws.ToString(output.DistributionList.NextMarker) == "" {
-					break
-				}
-				config.Marker = output.DistributionList.Marker
 			}
-			log.WithFields(log.Fields{
-				"provider":  "AWS",
-				"account":   client.Name,
-				"region":    client.AWSClient.Region,
-				"service":   "CloudFront",
-				"resources": len(resources),
-			}).Info("Fetched resources")
-			return resources, nil
+
 		}
 
+		output, err := cloudfrontClient.ListDistributions(ctx, &config)
+		if err != nil {
+			return resources, err
+		}
+
+		for _, distribution := range output.DistributionList.Items {
+			metricsBytesDownloadedOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("BytesDownloaded"),
+				Namespace:  aws.String("AWS/CloudFront"),
+				Dimensions: []types.Dimension{
+					{
+						Name:  aws.String("DistributionId"),
+						Value: distribution.Id,
+					},
+				},
+				Period: aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
+			}
+
+			bytesDownloaded := 0.0
+			if metricsBytesDownloadedOutput != nil && len(metricsBytesDownloadedOutput.Datapoints) > 0 {
+				bytesDownloaded = *metricsBytesDownloadedOutput.Datapoints[0].Sum
+			}
+
+			metricsRequestsOutput, err := cloudwatchClient.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
+				StartTime:  aws.Time(utils.BeginningOfMonth(time.Now())),
+				EndTime:    aws.Time(time.Now()),
+				MetricName: aws.String("Requests"),
+				Namespace:  aws.String("AWS/CloudFront"),
+				Dimensions: []types.Dimension{
+					{
+						Name:  aws.String("DistributionId"),
+						Value: distribution.Id,
+					},
+				},
+				Period: aws.Int32(86400),
+				Statistics: []types.Statistic{
+					types.StatisticSum,
+				},
+			})
+
+			if err != nil {
+				log.Warnf("Couldn't fetch invocations metric for %s", *distribution.Id)
+			}
+
+			requests := 0.0
+			if metricsRequestsOutput != nil && len(metricsRequestsOutput.Datapoints) > 0 {
+				requests = *metricsRequestsOutput.Datapoints[0].Sum
+			}
+			if requests > freeTierRequests {
+				requests -= freeTierRequests
+			}
+
+			dataTransferToOriginCost := awsUtils.GetCost(priceMapForDataTransfer[EdgeLocation], (float64(bytesDownloaded)/1099511627776)*1024)
+
+			requestsCost := awsUtils.GetCost(priceMapForRequest[EdgeLocation], requests/per10kRequest)
+
+			monthlyCost := dataTransferToOriginCost + requestsCost
+
+			outputTags, err := cloudfrontClient.ListTagsForResource(ctx, &cloudfront.ListTagsForResourceInput{
+				Resource: distribution.ARN,
+			})
+
+			tags := make([]Tag, 0)
+
+			if err == nil {
+				for _, tag := range outputTags.Tags.Items {
+					tags = append(tags, Tag{
+						Key:   *tag.Key,
+						Value: *tag.Value,
+					})
+				}
+			}
+
+			resources = append(resources, Resource{
+				Provider:   "AWS",
+				Account:    client.Name,
+				Service:    "CloudFront",
+				ResourceId: *distribution.ARN,
+				Region:     client.AWSClient.Region,
+				Name:       *distribution.DomainName,
+				Cost:       monthlyCost,
+				Tags:       tags,
+				FetchedAt:  time.Now(),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudfront/v3/home?region=%s#/distributions/%s", client.AWSClient.Region, client.AWSClient.Region, *distribution.Id),
+			})
+		}
+
+		if aws.ToString(output.DistributionList.NextMarker) == "" {
+			break
+		}
+		config.Marker = output.DistributionList.Marker
 	}
+	log.WithFields(log.Fields{
+		"provider":  "AWS",
+		"account":   client.Name,
+		"region":    client.AWSClient.Region,
+		"service":   "CloudFront",
+		"resources": len(resources),
+	}).Info("Fetched resources")
+	return resources, nil
+
 }
 
-func getRegionMapping() map[string][]string {
-	return map[string][]string{
-		"us-east-1":      {"United States", "Mexico", "Canada"},
-		"eu-west-1":      {"Europe", "Israel"},
-		"ap-northeast-1": {"Australia", "New Zealand", "Taiwan"},
-		"ap-northeast-2": {"South Korea"},
-		"ap-southeast-1": {"Philippines", "Singapore", "Thailand", "Malaysia"},
-		"ap-southeast-3": {"Indonesia"},
-		"ap-south-1":     {"India"},
-		"sa-east-1":      {"Japan", "South America"},
-		"me-south-1":     {"South Africa", "Kenya", "Middle East"},
-		"ap-east-1":      {"Hong Kong", "Vietnam"},
-		"cn-north-1":     {"China"},
+func getRegionMapping() map[string]string {
+	return map[string]string{
+		"us-east-1":      "United States",
+		"us-east-2":      "United States",
+		"us-west-1":      "United States",
+		"us-west-2":      "United States",
+		"ca-central-1":   "Canada",
+		"eu-north-1":     "Europe",
+		"eu-west-1":      "Europe",
+		"eu-west-2":      "Europe",
+		"eu-west-3":      "Europe",
+		"eu-central-1":   "Europe",
+		"ap-northeast-1": "Japan",
+		"ap-northeast-2": "Asia Pacific",
+		"ap-northeast-3": "Australia",
+		"ap-southeast-1": "Asia Pacific",
+		"ap-southeast-2": "Australia",
+		"ap-south-1":     "India",
+		"sa-east-1":      "South America",
 	}
 }
 

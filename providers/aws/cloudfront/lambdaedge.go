@@ -26,12 +26,11 @@ func LambdaEdgeFunctions(ctx context.Context, client ProviderClient) ([]Resource
 	resources := make([]Resource, 0)
 	var config cloudfront.ListFunctionsInput
 	cloudfrontClient := cloudfront.NewFromConfig(*client.AWSClient)
-
 	tempRegion := client.AWSClient.Region
 	client.AWSClient.Region = "us-east-1"
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
-	client.AWSClient.Region = tempRegion
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = tempRegion
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 		ServiceCode: aws.String("AmazonCloudFront"),
