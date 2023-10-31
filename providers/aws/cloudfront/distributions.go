@@ -60,7 +60,6 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 	for {
 		for region, edgelocation := range getRegions {
 			if client.AWSClient.Region == region {
-				log.Println("matched region--------------------------", region)
 				if priceMapForDataTransfer[edgelocation] != nil && priceMapForRequest[edgelocation] != nil {
 					EdgeLocation = edgelocation
 				}
