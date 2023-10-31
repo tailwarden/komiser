@@ -9,7 +9,8 @@ export type Provider =
   | 'tencent'
   | 'oci'
   | 'scaleway'
-  | 'mongodbatlas';
+  | 'mongodbatlas'
+  | 'ovh';
 
 type ProviderKey =
   | 'AWS'
@@ -22,7 +23,8 @@ type ProviderKey =
   | 'TENCENT'
   | 'OCI'
   | 'SCALE_WAY'
-  | 'MONGODB_ATLAS';
+  | 'MONGODB_ATLAS'
+  | 'OVH';
 
 export const allProviders: { [key in ProviderKey]: Provider } = {
   AWS: 'aws',
@@ -35,7 +37,8 @@ export const allProviders: { [key in ProviderKey]: Provider } = {
   TENCENT: 'tencent',
   OCI: 'oci',
   SCALE_WAY: 'scaleway',
-  MONGODB_ATLAS: 'mongodbatlas'
+  MONGODB_ATLAS: 'mongodbatlas',
+  OVH: 'ovh'
 };
 
 export type DBProvider = 'postgres' | 'sqlite';
@@ -94,6 +97,10 @@ const providers = {
       label = 'MongoDB Atlas';
     }
 
+    if (arg.toLowerCase() === 'ovh') {
+      label = 'OVH';
+    }
+
     return label;
   },
   providerImg(arg: Provider) {
@@ -141,6 +148,10 @@ const providers = {
 
     if (arg.toLowerCase() === 'mongodbatlas') {
       img = '/assets/img/providers/mongodbatlas.jpg';
+    }
+
+    if (arg.toLowerCase() === 'ovh') {
+      img = '/assets/img/providers/ovh.png';
     }
 
     return img;
