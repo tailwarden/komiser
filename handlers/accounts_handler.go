@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
+	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
@@ -19,6 +21,8 @@ import (
 	"github.com/uptrace/bun/driver/sqliteshim"
 )
 
+var unsavedAccounts []models.Account
+
 func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	output := struct {
 		Onboarded bool   `json:"onboarded"`
@@ -29,7 +33,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	}
 
 	if handler.db == nil {
-		output.Status = "PENDING_DATABASE"
+		output.Status = "PENDING_ACCOUNTS"
 		c.JSON(http.StatusOK, output)
 		return
 	}
@@ -53,6 +57,12 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 
 func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 	accounts := make([]models.Account, 0)
+
+	if handler.db == nil {
+		c.JSON(http.StatusOK, unsavedAccounts)
+		return
+	}
+
 	err := handler.db.NewRaw("SELECT * FROM accounts").Scan(handler.ctx, &accounts)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
@@ -88,14 +98,22 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := handler.db.NewInsert().Model(&account).Exec(context.Background())
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+	if handler.db == nil {
+		if len(unsavedAccounts) == 0 {
+			unsavedAccounts = make([]models.Account, 0)
+		}
 
-	accountId, _ := result.LastInsertId()
-	account.Id = accountId
+		unsavedAccounts = append(unsavedAccounts, account)
+	} else {
+		result, err := handler.db.NewInsert().Model(&account).Exec(context.Background())
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		accountId, _ := result.LastInsertId()
+		account.Id = accountId
+	}
 
 	if handler.telemetry {
 		handler.analytics.TrackEvent("creating_alert", map[string]interface{}{
@@ -147,6 +165,8 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 		return
 	}
 
+	config := models.Config{}
+
 	if db.Type == "SQLITE" {
 		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.FilePath))
 		if err != nil {
@@ -158,12 +178,43 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 
 		handler.db = bun.NewDB(sqldb, sqlitedialect.New())
 		log.Println("Data will be stored in SQLite")
+
+		config.SQLite = models.SQLiteConfig{
+			File: db.FilePath,
+		}
 	} else {
 		uri := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", db.Username, db.Password, db.Hostname, db.Database)
 		sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(uri)))
 		handler.db = bun.NewDB(sqldb, pgdialect.New())
 
 		log.Println("Data will be stored in PostgreSQL")
+
+		config.Postgres = models.PostgresConfig{
+			URI: uri,
+		}
+	}
+
+	if len(unsavedAccounts) > 0 {
+		if len(handler.accounts) == 0 {
+			handler.accounts = unsavedAccounts
+		} else {
+			handler.accounts = append(handler.accounts, unsavedAccounts...)
+		}
+		unsavedAccounts = make([]models.Account, 0)
+
+		f, err := os.Create("config.toml")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if err := toml.NewEncoder(f).Encode(config); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if err := f.Close(); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 	}
 
 	err = utils.SetupSchema(handler.db, &handler.cfg, handler.accounts)
