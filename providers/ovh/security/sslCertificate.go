@@ -28,7 +28,7 @@ func SSLCertificates(_ context.Context, client providers.ProviderClient) ([]mode
 
 	for _, projectId := range projectIds {
 		sslCertIds := []sslCert{}
-		err := client.OVHClient.Get(fmt.Sprintf("/v2/ssl/%s", projectId), &sslCertIds)
+		err := client.OVHClient.Get(fmt.Sprintf("/ssl/%s", projectId), &sslCertIds)
 		if err != nil {
 			return resources, err
 		}

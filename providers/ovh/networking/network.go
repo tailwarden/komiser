@@ -29,7 +29,7 @@ func PublicNetworks(_ context.Context, client providers.ProviderClient) ([]model
 
 	for _, projectId := range projectIds {
 		networks := []network{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/network/public", projectId), &networks)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/network/public", projectId), &networks)
 		if err != nil {
 			return resources, err
 		}
@@ -67,7 +67,7 @@ func PrivateNetworks(_ context.Context, client providers.ProviderClient) ([]mode
 
 	for _, projectId := range projectIds {
 		networks := []network{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/network/private", projectId), &networks)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/network/private", projectId), &networks)
 		if err != nil {
 			return resources, err
 		}

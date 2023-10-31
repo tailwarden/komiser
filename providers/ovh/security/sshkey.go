@@ -29,7 +29,7 @@ func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resou
 
 	for _, projectId := range projectIds {
 		sshKeys := []sshKey{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/sshkey", projectId), &sshKeys)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/sshkey", projectId), &sshKeys)
 		if err != nil {
 			return resources, err
 		}

@@ -29,14 +29,14 @@ func Nodes(_ context.Context, client providers.ProviderClient) ([]models.Resourc
 
 	for _, projectId := range projectIds {
 		kubeIds := []string{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/kube", projectId), &kubeIds)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/kube", projectId), &kubeIds)
 		if err != nil {
 			return resources, err
 		}
 
 		for _, kubeId := range kubeIds {
 			nodes := []node{}
-			err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/kube/%s/node", projectId, kubeId), &nodes)
+			err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/kube/%s/node", projectId, kubeId), &nodes)
 			if err != nil {
 				return resources, err
 			}

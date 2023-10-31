@@ -22,7 +22,7 @@ func Clusters(_ context.Context, client providers.ProviderClient) ([]models.Reso
 
 	for _, projectId := range projectIds {
 		clusterIds := []string{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/kube", projectId), &clusterIds)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/kube", projectId), &clusterIds)
 		if err != nil {
 			return resources, err
 		}

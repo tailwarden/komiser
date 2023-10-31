@@ -29,7 +29,7 @@ func Containers(_ context.Context, client providers.ProviderClient) ([]models.Re
 
 	for _, projectId := range projectIds {
 		containers := []container{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/storage", projectId), &containers)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/storage", projectId), &containers)
 		if err != nil {
 			return resources, err
 		}

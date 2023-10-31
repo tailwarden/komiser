@@ -29,7 +29,7 @@ func IPs(_ context.Context, client providers.ProviderClient) ([]models.Resource,
 
 	for _, projectId := range projectIds {
 		ips := []ip{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/ip", projectId), &ips)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/ip", projectId), &ips)
 		if err != nil {
 			return resources, err
 		}
@@ -67,7 +67,7 @@ func FailoverIPs(_ context.Context, client providers.ProviderClient) ([]models.R
 
 	for _, projectId := range projectIds {
 		ips := []ip{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/ip/failover", projectId), &ips)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/ip/failover", projectId), &ips)
 		if err != nil {
 			return resources, err
 		}

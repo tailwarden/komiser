@@ -29,7 +29,7 @@ func Images(_ context.Context, client providers.ProviderClient) ([]models.Resour
 
 	for _, projectId := range projectIds {
 		images := []image{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/image", projectId), &images)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/image", projectId), &images)
 		if err != nil {
 			return resources, err
 		}

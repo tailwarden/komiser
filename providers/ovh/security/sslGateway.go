@@ -28,7 +28,7 @@ func SSLGateways(_ context.Context, client providers.ProviderClient) ([]models.R
 
 	for _, projectId := range projectIds {
 		sslGateways := []sslGateway{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/sslGateway/%s", projectId), &sslGateways)
+		err = client.OVHClient.Get(fmt.Sprintf("/sslGateway/%s", projectId), &sslGateways)
 		if err != nil {
 			return resources, err
 		}

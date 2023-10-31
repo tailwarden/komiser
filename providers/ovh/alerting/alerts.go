@@ -22,14 +22,14 @@ func Alerts(_ context.Context, client providers.ProviderClient) ([]models.Resour
 
 	for _, projectId := range projectIds {
 		alertingIds := []string{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/alerting", projectId), &alertingIds)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/alerting", projectId), &alertingIds)
 		if err != nil {
 			return resources, err
 		}
 
 		for _, alertingId := range alertingIds {
 			alertIds := []string{}
-			err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/alerting/%s/alert", projectId, alertingId), &alertIds)
+			err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/alerting/%s/alert", projectId, alertingId), &alertIds)
 			if err != nil {
 				return resources, err
 			}

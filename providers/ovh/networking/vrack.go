@@ -29,7 +29,7 @@ func Vracks(_ context.Context, client providers.ProviderClient) ([]models.Resour
 
 	for _, projectId := range projectIds {
 		vracks := []vrack{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/vrack", projectId), &vracks)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/vrack", projectId), &vracks)
 		if err != nil {
 			return resources, err
 		}

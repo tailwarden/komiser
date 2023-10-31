@@ -29,7 +29,7 @@ func Instances(_ context.Context, client providers.ProviderClient) ([]models.Res
 
 	for _, projectId := range projectIds {
 		instances := []instance{}
-		err = client.OVHClient.Get(fmt.Sprintf("/v2/cloud/project/%s/instance", projectId), &instances)
+		err = client.OVHClient.Get(fmt.Sprintf("/cloud/project/%s/instance", projectId), &instances)
 		if err != nil {
 			return resources, err
 		}
