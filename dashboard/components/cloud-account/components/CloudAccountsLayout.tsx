@@ -1,8 +1,8 @@
 import { NextRouter } from 'next/router';
 import { ReactNode, useContext } from 'react';
 
+import platform, { allProviders } from '@utils/providerHelper';
 import GlobalAppContext from '../../layout/context/GlobalAppContext';
-import platform, { allProviders } from '../../../utils/providerHelper';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 
 type CloudAccountsLayoutProps = {

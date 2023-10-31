@@ -1,8 +1,8 @@
-import platform, { Integration, Provider } from '@utils/providerHelper';
+import platform, { IntegrationProvider, Provider } from '@utils/providerHelper';
 import Image from 'next/image';
 
 export type AvatarProps = {
-  avatarName: Provider | Integration;
+  avatarName: Provider | IntegrationProvider;
   size?: number;
 };
 

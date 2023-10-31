@@ -44,14 +44,6 @@ export const allProviders: { [key in ProviderKey]: Provider } = {
   PULUMI: 'pulumi'
 };
 
-export type Integration = 'slack' | 'webhook';
-type IntegrationsKey = 'SLACK' | 'WEBHOOK';
-
-export const allIntegrations: { [key in IntegrationsKey]: Integration } = {
-  SLACK: 'slack',
-  WEBHOOK: 'webhook'
-};
-
 export type DBProvider = 'postgres' | 'sqlite';
 type DBProviderKey = 'POSTGRES' | 'SQLITE';
 
@@ -60,20 +52,25 @@ export const allDBProviders: { [key in DBProviderKey]: DBProvider } = {
   SQLITE: 'sqlite'
 };
 
-type PlatformItem = {
+export enum IntegrationProvider {
+  SLACK = 'slack',
+  WEBHOOK = 'webhook'
+}
+
+type ProviderInfo = {
   label: string;
   imgSrc: string;
 };
 
 export type Platform = {
-  provider: Record<string, PlatformItem>;
-  integration: Record<string, PlatformItem>;
-  getImgSrc: (platformName: Provider | Integration) => string;
-  getLabel: (platformName: Provider | Integration) => string;
+  cloudProviders: Record<string, ProviderInfo>;
+  integrationProviders: Record<string, ProviderInfo>;
+  getImgSrc: (providerName: Provider | IntegrationProvider) => string;
+  getLabel: (providerName: Provider | IntegrationProvider) => string;
 };
 
 const platform: Platform = {
-  provider: {
+  cloudProviders: {
     aws: {
       label: 'Amazon Web Services',
       imgSrc: '/assets/img/providers/aws.png'
@@ -127,7 +124,7 @@ const platform: Platform = {
       imgSrc: '/assets/img/providers/pulumi.png'
     }
   },
-  integration: {
+  integrationProviders: {
     slack: {
       label: 'Slack',
       imgSrc: '/assets/img/integrations/slack.png'
@@ -138,16 +135,18 @@ const platform: Platform = {
     }
   },
 
-  getImgSrc(platformName) {
-    const key = platformName.toLowerCase();
-    if (key in this.provider) return this.provider[key].imgSrc;
-    if (key in this.integration) return this.integration[key].imgSrc;
+  getImgSrc(providerName) {
+    const key = providerName.toLowerCase();
+    if (key in this.cloudProviders) return this.cloudProviders[key].imgSrc;
+    if (key in this.integrationProviders)
+      return this.integrationProviders[key].imgSrc;
     return '';
   },
-  getLabel(platformName) {
-    const key = platformName.toLowerCase();
-    if (key in this.provider) return this.provider[key].label;
-    if (key in this.integration) return this.integration[key].label;
+  getLabel(providerName) {
+    const key = providerName.toLowerCase();
+    if (key in this.cloudProviders) return this.cloudProviders[key].label;
+    if (key in this.integrationProviders)
+      return this.integrationProviders[key].label;
     return '';
   }
 };
