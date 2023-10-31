@@ -51,23 +51,14 @@ function InventorySidePanel({
   tabs
 }: InventorySidePanelProps) {
   const getLastFetched = (date: string) => {
-    const givenDate = new Date(date);
-    // Current date
-    const currentDate = new Date();
-
-    // Calculate "since last month" date
-    const lastMonthDate = new Date(currentDate);
-    lastMonthDate.setMonth(currentDate.getMonth() - 1);
-
-    // Calculate "since last week" date
-    const lastWeekDate = new Date(currentDate);
-    lastWeekDate.setDate(currentDate.getDate() - 7);
-
+    const dateLastFetched = new Date(date);
+    const today = new Date();
+    const aMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    const aWeekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
     let message;
-    // Compare the given date to the calculated dates
-    if (givenDate > lastMonthDate) {
+    if (dateLastFetched > aMonthAgo) {
       message = 'Since last month';
-    } else if (givenDate > lastWeekDate) {
+    } else if (dateLastFetched > aWeekAgo) {
       message = 'Since last week';
     } else {
       message = 'More than a month ago';

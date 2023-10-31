@@ -64,9 +64,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const handleNodeClick = async (event: EventObject) => {
     const nodeData = event.target.data();
     settingsService.getResourceById(`?resourceId=${nodeData.id}`).then(res => {
-      if (res === Error) {
-        console.log('Error retrieving resource by id');
-      } else {
+      if (res !== Error) {
         openModal(res);
       }
     });

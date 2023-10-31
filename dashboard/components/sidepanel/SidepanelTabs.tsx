@@ -1,3 +1,5 @@
+import { capitalizeString } from "@utils/formatString";
+
 export type SidepanelTabsProps = {
   goTo: (page: any) => void;
   page: string;
@@ -19,7 +21,7 @@ function SidepanelTabs({ goTo, page, tabs }: SidepanelTabsProps) {
                          : 'border-transparent hover:text-komiser-700'
                      }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1).toLowerCase()}{' '}
+              {capitalizeString(tab)}{' '}
               {/* capitalize first letter */}
             </a>
           </li>
