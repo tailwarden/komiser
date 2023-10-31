@@ -173,32 +173,6 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
-      <CytoscapeComponent
-        className="h-full w-full"
-        elements={CytoscapeComponent.normalizeElements({
-          nodes: data.nodes,
-          edges: data.edges
-        })}
-        // forEach={(data.nodes, node => {console.log(node)})}
-        maxZoom={maxZoom}
-        minZoom={minZoom}
-        layout={graphLayoutConfig}
-        stylesheet={[
-          {
-            selector: 'node',
-            style: nodeStyeConfig
-          },
-          {
-            selector: 'edge',
-            style: edgeStyleConfig
-          },
-          {
-            selector: '.leaf',
-            style: leafStyleConfig
-          }
-        ]}
-        cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
-      />
       {dataIsEmpty ? (
         <>
           <div className="translate-y-[201px]">
@@ -244,7 +218,8 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           <div className="relative">
             <WarningIcon className="peer" height="16" width="16" />
             <Tooltip bottom="xs" align="left" width="lg">
-              Only AWS resources are currently supported on the explorer.
+              Only AWS and Civo resources are currently supported on the
+              explorer.
             </Tooltip>
           </div>
         )}
