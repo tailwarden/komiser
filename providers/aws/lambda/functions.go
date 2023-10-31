@@ -31,7 +31,11 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 	resources := make([]models.Resource, 0)
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	lambdaClient := lambda.NewFromConfig(*client.AWSClient)
+
+	tempRegion := client.AWSClient.Region
+	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = tempRegion
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 		ServiceCode: aws.String("AWSLambda"),

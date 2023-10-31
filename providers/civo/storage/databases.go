@@ -41,7 +41,7 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 			ResourceId: resource.ID,
 			Name:       resource.Name,
 			Cost:       monthlyCost,
-			Relations: relations,
+			Relations:  relations,
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://dashboard.civo.com/databases/%s", resource.ID),
 		})
@@ -61,19 +61,23 @@ func getDatabaseRelation(db civogo.Database) []models.Link {
 
 	var rel []models.Link
 
-	rel = append(rel, models.Link{
-		ResourceID: db.NetworkID,
-		Type: "Network",
-		Name: db.NetworkID,
-		Relation: "USES",
-	})
+	if len(db.NetworkID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: db.NetworkID,
+			Type:       "Network",
+			Name:       db.NetworkID,
+			Relation:   "USES",
+		})
+	}
 
-	rel = append(rel, models.Link{
-		ResourceID: db.FirewallID,
-		Type: "Firewall",
-		Name: db.FirewallID,
-		Relation: "USES",
-	})
+	if len(db.FirewallID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: db.FirewallID,
+			Type:       "Firewall",
+			Name:       db.FirewallID,
+			Relation:   "USES",
+		})
+	}
 
-	return rel 
+	return rel
 }
