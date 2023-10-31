@@ -13,10 +13,8 @@ import (
 )
 
 type network struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func PublicNetworks(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func PublicNetworks(_ context.Context, client providers.ProviderClient) ([]model
 				Account:    client.Name,
 				Service:    "Network",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: network.Properties.Id,
+				ResourceId: network.Id,
 				Cost:       0,
-				Name:       network.Properties.Name,
+				Name:       network.Name,
 				FetchedAt:  time.Now(),
 			})
 		}
@@ -78,9 +76,9 @@ func PrivateNetworks(_ context.Context, client providers.ProviderClient) ([]mode
 				Account:    client.Name,
 				Service:    "Network",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: network.Properties.Id,
+				ResourceId: network.Id,
 				Cost:       0,
-				Name:       network.Properties.Name,
+				Name:       network.Name,
 				FetchedAt:  time.Now(),
 			})
 		}

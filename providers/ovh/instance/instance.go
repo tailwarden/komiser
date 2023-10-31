@@ -13,10 +13,8 @@ import (
 )
 
 type instance struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Instances(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,11 +38,12 @@ func Instances(_ context.Context, client providers.ProviderClient) ([]models.Res
 				Account:    client.Name,
 				Service:    "Instance",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: instance.Properties.Id,
+				ResourceId: instance.Id,
 				Cost:       0,
-				Name:       instance.Properties.Name,
+				Name:       instance.Name,
 				FetchedAt:  time.Now(),
 			})
+			log.Println(instance)
 		}
 	}
 

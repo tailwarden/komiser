@@ -13,10 +13,8 @@ import (
 )
 
 type ip struct {
-	Properties struct {
-		Id string `json:"id"`
-		IP string `json:"ip"`
-	} `json:"properties"`
+	Id string `json:"id"`
+	IP string `json:"ip"`
 }
 
 func IPs(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func IPs(_ context.Context, client providers.ProviderClient) ([]models.Resource,
 				Account:    client.Name,
 				Service:    "IP",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: ip.Properties.Id,
+				ResourceId: ip.Id,
 				Cost:       0,
-				Name:       ip.Properties.IP,
+				Name:       ip.IP,
 				FetchedAt:  time.Now(),
 			})
 		}
@@ -78,9 +76,9 @@ func FailoverIPs(_ context.Context, client providers.ProviderClient) ([]models.R
 				Account:    client.Name,
 				Service:    "IP",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: ip.Properties.Id,
+				ResourceId: ip.Id,
 				Cost:       0,
-				Name:       ip.Properties.IP,
+				Name:       ip.IP,
 				FetchedAt:  time.Now(),
 			})
 		}

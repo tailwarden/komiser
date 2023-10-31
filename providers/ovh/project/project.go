@@ -13,10 +13,8 @@ import (
 )
 
 type project struct {
-	Properties struct {
-		ProjectId   string `json:"project_id"`
-		ProjectName string `json:"projectName"`
-	} `json:"properties"`
+	ProjectId   string `json:"project_id"`
+	ProjectName string `json:"projectName"`
 }
 
 func Projects(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func Projects(_ context.Context, client providers.ProviderClient) ([]models.Reso
 				Account:    client.Name,
 				Service:    "Project",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: project.Properties.ProjectId,
+				ResourceId: project.ProjectId,
 				Cost:       0,
-				Name:       project.Properties.ProjectName,
+				Name:       project.ProjectName,
 				FetchedAt:  time.Now(),
 			})
 		}

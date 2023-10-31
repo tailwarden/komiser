@@ -13,10 +13,8 @@ import (
 )
 
 type volume struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Volumes(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func Volumes(_ context.Context, client providers.ProviderClient) ([]models.Resou
 				Account:    client.Name,
 				Service:    "Volume",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: volume.Properties.Id,
+				ResourceId: volume.Id,
 				Cost:       0,
-				Name:       volume.Properties.Name,
+				Name:       volume.Name,
 				FetchedAt:  time.Now(),
 			})
 		}

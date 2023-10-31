@@ -13,10 +13,8 @@ import (
 )
 
 type sshKey struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func SSHKeys(_ context.Context, client providers.ProviderClient) ([]models.Resou
 				Account:    client.Name,
 				Service:    "SSH",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: sshKey.Properties.Id,
+				ResourceId: sshKey.Id,
 				Cost:       0,
-				Name:       sshKey.Properties.Name,
+				Name:       sshKey.Name,
 				FetchedAt:  time.Now(),
 			})
 		}

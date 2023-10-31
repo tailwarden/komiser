@@ -13,10 +13,8 @@ import (
 )
 
 type container struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Containers(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func Containers(_ context.Context, client providers.ProviderClient) ([]models.Re
 				Account:    client.Name,
 				Service:    "Container",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: container.Properties.Id,
+				ResourceId: container.Id,
 				Cost:       0,
-				Name:       container.Properties.Name,
+				Name:       container.Name,
 				FetchedAt:  time.Now(),
 			})
 		}

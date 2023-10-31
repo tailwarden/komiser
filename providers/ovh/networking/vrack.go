@@ -13,10 +13,8 @@ import (
 )
 
 type vrack struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Vracks(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func Vracks(_ context.Context, client providers.ProviderClient) ([]models.Resour
 				Account:    client.Name,
 				Service:    "Vrack",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: vrack.Properties.Id,
+				ResourceId: vrack.Id,
 				Cost:       0,
-				Name:       vrack.Properties.Name,
+				Name:       vrack.Name,
 				FetchedAt:  time.Now(),
 			})
 		}

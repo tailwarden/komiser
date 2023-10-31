@@ -13,10 +13,8 @@ import (
 )
 
 type node struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Nodes(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -47,9 +45,9 @@ func Nodes(_ context.Context, client providers.ProviderClient) ([]models.Resourc
 					Account:    client.Name,
 					Service:    "Kube",
 					Region:     client.OVHClient.Endpoint(),
-					ResourceId: node.Properties.Id,
+					ResourceId: node.Id,
 					Cost:       0,
-					Name:       node.Properties.Name,
+					Name:       node.Name,
 					FetchedAt:  time.Now(),
 				})
 			}

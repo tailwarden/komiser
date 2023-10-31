@@ -12,10 +12,8 @@ import (
 )
 
 type sslGateway struct {
-	Properties struct {
-		ServiceName string `json:"serviceName"`
-		DisplayName string `json:"displayName"`
-	} `json:"properties"`
+	ServiceName string `json:"serviceName"`
+	DisplayName string `json:"displayName"`
 }
 
 func SSLGateways(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -39,9 +37,9 @@ func SSLGateways(_ context.Context, client providers.ProviderClient) ([]models.R
 				Account:    client.Name,
 				Service:    "SSL",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: sslGateway.Properties.ServiceName,
+				ResourceId: sslGateway.ServiceName,
 				Cost:       0,
-				Name:       sslGateway.Properties.DisplayName,
+				Name:       sslGateway.DisplayName,
 				FetchedAt:  time.Now(),
 			})
 		}

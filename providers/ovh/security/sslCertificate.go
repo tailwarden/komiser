@@ -12,10 +12,8 @@ import (
 )
 
 type sslCert struct {
-	Properties struct {
-		ServiceName string `json:"serviceName"`
-		CN          string `json:"commonName"`
-	} `json:"properties"`
+	ServiceName string `json:"serviceName"`
+	CN          string `json:"commonName"`
 }
 
 func SSLCertificates(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -39,9 +37,9 @@ func SSLCertificates(_ context.Context, client providers.ProviderClient) ([]mode
 				Account:    client.Name,
 				Service:    "SSL",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: sslCert.Properties.ServiceName,
+				ResourceId: sslCert.ServiceName,
 				Cost:       0,
-				Name:       sslCert.Properties.CN,
+				Name:       sslCert.CN,
 				FetchedAt:  time.Now(),
 			})
 		}

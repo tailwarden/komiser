@@ -13,10 +13,8 @@ import (
 )
 
 type image struct {
-	Properties struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"properties"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Images(_ context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -40,9 +38,9 @@ func Images(_ context.Context, client providers.ProviderClient) ([]models.Resour
 				Account:    client.Name,
 				Service:    "Image",
 				Region:     client.OVHClient.Endpoint(),
-				ResourceId: image.Properties.Id,
+				ResourceId: image.Id,
 				Cost:       0,
-				Name:       image.Properties.Name,
+				Name:       image.Name,
 				FetchedAt:  time.Now(),
 			})
 		}
