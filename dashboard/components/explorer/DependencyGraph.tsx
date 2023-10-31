@@ -16,6 +16,9 @@ import EmptyState from '@components/empty-state/EmptyState';
 
 import Tooltip from '@components/tooltip/Tooltip';
 import WarningIcon from '@components/icons/WarningIcon';
+import useInventory from '@components/inventory/hooks/useInventory/useInventory';
+import settingsService from '@services/settingsService';
+import InventorySidePanel from '@components/inventory/components/InventorySidePanel';
 import { ReactFlowData } from './hooks/useDependencyGraph';
 import {
   edgeAnimationConfig,
@@ -37,8 +40,37 @@ nodeHtmlLabel(Cytoscape.use(COSEBilkent));
 Cytoscape.use(popper);
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const [initDone, setInitDone] = useState(false);
-
   const dataIsEmpty: boolean = data.nodes.length === 0;
+
+  const {
+    openModal,
+    isOpen,
+    closeModal,
+    data: inventoryItem,
+    page,
+    goTo,
+    tags,
+    handleChange,
+    addNewTag,
+    removeTag,
+    updateTags,
+    loading,
+    deleteLoading,
+    bulkItems,
+    updateBulkTags
+  } = useInventory();
+
+  // opens modal to display details of clicked node
+  const handleNodeClick = async (event: EventObject) => {
+    const nodeData = event.target.data();
+    settingsService.getResourceById(`?resourceId=${nodeData.id}`).then(res => {
+      if (res === Error) {
+        console.log('Error retrieving resource by id');
+      } else {
+        openModal(res);
+      }
+    });
+  };
 
   // Type technically is Cytoscape.EdgeCollection but that throws an unexpected error
   const loopAnimation = (eles: any) => {
@@ -81,6 +113,8 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       cy.nodes().roots().addClass('root');
       // Animate edges
       cy.edges().forEach(loopAnimation);
+      // Add a click event listener to the Cytoscape graph
+      cy.on('tap', 'node', handleNodeClick);
 
       // Add hover tooltip on edges
       cy.edges().bind('mouseover', event => {
@@ -141,12 +175,13 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
-      {/* <CytoscapeComponent
+      <CytoscapeComponent
         className="h-full w-full"
         elements={CytoscapeComponent.normalizeElements({
           nodes: data.nodes,
           edges: data.edges
         })}
+        // forEach={(data.nodes, node => {console.log(node)})}
         maxZoom={maxZoom}
         minZoom={minZoom}
         layout={graphLayoutConfig}
@@ -165,7 +200,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           }
         ]}
         cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
-      /> */}
+      />
       {dataIsEmpty ? (
         <>
           <div className="translate-y-[201px]">
@@ -216,6 +251,24 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           </div>
         )}
       </div>
+      {/* Modal */}
+      <InventorySidePanel
+        isOpen={isOpen}
+        closeModal={closeModal}
+        data={inventoryItem}
+        goTo={goTo}
+        page={page}
+        updateTags={updateTags}
+        tags={tags}
+        tabs={['resource details', 'tags']}
+        handleChange={handleChange}
+        removeTag={removeTag}
+        addNewTag={addNewTag}
+        loading={loading}
+        deleteLoading={deleteLoading}
+        bulkItems={bulkItems}
+        updateBulkTags={updateBulkTags}
+      />
     </div>
   );
 };
