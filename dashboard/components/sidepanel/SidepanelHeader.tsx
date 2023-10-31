@@ -1,32 +1,83 @@
+import { ReactNode } from 'react';
+import ArrowLeftIcon from '@components/icons/ArrowLeftIcon';
+import HyperLinkIcon from '@components/icons/HyperLinkIcon';
 import Button from '../button/Button';
 
-type SidepanelHeaderProps = {
+export type SidepanelHeaderProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
+  href?: string;
+  imgSrc?: string;
+  imgAlt?: string;
+  children?: ReactNode;
   closeModal: () => void;
   deleteAction?: () => void;
+  goBack?: () => void;
   deleteLabel?: string;
 };
 
 function SidepanelHeader({
   title,
   subtitle,
+  href,
+  imgSrc,
+  imgAlt,
+  children,
   closeModal,
   deleteAction,
-  deleteLabel
+  deleteLabel,
+  goBack
 }: SidepanelHeaderProps) {
   return (
-    <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
-      <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
-        <div className="flex flex-col gap-1 py-1">
-          <p className="... w-48 truncate font-medium text-black-900">
-            {title}
-          </p>
-          <p className="flex items-center gap-2 text-xs text-black-300">
-            {subtitle}
-          </p>
+    <div
+      className={`flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap ${
+        subtitle && 'pt-2'
+      }`}
+    >
+      {title && subtitle && (
+        <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
+          {imgSrc && (
+            <picture className="flex-shrink-0">
+              <img
+                src={imgSrc}
+                className="h-10 w-10 rounded-full"
+                alt={imgAlt}
+              />
+            </picture>
+          )}
+          <div className="flex flex-col gap-0.5">
+            <p className="font-['Noto Sans'] inline-flex w-48 items-center gap-2 truncate text-base font-medium leading-normal text-neutral-900">
+              {title}
+              <a
+                target="_blank"
+                href={href}
+                rel="noreferrer"
+                className="hover:text-primary"
+              >
+                <HyperLinkIcon />
+              </a>
+            </p>
+            <p className="font-['Noto Sans'] text-xs font-normal text-neutral-500">
+              {subtitle}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
+
+      {title && !subtitle && (
+        <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
+          <button type="button" onClick={goBack}>
+            <ArrowLeftIcon className="h-6 w-6" />
+          </button>
+          <div className="flex flex-col gap-0.5">
+            <p className="font-['Noto Sans'] text-center text-xl font-semibold leading-loose text-neutral-900">
+              {title}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {children}
 
       <div className="flex flex-shrink-0 items-center gap-4">
         {deleteAction && (

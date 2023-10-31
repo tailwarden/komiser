@@ -1,4 +1,4 @@
-type SidepanelTabsProps = {
+export type SidepanelTabsProps = {
   goTo: (page: any) => void;
   page: string;
   tabs: string[];
@@ -19,7 +19,8 @@ function SidepanelTabs({ goTo, page, tabs }: SidepanelTabsProps) {
                          : 'border-transparent hover:text-komiser-700'
                      }`}
             >
-              {tab}
+              {tab.charAt(0).toUpperCase() + tab.slice(1).toLowerCase()}{' '}
+              {/* capitalize first letter */}
             </a>
           </li>
         ))}
