@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/civo/civogo"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
@@ -76,6 +77,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			monthlyCost += instanceMonthlyCost
 		}
 
+		relation := getKubernetesRelation(cluster)
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
@@ -86,6 +88,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			Name:       cluster.Name,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
+			Relations: relation,
 			CreatedAt:  cluster.CreatedAt,
 			Link:       fmt.Sprintf("https://dashboard.civo.com/kubernetes/%s", cluster.ID),
 		})
@@ -99,4 +102,34 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getKubernetesRelation(k8s civogo.KubernetesCluster) []models.Link {
+
+	var rel []models.Link
+
+	for _, inst := range k8s.Instances {
+		rel = append(rel, models.Link{
+			ResourceID: inst.ID,
+			Type: "Instance",
+			Name: inst.Hostname,
+			Relation: "USES",
+		})
+	}
+
+	rel = append(rel, models.Link{
+		ResourceID: k8s.NetworkID,
+		Type: "Network",
+		Name: k8s.NetworkID,
+		Relation: "USES",
+	})
+
+	rel = append(rel, models.Link{
+		ResourceID: k8s.FirewallID,
+		Type: "Firewall",
+		Name: k8s.FirewallID,
+		Relation: "USES",
+	})
+
+	return rel 
 }

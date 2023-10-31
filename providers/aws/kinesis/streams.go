@@ -36,7 +36,12 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	kinesisClient := kinesis.NewFromConfig(*client.AWSClient)
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+
+	tempRegion := client.AWSClient.Region
+	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = tempRegion
+
 	priceMap, err := retrievePriceMap(ctx, pricingClient, client.AWSClient.Region)
 	if err != nil {
 		return resources, err

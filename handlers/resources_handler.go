@@ -429,3 +429,16 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, out)
 
 }
+
+func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
+	resourceId := c.Query("resourceId")
+
+	var resource Resource
+
+	err := handler.db.NewSelect().Model(&resource).Where("resource_id = ?", resourceId).Scan(handler.ctx)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
+	}
+
+	c.JSON(http.StatusOK, resource)
+}

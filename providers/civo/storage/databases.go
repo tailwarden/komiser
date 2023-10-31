@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/civo/civogo"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
@@ -31,6 +32,7 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 		monthlyCost := float64((resourceInGB / 20) * (20 + (resource.Nodes-1)*15))
 
+		relations := getDatabaseRelation(resource)
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
@@ -39,6 +41,7 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 			ResourceId: resource.ID,
 			Name:       resource.Name,
 			Cost:       monthlyCost,
+			Relations:  relations,
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://dashboard.civo.com/databases/%s", resource.ID),
 		})
@@ -52,4 +55,29 @@ func Databases(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getDatabaseRelation(db civogo.Database) []models.Link {
+
+	var rel []models.Link
+
+	if len(db.NetworkID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: db.NetworkID,
+			Type:       "Network",
+			Name:       db.NetworkID,
+			Relation:   "USES",
+		})
+	}
+
+	if len(db.FirewallID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: db.FirewallID,
+			Type:       "Firewall",
+			Name:       db.FirewallID,
+			Relation:   "USES",
+		})
+	}
+
+	return rel
 }
