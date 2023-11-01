@@ -34,7 +34,7 @@ package:
 
 ## test: Run tests.
 test:
-	go test -v $(go list ./... | grep -v /dashboard/)
+	go test ./... | grep -v /dashboard/
 
 ## version: Show version.
 version:

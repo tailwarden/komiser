@@ -34,7 +34,7 @@ function useInventory() {
   const [shouldFetchMore, setShouldFetchMore] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<InventoryItem>();
-  const [page, setPage] = useState<Pages>('tags');
+  const [page, setPage] = useState<Pages>('resource details');
   const [tags, setTags] = useState<Tag[]>();
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -461,7 +461,7 @@ function useInventory() {
    */
   function cleanModal() {
     setData(undefined);
-    setPage('tags');
+    setPage('resource details');
   }
 
   /** Opens the modal, as well as:

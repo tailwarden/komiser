@@ -64,10 +64,16 @@ export const nodeStyeConfig = {
   'text-opacity': 1,
   'font-size': 17,
   'background-color': 'white',
-  'background-image': node =>
-    node.data('provider') === 'AWS'
-      ? '/assets/img/dependency-graph/aws-node.svg'
-      : '',
+  'background-image': node => {
+    switch (node.data('provider')) {
+      case 'AWS':
+        return '/assets/img/dependency-graph/aws-node.svg';
+      case 'Civo':
+        return '/assets/img/dependency-graph/civo-node.svg';
+      default:
+        return '';
+    }
+  },
   'background-height': 20,
   'background-width': 20,
   'border-color': '#EDEBEE',
