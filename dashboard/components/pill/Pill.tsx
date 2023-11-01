@@ -49,10 +49,14 @@ function Pill({ status, children, textcase = 'lowercase' }: PillProps) {
 
   return (
     <div
-      className={`inline-flex items-start justify-start gap-2.5 rounded-3xl px-1.5 pb-1 pt-0.5 ${handleColor().background}`}
+      className={`inline-flex items-start justify-start gap-2.5 rounded-3xl px-1.5 pb-1 pt-0.5 ${
+        handleColor().background
+      }`}
     >
       <p
-        className={`${handleColor().text} font-sans text-xs font-normal ${textcase}`}
+        className={`${
+          handleColor().text
+        } font-sans text-xs font-normal ${textcase}`}
       >
         {children}
       </p>

@@ -1,13 +1,12 @@
 import SidepanelHeader from '@components/sidepanel/SidepanelHeader';
 import SidepanelPage from '@components/sidepanel/SidepanelPage';
 import Pill from '@components/pill/Pill';
-import formatNumber from '../../../utils/formatNumber';
-import platform from '@utils/providerHelper';
-import Button from '../../button/Button';
-import CloseIcon from '../../icons/CloseIcon';
-import PlusIcon from '../../icons/PlusIcon';
-import Sidepanel from '../../sidepanel/Sidepanel';
-import SidepanelTabs from '../../sidepanel/SidepanelTabs';
+import Button from '@components/button/Button';
+import CloseIcon from '@components/icons/CloseIcon';
+import PlusIcon from '@components/icons/PlusIcon';
+import Sidepanel from '@components/sidepanel/Sidepanel';
+import SidepanelTabs from '@components/sidepanel/SidepanelTabs';
+import formatNumber from '@utils/formatNumber';
 import {
   InventoryItem,
   Pages,
@@ -84,8 +83,7 @@ function InventorySidePanel({
             subtitle={data.name}
             closeModal={closeModal}
             href={data.link}
-            imgSrc={platform.getImgSrc(data.provider)}
-            imgAlt={data.provider}
+            cloudProvider={data.provider}
           >
             {!data && bulkItems && (
               <div className="flex flex-col gap-1 py-1">
