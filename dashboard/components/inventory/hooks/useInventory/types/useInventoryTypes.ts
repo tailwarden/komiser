@@ -40,6 +40,7 @@ export type Tag = {
 };
 
 export type InventoryItem = {
+  relations: any[];
   account: string;
   accountId: string;
   cost: number;
@@ -55,7 +56,7 @@ export type InventoryItem = {
   service: string;
   tags: Tag[] | [] | null;
 };
-export type Pages = 'tags' | 'delete';
+export type Pages = 'resource details' | 'tags' | 'delete';
 
 export type View = {
   id: number;
