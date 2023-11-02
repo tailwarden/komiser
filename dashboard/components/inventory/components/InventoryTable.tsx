@@ -1,8 +1,8 @@
 import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
+import Avatar from '@components/avatar/Avatar';
 import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
 import {
@@ -118,13 +118,7 @@ function InventoryTable({
                         className="min-w-[7rem] cursor-pointer py-4 pl-2 pr-6"
                       >
                         <div className="flex items-center gap-3">
-                          <picture className="flex-shrink-0">
-                            <img
-                              src={providers.providerImg(item.provider)}
-                              className="h-6 w-6 rounded-full"
-                              alt={item.provider}
-                            />
-                          </picture>
+                          <Avatar avatarName={item.provider} />
                           <span>{item.provider}</span>
                         </div>
                       </td>
@@ -203,13 +197,7 @@ function InventoryTable({
                         className="min-w-[7rem] cursor-pointer py-4 pl-2 pr-6"
                       >
                         <div className="flex items-center gap-3">
-                          <picture className="flex-shrink-0">
-                            <img
-                              src={providers.providerImg(item.provider)}
-                              className="h-6 w-6 rounded-full"
-                              alt={item.provider}
-                            />
-                          </picture>
+                          <Avatar avatarName={item.provider} />
                           <span>{item.provider}</span>
                         </div>
                       </td>

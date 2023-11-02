@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import { NextRouter } from 'next/router';
 import { ToastProps } from '@components/toast/Toast';
+import Avatar from '@components/avatar/Avatar';
 import formatNumber from '../../../../utils/formatNumber';
-import providers, { Provider } from '../../../../utils/providerHelper';
+import { Provider } from '../../../../utils/providerHelper';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import AlertIcon from '../../../icons/AlertIcon';
@@ -223,15 +224,7 @@ function InventoryView({
                         </td>
                         <td className="py-4 pl-2 pr-6">
                           <div className="flex items-center gap-2">
-                            <picture className="flex-shrink-0">
-                              <img
-                                src={providers.providerImg(
-                                  item.provider as Provider
-                                )}
-                                className="h-6 w-6 rounded-full"
-                                alt={item.provider}
-                              />
-                            </picture>
+                            <Avatar avatarName={item.provider as Provider} />
                             <span>{item.provider}</span>
                           </div>
                         </td>
