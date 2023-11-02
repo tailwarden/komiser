@@ -98,7 +98,7 @@ const providers = {
     }
 
     if (arg.toLowerCase() === 'ovh') {
-      label = 'OVH';
+      label = 'OVHcloud';
     }
 
     return label;
