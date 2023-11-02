@@ -1,8 +1,8 @@
 import { NextRouter } from 'next/router';
 import { ReactNode, useContext } from 'react';
 
+import platform, { allProviders } from '@utils/providerHelper';
 import GlobalAppContext from '../../layout/context/GlobalAppContext';
-import Providers, { allProviders } from '../../../utils/providerHelper';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 
 type CloudAccountsLayoutProps = {
@@ -73,7 +73,7 @@ function CloudAccountsLayout({
                   >
                     <div className={isActive ? 'ml-[-2px]' : ''}>
                       <p className="w-[188px] truncate">
-                        {Providers.providerLabel(provider)}
+                        {platform.getLabel(provider)}
                       </p>
                     </div>
                   </button>
