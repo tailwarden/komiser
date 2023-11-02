@@ -3,10 +3,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import ProviderCls, {
-  allProviders,
-  Provider
-} from '../../utils/providerHelper';
+import Avatar from '@components/avatar/Avatar';
+import platform, { allProviders, Provider } from '../../utils/providerHelper';
 
 import Button from '../../components/button/Button';
 import OnboardingWizardLayout, {
@@ -57,7 +55,7 @@ export default function ChooseCloud() {
               values={Object.values(allProviders)}
               handleChange={handleSelectChange}
               displayValues={Object.values(allProviders).map(value => ({
-                label: ProviderCls.providerLabel(value)
+                label: platform.getLabel(value)
               }))}
             />
           </div>
@@ -93,13 +91,7 @@ export default function ChooseCloud() {
               height={120}
             />
             <div className="absolute left-[48%] top-[53%] -translate-x-1/2 -translate-y-1/2 transform rounded-full">
-              <Image
-                src={ProviderCls.providerImg(provider) as string}
-                alt={`${provider} Logo`}
-                className="rounded-full shadow-md"
-                width={95}
-                height={95}
-              />
+              <Avatar avatarName={provider} size={96} />
             </div>
           </div>
           <Image
