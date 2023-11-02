@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/civo/civogo"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
@@ -49,6 +50,8 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			duration = currentTime.Sub(resource.CreatedAt)
 		}
 
+		relations := getComputeRelations(resource) 
+
 		monthlyCost := hourlyPrice * float64(duration.Hours())
 
 		resources = append(resources, models.Resource{
@@ -62,6 +65,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 			FetchedAt:  time.Now(),
 			CreatedAt:  resource.CreatedAt,
 			Tags:       tags,
+			Relations: relations,
 			Link:       fmt.Sprintf("https://dashboard.civo.com/instances/%s", resource.ID),
 		})
 	}
@@ -74,4 +78,15 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getComputeRelations(compute civogo.Instance) []models.Link {
+	return []models.Link{
+		{
+			ResourceID: compute.NetworkID,
+			Type: "Network",
+			Name: compute.NetworkID, //cannot get the name of the network unless calling the network api
+			Relation: "USES",
+		},
+	}
 }
