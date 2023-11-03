@@ -15,7 +15,7 @@ function Banner({ githubStars }: BannerProps) {
   return (
     <div
       className={classNames(
-        'top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3 opacity-0',
+        'from-primary to-secondary top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br py-3 opacity-0',
         {
           fixed: displayBanner,
           hidden: !displayBanner
@@ -44,7 +44,7 @@ function Banner({ githubStars }: BannerProps) {
             <StarIcon
               width={16}
               height={16}
-              className="group-hover:fill-warning-600 group-hover:text-warning-600"
+              className="group-hover:fill-orange-400 group-hover:text-orange-400"
             />
             {formatNumber(githubStars)}
           </div>
@@ -53,7 +53,7 @@ function Banner({ githubStars }: BannerProps) {
 
       <button
         onClick={dismissBanner}
-        className="absolute right-8 cursor-pointer rounded-lg p-3 text-white transition-colors hover:bg-white/10 active:bg-black-900/10"
+        className="absolute right-8 cursor-pointer rounded-lg p-3 text-white transition-colors hover:bg-white/10 active:bg-gray-950"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

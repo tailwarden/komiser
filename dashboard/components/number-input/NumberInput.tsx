@@ -88,8 +88,8 @@ function NumberInput({
           name={name}
           className={`peer w-full rounded bg-white px-12 py-[0.75rem] ${
             label && 'pt-[1.75rem]'
-          } text-center text-sm text-neutral-900 caret-primary outline outline-[0.063rem] outline-black-200 focus:outline-[0.12rem] focus:outline-primary ${
-            isValid === false && `outline-error-600 focus:outline-error-600`
+          } text-neutral-900 caret-primary focus:outline-primary text-center text-sm outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] ${
+            isValid === false && `outline-red-500 focus:outline-red-500`
           }`}
           type="number"
           placeholder=" "
@@ -120,13 +120,13 @@ function NumberInput({
           <PlusIcon className={iconStyle} />
         </button>
         {label && (
-          <span className="font-['Noto Sans'] pointer-events-none absolute bottom-[1.925rem] left-1/2 -translate-x-1/2 select-none text-xs font-normal text-neutral-500 transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem]">
+          <span className="font-['Noto Sans'] text-neutral-500 pointer-events-none absolute bottom-[1.925rem] left-1/2 -translate-x-1/2 select-none text-xs font-normal transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem]">
             {label}
           </span>
         )}
       </div>
       {isValid === false && (
-        <p className="mt-2 text-xs text-error-600">{error}</p>
+        <p className="mt-2 text-xs text-red-500">{error}</p>
       )}
     </div>
   );

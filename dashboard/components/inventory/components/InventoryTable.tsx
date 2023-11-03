@@ -136,7 +136,7 @@ function InventoryTable({
                         <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
-                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 px-4 py-3 text-xs text-black-200 shadow-lg group-hover:flex">
+                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-gray-950 px-4 py-3 text-xs text-gray-300 shadow-lg group-hover:flex">
                           {item.name}
                         </div>
                       </td>
@@ -215,7 +215,7 @@ function InventoryTable({
                         <p className="... w-56 truncate 2xl:w-96">
                           {item.name}
                         </p>
-                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-black-900 px-4 py-3 text-xs text-black-200 shadow-lg group-hover:flex">
+                        <div className="absolute left-4 top-12 z-10 hidden flex-col gap-2 rounded-lg bg-gray-950 px-4 py-3 text-xs text-gray-300 shadow-lg group-hover:flex">
                           {item.name}
                         </div>
                       </td>

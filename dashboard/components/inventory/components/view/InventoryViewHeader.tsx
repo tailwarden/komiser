@@ -75,7 +75,7 @@ function InventoryViewHeader({
     <div className="absolute -top-14 left-0">
       {currentView && (
         <>
-          <div className="flex items-center gap-2 text-lg font-medium text-black-900">
+          <div className="flex items-center gap-2 text-lg font-medium text-gray-950">
             <span>{currentView.name}</span>
             <Button style="ghost" size="xxs" onClick={openDropdown}>
               <ChevronDownIcon width={16} height={16} />
@@ -86,7 +86,7 @@ function InventoryViewHeader({
             <>
               <div
                 onClick={closeDropdown}
-                className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
+                className="bg-transparent fixed inset-0 z-20 hidden animate-fade-in opacity-0 sm:block"
               ></div>
               <div className="absolute left-0 top-10 z-[21] inline-flex w-[16rem] rounded-lg bg-white p-4 text-sm shadow-xl">
                 <div className="flex w-full flex-col gap-1">
@@ -145,7 +145,7 @@ function InventoryViewHeader({
                     Copy view link
                   </Button>
                   <ExportCSV showToast={showToast} />
-                  <span className="m-2 -mx-4 border-b border-black-200/40"></span>
+                  <span className="m-2 -mx-4 border-b border-gray-300"></span>
                   <Button
                     style="dropdown"
                     size="sm"
@@ -166,14 +166,14 @@ function InventoryViewHeader({
           <Modal isOpen={modalIsOpen} closeModal={closeDoubleConfirmationModal}>
             <div className="flex w-full flex-col gap-6 rounded-lg">
               <div className="flex flex-col gap-6">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-error-100 text-error-600">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-500">
                   <WarningIcon width={24} height={24} />
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-center text-lg font-medium text-black-900">
+                  <p className="text-center text-lg font-medium text-gray-950">
                     Are you sure you want to delete this view?
                   </p>
-                  <p className="text-sm text-black-400">
+                  <p className="text-sm text-gray-700">
                     This is a permanent action.
                   </p>
                 </div>

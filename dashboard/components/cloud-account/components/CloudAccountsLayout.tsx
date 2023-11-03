@@ -34,8 +34,8 @@ function CloudAccountsLayout({
           className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 !router.query.view
-                  ? 'border-l-2 border-primary bg-komiser-150 text-primary'
-                  : 'text-black-400 transition-colors hover:bg-komiser-100'
+                  ? 'border-primary text-primary border-l-2 bg-cyan-100'
+                  : 'text-gray-700 transition-colors hover:bg-gray-50'
               }
             `}
         >
@@ -66,8 +66,8 @@ function CloudAccountsLayout({
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 isActive
-                  ? 'border-l-2 border-primary bg-komiser-150 text-primary'
-                  : 'text-black-400 transition-colors hover:bg-komiser-100'
+                  ? 'border-primary text-primary border-l-2 bg-cyan-100'
+                  : 'text-gray-700 transition-colors hover:bg-gray-50'
               }
             `}
                   >

@@ -22,7 +22,7 @@ module.exports = {
         900: '#0E3838',
         950: '#051313'
       },
-      darkCyan: {
+      darkcyan: {
         50: '#EDFAFA',
         100: '#E2F6F6',
         200: '#B6EAEA',
@@ -112,6 +112,12 @@ module.exports = {
         800: '#5F4585',
         900: '#4B3966',
         950: '#372B4A'
+      },
+      background: {
+        DEFAULT: '#F2FFFF',
+        base: '#F2F7F8',
+        disabled: '#EFEDF1',
+        ds: '#F5F5F5' /* ds => design-system */
       }
     },
     extend: {
@@ -245,3 +251,7 @@ module.exports = {
   },
   plugins: []
 };
+
+// TODO:
+// add gradients
+// add box-shadows

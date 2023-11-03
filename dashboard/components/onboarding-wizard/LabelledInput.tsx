@@ -34,7 +34,7 @@ function LabelledInput({
       </label>
 
       {subLabel && (
-        <span className="-mt-[5px] mb-2 block text-xs leading-4 text-black-400">
+        <span className="-mt-[5px] mb-2 block text-xs leading-4 text-gray-700">
           {subLabel}
         </span>
       )}
@@ -53,7 +53,7 @@ function LabelledInput({
           disabled={disabled}
           placeholder={placeholder}
           required={required}
-          className={`block w-full rounded py-[14.5px] text-sm text-black-900 outline outline-black-200 focus:outline-2 focus:outline-primary ${
+          className={`focus:outline-primary block w-full rounded py-[14.5px] text-sm text-gray-950 outline outline-gray-300 focus:outline-2 ${
             icon ? 'pl-10' : 'pl-3'
           }`}
           onChange={onChange}

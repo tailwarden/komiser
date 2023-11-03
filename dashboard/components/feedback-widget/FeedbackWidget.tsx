@@ -161,10 +161,10 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           id={FEEDBACK_MODAL_ID}
         >
           <div className="w-[546px]">
-            <h3 className="text-lg font-bold text-black-900">
+            <h3 className="text-lg font-bold text-gray-950">
               Describe your issue
             </h3>
-            <p className="text-base text-black-400">
+            <p className="text-base text-gray-700">
               By providing details of the issue you’ve encountered and outlining
               the steps to reproduce it, we’ll be able to give you better
               support.
@@ -185,7 +185,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 disabled={isSendingFeedback}
                 rows={13}
                 placeholder={textAreaPlaceholder}
-                className="peer mt-4 w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-black-900 caret-primary outline outline-[0.063rem] outline-black-200 focus:outline-[0.12rem] focus:outline-primary"
+                className="caret-primary focus:outline-primary peer mt-4 w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-gray-950 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem]"
                 onChange={event => updateDescription(event?.target?.value)}
                 value={description}
                 required
@@ -196,7 +196,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                     <>
                       <div
                         onClick={() => takeScreenshot()}
-                        className="flex-1 grow cursor-pointer rounded border-2 border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100"
+                        className="flex-1 grow cursor-pointer rounded border-2 border-gray-200 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-gray-50"
                       >
                         <svg
                           className="mb-2 inline-block"
@@ -242,7 +242,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                             : 'Capture current screen'}
                         </p>
                       </div>
-                      <span className="self-center justify-self-center text-sm text-black-400">
+                      <span className="self-center justify-self-center text-sm text-gray-700">
                         or
                       </span>
                     </>
@@ -277,7 +277,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 </div>
               </div>
               <div className="mt-4 flex justify-between">
-                <p className="text-xs text-black-400">
+                <p className="text-xs text-gray-700">
                   Need in depth assistance?
                   <br />
                   Email us at{' '}

@@ -71,11 +71,11 @@ function DashboardCostExplorerCard({
 
   return (
     <div className="w-full rounded-lg bg-white px-6 py-4 pb-6">
-      <div className="-mx-6 flex flex-wrap items-center justify-between gap-4 border-b border-black-200/40 px-6 pb-4">
+      <div className="-mx-6 flex flex-wrap items-center justify-between gap-4 border-b border-gray-300 px-6 pb-4">
         <div>
-          <p className="text-sm font-semibold text-black-900">Cost explorer</p>
+          <p className="text-sm font-semibold text-gray-950">Cost explorer</p>
           <div className="mt-1"></div>
-          <p className="text-xs text-black-300">
+          <p className="text-xs text-gray-500">
             Visualise, understand, and manage your infrastructure costs and
             usage
           </p>
@@ -116,7 +116,7 @@ function DashboardCostExplorerCard({
         {chartData && <Bar data={chartData} options={options} />}
         {!chartData && (
           <div className="relative flex flex-col items-center">
-            <p className="mt-10 text-lg text-black-900">
+            <p className="mt-10 text-lg text-gray-950">
               No data for this time period
             </p>
             <Image

@@ -31,9 +31,9 @@ function Navbar() {
     <nav
       className={`fixed ${
         displayBanner ? 'top-[72px]' : 'top-0'
-      } z-30 flex w-full items-center justify-between gap-10 border-b border-black-200/30 bg-white px-6 py-4 shadow-[0_2px_9px_rgba(105,115,114,0.16)] xl:pr-8 2xl:pr-24`}
+      } z-30 flex w-full items-center justify-between gap-10 border-b border-gray-300 bg-white px-6 py-4 shadow-[0_2px_9px_rgba(105,115,114,0.16)] xl:pr-8 2xl:pr-24`}
     >
-      <div className="flex items-center gap-8 text-sm font-semibold text-black-400">
+      <div className="flex items-center gap-8 text-sm font-semibold text-gray-700">
         <Link href="/dashboard">
           <Image
             src="/assets/img/komiser.svg"
@@ -49,16 +49,16 @@ function Navbar() {
             className={
               router.pathname === navItem.href
                 ? 'text-primary'
-                : 'text-black-400'
+                : 'text-gray-700'
             }
           >
             {navItem.label}
           </Link>
         ))}
       </div>
-      <div className="flex gap-4 text-sm font-medium text-black-900 lg:gap-10">
+      <div className="flex gap-4 text-sm font-medium text-gray-950 lg:gap-10">
         <a
-          className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
+          className="hover:text-primary hidden items-center gap-2 transition-colors md:flex"
           href="https://docs.komiser.io/docs/intro?utm_source=komiser&utm_medium=referral&utm_campaign=static"
           target="_blank"
           rel="noopener noreferrer"
@@ -90,7 +90,7 @@ function Navbar() {
           Docs
         </a>
         <a
-          className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
+          className="hover:text-primary hidden items-center gap-2 transition-colors md:flex"
           href="https://www.tailwarden.com/changelog?utm_source=komiser&utm_medium=referral&utm_campaign=static"
           target="_blank"
           rel="noopener noreferrer"
@@ -121,7 +121,7 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="hidden cursor-pointer items-center gap-2 transition-colors hover:text-primary md:flex"
+          className="hover:text-primary hidden cursor-pointer items-center gap-2 transition-colors md:flex"
           rel="noopener noreferrer"
           onClick={() => openFeedbackModal()}
         >

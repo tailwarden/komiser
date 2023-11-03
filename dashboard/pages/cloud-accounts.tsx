@@ -110,7 +110,7 @@ function CloudAccounts() {
 
       {/* Delete Modal */}
       <Modal isOpen={isDeleteModalOpen} closeModal={() => closeRemoveModal()}>
-        <div className="flex max-w-xl flex-col gap-y-6 p-8 text-black-400">
+        <div className="flex max-w-xl flex-col gap-y-6 p-8 text-gray-700">
           {cloudAccountItem && (
             <CloudAccountDeleteContents
               cloudAccount={cloudAccountItem}

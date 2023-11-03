@@ -66,8 +66,8 @@ function Input({
       <div className="relative">
         <input
           name={name}
-          className={`peer w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-black-900 caret-primary outline outline-[0.063rem] outline-black-200 focus:outline-[0.12rem] focus:outline-primary ${
-            isValid === false && `outline-error-600 focus:outline-error-600`
+          className={`caret-primary focus:outline-primary peer w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-gray-950 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] ${
+            isValid === false && `outline-red-500 focus:outline-red-500`
           }`}
           placeholder=" "
           onFocus={handleFocus}
@@ -86,12 +86,12 @@ function Input({
           data-form-type="other"
           {...otherProps}
         />
-        <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-black-300 transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
+        <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-gray-500 transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
           {label}
         </span>
       </div>
       {isValid === false && (
-        <p className="mt-2 text-xs text-error-600">{error}</p>
+        <p className="mt-2 text-xs text-red-500">{error}</p>
       )}
     </div>
   );

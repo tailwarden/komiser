@@ -102,13 +102,13 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
             return `<div><p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center" title="${
+                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-gray-900 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center" title="${
                    templateData.label
                  }">${templateData.label || '&nbsp;'}</p>
               <p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
                  0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin" title="${
+                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-gray-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin" title="${
                    templateData.label
                  }">${templateData.service || '&nbsp;'}</p></div>`;
           }
@@ -277,7 +277,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       )}
       <div className="absolute bottom-0 w-full">
         <div className="flex w-full flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <div className="flex gap-2 overflow-visible bg-black-100 text-black-400">
+          <div className="flex gap-2 overflow-visible bg-gray-50 text-gray-700">
             {data?.nodes?.length} Resources
             {!dataIsEmpty && (
               <div className="relative">
@@ -290,7 +290,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           </div>
           <div className="flex max-h-11 gap-4">
             <button
-              className={`peer relative flex items-center rounded border-[1.2px] border-black-200 bg-white p-2.5 ${
+              className={`peer relative flex items-center rounded border-[1.2px] border-gray-300 bg-white p-2.5 ${
                 isNodeDraggingEnabled && 'border-primary'
               }`}
               onClick={toggleNodeDragging}
@@ -313,7 +313,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
                 maxLength={3}
               />
               <span
-                className={`absolute left-1/2 top-1/2 ${translateXClass} -translate-y-1/2 text-sm text-neutral-900`}
+                className={`absolute left-1/2 top-1/2 ${translateXClass} text-neutral-900 -translate-y-1/2 text-sm`}
               >
                 %
               </span>
