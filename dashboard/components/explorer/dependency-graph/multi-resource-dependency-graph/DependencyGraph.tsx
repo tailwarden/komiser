@@ -19,7 +19,7 @@ import WarningIcon from '@components/icons/WarningIcon';
 import useInventory from '@components/inventory/hooks/useInventory/useInventory';
 import settingsService from '@services/settingsService';
 import InventorySidePanel from '@components/inventory/components/InventorySidePanel';
-import { ReactFlowData } from './hooks/useDependencyGraph';
+import { ReactFlowData } from '../hooks/useDependencyGraph';
 import {
   edgeAnimationConfig,
   edgeStyleConfig,
@@ -30,7 +30,7 @@ import {
   nodeHTMLLabelConfig,
   nodeStyeConfig,
   zoomLevelBreakpoint
-} from './config';
+} from '../config';
 
 export type DependencyGraphProps = {
   data: ReactFlowData;

@@ -173,7 +173,7 @@ export default function Inventory() {
           deleteLoading={deleteLoading}
           bulkItems={bulkItems}
           updateBulkTags={updateBulkTags}
-          tabs={['resource details', 'tags']}
+          tabs={['resource details', 'tags', 'relations']}
         />
 
         {/* Error state */}

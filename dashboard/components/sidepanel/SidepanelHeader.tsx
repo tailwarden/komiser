@@ -46,7 +46,7 @@ function SidepanelHeader({
             </picture>
           )}
           <div className="flex flex-col gap-0.5">
-            <p className="font-['Noto Sans'] inline-flex w-48 items-center gap-2 truncate text-base font-medium leading-normal text-neutral-900">
+            <p className=" inline-flex w-48 items-center gap-2 truncate text-base font-medium leading-normal text-neutral-900">
               {title}
               <a
                 target="_blank"
@@ -57,9 +57,7 @@ function SidepanelHeader({
                 <HyperLinkIcon />
               </a>
             </p>
-            <p className="font-['Noto Sans'] text-xs font-normal text-neutral-500">
-              {subtitle}
-            </p>
+            <p className="text-xs font-normal text-neutral-500">{subtitle}</p>
           </div>
         </div>
       )}
@@ -70,7 +68,7 @@ function SidepanelHeader({
             <ArrowLeftIcon className="h-6 w-6" />
           </button>
           <div className="flex flex-col gap-0.5">
-            <p className="font-['Noto Sans'] text-center text-xl font-semibold leading-loose text-neutral-900">
+            <p className="text-center text-xl font-semibold leading-loose text-neutral-900">
               {title}
             </p>
           </div>

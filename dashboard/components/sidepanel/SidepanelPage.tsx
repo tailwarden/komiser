@@ -21,7 +21,7 @@ function SidepanelPage({
             container ? 'rounded-lg bg-black-100 p-6' : ' h-full overflow-auto'
           }
         >
-          <div className="flex flex-col gap-6">{children}</div>
+          <div className="flex h-full flex-col gap-6">{children}</div>
         </div>
       )}
     </>

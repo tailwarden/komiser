@@ -1,6 +1,7 @@
 import SidepanelHeader from '@components/sidepanel/SidepanelHeader';
 import SidepanelPage from '@components/sidepanel/SidepanelPage';
 import Pill from '@components/pill/Pill';
+import SingleDependencyGraphWrapper from '@components/explorer/dependency-graph/single-resource-graph-dependency-graph/SingleDependencyGraphWrapper';
 import formatNumber from '../../../utils/formatNumber';
 import providers from '../../../utils/providerHelper';
 import Button from '../../button/Button';
@@ -53,8 +54,16 @@ function InventorySidePanel({
   const getLastFetched = (date: string) => {
     const dateLastFetched = new Date(date);
     const today = new Date();
-    const aMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-    const aWeekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    const aMonthAgo = new Date(
+      today.getFullYear(),
+      today.getMonth() - 1,
+      today.getDate()
+    );
+    const aWeekAgo = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 7
+    );
     let message;
     if (dateLastFetched > aMonthAgo) {
       message = 'Since last month';
@@ -101,10 +110,10 @@ function InventorySidePanel({
           <SidepanelPage page={page} param={'resource details'}>
             <div className="space-y-6 pt-1">
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="text-sm font-normal leading-tight text-neutral-500">
                   Cloud account
                 </h2>
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                <h2 className="text-sm font-normal leading-tight text-neutral-900">
                   {!data && (
                     <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
                   )}
@@ -112,10 +121,10 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="text-sm font-normal leading-tight text-neutral-500">
                   Region
                 </h2>
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                <h2 className="text-sm font-normal leading-tight text-neutral-900">
                   {!data && (
                     <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
                   )}
@@ -123,7 +132,7 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="text-sm font-normal leading-tight text-neutral-500">
                   Cost
                 </h2>
                 <h2 className=" flex items-center gap-2 text-sm">
@@ -139,10 +148,10 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="text-sm font-normal leading-tight text-neutral-500">
                   Relations
                 </h2>
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                <h2 className="text-sm font-normal leading-tight text-neutral-900">
                   {!data && (
                     <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
                   )}
@@ -154,6 +163,7 @@ function InventorySidePanel({
             </div>
           </SidepanelPage>
         )}
+
         {/* Tags form */}
         {tabs.includes('tags') && (
           <SidepanelPage page={page} param={'tags'}>
@@ -225,6 +235,13 @@ function InventorySidePanel({
                 </Button>
               </div>
             </form>
+          </SidepanelPage>
+        )}
+
+        {/* Relations */}
+        {tabs.includes('relations') && (
+          <SidepanelPage page={page} param={'relations'}>
+            <SingleDependencyGraphWrapper resourceId={data?.resourceId} />
           </SidepanelPage>
         )}
         <div>

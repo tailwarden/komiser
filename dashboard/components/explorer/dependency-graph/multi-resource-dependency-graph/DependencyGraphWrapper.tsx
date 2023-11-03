@@ -7,8 +7,8 @@ import { InventoryFilterData } from '@components/inventory/hooks/useInventory/ty
 import ArrowDownIcon from '@components/icons/ArrowDownIcon';
 import EmptyState from '@components/empty-state/EmptyState';
 import DependencyGraphLoader from './DependencyGraphLoader';
-import DependendencyGraphFilter from './filter/DependendencyGraphFilter';
-import useDependencyGraph from './hooks/useDependencyGraph';
+import DependendencyGraphFilter from '../filter/DependendencyGraphFilter';
+import useDependencyGraph from '../hooks/useDependencyGraph';
 
 function DependencyGraphWrapper() {
   const {

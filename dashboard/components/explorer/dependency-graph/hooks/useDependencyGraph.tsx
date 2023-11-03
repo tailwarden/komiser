@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { InventoryFilterData } from '@components/inventory/hooks/useInventory/types/useInventoryTypes';
@@ -66,7 +66,7 @@ function GetData(res: any) {
   return d;
 }
 
-function useDependencyGraph() {
+function useDependencyGraph(resourceId?: string | null) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ReactFlowData>();
   const [error, setError] = useState(false);
@@ -76,7 +76,44 @@ function useDependencyGraph() {
 
   const router = useRouter();
 
-  function fetch() {
+  const fetchRelationsByResourceId = useCallback(
+    (id: string) => {
+      settingsService
+        .getResourceRelations(id)
+        .then(res => {
+          if (res === Error) {
+            setLoading(false);
+            setError(true);
+          } else {
+            setLoading(false);
+            setData(GetData([].concat(res)));
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [resourceId]
+  );
+
+  const fetchAllRelations = useCallback(() => {
+    settingsService
+      .getRelations(filters)
+      .then(res => {
+        if (res === Error) {
+          setLoading(false);
+          setError(true);
+        } else {
+          setLoading(false);
+          setData(GetData([].concat(res)));
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [filters]);
+
+  const fetch = useCallback(() => {
     if (!loading) {
       setLoading(true);
     }
@@ -84,17 +121,10 @@ function useDependencyGraph() {
     if (error) {
       setError(false);
     }
-
-    settingsService.getRelations(filters).then(res => {
-      if (res === Error) {
-        setLoading(false);
-        setError(true);
-      } else {
-        setLoading(false);
-        setData(GetData(res));
-      }
-    });
-  }
+    if (resourceId) {
+      fetchRelationsByResourceId(resourceId);
+    } else fetchAllRelations();
+  }, []);
 
   function deleteFilter(idx: number) {
     const updatedFilters: InventoryFilterData[] = [...filters!];
