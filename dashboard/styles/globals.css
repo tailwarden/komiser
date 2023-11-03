@@ -49,7 +49,7 @@
   transform: rotateY(180deg);
 }
 
-.dependency-graph-node-label {
+.dependency-graph-nodeLabel {
   transition: opacity 0.2s linear;
   opacity: 0;
 }
