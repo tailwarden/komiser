@@ -2,9 +2,8 @@ import SidepanelHeader from '@components/sidepanel/SidepanelHeader';
 import SidepanelPage from '@components/sidepanel/SidepanelPage';
 import Pill from '@components/pill/Pill';
 import SingleDependencyGraphWrapper from '@components/explorer/dependency-graph/single-resource-graph-dependency-graph/SingleDependencyGraphWrapper';
+import Button from '@components/button/Button';
 import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
-import Button from '../../button/Button';
 import CloseIcon from '../../icons/CloseIcon';
 import PlusIcon from '../../icons/PlusIcon';
 import Sidepanel from '../../sidepanel/Sidepanel';
@@ -85,8 +84,7 @@ function InventorySidePanel({
             subtitle={data.name}
             closeModal={closeModal}
             href={data.link}
-            imgSrc={providers.providerImg(data.provider)}
-            imgAlt={data.provider}
+            cloudProvider={data.provider}
           >
             {!data && bulkItems && (
               <div className="flex flex-col gap-1 py-1">

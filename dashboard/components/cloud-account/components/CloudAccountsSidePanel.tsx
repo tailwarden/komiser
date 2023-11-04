@@ -11,10 +11,8 @@ import OciAccountDetails from '@components/account-details/OciAccountDetails';
 import ScalewayAccountDetails from '@components/account-details/ScalewayAccountDetails';
 import { getPayloadFromForm } from '@utils/cloudAccountHelpers';
 import { ToastProps } from '@components/toast/Toast';
-import providers, {
-  allProviders,
-  Provider
-} from '../../../utils/providerHelper';
+import Avatar from '@components/avatar/Avatar';
+import { allProviders, Provider } from '../../../utils/providerHelper';
 import AwsAccountDetails from '../../account-details/AwsAccountDetails';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
@@ -132,14 +130,7 @@ function CloudAccountsSidePanel({
           <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
             {cloudAccount && (
               <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
-                <picture className="flex-shrink-0">
-                  <img
-                    src={providers.providerImg(cloudAccount.provider)}
-                    className="h-10 w-10 rounded-full"
-                    alt={cloudAccount.provider}
-                  />
-                </picture>
-
+                <Avatar avatarName={cloudAccount.provider} size={40} />
                 <div className="flex flex-col gap-1">
                   <div className="flex max-w-[14rem] items-center gap-1">
                     <p className="truncate font-medium text-black-900">

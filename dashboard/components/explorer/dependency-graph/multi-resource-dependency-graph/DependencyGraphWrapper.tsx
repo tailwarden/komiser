@@ -110,7 +110,7 @@ function DependencyGraphWrapper() {
                 );
               }}
               action={() => {
-                router.push('/');
+                router.push('/cloud-accounts');
               }}
             />
           </div>

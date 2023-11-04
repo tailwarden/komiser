@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
 import ArrowLeftIcon from '@components/icons/ArrowLeftIcon';
 import HyperLinkIcon from '@components/icons/HyperLinkIcon';
-import Button from '../button/Button';
+import Button from '@components/button/Button';
+import Avatar from '@components/avatar/Avatar';
+import { Provider } from '@utils/providerHelper';
 
 export type SidepanelHeaderProps = {
   title: string;
   subtitle?: string;
   href?: string;
-  imgSrc?: string;
-  imgAlt?: string;
+  cloudProvider?: Provider;
   children?: ReactNode;
   closeModal: () => void;
   deleteAction?: () => void;
@@ -20,8 +21,7 @@ function SidepanelHeader({
   title,
   subtitle,
   href,
-  imgSrc,
-  imgAlt,
+  cloudProvider,
   children,
   closeModal,
   deleteAction,
@@ -36,15 +36,7 @@ function SidepanelHeader({
     >
       {title && subtitle && (
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
-          {imgSrc && (
-            <picture className="flex-shrink-0">
-              <img
-                src={imgSrc}
-                className="h-10 w-10 rounded-full"
-                alt={imgAlt}
-              />
-            </picture>
-          )}
+          {cloudProvider && <Avatar avatarName={cloudProvider} size={40} />}
           <div className="flex flex-col gap-0.5">
             <p className=" inline-flex w-48 items-center gap-2 truncate text-base font-medium leading-normal text-neutral-900">
               {title}
