@@ -185,7 +185,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 disabled={isSendingFeedback}
                 rows={13}
                 placeholder={textAreaPlaceholder}
-                className="caret-primary focus:outline-primary peer mt-4 w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-gray-950 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem]"
+                className="peer mt-4 w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-gray-950 caret-darkcyan-500 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] focus:outline-darkcyan-500"
                 onChange={event => updateDescription(event?.target?.value)}
                 value={description}
                 required
@@ -283,7 +283,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   Email us at{' '}
                   <a
                     href="mailto:support@tailwarden.com"
-                    className="text-primary"
+                    className="text-darkcyan-500"
                   >
                     support@tailwarden.com
                   </a>

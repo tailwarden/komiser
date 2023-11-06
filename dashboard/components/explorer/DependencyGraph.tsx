@@ -291,7 +291,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
           <div className="flex max-h-11 gap-4">
             <button
               className={`peer relative flex items-center rounded border-[1.2px] border-gray-300 bg-white p-2.5 ${
-                isNodeDraggingEnabled && 'border-primary'
+                isNodeDraggingEnabled && 'border-darkcyan-500'
               }`}
               onClick={toggleNodeDragging}
             >

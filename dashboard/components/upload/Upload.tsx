@@ -145,7 +145,9 @@ function Upload({
             </svg>
             <p>
               Drag and drop or{' '}
-              <span className="text-primary cursor-pointer">choose a file</span>
+              <span className="cursor-pointer text-darkcyan-500">
+                choose a file
+              </span>
             </p>
           </div>
         )}

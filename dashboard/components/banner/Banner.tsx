@@ -15,7 +15,7 @@ function Banner({ githubStars }: BannerProps) {
   return (
     <div
       className={classNames(
-        'from-primary to-secondary top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br py-3 opacity-0',
+        'top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-darkcyan-500 to-darkcyan-700 py-3 opacity-0',
         {
           fixed: displayBanner,
           hidden: !displayBanner

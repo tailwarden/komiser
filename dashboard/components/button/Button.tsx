@@ -52,9 +52,9 @@ function Button({
     transition ? 'transition-colors' : ''
   }`;
 
-  const primary = `${base} font-semibold bg-gradient-to-br from-primary bg-secondary hover:bg-primary active:from-secondary active:bg-secondary text-white disabled:from-primary disabled:bg-secondary disabled:opacity-50`;
+  const primary = `${base} font-semibold bg-gradient-to-br from-darkcyan-500 bg-darkcyan-700 hover:bg-darkcyan-500 active:from-darkcyan-700 active:bg-darkcyan-700 text-white disabled:from-darkcyan-500 disabled:bg-darkcyan-700 disabled:opacity-50`;
 
-  const secondary = `${base} bg-transparent text-primary border-[1.5px] border-primary hover:bg-darkcyan-100 active:bg-cyan-200 active:text-primary disabled:bg-transparent disabled:opacity-50`;
+  const secondary = `${base} bg-transparent text-darkcyan-500 border-[1.5px] border-darkcyan-500 hover:bg-darkcyan-100 active:bg-cyan-200 active:text-darkcyan-500 disabled:bg-transparent disabled:opacity-50`;
 
   const ghost = `${base} bg-transparent hover:bg-gray-50 active:bg-gray-300 text-gray-950  disabled:bg-transparent disabled:opacity-50`;
 

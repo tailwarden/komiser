@@ -69,7 +69,7 @@ function InputFileSelect({
           className={classNames(
             hasError
               ? 'outline-red-500 focus:outline-red-500'
-              : 'focus:outline-primary outline-gray-200',
+              : 'outline-gray-200 focus:outline-darkcyan-500',
             'block w-full rounded border py-4 pl-5 text-sm text-gray-950 outline focus:outline-2 '
           )}
           onChange={handleInputChange}

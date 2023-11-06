@@ -49,8 +49,8 @@ function SelectInput({
       <button
         onClick={toggle}
         className={classNames(
-          'focus:outline-primary h-[60px] w-full overflow-hidden rounded bg-white text-left outline outline-gray-300 hover:outline-gray-300',
-          { 'outline-primary outline-2': isOpen }
+          'h-[60px] w-full overflow-hidden rounded bg-white text-left outline outline-gray-300 hover:outline-gray-300 focus:outline-darkcyan-500',
+          { 'outline-2 outline-darkcyan-500': isOpen }
         )}
       >
         <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pb-[0.75rem] pl-4 pr-16 pt-[0.75rem] text-sm text-gray-950">

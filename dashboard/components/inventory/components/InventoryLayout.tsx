@@ -60,7 +60,7 @@ function InventoryLayout({
             className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 !router.query.view
-                  ? 'border-primary text-primary border-l-2 bg-cyan-100'
+                  ? 'border-l-2 border-darkcyan-500 bg-cyan-100 text-darkcyan-500'
                   : 'text-gray-700 transition-colors hover:bg-gray-50'
               }
             `}
@@ -77,7 +77,7 @@ function InventoryLayout({
                   value={query}
                   maxLength={64}
                   onChange={e => setQuery(e.target.value)}
-                  className="focus-visible:outline-primary flex w-full items-center rounded-lg border border-gray-300 px-4 py-3 pl-10 text-sm font-medium text-gray-700 transition-colors hover:border-gray-500"
+                  className="flex w-full items-center rounded-lg border border-gray-300 px-4 py-3 pl-10 text-sm font-medium text-gray-700 transition-colors hover:border-gray-500 focus-visible:outline-darkcyan-500"
                 />
                 <div
                   className={`absolute left-4 top-[0.95rem] ${
@@ -136,7 +136,7 @@ function InventoryLayout({
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium
               ${
                 isActive
-                  ? 'border-primary text-primary border-l-2 bg-cyan-100'
+                  ? 'border-l-2 border-darkcyan-500 bg-cyan-100 text-darkcyan-500'
                   : 'text-gray-700 transition-colors hover:bg-gray-50'
               }
             `}

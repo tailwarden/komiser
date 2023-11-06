@@ -38,7 +38,7 @@ function InventorySearchBar({
             onChange={e => setQuery(e.target.value)}
             type="text"
             placeholder="Search by tags, service, name, region..."
-            className="caret-secondary w-full rounded-t-lg border-b border-gray-300 bg-white py-6 pl-14 pr-6 text-sm text-gray-950 placeholder:text-gray-500 focus:outline-none"
+            className="w-full rounded-t-lg border-b border-gray-300 bg-white py-6 pl-14 pr-6 text-sm text-gray-950 caret-darkcyan-700 placeholder:text-gray-500 focus:outline-none"
             autoComplete="off"
             data-lpignore="true"
             data-form-type="other"

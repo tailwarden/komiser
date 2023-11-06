@@ -64,7 +64,7 @@ export default function CloudAccounts() {
           <div className="mb-4 space-y-4">
             <Link
               href={'/onboarding/choose-cloud/'}
-              className="border-primary bg-transparent text-primary flex w-full items-center rounded border-[1.5px] p-6 hover:bg-darkcyan-100"
+              className="bg-transparent flex w-full items-center rounded border-[1.5px] border-darkcyan-500 p-6 text-darkcyan-500 hover:bg-darkcyan-100"
             >
               <PlusIcon className="my-4 ml-2 mr-6 h-6 w-6" />
               Add cloud account
@@ -89,7 +89,7 @@ export default function CloudAccounts() {
                 </div>
                 <div className="flex gap-5">
                   <button
-                    className="hover:text-primary hidden items-center gap-2 transition-colors md:flex"
+                    className="hidden items-center gap-2 transition-colors hover:text-darkcyan-500 md:flex"
                     onClick={() => handleDelete(account)}
                   >
                     <DeleteIcon className="h-4 w-4" />

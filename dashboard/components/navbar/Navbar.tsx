@@ -48,7 +48,7 @@ function Navbar() {
             href={navItem.href}
             className={
               router.pathname === navItem.href
-                ? 'text-primary'
+                ? 'text-darkcyan-500'
                 : 'text-gray-700'
             }
           >
@@ -58,7 +58,7 @@ function Navbar() {
       </div>
       <div className="flex gap-4 text-sm font-medium text-gray-950 lg:gap-10">
         <a
-          className="hover:text-primary hidden items-center gap-2 transition-colors md:flex"
+          className="hidden items-center gap-2 transition-colors hover:text-darkcyan-500 md:flex"
           href="https://docs.komiser.io/docs/intro?utm_source=komiser&utm_medium=referral&utm_campaign=static"
           target="_blank"
           rel="noopener noreferrer"
@@ -90,7 +90,7 @@ function Navbar() {
           Docs
         </a>
         <a
-          className="hover:text-primary hidden items-center gap-2 transition-colors md:flex"
+          className="hidden items-center gap-2 transition-colors hover:text-darkcyan-500 md:flex"
           href="https://www.tailwarden.com/changelog?utm_source=komiser&utm_medium=referral&utm_campaign=static"
           target="_blank"
           rel="noopener noreferrer"
@@ -121,7 +121,7 @@ function Navbar() {
           Changelog
         </a>
         <a
-          className="hover:text-primary hidden cursor-pointer items-center gap-2 transition-colors md:flex"
+          className="hidden cursor-pointer items-center gap-2 transition-colors hover:text-darkcyan-500 md:flex"
           rel="noopener noreferrer"
           onClick={() => openFeedbackModal()}
         >

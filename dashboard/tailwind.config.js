@@ -120,6 +120,11 @@ module.exports = {
         ds: '#F5F5F5' /* ds => design-system */
       }
     },
+    boxShadow: {
+      right: '2px 4px 8px 0px rgba(105, 115, 114, 0.16)',
+      left: '-2px 4px 8px 0px rgba(105, 115, 114, 0.16)',
+      none: '0 0 #0000'
+    },
     extend: {
       fontFamily: {
         sans: [
@@ -251,7 +256,3 @@ module.exports = {
   },
   plugins: []
 };
-
-// TODO:
-// add gradients
-// add box-shadows

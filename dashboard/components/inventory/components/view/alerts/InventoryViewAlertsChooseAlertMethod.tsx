@@ -75,7 +75,7 @@ function InventoryViewAlertsChooseAlertMethod({
                   href="https://docs.komiser.io/docs/introduction/getting-started/#slack-integration-alerts"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-primary"
+                  className="text-darkcyan-500"
                 >
                   <u>guide</u>
                 </a>

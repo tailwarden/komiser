@@ -66,7 +66,7 @@ function Input({
       <div className="relative">
         <input
           name={name}
-          className={`caret-primary focus:outline-primary peer w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-gray-950 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] ${
+          className={`peer w-full rounded bg-white px-4 pb-[0.75rem] pt-[1.75rem] text-sm text-gray-950 caret-darkcyan-500 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] focus:outline-darkcyan-500 ${
             isValid === false && `outline-red-500 focus:outline-red-500`
           }`}
           placeholder=" "

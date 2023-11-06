@@ -35,8 +35,8 @@ function Select({
       <button
         onClick={toggle}
         className={classNames(
-          'focus:outline-primary h-[60px] w-full overflow-hidden rounded text-left outline outline-gray-300 hover:outline-gray-300',
-          { 'outline-primary outline-2': isOpen }
+          'h-[60px] w-full overflow-hidden rounded text-left outline outline-gray-300 hover:outline-gray-300 focus:outline-darkcyan-500',
+          { 'outline-2 outline-darkcyan-500': isOpen }
         )}
       >
         <div className="absolute right-0 top-1 h-[50px] w-6"></div>

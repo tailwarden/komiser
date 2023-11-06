@@ -133,7 +133,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                   className={classNames(
                     'flex cursor-pointer flex-col items-start justify-center rounded-lg px-6 py-4 outline outline-gray-300 hover:outline-gray-500',
                     {
-                      'outline-primary hover:outline-primary outline-2':
+                      'outline-2 outline-darkcyan-500 hover:outline-darkcyan-500':
                         isActive
                     }
                   )}
@@ -228,7 +228,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                   <input
                     type="text"
                     name="endpoint"
-                    className={`caret-primary focus:outline-primary peer mr-6 w-full rounded bg-white pb-[0.75rem] pl-4 pr-32 pt-[1.75rem] text-sm text-gray-950 outline outline-gray-300 focus:outline-2 ${
+                    className={`peer mr-6 w-full rounded bg-white pb-[0.75rem] pl-4 pr-32 pt-[1.75rem] text-sm text-gray-950 caret-darkcyan-500 outline outline-gray-300 focus:outline-2 focus:outline-darkcyan-500 ${
                       testResultData?.success === false &&
                       `outline-red-500 focus:outline-red-500`
                     }`}
@@ -248,7 +248,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                 </div>
               </div>
               <span
-                className={`bg-transparent text-primary text-primary active:text-primary absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded text-sm font-medium active:bg-cyan-200 disabled:cursor-not-allowed sm:w-auto ${
+                className={`bg-transparent absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded text-sm font-medium text-darkcyan-500 text-darkcyan-500 active:bg-cyan-200 active:text-darkcyan-500 disabled:cursor-not-allowed sm:w-auto ${
                   testingEndpoint ? 'pointer-events-none opacity-50' : ''
                 }`}
                 onClick={testEndpoint}
@@ -301,7 +301,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                 href="https://docs.komiser.io/docs/guides/how-to-komiser/alerts#request-details"
                 target="_blank"
                 rel="noreferrer"
-                className="text-primary"
+                className="text-darkcyan-500"
               >
                 <u>developer documentation</u>
               </a>

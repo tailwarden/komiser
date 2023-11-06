@@ -72,8 +72,8 @@ function SelectCheckbox({
       </div>
       <button
         onClick={toggle}
-        className={`focus:outline-primary h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-gray-300 focus:outline-2 ${
-          isOpen ? 'outline-primary outline-2' : 'outline-gray-300'
+        className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-gray-300 focus:outline-2 focus:outline-darkcyan-500 ${
+          isOpen ? 'outline-2 outline-darkcyan-500' : 'outline-gray-300'
         }`}
       >
         <div className="from-transparent absolute right-0 top-1 h-[50px] w-6 bg-gradient-to-r via-white to-white"></div>
@@ -155,7 +155,7 @@ function SelectCheckbox({
                 onChange={e => setSearch(e.target.value)}
                 type="text"
                 placeholder="Search"
-                className="caret-secondary h-10 w-full rounded-md border border-gray-300 bg-white py-4 pl-10 pr-6 text-sm text-gray-950 placeholder:text-gray-500 focus:outline-none"
+                className="h-10 w-full rounded-md border border-gray-300 bg-white py-4 pl-10 pr-6 text-sm text-gray-950 caret-darkcyan-700 placeholder:text-gray-500 focus:outline-none"
                 autoFocus
                 maxLength={64}
               />

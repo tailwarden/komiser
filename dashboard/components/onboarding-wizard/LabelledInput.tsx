@@ -53,7 +53,7 @@ function LabelledInput({
           disabled={disabled}
           placeholder={placeholder}
           required={required}
-          className={`focus:outline-primary block w-full rounded py-[14.5px] text-sm text-gray-950 outline outline-gray-300 focus:outline-2 ${
+          className={`block w-full rounded py-[14.5px] text-sm text-gray-950 outline outline-gray-300 focus:outline-2 focus:outline-darkcyan-500 ${
             icon ? 'pl-10' : 'pl-3'
           }`}
           onChange={onChange}

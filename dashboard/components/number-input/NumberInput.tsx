@@ -88,7 +88,7 @@ function NumberInput({
           name={name}
           className={`peer w-full rounded bg-white px-12 py-[0.75rem] ${
             label && 'pt-[1.75rem]'
-          } text-neutral-900 caret-primary focus:outline-primary text-center text-sm outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] ${
+          } text-neutral-900 text-center text-sm caret-darkcyan-500 outline outline-[0.063rem] outline-gray-300 focus:outline-[0.12rem] focus:outline-darkcyan-500 ${
             isValid === false && `outline-red-500 focus:outline-red-500`
           }`}
           type="number"
