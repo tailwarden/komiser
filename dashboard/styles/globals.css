@@ -49,14 +49,20 @@
   transform: rotateY(180deg);
 }
 
-.dependency-graph-node-label {
+.dependency-graph-nodeLabel {
   transition: opacity 0.2s linear;
   opacity: 0;
 }
 
 .popper-div {
-  text-shadow: 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
-    0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9, 0 0 5px #f4f9f9,
+  text-shadow:
+    0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9,
+    0 0 5px #f4f9f9,
     0 0 5px #f4f9f9;
   position: relative;
   color: #000;
