@@ -248,7 +248,7 @@ function InventoryViewAlertsCreateOrEditAlert({
                 </div>
               </div>
               <span
-                className={`bg-transparent absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded text-sm font-medium text-darkcyan-500 text-darkcyan-500 active:bg-cyan-200 active:text-darkcyan-500 disabled:cursor-not-allowed sm:w-auto ${
+                className={`absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded bg-transparent text-sm font-medium text-darkcyan-500 text-darkcyan-500 active:bg-cyan-200 active:text-darkcyan-500 disabled:cursor-not-allowed sm:w-auto ${
                   testingEndpoint ? 'pointer-events-none opacity-50' : ''
                 }`}
                 onClick={testEndpoint}

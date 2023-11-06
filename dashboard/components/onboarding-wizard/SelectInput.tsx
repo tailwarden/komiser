@@ -63,7 +63,7 @@ function SelectInput({
         <>
           <div
             onClick={toggle}
-            className="bg-transparent fixed inset-0 z-20 hidden animate-fade-in opacity-0 sm:block"
+            className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
           <div className="absolute top-[96px] z-[21] max-h-52 w-full overflow-hidden overflow-y-auto rounded-lg border border-gray-100 bg-white px-3 py-2 shadow-right">
             <div className="flex w-full flex-col gap-1">

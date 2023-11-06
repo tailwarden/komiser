@@ -64,7 +64,7 @@ export default function CloudAccounts() {
           <div className="mb-4 space-y-4">
             <Link
               href={'/onboarding/choose-cloud/'}
-              className="bg-transparent flex w-full items-center rounded border-[1.5px] border-darkcyan-500 p-6 text-darkcyan-500 hover:bg-darkcyan-100"
+              className="flex w-full items-center rounded border-[1.5px] border-darkcyan-500 bg-transparent p-6 text-darkcyan-500 hover:bg-darkcyan-100"
             >
               <PlusIcon className="my-4 ml-2 mr-6 h-6 w-6" />
               Add cloud account
@@ -108,16 +108,16 @@ export default function CloudAccounts() {
         <RightSideLayout isCustom={true} customClasses="flex flex-col p-4">
           <div className="grid w-full grid-cols-7 gap-3">
             {/* Row 1 */}
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-300"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
 
             {/* Row 2 */}
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200">
               <div className="relative bottom-3 left-3 h-full w-full scale-110 overflow-clip rounded-lg shadow-right">
@@ -126,8 +126,8 @@ export default function CloudAccounts() {
             </div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
 
             {/* Row 3 */}
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
@@ -138,22 +138,22 @@ export default function CloudAccounts() {
             </div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-400"></div>
 
             {/* Row 4 */}
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-400">
               <div className="relative h-full w-full overflow-clip rounded-lg bg-white shadow-right">
                 <Avatar avatarName="gcp" />
               </div>
             </div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
 
             {/* Row 5 */}
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
@@ -164,27 +164,27 @@ export default function CloudAccounts() {
                 <Avatar avatarName="azure" />
               </div>
             </div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
 
             {/* Row 6 */}
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-400"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
 
             {/* Row 7 */}
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
-            <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
+            <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
           </div>
         </RightSideLayout>
       </OnboardingWizardLayout>

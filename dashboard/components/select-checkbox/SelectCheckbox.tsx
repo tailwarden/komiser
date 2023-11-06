@@ -76,7 +76,7 @@ function SelectCheckbox({
           isOpen ? 'outline-2 outline-darkcyan-500' : 'outline-gray-300'
         }`}
       >
-        <div className="from-transparent absolute right-0 top-1 h-[50px] w-6 bg-gradient-to-r via-white to-white"></div>
+        <div className="absolute right-0 top-1 h-[50px] w-6 bg-gradient-to-r from-transparent via-white to-white"></div>
         <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-gray-500">
           {label}
         </span>
@@ -104,7 +104,7 @@ function SelectCheckbox({
           <div
             data-testid="overlay"
             onClick={toggle}
-            className="bg-transparent fixed inset-0 z-20 hidden animate-fade-in opacity-0 sm:block"
+            className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
           <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-gray-50 bg-white shadow-right">
             <div className="relative m-4 ">
