@@ -120,5 +120,5 @@ export const nodeHTMLLabelConfig = {
   valign: 'bottom', // title vertical position. Can be 'top',''center, 'bottom'
   halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
   valignBox: 'bottom', // title relative box vertical position. Can be 'top',''center, 'bottom'
-  cssClass: 'dependency-graph-node-label' // any classes will be as attribute of <div> container for every title
+  cssClass: 'dependency-graph-nodeLabel' // any classes will be as attribute of <div> container for every title
 };

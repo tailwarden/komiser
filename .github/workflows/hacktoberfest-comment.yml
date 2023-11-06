@@ -17,4 +17,4 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             A heartfelt thank you, @${{ github.event.pull_request.user.login }}, for your enthusiastic involvement in Hacktoberfest! To express our gratitude, we've crafted a special virtual badge just for you. Don't hesitate to showcase it on your social media profiles and share the love by mentioning Komiser in your posts. Your contribution means the world to us!
-            ![Image](docs/images/hacktoberfest-badge.svg)
+            ![Image](/images/hacktoberfest-badge.svg)
