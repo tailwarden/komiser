@@ -95,16 +95,6 @@ const settingsService = {
       return Error;
     }
   },
-
-  async getResourceRelations(resourceId: string) {
-    try {
-      const res = await fetch(`${BASE_URL}/resources?resourceId=${resourceId}`);
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return Error;
-    }
-  },
   async getGlobalResources(payload: string) {
     try {
       const res = await fetch(

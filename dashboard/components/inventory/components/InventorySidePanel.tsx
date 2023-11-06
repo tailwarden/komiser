@@ -3,11 +3,11 @@ import SidepanelPage from '@components/sidepanel/SidepanelPage';
 import Pill from '@components/pill/Pill';
 import SingleDependencyGraphWrapper from '@components/explorer/dependency-graph/single-resource-dependency-graph/SingleDependencyGraphWrapper';
 import Button from '@components/button/Button';
-import formatNumber from '../../../utils/formatNumber';
-import CloseIcon from '../../icons/CloseIcon';
-import PlusIcon from '../../icons/PlusIcon';
-import Sidepanel from '../../sidepanel/Sidepanel';
-import SidepanelTabs from '../../sidepanel/SidepanelTabs';
+import CloseIcon from '@components/icons/CloseIcon';
+import PlusIcon from '@components/icons/PlusIcon';
+import Sidepanel from '@components/sidepanel/Sidepanel';
+import SidepanelTabs from '@components/sidepanel/SidepanelTabs';
+import formatNumber from '@utils/formatNumber';
 import {
   InventoryItem,
   Pages,

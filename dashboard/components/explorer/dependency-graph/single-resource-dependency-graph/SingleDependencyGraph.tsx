@@ -1,141 +1,34 @@
-import React, { useState, memo } from 'react';
+import React, { memo } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
-import Cytoscape, { EdgeSingular } from 'cytoscape';
-import popper from 'cytoscape-popper';
-
-import nodeHtmlLabel, {
-  CytoscapeNodeHtmlParams
-  // @ts-ignore
-} from 'cytoscape-node-html-label';
-
-// @ts-ignore
-import COSEBilkent from 'cytoscape-cose-bilkent';
+import Cytoscape from 'cytoscape';
 
 import EmptyState from '@components/empty-state/EmptyState';
 
 import Tooltip from '@components/tooltip/Tooltip';
-import WarningIcon from '@components/icons/WarningIcon';
-import { ReactFlowData } from '../hooks/useDependencyGraph';
+import { DragIcon } from '@components/icons';
+import NumberInput from '@components/number-input/NumberInput';
+import { DependencyGraphProps } from '../hooks/useDependencyGraph';
 import {
-  edgeAnimationConfig,
   edgeStyleConfig,
   graphLayoutConfig,
   leafStyleConfig,
   maxZoom,
   minZoom,
-  nodeHTMLLabelConfig,
-  nodeStyeConfig,
-  zoomLevelBreakpoint
+  nodeStyeConfig
 } from '../config';
+import { useDependencyGraphActions } from '../hooks/useDependencyGraphActions';
 
-export type DependencyGraphProps = {
-  data: ReactFlowData;
-};
-
-nodeHtmlLabel(Cytoscape.use(COSEBilkent));
-Cytoscape.use(popper);
 const SingleDependencyGraph = ({ data }: DependencyGraphProps) => {
-  const [initDone, setInitDone] = useState(false);
-
   const dataNodesLength: number = data.nodes.length;
-  // Type technically is Cytoscape.EdgeCollection but that throws an unexpected error
-  const loopAnimation = (eles: any) => {
-    const ani = eles.animation(edgeAnimationConfig[0], edgeAnimationConfig[1]);
-
-    ani
-      .reverse()
-      .play()
-      .promise('complete')
-      .then(() => loopAnimation(eles));
-  };
-
-  const cyActionHandlers = (cy: Cytoscape.Core) => {
-    // make sure we did not init already, otherwise this will be bound more than once
-    if (!initDone) {
-      // Add HTML labels for better flexibility
-      // @ts-ignore
-      cy.nodeHtmlLabel([
-        {
-          ...nodeHTMLLabelConfig,
-          tpl(templateData: Cytoscape.NodeDataDefinition) {
-            return `<div><p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-700 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center" title="${
-                   templateData.label
-                 }">${templateData.label || '&nbsp;'}</p>
-              <p style="font-size: 10px; text-shadow: 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9,
-                 0 0 5px #F4F9F9,0 0 5px #F4F9F9;" class="text-black-400 text-ellipsis max-w-[100px] overflow-hidden whitespace-nowrap text-center font-thin" title="${
-                   templateData.label
-                 }">${templateData.service || '&nbsp;'}</p></div>`;
-          }
-        }
-      ]);
-      // Add class to leave nodes so we can make them smaller
-      cy.nodes().leaves().addClass('leaf');
-      // same for root notes
-      cy.nodes().roots().addClass('root');
-      // Animate edges
-      cy.edges().forEach(loopAnimation);
-
-      // Add hover tooltip on edges
-      cy.edges().bind('mouseover', event => {
-        if (cy.zoom() >= zoomLevelBreakpoint) {
-          // eslint-disable-next-line no-param-reassign
-          event.target.popperRefObj = event.target.popper({
-            content: () => {
-              const content = document.createElement('div');
-              content.classList.add('popper-div');
-              content.innerHTML = event.target.data('label');
-              content.style.pointerEvents = 'none';
-
-              document.body.appendChild(content);
-              return content;
-            }
-          });
-        }
-      });
-      // Hide Edges tooltip on mouseout
-      cy.edges().bind('mouseout', event => {
-        if (cy.zoom() >= zoomLevelBreakpoint && event.target.popperRefObj) {
-          event.target.popperRefObj.state.elements.popper.remove();
-          event.target.popperRefObj.destroy();
-        }
-      });
-
-      // Hide labels when being zoomed out
-      cy.on('zoom', event => {
-        if (cy.zoom() <= zoomLevelBreakpoint) {
-          interface ExtendedEdgeSingular extends EdgeSingular {
-            popperRefObj?: any;
-          }
-
-          // Check if a tooltip is present and remove it
-          cy.edges().forEach((edge: ExtendedEdgeSingular) => {
-            if (edge.popperRefObj) {
-              edge.popperRefObj.state.elements.popper.remove();
-              edge.popperRefObj.destroy();
-            }
-          });
-        }
-
-        const opacity = cy.zoom() <= zoomLevelBreakpoint ? 0 : 1;
-
-        Array.from(
-          document.querySelectorAll('.dependency-graph-node-label'),
-          e => {
-            // @ts-ignore
-            e.style.opacity = opacity;
-            return e;
-          }
-        );
-      });
-      // Make sure to tell we inited successfully and prevent another init
-      setInitDone(true);
-    }
-  };
+  const {
+    cyRef,
+    cyActionHandlers,
+    toggleNodeDragging,
+    isNodeDraggingEnabled,
+    translateXClass,
+    zoomVal,
+    handleZoomChange
+  } = useDependencyGraphActions({ enableClickHandler: false });
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
@@ -159,6 +52,7 @@ const SingleDependencyGraph = ({ data }: DependencyGraphProps) => {
             })}
             maxZoom={maxZoom}
             minZoom={minZoom}
+            zoom={(minZoom + maxZoom) / 2}
             layout={graphLayoutConfig}
             stylesheet={[
               {
@@ -174,21 +68,50 @@ const SingleDependencyGraph = ({ data }: DependencyGraphProps) => {
                 style: leafStyleConfig
               }
             ]}
-            cy={(cy: Cytoscape.Core) => cyActionHandlers(cy)}
+            cy={(cy: Cytoscape.Core) => {
+              cyActionHandlers(cy);
+              cyRef.current = cy;
+            }}
           />
         </>
       )}
-      <div className="absolute bottom-0 left-0 flex gap-2 overflow-visible bg-black-100 text-black-400">
-        {dataNodesLength} {`related resource${dataNodesLength > 1 ? 's' : ''}`}
-        {dataNodesLength !== 0 && (
-          <div className="relative">
-            <WarningIcon className="peer" height="16" width="16" />
-            <Tooltip bottom="xs" align="left" width="lg">
-              Only AWS and Civo resources are currently supported on the
-              explorer.
-            </Tooltip>
+      <div className="absolute bottom-5 right-1 w-full">
+        <div className="flex w-full flex-col items-center gap-2 sm:flex-row sm:justify-between">
+          <div className="ml-1 flex overflow-visible bg-black-100 text-black-400">
+            {dataNodesLength} {`Resource${dataNodesLength > 1 ? 's' : ''}`}
           </div>
-        )}
+          <div className="flex max-h-11 gap-4">
+            <button
+              className={`peer relative flex items-center rounded border-[1.2px] border-black-200 bg-white p-2.5 ${
+                isNodeDraggingEnabled && 'border-primary'
+              }`}
+              onClick={toggleNodeDragging}
+            >
+              <DragIcon className="h-6 w-6" />
+            </button>
+            <Tooltip align="center" bottom="sm">
+              {isNodeDraggingEnabled
+                ? 'Disable node dragging'
+                : 'Enable node dragging'}
+            </Tooltip>
+
+            <div className="relative w-40">
+              <NumberInput
+                name="zoom"
+                value={zoomVal}
+                action={zoomData => handleZoomChange(Number(zoomData.zoom))}
+                handleValueChange={handleZoomChange} // increment or decrement input value
+                step={5} // percentage change in zoom
+                maxLength={3}
+              />
+              <span
+                className={`absolute left-1/2 top-1/2 ${translateXClass} -translate-y-1/2 text-sm text-neutral-900`}
+              >
+                %
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

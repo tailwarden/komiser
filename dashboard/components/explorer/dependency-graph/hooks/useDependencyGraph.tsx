@@ -9,6 +9,10 @@ export type ReactFlowData = {
   edges: any[];
 };
 
+export type DependencyGraphProps = {
+  data: ReactFlowData;
+};
+
 // converting the json object into data that reactflow needs
 // TODO - based on selected library
 function GetData(res: any) {
@@ -66,7 +70,7 @@ function GetData(res: any) {
   return d;
 }
 
-function useDependencyGraph(resourceId?: string | null) {
+function useDependencyGraph(resourceId?: string) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ReactFlowData>();
   const [error, setError] = useState(false);
@@ -75,11 +79,10 @@ function useDependencyGraph(resourceId?: string | null) {
     useState<InventoryFilterData[]>();
 
   const router = useRouter();
-
   const fetchRelationsByResourceId = useCallback(
     (id: string) => {
       settingsService
-        .getResourceRelations(id)
+        .getResourceById(`?resourceId=${id}`)
         .then(res => {
           if (res === Error) {
             setLoading(false);
