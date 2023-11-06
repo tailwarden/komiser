@@ -19,7 +19,7 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
     <>
       <div
         className={classNames(
-          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg px-6 py-4 text-gray-950 opacity-0 shadow-2xl sm:left-8',
+          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg px-6 py-4 text-gray-950 opacity-0 shadow-right sm:left-8',
           {
             'bg-red-50': hasError,
             'bg-green-100': !hasError

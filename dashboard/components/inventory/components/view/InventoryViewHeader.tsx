@@ -88,7 +88,7 @@ function InventoryViewHeader({
                 onClick={closeDropdown}
                 className="bg-transparent fixed inset-0 z-20 hidden animate-fade-in opacity-0 sm:block"
               ></div>
-              <div className="absolute left-0 top-10 z-[21] inline-flex w-[16rem] rounded-lg bg-white p-4 text-sm shadow-xl">
+              <div className="absolute left-0 top-10 z-[21] inline-flex w-[16rem] rounded-lg bg-white p-4 text-sm shadow-right">
                 <div className="flex w-full flex-col gap-1">
                   <Button
                     style="dropdown"

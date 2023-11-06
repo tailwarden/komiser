@@ -54,7 +54,7 @@ function Select({
             onClick={toggle}
             className="bg-transparent fixed inset-0 z-20 hidden animate-fade-in opacity-0 sm:block"
           ></div>
-          <div className="absolute top-[66px] z-[21] max-h-52 w-full overflow-hidden overflow-y-auto rounded-lg border border-gray-100 bg-white px-3 py-2 shadow-lg">
+          <div className="absolute top-[66px] z-[21] max-h-52 w-full overflow-hidden overflow-y-auto rounded-lg border border-gray-100 bg-white px-3 py-2 shadow-right">
             <div className="flex w-full flex-col gap-1">
               {values.map((item, idx) => {
                 const isActive = value === item;

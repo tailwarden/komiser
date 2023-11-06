@@ -49,7 +49,7 @@ function InventoryTableTags({
               {tags.length}
             </span>
           </div>
-          <div className="absolute right-6 top-11 z-10 hidden max-w-xs flex-col gap-2 rounded-lg bg-gray-950 px-4 py-3 shadow-lg group-hover:flex">
+          <div className="absolute right-6 top-11 z-10 hidden max-w-xs flex-col gap-2 rounded-lg bg-gray-950 px-4 py-3 shadow-right group-hover:flex">
             {tags.map((tag, index) => (
               <div
                 key={index}

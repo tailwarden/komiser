@@ -33,7 +33,7 @@ function Modal({ isOpen, closeModal, id, children }: ModalProps) {
           ></div>
           <div
             id={`${id}-modal`}
-            className="fixed inset-0 z-30 w-full animate-fade-in-down-short bg-white p-8 opacity-0 shadow-2xl sm:bottom-auto sm:top-[15%] sm:m-auto sm:max-w-fit sm:rounded-lg"
+            className="fixed inset-0 z-30 w-full animate-fade-in-down-short bg-white p-8 opacity-0 shadow-left sm:bottom-auto sm:top-[15%] sm:m-auto sm:max-w-fit sm:rounded-lg"
           >
             {children}
           </div>

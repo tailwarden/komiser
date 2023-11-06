@@ -120,7 +120,7 @@ export default function CloudAccounts() {
             <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200">
-              <div className="relative bottom-3 left-3 h-full w-full scale-110 overflow-clip rounded-lg shadow-xl">
+              <div className="relative bottom-3 left-3 h-full w-full scale-110 overflow-clip rounded-lg shadow-right">
                 <Avatar avatarName="aws" />
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function CloudAccounts() {
             {/* Row 3 */}
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200">
-              <div className="relative h-full w-full overflow-clip rounded-lg shadow-xl">
+              <div className="relative h-full w-full overflow-clip rounded-lg shadow-right">
                 <Avatar avatarName="civo" />
               </div>
             </div>
@@ -146,7 +146,7 @@ export default function CloudAccounts() {
             <div className="bg-transparent aspect-square h-full w-full rounded-lg"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-400">
-              <div className="relative h-full w-full overflow-clip rounded-lg bg-white shadow-xl">
+              <div className="relative h-full w-full overflow-clip rounded-lg bg-white shadow-right">
                 <Avatar avatarName="gcp" />
               </div>
             </div>
@@ -160,7 +160,7 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-400"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-cyan-200">
-              <div className="relative left-3 top-3  h-full w-full overflow-clip rounded-lg bg-gray-950 shadow-xl">
+              <div className="relative left-3 top-3  h-full w-full overflow-clip rounded-lg bg-gray-950 shadow-right">
                 <Avatar avatarName="azure" />
               </div>
             </div>

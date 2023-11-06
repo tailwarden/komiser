@@ -63,7 +63,7 @@ export default function CloudAccountItem({
       {isOpen && (
         <div
           ref={optionsRef}
-          className="absolute right-0 top-0 mr-5 mt-[70px] items-center rounded-md border border-gray-100 bg-white p-4 shadow-xl"
+          className="absolute right-0 top-0 mr-5 mt-[70px] items-center rounded-md border border-gray-100 bg-white p-4 shadow-right"
           style={{ zIndex: 1000 }}
         >
           <button

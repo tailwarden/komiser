@@ -118,6 +118,9 @@ module.exports = {
         base: '#F2F7F8',
         disabled: '#EFEDF1',
         ds: '#F5F5F5' /* ds => design-system */
+      },
+      komiser: {
+        dark: '#009999'
       }
     },
     boxShadow: {

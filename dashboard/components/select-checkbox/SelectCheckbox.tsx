@@ -106,7 +106,7 @@ function SelectCheckbox({
             onClick={toggle}
             className="bg-transparent fixed inset-0 z-20 hidden animate-fade-in opacity-0 sm:block"
           ></div>
-          <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-gray-50 bg-white shadow-lg">
+          <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-gray-50 bg-white shadow-right">
             <div className="relative m-4 ">
               {!search ? (
                 <svg
