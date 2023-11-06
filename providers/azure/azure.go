@@ -1,4 +1,4 @@
-package digitalocean
+package azure
 
 import (
 	"context"
