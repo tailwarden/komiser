@@ -78,7 +78,8 @@ const SingleDependencyGraph = ({ data }: DependencyGraphProps) => {
       <div className="absolute bottom-5 right-1 w-full">
         <div className="flex w-full flex-col items-center gap-2 sm:flex-row sm:justify-between">
           <div className="ml-1 flex overflow-visible bg-black-100 text-black-400">
-            {dataNodesLength} {`Resource${dataNodesLength > 1 ? 's' : ''}`}
+            {dataNodesLength}{' '}
+            {`related resource${dataNodesLength > 1 ? 's' : ''}`}
           </div>
           <div className="flex max-h-11 gap-4">
             <button
