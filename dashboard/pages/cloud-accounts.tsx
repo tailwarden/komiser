@@ -160,7 +160,7 @@ function CloudAccounts() {
             size="xs"
             gap="md"
             asLink
-            href="https://cloud.tailwarden.com/?utm_source=komiser"
+            href="https://tailwarden.com/?utm_source=komiser"
             target="_blank"
           >
             Discover Tailwarden

@@ -130,7 +130,7 @@ function DashboardCostExplorerCard({
                   size="sm"
                   gap="md"
                   asLink
-                  href="https://cloud.tailwarden.com/?utm_source=komiser"
+                  href="https://tailwarden.com/?utm_source=komiser"
                   target="_blank"
                 >
                   <CloudIcon width="24" /> Discover Tailwarden
