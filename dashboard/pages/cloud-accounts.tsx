@@ -14,15 +14,31 @@ import CloudAccountDeleteContents from '@components/cloud-account/components/Clo
 import { useToast } from '@components/toast/ToastProvider';
 
 import EmptyState from '@components/empty-state/EmptyState';
+import Banner from '@components/banner/Banner';
+import Button from '@components/button/Button';
 
 function CloudAccounts() {
   const [editCloudAccount, setEditCloudAccount] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
+  const [isTailwardenBannerDismissed, setIsTailwardenBannerDismissed] =
+    useState(true);
+
   const { toast, showToast, dismissToast } = useToast();
   const router = useRouter();
 
   const currentViewProvider = router.query.view as string;
+
+  const hideTailwardenBanner = () => {
+    setIsTailwardenBannerDismissed(true);
+    window.localStorage.setItem('tailwardenBannerDismissed', 'true');
+  };
+
+  useEffect(() => {
+    setIsTailwardenBannerDismissed(
+      window.localStorage.getItem('tailwardenBannerDismissed') === 'true'
+    );
+  }, []);
 
   const {
     cloudAccounts,
@@ -75,7 +91,7 @@ function CloudAccounts() {
       {/* Wraps the cloud account page and handles the custom views sidebar */}
       <CloudAccountsLayout router={router} cloudAccounts={cloudAccounts}>
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
-
+        <div className="z-10 text-sm text-black-800 first-letter:top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3 opacity-1 fixed"></div>
         {filteredCloudAccounts.map(account => (
           <CloudAccountItem
             key={account.id}
@@ -134,6 +150,30 @@ function CloudAccounts() {
           page={page}
           goTo={goTo}
         />
+      )}
+
+      {cloudAccounts.length >= 2 && !isTailwardenBannerDismissed && (
+        <div className="bg-white absolute bottom-0 left-0 right-0 z-20 px-28 border-black-170 border-t text-base py-3 flex gap-4 items-center justify-center">
+          For deeper insights and account-level alerts, make the switch to
+          Tailwarden — our recommended cloud version for production use.{' '}
+          <Button
+            size="xs"
+            gap="md"
+            asLink
+            href="https://cloud.tailwarden.com/?utm_source=komiser"
+            target="_blank"
+          >
+            Discover Tailwarden
+          </Button>
+          <Button
+            size="xs"
+            gap="md"
+            style="ghost"
+            onClick={() => hideTailwardenBanner()}
+          >
+            X
+          </Button>
+        </div>
       )}
     </>
   );
