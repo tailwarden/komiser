@@ -118,7 +118,7 @@ function DashboardCostExplorerCard({
       <div className="h-full min-h-[22rem]">
         {chartData && <Bar data={chartData} options={options} />}
         {!chartData && (
-          <div className="relative flex flex-col items-center bg-empty-cost-explorer h-[330px] w-[940px]">
+          <div className="relative flex flex-col items-center bg-empty-cost-explorer h-[330px] w-full">
             <div className="mt-10 text-lg text-black-900 border border-gray-200 px-8 py-6 flex bg-white">
               <div>
                 <p className="text-lg">No data for this time period</p>
