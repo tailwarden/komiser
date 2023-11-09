@@ -7,6 +7,7 @@ export { default as ChevronDownIcon } from './ChevronDownIcon';
 export { default as ChevronRightIcon } from './ChevronRightIcon';
 export { default as ClearFilterIcon } from './ClearFilterIcon';
 export { default as CloseIcon } from './CloseIcon';
+export { default as CloudIcon } from './CloudIcon';
 export { default as DeleteIcon } from './DeleteIcon';
 export { default as DocumentTextIcon } from './DocumentTextIcon';
 export { default as DownloadIcon } from './DownloadIcon';
