@@ -277,13 +277,14 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
       )}
       <div className="absolute bottom-0 w-full">
         <div className="flex w-full flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <div className="flex gap-2 overflow-visible bg-black-100 text-black-400">
-            {data?.nodes?.length} Resources
+          <div className="flex items-center gap-2 bg-black-100 text-black-400">
+            <span>{data?.nodes?.length} Resources</span>
             {!dataIsEmpty && (
-              <div className="relative">
+              <div className="relative mt-[2px]">
                 <WarningIcon className="peer" height="16" width="16" />
                 <Tooltip bottom="xs" align="left" width="lg">
-                  Only AWS resources are currently supported on the explorer.
+                  Only AWS and CIVO resources are currently supported on the
+                  explorer.
                 </Tooltip>
               </div>
             )}
