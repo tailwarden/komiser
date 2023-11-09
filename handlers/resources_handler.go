@@ -400,14 +400,14 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 
 	query := ""
 	if len(filters) == 0 {
-		query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)"
+		query = "SELECT DISTINCT resources.resource_id, resources.provider, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)"
 		if handler.db.Dialect().Name() == dialect.SQLite {
-			query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)"
+			query = "SELECT DISTINCT resources.resource_id, resources.provider, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0)"
 		}
 	} else {
-		query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0) AND " + whereClause
+		query = "SELECT DISTINCT resources.resource_id, resources.provider, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0) AND " + whereClause
 		if handler.db.Dialect().Name() == dialect.SQLite {
-			query = "SELECT DISTINCT resources.resource_id, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0) AND " + whereClause
+			query = "SELECT DISTINCT resources.resource_id, resources.provider, resources.name, resources.service, resources.relations FROM resources WHERE (json_array_length(relations) > 0) AND " + whereClause
 		}
 	}
 
@@ -423,9 +423,10 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 			Name:       ele.Name,
 			Type:       ele.Service,
 			Link:       ele.Relations,
+			Provider:   ele.Provider,
 		})
 	}
-
+	
 	c.JSON(http.StatusOK, out)
 
 }
