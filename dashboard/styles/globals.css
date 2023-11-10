@@ -69,3 +69,10 @@
   font-size: 16px;
   padding: 5px 9px;
 }
+
+#feedback-modal-modal {
+  min-height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
