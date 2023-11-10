@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import Image from 'next/image';
+import { ToastProps } from '@components/toast/Toast';
 import Button from '../../../../button/Button';
 import Grid from '../../../../grid/Grid';
 import ArrowLeftIcon from '../../../../icons/ArrowLeftIcon';
 import Input from '../../../../input/Input';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import useEditAlerts from './hooks/useEditAlerts';
 import { AlertMethod, Alert } from './hooks/useAlerts';
 import settingsService from '../../../../../services/settingsService';
@@ -19,7 +19,7 @@ type InventoryViewAlertsCreateOrEditAlertProps = {
   currentAlert: Alert | undefined;
   closeAlert: (action?: 'hasChanges' | undefined) => void;
   viewId: number;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 function InventoryViewAlertsCreateOrEditAlert({
@@ -30,7 +30,7 @@ function InventoryViewAlertsCreateOrEditAlert({
   currentAlert,
   closeAlert,
   viewId,
-  setToast
+  showToast
 }: InventoryViewAlertsCreateOrEditAlertProps) {
   const {
     selected,
@@ -46,7 +46,7 @@ function InventoryViewAlertsCreateOrEditAlert({
     currentAlert,
     viewId,
     closeAlert,
-    setToast
+    showToast
   });
 
   const [testingEndpoint, setTestingEndpoint] = useState(false);

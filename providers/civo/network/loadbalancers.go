@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/civo/civogo"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
@@ -19,6 +20,7 @@ func LoadBalancers(ctx context.Context, client providers.ProviderClient) ([]mode
 	}
 
 	for _, lb := range lbs {
+		relations := getLoadBalancerRelations(lb)
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
@@ -27,6 +29,7 @@ func LoadBalancers(ctx context.Context, client providers.ProviderClient) ([]mode
 			ResourceId: lb.ID,
 			Cost:       10,
 			Name:       lb.Name,
+			Relations:  relations,
 			FetchedAt:  time.Now(),
 			Link:       "https://dashboard.civo.com/loadbalancers",
 		})
@@ -40,4 +43,27 @@ func LoadBalancers(ctx context.Context, client providers.ProviderClient) ([]mode
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getLoadBalancerRelations(lb civogo.LoadBalancer) []models.Link {
+	var rel []models.Link
+
+	if len(lb.FirewallID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: lb.FirewallID,
+			Type:       "Firewall",
+			Name:       lb.FirewallID, //cannot get the name of the network unless calling the network api
+			Relation:   "USES",
+		})
+	}
+
+	if len(lb.FirewallID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: lb.ClusterID,
+			Type:       "Cluster",
+			Name:       lb.ClusterID,
+			Relation:   "USES",
+		})
+	}
+	return rel
 }

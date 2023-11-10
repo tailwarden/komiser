@@ -10,7 +10,7 @@ func TestGet(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if pricing.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.Vmimagee2Core.Regions["us-central1"].Prices[0].Nanos != 21811590 {
+	if pricing.Gcp.Compute.GCE.VmsOnDemand.CoresPerCore.E2.Vmimagee2Core.Regions["us-central1"].Prices[0].Nanos != 21811590 {
 		t.Error("Broken")
 	}
 }

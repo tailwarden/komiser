@@ -28,7 +28,11 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config s3.ListBucketsInput
 	s3Client := s3.NewFromConfig(*client.AWSClient)
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
+
+	tempRegion := client.AWSClient.Region
+	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+	client.AWSClient.Region = tempRegion
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 		ServiceCode: aws.String("AmazonS3"),
@@ -45,7 +49,7 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
-	priceMap, err := awsUtils.GetPriceMap(pricingOutput)
+	priceMap, err := awsUtils.GetPriceMap(pricingOutput, "group")
 	if err != nil {
 		log.Errorf("ERROR: Failed to calculate cost per month: %v", err)
 		return resources, err

@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, memo, SyntheticEvent } from 'react';
-import { FileUploader } from 'react-drag-drop-files';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { toBlob } from 'html-to-image';
 import Image from 'next/image';
@@ -8,8 +7,9 @@ import Modal from '@components/modal/Modal';
 import Input from '@components/input/Input';
 import settingsService from '@services/settingsService';
 import Button from '@components/button/Button';
-import useToast from '@components/toast/hooks/useToast';
+import { useToast } from '@components/toast/ToastProvider';
 import Toast from '@components/toast/Toast';
+import Upload from '@components/upload/Upload';
 
 // We define the placeholder here for convenience
 // It's difficult to read when passed inline
@@ -29,9 +29,7 @@ Outcome
 const useFeedbackWidget = (defaultState: boolean = false) => {
   const [showFeedbackModel, setShowFeedbackModal] = useState(defaultState);
 
-  const FILE_TYPES = ['JPG', 'PNG', 'GIF', 'TXT', 'LOG', 'MP4', 'AVI', 'MOV'];
   const FEEDBACK_MODAL_ID = 'feedback-modal';
-  const MAX_FILE_SIZE_MB = 37;
 
   function openFeedbackModal() {
     setShowFeedbackModal(true);
@@ -54,7 +52,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
     const [isTakingScreenCapture, setIsTakingScreenCapture] = useState(false);
     const [fileAttachement, setFileAttachement] = useState<File | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-    const { toast, setToast, dismissToast } = useToast();
+    const { toast, showToast, dismissToast } = useToast();
 
     async function takeScreenshot() {
       if (
@@ -85,7 +83,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
             setFileAttachement(screenShotFile);
           }
 
-          setToast({
+          showToast({
             hasError: false,
             title: 'Screen capture',
             message:
@@ -93,7 +91,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           });
         })
         .catch(err => {
-          setToast({
+          showToast({
             hasError: true,
             title: 'Screen capture failed',
             message:
@@ -126,7 +124,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           settingsService
             .sendFeedback(formData)
             .then(result => {
-              setToast({
+              showToast({
                 hasError: false,
                 title: 'Feedback sent',
                 message:
@@ -136,7 +134,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
               clearFeedbackForm();
             })
             .catch(error => {
-              setToast({
+              showToast({
                 hasError: true,
                 title: 'Feedback',
                 message: 'An Error happened. Maybe try again please!'
@@ -151,7 +149,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
       }
     }
 
-    function uploadFile(attachement: File) {
+    function uploadFile(attachement: File | null): void {
       setFileAttachement(attachement);
     }
 
@@ -198,7 +196,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                     <>
                       <div
                         onClick={() => takeScreenshot()}
-                        className="w-[50%] grow cursor-pointer rounded border-2 border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100"
+                        className="flex-1 grow cursor-pointer rounded border-2 border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100"
                       >
                         <svg
                           className="mb-2 inline-block"
@@ -249,189 +247,33 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                       </span>
                     </>
                   )}
-                  <FileUploader
-                    classes={
-                      fileAttachement === null
-                        ? `grow cursor-pointer rounded border-2 border-dashed border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100 w-[50%]`
-                        : `grow min-h-full flex-1 rounded border-2 border-[#B6EAEA] text-center text-xs transition w-full`
-                    }
-                    disabled={
-                      fileAttachement !== null ||
-                      isSendingFeedback ||
-                      isTakingScreenCapture
-                    }
-                    handleChange={uploadFile}
-                    name="attachement"
-                    types={FILE_TYPES}
-                    fileOrFiles={fileAttachement}
-                    hoverTitle="drop here"
-                    maxSize={MAX_FILE_SIZE_MB}
-                    onTypeError={(err: string) =>
-                      setToast({
-                        hasError: true,
-                        title: 'File upload failed',
-                        message: err
-                      })
-                    }
-                    onSizeError={(err: string) =>
-                      setToast({
-                        hasError: true,
-                        title: 'File upload failed',
-                        message: err
-                      })
-                    }
-                    dropMessageStyle={{
-                      width: '100%',
-                      height: '100%',
-                      position: 'absolute',
-                      background: '#F4F9F9',
-                      top: 0,
-                      right: 2,
-                      display: 'flex',
-                      flexGrow: 2,
-                      opacity: 1,
-                      zIndex: 20,
-                      color: '#008484',
-                      fontSize: 14,
-                      border: 'none'
-                    }}
-                  >
-                    {fileAttachement === null && (
-                      <div className="">
-                        <svg
-                          className="mb-2 inline-block"
-                          width="25"
-                          height="24"
-                          viewBox="0 0 25 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M9.5 17V11L7.5 13"
-                            stroke="#0C1717"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M9.5 11L11.5 13"
-                            stroke="#0C1717"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M22.5 10V15C22.5 20 20.5 22 15.5 22H9.5C4.5 22 2.5 20 2.5 15V9C2.5 4 4.5 2 9.5 2H14.5"
-                            stroke="#0C1717"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M22.5 10H18.5C15.5 10 14.5 9 14.5 6V2L22.5 10Z"
-                            stroke="#0C1717"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        <p>
-                          Drag and drop or{' '}
-                          <span className="cursor-pointer text-primary">
-                            choose a file
-                          </span>
-                        </p>
-                      </div>
-                    )}
-                    {fileAttachement !== null && (
-                      <div className="relative h-full w-full px-6 py-5">
-                        <div className="flex h-full w-full items-center justify-items-center gap-2">
-                          <svg
-                            width="40"
-                            height="40"
-                            viewBox="0 0 40 40"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M35 11.6666V28.3333C35 33.3333 32.5 36.6666 26.6667 36.6666H13.3333C7.5 36.6666 5 33.3333 5 28.3333V11.6666C5 6.66659 7.5 3.33325 13.3333 3.33325H26.6667C32.5 3.33325 35 6.66659 35 11.6666Z"
-                              stroke="#0C1717"
-                              strokeWidth="1.5"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M24.167 7.5V10.8333C24.167 12.6667 25.667 14.1667 27.5003 14.1667H30.8337"
-                              stroke="#0C1717"
-                              strokeWidth="1.5"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M13.333 21.6667H19.9997"
-                              stroke="#0C1717"
-                              strokeWidth="1.5"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M13.333 28.3333H26.6663"
-                              stroke="#0C1717"
-                              strokeWidth="1.5"
-                              strokeMiterlimit="10"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                          <div className="flex-1 text-left">
-                            <p>{fileAttachement.name}</p>
-                            <p className="text-black-400">
-                              {(fileAttachement.size / (1024 * 1024)).toFixed(
-                                2
-                              )}
-                              MB
-                            </p>
-                          </div>
-                        </div>
-                        <a
-                          onClick={e => {
-                            e.preventDefault();
-                            if (!isSendingFeedback && !isTakingScreenCapture)
-                              setFileAttachement(null);
-                            return false;
-                          }}
-                          className="absolute right-4 top-4 block h-4 w-4 cursor-pointer"
-                          aria-disabled={
-                            isTakingScreenCapture || isSendingFeedback
-                          }
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="17"
-                            viewBox="0 0 16 17"
-                            fill="none"
-                          >
-                            <path
-                              d="M4.66602 12.079L11.3327 5.41235"
-                              stroke="#0C1717"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M11.3327 12.079L4.66602 5.41235"
-                              stroke="#0C1717"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </a>
-                      </div>
-                    )}
-                  </FileUploader>
+                  <div className="flex-1 grow">
+                    <Upload
+                      multiple={false}
+                      fileOrFiles={fileAttachement}
+                      handleChange={uploadFile}
+                      onClose={() => setFileAttachement(null)}
+                      disabled={
+                        fileAttachement !== null ||
+                        isSendingFeedback ||
+                        isTakingScreenCapture
+                      }
+                      onTypeError={(err: string) =>
+                        showToast({
+                          hasError: true,
+                          title: 'File upload failed',
+                          message: err
+                        })
+                      }
+                      onSizeError={(err: string) =>
+                        showToast({
+                          hasError: true,
+                          title: 'File upload failed',
+                          message: err
+                        })
+                      }
+                    />
+                  </div>
                 </div>
               </div>
               <div className="mt-4 flex justify-between">
@@ -448,7 +290,12 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                   .
                 </p>
                 <div className="flex gap-2">
-                  <Button size="xs" disabled={isSendingFeedback} style="ghost">
+                  <Button
+                    size="xs"
+                    disabled={isSendingFeedback}
+                    style="ghost"
+                    onClick={() => closeFeedbackModal()}
+                  >
                     Cancel
                   </Button>
                   <Button type="submit" size="xs" disabled={isSendingFeedback}>
@@ -459,7 +306,6 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
             </form>
           </div>
         </Modal>
-        {toast && <Toast {...toast} dismissToast={dismissToast} />}
       </>
     );
   };

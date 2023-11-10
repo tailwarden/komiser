@@ -1,10 +1,12 @@
-import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
-import Button from '../../button/Button';
-import CloseIcon from '../../icons/CloseIcon';
-import PlusIcon from '../../icons/PlusIcon';
-import Sidepanel from '../../sidepanel/Sidepanel';
-import SidepanelTabs from '../../sidepanel/SidepanelTabs';
+import SidepanelHeader from '@components/sidepanel/SidepanelHeader';
+import SidepanelPage from '@components/sidepanel/SidepanelPage';
+import Pill from '@components/pill/Pill';
+import Button from '@components/button/Button';
+import CloseIcon from '@components/icons/CloseIcon';
+import PlusIcon from '@components/icons/PlusIcon';
+import Sidepanel from '@components/sidepanel/Sidepanel';
+import SidepanelTabs from '@components/sidepanel/SidepanelTabs';
+import formatNumber from '@utils/formatNumber';
 import {
   InventoryItem,
   Pages,
@@ -27,6 +29,7 @@ type InventorySidePanelProps = {
   isOpen: boolean;
   bulkItems: [] | string[];
   updateBulkTags: (action?: 'delete' | undefined) => void;
+  tabs: string[];
 };
 
 function InventorySidePanel({
@@ -43,80 +46,123 @@ function InventorySidePanel({
   deleteLoading,
   isOpen,
   bulkItems,
-  updateBulkTags
+  updateBulkTags,
+  tabs
 }: InventorySidePanelProps) {
+  const getLastFetched = (date: string) => {
+    const dateLastFetched = new Date(date);
+    const today = new Date();
+    const aMonthAgo = new Date(
+      today.getFullYear(),
+      today.getMonth() - 1,
+      today.getDate()
+    );
+    const aWeekAgo = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 7
+    );
+    let message;
+    if (dateLastFetched > aMonthAgo) {
+      message = 'Since last month';
+    } else if (dateLastFetched > aWeekAgo) {
+      message = 'Since last week';
+    } else {
+      message = 'More than a month ago';
+    }
+    return message;
+  };
+
   return (
     <>
       <Sidepanel isOpen={isOpen} closeModal={closeModal}>
         {/* Modal headers */}
-        <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
-          {data && (
-            <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
-              <picture className="flex-shrink-0">
-                <img
-                  src={providers.providerImg(data.provider)}
-                  className="h-8 w-8 rounded-full"
-                  alt={data.provider}
-                />
-              </picture>
-
+        {data && (
+          <SidepanelHeader
+            title={data.service}
+            subtitle={data.name}
+            closeModal={closeModal}
+            href={data.link}
+            cloudProvider={data.provider}
+          >
+            {!data && bulkItems && (
               <div className="flex flex-col gap-1 py-1">
-                <p className="... w-48 truncate font-medium text-black-900">
-                  {data.service}
+                <p className="font-medium text-black-900">
+                  Managing tags for {formatNumber(bulkItems.length)}{' '}
+                  {bulkItems.length > 1 ? 'resources' : 'resource'}
                 </p>
-                <p className="flex items-center gap-2 text-xs text-black-300">
-                  {data.name}
-                  <a
-                    target="_blank"
-                    href={data.link}
-                    rel="noreferrer"
-                    className="hover:text-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.5"
-                        d="M13 11l8.2-8.2M22 6.8V2h-4.8M11 2H9C4 2 2 4 2 9v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2"
-                      ></path>
-                    </svg>
-                  </a>
+                <p className="text-xs text-black-300">
+                  All actions will overwrite previous tags for these resources
                 </p>
               </div>
-            </div>
-          )}
-          {!data && bulkItems && (
-            <div className="flex flex-col gap-1 py-1">
-              <p className="font-medium text-black-900">
-                Managing tags for {formatNumber(bulkItems.length)}{' '}
-                {bulkItems.length > 1 ? 'resources' : 'resource'}
-              </p>
-              <p className="text-xs text-black-300">
-                All actions will overwrite previous tags for these resources
-              </p>
-            </div>
-          )}
-
-          <div className="flex flex-shrink-0 items-center gap-2">
-            <Button style="secondary" onClick={closeModal}>
-              Close
-            </Button>
-          </div>
-        </div>
+            )}
+          </SidepanelHeader>
+        )}
 
         {/* Tabs */}
-        <SidepanelTabs goTo={goTo} page={page} tabs={['Tags']} />
+        <SidepanelTabs goTo={goTo} page={page} tabs={tabs} />
 
+        {/* Tab Content */}
+        {tabs.includes('resource details') && (
+          <SidepanelPage page={page} param={'resource details'}>
+            <div className="space-y-6 pt-1">
+              <div className="space-y-2">
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                  Cloud account
+                </h2>
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                  {!data && (
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                  )}
+                  {data && <span>{data.account}</span>}
+                </h2>
+              </div>
+              <div className="space-y-2">
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                  Region
+                </h2>
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                  {!data && (
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                  )}
+                  {data && <span>{data.region}</span>}
+                </h2>
+              </div>
+              <div className="space-y-2">
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                  Cost
+                </h2>
+                <h2 className=" flex items-center gap-2 text-sm">
+                  {!data && (
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                  )}
+                  {data && <span>{data?.cost.toFixed(2)}$</span>}
+                  {data && (
+                    <Pill status="removed">
+                      {getLastFetched(data.fetchedAt)}
+                    </Pill>
+                  )}
+                </h2>
+              </div>
+              <div className="space-y-2">
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                  Relations
+                </h2>
+                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                  {!data && (
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                  )}
+                  {data && (
+                    <span>{data.relations.length} related resources</span>
+                  )}
+                </h2>
+              </div>
+            </div>
+          </SidepanelPage>
+        )}
         {/* Tags form */}
-        <div>
-          {page === 'tags' && (
+        {tabs.includes('tags') && (
+          <SidepanelPage page={page} param={'tags'}>
             <form
               onSubmit={e => {
                 e.preventDefault();
@@ -127,7 +173,7 @@ function InventorySidePanel({
                   updateTags();
                 }
               }}
-              className="flex flex-col gap-6 pt-2"
+              className="flex flex-col gap-6 px-1 pt-2"
             >
               {tags &&
                 tags.map((tag, id) => (
@@ -185,8 +231,9 @@ function InventorySidePanel({
                 </Button>
               </div>
             </form>
-          )}
-
+          </SidepanelPage>
+        )}
+        <div>
           {page === 'delete' && (
             <>
               <div className="flex flex-col gap-6 bg-black-100 p-6">

@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -31,15 +32,17 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
-	azure "github.com/tailwarden/komiser/providers/azure"
+	"github.com/tailwarden/komiser/providers/azure"
 	"github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	"github.com/tailwarden/komiser/providers/gcp"
-	k8s "github.com/tailwarden/komiser/providers/k8s"
-	linode "github.com/tailwarden/komiser/providers/linode"
+	"github.com/tailwarden/komiser/providers/k8s"
+	"github.com/tailwarden/komiser/providers/linode"
 	"github.com/tailwarden/komiser/providers/mongodbatlas"
 	"github.com/tailwarden/komiser/providers/oci"
-	scaleway "github.com/tailwarden/komiser/providers/scaleway"
+	"github.com/tailwarden/komiser/providers/ovh"
+
+	"github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -54,7 +57,7 @@ var Arch = runtime.GOARCH
 var db *bun.DB
 var analytics utils.Analytics
 
-func Exec(address string, port int, configPath string, telemetry bool, a utils.Analytics, regions []string, cmd *cobra.Command) error {
+func Exec(address string, port int, configPath string, telemetry bool, a utils.Analytics, regions []string, _ *cobra.Command) error {
 	analytics = a
 
 	ctx := context.Background()
@@ -79,10 +82,8 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 
 		_, err = cron.Every(1).Hours().Do(func() {
 			log.Info("Fetching resources workflow has started")
-			err = fetchResources(ctx, clients, regions, telemetry)
-			if err != nil {
-				log.Fatal(err)
-			}
+
+			fetchResources(ctx, clients, regions, telemetry)
 		})
 
 		if err != nil {
@@ -209,7 +210,7 @@ func setupDBConnection(c *models.Config) error {
 	return nil
 }
 
-func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string) {
+func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string, wp *providers.WorkerPool) {
 	localHub := sentry.CurrentHub().Clone()
 
 	defer func() {
@@ -233,7 +234,7 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 
 	switch provider {
 	case "AWS":
-		aws.FetchResources(ctx, client, regions, db, telemetry, analytics)
+		aws.FetchResources(ctx, client, regions, db, telemetry, analytics, wp)
 	case "DigitalOcean":
 		do.FetchResources(ctx, client, db, telemetry, analytics)
 	case "OCI":
@@ -254,36 +255,55 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
 	case "GCP":
 		gcp.FetchResources(ctx, client, db, telemetry, analytics)
+	case "OVH":
+		ovh.FetchResources(ctx, client, db, telemetry, analytics)
 	}
 }
 
-func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) error {
+func fetchResources(ctx context.Context, clients []providers.ProviderClient, regions []string, telemetry bool) {
+	numWorkers := 64
+	wp := providers.NewWorkerPool(numWorkers)
+	wp.Start()
+
+	var wwg sync.WaitGroup
+	workflowTrigger := func(client providers.ProviderClient, provider string) {
+		wwg.Add(1)
+		go func() {
+			defer wwg.Done()
+			triggerFetchingWorfklow(ctx, client, provider, telemetry, regions, wp)
+		}()
+	}
+
 	for _, client := range clients {
 		if client.AWSClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "AWS", telemetry, regions)
+			workflowTrigger(client, "AWS")
 		} else if client.DigitalOceanClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "DigitalOcean", telemetry, regions)
+			workflowTrigger(client, "DigitalOcean")
 		} else if client.OciClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "OCI", telemetry, regions)
+			workflowTrigger(client, "OCI")
 		} else if client.CivoClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Civo", telemetry, regions)
+			workflowTrigger(client, "Civo")
 		} else if client.K8sClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Kubernetes", telemetry, regions)
+			workflowTrigger(client, "Kubernetes")
 		} else if client.LinodeClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Linode", telemetry, regions)
+			workflowTrigger(client, "Linode")
 		} else if client.TencentClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Tencent", telemetry, regions)
+			workflowTrigger(client, "Tencent")
 		} else if client.AzureClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Azure", telemetry, regions)
+			workflowTrigger(client, "Azure")
 		} else if client.ScalewayClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "Scaleway", telemetry, regions)
+			workflowTrigger(client, "Scaleway")
 		} else if client.MongoDBAtlasClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "MongoDBAtlas", telemetry, regions)
+			workflowTrigger(client, "MongoDBAtlas")
 		} else if client.GCPClient != nil {
-			go triggerFetchingWorfklow(ctx, client, "GCP", telemetry, regions)
+			workflowTrigger(client, "GCP")
+		} else if client.OVHClient != nil {
+			workflowTrigger(client, "OVH")
 		}
 	}
-	return nil
+
+	wwg.Wait()
+	wp.Wait()
 }
 
 func checkUpgrade() {

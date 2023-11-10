@@ -10,9 +10,9 @@ import OnboardingWizardLayout, {
 import PurplinCloud from '@components/onboarding-wizard/PurplinCloud';
 import CredentialsButton from '@components/onboarding-wizard/CredentialsButton';
 import Toast from '@components/toast/Toast';
-import useToast from '@components/toast/hooks/useToast';
 import { Provider } from '@utils/providerHelper';
 import { CloudAccountPayload } from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
+import { useToast } from '@components/toast/ToastProvider';
 
 interface ChildProps {
   cloudAccountData?: CloudAccountPayload<Credentials>;
@@ -32,7 +32,7 @@ export default function ProviderContent({
   description,
   children
 }: ProviderContentProps) {
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const [hasError, setHasError] = useState(false);
 
@@ -64,7 +64,7 @@ export default function ProviderContent({
           </div>
           <form
             onSubmit={event =>
-              configureAccount(event, provider, setToast, setHasError)
+              configureAccount(event, provider, showToast, setHasError)
             }
           >
             {React.isValidElement(children)
@@ -80,9 +80,6 @@ export default function ProviderContent({
           </div>
         </RightSideLayout>
       </OnboardingWizardLayout>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }

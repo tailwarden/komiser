@@ -28,6 +28,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.GET("/resources/export-csv", api.DownloadInventoryCSV)
 	router.GET("/resources/export-csv/:viewId", api.DownloadInventoryCSVForView)
 	router.POST("/resources/relations", api.RelationStatsHandler)
+	router.GET("/resources", api.GetResourceByIdHandler)
 
 	router.GET("/views", api.ListViewsHandler)
 	router.POST("/views", api.NewViewHandler)

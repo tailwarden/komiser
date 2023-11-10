@@ -1,10 +1,10 @@
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
+import Avatar from '@components/avatar/Avatar';
 import formatNumber from '../../../utils/formatNumber';
-import providers from '../../../utils/providerHelper';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
-import { ToastProps } from '../../toast/hooks/useToast';
 import {
   InventoryItem,
   InventoryStats
@@ -32,7 +32,7 @@ type InventoryTableProps = {
   searchedLoading: boolean;
   hideResourceFromCustomView: () => void;
   hideResourcesLoading: boolean;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 function InventoryTable({
@@ -52,7 +52,7 @@ function InventoryTable({
   searchedLoading,
   hideResourceFromCustomView,
   hideResourcesLoading,
-  setToast
+  showToast
 }: InventoryTableProps) {
   return (
     <>
@@ -63,7 +63,7 @@ function InventoryTable({
             query={query}
             setQuery={setQuery}
             error={error}
-            setToast={setToast}
+            showToast={showToast}
           />
           <div className="rounded-lg rounded-t-none pb-6">
             <table className="w-full table-auto bg-white text-left text-sm text-gray-900">
@@ -118,13 +118,7 @@ function InventoryTable({
                         className="min-w-[7rem] cursor-pointer py-4 pl-2 pr-6"
                       >
                         <div className="flex items-center gap-3">
-                          <picture className="flex-shrink-0">
-                            <img
-                              src={providers.providerImg(item.provider)}
-                              className="h-6 w-6 rounded-full"
-                              alt={item.provider}
-                            />
-                          </picture>
+                          <Avatar avatarName={item.provider} />
                           <span>{item.provider}</span>
                         </div>
                       </td>
@@ -203,13 +197,7 @@ function InventoryTable({
                         className="min-w-[7rem] cursor-pointer py-4 pl-2 pr-6"
                       >
                         <div className="flex items-center gap-3">
-                          <picture className="flex-shrink-0">
-                            <img
-                              src={providers.providerImg(item.provider)}
-                              className="h-6 w-6 rounded-full"
-                              alt={item.provider}
-                            />
-                          </picture>
+                          <Avatar avatarName={item.provider} />
                           <span>{item.provider}</span>
                         </div>
                       </td>

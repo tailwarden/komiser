@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import providers from '@utils/providerHelper';
+import Avatar from '@components/avatar/Avatar';
+import platform from '@utils/providerHelper';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 import CloudAccountStatus from './CloudAccountStatus';
 import More2Icon from '../../icons/More2Icon';
@@ -21,7 +21,7 @@ export default function CloudAccountItem({
   setCloudAccountItem: (cloudAccountItem: CloudAccount) => void;
 }) {
   const optionsRef = useRef<HTMLDivElement | null>(null);
-  const { id, provider, name, status } = account;
+  const { id, provider: cloudProvider, name, status } = account;
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -47,17 +47,10 @@ export default function CloudAccountItem({
       onClick={() => openModal(account)}
       className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-black-170 bg-white p-6 text-black-900 transition-colors"
     >
-      <Image
-        src={providers.providerImg(provider) as string}
-        alt={`${name} image`}
-        width={150}
-        height={150}
-        className="h-12 w-12 rounded-full"
-      />
-
+      <Avatar avatarName={cloudProvider} size={48} />
       <div className="mr-auto">
         <p className="font-bold">{name}</p>
-        <p className="text-black-300">{providers.providerLabel(provider)}</p>
+        <p className="text-black-300">{platform.getLabel(cloudProvider)}</p>
       </div>
 
       <CloudAccountStatus status={status} />

@@ -9,6 +9,7 @@ sidebar_label: Amazon Web Services
   - API Gateway
   - Access control lists
   - CloudFront distributions
+  - CloudFront functions
   - CloudWatch Dashboards
   - CloudWatch alarms
   - CloudWatch metrics
@@ -341,65 +342,69 @@ The above command deploys Komiser on the Kubernetes cluster in the default confi
 </iframe>
 </div>
 
-## Multiple account EKS (Helm chart) installation
+## Multiple Account EKS Installation
 ---
-Link to [README](https://github.com/tailwarden/helm/blob/master/README.md#configuration-multiple-aws-accounts) file with step by step instructions.
 
-Steps for a container to access the resources in multiple AWS accounts.
-We are working with two example clusters, ADMIN and DEV cluster.
+Below you will find the steps to deploy Komiser to an EKS cluster, such that it can monitor resources from multiple AWS accounts.
 
-Solution diagram:
+We are working with two AWS accounts here: **ADMIN** and **DEV** accounts.
+
+**Solution diagram:**
+
 <Frame className="tailwind styles absolute top-0 left-0 w-full h-full rounded-2xl">
-  <img src="/images/multi-account-graph.png" />
+  <img src="/images/multi-account-diagram.png" />
 </Frame>
 
-### Create and IAM OIDC provider for your cluster
+### Create an IAM OIDC provider for your cluster
 
-1. Open the Amazon EKS console at [https://console\.aws\.amazon\.com/eks/home\#/clusters](https://console.aws.amazon.com/eks/home#/clusters)\.
+1. Open the [Amazon EKS console](https://console\.aws\.amazon\.com/eks/home\#/clusters).
+2. Select the name of your cluster.
+3. Once the cluster is up and running, note the value of the **OpenID Connect provider URL** from the **Details** section on the **Overview** tab.
+4. Open the [AWS IAM console](https://console.aws.amazon.com/iam/).
+5. In the left navigation pane, choose **Identity Providers** under **Access management**. 
+    > If a **Provider** is listed that matches the URL for your cluster, then you already have a provider for your cluster. If a provider isn't listed that matches the URL for your cluster, then you must create one.
+6. To create a provider, choose **Add Provider**.
+7. For **Provider Type**, choose **OpenID Connect**.
+8. For **Provider URL**, paste the OIDC issuer URL for your cluster, and then choose **Get thumbprint**.
+9. For **Audience**, enter `sts.amazonaws.com` and choose **Add provider**.
 
-1. Select the name of your cluster\.
-
-1. In the **Details** section on the **Overview** tab, note the value of the **OpenID Connect provider URL**\.
-
-1. Open the IAM console at [https://console\.aws\.amazon\.com/iam/](https://console.aws.amazon.com/iam/)\.
-
-1. In the left navigation pane, choose **Identity Providers** under **Access management**\. If a **Provider** is listed that matches the URL for your cluster, then you already have a provider for your cluster\. If a provider isn't listed that matches the URL for your cluster, then you must create one\.
-
-1. To create a provider, choose **Add Provider**\.
-
-1. For **Provider Type**, choose **OpenID Connect**\.
-
-1. For **Provider URL**, paste the OIDC issuer URL for your cluster, and then choose **Get thumbprint**\.
-
-1. For **Audience**, enter `sts.amazonaws.com` and choose **Add provider**\.
-
-### Register the `ADMIN` OIDC provider in the `DEV` cluster
+### Register the `ADMIN` OIDC provider in the `DEV` Account
 
 1. Grab the **OpenID Connect provider URL** from the **ADMIN** account.
+2. Open the [AWS IAM console](https://console.aws.amazon.com/iam/) in the **DEV account**.
+3. In the left navigation pane, choose **Identity Providers** under **Access management**.
+4. To create a provider, choose **Add Provider**.
+5. For **Provider Type**, choose **OpenID Connect**.
+6. For **Provider URL**, paste the **ADMIN OIDC URL**, and then choose **Get thumbprint**.
+7. For **Audience**, enter `sts.amazonaws.com` and choose **Add provider**.
 
-2. Open the IAM console at [https://console\.aws\.amazon\.com/iam/](https://console.aws.amazon.com/iam/)\.
+### Create an `ADMIN IAM` role for the `ADMIN` Account
 
-1. In the left navigation pane, choose **Identity Providers** under **Access management**\.
-
-1. To create a provider, choose **Add Provider**\.
-
-1. For **Provider Type**, choose **OpenID Connect**\.
-
-1. For **Provider URL**, paste the ADMIN OIDC issuer URL, and then choose **Get thumbprint**\.
-
-1. For **Audience**, enter `sts.amazonaws.com` and choose **Add provider**\.
-
-### Create A `DEV IAM role`
-Add the recommended [Komiser policy](https://github.com/tailwarden/komiser/blob/master/policy.json)
-Create a Trust Relathionship with the `ADMIN` role (once it's created)
+1. Create a the Admin IAM role using the same [configuration](#create-iam-role-and-attach-a-komiser-iam-policy) as mentioned in the above section:
+    - Attach the [Komiser policy](https://github.com/tailwarden/komiser/blob/master/policy.json).
+    - Create a [service account trust relationship](#create-an-iam-role-for-a-service-account).
+3. Additionally modify the IAM policy to assume the `DEV` IAM role **(once created)**:
+```bash
+{
+    "Sid": "6",
+	  "Effect": "Allow",
+	  "Action": "sts:AssumeRole",
+	  "Resource": "arn:aws:iam::${DEV_ACCOUNT_ID}:role/${DEV_IAM_ROLE}"
+}
 ```
- {
+
+### Create a `DEV IAM` role for the `DEV` Account
+
+1. Add the recommended [Komiser policy](https://github.com/tailwarden/komiser/blob/master/policy.json)
+2. Create a Trust Relationship with the `ADMIN IAM` role
+```json
+{
      "Version": "2012-10-17",
      "Statement": [
          {
              "Effect": "Allow",
              "Principal": {
-                 "AWS": "arn:aws:iam::${ADMIN_ACCOUNT_ID}:role/${ROLE_NAME}"
+                 "AWS": "${ADMIN_IAM_ROLE_ARN}"
              },
              "Action": "sts:AssumeRole",
              "Condition": {}
@@ -408,23 +413,12 @@ Create a Trust Relathionship with the `ADMIN` role (once it's created)
  }
 ```
 
-### Create an `ADMIN IAM role`
-Create a [role](#create-iam-role-and-attach-a-komiser-iam-policy) with the same configuration as above. 
-Additionally attach the policy to assume the `DEV` role
-```
- {
-     "Version": "2012-10-17",
-     "Statement": [
-         {
-             "Effect": "Allow",
-             "Action": "sts:AssumeRole",
-             "Resource": "arn:aws:iam::${DEV_ACCOUNT_ID}:role/${ROLE_NAME}"
-         }
-     ]
- }
-```
+### Helm Chart Configuration
 
-### Add the `ADMIN` role to the ServiceAccount
+We'll be modifying the [helm chart](https://github.com/tailwarden/helm), to deploy Komiser to the EKS cluster.
+
+#### Add the `ADMIN` role to the ServiceAccount
+
 Add your values for `ACCOUNT_ID` and `ROLE_Name`
 
 ```
@@ -436,72 +430,95 @@ metadata:
     eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
 ```
 
-### Add a ConfigMap to the `/templates` folder
+#### Add a ConfigMap to the `/templates` folder
 
-1. Add the configmap.yaml file the the `/templates` folder in the root of the repository.
+Add the `configmap.yaml` file the the `/templates` folder in the root of the repository:
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-configmap
+  annotations:
+    meta.helm.sh/release-name: komiser
+    meta.helm.sh/release-namespace: ${NAMESPACE}
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  namespace: ${NAMESPACE}
+data:
+ config.toml: |-
+   [[aws]]
+   name="Admin Account"
+   source="CREDENTIALS_FILE"
+   path="/path/to/credentials/file"
+   profile="Admin-User" # Required if CREDENTIALS_FILE is set
 
-   ```
-    apiVersion: v1
-    kind: ConfigMap
-    data:
-    config.toml: |-
-      [[aws]]
-      name="admin"
-      source="CREDENTIALS_FILE"
-      path=/path/to/credentials/file
-      profile="ADMIN-account" # Required if CREDENTIALS_FILE is set
+   [[aws]]
+   name="Dev Account"
+   source="CREDENTIALS_FILE"
+   path="/path/to/credentials/file"
+   profile="Dev-User" # Required if CREDENTIALS_FILE is set
 
-      [[aws]]
-      name="dev"
-      source="CREDENTIALS_FILE"
-      path=/path/to/credentials/file
-      profile="ADMIN-account" # Required if CREDENTIALS_FILE is set
-    metadata:
-    annotations:
-        meta.helm.sh/release-name: ${RELEASE_NAME}
-        meta.helm.sh/release-namespace: ${NAMESPACE}
-    labels:
-        app.kubernetes.io/managed-by: Helm
-    name: aws-configmap
-    namespace: ${NAMESPACE}
-   ```
+   [sqlite]
+   file="komiser.db"
+```
 
-### Mount the ConfigMap to the Deployment manifest
+#### Mount the `ConfigMap` to the Deployment manifest
 
-1. Make sure not to change the mount path or internal volume path, paths should match the example below.
-2. Add the correct `config.toml` path to `command` to the container to allow a multi account setup.
-3. Have a valid credentials file that the deployment has access to.
-
-   ```
-    apiVersion: apps/v1 
-    kind: Deployment 
-    metadata: 
-    name: komiser
-    spec:
-    selector: 
-        matchLabels: 
+```yaml
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: komiser-deploy
+spec:
+  selector: 
+    matchLabels: 
+      app: komiser
+  template: 
+     metadata: 
+      name: komiser
+      labels: 
         app: komiser
-    template: 
-        metadata: 
-        name: komiser
-        labels: 
-            app: komiser
-        spec:
-        serviceAccountName: komiser
-        containers: 
-            - name: {{ .Chart.Name }}
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-            imagePullPolicy: {{ .Values.image.pullPolicy }}
-            command: ["komiser","start","--config","/root/.aws/config.toml"]
-            env:
-                - name: AWS_DEFAULT_REGION
-                value: "{{ .Values.aws.region }}"
-                - name: AWS_CONFIG_FILE
-                value: /root/.aws/credentials
-            volumeMounts:
-            - name: test-volume
-                mountPath: /root/.aws/
-        volumes:
-        - name: test-volume
-            configMap:
-            name: aws-configmap
+     spec:
+      serviceAccountName: komiser
+      volumes:
+      - name: test-volume
+        configMap:
+          name: aws-configmap
+      containers: 
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["komiser","start","--config","/root/.aws/config.toml"]
+          env:
+          - name: AWS_DEFAULT_REGION
+            value: "{{ .Values.aws.region }}"
+          - name: AWS_CONFIG_FILE
+            value: /root/.aws/credentials
+          volumeMounts:
+          - name: test-volume
+            mountPath: /root/.aws/
+```
+
+> **Points to remember:**
+> 1. Make sure not to change the mount path or internal volume path here. The paths should match the example above.
+> 2. The `config.toml` file will be mounted as a volume at the location: `/root/.aws/`. 
+Therefore, make sure to provide the same path in the komiser start command for the container.
+> 3. Have a valid credentials file that the deployment has access to.
+
+### Here's a video tutorial on how to deploy Komiser to an EKS cluster, with a Multi-Account Configuration:
+
+<div style={{
+    position: 'relative',
+    paddingBottom: '56.25%',
+    paddingTop:'30px',
+    height:0,
+    overflow:'hidden',
+  }}>
+<iframe className="tailwind styles absolute top-0 left-0 w-full h-full rounded-2xl"
+  src='https://www.youtube.com/embed/TMhlLoA0hfU?si=LYf7tgK4K2IwK7be'
+  allowFullScreen
+  webkitallowfullscreen="true"
+  frameBorder="0"
+>
+</iframe>
+</div>

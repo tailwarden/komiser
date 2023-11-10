@@ -8,7 +8,9 @@ const base: ButtonProps = {
   size: 'lg',
   disabled: false,
   loading: false,
-  onClick: () => {}
+  onClick: () => {},
+  href: '',
+  target: ''
 };
 
 const secondary: ButtonProps = {
@@ -63,13 +65,34 @@ const deleteButton: ButtonProps = {
   onClick: () => {}
 };
 
+const linkButton: ButtonProps = {
+  children: 'Link button',
+  asLink: true,
+  style: 'primary',
+  size: 'lg',
+  loading: false,
+  href: 'https://komiser.io'
+};
+
+const newTabLinkButton: ButtonProps = {
+  children: 'New Tab Link button',
+  asLink: true,
+  style: 'secondary',
+  size: 'lg',
+  loading: false,
+  href: 'https://komiser.io',
+  target: '_blank'
+};
+
 const mockButtonProps = {
   base,
   secondary,
   ghost,
   text,
   dropdown,
-  deleteButton
+  deleteButton,
+  linkButton,
+  newTabLinkButton
 };
 
 export default mockButtonProps;

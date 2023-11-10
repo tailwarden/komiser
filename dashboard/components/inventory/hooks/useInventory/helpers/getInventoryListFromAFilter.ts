@@ -1,7 +1,7 @@
+import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { SetStateAction } from 'react';
 import settingsService from '../../../../../services/settingsService';
-import { ToastProps } from '../../../../toast/hooks/useToast';
 import {
   InventoryFilterData,
   InventoryItem,
@@ -13,7 +13,7 @@ type getInventoryListFromAFilterProps = {
   router: NextRouter;
   setSearchedLoading: (searchedLoading: boolean) => void;
   setStatsLoading: (statsLoading: boolean) => void;
-  setToast: (value: SetStateAction<ToastProps | undefined>) => void;
+  showToast: (value: ToastProps) => void;
   setError: (error: boolean) => void;
   setInventoryStats: (inventoryStats: InventoryStats | undefined) => void;
   batchSize: number;
@@ -35,7 +35,7 @@ function getInventoryListFromAFilter({
   router,
   setSearchedLoading,
   setStatsLoading,
-  setToast,
+  showToast,
   setError,
   setInventoryStats,
   batchSize,
@@ -55,7 +55,7 @@ function getInventoryListFromAFilter({
       !router.query.view
     ) {
       setTimeout(() => router.push(router.pathname), 5000);
-      return setToast({
+      return showToast({
         hasError: true,
         title: `Invalid URL params`,
         message: `There was an error processing the page. Redirecting back to home...`
@@ -87,7 +87,7 @@ function getInventoryListFromAFilter({
       .getInventory(`?limit=${batchSize}&skip=0`, payloadJson)
       .then(res => {
         if (res.error) {
-          setToast({
+          showToast({
             hasError: true,
             title: `Filter could not be applied!`,
             message: `Please refresh the page and try again.`

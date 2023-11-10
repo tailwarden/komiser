@@ -10,10 +10,9 @@ import MongoDbAtlasAccountDetails from '@components/account-details/MongoDBAtlas
 import OciAccountDetails from '@components/account-details/OciAccountDetails';
 import ScalewayAccountDetails from '@components/account-details/ScalewayAccountDetails';
 import { getPayloadFromForm } from '@utils/cloudAccountHelpers';
-import providers, {
-  allProviders,
-  Provider
-} from '../../../utils/providerHelper';
+import { ToastProps } from '@components/toast/Toast';
+import Avatar from '@components/avatar/Avatar';
+import { allProviders, Provider } from '../../../utils/providerHelper';
 import AwsAccountDetails from '../../account-details/AwsAccountDetails';
 import Button from '../../button/Button';
 import Sidepanel from '../../sidepanel/Sidepanel';
@@ -24,7 +23,6 @@ import {
   CloudAccount,
   CloudAccountsPage
 } from '../hooks/useCloudAccounts/useCloudAccount';
-import { ToastProps } from '../../toast/hooks/useToast';
 import settingsService from '../../../services/settingsService';
 
 interface CloudAccountsSidePanelProps {
@@ -36,7 +34,7 @@ interface CloudAccountsSidePanelProps {
   handleAfterDelete: (account: CloudAccount) => void;
   page: CloudAccountsPage;
   goTo: (page: CloudAccountsPage) => void;
-  setToast: (toast: ToastProps) => void;
+  showToast: (toast: ToastProps) => void;
 }
 
 function AccountDetails({
@@ -81,7 +79,7 @@ function CloudAccountsSidePanel({
   handleAfterDelete,
   page,
   goTo,
-  setToast
+  showToast
 }: CloudAccountsSidePanelProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -101,7 +99,7 @@ function CloudAccountsSidePanel({
     settingsService.editCloudAccount(id, payloadJson).then(res => {
       if (res === Error || res.error) {
         setLoading(false);
-        setToast({
+        showToast({
           hasError: true,
           title: 'Cloud account not edited',
           message:
@@ -109,7 +107,7 @@ function CloudAccountsSidePanel({
         });
       } else {
         setLoading(false);
-        setToast({
+        showToast({
           hasError: false,
           title: 'Cloud account edited',
           message: `The cloud account was successfully edited!`
@@ -132,14 +130,7 @@ function CloudAccountsSidePanel({
           <div className="flex flex-wrap-reverse items-center justify-between gap-6 sm:flex-nowrap">
             {cloudAccount && (
               <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
-                <picture className="flex-shrink-0">
-                  <img
-                    src={providers.providerImg(cloudAccount.provider)}
-                    className="h-10 w-10 rounded-full"
-                    alt={cloudAccount.provider}
-                  />
-                </picture>
-
+                <Avatar avatarName={cloudAccount.provider} size={40} />
                 <div className="flex flex-col gap-1">
                   <div className="flex max-w-[14rem] items-center gap-1">
                     <p className="truncate font-medium text-black-900">
@@ -182,7 +173,7 @@ function CloudAccountsSidePanel({
                   setIsDeleteOpen(false);
                   closeModal();
                 }}
-                setToast={setToast}
+                showToast={showToast}
               />
             </div>
           ) : (

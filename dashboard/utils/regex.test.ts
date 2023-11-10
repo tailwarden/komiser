@@ -1,6 +1,6 @@
 import regex, { required } from './regex';
 
-describe('regex outputs', () => {
+describe('regex util', () => {
   it('should return the required regex', () => {
     const result = required;
     expect(result).toStrictEqual(/./);

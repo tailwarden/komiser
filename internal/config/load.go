@@ -18,6 +18,7 @@ import (
 	"github.com/linode/linodego"
 	"github.com/mongodb-forks/digest"
 	"github.com/oracle/oci-go-sdk/common"
+	"github.com/ovh/go-ovh/ovh"
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
@@ -450,6 +451,37 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.
 					Credentials: creds,
 				},
 				Name: account.Name,
+			})
+		}
+	}
+
+	if len(config.OVH) > 0 {
+		for _, account := range config.OVH {
+			cloudAccount := models.Account{
+				Provider: "OVH",
+				Name:     account.Name,
+				Credentials: map[string]string{
+					"endpoint":          account.Endpoint,
+					"applicationKey":    account.ApplicationKey,
+					"applicationSecret": account.ApplicationSecret,
+					"consumerKey":       account.ConsumerKey,
+				},
+			}
+			accounts = append(accounts, cloudAccount)
+
+			client, err := ovh.NewClient(
+				account.Endpoint,
+				account.ApplicationKey,
+				account.ApplicationSecret,
+				account.ConsumerKey,
+			)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			clients = append(clients, providers.ProviderClient{
+				OVHClient: client,
+				Name:      account.Name,
 			})
 		}
 	}

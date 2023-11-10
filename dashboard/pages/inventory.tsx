@@ -37,7 +37,7 @@ export default function Inventory() {
     loading,
     updateTags,
     toast,
-    setToast,
+    showToast,
     dismissToast,
     deleteLoading,
     reloadDiv,
@@ -104,7 +104,7 @@ export default function Inventory() {
               <InventoryView
                 filters={filters}
                 displayedFilters={displayedFilters}
-                setToast={setToast}
+                showToast={showToast}
                 inventoryStats={inventoryStats}
                 router={router}
                 views={views}
@@ -151,7 +151,7 @@ export default function Inventory() {
           searchedLoading={searchedLoading}
           hideResourceFromCustomView={hideResourceFromCustomView}
           hideResourcesLoading={hideResourcesLoading}
-          setToast={setToast}
+          showToast={showToast}
         />
 
         {/* Infite scroll trigger */}
@@ -173,6 +173,7 @@ export default function Inventory() {
           deleteLoading={deleteLoading}
           bulkItems={bulkItems}
           updateBulkTags={updateBulkTags}
+          tabs={['resource details', 'tags']}
         />
 
         {/* Error state */}
@@ -207,9 +208,6 @@ export default function Inventory() {
           />
         )}
       </InventoryLayout>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/civo/civogo"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/models"
@@ -22,6 +23,7 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 
 		monthlyCost := float64(volume.SizeGigabytes) * 0.10
 
+		relation := getVolumesRelation(volume)
 		resources = append(resources, models.Resource{
 			Provider:   "Civo",
 			Account:    client.Name,
@@ -30,6 +32,7 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			ResourceId: volume.ID,
 			Cost:       monthlyCost,
 			Name:       volume.Name,
+			Relations:  relation,
 			FetchedAt:  time.Now(),
 			CreatedAt:  volume.CreatedAt,
 			Link:       "https://dashboard.civo.com/volumes",
@@ -44,4 +47,37 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getVolumesRelation(vol civogo.Volume) []models.Link {
+	var rel []models.Link
+
+	if len(vol.ClusterID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: vol.ClusterID,
+			Type:       "Kubernetes",
+			Name:       vol.ClusterID,
+			Relation:   "USES",
+		})
+	}
+
+	if len(vol.InstanceID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: vol.InstanceID,
+			Type:       "Instance",
+			Name:       vol.InstanceID,
+			Relation:   "USES",
+		})
+	}
+
+	if len(vol.ClusterID) > 0 {
+		rel = append(rel, models.Link{
+			ResourceID: vol.ClusterID,
+			Type:       "Network",
+			Name:       vol.NetworkID,
+			Relation:   "USES",
+		})
+	}
+
+	return rel
 }
