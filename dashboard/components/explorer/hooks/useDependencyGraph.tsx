@@ -23,7 +23,7 @@ function GetData(res: any) {
         data: {
           label: ele.name,
           service: ele.service,
-          provider: 'AWS',
+          provider: ele.provider,
           id: ele.resourceId,
           isRoot: true
         }
@@ -40,7 +40,7 @@ function GetData(res: any) {
             label: rel.name,
             service: ele.service,
             type: rel.type,
-            provider: 'AWS', // when supporting new provider this could be made dynamic
+            provider: ele.provider,
             isRoot: false
           }
         };
