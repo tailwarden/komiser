@@ -16,7 +16,6 @@ import (
 const createdLayout = "2006-01-02T15:04:05Z"
 
 func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
-	var hourlyPrice float64
 	resources := make([]models.Resource, 0)
 	volumes, _, err := client.DigitalOceanClient.Storage.ListVolumes(ctx, &godo.ListVolumeParams{})
 	if err != nil {
@@ -39,7 +38,8 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 				})
 			}
 		}
-
+		
+		var hourlyPrice float64
 		sizeInGB := volume.SizeGigaBytes
 		if sizeInGB <= 100 {
 			hourlyPrice = 0.015
