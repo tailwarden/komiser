@@ -10,13 +10,6 @@
 	},
 	"customizations": {
 		"vscode": {
-			"settings": {
-				"go.lintTool": "golangci-lint",
-				"go.lintFlags": [
-					"--fast",
-					"--config=.golangci.yml"
-				]
-			},
 			"extensions": [
 				"golang.go-nightly",
 				"bradlc.vscode-tailwindcss"
