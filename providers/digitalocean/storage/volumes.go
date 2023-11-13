@@ -43,8 +43,7 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 		sizeInGB := volume.SizeGigaBytes
 		if sizeInGB <= 100 {
 			hourlyPrice = 0.015
-		}
-		if sizeInGB <= 500 && sizeInGB > 100 {
+		} else if sizeInGB <= 500 {
 			hourlyPrice = 0.075
 		} else {
 			hourlyPrice = 0.150
