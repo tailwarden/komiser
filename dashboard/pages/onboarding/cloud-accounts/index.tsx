@@ -2,25 +2,26 @@ import { useState } from 'react';
 import router from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import OnboardingWizardLayout, {
   LeftSideLayout,
   RightSideLayout
 } from '@components/onboarding-wizard/OnboardingWizardLayout';
 import PlusIcon from '@components/icons/PlusIcon';
-import providers from '@utils/providerHelper';
+import platform from '@utils/providerHelper';
 import DeleteIcon from '@components/icons/DeleteIcon';
 import Modal from '@components/modal/Modal';
 import CloudAccountDeleteContents from '@components/cloud-account/components/CloudAccountDeleteContents';
 import Toast from '@components/toast/Toast';
-import useToast from '@components/toast/hooks/useToast';
+
 import useCloudAccount from '@components/cloud-account/hooks/useCloudAccounts/useCloudAccount';
 import Button from '@components/button/Button';
+import { useToast } from '@components/toast/ToastProvider';
+import Avatar from '@components/avatar/Avatar';
 
 export default function CloudAccounts() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const { toast, setToast, dismissToast } = useToast();
+  const { toast, showToast, dismissToast } = useToast();
 
   const {
     cloudAccounts,
@@ -74,16 +75,7 @@ export default function CloudAccounts() {
                 className="flex items-center justify-between rounded-lg border border-black-200 p-6"
               >
                 <div className="flex flex-wrap items-center gap-4 sm:flex-nowrap">
-                  <picture className="flex-shrink-0">
-                    <Image
-                      src={String(providers.providerImg(account.provider))}
-                      className="rounded-full"
-                      height={40}
-                      width={40}
-                      alt={account.provider}
-                    />
-                  </picture>
-
+                  <Avatar avatarName={account.provider} size={40} />
                   <div className="flex flex-col gap-1">
                     <div className="flex max-w-[14rem] items-center gap-1">
                       <p className="truncate font-medium text-black-900">
@@ -91,7 +83,7 @@ export default function CloudAccounts() {
                       </p>
                     </div>
                     <p className="flex items-center gap-2 text-xs text-black-300">
-                      {providers.providerLabel(account.provider)}
+                      {platform.getLabel(account.provider)}
                     </p>
                   </div>
                 </div>
@@ -129,13 +121,7 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200">
               <div className="relative bottom-3 left-3 h-full w-full scale-110 overflow-clip rounded-lg shadow-xl">
-                <Image
-                  src={String(providers.providerImg('aws'))}
-                  layout="fill"
-                  objectFit="cover"
-                  className="object-center"
-                  alt="AWS"
-                />
+                <Avatar avatarName="aws" />
               </div>
             </div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
@@ -147,13 +133,7 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200">
               <div className="relative h-full w-full overflow-clip rounded-lg shadow-xl">
-                <Image
-                  src={String(providers.providerImg('civo'))}
-                  layout="fill"
-                  objectFit="cover"
-                  className="object-center"
-                  alt="Civo"
-                />
+                <Avatar avatarName="civo" />
               </div>
             </div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
@@ -167,13 +147,7 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-400">
               <div className="relative h-full w-full overflow-clip rounded-lg bg-white shadow-xl">
-                <Image
-                  src={String(providers.providerImg('gcp'))}
-                  layout="fill"
-                  objectFit="cover"
-                  className="object-center p-2"
-                  alt="GCP"
-                />
+                <Avatar avatarName="gcp" />
               </div>
             </div>
             <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
@@ -187,13 +161,7 @@ export default function CloudAccounts() {
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-400"></div>
             <div className="aspect-square h-full w-full rounded-lg bg-komiser-200">
               <div className="relative left-3 top-3  h-full w-full overflow-clip rounded-lg bg-black-800 shadow-xl">
-                <Image
-                  src={String(providers.providerImg('azure'))}
-                  layout="fill"
-                  objectFit="cover"
-                  className="object-center p-5"
-                  alt="Azure"
-                />
+                <Avatar avatarName="azure" />
               </div>
             </div>
             <div className="aspect-square h-full w-full rounded-lg bg-transparent"></div>
@@ -227,15 +195,12 @@ export default function CloudAccounts() {
             <CloudAccountDeleteContents
               cloudAccount={cloudAccountItem}
               onCancel={closeRemoveModal}
-              setToast={setToast}
+              showToast={showToast}
               handleAfterDelete={handleAfterDelete}
             />
           )}
         </div>
       </Modal>
-
-      {/* Toast component */}
-      {toast && <Toast {...toast} dismissToast={dismissToast} />}
     </div>
   );
 }

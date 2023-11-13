@@ -135,6 +135,19 @@ const settingsService = {
     }
   },
 
+  async getResourceById(urlParams: string) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/resources${urlParams}`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async getInventoryStats() {
     try {
       const res = await fetch(`${BASE_URL}/stats`, settings('GET'));

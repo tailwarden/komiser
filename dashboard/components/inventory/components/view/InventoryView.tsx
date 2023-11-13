@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import { NextRouter } from 'next/router';
+import { ToastProps } from '@components/toast/Toast';
+import Avatar from '@components/avatar/Avatar';
 import formatNumber from '../../../../utils/formatNumber';
-import providers, { Provider } from '../../../../utils/providerHelper';
+import { Provider } from '../../../../utils/providerHelper';
 import Button from '../../../button/Button';
 import Checkbox from '../../../checkbox/Checkbox';
 import AlertIcon from '../../../icons/AlertIcon';
@@ -10,7 +12,6 @@ import Sidepanel from '../../../sidepanel/Sidepanel';
 import SidepanelHeader from '../../../sidepanel/SidepanelHeader';
 import SidepanelPage from '../../../sidepanel/SidepanelPage';
 import SidepanelTabs from '../../../sidepanel/SidepanelTabs';
-import { ToastProps } from '../../../toast/hooks/useToast';
 import {
   HiddenResource,
   InventoryFilterData,
@@ -25,7 +26,7 @@ import useViews from './hooks/useViews';
 type InventoryViewProps = {
   filters: InventoryFilterData[] | undefined;
   displayedFilters: InventoryFilterData[] | undefined;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
   inventoryStats: InventoryStats | undefined;
   router: NextRouter;
   views: View[] | undefined;
@@ -36,7 +37,7 @@ type InventoryViewProps = {
 function InventoryView({
   filters,
   displayedFilters,
-  setToast,
+  showToast,
   inventoryStats,
   router,
   views,
@@ -63,7 +64,7 @@ function InventoryView({
     unhideResources,
     deleteLoading
   } = useViews({
-    setToast,
+    showToast,
     views,
     router,
     getViews,
@@ -78,7 +79,7 @@ function InventoryView({
         views={views}
         router={router}
         saveView={saveView}
-        setToast={setToast}
+        showToast={showToast}
         loading={loading}
         deleteView={deleteView}
         deleteLoading={deleteLoading}
@@ -173,7 +174,7 @@ function InventoryView({
         </SidepanelPage>
 
         <SidepanelPage page={page} param="alerts">
-          <InventoryViewAlerts viewId={view.id} setToast={setToast} />
+          <InventoryViewAlerts viewId={view.id} showToast={showToast} />
         </SidepanelPage>
 
         <SidepanelPage page={page} param="hidden resources">
@@ -223,15 +224,7 @@ function InventoryView({
                         </td>
                         <td className="py-4 pl-2 pr-6">
                           <div className="flex items-center gap-2">
-                            <picture className="flex-shrink-0">
-                              <img
-                                src={providers.providerImg(
-                                  item.provider as Provider
-                                )}
-                                className="h-6 w-6 rounded-full"
-                                alt={item.provider}
-                              />
-                            </picture>
+                            <Avatar avatarName={item.provider as Provider} />
                             <span>{item.provider}</span>
                           </div>
                         </td>

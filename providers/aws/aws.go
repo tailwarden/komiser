@@ -6,6 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
@@ -57,6 +58,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.Instances,
 		eks.KubernetesClusters,
 		cloudfront.Distributions,
+		cloudfront.Functions,
 		dynamodb.Tables,
 		ecs.Clusters,
 		ecs.TaskDefinitions,
@@ -106,7 +108,12 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 	}
 
 	for _, region := range listOfSupportedRegions {
-		client.AWSClient.Region = region
+		c := client.AWSClient.Copy()
+		c.Region = region
+		client = providers.ProviderClient{
+			AWSClient: &c,
+			Name:      client.Name,
+		}
 		for _, fetchResources := range listOfSupportedServices() {
 			wp.SubmitTask(func() {
 				resources, err := fetchResources(ctx, client)
@@ -121,14 +128,23 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 					}
 					if telemetry {
 						analytics.TrackEvent("discovered_resources", map[string]interface{}{
-							"provider":  "AWS",
-							"resources": len(resources),
+							"provider":     "AWS",
+							"resources":    len(resources),
+							"dependencies": calculateDependencies(resources),
 						})
 					}
 				}
 			})
 		}
 	}
+}
+
+func calculateDependencies(resources []models.Resource) int {
+	total := 0
+	for _, resource := range resources {
+		total += len(resource.Relations)
+	}
+	return total
 }
 
 func getRegions() []string {

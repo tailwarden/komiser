@@ -1,4 +1,4 @@
-import { ToastProps } from '../../../../toast/hooks/useToast';
+import { ToastProps } from '@components/toast/Toast';
 import useAlerts from './hooks/useAlerts';
 import InventoryViewAlertsDeleteAlert from './InventoryViewAlertsDeleteAlert';
 import InventoryViewAlertDisplayAlerts from './InventoryViewAlertsDisplay';
@@ -10,7 +10,7 @@ import InventoryViewAlertsChooseAlertMethod from './InventoryViewAlertsChooseAle
 
 type InventoryViewAlertsProps = {
   viewId: number;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 const viewControllerOptions = {
@@ -20,7 +20,7 @@ const viewControllerOptions = {
   DELETE_ALERT: 3
 };
 
-function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
+function InventoryViewAlerts({ viewId, showToast }: InventoryViewAlertsProps) {
   const {
     loading,
     error,
@@ -69,7 +69,7 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
             currentAlert={currentAlert}
             closeAlert={closeAlert}
             viewId={viewId}
-            setToast={setToast}
+            showToast={showToast}
           />
         );
       }
@@ -101,7 +101,7 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
           currentAlert={currentAlert}
           closeAlert={closeAlert}
           viewId={viewId}
-          setToast={setToast}
+          showToast={showToast}
         />
       );
     case viewControllerOptions.DELETE_ALERT:
@@ -112,7 +112,7 @@ function InventoryViewAlerts({ viewId, setToast }: InventoryViewAlertsProps) {
           currentAlert={currentAlert}
           closeAlert={closeAlert}
           viewId={viewId}
-          setToast={setToast}
+          showToast={showToast}
         />
       );
     default:

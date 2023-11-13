@@ -1,6 +1,6 @@
+import { ToastProps } from '@components/toast/Toast';
 import { FormEvent, useState } from 'react';
 import settingsService from '../../../../../../services/settingsService';
-import { ToastProps } from '../../../../../toast/hooks/useToast';
 import { AlertMethod, Alert } from './useAlerts';
 
 type AlertType = 'BUDGET' | 'USAGE';
@@ -22,7 +22,7 @@ type useEditAlertsProps = {
   currentAlert: Alert | undefined;
   viewId: number;
   closeAlert: (action?: 'hasChanges' | undefined) => void;
-  setToast: (toast: ToastProps | undefined) => void;
+  showToast: (toast: ToastProps) => void;
 };
 
 const INITIAL_BUDGET_ALERT: Partial<Alert> = {
@@ -44,7 +44,7 @@ function useEditAlerts({
   viewId,
   currentAlert,
   closeAlert,
-  setToast
+  showToast
 }: useEditAlertsProps) {
   const [selected, setSelected] = useState<AlertType>(
     currentAlert?.type || ALERT_TYPE.BUDGET
@@ -110,7 +110,7 @@ function useEditAlerts({
       settingsService.createAlert(payloadJson).then(res => {
         if (res === Error || res.error) {
           setLoading(false);
-          setToast({
+          showToast({
             hasError: true,
             title: 'Alert not created',
             message:
@@ -118,7 +118,7 @@ function useEditAlerts({
           });
         } else {
           setLoading(false);
-          setToast({
+          showToast({
             hasError: false,
             title: 'Alert created',
             message: `The alert was successfully created!`
@@ -137,7 +137,7 @@ function useEditAlerts({
         settingsService.editAlert(id, payloadJson).then(res => {
           if (res === Error || res.error) {
             setLoading(false);
-            setToast({
+            showToast({
               hasError: true,
               title: 'Alert not edited',
               message:
@@ -145,7 +145,7 @@ function useEditAlerts({
             });
           } else {
             setLoading(false);
-            setToast({
+            showToast({
               hasError: false,
               title: 'Alert edited',
               message: `The alert was successfully edited!`
@@ -163,7 +163,7 @@ function useEditAlerts({
     settingsService.deleteAlert(id).then(res => {
       if (res === Error || res.error) {
         setLoading(false);
-        setToast({
+        showToast({
           hasError: true,
           title: 'Alert was not deleted',
           message:
@@ -171,7 +171,7 @@ function useEditAlerts({
         });
       } else {
         setLoading(false);
-        setToast({
+        showToast({
           hasError: false,
           title: 'Alert deleted',
           message: `The alert was successfully deleted!`
