@@ -13,6 +13,9 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
+var hourlyPrice float64
+const createdLayout = "2006-01-02T15:04:05Z" // 2020-07-21T18:37:44Z
+
 func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 	volumes, _, err := client.DigitalOceanClient.Storage.ListVolumes(ctx, &godo.ListVolumeParams{})
@@ -37,6 +40,33 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			}
 		}
 
+		sizeInGB := volume.SizeGigaBytes
+		if sizeInGB <= 100 {
+			hourlyPrice = 0.015
+		}
+		if sizeInGB <= 500 && sizeInGB > 100 {
+			hourlyPrice = 0.075
+		} else {
+			hourlyPrice = 0.150
+		}
+
+		currentTime := time.Now()
+		currentMonth := time.Date(currentTime.Year(), currentTime.Month(), 1, 0, 0, 0, 0, time.UTC)
+
+		created, err := time.Parse(createdLayout, volume.CreatedAt.String())
+		if err != nil {
+			return nil, err
+		}
+
+		var duration time.Duration
+		if created.Before(currentMonth) {
+			duration = currentTime.Sub(currentMonth)
+		} else {
+			duration = currentTime.Sub(created)
+		}
+
+		monthlyCost := hourlyPrice * float64(duration.Hours())
+
 		resources = append(resources, models.Resource{
 			Provider:   "DigitalOcean",
 			Account:    client.Name,
@@ -44,6 +74,7 @@ func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			ResourceId: volume.ID,
 			Region:     volume.Region.Name,
 			Name:       volume.Name,
+			Cost:       monthlyCost,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://cloud.digitalocean.com/volumes/%s", volume.ID),
