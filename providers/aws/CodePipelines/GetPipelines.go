@@ -10,8 +10,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/pipeline"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -55,18 +53,6 @@ func GetPipelines(ctx context.Context, client ProviderClient) ([]Resource, error
 				Name: &cluster,
 			})
 
-			createdAt := time.Now()
-			if err == nil {
-				startOfMonth := utils.BeginningOfMonth(time.Now())
-				hourlyUsage := 0
-				if (*outputDescribe.Cluster.CreatedAt).Before(startOfMonth) {
-					hourlyUsage = int(time.Since(startOfMonth).Hours())
-				} else {
-					hourlyUsage = int(time.Since(*outputDescribe.Cluster.CreatedAt).Hours())
-				}
-				createdAt = *outputDescribe.Cluster.CreatedAt
-			}
-
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -84,7 +70,7 @@ func GetPipelines(ctx context.Context, client ProviderClient) ([]Resource, error
 		if aws.ToString(output.NextToken) == "" {
 			break
 		}
-
+å
 		config.NextToken = output.NextToken
 	}
 	log.WithFields(log.Fields{
