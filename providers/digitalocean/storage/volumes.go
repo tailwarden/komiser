@@ -13,10 +13,10 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-var hourlyPrice float64
-const createdLayout = "2006-01-02T15:04:05Z" // 2020-07-21T18:37:44Z
+const createdLayout = "2006-01-02T15:04:05Z"
 
 func Volumes(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+	var hourlyPrice float64
 	resources := make([]models.Resource, 0)
 	volumes, _, err := client.DigitalOceanClient.Storage.ListVolumes(ctx, &godo.ListVolumeParams{})
 	if err != nil {
