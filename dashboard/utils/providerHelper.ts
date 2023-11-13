@@ -10,6 +10,7 @@ export type Provider =
   | 'oci'
   | 'scaleway'
   | 'mongodbatlas'
+  | 'ovh'
   | 'pulumi'
   | 'terraform';
 
@@ -25,6 +26,7 @@ type ProviderKey =
   | 'OCI'
   | 'SCALE_WAY'
   | 'MONGODB_ATLAS'
+  | 'OVH'
   | 'PULUMI'
   | 'TERRAFORM';
 
@@ -40,6 +42,7 @@ export const allProviders: { [key in ProviderKey]: Provider } = {
   OCI: 'oci',
   SCALE_WAY: 'scaleway',
   MONGODB_ATLAS: 'mongodbatlas',
+  OVH: 'ovh',
   TERRAFORM: 'terraform',
   PULUMI: 'pulumi'
 };
@@ -114,6 +117,10 @@ const platform: Platform = {
     mongodbatlas: {
       label: 'MongoDB Atlas',
       imgSrc: '/assets/img/providers/mongodbatlas.png'
+    },
+    ovh: {
+      label: 'OVHcloud',
+      imgSrc: '/assets/img/providers/ovh.png'
     },
     terraform: {
       label: 'Terraform',

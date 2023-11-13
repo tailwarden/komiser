@@ -91,7 +91,7 @@ function Navbar() {
         </a>
         <a
           className="hidden items-center gap-2 transition-colors hover:text-primary md:flex"
-          href="https://www.tailwarden.com/changelog?utm_source=komiser&utm_medium=referral&utm_campaign=static"
+          href="https://www.tailwarden.com/changelog/komiser"
           target="_blank"
           rel="noopener noreferrer"
         >
