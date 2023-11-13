@@ -15,8 +15,8 @@ import (
 
 func GetPipelines(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
-	var config eks.ListClustersInput
-	pipelineClient := eks.NewFromConfig(*client.AWSClient)
+	var config pipeline.ListClustersInput
+	pipelineClient := pipeline.NewFromConfig(*client.AWSClient)
 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
 	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
@@ -27,14 +27,14 @@ func GetPipelines(ctx context.Context, client ProviderClient) ([]Resource, error
 	accountId := stsOutput.Account
 
 	for {
-		output, err := eksClient.ListClusters(ctx, &config)
+		output, err := pipelineClient.ListClusters(ctx, &config)
 		if err != nil {
 			return resources, err
 		}
 
 		for _, cluster := range output.Clusters {
-			resourceArn := fmt.Sprintf("arn:aws:eks:%s:%s:cluster/%s", client.AWSClient.Region, *accountId, cluster)
-			outputTags, err := eksClient.ListTagsForResource(ctx, &eks.ListTagsForResourceInput{
+			resourceArn := fmt.Sprintf("arn:aws:pipeline:%s:%s:cluster/%s", client.AWSClient.Region, *accountId, cluster)
+			outputTags, err := pipelineClient.ListTagsForResource(ctx, &pipeline.ListTagsForResourceInput{
 				ResourceArn: &resourceArn,
 			})
 
@@ -49,21 +49,21 @@ func GetPipelines(ctx context.Context, client ProviderClient) ([]Resource, error
 				}
 			}
 
-			outputDescribe, err := eksClient.DescribeCluster(ctx, &eks.DescribeClusterInput{
+			outputDescribe, err := pipelineClient.DescribeCluster(ctx, &eks.DescribeClusterInput{
 				Name: &cluster,
 			})
 
 			resources = append(resources, Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "pipeline",
+				Service:    "codepipeline",
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
 				Name:       cluster,
 				Tags:       tags,
 				CreatedAt:  createdAt,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, cluster),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/codepipeline/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, cluster),
 			})
 		}
 
@@ -77,7 +77,7 @@ func GetPipelines(ctx context.Context, client ProviderClient) ([]Resource, error
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "pipeline",
+		"service":   "codepipeline",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
