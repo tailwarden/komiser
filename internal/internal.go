@@ -248,13 +248,13 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	case "Tencent":
 		tencent.FetchResources(ctx, client, db, telemetry, analytics)
 	case "Azure":
-		azure.FetchResources(ctx, client, db, telemetry, analytics)
+		azure.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Scaleway":
 		scaleway.FetchResources(ctx, client, db, telemetry, analytics)
 	case "MongoDBAtlas":
 		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
 	case "GCP":
-		gcp.FetchResources(ctx, client, db, telemetry, analytics)
+		gcp.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "OVH":
 		ovh.FetchResources(ctx, client, db, telemetry, analytics)
 	}
