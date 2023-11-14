@@ -142,7 +142,6 @@ const platform: Platform = {
     }
   },
 
-
   getImgSrc(providerName) {
     const key = providerName.toLowerCase();
     if (key in this.cloudProviders) return this.cloudProviders[key].imgSrc;

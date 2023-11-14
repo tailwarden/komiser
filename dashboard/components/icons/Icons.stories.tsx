@@ -9,7 +9,7 @@ const IconsWrapper = (props: SVGProps<SVGSVGElement>) => (
   <div className="inline-flex w-full flex-wrap gap-2 p-2">
     {Object.entries(icons).map(([name, Icon]) => (
       <div key={name} className="relative">
-        <div className="peer flex h-full flex-col items-center justify-center gap-2 rounded-md border bg-white p-3">
+        <div className="peer flex h-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-200 p-3">
           <Icon {...props} />
           <p className="text-sm">{name}</p>
         </div>

@@ -253,7 +253,12 @@ module.exports = {
         scale: 'scale 250ms ease forwards'
       },
       backgroundImage: {
-        'dependency-graph': 'radial-gradient(#EDEBEE 2px, transparent 0)'
+        'dependency-graph': 'radial-gradient(#EDEBEE 2px, transparent 0)',
+        'empty-cost-explorer':
+          "url('/assets/img/others/empty-state-cost-explorer.png')"
+      },
+      width: {
+        'fit-content': 'fit-content'
       }
     }
   },
