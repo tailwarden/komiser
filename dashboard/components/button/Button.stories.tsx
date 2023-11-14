@@ -65,3 +65,15 @@ export const Delete: Story = {
     ...mockButtonProps.deleteButton
   }
 };
+
+export const Link: Story = {
+  args: {
+    ...mockButtonProps.linkButton
+  }
+};
+
+export const NewTabLink: Story = {
+  args: {
+    ...mockButtonProps.newTabLinkButton
+  }
+};
