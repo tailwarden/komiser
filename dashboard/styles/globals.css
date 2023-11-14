@@ -69,3 +69,9 @@
   font-size: 16px;
   padding: 5px 9px;
 }
+
+#feedback-modal-modal {
+  max-height: 80vh;
+  padding-right: 16px;
+  padding-left: 16px;
+}
