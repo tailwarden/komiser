@@ -239,7 +239,7 @@ function InventorySidePanel({
         {/* Relations */}
         {tabs.includes('relations') && (
           <SidepanelPage page={page} param={'relations'}>
-            <SingleDependencyGraphWrapper resourceId={data?.resourceId} />
+            <SingleDependencyGraphWrapper resourceId={data?.resourceId || ''} />
           </SidepanelPage>
         )}
         <div>

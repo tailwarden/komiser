@@ -24,17 +24,9 @@ import { useDependencyGraphActions } from '../hooks/useDependencyGraphActions';
 
 const DependencyGraph = ({ data }: DependencyGraphProps) => {
   const dataIsEmpty: boolean = data.nodes.length === 0;
-  const {
-    cyRef,
-    cyActionHandlers,
-    toggleNodeDragging,
-    isNodeDraggingEnabled,
-    translateXClass,
-    zoomVal,
-    handleZoomChange
-  } = useDependencyGraphActions({ enableClickHandler: true });
 
   const {
+    openModal,
     isOpen,
     closeModal,
     data: inventoryItem,
@@ -50,6 +42,16 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
     bulkItems,
     updateBulkTags
   } = useInventory();
+
+  const {
+    cyRef,
+    cyActionHandlers,
+    toggleNodeDragging,
+    isNodeDraggingEnabled,
+    translateXClass,
+    zoomVal,
+    handleZoomChange
+  } = useDependencyGraphActions({ isSingleDependencyGraph: false, openModal });
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
@@ -142,6 +144,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
         </div>
       </div>
       {/* Modal */}
+
       <InventorySidePanel
         isOpen={isOpen}
         closeModal={closeModal}

@@ -28,7 +28,7 @@ const SingleDependencyGraph = ({ data }: DependencyGraphProps) => {
     translateXClass,
     zoomVal,
     handleZoomChange
-  } = useDependencyGraphActions({ enableClickHandler: false });
+  } = useDependencyGraphActions({ isSingleDependencyGraph: true });
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">

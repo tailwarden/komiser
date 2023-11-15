@@ -9,7 +9,7 @@ import nodeHtmlLabel, {
 // @ts-ignore
 import COSEBilkent from 'cytoscape-cose-bilkent';
 import settingsService from '@services/settingsService';
-import useInventory from '@components/inventory/hooks/useInventory/useInventory';
+import { InventoryItem } from '@components/inventory/hooks/useInventory/types/useInventoryTypes';
 import {
   edgeAnimationConfig,
   maxZoom,
@@ -19,7 +19,8 @@ import {
 } from '../config';
 
 type UseDependencyGraphActionsT = {
-  enableClickHandler?: boolean;
+  isSingleDependencyGraph?: boolean;
+  openModal?: (inventoryItem: InventoryItem) => void;
 };
 
 // Register the extensions only once
@@ -27,7 +28,8 @@ nodeHtmlLabel(Cytoscape.use(COSEBilkent));
 Cytoscape.use(popper);
 
 export const useDependencyGraphActions = ({
-  enableClickHandler = true
+  isSingleDependencyGraph = false,
+  openModal
 }: UseDependencyGraphActionsT) => {
   const [initDone, setInitDone] = useState(false);
 
@@ -37,14 +39,12 @@ export const useDependencyGraphActions = ({
   const [zoomVal, setZoomVal] = useState(0); // debounced zoom state to display percentage
   const cyRef = useRef<Cytoscape.Core | null>(null);
 
-  const { openModal } = useInventory();
-
   // opens modal to display details of clicked node
   const handleNodeClick = async (event: EventObject) => {
     const nodeData = event.target.data();
     settingsService.getResourceById(`?resourceId=${nodeData.id}`).then(res => {
       if (res !== Error) {
-        openModal(res);
+        if (openModal) openModal(res);
       }
     });
   };
@@ -90,7 +90,7 @@ export const useDependencyGraphActions = ({
       cy.edges().forEach(loopAnimation);
 
       // Add a click event listener to the Cytoscape graph
-      if (enableClickHandler) {
+      if (!isSingleDependencyGraph) {
         cy.on('tap', 'node', handleNodeClick);
       }
 

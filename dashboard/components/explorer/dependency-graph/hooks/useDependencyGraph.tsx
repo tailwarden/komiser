@@ -127,7 +127,7 @@ function useDependencyGraph(resourceId?: string) {
     if (resourceId) {
       fetchRelationsByResourceId(resourceId);
     } else fetchAllRelations();
-  }, []);
+  }, [filters, resourceId]);
 
   function deleteFilter(idx: number) {
     const updatedFilters: InventoryFilterData[] = [...filters!];
