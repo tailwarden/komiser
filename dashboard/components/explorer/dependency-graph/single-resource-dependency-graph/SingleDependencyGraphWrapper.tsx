@@ -24,7 +24,7 @@ function SingleDependencyGraphWrapper({
             <div className=" flex w-48 items-center gap-1 truncate text-base font-medium leading-normal text-primary">
               <a
                 target="_blank"
-                onClick={() => router.push(`/explorer/${encodedId}`)}
+                onClick={() => router.push(`/explorer?resourceId=${encodedId}`)}
                 rel="noreferrer"
                 className="hover:text-primary"
               >
