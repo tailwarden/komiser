@@ -12,6 +12,7 @@ type Config struct {
 	Scaleway     []ScalewayConfig     `toml:"scaleway"`
 	MongoDBAtlas []MongoDBAtlasConfig `toml:"mongodbatlas"`
 	GCP          []GCPConfig          `toml:"gcp"`
+	OVH          []OVHConfig          `toml:"ovh"`
 	Postgres     PostgresConfig       `toml:"postgres,omitempty"`
 	SQLite       SQLiteConfig         `toml:"sqlite"`
 	Slack        SlackConfig          `toml:"slack"`
@@ -92,6 +93,14 @@ type MongoDBAtlasConfig struct {
 type GCPConfig struct {
 	Name                  string `toml:"name"`
 	ServiceAccountKeyPath string `toml:"serviceAccountKeyPath"`
+}
+
+type OVHConfig struct {
+	Name              string `toml:"name"`
+	Endpoint          string `toml:"endpoint"`
+	ApplicationKey    string `toml:"application_key"`
+	ApplicationSecret string `toml:"application_secret"`
+	ConsumerKey       string `toml:"consumer_key"`
 }
 
 type SlackConfig struct {

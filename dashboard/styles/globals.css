@@ -23,6 +23,13 @@
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #95a3a3;
   }
+
+  /* Remove the default browser styles */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @variants responsive {
@@ -42,7 +49,7 @@
   transform: rotateY(180deg);
 }
 
-.dependency-graph-node-label {
+.dependency-graph-nodeLabel {
   transition: opacity 0.2s linear;
   opacity: 0;
 }
@@ -61,4 +68,10 @@
   color: #000;
   font-size: 16px;
   padding: 5px 9px;
+}
+
+#feedback-modal-modal {
+  max-height: 80vh;
+  padding-right: 16px;
+  padding-left: 16px;
 }

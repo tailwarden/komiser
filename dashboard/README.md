@@ -20,7 +20,7 @@ Follow the [Contribution Guide](https://github.com/tailwarden/komiser/blob/devel
 From the Komiser root folder start the Komiser server by running:
 
 ```shell
-go run \*.go start --config /path/to/config.toml
+go run *.go start --config /path/to/config.toml
 ```
 
 In a different terminal tab navigate to the `/dashboard` folder:

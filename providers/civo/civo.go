@@ -2,10 +2,9 @@ package civo
 
 import (
 	"context"
-	"log"
 
 	"github.com/civo/civogo"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/civo/compute"
 	"github.com/tailwarden/komiser/providers/civo/kubernetes"
@@ -49,9 +48,9 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 				log.Printf("[%s][Civo] %s", client.Name, err)
 			} else {
 				for _, resource := range resources {
-					_, err := db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
+					_, err := db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
 					if err != nil {
-						logrus.WithError(err).Errorf("db trigger failed")
+						log.WithError(err).Errorf("db trigger failed")
 					}
 				}
 				if telemetry {

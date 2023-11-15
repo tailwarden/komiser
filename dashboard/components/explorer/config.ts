@@ -64,10 +64,16 @@ export const nodeStyeConfig = {
   'text-opacity': 1,
   'font-size': 17,
   'background-color': 'white',
-  'background-image': node =>
-    node.data('provider') === 'AWS'
-      ? '/assets/img/dependency-graph/aws-node.svg'
-      : '',
+  'background-image': node => {
+    switch (node.data('provider')) {
+      case 'AWS':
+        return '/assets/img/dependency-graph/aws-node.svg';
+      case 'Civo':
+        return '/assets/img/dependency-graph/civo-node.svg';
+      default:
+        return '';
+    }
+  },
   'background-height': 20,
   'background-width': 20,
   'border-color': '#EDEBEE',
@@ -114,5 +120,5 @@ export const nodeHTMLLabelConfig = {
   valign: 'bottom', // title vertical position. Can be 'top',''center, 'bottom'
   halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
   valignBox: 'bottom', // title relative box vertical position. Can be 'top',''center, 'bottom'
-  cssClass: 'dependency-graph-node-label' // any classes will be as attribute of <div> container for every title
+  cssClass: 'dependency-graph-nodeLabel' // any classes will be as attribute of <div> container for every title
 };
