@@ -8,7 +8,7 @@
 				"apigateway:GET",
 				"cloudwatch:GetMetricStatistics",
 				"cloudfront:ListDistributions",
-				"cloudfront:Functions",
+				"cloudfront:ListFunctions",
 				"cloudfront:ListTagsForResource",
 				"cloudwatch:DescribeAlarms",
 				"cloudwatch:ListTagsForResource",

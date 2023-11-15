@@ -32,15 +32,17 @@ import (
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws"
-	azure "github.com/tailwarden/komiser/providers/azure"
+	"github.com/tailwarden/komiser/providers/azure"
 	"github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	"github.com/tailwarden/komiser/providers/gcp"
-	k8s "github.com/tailwarden/komiser/providers/k8s"
-	linode "github.com/tailwarden/komiser/providers/linode"
+	"github.com/tailwarden/komiser/providers/k8s"
+	"github.com/tailwarden/komiser/providers/linode"
 	"github.com/tailwarden/komiser/providers/mongodbatlas"
 	"github.com/tailwarden/komiser/providers/oci"
-	scaleway "github.com/tailwarden/komiser/providers/scaleway"
+	"github.com/tailwarden/komiser/providers/ovh"
+
+	"github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
@@ -246,13 +248,15 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	case "Tencent":
 		tencent.FetchResources(ctx, client, db, telemetry, analytics)
 	case "Azure":
-		azure.FetchResources(ctx, client, db, telemetry, analytics)
+		azure.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Scaleway":
 		scaleway.FetchResources(ctx, client, db, telemetry, analytics)
 	case "MongoDBAtlas":
-		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
+		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "GCP":
-		gcp.FetchResources(ctx, client, db, telemetry, analytics)
+		gcp.FetchResources(ctx, client, db, telemetry, analytics, wp)
+	case "OVH":
+		ovh.FetchResources(ctx, client, db, telemetry, analytics)
 	}
 }
 
@@ -293,6 +297,8 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 			workflowTrigger(client, "MongoDBAtlas")
 		} else if client.GCPClient != nil {
 			workflowTrigger(client, "GCP")
+		} else if client.OVHClient != nil {
+			workflowTrigger(client, "OVH")
 		}
 	}
 
