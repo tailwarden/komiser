@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import DashboardDependencyGraphWrapper from '@components/explorer/dependency-graph/multi-resource-dependency-graph/DependencyGraphWrapper';
 import { useRouter } from 'next/router';
-import SingleDependencyGraphWrapper from '@components/explorer/dependency-graph/single-resource-dependency-graph/SingleDependencyGraphWrapper';
+import DashboardSingleDependencyGraphWrapper from '@components/explorer/dependency-graph/single-resource-dependency-graph/SingleDependencyGraphWrapper';
 
 function Explorer() {
   const router = useRouter();
@@ -14,7 +14,7 @@ function Explorer() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {resourceId ? (
-        <SingleDependencyGraphWrapper
+        <DashboardSingleDependencyGraphWrapper
           resourceId={resourceId as string}
           isInExplorer={true}
         />
