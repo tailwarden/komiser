@@ -252,7 +252,7 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	case "Scaleway":
 		scaleway.FetchResources(ctx, client, db, telemetry, analytics)
 	case "MongoDBAtlas":
-		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics)
+		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "GCP":
 		gcp.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "OVH":
