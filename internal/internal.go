@@ -256,7 +256,7 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	case "GCP":
 		gcp.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "OVH":
-		ovh.FetchResources(ctx, client, db, telemetry, analytics)
+		ovh.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	}
 }
 
