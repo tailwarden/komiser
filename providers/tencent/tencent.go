@@ -22,22 +22,22 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
 	for _, fetchResources := range listOfSupportedServices() {
-		wp.SubmitTask(func() {
-			regions, err := client.TencentClient.DescribeRegionsWithContext(ctx, tccvm.NewDescribeRegionsRequest())
+		regions, err := client.TencentClient.DescribeRegionsWithContext(ctx, tccvm.NewDescribeRegionsRequest())
+		if err != nil {
+			log.Errorf("[%s][Tencent] Couldn't fetch the list of regions: %s", client.Name, err)
+		}
+
+		for _, region := range regions.Response.RegionSet {
+			cpf := profile.NewClientProfile()
+			cpf.Language = "en-US"
+			clientWithRegion, err := tccvm.NewClient(client.TencentClient.GetCredential(), *region.Region, cpf)
 			if err != nil {
-				log.Errorf("[%s][Tencent] Couldn't fetch the list of regions: %s", client.Name, err)
+				log.Errorf("[%s][Tencent] Couldn't create the Tencent client with region %s: %s", client.Name, *region.Region, err)
 			}
 
-			for _, region := range regions.Response.RegionSet {
-				cpf := profile.NewClientProfile()
-				cpf.Language = "en-US"
-				clientWithRegion, err := tccvm.NewClient(client.TencentClient.GetCredential(), *region.Region, cpf)
-				if err != nil {
-					log.Errorf("[%s][Tencent] Couldn't create the Tencent client with region %s: %s", client.Name, *region.Region, err)
-				}
+			client.TencentClient = clientWithRegion
 
-				client.TencentClient = clientWithRegion
-
+			wp.SubmitTask(func() {
 				resources, err := fetchResources(ctx, client)
 				if err != nil {
 					log.Printf("[%s][Tencent] %s", client.Name, err)
@@ -55,7 +55,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 						})
 					}
 				}
-			}
-		})
+			})
+		}
 	}
 }

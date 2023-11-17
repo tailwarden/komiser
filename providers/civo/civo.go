@@ -30,20 +30,20 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
 	for _, fetchResources := range listOfSupportedServices() {
-		wp.SubmitTask(func() {
-			regions, err := client.CivoClient.ListRegions()
+		regions, err := client.CivoClient.ListRegions()
+		if err != nil {
+			log.Printf("[%s][Civo] %s", client.Name, err)
+		}
+
+		for _, region := range regions {
+			clientWithRegion, err := civogo.NewClient(client.CivoClient.APIKey, region.Code)
 			if err != nil {
 				log.Printf("[%s][Civo] %s", client.Name, err)
 			}
 
-			for _, region := range regions {
-				clientWithRegion, err := civogo.NewClient(client.CivoClient.APIKey, region.Code)
-				if err != nil {
-					log.Printf("[%s][Civo] %s", client.Name, err)
-				}
+			client.CivoClient = clientWithRegion
 
-				client.CivoClient = clientWithRegion
-
+			wp.SubmitTask(func() {
 				resources, err := fetchResources(ctx, client)
 				if err != nil {
 					log.Printf("[%s][Civo] %s", client.Name, err)
@@ -61,7 +61,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 						})
 					}
 				}
-			}
-		})
+			})
+		}
 	}
 }
