@@ -85,13 +85,19 @@ export const animateEdges = async (options: Options, cy: Core) => {
     return options.direction === 'forward' ? v : 1 - v;
   }
 
-  if (typeof window !== 'undefined') {
+  // let animationId: number | null = null;
+
+  if (
+    typeof window !== 'undefined' &&
+    window.document.URL.includes('explorer')
+  ) {
     // Modified but mainly taken from: https://github.com/sgratzl/cytoscape.js-layers/blob/main/samples/animatedEdges.ts
     const cytoLayersModule = await import('cytoscape-layers');
     cyLayers = cytoLayersModule.layers(cy);
     const animationLayer = cyLayers.nodeLayer.insertBefore('canvas');
 
     let start: number | null = null;
+
     let elapsed = 0;
     const update = (time: number) => {
       if (start == null) {
@@ -143,6 +149,13 @@ export const animateEdges = async (options: Options, cy: Core) => {
         checkBoundsPointCount: 5
       }
     );
-    requestAnimationFrame(update);
+    return requestAnimationFrame(update);
   }
+  return {
+    stop: (animationId: number) => {
+      if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+      }
+    }
+  };
 };
