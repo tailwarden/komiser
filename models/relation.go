@@ -12,4 +12,5 @@ type OutputRelationResponse struct {
 	Type       string `json:"service" bun:"service"`
 	Name       string `json:"name" bun:"name"`
 	Link       []Link `json:"relations" bun:"relations"`
+	Provider   string `json:"provider" bun:"provider"`
 }
