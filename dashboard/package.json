@@ -17,7 +17,7 @@
   "dependencies": {
     "@formbricks/js": "^1.1.2",
     "@sentry/react": "^7.41.0",
-    "@sentry/tracing": "^7.41.0",
+    "@sentry/tracing": "^7.81.0",
     "@tippyjs/react": "^4.2.6",
     "chart.js": "^4.2.1",
     "classnames": "^2.3.2",
