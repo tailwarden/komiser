@@ -236,21 +236,21 @@ func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClien
 	case "AWS":
 		aws.FetchResources(ctx, client, regions, db, telemetry, analytics, wp)
 	case "DigitalOcean":
-		do.FetchResources(ctx, client, db, telemetry, analytics)
+		do.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "OCI":
-		oci.FetchResources(ctx, client, db, telemetry, analytics)
+		oci.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Civo":
-		civo.FetchResources(ctx, client, db, telemetry, analytics)
+		civo.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Kubernetes":
-		k8s.FetchResources(ctx, client, db, telemetry, analytics)
+		k8s.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Linode":
-		linode.FetchResources(ctx, client, db, telemetry, analytics)
+		linode.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Tencent":
-		tencent.FetchResources(ctx, client, db, telemetry, analytics)
+		tencent.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Azure":
 		azure.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Scaleway":
-		scaleway.FetchResources(ctx, client, db, telemetry, analytics)
+		scaleway.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "MongoDBAtlas":
 		mongodbatlas.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "GCP":
