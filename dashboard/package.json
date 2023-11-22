@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3002",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start -p 3002",
     "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,json,css,scss,md}\"",
