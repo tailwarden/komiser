@@ -46,7 +46,7 @@ function InputFileSelect({
       </label>
 
       {subLabel && (
-        <span className="-mt-[5px] mb-2 block text-xs leading-4 text-black-400">
+        <span className="-mt-[5px] mb-2 block text-xs leading-4 text-gray-700">
           {subLabel}
         </span>
       )}
@@ -68,9 +68,9 @@ function InputFileSelect({
           placeholder={placeholder}
           className={classNames(
             hasError
-              ? 'outline-error-600 focus:outline-error-700'
-              : 'outline-gray-200 focus:outline-primary',
-            'block w-full rounded border py-4 pl-5 text-sm text-black-900 outline focus:outline-2 '
+              ? 'outline-red-500 focus:outline-red-500'
+              : 'outline-gray-200 focus:outline-darkcyan-500',
+            'block w-full rounded border py-4 pl-5 text-sm text-gray-950 outline focus:outline-2 '
           )}
           onChange={handleInputChange}
         />
@@ -78,14 +78,14 @@ function InputFileSelect({
         {icon && (
           <button
             onClick={iconClick}
-            className="absolute inset-y-0 right-5 flex items-center pl-3 text-komiser-600"
+            className="absolute inset-y-0 right-5 flex items-center pl-3 text-darkcyan-500"
           >
             {icon}
           </button>
         )}
       </div>
       {hasError && errorMessage && (
-        <div className="mt-2 flex items-center text-sm text-error-600">
+        <div className="mt-2 flex items-center text-sm text-red-500">
           <AlertCircleIconFilled className="mr-1 inline-block h-4 w-4" />
           {errorMessage}
         </div>

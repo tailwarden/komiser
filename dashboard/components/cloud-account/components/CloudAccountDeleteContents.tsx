@@ -51,7 +51,7 @@ function CloudAccountDeleteContents({
     <>
       <div className="flex flex-col items-center gap-y-6">
         <AlertCircleIcon className="h-16 w-16" />
-        <h1 className="text-center text-xl font-semibold text-black-800">
+        <h1 className="text-center text-xl font-semibold text-gray-950">
           Are you sure you want to
           <br />
           remove this cloud account?

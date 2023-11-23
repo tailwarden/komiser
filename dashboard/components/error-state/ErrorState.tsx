@@ -18,8 +18,8 @@ function ErrorState({ title, message, action }: ErrorStateProps) {
               alt="Purplin"
             />
           </picture>
-          <p className="font-medium text-black-900">{title}</p>
-          <p className="text-center text-sm text-black-300">{message}</p>
+          <p className="font-medium text-gray-950">{title}</p>
+          <p className="text-center text-sm text-gray-500">{message}</p>
           {action && <>{action}</>}
         </div>
       </div>

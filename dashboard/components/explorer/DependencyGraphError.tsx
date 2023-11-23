@@ -8,13 +8,13 @@ function DependencyGraphError({ fetch }: DashboardDependencyGraphErrorProps) {
   return (
     <>
       <div className={`w-full rounded-lg bg-white px-6 py-4 pb-6`}>
-        <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
+        <div className="-mx-6 flex items-center justify-between border-b border-gray-300 px-6 pb-4">
           <div>
-            <p className="text-sm font-semibold text-black-900">
+            <p className="text-sm font-semibold text-gray-950">
               Dependency Graph
             </p>
             <div className="mt-1"></div>
-            <p className="text-xs text-black-300">
+            <p className="text-xs text-gray-500">
               Analyze account resource associations
             </p>
           </div>
@@ -34,7 +34,7 @@ function DependencyGraphError({ fetch }: DashboardDependencyGraphErrorProps) {
             <path stroke="none" d="M0 0h24v24H0z" />
             <path d="M4 8V6a2 2 0 012-2h2M4 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2M9 10h.01M15 10h.01M9.5 15.05a3.5 3.5 0 015 0" />
           </svg>
-          <p className="text-sm font-semibold text-black-900">
+          <p className="text-sm font-semibold text-gray-950">
             Cannot fetch Relationships
           </p>
           <div className="m-2 flex-shrink-0">

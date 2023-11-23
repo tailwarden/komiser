@@ -107,7 +107,7 @@ function InventoryView({
       {!router.query.view && (
         <div
           onClick={() => openModal(filters)}
-          className="cursor-pointer font-sans text-[14px] font-semibold text-komiser-600"
+          className="cursor-pointer font-sans text-[14px] font-semibold text-darkcyan-500"
         >
           Save as view
         </div>
@@ -165,7 +165,7 @@ function InventoryView({
                 disabled={!view.name}
               >
                 {router.query.view ? 'Update view' : 'Save as a view'}{' '}
-                <span className="flex items-center justify-center rounded-lg bg-black-900/20 px-2 py-1 text-xs">
+                <span className="flex items-center justify-center rounded-lg bg-gray-950 px-2 py-1 text-xs">
                   {inventoryStats?.resources}
                 </span>
               </Button>
@@ -204,11 +204,11 @@ function InventoryView({
                     {hiddenResources.map(item => (
                       <tr
                         key={item.id}
-                        className={`border-b border-black-200/30 last:border-none ${
+                        className={`border-b border-gray-300 last:border-none ${
                           bulkItems &&
                           bulkItems.find(currentId => currentId === item.id)
-                            ? 'border-black-200/70 bg-komiser-120'
-                            : 'border-black-200/30 bg-white hover:bg-black-100/50'
+                            ? 'border-gray-300 bg-darkcyan-100'
+                            : 'border-gray-300 bg-white hover:bg-gray-50'
                         } border-b last:border-none`}
                       >
                         <td className="px-2 py-4">
@@ -263,7 +263,7 @@ function InventoryView({
           )}
 
           {hiddenResources && hiddenResources.length === 0 && (
-            <div className="rounded-lg bg-black-100 p-6">
+            <div className="rounded-lg bg-gray-50 p-6">
               <div className="flex flex-col items-center gap-6">
                 <Image
                   src="/assets/img/purplin/dashboard.svg"
@@ -272,10 +272,10 @@ function InventoryView({
                   height={100}
                 />
                 <div className="flex flex-col items-center justify-center gap-2 px-24 text-center">
-                  <p className="font-semibold text-black-900">
+                  <p className="font-semibold text-gray-950">
                     No hidden resources in this view
                   </p>
-                  <p className="text-sm text-black-400">
+                  <p className="text-sm text-gray-700">
                     To hide a resource from this view, select and hide them on
                     the inventory table.
                   </p>
