@@ -34,11 +34,11 @@ function InventoryActiveFilters({
       {!hasFilters ? (
         <>
           <div
-            className="flex w-fit cursor-pointer items-center gap-1 rounded-md border-2 border-dashed border-black-200 border-opacity-60 px-3 py-1"
+            className="flex w-fit cursor-pointer items-center gap-1 rounded-md border-2 border-dashed border-gray-300 border-opacity-60 px-3 py-1"
             onClick={toggle}
           >
             <PlusIcon width={16} height={16} />
-            <span className="font-sans text-sm text-black-400">Filter</span>
+            <span className="font-sans text-sm text-gray-700">Filter</span>
           </div>
           {isOpen && (
             <InventoryFilterDropdown
@@ -50,7 +50,7 @@ function InventoryActiveFilters({
         </>
       ) : (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <div className="h-full text-sm text-black-400">Filters</div>
+          <div className="h-full text-sm text-gray-700">Filters</div>
           {displayedFilters &&
             displayedFilters.map((activeFilter, idx) => (
               <InventoryFilterSummary
@@ -65,7 +65,7 @@ function InventoryActiveFilters({
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="cursor-pointer" onClick={toggle}>
-                  <PlusIcon className="h-6 w-6 rounded-full border-dashed border-black-200 p-1 hover:border hover:bg-black-400 hover:bg-opacity-10" />
+                  <PlusIcon className="h-6 w-6 rounded-full border-dashed border-gray-300 p-1 hover:border hover:bg-gray-700 hover:bg-opacity-10" />
                 </div>
                 {isOpen && (
                   <InventoryFilterDropdown
@@ -78,7 +78,7 @@ function InventoryActiveFilters({
 
               <div className="border-x-1 h-7 border"></div>
               <div
-                className="flex cursor-pointer items-center gap-1 text-black-400 hover:text-black-900"
+                className="flex cursor-pointer items-center gap-1 text-gray-700 hover:text-gray-950"
                 onClick={() => router.push(router.pathname)}
               >
                 <span className="font-sans text-[14px] font-semibold ">

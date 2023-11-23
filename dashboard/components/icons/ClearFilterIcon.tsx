@@ -7,7 +7,7 @@ const ClearFilterIcon = (props: SVGProps<SVGSVGElement>) => (
     height="16"
     fill="none"
     viewBox="0 0 24 24"
-    className="text-black-400"
+    className="text-gray-700"
   >
     <path
       stroke="currentColor"

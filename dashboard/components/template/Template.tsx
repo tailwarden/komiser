@@ -4,7 +4,7 @@ export type TemplateProps = {
 
 function Template({ sampleTextProp }: TemplateProps) {
   return (
-    <div className="rounded-lg bg-primary p-6 text-sm text-white">
+    <div className="rounded-lg bg-darkcyan-500 p-6 text-sm text-white">
       {sampleTextProp}
     </div>
   );

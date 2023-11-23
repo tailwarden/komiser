@@ -10,7 +10,7 @@ function CloudAccountsHeader({ isNotCustomView }: CloudAccountsHeaderProps) {
     <div className="flex min-h-[40px] items-center justify-between gap-8">
       {isNotCustomView && (
         <>
-          <p className="flex items-center gap-2 text-lg font-medium text-black-900">
+          <p className="flex items-center gap-2 text-lg font-medium text-gray-950">
             Your Cloud Accounts
           </p>
         </>
