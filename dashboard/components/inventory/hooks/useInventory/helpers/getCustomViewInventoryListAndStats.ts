@@ -110,14 +110,16 @@ function getCustomViewInventoryListAndStats({
             }
           }
         });
-    } else {
-      setTimeout(() => router.push(router.pathname), 5000);
-      return showToast({
-        hasError: true,
-        title: `Invalid view`,
-        message: `We couldn't find this view. Redirecting back to home...`
-      });
-    }
+    } 
+    // TODO: https://github.com/tailwarden/komiser/issues/1208
+    // else {
+    //   setTimeout(() => router.push(router.pathname), 5000);
+    //   return showToast({
+    //     hasError: true,
+    //     title: `Invalid view`,
+    //     message: `We couldn't find this view. Redirecting back to home...`
+    //   });
+    // }
   }
   return null;
 }

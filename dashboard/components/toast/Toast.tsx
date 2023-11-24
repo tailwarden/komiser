@@ -19,10 +19,10 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
     <>
       <div
         className={classNames(
-          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg px-6 py-4 text-black-900 opacity-0 shadow-2xl sm:left-8',
+          'fixed bottom-4 left-4 right-4 z-40 flex max-w-2xl animate-fade-in-up items-center justify-between overflow-hidden rounded-lg px-6 py-4 text-gray-950 opacity-0 shadow-right sm:left-8',
           {
-            'bg-error-100': hasError,
-            'bg-success-100': !hasError
+            'bg-red-50': hasError,
+            'bg-green-100': !hasError
           }
         )}
       >
@@ -30,16 +30,16 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
           className={classNames(
             'absolute bottom-0 left-0 h-1 animate-width-to-fit',
             {
-              'bg-error-600/60': hasError,
-              'bg-success-600/60': !hasError
+              'bg-red-50': hasError,
+              'bg-green-500': !hasError
             }
           )}
         ></div>
         <div className="flex items-start">
           <div
             className={classNames({
-              'mt-4 text-error-600 ': hasError,
-              'mt-4 text-success-600': !hasError
+              'mt-4 text-red-500 ': hasError,
+              'mt-4 text-green-500': !hasError
             })}
           >
             {hasError ? (
@@ -51,7 +51,7 @@ function Toast({ hasError, title, message, dismissToast }: ToastProp) {
           <div className="p-3">
             <p className="pb-2 text-sm font-medium">{title}</p>
             <p
-              className="text-sm text-black-900/60 "
+              className="text-sm text-gray-950 "
               dangerouslySetInnerHTML={{ __html: message }}
             />
           </div>

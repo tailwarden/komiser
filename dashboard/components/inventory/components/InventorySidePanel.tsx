@@ -87,11 +87,11 @@ function InventorySidePanel({
           >
             {!data && bulkItems && (
               <div className="flex flex-col gap-1 py-1">
-                <p className="font-medium text-black-900">
+                <p className="font-medium text-gray-950">
                   Managing tags for {formatNumber(bulkItems.length)}{' '}
                   {bulkItems.length > 1 ? 'resources' : 'resource'}
                 </p>
-                <p className="text-xs text-black-300">
+                <p className="text-xs text-gray-500">
                   All actions will overwrite previous tags for these resources
                 </p>
               </div>
@@ -107,34 +107,34 @@ function InventorySidePanel({
           <SidepanelPage page={page} param={'resource details'}>
             <div className="space-y-6 pt-1">
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
                   Cloud account
                 </h2>
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
                   {!data && (
-                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
                   {data && <span>{data.account}</span>}
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
                   Region
                 </h2>
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
                   {!data && (
-                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
                   {data && <span>{data.region}</span>}
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
                   Cost
                 </h2>
                 <h2 className=" flex items-center gap-2 text-sm">
                   {!data && (
-                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
                   {data && <span>{data?.cost.toFixed(2)}$</span>}
                   {data && (
@@ -145,12 +145,12 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-500">
+                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
                   Relations
                 </h2>
-                <h2 className="font-['Noto Sans'] text-sm font-normal leading-tight text-neutral-900">
+                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
                   {!data && (
-                    <p className="h-3 w-48 animate-pulse rounded-xl bg-komiser-200"></p>
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
                   {data && (
                     <span>{data.relations.length} related resources</span>
@@ -236,8 +236,8 @@ function InventorySidePanel({
         <div>
           {page === 'delete' && (
             <>
-              <div className="flex flex-col gap-6 bg-black-100 p-6">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-error-100 text-error-600">
+              <div className="flex flex-col gap-6 bg-gray-50 p-6">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -255,12 +255,12 @@ function InventorySidePanel({
                   </svg>
                 </div>
                 <div className="flex flex-col items-center gap-6">
-                  <p className="text-center font-medium text-black-900">
+                  <p className="text-center font-medium text-gray-950">
                     Are you sure you want to delete all tags from{' '}
                     {formatNumber(bulkItems.length)}{' '}
                     {bulkItems.length > 1 ? 'resources' : 'resource'}?
                   </p>
-                  <p className="text-sm text-black-400">
+                  <p className="text-sm text-gray-700">
                     This is a permanent action, and it will also delete previous
                     tags you have added to these resources.
                   </p>
