@@ -66,32 +66,32 @@ function SelectCheckbox({
     <div className="relative">
       <div
         className="pointer-events-none absolute bottom-[1.15rem]
-        right-4 text-black-900 transition-all"
+        right-4 text-gray-950 transition-all"
       >
         <ChevronDownIcon width={24} height={24} />
       </div>
       <button
         onClick={toggle}
-        className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-black-200 focus:outline-2 focus:outline-primary ${
-          isOpen ? 'outline-2 outline-primary' : 'outline-black-200/50'
+        className={`h-[60px] w-full overflow-hidden rounded text-left outline hover:outline-gray-300 focus:outline-2 focus:outline-darkcyan-500 ${
+          isOpen ? 'outline-2 outline-darkcyan-500' : 'outline-gray-300'
         }`}
       >
         <div className="absolute right-0 top-1 h-[50px] w-6 bg-gradient-to-r from-transparent via-white to-white"></div>
-        <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-black-300">
+        <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-gray-500">
           {label}
         </span>
-        <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pb-[0.75rem] pl-4 pr-16 pt-[1.75rem] text-sm text-black-900">
+        <div className="pointer-events-none flex w-full appearance-none items-center gap-2 rounded bg-white pb-[0.75rem] pl-4 pr-16 pt-[1.75rem] text-sm text-gray-950">
           {exclude.length > 0 &&
             exclude.slice(0, 3).map((resource, idx) => (
               <p
                 key={idx}
-                className="whitespace-nowrap rounded bg-black-100 px-3 py-1 text-xs"
+                className="whitespace-nowrap rounded bg-gray-50 px-3 py-1 text-xs"
               >
                 {resource}
               </p>
             ))}
           {exclude.length > 3 && (
-            <p className="rounded-full bg-black-100 px-3 py-1 text-xs">
+            <p className="rounded-full bg-gray-50 px-3 py-1 text-xs">
               +{exclude.length - 3}
             </p>
           )}
@@ -106,7 +106,7 @@ function SelectCheckbox({
             onClick={toggle}
             className="fixed inset-0 z-20 hidden animate-fade-in bg-transparent opacity-0 sm:block"
           ></div>
-          <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-black-100 bg-white shadow-lg">
+          <div className="absolute top-[4.15rem] z-[21] w-full rounded-lg border border-gray-50 bg-white shadow-right">
             <div className="relative m-4 ">
               {!search ? (
                 <svg
@@ -155,13 +155,13 @@ function SelectCheckbox({
                 onChange={e => setSearch(e.target.value)}
                 type="text"
                 placeholder="Search"
-                className="h-10 w-full rounded-md border border-black-200/50 bg-white py-4 pl-10 pr-6 text-sm text-black-900 caret-secondary placeholder:text-black-300 focus:outline-none"
+                className="h-10 w-full rounded-md border border-gray-300 bg-white py-4 pl-10 pr-6 text-sm text-gray-950 caret-darkcyan-700 placeholder:text-gray-500 focus:outline-none"
                 autoFocus
                 maxLength={64}
               />
             </div>
             {error && (
-              <p className="text-sm text-black-400">
+              <p className="text-sm text-gray-700">
                 There was an error fetching the options for: {query}
               </p>
             )}
@@ -178,13 +178,13 @@ function SelectCheckbox({
                     />
                     <label
                       htmlFor="all"
-                      className="w-full text-sm text-black-400"
+                      className="w-full text-sm text-gray-700"
                     >
                       Exclude All
                     </label>
                   </div>
                 )}
-                <hr className="m-4 mb-0 h-px border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
+                <hr className="bg-neutral-100 m-4 mb-0 h-px border-t-0 opacity-100 dark:opacity-50" />
                 <div className="scrollbar mb-2 mr-3 mt-2 overflow-auto">
                   <div className="mt-2 flex max-h-[12rem] flex-col gap-3 p-4 pb-4 pl-6 pt-0">
                     {resources.map((resource, idx) => (
@@ -201,20 +201,20 @@ function SelectCheckbox({
                         />
                         <label
                           htmlFor={resource}
-                          className="w-full text-black-400"
+                          className="w-full text-gray-700"
                         >
                           {resource}
                         </label>
                       </div>
                     ))}
                     {resources.length === 0 && (
-                      <p className="text-sm text-black-400">
+                      <p className="text-sm text-gray-700">
                         There are no results for {search}
                       </p>
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col border-t border-black-200/50 p-4">
+                <div className="flex flex-col border-t border-gray-300 p-4">
                   <Button onClick={submit}>Apply</Button>
                 </div>
               </>

@@ -21,11 +21,11 @@ function InventorySearchNoResults({ query, setQuery, router }: Props) {
         <div>
           {query ? (
             <>
-              <p className="text-black-300">No results were found for:</p>
+              <p className="text-gray-500">No results were found for:</p>
               <p className="font-medium">{query}</p>
             </>
           ) : (
-            <p className="text-black-300">
+            <p className="text-gray-500">
               No results were found for this filter.
             </p>
           )}

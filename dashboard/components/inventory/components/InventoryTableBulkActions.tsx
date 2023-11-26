@@ -23,7 +23,7 @@ function InventoryTableBulkActions({
     <>
       {bulkItems && bulkItems.length > 0 && (
         <div className="border-purplin-650 sticky bottom-0 flex w-full items-center justify-between bg-white px-6 py-4 text-sm font-medium shadow-[0px_-2px_4px_rgba(0,0,0,0.05)]">
-          <p className="text-black-900">
+          <p className="text-gray-950">
             {bulkItems.length} {resourceText} {''}
             selected
           </p>
