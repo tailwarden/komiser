@@ -18,13 +18,6 @@ func Repositories(ctx context.Context, client providers.ProviderClient) ([]model
 	var listRepoParams codecommit.ListRepositoriesInput
 	resources := make([]models.Resource, 0)
 	codecommitClient := codecommit.NewFromConfig(*client.AWSClient)
-	// stsClient := sts.NewFromConfig(*client.AWSClient)
-	// stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
-	// if err != nil {
-	// 	return resources, err
-	// }
-
-	// accountId := stsOutput.Account
 
 	for {
 		output, err := codecommitClient.ListRepositories(ctx, &listRepoParams)
