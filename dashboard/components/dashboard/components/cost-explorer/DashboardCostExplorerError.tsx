@@ -20,8 +20,8 @@ function DashboardCostExplorerError({
 
   return (
     <div className="w-full rounded-lg bg-white px-6 py-4 pb-6">
-      <div className="-mx-6 flex items-center justify-center gap-6 border-b border-black-200/40 px-6 pb-4">
-        <p className="text-sm text-black-400">
+      <div className="-mx-6 flex items-center justify-center gap-6 border-b border-gray-300 px-6 pb-4">
+        <p className="text-sm text-gray-700">
           There was an error loading the cost explorer.
         </p>
         <div className="flex-shrink-0">
@@ -52,10 +52,10 @@ function DashboardCostExplorerError({
           <tbody>
             {rows.map(idx => (
               <tr key={idx}>
-                <td className="border border-black-150"></td>
-                <td className="border border-black-150"></td>
-                <td className="border border-black-150"></td>
-                <td className="border border-black-150"></td>
+                <td className="border border-background-ds"></td>
+                <td className="border border-background-ds"></td>
+                <td className="border border-background-ds"></td>
+                <td className="border border-background-ds"></td>
               </tr>
             ))}
           </tbody>
@@ -63,16 +63,16 @@ function DashboardCostExplorerError({
         <div className="mt-4"></div>
         <div className="flex justify-center gap-8">
           <div className="flex items-center gap-2">
-            <div className="h-5 w-5 rounded-full bg-black-200/50"></div>
-            <div className="h-3 w-24 rounded-lg bg-black-200/50"></div>
+            <div className="h-5 w-5 rounded-full bg-gray-300"></div>
+            <div className="h-3 w-24 rounded-lg bg-gray-300"></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-5 w-5 rounded-full bg-black-200/50"></div>
-            <div className="h-3 w-12 rounded-lg bg-black-200/50"></div>
+            <div className="h-5 w-5 rounded-full bg-gray-300"></div>
+            <div className="h-3 w-12 rounded-lg bg-gray-300"></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-5 w-5 rounded-full bg-black-200/50"></div>
-            <div className="h-3 w-36 rounded-lg bg-black-200/50"></div>
+            <div className="h-5 w-5 rounded-full bg-gray-300"></div>
+            <div className="h-3 w-36 rounded-lg bg-gray-300"></div>
           </div>
         </div>
       </div>

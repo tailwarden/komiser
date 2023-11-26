@@ -71,7 +71,7 @@
     },
     {
       "group": "Configuration",
-      "pages": [{"group": "Cloud Providers", "pages": ["configuration/cloud-providers/aws", "configuration/cloud-providers/azure", "configuration/cloud-providers/civo", "configuration/cloud-providers/digital-ocean", "configuration/cloud-providers/k8s", "configuration/cloud-providers/linode", "configuration/cloud-providers/tencent", "configuration/cloud-providers/scaleway", "configuration/cloud-providers/mongodb-atlas", "configuration/cloud-providers/gcp", "configuration/cloud-providers/oracle"]}]
+      "pages": [{"group": "Cloud Providers", "pages": ["configuration/cloud-providers/aws", "configuration/cloud-providers/azure", "configuration/cloud-providers/civo", "configuration/cloud-providers/digital-ocean", "configuration/cloud-providers/k8s", "configuration/cloud-providers/linode", "configuration/cloud-providers/tencent", "configuration/cloud-providers/scaleway", "configuration/cloud-providers/mongodb-atlas", "configuration/cloud-providers/gcp", "configuration/cloud-providers/oracle", "configuration/cloud-providers/ovh"]}]
     },
     {
       "group": "Guides",

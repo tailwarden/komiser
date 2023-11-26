@@ -36,13 +36,13 @@ function DashboardResourcesManagerCard({
 
   return (
     <div className="w-full rounded-lg bg-white px-6 py-4 pb-6">
-      <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
+      <div className="-mx-6 flex items-center justify-between border-b border-gray-300 px-6 pb-4">
         <div>
-          <p className="text-sm font-semibold text-black-900">
+          <p className="text-sm font-semibold text-gray-950">
             Resources manager
           </p>
           <div className="mt-1"></div>
-          <p className="text-xs text-black-300">
+          <p className="text-xs text-gray-500">
             Uncover how your resources are distributed
           </p>
         </div>
@@ -75,7 +75,7 @@ function DashboardResourcesManagerCard({
               height={200}
               alt="No data to display image"
             />
-            <p className="text-center text-lg text-black-900">
+            <p className="text-center text-lg text-gray-950">
               No resource data
               <br />
               to display

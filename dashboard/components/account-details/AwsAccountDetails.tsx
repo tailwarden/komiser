@@ -103,7 +103,7 @@ function AwsAccountDetails({
       <div
         className={classNames(
           'flex flex-col space-y-8 rounded-md p-5',
-          hasError ? 'bg-error-100' : 'bg-komiser-100'
+          hasError ? 'bg-red-50' : 'bg-gray-50'
         )}
       >
         <div>
@@ -117,7 +117,7 @@ function AwsAccountDetails({
             values={options.map(option => option.value)}
           />
           {[options[2].value, options[3].value].includes(credentialType) && (
-            <div className="mt-2 text-sm text-black-400">
+            <div className="mt-2 text-sm text-gray-700">
               {credentialType === options[3].value
                 ? 'Komiser will fetch the credentials from AWS'
                 : 'Komiser will load credentials from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.'}
@@ -180,7 +180,7 @@ function AwsAccountDetails({
         )}
       </div>
       {hasError && (
-        <div className="text-sm text-error-600">
+        <div className="text-sm text-red-500">
           We couldn&apos;t connect to your AWS account. Please check if the file
           is correct.
         </div>

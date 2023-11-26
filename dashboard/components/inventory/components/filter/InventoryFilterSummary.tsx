@@ -51,8 +51,8 @@ function InventoryFilterSummary({
   return (
     <div
       className={`${
-        bg ? 'bg-white' : 'bg-black-150'
-      }  relative flex h-6 w-fit max-w-[calc(100vw-250px)] items-center gap-1 overflow-hidden rounded px-2 text-xs text-black-900/70 md:max-w-[calc(100vw-400px)]`}
+        bg ? 'bg-white' : 'bg-background-ds'
+      }  relative flex h-6 w-fit max-w-[calc(100vw-250px)] items-center gap-1 overflow-hidden rounded px-2 text-xs text-gray-950 md:max-w-[calc(100vw-400px)]`}
     >
       <div className="flex items-center gap-1 whitespace-nowrap">
         <div className="scale-75">{getField('icon')}</div>

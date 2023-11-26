@@ -12,8 +12,8 @@ export type CardProps = {
 
 function Card({ label, value, tooltip, icon, formatter }: CardProps) {
   return (
-    <div className="relative flex w-full items-center gap-4 rounded-lg bg-white px-6 py-8 text-black-900 transition-colors">
-      <div className="rounded-lg bg-komiser-100 p-4" data-testid="icon">
+    <div className="relative flex w-full items-center gap-4 rounded-lg bg-white px-6 py-8 text-gray-950 transition-colors">
+      <div className="rounded-lg bg-gray-50 p-4" data-testid="icon">
         {icon}
       </div>
       <div className="peer flex flex-col">
@@ -23,7 +23,7 @@ function Card({ label, value, tooltip, icon, formatter }: CardProps) {
             formatter === 'currency' ? 'currency' : undefined
           )}
         </p>
-        <p className="text-sm text-black-300">{label}</p>
+        <p className="text-sm text-gray-500">{label}</p>
       </div>
       {tooltip && <Tooltip>{tooltip}</Tooltip>}
     </div>

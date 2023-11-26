@@ -10,7 +10,7 @@ function DashboardTopStatsError({ fetch }: DashboardTopStatsErrorProps) {
       data-testid="error"
       className="flex h-[7.5rem] items-center justify-center gap-4 rounded-lg bg-white"
     >
-      <p className="text-sm text-black-400">
+      <p className="text-sm text-gray-700">
         There was an error loading the top stats.
       </p>
       <div className="flex-shrink-0">
