@@ -161,7 +161,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
           id={FEEDBACK_MODAL_ID}
         >
           <div className="w-[546px]">
-            <div className="fixed left-0 top-0 p-8 border-b border-gray-200">
+            <div className="fixed left-0 top-0 border-b border-gray-200 p-8">
               <h3 className="text-lg font-bold text-black-900">
                 Describe your issue
               </h3>
@@ -171,7 +171,7 @@ const useFeedbackWidget = (defaultState: boolean = false) => {
                 better support.
               </p>
             </div>
-            <div className="mt-[130px] h-[420px] overflow-y-auto overflow-x-hidden pl-[16px] pr-[16px] pt-[1px] pb-[10px]">
+            <div className="mt-[130px] h-[420px] overflow-y-auto overflow-x-hidden pb-[10px] pl-[16px] pr-[16px] pt-[1px]">
               <form onSubmit={uploadFeedback}>
                 <Input
                   disabled={isSendingFeedback}

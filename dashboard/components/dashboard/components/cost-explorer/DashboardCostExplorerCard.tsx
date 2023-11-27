@@ -118,11 +118,11 @@ function DashboardCostExplorerCard({
       <div className="h-full min-h-[22rem]">
         {chartData && <Bar data={chartData} options={options} />}
         {!chartData && (
-          <div className="relative flex flex-col items-center bg-empty-cost-explorer h-[330px] w-full">
-            <div className="mt-10 text-lg text-black-900 border border-gray-200 px-8 py-6 flex bg-white">
+          <div className="relative flex h-[330px] w-full flex-col items-center bg-empty-cost-explorer">
+            <div className="mt-10 flex border border-gray-200 bg-white px-8 py-6 text-lg text-black-900">
               <div>
                 <p className="text-lg">No data for this time period</p>
-                <p className="text-sm text-gray-400 mb-4">
+                <p className="mb-4 text-sm text-gray-400">
                   Our cloud version, Tailwarden, supports <br />
                   historical costs from certain cloud providers
                 </p>
