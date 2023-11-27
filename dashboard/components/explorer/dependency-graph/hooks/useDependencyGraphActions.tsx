@@ -38,6 +38,9 @@ export const useDependencyGraphActions = ({
   const [zoomLevel, setZoomLevel] = useState(minZoom);
   const [zoomVal, setZoomVal] = useState(0); // debounced zoom state to display percentage
   const cyRef = useRef<Cytoscape.Core | null>(null);
+  const resourceId = JSON.parse(localStorage.getItem('resourceId') || '');
+
+  const [zoomToResourceId, setZoomToResourceId] = useState(false);
 
   // opens modal to display details of clicked node
   const handleNodeClick = async (event: EventObject) => {
@@ -154,8 +157,27 @@ export const useDependencyGraphActions = ({
       });
       // Make sure to tell we inited successfully and prevent another init
       setInitDone(true);
+
+      if (resourceId && cyRef.current) {
+        const targetNode = cyRef.current.getElementById(resourceId);
+
+        if (targetNode.length > 0) {
+          cyRef.current.fit(targetNode);
+          setZoomToResourceId(true);
+        }
+      }
     }
   };
+  useEffect(() => {
+    if (cyRef.current && zoomToResourceId) {
+      const targetNode = cyRef.current.getElementById(resourceId);
+
+      if (targetNode.length > 0) {
+        cyRef.current.fit(targetNode);
+        setZoomToResourceId(false); // Reset the state after zooming
+      }
+    }
+  }, [zoomToResourceId, cyRef.current]);
 
   const handleZoomChange = (zoomPercentage: number) => {
     let newZoomLevel = minZoom + zoomPercentage * ((maxZoom - minZoom) / 100);

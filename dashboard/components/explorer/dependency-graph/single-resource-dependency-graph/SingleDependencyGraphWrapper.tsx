@@ -5,35 +5,30 @@ import HyperLinkIcon from '@components/icons/HyperLinkIcon';
 import useDependencyGraph from '../hooks/useDependencyGraph';
 import SingleDependencyGraphLoader from './SingleDependencyGraphLoader';
 
-function SingleDependencyGraphWrapper({
-  resourceId,
-  isInExplorer = false
-}: {
-  resourceId: string;
-  isInExplorer?: boolean;
-}) {
+function SingleDependencyGraphWrapper({ resourceId }: { resourceId: string }) {
   const { loading, data, error, fetch } = useDependencyGraph(resourceId);
   const router = useRouter();
   const title = 'Open in explorer';
-  const encodedId = !isInExplorer && encodeURIComponent(resourceId);
   return (
     <>
       <div className="flex h-[calc(100vh-145px)] w-full flex-col">
-        {!isInExplorer && (
-          <div className="flex flex-row justify-between gap-2">
-            <div className=" flex w-48 items-center gap-1 truncate text-base font-medium leading-normal text-primary">
-              <a
-                target="_blank"
-                onClick={() => router.push(`/explorer?resourceId=${encodedId}`)}
-                rel="noreferrer"
-                className="hover:text-primary"
-              >
-                <HyperLinkIcon />
-              </a>
-              <span>{title}</span>
-            </div>
+        <div className="flex flex-row justify-between gap-2">
+          <div className=" flex w-48 items-center gap-1 truncate text-base font-medium leading-normal text-primary">
+            <a
+              target="_blank"
+              onClick={() => {
+                localStorage.setItem('resourceId', JSON.stringify(resourceId));
+                router.push('/explorer');
+              }}
+              rel="noreferrer"
+              className="hover:text-primary"
+            >
+              <HyperLinkIcon />
+            </a>
+            <span>{title}</span>
           </div>
-        )}
+        </div>
+
         {!data?.nodes.length && !data?.edges.length ? (
           <div className="mt-24">
             <EmptyState

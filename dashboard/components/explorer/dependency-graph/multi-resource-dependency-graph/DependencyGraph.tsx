@@ -51,7 +51,7 @@ const DependencyGraph = ({ data }: DependencyGraphProps) => {
     translateXClass,
     zoomVal,
     handleZoomChange
-  } = useDependencyGraphActions({ isSingleDependencyGraph: false, openModal });
+  } = useDependencyGraphActions({ openModal });
 
   return (
     <div className="relative h-full flex-1 bg-dependency-graph bg-[length:40px_40px]">
