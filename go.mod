@@ -18,12 +18,13 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/sql/armsql v1.0.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/storage/armstorage v1.2.0
 	github.com/BurntSushi/toml v1.2.1
-	github.com/aws/aws-sdk-go-v2 v1.23.0
+	github.com/aws/aws-sdk-go-v2 v1.23.1
 	github.com/aws/aws-sdk-go-v2/config v1.25.3
 	github.com/aws/aws-sdk-go-v2/service/apigateway v1.20.2
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.35.1
 	github.com/aws/aws-sdk-go-v2/service/cloudfront v1.30.2
 	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.30.2
+	github.com/aws/aws-sdk-go-v2/service/codedeploy v1.20.3
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.41.2
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.25.2
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.136.0
@@ -102,8 +103,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.5.1 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.16.2 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.14.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.2.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.5.3 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.2.4 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.5.4 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.7.1 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.2.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.27.1
