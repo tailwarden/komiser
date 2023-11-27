@@ -43,11 +43,11 @@ function RightSideLayout({
   return (
     <>
       {isCustom ? (
-        <div className={`col-span-5 bg-komiser-100 ${customClasses}`}>
+        <div className={`col-span-5 bg-gray-50 ${customClasses}`}>
           {children}
         </div>
       ) : (
-        <div className="col-span-5 flex items-center justify-center bg-komiser-100 p-7">
+        <div className="col-span-5 flex items-center justify-center bg-gray-50 p-7">
           {children}
         </div>
       )}

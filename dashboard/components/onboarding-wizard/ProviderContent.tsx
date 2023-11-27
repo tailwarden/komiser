@@ -55,7 +55,7 @@ export default function ProviderContent({
               <a
                 target="_blank"
                 href={`https://docs.komiser.io/configuration/cloud-providers/${provider}`}
-                className="text-komiser-600"
+                className="text-darkcyan-500"
                 rel="noreferrer"
               >
                 adding an {providerName} account to Komiser.

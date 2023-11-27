@@ -33,8 +33,8 @@ function InventoryStatsCards({
               router.query.view ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
             } gap-8`}
           >
-            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
-              <div className=" rounded-lg bg-komiser-100 p-4">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-gray-950 transition-colors">
+              <div className=" rounded-lg bg-gray-50 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -63,12 +63,12 @@ function InventoryStatsCards({
                 <p className="text-xl font-medium">
                   {formatNumber(inventoryStats.resources, 'full')}
                 </p>
-                <p className="text-sm text-black-300">Resources</p>
+                <p className="text-sm text-gray-500">Resources</p>
               </div>
               <Tooltip>Number of active cloud services</Tooltip>
             </div>
-            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
-              <div className=" rounded-lg bg-komiser-100 p-4">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-gray-950 transition-colors">
+              <div className=" rounded-lg bg-gray-50 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -102,14 +102,14 @@ function InventoryStatsCards({
               </div>
               <div className="peer flex flex-col">
                 <p className="text-xl font-medium">{inventoryStats.regions}</p>
-                <p className="text-sm text-black-300">Regions</p>
+                <p className="text-sm text-gray-500">Regions</p>
               </div>
               <Tooltip>
                 Number of regions where you have active cloud services
               </Tooltip>
             </div>
-            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
-              <div className=" rounded-lg bg-komiser-100 p-4">
+            <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-gray-950 transition-colors">
+              <div className=" rounded-lg bg-gray-50 p-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -138,13 +138,13 @@ function InventoryStatsCards({
                 <p className="text-xl font-medium">
                   ${formatNumber(inventoryStats.costs)}
                 </p>
-                <p className="text-sm text-black-300">Cost</p>
+                <p className="text-sm text-gray-500">Cost</p>
               </div>
               <Tooltip>Up-to-date monthly cost</Tooltip>
             </div>
             {router.query.view && hiddenResources && (
-              <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-black-900 transition-colors">
-                <div className=" rounded-lg bg-komiser-100 p-4">
+              <div className="relative flex w-full items-center gap-4 rounded-lg bg-white  px-6  py-8 text-gray-950 transition-colors">
+                <div className=" rounded-lg bg-gray-50 p-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -180,7 +180,7 @@ function InventoryStatsCards({
                   <p className="text-xl font-medium">
                     {formatNumber(hiddenResources.length)}
                   </p>
-                  <p className="text-sm text-black-300">Hidden resources</p>
+                  <p className="text-sm text-gray-500">Hidden resources</p>
                 </div>
                 <Tooltip>
                   Resources that will be hidden from the inventory

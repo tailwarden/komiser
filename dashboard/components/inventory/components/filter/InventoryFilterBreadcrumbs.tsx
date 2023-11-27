@@ -8,12 +8,12 @@ function InventoryFilterBreadcrumbs({
   goTo
 }: InventoryFilterBreadcrumbsProps) {
   return (
-    <div className="flex gap-2 text-xs text-black-300">
+    <div className="flex gap-2 text-xs text-gray-500">
       <p
         className={`cursor-pointer ${
           step === 0
-            ? 'text-black-900 hover:text-black-900'
-            : 'hover:text-black-400'
+            ? 'text-gray-950 hover:text-gray-950'
+            : 'hover:text-gray-700'
         }`}
         onClick={() => goTo(0)}
       >
@@ -25,8 +25,8 @@ function InventoryFilterBreadcrumbs({
           <p
             className={`cursor-pointer ${
               step === 1
-                ? 'text-black-900 hover:text-black-900'
-                : 'hover:text-black-400'
+                ? 'text-gray-950 hover:text-gray-950'
+                : 'hover:text-gray-700'
             }`}
             onClick={() => goTo(1)}
           >
@@ -38,8 +38,8 @@ function InventoryFilterBreadcrumbs({
               <p
                 className={`cursor-pointer ${
                   step === 2
-                    ? 'text-black-900 hover:text-black-900'
-                    : 'hover:text-black-400'
+                    ? 'text-gray-950 hover:text-gray-950'
+                    : 'hover:text-gray-700'
                 }`}
                 onClick={() => goTo(2)}
               >

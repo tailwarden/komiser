@@ -58,18 +58,18 @@ function DependencyGraphWrapper() {
     <>
       <div className="flex h-[calc(100vh-145px)] w-full flex-col">
         <div className="flex flex-row justify-between gap-2">
-          <p className="text-lg font-medium text-black-900">
+          <p className="text-lg font-medium text-gray-950">
             Resources Explorer
           </p>
           <div
             className={cn(
-              'absolute -top-1 right-24 z-20 flex translate-y-0 cursor-pointer items-center justify-start gap-4 rounded-b-[4px] border-x border-b border-black-170 bg-white px-4 py-2 text-sm transition',
+              'absolute -top-1 right-24 z-20 flex translate-y-0 cursor-pointer items-center justify-start gap-4 rounded-b-[4px] border-x border-b border-gray-200 bg-white px-4 py-2 text-sm transition',
               { 'translate-y-[105px]': filterOpen }
             )}
             onClick={() => setFilterOpen(!filterOpen)}
           >
             {displayedFilters && displayedFilters?.length > 0 && (
-              <span className="bg-komiser-130 px-[6px] pb-[3px] pt-[2px] text-xs text-komiser-600">
+              <span className="bg-darkcyan-100 px-[6px] pb-[3px] pt-[2px] text-xs text-darkcyan-500">
                 {displayedFilters?.length}
               </span>
             )}
@@ -85,7 +85,7 @@ function DependencyGraphWrapper() {
         </div>
         <div
           className={cn(
-            'absolute left-0 top-0 z-10 m-0 h-[102px] w-full origin-top scale-y-0 border-b border-black-170 bg-white px-24 transition',
+            'absolute left-0 top-0 z-10 m-0 h-[102px] w-full origin-top scale-y-0 border-b border-gray-200 bg-white px-24 transition',
             { 'scale-y-100': filterOpen }
           )}
         >

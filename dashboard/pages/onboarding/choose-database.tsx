@@ -33,8 +33,8 @@ function DatabaseLeftItem({
       onClick={onClick}
       className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-[1.5px] p-6 ${
         selected === value
-          ? 'border-komiser-600'
-          : 'border-gray-200 hover:border-komiser-400'
+          ? 'border-darkcyan-500'
+          : 'border-gray-200 hover:border-cyan-400'
       }`}
     >
       <Image
@@ -62,7 +62,7 @@ function DatabaseRightItem({
       onClick={onClick}
       key={value}
       className={`flex w-32 items-center justify-center rounded-3xl p-6 ${
-        selected === value ? 'bg-komiser-200' : 'bg-white'
+        selected === value ? 'bg-cyan-200' : 'bg-white'
       }`}
     >
       <Image
