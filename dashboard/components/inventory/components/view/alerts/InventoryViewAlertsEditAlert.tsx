@@ -101,7 +101,7 @@ function InventoryViewAlertsCreateOrEditAlert({
       {!currentAlert && (
         <div
           onClick={() => setViewControllerOnClickingBackButton()}
-          className="flex cursor-pointer items-center gap-2 self-start text-black-900"
+          className="flex cursor-pointer items-center gap-2 self-start text-gray-950"
         >
           <ArrowLeftIcon width={24} height={24} />
           Setup {alertName} Alert
@@ -111,7 +111,7 @@ function InventoryViewAlertsCreateOrEditAlert({
       {currentAlert && (
         <div
           onClick={() => closeAlert()}
-          className="flex cursor-pointer items-center gap-2 self-start text-black-900"
+          className="flex cursor-pointer items-center gap-2 self-start text-gray-950"
         >
           <ArrowLeftIcon width={24} height={24} />
           Edit {currentAlert.isSlack ? 'Slack' : 'Webhook'} alert
@@ -119,7 +119,7 @@ function InventoryViewAlertsCreateOrEditAlert({
       )}
 
       <div className="flex flex-col gap-4">
-        <p className="text-black-400">Type</p>
+        <p className="text-gray-700">Type</p>
 
         {/* Displaying the slack alert types when creating a new alert */}
         {!currentAlert && (
@@ -131,9 +131,9 @@ function InventoryViewAlertsCreateOrEditAlert({
                   key={option.label}
                   onClick={() => changeAlertType(option.type)}
                   className={classNames(
-                    'flex cursor-pointer flex-col items-start justify-center rounded-lg px-6 py-4 outline outline-black-200 hover:outline-black-300',
+                    'flex cursor-pointer flex-col items-start justify-center rounded-lg px-6 py-4 outline outline-gray-300 hover:outline-gray-500',
                     {
-                      'outline-2 outline-primary hover:outline-primary':
+                      'outline-2 outline-darkcyan-500 hover:outline-darkcyan-500':
                         isActive
                     }
                   )}
@@ -146,10 +146,10 @@ function InventoryViewAlertsCreateOrEditAlert({
                       width={42}
                     />
                     <div className="flex flex-col">
-                      <p className="text-base font-semibold text-black-900">
+                      <p className="text-base font-semibold text-gray-950">
                         {option.label}
                       </p>
-                      <p className="text-xs text-black-400">
+                      <p className="text-xs text-gray-700">
                         {option.description}
                       </p>
                     </div>
@@ -163,17 +163,17 @@ function InventoryViewAlertsCreateOrEditAlert({
         {/* Displaying the chosen slack alert type when editing an alert */}
         {currentAlert && (
           <div className="flex flex-col items-start justify-center">
-            <p className="text-base font-semibold text-black-900">
+            <p className="text-base font-semibold text-gray-950">
               {findWhichOption?.label}
             </p>
-            <p className="text-xs text-black-400">
+            <p className="text-xs text-gray-700">
               {findWhichOption?.description}
             </p>
           </div>
         )}
       </div>
       <div className="flex flex-col gap-4">
-        <p className="text-black-400">Details</p>
+        <p className="text-gray-700">Details</p>
 
         {selected === 'BUDGET' && (
           <Grid gap="sm">
@@ -221,16 +221,16 @@ function InventoryViewAlertsCreateOrEditAlert({
       {alertName === 'Webhook' && (
         <div>
           <div className="flex flex-col gap-4">
-            <p className="text-black-400">Output</p>
+            <p className="text-gray-700">Output</p>
             <div className="relative">
               <div>
                 <div className="relative">
                   <input
                     type="text"
                     name="endpoint"
-                    className={`peer mr-6 w-full rounded bg-white pb-[0.75rem] pl-4 pr-32 pt-[1.75rem] text-sm text-black-900 caret-primary outline outline-black-200 focus:outline-2 focus:outline-primary ${
+                    className={`peer mr-6 w-full rounded bg-white pb-[0.75rem] pl-4 pr-32 pt-[1.75rem] text-sm text-gray-950 caret-darkcyan-500 outline outline-gray-300 focus:outline-2 focus:outline-darkcyan-500 ${
                       testResultData?.success === false &&
-                      `outline-error-600 focus:outline-error-600`
+                      `outline-red-500 focus:outline-red-500`
                     }`}
                     placeholder=""
                     onChange={e => {
@@ -242,13 +242,13 @@ function InventoryViewAlertsCreateOrEditAlert({
                     data-lpignore="true"
                     data-form-type="other"
                   />
-                  <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-black-300 transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
+                  <span className="pointer-events-none absolute bottom-[1.925rem] left-4 origin-left scale-75 select-none font-normal text-gray-500 transition-all peer-placeholder-shown:bottom-[1.15rem] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-[87.5%] peer-focus:bottom-[1.925rem] peer-focus:scale-75">
                     Endpoint
                   </span>
                 </div>
               </div>
               <span
-                className={`absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded bg-transparent text-sm font-medium text-primary text-primary active:bg-komiser-200 active:text-primary disabled:cursor-not-allowed sm:w-auto ${
+                className={`absolute right-4 top-1/2 flex w-full -translate-y-1/2 transform cursor-pointer items-center gap-2 rounded bg-transparent text-sm font-medium text-darkcyan-500 text-darkcyan-500 active:bg-cyan-200 active:text-darkcyan-500 disabled:cursor-not-allowed sm:w-auto ${
                   testingEndpoint ? 'pointer-events-none opacity-50' : ''
                 }`}
                 onClick={testEndpoint}
@@ -280,7 +280,7 @@ function InventoryViewAlertsCreateOrEditAlert({
               </span>
             </div>
             {testResultData?.success === false && (
-              <p className="-mt-2 text-xs text-error-600">
+              <p className="-mt-2 text-xs text-red-500">
                 {testResultData.message}
               </p>
             )}
@@ -294,14 +294,14 @@ function InventoryViewAlertsCreateOrEditAlert({
             />
           </div>
           <div className="mt-2">
-            <p className="text-xs text-black-400">
+            <p className="text-xs text-gray-700">
               We’ll send a POST request to the endpoint. More information can be
               found in our{' '}
               <a
                 href="https://docs.komiser.io/docs/guides/how-to-komiser/alerts#request-details"
                 target="_blank"
                 rel="noreferrer"
-                className="text-primary"
+                className="text-darkcyan-500"
               >
                 <u>developer documentation</u>
               </a>

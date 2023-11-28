@@ -9,8 +9,8 @@ function DashboardResourcesManagerError({
 }: DashboardResourcesManagerErrorProps) {
   return (
     <div className="flex min-h-[360px] w-full flex-col gap-4 overflow-hidden rounded-lg bg-white px-6 py-4 pb-6">
-      <div className="-mx-6 flex items-center justify-center gap-6 border-b border-black-200/40 px-6 pb-4">
-        <p className="text-sm text-black-400">
+      <div className="-mx-6 flex items-center justify-center gap-6 border-b border-gray-300 px-6 pb-4">
+        <p className="text-sm text-gray-700">
           There was an error loading the resources manager.
         </p>
         <div className="flex-shrink-0">
@@ -35,25 +35,25 @@ function DashboardResourcesManagerError({
         </div>
         <div className="h-[60px]"></div>
       </div>
-      <div className="h-[60px] w-full rounded-lg bg-black-100"></div>
+      <div className="h-[60px] w-full rounded-lg bg-gray-50"></div>
       <div className="flex items-center justify-between px-6">
-        <div className="min-h-[250px] min-w-[250px] rounded-full border-[50px] border-black-100 bg-white"></div>
+        <div className="min-h-[250px] min-w-[250px] rounded-full border-[50px] border-gray-50 bg-white"></div>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-lg bg-black-100"></div>
-            <div className="h-3 w-24 rounded-lg bg-black-100"></div>
+            <div className="h-4 w-4 rounded-lg bg-gray-50"></div>
+            <div className="h-3 w-24 rounded-lg bg-gray-50"></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-lg bg-black-100"></div>
-            <div className="h-3 w-24 rounded-lg bg-black-100"></div>
+            <div className="h-4 w-4 rounded-lg bg-gray-50"></div>
+            <div className="h-3 w-24 rounded-lg bg-gray-50"></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-lg bg-black-100"></div>
-            <div className="h-3 w-24 rounded-lg bg-black-100"></div>
+            <div className="h-4 w-4 rounded-lg bg-gray-50"></div>
+            <div className="h-3 w-24 rounded-lg bg-gray-50"></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-lg bg-black-100"></div>
-            <div className="h-3 w-24 rounded-lg bg-black-100"></div>
+            <div className="h-4 w-4 rounded-lg bg-gray-50"></div>
+            <div className="h-3 w-24 rounded-lg bg-gray-50"></div>
           </div>
         </div>
       </div>

@@ -79,7 +79,7 @@ function Upload({
 }: UploadProps) {
   const defaultChildClassName =
     fileOrFiles === null
-      ? `grow bg-white cursor-pointer rounded border-2 border-dashed border-black-170 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-black-100 w-full`
+      ? `grow bg-white cursor-pointer rounded border-2 border-dashed border-gray-200 py-5 text-center text-xs transition hover:border-[#B6EAEA] hover:bg-gray-50 w-full`
       : `grow bg-white min-h-full rounded border-2 border-[#B6EAEA] text-center text-xs transition w-full`;
 
   return (
@@ -145,7 +145,9 @@ function Upload({
             </svg>
             <p>
               Drag and drop or{' '}
-              <span className="cursor-pointer text-primary">choose a file</span>
+              <span className="cursor-pointer text-darkcyan-500">
+                choose a file
+              </span>
             </p>
           </div>
         )}
@@ -198,7 +200,7 @@ function Upload({
                     </svg>
                     <div className="flex-1 text-left">
                       <p>{file.name}</p>
-                      <p className="text-black-400">
+                      <p className="text-gray-700">
                         {(file.size / (1024 * 1024)).toFixed(2)}
                         MB
                       </p>
@@ -280,7 +282,7 @@ function Upload({
                   </svg>
                   <div className="flex-1 text-left">
                     <p>{(fileOrFiles as File).name}</p>
-                    <p className="text-black-400">
+                    <p className="text-gray-700">
                       {((fileOrFiles as File).size / (1024 * 1024)).toFixed(2)}
                       MB
                     </p>
