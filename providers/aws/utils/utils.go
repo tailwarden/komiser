@@ -8,6 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
 )
 
+type AWSCtxKey uint8
+
+const (
+	CostexplorerKey AWSCtxKey = iota
+)
+
 type ProductEntry struct {
 	Product struct {
 		Attributes struct {
@@ -93,8 +99,8 @@ func GetPriceMap(pricingOutput *pricing.GetProductsOutput, field string) (map[st
 }
 
 func Int64PtrToFloat64(i *int64) float64 {
-    if i == nil {
-        return 0.0  // or any default value you prefer
-    }
-    return float64(*i)
+	if i == nil {
+		return 0.0 // or any default value you prefer
+	}
+	return float64(*i)
 }

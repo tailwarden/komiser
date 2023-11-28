@@ -3,6 +3,7 @@ package lambda
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -10,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	cloudwatchTypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
+	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	lambdaTypes "github.com/aws/aws-sdk-go-v2/service/lambda/types"
@@ -31,6 +33,11 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 	resources := make([]models.Resource, 0)
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	lambdaClient := lambda.NewFromConfig(*client.AWSClient)
+
+	serviceCost, err := getLambdaCostAndUsage(ctx, client.AWSClient.Region)
+	if err != nil {
+		log.Warnln("Couldn't fetch Lambda cost and usage:", err)
+	}
 
 	tempRegion := client.AWSClient.Region
 	client.AWSClient.Region = "us-east-1"
@@ -157,7 +164,8 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 				Name:       *o.FunctionName,
 				Cost:       monthlyCost,
 				Metadata: map[string]string{
-					"runtime": string(o.Runtime),
+					"runtime":     string(o.Runtime),
+					"serviceCost": fmt.Sprint(serviceCost),
 				},
 				Relations: relations,
 				FetchedAt: time.Now(),
@@ -180,6 +188,28 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getLambdaCostAndUsage(ctx context.Context, region string) (float64, error) {
+	total := 0.0
+	costexplorerOutputList, ok := ctx.Value(awsUtils.CostexplorerKey).([]*costexplorer.GetCostAndUsageOutput)
+	if !ok || costexplorerOutputList == nil {
+		return 0, fmt.Errorf("incorrect costexplorerOutputList")
+	}
+	for _, costexplorerOutput := range costexplorerOutputList {
+		for _, group := range costexplorerOutput.ResultsByTime {
+			for _, v := range group.Groups {
+				if v.Keys[0] == "Lambda" && v.Keys[1] == region {
+					amt, err := strconv.ParseFloat(*v.Metrics["UnblendedCost"].Amount, 64)
+					if err != nil {
+						return 0, err
+					}
+					total += amt
+				}
+			}
+		}
+	}
+	return total, nil
 }
 
 func getLambdaRelations(config aws.Config, lambda lambdaTypes.FunctionConfiguration) (rel []models.Link) {
