@@ -19,10 +19,10 @@ function InventoryViewAlertHasNoExistingAlerts({
           className="flex-shrink-0"
         />
         <div className="flex flex-col items-start gap-2 px-4">
-          <p className="font-semibold text-black-900">
+          <p className="font-semibold text-gray-950">
             It seems you have no alerts set up
           </p>
-          <p className="text-sm text-black-400">
+          <p className="text-sm text-gray-700">
             Set up budget or resources alerts to stay updated on your cloud
             infrastructure
           </p>

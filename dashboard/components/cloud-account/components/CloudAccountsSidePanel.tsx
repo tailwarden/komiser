@@ -133,11 +133,11 @@ function CloudAccountsSidePanel({
                 <Avatar avatarName={cloudAccount.provider} size={40} />
                 <div className="flex flex-col gap-1">
                   <div className="flex max-w-[14rem] items-center gap-1">
-                    <p className="truncate font-medium text-black-900">
+                    <p className="truncate font-medium text-gray-950">
                       {cloudAccount.name}
                     </p>
                   </div>
-                  <p className="flex items-center gap-2 text-xs text-black-300">
+                  <p className="flex items-center gap-2 text-xs text-gray-500">
                     {cloudAccount.resources} resources in this cloud account
                   </p>
                 </div>
@@ -164,7 +164,7 @@ function CloudAccountsSidePanel({
           </div>
 
           {isDeleteOpen ? (
-            <div className="mt-4 flex flex-col gap-6 rounded-lg bg-black-100 p-8">
+            <div className="mt-4 flex flex-col gap-6 rounded-lg bg-gray-50 p-8">
               <CloudAccountDeleteContents
                 cloudAccount={cloudAccount}
                 onCancel={() => setIsDeleteOpen(false)}
@@ -205,7 +205,7 @@ function CloudAccountsSidePanel({
                     <CloudAccountStatus status={cloudAccount?.status} />
                     <AccountDetails cloudAccountData={cloudAccount} />
                   </div>
-                  <div className="-mx-4 mb-4 h-px bg-black-200"></div>
+                  <div className="-mx-4 mb-4 h-px bg-gray-300"></div>
                   <div className="mb-4 flex flex-shrink-0 items-center justify-end gap-6">
                     <Button size="lg" style="ghost" onClick={closeModal}>
                       Cancel

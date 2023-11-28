@@ -45,12 +45,12 @@ export default function CloudAccountItem({
     <div
       key={id}
       onClick={() => openModal(account)}
-      className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-black-170 bg-white p-6 text-black-900 transition-colors"
+      className="relative my-5 flex w-full items-center gap-4 rounded-lg border-2 border-gray-200 bg-white p-6 text-gray-950 transition-colors"
     >
       <Avatar avatarName={cloudProvider} size={48} />
       <div className="mr-auto">
         <p className="font-bold">{name}</p>
-        <p className="text-black-300">{platform.getLabel(cloudProvider)}</p>
+        <p className="text-gray-500">{platform.getLabel(cloudProvider)}</p>
       </div>
 
       <CloudAccountStatus status={status} />
@@ -63,11 +63,11 @@ export default function CloudAccountItem({
       {isOpen && (
         <div
           ref={optionsRef}
-          className="absolute right-0 top-0 mr-5 mt-[70px] items-center rounded-md border border-black-130 bg-white p-4 shadow-xl"
+          className="absolute right-0 top-0 mr-5 mt-[70px] items-center rounded-md border border-gray-100 bg-white p-4 shadow-right"
           style={{ zIndex: 1000 }}
         >
           <button
-            className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-black-400 hover:bg-black-150"
+            className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-gray-700 hover:bg-background-ds"
             onClick={() => {
               setIsOpen(false);
               setEditCloudAccount(true);
@@ -77,7 +77,7 @@ export default function CloudAccountItem({
             Edit cloud account
           </button>
           <button
-            className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-error-600 hover:bg-black-150"
+            className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-red-500 hover:bg-background-ds"
             onClick={() => {
               setIsOpen(false);
               setIsDeleteModalOpen(true);

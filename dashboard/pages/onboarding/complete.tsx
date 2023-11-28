@@ -28,7 +28,7 @@ export default function OnboardingComplete() {
               height={0}
               className="mb-8 h-56 w-56"
             />
-            <h2 className="mb-3 text-2xl font-semibold leading-8 text-black-900">
+            <h2 className="mb-3 text-2xl font-semibold leading-8 text-gray-950">
               Your data is being synced
             </h2>
             <div className="mb-10 font-normal">
