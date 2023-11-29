@@ -117,28 +117,42 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 	}
 
 	costexplorerClient := costexplorer.NewFromConfig(*client.AWSClient)
-	costexplorerOutput, err := costexplorerClient.GetCostAndUsage(ctx, &costexplorer.GetCostAndUsageInput{
-		Granularity: "DAILY",
-		Metrics:     []string{"UnblendedCost"},
-		TimePeriod: &types.DateInterval{
-			Start: aws.String(utils.BeginningOfMonth(time.Now()).Format("2006-01-02")),
-			End:   aws.String(time.Now().Format("2006-01-02")),
-		},
-		GroupBy: []types.GroupDefinition{
-			{
-				Key:  aws.String("SERVICE"),
-				Type: "DIMENSION",
+	costexplorerOutputList := []*costexplorer.GetCostAndUsageOutput{}
+	var nextPageToken *string
+	for {
+		costexplorerOutput, err := costexplorerClient.GetCostAndUsage(ctx, &costexplorer.GetCostAndUsageInput{
+			Granularity: "DAILY",
+			Metrics:     []string{"UnblendedCost"},
+			TimePeriod: &types.DateInterval{
+				Start: aws.String(utils.BeginningOfMonth(time.Now()).Format("2006-01-02")),
+				End:   aws.String(time.Now().Format("2006-01-02")),
 			},
-			{
-				Key:  aws.String("REGION"),
-				Type: "DIMENSION",
+			GroupBy: []types.GroupDefinition{
+				{
+					Key:  aws.String("SERVICE"),
+					Type: "DIMENSION",
+				},
+				{
+					Key:  aws.String("REGION"),
+					Type: "DIMENSION",
+				},
 			},
-		},
-	})
-	if err != nil {
-		log.Warn("Couldn't fetch cost and usage data:", err)
+			NextPageToken: nextPageToken,
+		})
+		if err != nil {
+			log.Warn("Couldn't fetch cost and usage data:", err)
+			break
+		}
+
+		costexplorerOutputList = append(costexplorerOutputList, costexplorerOutput)
+
+		if aws.ToString(costexplorerOutput.NextPageToken) == "" {
+			break
+		}
+
+		nextPageToken = costexplorerOutput.NextPageToken
 	}
-	ctxWithCostexplorerOutput := context.WithValue(ctx, awsUtils.CostexplorerKey, costexplorerOutput)
+	ctxWithCostexplorerOutput := context.WithValue(ctx, awsUtils.CostexplorerKey, costexplorerOutputList)
 	for _, region := range listOfSupportedRegions {
 		c := client.AWSClient.Copy()
 		c.Region = region
