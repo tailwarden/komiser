@@ -30,6 +30,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
 	for _, fetchResources := range listOfSupportedServices() {
+		fetchResources := fetchResources
 		regions, err := client.CivoClient.ListRegions()
 		if err != nil {
 			log.Printf("[%s][Civo] %s", client.Name, err)
