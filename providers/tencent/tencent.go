@@ -22,6 +22,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
 	for _, fetchResources := range listOfSupportedServices() {
+		fetchResources := fetchResources
 		regions, err := client.TencentClient.DescribeRegionsWithContext(ctx, tccvm.NewDescribeRegionsRequest())
 		if err != nil {
 			log.Errorf("[%s][Tencent] Couldn't fetch the list of regions: %s", client.Name, err)
