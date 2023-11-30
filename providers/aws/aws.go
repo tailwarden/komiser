@@ -161,6 +161,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 			Name:      client.Name,
 		}
 		for _, fetchResources := range listOfSupportedServices() {
+			fetchResources := fetchResources
 			wp.SubmitTask(func() {
 				resources, err := fetchResources(ctxWithCostexplorerOutput, client)
 				if err != nil {
