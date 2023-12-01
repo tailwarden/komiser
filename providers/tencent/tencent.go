@@ -3,7 +3,6 @@ package tencent
 import (
 	"context"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/tailwarden/komiser/providers"
@@ -22,6 +21,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
 	for _, fetchResources := range listOfSupportedServices() {
+		fetchResources := fetchResources
 		regions, err := client.TencentClient.DescribeRegionsWithContext(ctx, tccvm.NewDescribeRegionsRequest())
 		if err != nil {
 			log.Errorf("[%s][Tencent] Couldn't fetch the list of regions: %s", client.Name, err)
@@ -45,7 +45,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, db *bu
 					for _, resource := range resources {
 						_, err := db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost").Exec(context.Background())
 						if err != nil {
-							logrus.WithError(err).Error("db trigger failed")
+							log.WithError(err).Error("db trigger failed")
 						}
 					}
 					if telemetry {
