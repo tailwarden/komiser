@@ -4,7 +4,7 @@ import mockCardPrimaryProps from './CardPrimary.mock';
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta<typeof CardPrimary> = {
-  title: 'Komiser/CardPrimary',
+  title: 'Komiser/Card Primary',
   component: CardPrimary,
   tags: ['autodocs'],
   argTypes: {
@@ -14,14 +14,10 @@ const meta: Meta<typeof CardPrimary> = {
       }
     },
     showButton: {
-      control: {
-        type: 'inline-radio'
-      }
+      control: 'boolean'
     },
     showAvatar: {
-      control: {
-        type: 'inline-radio'
-      }
+      control: 'boolean'
     }
   }
 };
