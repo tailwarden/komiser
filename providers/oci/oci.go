@@ -29,6 +29,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 
 func FetchResources(ctx context.Context, client providers.ProviderClient, db *bun.DB, telemetry bool, analytics utils.Analytics, wp *providers.WorkerPool) {
 	for _, fetchResources := range listOfSupportedServices() {
+		fetchResources := fetchResources
 		wp.SubmitTask(func() {
 			resources, err := fetchResources(ctx, client)
 			if err != nil {
