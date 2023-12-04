@@ -11,6 +11,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
+	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codebuild"
 	"github.com/tailwarden/komiser/providers/aws/codedeploy"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
@@ -99,6 +100,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
 		redshift.EventSubscriptions,
+		codecommit.Repositories,
 		codebuild.BuildProjects,
 		codedeploy.DeploymentGroups,
 	}
@@ -119,6 +121,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 			Name:      client.Name,
 		}
 		for _, fetchResources := range listOfSupportedServices() {
+			fetchResources := fetchResources
 			wp.SubmitTask(func() {
 				resources, err := fetchResources(ctx, client)
 				if err != nil {
