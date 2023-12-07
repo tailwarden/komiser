@@ -20,7 +20,7 @@ function Tooltip({
     <div
       role="tooltip"
       className={classNames(
-        'absolute z-[1000] hidden animate-fade-in-up items-center rounded-lg bg-black-900 px-4 py-2 text-xs font-medium text-black-200 opacity-0 peer-hover:flex',
+        'absolute z-[1000] hidden animate-fade-in-up items-center rounded-lg bg-gray-950 px-4 py-2 text-xs font-medium text-gray-300 opacity-0 peer-hover:flex',
         { 'top-0': top === 'xs' && !bottom },
         { 'top-[3rem]': top === 'sm' && !bottom },
         { 'top-24': top === 'md' && !bottom },

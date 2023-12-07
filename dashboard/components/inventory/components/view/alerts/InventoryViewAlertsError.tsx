@@ -10,10 +10,10 @@ function InventoryViewAlertsError({
 }: InventoryViewAlertsErrorProps) {
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex select-none items-center justify-between rounded-lg border border-black-170 p-6">
+      <div className="flex select-none items-center justify-between rounded-lg border border-gray-200 p-6">
         <div className="flex items-center gap-4">
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-black-400">
+            <p className="text-sm text-gray-700">
               There was an error fetching the alerts
             </p>
           </div>

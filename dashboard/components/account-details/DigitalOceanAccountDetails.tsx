@@ -27,7 +27,7 @@ function DigitalOceanAccountDetails({
       <div
         className={classNames(
           'flex flex-col space-y-8 rounded-md p-5',
-          hasError ? 'bg-error-100' : 'bg-komiser-100'
+          hasError ? 'bg-red-50' : 'bg-gray-50'
         )}
       >
         <LabelledInput
@@ -49,7 +49,7 @@ function DigitalOceanAccountDetails({
         />
       </div>
       {hasError && (
-        <div className="text-sm text-error-600">
+        <div className="text-sm text-red-500">
           We couldn&apos;t connect to your Digital Ocean account. Please check
           if the file is correct.
         </div>

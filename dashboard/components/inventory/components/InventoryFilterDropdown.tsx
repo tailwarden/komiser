@@ -51,7 +51,7 @@ export default function InventoryFilterDropdown({
         className="fixed left-0 top-0 z-20 hidden h-screen w-screen animate-fade-in bg-transparent opacity-0 sm:block"
       ></div>
       <div
-        className={`absolute ${position} z-[21] inline-flex min-w-[16rem] max-w-[21rem] rounded-lg bg-white p-4 text-sm shadow-xl`}
+        className={`absolute ${position} z-[21] inline-flex min-w-[16rem] max-w-[21rem] rounded-lg bg-white p-4 text-sm shadow-right`}
       >
         <div className="flex w-full flex-col">
           {/* Filter breadcrumbs */}
@@ -97,7 +97,7 @@ export default function InventoryFilterDropdown({
                 />
               </div>
               {inlineError.hasError && (
-                <p className="pb-4 text-xs font-medium text-error-600">
+                <p className="pb-4 text-xs font-medium text-red-500">
                   {inlineError.message}
                 </p>
               )}

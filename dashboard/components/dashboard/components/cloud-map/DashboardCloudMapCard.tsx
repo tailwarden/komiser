@@ -19,11 +19,11 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
         isOpen ? 'fixed inset-0 z-30 origin-left animate-scale' : ''
       } w-full rounded-lg bg-white px-6 py-4 pb-6`}
     >
-      <div className="-mx-6 flex items-center justify-between border-b border-black-200/40 px-6 pb-4">
+      <div className="-mx-6 flex items-center justify-between border-b border-gray-300 px-6 pb-4">
         <div>
-          <p className="text-sm font-semibold text-black-900">Cloud map</p>
+          <p className="text-sm font-semibold text-gray-950">Cloud map</p>
           <div className="mt-1"></div>
-          <p className="text-xs text-black-300">
+          <p className="text-xs text-gray-500">
             Analyze which regions have active resources
           </p>
         </div>
@@ -61,12 +61,12 @@ function DashboardCloudMapCard({ data }: DashboardCloudMapCardProps) {
           />
         </>
       )}
-      <div className="flex gap-4 text-xs text-black-300">
+      <div className="flex gap-4 text-xs text-gray-500">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-info-600"></div>Active region
+          <div className="h-2 w-2 rounded-full bg-blue-500"></div>Active region
         </div>
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-black-300"></div>
+          <div className="h-2 w-2 rounded-full bg-gray-500"></div>
           Inactive region
         </div>
       </div>

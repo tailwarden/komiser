@@ -82,7 +82,7 @@ function Layout({ children }: LayoutProps) {
             <Navbar />
             <main
               className={classNames(
-                'relative bg-black-100 p-6 pb-12 xl:px-8 2xl:px-24',
+                'relative bg-gray-50 p-6 pb-12 xl:px-8 2xl:px-24',
                 displayBanner
                   ? 'mt-[145px] min-h-[calc(100vh-145px)]'
                   : 'mt-[73px] min-h-[calc(100vh-73px)]'

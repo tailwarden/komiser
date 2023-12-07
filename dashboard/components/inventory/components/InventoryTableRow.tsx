@@ -14,8 +14,8 @@ function InventoryTableRow({
     <tr
       className={`${
         bulkItems && bulkItems.find(currentId => currentId === id)
-          ? 'border-black-200/70 bg-komiser-120'
-          : 'border-black-200/30 bg-white hover:bg-black-100/50'
+          ? 'border-gray-300 bg-darkcyan-100'
+          : 'border-gray-300 bg-white hover:bg-gray-50'
       } border-b last:border-none`}
     >
       {children}
