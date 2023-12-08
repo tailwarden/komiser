@@ -174,9 +174,9 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 }
 
 func getEC2Relations(inst *etype.Instance, resourceArn string) []models.Link {
-	
+
 	var rel []models.Link
-	// Get associated security groups	
+	// Get associated security groups
 	for _, sgrp := range inst.SecurityGroups {
 		rel = append(rel, models.Link{
 			ResourceID: *sgrp.GroupId,
@@ -197,21 +197,25 @@ func getEC2Relations(inst *etype.Instance, resourceArn string) []models.Link {
 		})
 	}
 
-	// Get associated VPC
-	rel = append(rel, models.Link{
-		ResourceID: fmt.Sprintf("%s:vpc/%s", resourceArn, *inst.VpcId),
-		Type:       "VPC",
-		Name:       *inst.VpcId,
-		Relation:   "USES",
-	})
+	if inst.VpcId != nil {
+		// Get associated VPC
+		rel = append(rel, models.Link{
+			ResourceID: fmt.Sprintf("%s:vpc/%s", resourceArn, *inst.VpcId),
+			Type:       "VPC",
+			Name:       *inst.VpcId,
+			Relation:   "USES",
+		})
+	}
 
-	// Get associated Subnet
-	rel = append(rel, models.Link{
-		ResourceID: fmt.Sprintf("%s:subnet/%s", resourceArn, *inst.SubnetId),
-		Name:       *inst.SubnetId,
-		Type:       "Subnet",
-		Relation:   "USES",
-	})
+	if inst.SubnetId != nil {
+		// Get associated Subnet
+		rel = append(rel, models.Link{
+			ResourceID: fmt.Sprintf("%s:subnet/%s", resourceArn, *inst.SubnetId),
+			Name:       *inst.SubnetId,
+			Type:       "Subnet",
+			Relation:   "USES",
+		})
+	}
 
 	// Get associated Keypair
 	if inst.KeyName != nil {

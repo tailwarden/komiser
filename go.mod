@@ -85,6 +85,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/codecommit v1.18.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.20.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/google/s2a-go v0.1.4 // indirect
