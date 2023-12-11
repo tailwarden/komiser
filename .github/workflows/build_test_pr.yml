@@ -25,6 +25,8 @@ jobs:
       - run: npm run build
         working-directory: dashboard
 
+      - run: echo Awesome
+
   build_test_cli:
     runs-on: ubuntu-latest
     steps:
@@ -51,3 +53,6 @@ jobs:
 
       - name: Build
         run: make build
+
+      - name: Awesome
+        run: echo Awesome
