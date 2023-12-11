@@ -1,12 +1,42 @@
 package utils
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strconv"
 
+	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
 )
+
+type AWSCtxKey uint8
+
+const (
+	CostexplorerKey AWSCtxKey = iota
+)
+
+func GetCostAndUsage(ctx context.Context, region string, svcName string) (float64, error) {
+	total := 0.0
+	costexplorerOutputList, ok := ctx.Value(CostexplorerKey).([]*costexplorer.GetCostAndUsageOutput)
+	if !ok || costexplorerOutputList == nil {
+		return 0, fmt.Errorf("incorrect costexplorerOutputList")
+	}
+	for _, costexplorerOutput := range costexplorerOutputList {
+		for _, group := range costexplorerOutput.ResultsByTime {
+			for _, v := range group.Groups {
+				if v.Keys[0] == svcName && v.Keys[1] == region {
+					amt, err := strconv.ParseFloat(*v.Metrics["UnblendedCost"].Amount, 64)
+					if err != nil {
+						return 0, err
+					}
+					total += amt
+				}
+			}
+		}
+	}
+	return total, nil
+}
 
 type ProductEntry struct {
 	Product struct {
@@ -93,8 +123,8 @@ func GetPriceMap(pricingOutput *pricing.GetProductsOutput, field string) (map[st
 }
 
 func Int64PtrToFloat64(i *int64) float64 {
-    if i == nil {
-        return 0.0  // or any default value you prefer
-    }
-    return float64(*i)
+	if i == nil {
+		return 0.0 // or any default value you prefer
+	}
+	return float64(*i)
 }
