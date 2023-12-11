@@ -44,7 +44,7 @@
     "@storybook/addon-interactions": "^7.5.3",
     "@storybook/addon-links": "^7.5.3",
     "@storybook/addons": "^7.4.6",
-    "@storybook/blocks": "^7.4.5",
+    "@storybook/blocks": "^7.6.4",
     "@storybook/nextjs": "^7.5.2",
     "@storybook/preview-api": "^7.4.6",
     "@storybook/react": "^7.4.6",
