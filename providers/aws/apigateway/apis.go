@@ -28,9 +28,9 @@ func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "ApiGateway")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon API Gateway")
 	if err != nil {
-		log.Warnln("Couldn't fetch ApiGateway cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon API Gateway cost and usage:", err)
 	}
 
 	for _, api := range output.Items {

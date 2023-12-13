@@ -20,9 +20,9 @@ func MaintenanceWindows(ctx context.Context, client providers.ProviderClient) ([
 
 	input := &ssm.DescribeMaintenanceWindowsInput{}
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SystemManager")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SystemsManager")
 	if err != nil {
-		log.Warnln("Couldn't fetch SystemManager cost and usage:", err)
+		log.Warnln("Couldn't fetch SystemsManager cost and usage:", err)
 	}
 
 	for {

@@ -27,9 +27,9 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = tempRegion
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "CloudFront")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon CloudFront")
 	if err != nil {
-		log.Warnln("Couldn't fetch CloudFront cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon CloudFront cost and usage:", err)
 	}
 	for {
 		output, err := cloudfrontClient.ListDistributions(ctx, &config)

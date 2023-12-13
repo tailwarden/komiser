@@ -30,9 +30,9 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = oldRegion
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "DyanmoDB")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "DynamoDB")
 	if err != nil {
-		log.Warnln("Couldn't fetch DyanmoDB cost and usage:", err)
+		log.Warnln("Couldn't fetch DynamoDB cost and usage:", err)
 	}
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
