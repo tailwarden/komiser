@@ -28,12 +28,13 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
 	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	if err != nil {
+		return resources, err
+	}
+	
 	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SNS")
 	if err != nil {
 		log.Warnln("Couldn't fetch SNS cost and usage:", err)
-	}
-	if err != nil {
-		return resources, err
 	}
 
 	accountId := stsOutput.Account
