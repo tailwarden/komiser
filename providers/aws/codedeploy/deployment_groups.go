@@ -3,13 +3,15 @@ package codedeploy
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/codedeploy"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
-	"time"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func DeploymentGroups(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -22,6 +24,11 @@ func DeploymentGroups(ctx context.Context, client providers.ProviderClient) ([]m
 		return resources, err
 	}
 	accountId := stsOutput.Account
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "CodeDeploy")
+	if err != nil {
+		log.Warnln("Couldn't fetch CodeDeploy cost and usage:", err)
+	}
 
 	for {
 		output, err := codedeployClient.ListApplications(ctx, &listApplicationParams)
@@ -47,6 +54,9 @@ func DeploymentGroups(ctx context.Context, client providers.ProviderClient) ([]m
 						ResourceId: resourceArn,
 						Region:     client.AWSClient.Region,
 						Name:       deploymentGroup,
+						Metadata: map[string]string{
+							"serviceCost": fmt.Sprint(serviceCost),
+						},
 						Tags:       tags,
 						FetchedAt:  time.Now(),
 					})

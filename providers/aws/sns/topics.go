@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -27,6 +28,10 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 	stsClient := sts.NewFromConfig(*client.AWSClient)
 	stsOutput, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SNS")
+	if err != nil {
+		log.Warnln("Couldn't fetch SNS cost and usage:", err)
+	}
 	if err != nil {
 		return resources, err
 	}
@@ -94,6 +99,9 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:     client.AWSClient.Region,
 				Name:       *topic.TopicArn,
 				Cost:       monthlyCost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/topic/%s", client.AWSClient.Region, client.AWSClient.Region, *topic.TopicArn),

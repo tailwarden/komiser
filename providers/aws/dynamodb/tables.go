@@ -12,9 +12,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
 	"github.com/aws/aws-sdk-go-v2/service/pricing/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 
@@ -30,6 +30,10 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = oldRegion
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "DyanmoDB")
+	if err != nil {
+		log.Warnln("Couldn't fetch DyanmoDB cost and usage:", err)
+	}
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 	    ServiceCode: aws.String("AmazonDynamoDB"),
@@ -110,6 +114,9 @@ func Tables(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Region:     client.AWSClient.Region,
 			Name:       table,
 			Cost:       monthlyCost,
+			Metadata: map[string]string{
+				"serviceCost": fmt.Sprint(serviceCost),
+			},
 			Tags:       tags,
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/dynamodbv2/home?region=%s#table?initialTagKey=&name=%s", client.AWSClient.Region, client.AWSClient.Region, table),

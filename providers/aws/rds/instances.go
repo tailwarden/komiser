@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -27,6 +28,10 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = oldRegion
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	if err != nil {
+		log.Warnln("Couldn't fetch RDS cost and usage:", err)
+	}
 
 	for {
 		output, err := rdsClient.DescribeDBInstances(ctx, &config)
@@ -116,6 +121,9 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 				Region:     client.AWSClient.Region,
 				ResourceId: *instance.DBInstanceArn,
 				Cost:       monthlyCost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Name:       _instanceName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,

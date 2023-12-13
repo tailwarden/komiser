@@ -47,6 +47,10 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Kinesis")
+	if err != nil {
+		log.Warnln("Couldn't fetch Kinesis cost and usage:", err)
+	}
 	var config kinesis.ListStreamsInput
 	for {
 		output, err := kinesisClient.ListStreams(ctx, &config)
@@ -88,6 +92,9 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:     client.AWSClient.Region,
 				Name:       *stream.StreamName,
 				Cost:       cost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				CreatedAt:  *stream.StreamCreationTimestamp,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
