@@ -13,8 +13,8 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
-	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codebuild"
+	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codedeploy"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
@@ -135,6 +135,10 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		}
 	}
 
+	costexplorerOutputList, err := getCostexplorerOutput(ctx, client, utils.BeginningOfMonth(time.Now()).Format("2006-01-02"), time.Now().Format("2006-01-02"))
+	if err != nil {
+		log.Warn("Failed to get cost explorer output:", err)
+	}
 	ctxWithCostexplorerOutput := context.WithValue(ctx, awsUtils.CostexplorerKey, costexplorerOutputList)
 	for _, region := range listOfSupportedRegions {
 		c := client.AWSClient.Copy()
