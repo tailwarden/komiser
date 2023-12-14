@@ -125,7 +125,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		}
 	} else {
 		costexplorerOutputList, err = getCostexplorerOutput(
-			ctx, client, utils.BeginningOfMonth(time.Now()).Format("2006-01-02"), time.Now().Format("2006-01-02"),
+			ctx, client, utils.BeginningMonthsAgo(time.Now(), 6).Format("2006-01-02"), utils.BeginningOfMonth(time.Now()).Format("2006-01-02"),
 		)
 		if err != nil {
 			log.Warn("Failed to get cost explorer output:", err)
