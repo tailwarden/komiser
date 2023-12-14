@@ -72,7 +72,7 @@ function InventoryViewAlertsChooseAlertMethod({
                 You have not set up your Slack integration. Learn how through
                 our{' '}
                 <a
-                  href="https://docs.komiser.io/docs/introduction/getting-started/#slack-integration-alerts"
+                  href="https://docs.komiser.io/guides/alerts#slack-integration"
                   target="_blank"
                   rel="noreferrer"
                   className="text-darkcyan-500"

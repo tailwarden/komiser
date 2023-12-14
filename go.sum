@@ -92,10 +92,16 @@ github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.27.1 h1:TNRPtVMfBVk24DL3o
 github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.27.1/go.mod h1:f+2AxSfO44KOyp+hsuDsjJyZmaOQxkcmGKRFExyHZdU=
 github.com/aws/aws-sdk-go-v2/service/codebuild v1.25.2 h1:7CP1OWPNk3sLQe5eockBr1l8N5prgO7oDuYO+bNNUrI=
 github.com/aws/aws-sdk-go-v2/service/codebuild v1.25.2/go.mod h1:lad97CcvLKXfU5uWV/9S3QrHUwk6CBDounq7rNs9K0E=
+github.com/aws/aws-sdk-go-v2/service/codecommit v1.18.2 h1:pf48DGYnBziCfCWzL6Cw4fapTNg4qn3NOkKAmds/Ig0=
+github.com/aws/aws-sdk-go-v2/service/codecommit v1.18.2/go.mod h1:JzDQFX7S1XLn5z4PnFBEUyTFgxzl7iEOQ1TPpl3OSAs=
+github.com/aws/aws-sdk-go-v2/service/configservice v1.31.0 h1:3EaaGPAkwUHVbDKx/TCTAubBUqV8F6++5EaiSiXQgN0=
+github.com/aws/aws-sdk-go-v2/service/configservice v1.31.0/go.mod h1:a+PVnn9VNPzPVUiXKXDHK21PSi/TzEKQNIsvSlVXgFY=
 github.com/aws/aws-sdk-go-v2/service/codedeploy v1.20.3 h1:rGqIKTmugpZ7lEzXTmbiPg45Id09UQpB2YoGaE0J6T4=
 github.com/aws/aws-sdk-go-v2/service/codedeploy v1.20.3/go.mod h1:A7i1lQClkFz09enKv5WYKb8a2lf9QeeI1s9dNiym3hg=
 github.com/aws/aws-sdk-go-v2/service/configservice v1.41.2 h1:WJt83aWld986AxwJpzE0eDqQi18a/PwZ36y7DqENYdk=
 github.com/aws/aws-sdk-go-v2/service/configservice v1.41.2/go.mod h1:wIuYBSC8G7HHXK/T6YO0t/m463ssur9aMLnycNvKXqQ=
+github.com/aws/aws-sdk-go-v2/service/costexplorer v1.32.4 h1:ojxirFFJN39ar+tHiz84PuaeKA/Z3BiopdhxOGGQD4A=
+github.com/aws/aws-sdk-go-v2/service/costexplorer v1.32.4/go.mod h1:1ujrFMokNtwDv3fwb9RBwdeXS+RonpIeV9uh19GJoH8=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.25.2 h1:O6ff5PwwgQ7QkL/XA0H+0U0mWwjkYaP9tHvbr0Ptqak=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.25.2/go.mod h1:kuVxCbsxbP/h6YTT2BfOj4s/bwXYsG3C/8Qn9gO5QJY=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.136.0 h1:nZPVFkGojUUJupKJzaCKE07LaFDO3Tto1U69F8JipsI=
