@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"os"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -26,7 +27,12 @@ var startCmd = &cobra.Command{
 
 		file, err := cmd.Flags().GetString("config")
 		if err != nil {
-			return err
+			log.Info("unable to use given config file:", err)
+			log.Info("Creating default config.toml")
+			err = os.WriteFile("config.toml", []byte{}, 0644)
+			if err != nil {
+				return err
+			}
 		}
 		if file == "" {
 			return errors.New("you must specify a config file with '--config PATH'")
