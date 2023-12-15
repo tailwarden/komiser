@@ -91,7 +91,6 @@ function CloudAccounts() {
       {/* Wraps the cloud account page and handles the custom views sidebar */}
       <CloudAccountsLayout router={router} cloudAccounts={cloudAccounts}>
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
-        <div className="z-10 text-sm text-black-800 first-letter:top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3 opacity-1 fixed"></div>
         {filteredCloudAccounts.map(account => (
           <CloudAccountItem
             key={account.id}
