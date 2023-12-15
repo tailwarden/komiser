@@ -27,9 +27,9 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Elasticache")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon ElastiCache")
 	if err != nil {
-		log.Warnln("Couldn't fetch Elasticache cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon ElastiCache cost and usage:", err)
 	}
 
 	for {

@@ -32,9 +32,9 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	lambdaClient := lambda.NewFromConfig(*client.AWSClient)
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Lambda")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AWS Lambda")
 	if err != nil {
-		log.Warnln("Couldn't fetch Lambda cost and usage:", err)
+		log.Warnln("Couldn't fetch AWS Lambda cost and usage:", err)
 	}
 
 	tempRegion := client.AWSClient.Region

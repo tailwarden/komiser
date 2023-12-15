@@ -28,9 +28,9 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = oldRegion
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Relational Database Service")
 	if err != nil {
-		log.Warnln("Couldn't fetch RDS cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon Relational Database Service cost and usage:", err)
 	}
 
 	for {

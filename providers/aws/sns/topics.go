@@ -32,9 +32,9 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 	
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SNS")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Simple Notification Service")
 	if err != nil {
-		log.Warnln("Couldn't fetch SNS cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon Simple Notification Service cost and usage:", err)
 	}
 
 	accountId := stsOutput.Account

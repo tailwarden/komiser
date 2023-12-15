@@ -18,9 +18,9 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 	cloudWatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 
 	var nextToken *string
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "CloudWatch")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AmazonCloudWatch")
 	if err != nil {
-		log.Warnln("Couldn't fetch CloudWatch cost and usage:", err)
+		log.Warnln("Couldn't fetch AmazonCloudWatch cost and usage:", err)
 	}
 
 	for {

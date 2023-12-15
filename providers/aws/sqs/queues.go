@@ -25,9 +25,9 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config sqs.ListQueuesInput
 	sqsClient := sqs.NewFromConfig(*client.AWSClient)
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SQS")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Simple Queue Service")
 	if err != nil {
-		log.Warnln("Couldn't fetch SQS cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon Simple Queue Service cost and usage:", err)
 	}
 	for {
 		output, err := sqsClient.ListQueues(context.Background(), &config)

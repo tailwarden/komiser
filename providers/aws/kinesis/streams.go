@@ -47,9 +47,9 @@ func Streams(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		return resources, err
 	}
 
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Kinesis")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Kinesis")
 	if err != nil {
-		log.Warnln("Couldn't fetch Kinesis cost and usage:", err)
+		log.Warnln("Couldn't fetch Amazon Kinesis cost and usage:", err)
 	}
 	var config kinesis.ListStreamsInput
 	for {

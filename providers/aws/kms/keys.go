@@ -19,9 +19,9 @@ func Keys(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config kms.ListKeysInput
 	resources := make([]Resource, 0)
 	kmsClient := kms.NewFromConfig(*client.AWSClient)
-	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "KMS")
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AWS Key Management Service")
 	if err != nil {
-		log.Warnln("Couldn't fetch KMS cost and usage:", err)
+		log.Warnln("Couldn't fetch AWS Key Management Service cost and usage:", err)
 	}
 
 	for {
