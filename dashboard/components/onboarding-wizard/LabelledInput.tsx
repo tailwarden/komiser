@@ -58,6 +58,7 @@ function LabelledInput({
           }`}
           onChange={onChange}
           defaultValue={value}
+          autoComplete="off"
         />
       </div>
     </div>
