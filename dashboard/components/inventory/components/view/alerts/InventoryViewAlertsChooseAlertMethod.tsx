@@ -35,7 +35,7 @@ function InventoryViewAlertsChooseAlertMethod({
     <div className="flex flex-col gap-4">
       <div
         onClick={() => setViewControllerOnClickingBackButton()}
-        className="flex cursor-pointer items-center gap-2 self-start text-sm text-black-900"
+        className="flex cursor-pointer items-center gap-2 self-start text-sm text-gray-950"
       >
         <ArrowLeftIcon width={24} height={24} />
         Pick a Handler
@@ -49,7 +49,7 @@ function InventoryViewAlertsChooseAlertMethod({
                 setAlertMethodInViewController(alert.id);
               }
             }}
-            className={`flex cursor-pointer select-none items-center justify-between rounded-lg border border-black-170 p-6 hover:border-black-200 
+            className={`flex cursor-pointer select-none items-center justify-between rounded-lg border border-gray-200 p-6 hover:border-gray-300 
                         ${
                           alert.id === AlertMethod.SLACK && !isSlackConfigured
                             ? 'pointer-events-none bg-gray-200'
@@ -59,8 +59,8 @@ function InventoryViewAlertsChooseAlertMethod({
             <div className="flex items-center gap-4">
               <Image src={alert.image} height={42} width={42} alt={alert.alt} />
               <div className="flex flex-col">
-                <p className="font-semibold text-black-900">{alert.name}</p>
-                <p className="text-xs text-black-400">{alert.message}</p>
+                <p className="font-semibold text-gray-950">{alert.name}</p>
+                <p className="text-xs text-gray-700">{alert.message}</p>
               </div>
             </div>
             <ChevronRightIcon width={24} height={24} />
@@ -68,14 +68,14 @@ function InventoryViewAlertsChooseAlertMethod({
 
           {alert.id === AlertMethod.SLACK && !isSlackConfigured && (
             <div className="mt-2">
-              <p className="text-xs text-black-400">
+              <p className="text-xs text-gray-700">
                 You have not set up your Slack integration. Learn how through
                 our{' '}
                 <a
-                  href="https://docs.komiser.io/docs/introduction/getting-started/#slack-integration-alerts"
+                  href="https://docs.komiser.io/guides/alerts#slack-integration"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-primary"
+                  className="text-darkcyan-500"
                 >
                   <u>guide</u>
                 </a>

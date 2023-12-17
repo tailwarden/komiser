@@ -21,7 +21,7 @@ function InventoryViewAlertDisplayAlerts({
         <div
           onClick={() => createOrEditAlert(alert.id)}
           key={alert.id}
-          className="flex cursor-pointer select-none items-center justify-between rounded-lg border border-black-170 p-6 hover:border-black-200"
+          className="flex cursor-pointer select-none items-center justify-between rounded-lg border border-gray-200 p-6 hover:border-gray-300"
         >
           <div className="flex items-center gap-4">
             <Image
@@ -35,8 +35,8 @@ function InventoryViewAlertDisplayAlerts({
               alt={alert.isSlack ? 'Slack logo' : 'Webhook logo'}
             />
             <div className="flex flex-col">
-              <p className="font-semibold text-black-900">{alert.name}</p>
-              <p className="text-xs text-black-400">
+              <p className="font-semibold text-gray-950">{alert.name}</p>
+              <p className="text-xs text-gray-700">
                 {alert.budget
                   ? `When total cost is over $${formatNumber(
                       Number(alert.budget)

@@ -12,14 +12,14 @@ import (
 	"github.com/oracle/oci-go-sdk/common"
 	"github.com/ovh/go-ovh/ovh"
 	"github.com/scaleway/scaleway-sdk-go/scw"
-	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/models"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	"go.mongodb.org/atlas/mongodbatlas"
 	"golang.org/x/oauth2/google"
 	"k8s.io/client-go/kubernetes"
 )
 
-type FetchDataFunction func(ctx context.Context, client ProviderClient) ([]Resource, error)
+type FetchDataFunction func(ctx context.Context, client ProviderClient) ([]models.Resource, error)
 
 type ProviderClient struct {
 	AWSClient          *aws.Config

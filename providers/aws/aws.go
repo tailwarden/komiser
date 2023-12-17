@@ -3,14 +3,20 @@ package aws
 import (
 	"context"
 	"strings"
+	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
+	"github.com/aws/aws-sdk-go-v2/service/costexplorer/types"
 	log "github.com/sirupsen/logrus"
-
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
+	"github.com/tailwarden/komiser/providers/aws/codecommit"
+	"github.com/tailwarden/komiser/providers/aws/codebuild"
+	"github.com/tailwarden/komiser/providers/aws/codedeploy"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
 	"github.com/tailwarden/komiser/providers/aws/ecr"
@@ -31,7 +37,9 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
 	"github.com/tailwarden/komiser/providers/aws/systemsmanager"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
+
 	"github.com/uptrace/bun"
 )
 
@@ -97,6 +105,9 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
 		redshift.EventSubscriptions,
+		codecommit.Repositories,
+		codebuild.BuildProjects,
+		codedeploy.DeploymentGroups,
 	}
 }
 
@@ -107,6 +118,43 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		listOfSupportedRegions = regions
 	}
 
+	costexplorerClient := costexplorer.NewFromConfig(*client.AWSClient)
+	costexplorerOutputList := []*costexplorer.GetCostAndUsageOutput{}
+	var nextPageToken *string
+	for {
+		costexplorerOutput, err := costexplorerClient.GetCostAndUsage(ctx, &costexplorer.GetCostAndUsageInput{
+			Granularity: "DAILY",
+			Metrics:     []string{"UnblendedCost"},
+			TimePeriod: &types.DateInterval{
+				Start: aws.String(utils.BeginningOfMonth(time.Now()).Format("2006-01-02")),
+				End:   aws.String(time.Now().Format("2006-01-02")),
+			},
+			GroupBy: []types.GroupDefinition{
+				{
+					Key:  aws.String("SERVICE"),
+					Type: "DIMENSION",
+				},
+				{
+					Key:  aws.String("REGION"),
+					Type: "DIMENSION",
+				},
+			},
+			NextPageToken: nextPageToken,
+		})
+		if err != nil {
+			log.Warn("Couldn't fetch cost and usage data:", err)
+			break
+		}
+
+		costexplorerOutputList = append(costexplorerOutputList, costexplorerOutput)
+
+		if aws.ToString(costexplorerOutput.NextPageToken) == "" {
+			break
+		}
+
+		nextPageToken = costexplorerOutput.NextPageToken
+	}
+	ctxWithCostexplorerOutput := context.WithValue(ctx, awsUtils.CostexplorerKey, costexplorerOutputList)
 	for _, region := range listOfSupportedRegions {
 		c := client.AWSClient.Copy()
 		c.Region = region
@@ -115,8 +163,9 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 			Name:      client.Name,
 		}
 		for _, fetchResources := range listOfSupportedServices() {
+			fetchResources := fetchResources
 			wp.SubmitTask(func() {
-				resources, err := fetchResources(ctx, client)
+				resources, err := fetchResources(ctxWithCostexplorerOutput, client)
 				if err != nil {
 					log.Warnf("[%s][AWS] %s", client.Name, err)
 				} else {

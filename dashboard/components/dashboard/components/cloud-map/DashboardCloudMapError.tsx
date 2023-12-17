@@ -10,8 +10,8 @@ function DashboardCloudMapError({ fetch }: DashboardCloudMapErrorProps) {
       data-testid="error"
       className="min-h-[396px] w-full rounded-lg bg-white px-6 py-4 pb-6"
     >
-      <div className="-mx-6 flex items-center justify-center gap-6 border-b border-black-200/40 px-6 pb-4">
-        <p className="text-sm text-black-400">
+      <div className="-mx-6 flex items-center justify-center gap-6 border-b border-gray-300 px-6 pb-4">
+        <p className="text-sm text-gray-700">
           There was an error loading the cloud map.
         </p>
         <div className="flex-shrink-0">
@@ -43,12 +43,12 @@ function DashboardCloudMapError({ fetch }: DashboardCloudMapErrorProps) {
         </picture>
       </div>
       <div className="mt-12"></div>
-      <div className="flex gap-4 text-xs text-black-300">
+      <div className="flex gap-4 text-xs text-gray-500">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-info-600"></div>Active region
+          <div className="h-2 w-2 rounded-full bg-blue-500"></div>Active region
         </div>
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-black-300"></div>
+          <div className="h-2 w-2 rounded-full bg-gray-500"></div>
           Inactive region
         </div>
       </div>
