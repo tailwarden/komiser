@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func BuildProjects(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -25,6 +26,10 @@ func BuildProjects(ctx context.Context, client providers.ProviderClient) ([]mode
 		return resources, err
 	}
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "CodeBuild")
+	if err != nil {
+		log.Warnln("Couldn't fetch CodeBuild cost and usage:", err)
+	}
 	accountId := stsOutput.Account
 
 	for {
@@ -44,6 +49,9 @@ func BuildProjects(ctx context.Context, client providers.ProviderClient) ([]mode
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
 				Name:       project,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/codesuite/codebuild/%s/projects/%s/details?region=%s", client.AWSClient.Region, *accountId, project, client.AWSClient.Region),

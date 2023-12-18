@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func ContainerInstances(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -26,6 +27,10 @@ func ContainerInstances(ctx context.Context, client ProviderClient) ([]Resource,
 		return resources, err
 	}
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "ECS")
+	if err != nil {
+		log.Warnln("Couldn't fetch ECS cost and usage:", err)
+	}
 	accountId := stsOutput.Account
 	for {
 		output, err := ecsContainer.ListContainerInstances(context.Background(), &config)
@@ -44,6 +49,9 @@ func ContainerInstances(ctx context.Context, client ProviderClient) ([]Resource,
 				Region:     client.AWSClient.Region,
 				Name:       containerInstance,
 				Cost:       0,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecs/home?#/containers/%s", client.AWSClient.Region, containerInstance),
 			})

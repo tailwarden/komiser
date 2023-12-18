@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/opensearch"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func ServiceDomains(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -21,6 +22,11 @@ func ServiceDomains(ctx context.Context, client ProviderClient) ([]Resource, err
 	output, err := openSearchClient.ListDomainNames(ctx, input)
 	if err != nil {
 		return resources, err
+	}
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "OpenSearch")
+	if err != nil {
+		log.Warnln("Couldn't fetch OpenSearch cost and usage:", err)
 	}
 
 	for _, domainName := range output.DomainNames {
@@ -40,6 +46,9 @@ func ServiceDomains(ctx context.Context, client ProviderClient) ([]Resource, err
 			Region:     client.AWSClient.Region,
 			Name:       aws.ToString(domain.DomainName),
 			Cost:       0,
+			Metadata: map[string]string{
+				"serviceCost": fmt.Sprint(serviceCost),
+			},
 			FetchedAt:  time.Now(),
 			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/aos/home?region=%s#/opensearch/domains/%s", client.AWSClient.Region, client.AWSClient.Region, aws.ToString(domain.DomainName)),
 		})
