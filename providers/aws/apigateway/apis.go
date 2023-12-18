@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -25,6 +26,11 @@ func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	output, err := apigatewayClient.GetRestApis(ctx, &config)
 	if err != nil {
 		return resources, err
+	}
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon API Gateway")
+	if err != nil {
+		log.Warnln("Couldn't fetch Amazon API Gateway cost and usage:", err)
 	}
 
 	for _, api := range output.Items {
@@ -72,6 +78,9 @@ func Apis(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Region:     client.AWSClient.Region,
 			Name:       *api.Name,
 			Cost:       monthlyCost,
+			Metadata: map[string]string{
+				"serviceCost": fmt.Sprint(serviceCost),
+			},
 			Tags:       tags,
 			CreatedAt:  *api.CreatedDate,
 			FetchedAt:  time.Now(),

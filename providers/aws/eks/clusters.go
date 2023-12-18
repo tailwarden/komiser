@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -27,6 +28,11 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 	}
 
 	accountId := stsOutput.Account
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "EKS")
+	if err != nil {
+		log.Warnln("Couldn't fetch EKS cost and usage:", err)
+	}
 
 	for {
 		output, err := eksClient.ListClusters(ctx, &config)
@@ -96,6 +102,7 @@ func KubernetesClusters(ctx context.Context, client ProviderClient) ([]Resource,
 		"region":    client.AWSClient.Region,
 		"service":   "EKS",
 		"resources": len(resources),
+		"serviceCost":fmt.Sprint(serviceCost),
 	}).Info("Fetched resources")
 	return resources, nil
 }
