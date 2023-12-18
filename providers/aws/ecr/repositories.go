@@ -11,12 +11,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	resources := make([]Resource, 0)
 	var config ecr.DescribeRepositoriesInput
 	ecrClient := ecr.NewFromConfig(*client.AWSClient)
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "ECR")
+	if err != nil {
+		log.Warnln("Couldn't fetch ECR cost and usage:", err)
+	}
 	for {
 		output, err := ecrClient.DescribeRepositories(context.Background(), &config)
 		if err != nil {
@@ -47,6 +52,9 @@ func Repositories(ctx context.Context, client ProviderClient) ([]Resource, error
 				Region:     client.AWSClient.Region,
 				Name:       *repository.RepositoryName,
 				Cost:       0.10,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/ecr/repositories/%s", client.AWSClient.Region, *repository.RepositoryName),

@@ -12,12 +12,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/kms/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func Keys(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config kms.ListKeysInput
 	resources := make([]Resource, 0)
 	kmsClient := kms.NewFromConfig(*client.AWSClient)
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AWS Key Management Service")
+	if err != nil {
+		log.Warnln("Couldn't fetch AWS Key Management Service cost and usage:", err)
+	}
 
 	for {
 		output, err := kmsClient.ListKeys(ctx, &config)
@@ -62,6 +67,9 @@ func Keys(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:     client.AWSClient.Region,
 				ResourceId: *key.KeyArn,
 				Cost:       monthlyCost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Name:       *key.KeyId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,

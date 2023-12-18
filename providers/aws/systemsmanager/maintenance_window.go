@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func MaintenanceWindows(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -18,6 +19,11 @@ func MaintenanceWindows(ctx context.Context, client providers.ProviderClient) ([
 	ssmClient := ssm.NewFromConfig(*client.AWSClient)
 
 	input := &ssm.DescribeMaintenanceWindowsInput{}
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SystemsManager")
+	if err != nil {
+		log.Warnln("Couldn't fetch SystemsManager cost and usage:", err)
+	}
 
 	for {
 		maintenanceWindows, err := ssmClient.DescribeMaintenanceWindows(ctx, input)
@@ -39,6 +45,7 @@ func MaintenanceWindows(ctx context.Context, client providers.ProviderClient) ([
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/systems-manager/maintenance-windows/%s/details", client.AWSClient.Region, aws.ToString(window.WindowId)),
 				Metadata: map[string]string{
 					"Description": aws.ToString(window.Description),
+					"serviceCost": fmt.Sprint(serviceCost),
 				},
 			})
 		}
