@@ -110,7 +110,7 @@ function getCustomViewInventoryListAndStats({
             }
           }
         });
-    } 
+    }
     // TODO: https://github.com/tailwarden/komiser/issues/1208
     // else {
     //   setTimeout(() => router.push(router.pathname), 5000);

@@ -14,8 +14,8 @@ const AlertCircleIconFilled = (props: SVGProps<SVGSVGElement>) => (
     <path
       stroke="#fff"
       stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
+      strokeLinejoin="round"
+      strokeWidth="2"
       d="M8 6.043v2.6666M8 11.3765h.0067"
     />
   </svg>

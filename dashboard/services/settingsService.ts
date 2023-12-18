@@ -95,7 +95,6 @@ const settingsService = {
       return Error;
     }
   },
-
   async getGlobalResources(payload: string) {
     try {
       const res = await fetch(

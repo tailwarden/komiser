@@ -91,7 +91,7 @@ function CloudAccounts() {
       {/* Wraps the cloud account page and handles the custom views sidebar */}
       <CloudAccountsLayout router={router} cloudAccounts={cloudAccounts}>
         <CloudAccountsHeader isNotCustomView={isNotCustomView} />
-        <div className="z-10 text-sm text-black-800 first-letter:top-0 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3 opacity-1 fixed"></div>
+        <div className="opacity-1 fixed z-10 z-10 flex w-full animate-fade-in-down-short items-center justify-center gap-6 bg-gradient-to-br from-primary to-secondary py-3 text-sm text-black-800 first-letter:top-0"></div>
         {filteredCloudAccounts.map(account => (
           <CloudAccountItem
             key={account.id}
@@ -153,7 +153,7 @@ function CloudAccounts() {
       )}
 
       {cloudAccounts.length >= 2 && !isTailwardenBannerDismissed && (
-        <div className="bg-white absolute bottom-0 left-0 right-0 z-20 px-28 border-black-170 border-t text-base py-3 flex gap-4 items-center justify-center">
+        <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-center gap-4 border-t border-black-170 bg-white px-28 py-3 text-base">
           For deeper insights and account-level alerts, make the switch to
           Tailwarden — our recommended cloud version for production use.{' '}
           <Button

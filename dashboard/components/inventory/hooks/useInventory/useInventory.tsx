@@ -55,7 +55,9 @@ function useInventory() {
   const isVisible = useIsVisible(reloadDiv);
   const batchSize: number = 50;
   const router = useRouter();
-
+  useEffect(() => {
+    console.log('use inventory', { isOpen });
+  }, [isOpen]);
   /** Reset most of the UI states:
    * - skipped (used to skip results in the data fetch call)
    * - skippedSearch (same, but used to skip results in the searched data fetch call)

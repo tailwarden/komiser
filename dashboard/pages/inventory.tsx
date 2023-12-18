@@ -14,7 +14,6 @@ import SkeletonFilters from '../components/skeleton/SkeletonFilters';
 import SkeletonInventory from '../components/skeleton/SkeletonInventory';
 import SkeletonStats from '../components/skeleton/SkeletonStats';
 import VerticalSpacing from '../components/spacing/VerticalSpacing';
-import Toast from '../components/toast/Toast';
 
 export default function Inventory() {
   const {
@@ -173,7 +172,7 @@ export default function Inventory() {
           deleteLoading={deleteLoading}
           bulkItems={bulkItems}
           updateBulkTags={updateBulkTags}
-          tabs={['resource details', 'tags']}
+          tabs={['resource details', 'tags', 'relations']}
         />
 
         {/* Error state */}

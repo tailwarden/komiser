@@ -38,7 +38,7 @@ function SidepanelHeader({
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
           {cloudProvider && <Avatar avatarName={cloudProvider} size={40} />}
           <div className="flex flex-col gap-0.5">
-            <p className="font-['Noto Sans'] text-neutral-900 inline-flex w-48 items-center gap-2 truncate text-base font-medium leading-normal">
+            <p className=" text-neutral-900 inline-flex w-48 items-center gap-2 truncate text-base font-medium leading-normal">
               {title}
               <a
                 target="_blank"
@@ -49,9 +49,7 @@ function SidepanelHeader({
                 <HyperLinkIcon />
               </a>
             </p>
-            <p className="font-['Noto Sans'] text-neutral-500 text-xs font-normal">
-              {subtitle}
-            </p>
+            <p className="text-neutral-500 text-xs font-normal">{subtitle}</p>
           </div>
         </div>
       )}
@@ -62,7 +60,7 @@ function SidepanelHeader({
             <ArrowLeftIcon className="h-6 w-6" />
           </button>
           <div className="flex flex-col gap-0.5">
-            <p className="font-['Noto Sans'] text-neutral-900 text-center text-xl font-semibold leading-loose">
+            <p className="text-neutral-900 text-center text-xl font-semibold leading-loose">
               {title}
             </p>
           </div>

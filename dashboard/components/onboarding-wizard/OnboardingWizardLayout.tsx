@@ -4,11 +4,7 @@ import OnboardingWizardHeader from './PageHeaders';
 import OnboardingWizardProgressBar from './ProgressBar';
 
 function OnboardingWizardLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="font-['Noto Sans'] grid h-screen grid-cols-11">
-      {children}
-    </div>
-  );
+  return <div className="grid h-screen grid-cols-11">{children}</div>;
 }
 
 type LeftSideLayoutProps = {

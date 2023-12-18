@@ -1,6 +1,7 @@
 import SidepanelHeader from '@components/sidepanel/SidepanelHeader';
 import SidepanelPage from '@components/sidepanel/SidepanelPage';
 import Pill from '@components/pill/Pill';
+import SingleDependencyGraphWrapper from '@components/explorer/dependency-graph/single-resource-dependency-graph/SingleDependencyGraphWrapper';
 import Button from '@components/button/Button';
 import CloseIcon from '@components/icons/CloseIcon';
 import PlusIcon from '@components/icons/PlusIcon';
@@ -107,10 +108,10 @@ function InventorySidePanel({
           <SidepanelPage page={page} param={'resource details'}>
             <div className="space-y-6 pt-1">
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-500 text-sm font-normal leading-tight">
                   Cloud account
                 </h2>
-                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-900 text-sm font-normal leading-tight">
                   {!data && (
                     <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
@@ -118,10 +119,10 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-500 text-sm font-normal leading-tight">
                   Region
                 </h2>
-                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-900 text-sm font-normal leading-tight">
                   {!data && (
                     <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
@@ -129,7 +130,7 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-500 text-sm font-normal leading-tight">
                   Cost
                 </h2>
                 <h2 className=" flex items-center gap-2 text-sm">
@@ -145,10 +146,10 @@ function InventorySidePanel({
                 </h2>
               </div>
               <div className="space-y-2">
-                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-500 text-sm font-normal leading-tight">
                   Relations
                 </h2>
-                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
+                <h2 className="text-neutral-900 text-sm font-normal leading-tight">
                   {!data && (
                     <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
                   )}
@@ -160,6 +161,7 @@ function InventorySidePanel({
             </div>
           </SidepanelPage>
         )}
+
         {/* Tags form */}
         {tabs.includes('tags') && (
           <SidepanelPage page={page} param={'tags'}>
@@ -231,6 +233,13 @@ function InventorySidePanel({
                 </Button>
               </div>
             </form>
+          </SidepanelPage>
+        )}
+
+        {/* Relations */}
+        {tabs.includes('relations') && (
+          <SidepanelPage page={page} param={'relations'}>
+            <SingleDependencyGraphWrapper resourceId={data?.resourceId || ''} />
           </SidepanelPage>
         )}
         <div>

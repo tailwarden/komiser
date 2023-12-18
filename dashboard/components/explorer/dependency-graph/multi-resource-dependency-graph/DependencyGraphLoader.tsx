@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import DependencyGraphError from './DependencyGraphError';
-import DependencyGraphSkeleton from './DependencyGraphSkeleton';
+import { ReactFlowData } from '../hooks/useDependencyGraph';
+import DependencyGraphError from '../components/DependencyGraphError';
+import DependencyGraphSkeleton from '../components/DependencyGraphSkeleton';
 import DependencyGraphView from './DependencyGraph';
-import { ReactFlowData } from './hooks/useDependencyGraph';
 
 export type DependencyGraphLoaderProps = {
   loading: boolean;
