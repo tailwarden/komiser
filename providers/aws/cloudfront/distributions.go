@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -26,6 +27,10 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = tempRegion
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon CloudFront")
+	if err != nil {
+		log.Warnln("Couldn't fetch Amazon CloudFront cost and usage:", err)
+	}
 	for {
 		output, err := cloudfrontClient.ListDistributions(ctx, &config)
 		if err != nil {
@@ -145,6 +150,9 @@ func Distributions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				Region:     client.AWSClient.Region,
 				Name:       *distribution.DomainName,
 				Cost:       monthlyCost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudfront/v3/home?region=%s#/distributions/%s", client.AWSClient.Region, client.AWSClient.Region, *distribution.Id),
