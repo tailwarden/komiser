@@ -29,12 +29,14 @@ function useGlobalStats() {
         setError(true);
       } else {
         setLoading(false);
+        // in the case of res.account === 0 the default view should be shown 
+        // this couples the backend and the frontend strongly 
+        // if (res.accounts === 0) {
 
-        if (res.accounts === 0) {
-          setHasNoAccounts(true);
-        } else {
-          setData(res);
-        }
+        // } else {
+        //   setData(res);
+        // }
+        setData(res);
       }
     });
   }
