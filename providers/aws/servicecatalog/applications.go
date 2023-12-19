@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/servicecatalog"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func Products(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -19,6 +20,11 @@ func Products(ctx context.Context, client providers.ProviderClient) ([]models.Re
 	serviceCatalogsClient := servicecatalog.NewFromConfig(*client.AWSClient)
 
 	input := &servicecatalog.SearchProductsAsAdminInput{}
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "ServiceCatalog")
+	if err != nil {
+		log.Warnln("Couldn't fetch ServiceCatalog cost and usage:", err)
+	}
 
 	for {
 		output, err := serviceCatalogsClient.SearchProductsAsAdmin(ctx, input)
@@ -35,6 +41,9 @@ func Products(ctx context.Context, client providers.ProviderClient) ([]models.Re
 				Region:     client.AWSClient.Region,
 				Name:       aws.ToString(product.ProductViewSummary.Name),
 				Cost:       0,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/servicecatalog/home?region=%s#/admin-products/%s", client.AWSClient.Region, client.AWSClient.Region, aws.ToString(product.ProductViewSummary.ProductId)),
 			})

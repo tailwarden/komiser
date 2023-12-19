@@ -10,6 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 const (
@@ -24,6 +25,11 @@ func Users(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 	iamClient := iam.NewFromConfig(*client.AWSClient)
 
 	paginator := iam.NewListUsersPaginator(iamClient, &iam.ListUsersInput{})
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "IAM")
+	if err != nil {
+		log.Warnln("Couldn't fetch IAM cost and usage:", err)
+	}
 
 	for paginator.HasMorePages() {
 		output, err := paginator.NextPage(ctx)
@@ -49,6 +55,9 @@ func Users(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 				Region:     client.AWSClient.Region,
 				Name:       aws.ToString(o.UserName),
 				Cost:       0,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				CreatedAt:  *o.CreateDate,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
