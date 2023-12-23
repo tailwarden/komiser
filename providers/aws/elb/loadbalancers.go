@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -37,6 +38,11 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 
 	var configListeners elasticloadbalancingv2.DescribeListenersInput
 	var configRules elasticloadbalancingv2.DescribeRulesInput
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "ELB")
+	if err != nil {
+		log.Warnln("Couldn't fetch ELB cost and usage:", err)
+	}
 
 	for _, loadbalancer := range output.LoadBalancers {
 		resourceArn := *loadbalancer.LoadBalancerArn
@@ -76,6 +82,9 @@ func LoadBalancers(ctx context.Context, client ProviderClient) ([]Resource, erro
 			Region:     client.AWSClient.Region,
 			Name:       *loadbalancer.LoadBalancerName,
 			Cost:       monthlyCost,
+			Metadata: map[string]string{
+				"serviceCost": fmt.Sprint(serviceCost),
+			},
 			Tags:       tags,
 			CreatedAt:  *loadbalancer.CreatedTime,
 			FetchedAt:  time.Now(),

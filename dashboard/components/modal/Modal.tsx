@@ -29,7 +29,7 @@ function Modal({ isOpen, closeModal, id, children }: ModalProps) {
           <div
             id={`${id}-wrapper`}
             onClick={closeModal}
-            className="fixed inset-0 z-30 hidden animate-fade-in bg-gray-950 opacity-0 sm:block"
+            className="fixed inset-0 z-30 hidden animate-fade-in bg-gray-900/60 sm:block"
           ></div>
           <div
             id={`${id}-modal`}

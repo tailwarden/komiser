@@ -24,8 +24,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.35.1
 	github.com/aws/aws-sdk-go-v2/service/cloudfront v1.30.2
 	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.30.2
+	github.com/aws/aws-sdk-go-v2/service/codecommit v1.18.2
 	github.com/aws/aws-sdk-go-v2/service/codedeploy v1.20.3
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.41.2
+	github.com/aws/aws-sdk-go-v2/service/costexplorer v1.32.4
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.25.2
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.136.0
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.23.0
@@ -75,7 +77,7 @@ require (
 	github.com/uptrace/bun/driver/sqliteshim v1.1.8
 	go.mongodb.org/atlas v0.23.1
 	golang.org/x/oauth2 v0.13.0
-	golang.org/x/text v0.13.0
+	golang.org/x/text v0.14.0
 	google.golang.org/api v0.126.0
 	k8s.io/apimachinery v0.26.1
 	k8s.io/client-go v0.26.1
@@ -84,7 +86,6 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/codecommit v1.18.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.20.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/google/s2a-go v0.1.4 // indirect
@@ -187,12 +188,12 @@ require (
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/term v0.13.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/time v0.0.0-20220922220347-f3bd1da661af // indirect
 	golang.org/x/tools v0.6.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
