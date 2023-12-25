@@ -14,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -24,6 +25,10 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	var config sqs.ListQueuesInput
 	sqsClient := sqs.NewFromConfig(*client.AWSClient)
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Simple Queue Service")
+	if err != nil {
+		log.Warnln("Couldn't fetch Amazon Simple Queue Service cost and usage:", err)
+	}
 	for {
 		output, err := sqsClient.ListQueues(context.Background(), &config)
 		if err != nil {
@@ -140,6 +145,9 @@ func Queues(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Region:     client.AWSClient.Region,
 				Name:       queueName,
 				Cost:       monthlyCost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sqs/v2/home?region=%s#/queues/%s", client.AWSClient.Region, client.AWSClient.Region, queue),
