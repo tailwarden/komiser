@@ -41,7 +41,7 @@ func BuildProjects(ctx context.Context, client providers.ProviderClient) ([]mode
 		for _, project := range output.Projects {
 			resourceArn := fmt.Sprintf("arn:aws:codebuild:%s:%s:project/%s", client.AWSClient.Region, *accountId, project)
 			tags := make([]models.Tag, 0)
-		
+
 			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
@@ -52,9 +52,9 @@ func BuildProjects(ctx context.Context, client providers.ProviderClient) ([]mode
 				Metadata: map[string]string{
 					"serviceCost": fmt.Sprint(serviceCost),
 				},
-				Tags:       tags,
-				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/codesuite/codebuild/%s/projects/%s/details?region=%s", client.AWSClient.Region, *accountId, project, client.AWSClient.Region),
+				Tags:      tags,
+				FetchedAt: time.Now(),
+				Link:      fmt.Sprintf("https://%s.console.aws.amazon.com/codesuite/codebuild/%s/projects/%s/details?region=%s", client.AWSClient.Region, *accountId, project, client.AWSClient.Region),
 			})
 		}
 		if aws.ToString(output.NextToken) == "" {
