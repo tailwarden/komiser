@@ -3,8 +3,9 @@ package rds
 import (
 	"context"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	log "github.com/sirupsen/logrus"
@@ -36,6 +37,10 @@ func AutoBackups(ctx context.Context, client providers.ProviderClient) ([]models
 				Name:       _backupName,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#dbinstance:id=%s", client.AWSClient.Region, client.AWSClient.Region, *backup.DBInstanceIdentifier),
+				Metadata: map[string]string{
+					"Engine":        *backup.Engine,
+					"EngineVersion": *backup.EngineVersion,
+				},
 			})
 		}
 
