@@ -57,8 +57,8 @@ func DeploymentGroups(ctx context.Context, client providers.ProviderClient) ([]m
 						Metadata: map[string]string{
 							"serviceCost": fmt.Sprint(serviceCost),
 						},
-						Tags:       tags,
-						FetchedAt:  time.Now(),
+						Tags:      tags,
+						FetchedAt: time.Now(),
 					})
 				}
 				if aws.ToString(listDeploymentGroupOutput.NextToken) == "" {
