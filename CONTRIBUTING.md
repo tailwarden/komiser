@@ -185,12 +185,52 @@ source="ENVIRONMENT_VARIABLES"
 profile="production"
 ```
 
-#### 5️⃣ Compile a new Komiser binary:
+#### 5️⃣ Update Dashboard Utils
+Navigate to the `dashboard/utils` folder in your project and locate the file named `servicehelper.ts`. Open the file and follow these steps:
+
+##### a. Add Provider to Union Type
+Locate the `Providers` union type at the top of the file. Add the new cloud provider in lowercase to the union.
+
+```typescript
+// dashboard/utils/servicehelper.ts
+
+export type Providers =
+  | 'aws'
+  | 'gcp'
+  | 'digitalocean'
+  | 'azure'
+  | 'civo'
+  | 'kubernetes'
+  | 'linode'
+  | 'tencent'
+  | 'oci'
+  | 'scaleway'
+  | 'mongodbatlas'
+  | 'ovh'
+  | 'scaleway'
+  | 'tencent'
+  | 'provider_name'; // Add the new provider here
+
+```
+##### b. Add Provider and Service to `allProvidersServices`
+
+Find the `allProvidersServices` object in the `servicehelper.ts` file and add the new provider along with the service in lowercase.
+
+```typescript
+// dashboard/utils/servicehelper.ts
+
+export const allProvidersServices: { [key in Providers | string]: string[] } = {
+  // ... other services
+  new_provider: ['new_service_name'],
+};
+```
+
+#### 6️⃣ Compile a new Komiser binary:
 ```bash
 go build
 ```
 
-#### 6️⃣ Start a new Komiser development server:
+#### 7️⃣ Start a new Komiser development server:
 
 ```bash
 ./komiser start
@@ -254,7 +294,25 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 .
 ```
 
-#### 4️⃣
+#### 4️⃣ Update Dashboard Utils
+Navigate to the `dashboard/utils` folder in your project and locate the file named `servicehelper.ts`. Open the file and find the `allProvidersServices` object. Add the new service name in lowercase under the respective provider, adhering to the existing structure.
+
+Here's an example of how to add the new service:
+
+```typescript
+// dashboard/utils/servicehelper.ts
+
+export const allProvidersServices: { [key in Providers | string]: string[] } = {
+  // ... other services
+  your_provider_name: [
+    'existing_service_1',
+    'existing_service_2',
+    // ... other existing services
+    'new_service_name', // Add the new service here
+  ],
+};
+
+#### 5️⃣
 Do above mentioned steps [4](#4️⃣-add-provider-configuration), [5](#5️⃣-compile-a-new-komiser-binary) and [6](#6️⃣-start-a-new-komiser-development-server). You'll see a new resource/service added to Komiser, in the dashboard!
 
 Additionally, [here](https://youtu.be/Vn5uc2elcVg?feature=shared) is a video tutorial of the entire process for your reference.
