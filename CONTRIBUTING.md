@@ -185,7 +185,7 @@ source="ENVIRONMENT_VARIABLES"
 profile="production"
 ```
 
-#### 7️⃣ Update Dashboard Utils
+#### 5️⃣ Update Dashboard Utils
 Navigate to the `dashboard/utils` folder in your project and locate the file named `servicehelper.ts`. Open the file and follow these steps:
 
 ##### a. Add Provider to Union Type
@@ -225,12 +225,12 @@ export const allProvidersServices: { [key in Providers | string]: string[] } = {
 };
 ```
 
-#### 5️⃣ Compile a new Komiser binary:
+#### 6️⃣ Compile a new Komiser binary:
 ```bash
 go build
 ```
 
-#### 6️⃣ Start a new Komiser development server:
+#### 7️⃣ Start a new Komiser development server:
 
 ```bash
 ./komiser start
