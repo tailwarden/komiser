@@ -11,7 +11,8 @@ export type ResourcesManagerQuery =
   | 'service'
   | 'region'
   | 'account'
-  | 'view';
+  | 'view'
+  | 'Resource';
 
 export type ResourcesManagerGroupBySelectProps = {
   values: ResourcesManagerQuery[];
@@ -23,6 +24,7 @@ function useResourcesManager() {
   const [data, setData] = useState<ResourcesManagerData>();
   const [error, setError] = useState(false);
   const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
+  console.log(query)
   const [exclude, setExclude] = useState<string[]>([]);
   const previousQuery = useRef(query);
 
