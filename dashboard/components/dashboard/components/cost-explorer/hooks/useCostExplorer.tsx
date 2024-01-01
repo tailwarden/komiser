@@ -42,7 +42,6 @@ function useCostExplorer() {
   const [queryDate, setQueryDate] =
     useState<CostExplorerQueryDateProps>('lastSixMonths');
   const [exclude, setExclude] = useState<string[]>([]);
-  console.log(exclude)
   const previousQueryGroup = useRef(queryGroup);
 
   function fetch(
@@ -86,7 +85,6 @@ function useCostExplorer() {
       end: endDate,
       exclude
     };
-    console.log(payload)
     const payloadJson = JSON.stringify(payload);
 
     settingsService.getCostExplorer(payloadJson).then(res => {
@@ -101,8 +99,6 @@ function useCostExplorer() {
   }
 
   useEffect(() => {
-    console.log(queryGroup)
-    console.log(previousQueryGroup)
     if (queryGroup !== previousQueryGroup.current) {
       setExclude([]);
     }

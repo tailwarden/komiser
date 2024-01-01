@@ -24,7 +24,6 @@ function useResourcesManager() {
   const [data, setData] = useState<ResourcesManagerData>();
   const [error, setError] = useState(false);
   const [query, setQuery] = useState<ResourcesManagerQuery>('provider');
-  console.log(query)
   const [exclude, setExclude] = useState<string[]>([]);
   const previousQuery = useRef(query);
 
