@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -26,6 +27,11 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 	}
 
 	accountId := stsOutput.Account
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "EFS")
+	if err != nil {
+		log.Warnln("Couldn't fetch EFS cost and usage:", err)
+	}
 
 	for {
 		output, err := efsClient.DescribeFileSystems(ctx, &config)
@@ -62,6 +68,9 @@ func ElasticFileStorage(ctx context.Context, client ProviderClient) ([]Resource,
 					Region:     client.AWSClient.Region,
 					Name:       *filesystem.Name,
 					Cost:       monthlyCost,
+					Metadata: map[string]string{
+						"serviceCost": fmt.Sprint(serviceCost),
+					},
 					Tags:       tags,
 					FetchedAt:  time.Now(),
 					Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/efs/home?region=%s#/file-systems/%s", client.AWSClient.Region, client.AWSClient.Region, *filesystem.Name),

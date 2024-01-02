@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+
 	"fmt"
 	"regexp"
 	"time"
@@ -18,7 +19,14 @@ import (
 	"github.com/tailwarden/komiser/utils"
 )
 
+
+
 func Instances(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+	pricing, err := FetchPricing()
+	if err != nil {
+		return nil, err
+	}
+
 	resources := make([]models.Resource, 0)
 
 	regions, err := utils.FetchGCPRegionsInRealtime(client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))
@@ -57,6 +65,8 @@ RegionsLoop:
 			re := regexp.MustCompile(`instances\/(.+)$`)
 			redisInstanceName := re.FindStringSubmatch(redis.Name)[1]
 
+			cost := calculateRedisCost(redis, pricing)
+
 			resources = append(resources, models.Resource{
 				Provider:   "GCP",
 				Account:    client.Name,
@@ -65,7 +75,7 @@ RegionsLoop:
 				Name:       redis.DisplayName,
 				Region:     regionName,
 				CreatedAt:  redis.CreateTime.AsTime(),
-				Cost:       0,
+				Cost:       cost,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://console.cloud.google.com/memorystore/redis/locations/%s/instances/%s/details/overview?project=%s", regionName, redisInstanceName, client.GCPClient.Credentials.ProjectID),
 			})

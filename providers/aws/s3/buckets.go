@@ -33,6 +33,10 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = tempRegion
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "S3")
+	if err != nil {
+		log.Warnln("Couldn't fetch S3 cost and usage:", err)
+	}
 
 	pricingOutput, err := pricingClient.GetProducts(ctx, &pricing.GetProductsInput{
 		ServiceCode: aws.String("AmazonS3"),
@@ -143,6 +147,9 @@ func Buckets(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			ResourceId: resourceArn,
 			Name:       *bucket.Name,
 			Cost:       monthlyCost,
+			Metadata: map[string]string{
+				"serviceCost": fmt.Sprint(serviceCost),
+			},
 			CreatedAt:  *bucket.CreationDate,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
