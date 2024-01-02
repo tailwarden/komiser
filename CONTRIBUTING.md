@@ -311,6 +311,7 @@ export const allProvidersServices: { [key in Providers | string]: string[] } = {
     'new_service_name', // Add the new service here
   ],
 };
+```
 
 #### 5️⃣
 Do above mentioned steps [4](#4️⃣-add-provider-configuration), [5](#5️⃣-compile-a-new-komiser-binary) and [6](#6️⃣-start-a-new-komiser-development-server). You'll see a new resource/service added to Komiser, in the dashboard!

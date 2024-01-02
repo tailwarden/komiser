@@ -16,7 +16,7 @@ export type Providers =
   | 'tencent';
 
 // Define an object that maps each provider to an array of its supported services.
-export const allProvidersServices: { [key in Providers | string]: string[] } = {
+export const allProvidersServices: { [key in Providers]: string[] } = {
   aws: [
     'api gateway',
     'cloudfront',
@@ -192,7 +192,7 @@ export const allProvidersServices: { [key in Providers | string]: string[] } = {
 
 /**
  * Check if a specific service is supported by a given provider.
- * @param {string} provider - The cloud provider.
+ * @param {Providers} provider - The cloud provider.
  * @param {string} service - The service to check for support.
  * @returns {boolean} - Returns true if the service is supported, otherwise returns false.
  *
@@ -204,10 +204,10 @@ export function checkIfServiceIsSupported(
   provider: string,
   service: string
 ): boolean {
-  const lowercaseProvider = provider.toLowerCase();
+  const lowercaseProvider = provider.toLowerCase() as Providers;
   const lowercaseService = service.toLowerCase();
   const services = allProvidersServices[lowercaseProvider];
-  return services.includes(lowercaseService) ? true : false;
+  return services.includes(lowercaseService)
 }
 
 /**
