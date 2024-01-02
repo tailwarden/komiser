@@ -207,7 +207,7 @@ export function checkIfServiceIsSupported(
   const lowercaseProvider = provider.toLowerCase();
   const lowercaseService = service.toLowerCase();
   const services = allProvidersServices[lowercaseProvider];
-  return services.includes(lowercaseService) ? true : false;
+  return services.includes(lowercaseService);
 }
 
 /**
