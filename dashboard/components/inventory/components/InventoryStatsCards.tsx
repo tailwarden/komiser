@@ -148,7 +148,7 @@ function InventoryStatsCards({
                   onClick={() =>
                     window.open('https://www.tailwarden.com/', '_blank')
                   }
-                  className="absolute -top-[22px] -right-[22px] bg-white w-[44px] h-[44px] flex justify-center items-center border-2 border-gray-50"
+                  className="rounded-s absolute -top-[22px] -right-[22px] bg-white w-[44px] h-[44px] flex justify-center items-center border-2 border-gray-50"
                 >
                   <ErrorIcon
                     className="inline peer cursor-pointer"
