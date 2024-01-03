@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
