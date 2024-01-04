@@ -25,7 +25,7 @@ func getManagedEc2(ctx context.Context, client providers.ProviderClient) ([]mode
 		MaxResults: aws.Int32(50),
 	})
 	if err != nil {
-		log.Fatal(err)
+		return resources, err
 	}
 
 	instanceIds := make([]string, 0, len(ssmOutput.InstanceInformationList))
@@ -36,12 +36,12 @@ func getManagedEc2(ctx context.Context, client providers.ProviderClient) ([]mode
 		InstanceIds: instanceIds,
 	})
 	if err != nil {
-		return nil, err
+		return resources, err
 	}
 
 	account, accountID, err := fetchID(ctx, client)
 	if err != nil {
-		return nil, err
+		return resources, err
 	}
 
 	for _, ec2instance := range ec2Output.Reservations {
@@ -60,7 +60,7 @@ func getManagedEc2(ctx context.Context, client providers.ProviderClient) ([]mode
 					Provider:   "AWS",
 					Account:    account,
 					AccountId:  accountID,
-					Service:    "EC2",
+					Service:    "SSM-Instance",
 					Region:     client.AWSClient.Region,
 					ResourceId: *instance.InstanceId,
 					Name:       string(instance.InstanceType),
