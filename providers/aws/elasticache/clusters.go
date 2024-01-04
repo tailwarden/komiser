@@ -16,6 +16,7 @@ import (
 	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -25,6 +26,11 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	elasticacheClient := elasticache.NewFromConfig(*client.AWSClient)
 
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon ElastiCache")
+	if err != nil {
+		log.Warnln("Couldn't fetch Amazon ElastiCache cost and usage:", err)
+	}
 
 	for {
 		output, err := elasticacheClient.DescribeCacheClusters(ctx, &config)
@@ -122,6 +128,7 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					"nodeType":  *cluster.CacheNodeType,
 					"status":    *cluster.CacheClusterStatus,
 					"clusterId": *cluster.CacheClusterId,
+					"serviceCost": fmt.Sprint(serviceCost),
 				},
 				FetchedAt: time.Now(),
 				Link:      fmt.Sprintf("https:/%s.console.aws.amazon.com/elasticache/home?region=%s#/%s/%s", client.AWSClient.Region, client.AWSClient.Region, *cluster.Engine, *cluster.CacheClusterId),

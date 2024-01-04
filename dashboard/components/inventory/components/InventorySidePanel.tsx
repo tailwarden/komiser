@@ -157,6 +157,23 @@ function InventorySidePanel({
                   )}
                 </h2>
               </div>
+              {data && data.metadata !== null && (
+              <div className="space-y-2">
+                <h2 className="font-['Noto Sans'] text-neutral-500 text-sm font-normal leading-tight">
+                  Metadata
+                </h2>
+                <h2 className="font-['Noto Sans'] text-neutral-900 text-sm font-normal leading-tight">
+                  {!data && (
+                    <p className="h-3 w-48 animate-pulse rounded-xl bg-cyan-200"></p>
+                  )}
+                  {data && (
+                    <pre>
+                      {JSON.stringify(data.metadata, null, 2)}
+                    </pre>
+                  )}
+                </h2>
+              </div>
+              )}
             </div>
           </SidepanelPage>
         )}

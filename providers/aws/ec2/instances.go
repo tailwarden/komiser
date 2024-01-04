@@ -17,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -32,6 +33,11 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	}
 
 	accountId := stsOutput.Account
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "EC2")
+	if err != nil {
+		log.Warnln("Couldn't fetch EC2 cost and usage:", err)
+	}
 
 	oldRegion := client.AWSClient.Region
 	client.AWSClient.Region = "us-east-1"
@@ -151,6 +157,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 					Metadata: map[string]string{
 						"instanceType": string(instance.InstanceType),
 						"state":        string(instance.State.Name),
+						"serviceCost": fmt.Sprint(serviceCost),
 					},
 					Link: fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.InstanceId),
 				})

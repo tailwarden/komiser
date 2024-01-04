@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func EventSubscriptions(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -26,6 +27,11 @@ func EventSubscriptions(ctx context.Context, client ProviderClient) ([]Resource,
 	}
 
 	accountId := stsOutput.Account
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Redshift")
+	if err != nil {
+		log.Warnln("Couldn't fetch Redshift cost and usage:", err)
+	}
 
 	for {
 		output, err := redshiftClient.DescribeEventSubscriptions(ctx, &config)
@@ -60,6 +66,9 @@ func EventSubscriptions(ctx context.Context, client ProviderClient) ([]Resource,
 					Region:     client.AWSClient.Region,
 					Name:       *eventSubscription.CustSubscriptionId,
 					Cost:       monthlyCost,
+					Metadata: map[string]string{
+						"serviceCost": fmt.Sprint(serviceCost),
+					},
 					Tags:       tags,
 					FetchedAt:  time.Now(),
 					Link:       fmt.Sprintf("https://%s.console.aws.amaxon.com/redshift/home?region=%s/event-subscriptions/%s", client.AWSClient.Region, client.AWSClient.Region, *eventSubscription.CustSubscriptionId),
