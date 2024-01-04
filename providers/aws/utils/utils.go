@@ -25,7 +25,7 @@ func GetCostAndUsage(ctx context.Context, region string, svcName string) (float6
 	for _, costexplorerOutput := range costexplorerOutputList {
 		for _, group := range costexplorerOutput.ResultsByTime {
 			for _, v := range group.Groups {
-				if v.Keys[0] == svcName && v.Keys[1] == region {
+				if v.Keys[0] == svcName {
 					amt, err := strconv.ParseFloat(*v.Metrics["UnblendedCost"].Amount, 64)
 					if err != nil {
 						return 0, err
