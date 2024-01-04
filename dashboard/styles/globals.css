@@ -32,7 +32,7 @@
   }
 }
 
-@variants responsive {
+@layer responsive {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
