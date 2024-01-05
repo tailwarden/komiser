@@ -51,6 +51,10 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *cluster.DBClusterIdentifier),
+				Metadata: map[string]string{
+					"Engine":        *cluster.Engine,
+					"EngineVersion": *cluster.EngineVersion,
+				},
 			})
 		}
 

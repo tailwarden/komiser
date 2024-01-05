@@ -122,12 +122,14 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 				ResourceId: *instance.DBInstanceArn,
 				Cost:       monthlyCost,
 				Metadata: map[string]string{
-					"serviceCost": fmt.Sprint(serviceCost),
+					"serviceCost":   fmt.Sprint(serviceCost),
+					"engine":        *instance.Engine,
+					"engineVersion": *instance.EngineVersion,
 				},
-				Name:       _instanceName,
-				FetchedAt:  time.Now(),
-				Tags:       tags,
-				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.DBInstanceIdentifier),
+				Name:      _instanceName,
+				FetchedAt: time.Now(),
+				Tags:      tags,
+				Link:      fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.DBInstanceIdentifier),
 			})
 		}
 

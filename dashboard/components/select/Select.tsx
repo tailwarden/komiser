@@ -23,7 +23,6 @@ function Select({
   function toggle() {
     setIsOpen(!isOpen);
   }
-
   return (
     <div className="relative">
       <div
