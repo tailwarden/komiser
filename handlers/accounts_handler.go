@@ -33,7 +33,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	}
 
 	if handler.db == nil {
-		output.Status = "PENDING_ACCOUNTS"
+		output.Status = "PENDING_DATABASE"
 		c.JSON(http.StatusOK, output)
 		return
 	}
