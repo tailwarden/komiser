@@ -4,9 +4,13 @@ updates:
     directory: "/dashboard"  
     schedule:
       interval: "weekly"
+      time: "23:00"
+      timezone: Europe/London
       labels:
-      - "npm dependencies"
+      - "dependencies"
+    open-pull-requests-limit: 10
       reviewers:
       - "mlabouardy"
       - "ShubhamPalriwala"
       - "AvineshTripathi"
+      
