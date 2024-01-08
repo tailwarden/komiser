@@ -56,6 +56,7 @@
 				"iam:ListRoles",
 				"iam:ListSAMLProviders",
 				"iam:ListSAMLProviderTags",
+				"iam:ListUsers",
 				"kinesis:ListStreams",
 				"kinesis:ListStreamConsumers",
 				"kms:ListKeys",
