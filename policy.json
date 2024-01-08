@@ -6,6 +6,11 @@
 			"Effect": "Allow",
 			"Action": [
 				"apigateway:GET",
+				"codecommit:ListRepositories",
+				"codecommit:ListTagsForResource",
+				"codebuild:ListProjects",
+				"codedeploy:ListApplications",
+				"codedeploy:ListDeploymentGroups",
 				"cloudwatch:GetMetricStatistics",
 				"cloudfront:ListDistributions",
 				"cloudfront:ListFunctions",
