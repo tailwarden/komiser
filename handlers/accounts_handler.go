@@ -112,6 +112,7 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 
 		accountId, _ := result.LastInsertId()
 		account.Id = accountId
+		go fetchResourcesForAccount(c, account, handler.db, []string{})
 	}
 
 	if handler.telemetry {
