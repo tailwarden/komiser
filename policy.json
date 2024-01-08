@@ -90,7 +90,7 @@
 				"lambda:ListTags",
 				"es:ListDomainNames",
 				"es:DescribeDomains",
-				"s3:ListBucket"
+				"s3:ListAllMyBuckets"
 			],
 			"Resource": "*"
 		}
