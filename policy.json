@@ -84,6 +84,7 @@
 				"elasticfilesystem:DescribeFileSystems",
 				"elasticfilesystem:ListTagsForResource",
 				"iam:ListInstanceProfileTags",
+				"lambda:ListEventSourceMappings",
 				"lambda:ListFunctions",
 				"lambda:ListTags",
 				"es:ListDomainNames",
