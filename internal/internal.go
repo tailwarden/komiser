@@ -210,7 +210,7 @@ func setupDBConnection(c *models.Config) error {
 	return nil
 }
 
-func triggerFetchingWorfklow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string, wp *providers.WorkerPool) {
+func triggerFetchingWorkflow(ctx context.Context, client providers.ProviderClient, provider string, telemetry bool, regions []string, wp *providers.WorkerPool) {
 	localHub := sentry.CurrentHub().Clone()
 
 	defer func() {
@@ -270,7 +270,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		wwg.Add(1)
 		go func() {
 			defer wwg.Done()
-			triggerFetchingWorfklow(ctx, client, provider, telemetry, regions, wp)
+			triggerFetchingWorkflow(ctx, client, provider, telemetry, regions, wp)
 		}()
 	}
 
