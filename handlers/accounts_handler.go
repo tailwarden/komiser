@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
+	"github.com/go-co-op/gocron"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
@@ -112,7 +114,17 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 
 		accountId, _ := result.LastInsertId()
 		account.Id = accountId
-		go fetchResourcesForAccount(c, account, handler.db, []string{})
+
+		cron := gocron.NewScheduler(time.UTC)
+		_, err = cron.Every(1).Hours().Do(func() {
+			log.Info("Fetching resources workflow has started")
+
+			fetchResourcesForAccount(c, account, handler.db, []string{})
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 	}
 
 	if handler.telemetry {
