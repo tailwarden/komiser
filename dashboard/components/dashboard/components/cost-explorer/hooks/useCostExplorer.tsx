@@ -21,7 +21,8 @@ export type CostExplorerQueryGroupProps =
   | 'service'
   | 'region'
   | 'account'
-  | 'view';
+  | 'view'
+  | 'Resource';
 export type CostExplorerQueryGranularityProps = 'monthly' | 'daily';
 export type CostExplorerQueryDateProps =
   | 'thisMonth'
