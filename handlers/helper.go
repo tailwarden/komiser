@@ -222,7 +222,7 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 
 		client := providers.K8sClient{
 			Client:          k8sClient,
-			OpencostBaseUrl: account.Credentials["opencostbaseurl"],
+			OpencostBaseUrl: account.Credentials["opencostBaseUrl"],
 		}
 
 		return &providers.ProviderClient{
