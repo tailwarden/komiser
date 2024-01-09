@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -27,6 +28,10 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
 	client.AWSClient.Region = oldRegion
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Relational Database Service")
+	if err != nil {
+		log.Warnln("Couldn't fetch Amazon Relational Database Service cost and usage:", err)
+	}
 
 	for {
 		output, err := rdsClient.DescribeDBInstances(ctx, &config)
@@ -116,10 +121,15 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 				Region:     client.AWSClient.Region,
 				ResourceId: *instance.DBInstanceArn,
 				Cost:       monthlyCost,
-				Name:       _instanceName,
-				FetchedAt:  time.Now(),
-				Tags:       tags,
-				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.DBInstanceIdentifier),
+				Metadata: map[string]string{
+					"serviceCost":   fmt.Sprint(serviceCost),
+					"engine":        *instance.Engine,
+					"engineVersion": *instance.EngineVersion,
+				},
+				Name:      _instanceName,
+				FetchedAt: time.Now(),
+				Tags:      tags,
+				Link:      fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#database:id=%s", client.AWSClient.Region, client.AWSClient.Region, *instance.DBInstanceIdentifier),
 			})
 		}
 

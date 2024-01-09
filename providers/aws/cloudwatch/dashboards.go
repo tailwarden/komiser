@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	. "github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) {
@@ -17,6 +18,10 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 	cloudWatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 
 	var nextToken *string
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AmazonCloudWatch")
+	if err != nil {
+		log.Warnln("Couldn't fetch AmazonCloudWatch cost and usage:", err)
+	}
 
 	for {
 		input := &cloudwatch.ListDashboardsInput{
@@ -53,6 +58,9 @@ func Dashboards(ctx context.Context, client ProviderClient) ([]Resource, error) 
 				Region:     client.AWSClient.Region,
 				Name:       *dashboard.DashboardName,
 				Cost:       cost,
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
 				Tags:       tags,
 				FetchedAt:  time.Now(),
 				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudwatch/home?region=%s#dashboards:name=%s", client.AWSClient.Region, client.AWSClient.Region, *dashboard.DashboardName),

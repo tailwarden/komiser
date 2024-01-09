@@ -6,6 +6,11 @@
 			"Effect": "Allow",
 			"Action": [
 				"apigateway:GET",
+				"codecommit:ListRepositories",
+				"codecommit:ListTagsForResource",
+				"codebuild:ListProjects",
+				"codedeploy:ListApplications",
+				"codedeploy:ListDeploymentGroups",
 				"cloudwatch:GetMetricStatistics",
 				"cloudfront:ListDistributions",
 				"cloudfront:ListFunctions",
@@ -14,6 +19,7 @@
 				"cloudwatch:ListTagsForResource",
 				"cloudwatch:ListDashboards",
 				"cloudwatch:ListMetricStreams",
+				"dynamodb:DescribeTable",
 				"dynamodb:ListTables",
 				"sts:GetCallerIdentity",
 				"dynamodb:ListTagsOfResource",
@@ -55,6 +61,7 @@
 				"iam:ListRoles",
 				"iam:ListSAMLProviders",
 				"iam:ListSAMLProviderTags",
+				"iam:ListUsers",
 				"kinesis:ListStreams",
 				"kinesis:ListStreamConsumers",
 				"kms:ListKeys",
@@ -83,11 +90,12 @@
 				"elasticfilesystem:DescribeFileSystems",
 				"elasticfilesystem:ListTagsForResource",
 				"iam:ListInstanceProfileTags",
+				"lambda:ListEventSourceMappings",
 				"lambda:ListFunctions",
 				"lambda:ListTags",
 				"es:ListDomainNames",
 				"es:DescribeDomains",
-				"s3:ListBucket"
+				"s3:ListAllMyBuckets"
 			],
 			"Resource": "*"
 		}

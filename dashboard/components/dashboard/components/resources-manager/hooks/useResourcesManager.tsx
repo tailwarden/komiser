@@ -11,7 +11,8 @@ export type ResourcesManagerQuery =
   | 'service'
   | 'region'
   | 'account'
-  | 'view';
+  | 'view'
+  | 'Resource';
 
 export type ResourcesManagerGroupBySelectProps = {
   values: ResourcesManagerQuery[];

@@ -56,7 +56,7 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
-  const betaFlagOnboardingWizard = true;
+  const betaFlagOnboardingWizard = false; // set this to true once wizard gets good support of the backend 
   const isOnboarding =
     betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
 
@@ -95,7 +95,7 @@ function Layout({ children }: LayoutProps) {
                   title="We could not find a cloud account"
                   message="Get Started Onboarding"
                   action={() => {
-                    router.push('/onboarding/choose-cloud');
+                    router.push('/onboarding/choose-database');
                   }}
                   actionLabel="Begin Onboarding"
                   secondaryAction={() => {

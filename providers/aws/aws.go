@@ -2,16 +2,19 @@ package aws
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
+	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	log "github.com/sirupsen/logrus"
-
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
 	"github.com/tailwarden/komiser/providers/aws/codebuild"
+	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codedeploy"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
@@ -33,7 +36,9 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
 	"github.com/tailwarden/komiser/providers/aws/systemsmanager"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
+
 	"github.com/uptrace/bun"
 )
 
@@ -99,6 +104,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
 		redshift.EventSubscriptions,
+		codecommit.Repositories,
 		codebuild.BuildProjects,
 		codedeploy.DeploymentGroups,
 	}
@@ -111,6 +117,29 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		listOfSupportedRegions = regions
 	}
 
+	var costexplorerOutputList []*costexplorer.GetCostAndUsageOutput
+	if jsonData, err := readCostExplorerCache(); err == nil {
+		err := json.Unmarshal(jsonData, &costexplorerOutputList)
+		if err != nil {
+			log.Warn("Failed to unmarshal cached cost explorer data:", err)
+		}
+	} else {
+		costexplorerOutputList, err = getCostexplorerOutput(
+			ctx, client, utils.BeginningMonthsAgo(time.Now(), 6).Format("2006-01-02"), utils.EndingOfLastMonth(time.Now()).Format("2006-01-02"),
+		)
+		if err != nil {
+			log.Warn("Failed to get cost explorer output:", err)
+		}
+		if err := writeCostExplorerCache(costexplorerOutputList); err != nil {
+			log.Warn("Failed to write cost explorer cache:", err)
+		}
+	}
+
+	costexplorerOutputList, err := getCostexplorerOutput(ctx, client, utils.BeginningOfMonth(time.Now()).Format("2006-01-02"), time.Now().Format("2006-01-02"))
+	if err != nil {
+		log.Warn("Failed to get cost explorer output:", err)
+	}
+	ctxWithCostexplorerOutput := context.WithValue(ctx, awsUtils.CostexplorerKey, costexplorerOutputList)
 	for _, region := range listOfSupportedRegions {
 		c := client.AWSClient.Copy()
 		c.Region = region
@@ -121,7 +150,7 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		for _, fetchResources := range listOfSupportedServices() {
 			fetchResources := fetchResources
 			wp.SubmitTask(func() {
-				resources, err := fetchResources(ctx, client)
+				resources, err := fetchResources(ctxWithCostexplorerOutput, client)
 				if err != nil {
 					log.Warnf("[%s][AWS] %s", client.Name, err)
 				} else {

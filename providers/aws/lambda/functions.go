@@ -32,6 +32,11 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 	cloudwatchClient := cloudwatch.NewFromConfig(*client.AWSClient)
 	lambdaClient := lambda.NewFromConfig(*client.AWSClient)
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AWS Lambda")
+	if err != nil {
+		log.Warnln("Couldn't fetch AWS Lambda cost and usage:", err)
+	}
+
 	tempRegion := client.AWSClient.Region
 	client.AWSClient.Region = "us-east-1"
 	pricingClient := pricing.NewFromConfig(*client.AWSClient)
@@ -157,7 +162,8 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 				Name:       *o.FunctionName,
 				Cost:       monthlyCost,
 				Metadata: map[string]string{
-					"runtime": string(o.Runtime),
+					"runtime":     string(o.Runtime),
+					"serviceCost": fmt.Sprint(serviceCost),
 				},
 				Relations: relations,
 				FetchedAt: time.Now(),

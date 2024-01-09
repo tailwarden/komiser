@@ -57,6 +57,10 @@ func ClusterSnapshots(ctx context.Context, client providers.ProviderClient) ([]m
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#snapshots-list:id=%s", client.AWSClient.Region, client.AWSClient.Region, *clusterSnapshot.DBClusterSnapshotIdentifier),
+				Metadata: map[string]string{
+					"Engine":        *clusterSnapshot.Engine,
+					"EngineVersion": *clusterSnapshot.EngineVersion,
+				},
 			})
 		}
 
