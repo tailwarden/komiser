@@ -11,7 +11,7 @@ services:
       - 3000:3000
 
   postgres:
-    image: postgres:13
+    image: postgres:16
     restart: always
     environment:
       - POSTGRES_USER=root

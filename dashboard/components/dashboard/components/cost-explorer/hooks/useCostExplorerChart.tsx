@@ -84,12 +84,13 @@ function useCostExplorerChart({
   }; */
 
   const groupBySelect: GroupBySelectProps = {
-    values: ['provider', 'service', 'region', 'account'],
+    values: ['provider', 'service', 'region', 'account','Resource'],
     displayValues: [
       'Cloud provider',
       'Cloud service',
       'Cloud region',
-      'Cloud account'
+      'Cloud account',
+      'Resource'
     ]
   };
 

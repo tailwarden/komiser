@@ -99,7 +99,7 @@ export default function CloudAccounts() {
             ))}
           </div>
           <div className="fixed bottom-0 -mx-20 flex w-[calc(100%*6/11)] justify-end border-t border-gray-300 bg-white px-20 py-4">
-            <Button onClick={() => router.push('/onboarding/choose-database')}>
+            <Button onClick={() => router.push('/onboarding/complete')}>
               Next
             </Button>
           </div>
