@@ -50,7 +50,7 @@ export default function SqliteCredentials() {
           message:
             'Your Postgres database has been successfully connected to Komiser.'
         });
-        router.push('/onboarding/complete/');
+        router.push('/onboarding/choose-cloud/');
       }
     });
   };
