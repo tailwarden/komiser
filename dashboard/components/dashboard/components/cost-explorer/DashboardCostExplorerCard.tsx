@@ -117,7 +117,39 @@ function DashboardCostExplorerCard({
       <div className="mt-8"></div>
       <div className="h-full min-h-[22rem]">
         {chartData && <Bar data={chartData} options={options} />}
-        {!chartData && (
+        {/* ⤵ will be removed when cost is supported at Resource level */}
+        {queryGroup === 'Resource' && (
+          <div className="relative flex flex-col items-center bg-empty-cost-explorer h-[330px] w-full">
+            <div className="mt-10 text-lg text-black-900 border border-gray-200 px-8 py-6 flex bg-white">
+              <div>
+                <p className="text-lg">
+                  Cost at resource level not yet supported
+                </p>
+                <p className="text-sm text-gray-400 mb-4">
+                  We recommend our cloud version, Tailwarden, <br />
+                  as it supports accurate costs at the resource level
+                </p>
+
+                <Button
+                  size="sm"
+                  gap="md"
+                  asLink
+                  href="https://tailwarden.com/?utm_source=komiser"
+                  target="_blank"
+                >
+                  <CloudIcon width="24" /> Discover Tailwarden
+                </Button>
+              </div>
+              <Image
+                src="/assets/img/purplin/rocket.svg"
+                alt="Purplin on a Rocket"
+                width="115"
+                height="124"
+              />
+            </div>
+          </div>
+        )}
+        {!chartData && queryGroup !== 'Resource' && (
           <div className="relative flex flex-col items-center bg-empty-cost-explorer h-[330px] w-full">
             <div className="mt-10 text-lg text-black-900 border border-gray-200 px-8 py-6 flex bg-white">
               <div>

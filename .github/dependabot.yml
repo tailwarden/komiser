@@ -4,9 +4,26 @@ updates:
     directory: "/dashboard"  
     schedule:
       interval: "weekly"
+      time: "23:00"
+      timezone: Europe/London
       labels:
-      - "npm dependencies"
+      - "dependency"
+      open-pull-requests-limit: 10
       reviewers:
       - "mlabouardy"
-      - "ShubhamPalriwala"
+      - "Azanul"
       - "AvineshTripathi"
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "23:00"
+      timezone: Europe/London
+    labels:
+      - dependency
+    open-pull-requests-limit: 10
+    reviewers:
+      - "mlabouardy"
+      - "Azanul"
+      - "AvineshTripathi"
+      
