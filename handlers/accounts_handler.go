@@ -7,10 +7,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	"github.com/go-co-op/gocron"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
@@ -33,7 +34,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	}
 
 	if handler.db == nil {
-		output.Status = "PENDING_ACCOUNTS"
+		output.Status = "PENDING_DATABASE"
 		c.JSON(http.StatusOK, output)
 		return
 	}
@@ -41,7 +42,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 	accounts := make([]models.Account, 0)
 	err := handler.db.NewRaw("SELECT * FROM accounts").Scan(handler.ctx, &accounts)
 	if err != nil {
-		logrus.WithError(err).Error("scan failed")
+		log.WithError(err).Error("scan failed")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
 		return
 	}
@@ -65,7 +66,7 @@ func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 
 	err := handler.db.NewRaw("SELECT * FROM accounts").Scan(handler.ctx, &accounts)
 	if err != nil {
-		logrus.WithError(err).Error("scan failed")
+		log.WithError(err).Error("scan failed")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
 		return
 	}
@@ -113,6 +114,17 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 
 		accountId, _ := result.LastInsertId()
 		account.Id = accountId
+
+		cron := gocron.NewScheduler(time.UTC)
+		_, err = cron.Every(1).Hours().Do(func() {
+			log.Info("Fetching resources workflow has started")
+
+			fetchResourcesForAccount(c, account, handler.db, []string{})
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 	}
 
 	if handler.telemetry {
