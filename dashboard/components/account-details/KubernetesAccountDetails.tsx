@@ -111,6 +111,14 @@ function KubernetesAccountDetails({
           hasError={isValidationError}
           errorMessage={errorMessage}
         />
+        <LabelledInput
+          type="text"
+          id="opencost-base-url"
+          name="opencostBaseUrl"
+          value={cloudAccountData?.name}
+          label="Opencost Base URL"
+          placeholder="localhost:9003"
+        />
       </div>
       {hasError && (
         <div className="text-sm text-red-500">
