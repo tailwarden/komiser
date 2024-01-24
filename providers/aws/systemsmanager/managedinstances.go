@@ -13,7 +13,7 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-func getManagedEc2(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func GetManagedEc2(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	ssmClient := ssm.NewFromConfig(*client.AWSClient)
