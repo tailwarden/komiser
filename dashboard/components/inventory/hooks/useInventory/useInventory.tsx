@@ -1,6 +1,10 @@
 import { useToast } from '@components/toast/ToastProvider';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import {
+  checkIfServiceIsSupported,
+  checkIsSomeServiceUnavailable
+} from '@utils/serviceHelper';
 import settingsService from '../../../../services/settingsService';
 import useIsVisible from '../useIsVisible/useIsVisible';
 import getCustomViewInventoryListAndStats from './helpers/getCustomViewInventoryListAndStats';
@@ -23,6 +27,8 @@ import {
 } from './types/useInventoryTypes';
 
 function useInventory() {
+  const [isSomeServiceUnavailable, setIsSomeServiceUnavailable] =
+    useState<boolean>(false);
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>();
   const [inventory, setInventory] = useState<InventoryItem[]>();
   const [error, setError] = useState(false);
@@ -55,6 +61,27 @@ function useInventory() {
   const isVisible = useIsVisible(reloadDiv);
   const batchSize: number = 50;
   const router = useRouter();
+
+  /*
+    Check if there are items in searchedInventory:
+    - If yes, check if even one item is not supported.
+    - If unsupported item found, set isSomeServiceUnavailable to true.
+    - If searchedInventory is empty, get all services and check if even one is not supported.
+      - If unsupported service found, set isSomeServiceUnavailable to true.
+  */
+  useEffect(() => {
+    if (searchedInventory) {
+      setIsSomeServiceUnavailable(
+        searchedInventory.some(
+          item => !checkIfServiceIsSupported(item.provider, item.service)
+        )
+      );
+    } else {
+      settingsService.getServices().then(res => {
+        setIsSomeServiceUnavailable(checkIsSomeServiceUnavailable(res));
+      });
+    }
+  }, [searchedInventory]);
 
   /** Reset most of the UI states:
    * - skipped (used to skip results in the data fetch call)
@@ -794,7 +821,8 @@ function useInventory() {
     displayFilterIfIsNotCustomView,
     loadingFilters,
     hasFilters,
-    loadingInventory
+    loadingInventory,
+    isSomeServiceUnavailable
   };
 }
 

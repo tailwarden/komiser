@@ -67,7 +67,8 @@ export default function Inventory() {
     displayFilterIfIsNotCustomView,
     loadingFilters,
     hasFilters,
-    loadingInventory
+    loadingInventory,
+    isSomeServiceUnavailable
   } = useInventory();
 
   return (
@@ -123,6 +124,7 @@ export default function Inventory() {
         {/* Inventory stats */}
         <InventoryStatsCards
           inventoryStats={inventoryStats}
+          isSomeServiceUnavailable={isSomeServiceUnavailable}
           error={error}
           statsLoading={statsLoading}
           hiddenResources={hiddenResources}
