@@ -197,7 +197,7 @@ func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 			return
 		}
 	} else {
-		err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
+		err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY period, %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
