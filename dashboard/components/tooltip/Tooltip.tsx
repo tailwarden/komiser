@@ -6,7 +6,7 @@ type TooltipProps = {
   top?: 'xs' | 'sm' | 'md' | 'lg';
   bottom?: 'xs' | 'sm' | 'md' | 'lg';
   align?: 'left' | 'center' | 'right';
-  width?: 'sm' | 'md' | 'lg';
+  width?: 'sm' | 'md' | 'lg' | 'xl';
 };
 
 function Tooltip({
@@ -31,7 +31,8 @@ function Tooltip({
         { 'bottom-36': bottom === 'lg' },
         { 'left-6': align === 'left' },
         { 'right-6': align === 'right' },
-        { 'w-72': width === 'lg' }
+        { 'w-72': width === 'lg' },
+        { 'w-[30.5rem]': width === 'xl' }
       )}
     >
       {children}

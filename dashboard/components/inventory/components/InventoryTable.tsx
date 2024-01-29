@@ -2,6 +2,8 @@ import { ToastProps } from '@components/toast/Toast';
 import { NextRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import Avatar from '@components/avatar/Avatar';
+import ErrorIcon from '@components/icons/ErrorIcon';
+import { checkIfServiceIsSupported } from '@utils/serviceHelper';
 import formatNumber from '../../../utils/formatNumber';
 import Checkbox from '../../checkbox/Checkbox';
 import SkeletonInventory from '../../skeleton/SkeletonInventory';
@@ -156,7 +158,34 @@ function InventoryTable({
                         onClick={() => openModal(item)}
                         className="cursor-pointer whitespace-nowrap px-6 py-4 text-right"
                       >
-                        ${formatNumber(item.cost)}
+                        {checkIfServiceIsSupported(
+                          item.provider,
+                          item.service
+                        ) ? (
+                          `$${formatNumber(item.cost)}`
+                        ) : (
+                          <div
+                            onClick={e => {
+                              e.stopPropagation();
+                              window.open(
+                                'https://www.tailwarden.com/',
+                                '_blank'
+                              );
+                            }}
+                            className="group relative"
+                          >
+                            <ErrorIcon
+                              className="inline relative left-1"
+                              width={24}
+                              height={24}
+                            />
+                            <div className="animate-fade-in-up text-left right-2 -top-14 absolute z-[999] hidden flex-col gap-2 rounded-lg bg-gray-950 px-4 py-3 text-xs text-gray-300 shadow-right group-hover:block">
+                              Service-level cost analysis is not available in
+                              Komiser.<br></br>For advanced insights, try
+                              Tailwarden.
+                            </div>
+                          </div>
+                        )}
                       </td>
                       <td>
                         <InventoryTableTags
@@ -235,7 +264,34 @@ function InventoryTable({
                         onClick={() => openModal(item)}
                         className="cursor-pointer whitespace-nowrap px-6 py-4 text-right"
                       >
-                        ${formatNumber(item.cost)}
+                        {checkIfServiceIsSupported(
+                          item.provider,
+                          item.service
+                        ) ? (
+                          `$${formatNumber(item.cost)}`
+                        ) : (
+                          <div
+                            onClick={e => {
+                              e.stopPropagation();
+                              window.open(
+                                'https://www.tailwarden.com/',
+                                '_blank'
+                              );
+                            }}
+                            className="group relative"
+                          >
+                            <ErrorIcon
+                              className="inline relative left-1"
+                              width={24}
+                              height={24}
+                            />
+                            <div className="animate-fade-in-up text-left right-2 -top-14 absolute z-[999] hidden flex-col gap-2 rounded-lg bg-gray-950 px-4 py-3 text-xs text-gray-300 shadow-right group-hover:block">
+                              Service-level cost analysis is not available in
+                              Komiser.<br></br>For advanced insights, try
+                              Tailwarden.
+                            </div>
+                          </div>
+                        )}
                       </td>
                       <td>
                         <InventoryTableTags
