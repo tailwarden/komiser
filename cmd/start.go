@@ -30,24 +30,21 @@ var startCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		if file == "" {
-			return errors.New("you must specify a config file with '--config PATH'")
+
+		filename, err := filepath.Abs(file)
+		if err != nil {
+			return err
 		}
-		if file == "config.toml" {
-			filename, err := filepath.Abs(file)
+
+		if _, err := os.Stat(filename); errors.Is(err, os.ErrNotExist) {
+			log.Info("unable to use given config file:", err)
+			log.Info("Creating default config.toml")
+			err = os.WriteFile("config.toml", []byte{}, 0644)
 			if err != nil {
 				return err
 			}
-
-			if _, err := os.Stat(filename); errors.Is(err, os.ErrNotExist) {
-				log.Info("unable to use given config file:", err)
-				log.Info("Creating default config.toml")
-				err = os.WriteFile("config.toml", []byte{}, 0644)
-				if err != nil {
-					return err
-				}
-			}
 		}
+
 		regions, err := cmd.Flags().GetStringArray("regions")
 		if err != nil {
 			return err
@@ -75,7 +72,7 @@ var startCmd = &cobra.Command{
 			return err
 		}
 
-		err = internal.Exec(address, port, file, telemetry, analytics, regions, cmd)
+		err = internal.Exec(address, port, filename, telemetry, analytics, regions, cmd)
 		if err != nil {
 			return err
 		}

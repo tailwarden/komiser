@@ -22,16 +22,18 @@ type ApiHandler struct {
 	ctx       context.Context
 	telemetry bool
 	cfg       models.Config
+	configPath string
 	analytics utils.Analytics
 	accounts  []models.Account
 }
 
-func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, accounts []models.Account) *ApiHandler {
+func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
 	handler := ApiHandler{
 		db:        db,
 		ctx:       ctx,
 		telemetry: telemetry,
 		cfg:       cfg,
+		configPath: configPath,
 		analytics: analytics,
 		accounts:  accounts,
 	}

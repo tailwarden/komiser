@@ -6,10 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
-	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
 	log "github.com/sirupsen/logrus"
@@ -115,6 +113,18 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 		accountId, _ := result.LastInsertId()
 		account.Id = accountId
 
+		err = populateConfigFromAccount(account, &handler.cfg)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		err = updateConfig(handler.configPath, &handler.cfg)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
 		cron := gocron.NewScheduler(time.UTC)
 		_, err = cron.Every(1).Hours().Do(func() {
 			log.Info("Fetching resources workflow has started")
@@ -178,8 +188,6 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 		return
 	}
 
-	config := models.Config{}
-
 	if db.Type == "SQLITE" {
 		sqldb, err := sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", db.FilePath))
 		if err != nil {
@@ -192,7 +200,7 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 		handler.db = bun.NewDB(sqldb, sqlitedialect.New())
 		log.Println("Data will be stored in SQLite")
 
-		config.SQLite = models.SQLiteConfig{
+		handler.cfg.SQLite = models.SQLiteConfig{
 			File: db.FilePath,
 		}
 	} else {
@@ -202,7 +210,7 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 
 		log.Println("Data will be stored in PostgreSQL")
 
-		config.Postgres = models.PostgresConfig{
+		handler.cfg.Postgres = models.PostgresConfig{
 			URI: uri,
 		}
 	}
@@ -214,20 +222,12 @@ func (handler *ApiHandler) ConfigureDatabaseHandler(c *gin.Context) {
 			handler.accounts = append(handler.accounts, unsavedAccounts...)
 		}
 		unsavedAccounts = make([]models.Account, 0)
+	}
 
-		f, err := os.Create("config.toml")
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		if err := toml.NewEncoder(f).Encode(config); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		if err := f.Close(); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	err = updateConfig(handler.configPath, &handler.cfg)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	err = utils.SetupSchema(handler.db, &handler.cfg, handler.accounts)
