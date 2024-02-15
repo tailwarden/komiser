@@ -125,6 +125,7 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		cron.StartAsync()
 	}
 
 	if handler.telemetry {

@@ -2,6 +2,7 @@ import { NextRouter } from 'next/router';
 import { ReactNode, useContext } from 'react';
 
 import platform, { allProviders } from '@utils/providerHelper';
+import Button from '@components/button/Button';
 import GlobalAppContext from '../../layout/context/GlobalAppContext';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 
@@ -81,6 +82,15 @@ function CloudAccountsLayout({
               })}
           </div>
         )}
+        <div className="flex flex-col justify-end absolute bottom-10 border-t border-gray-300 p-4">
+          <Button
+            onClick={() => {
+              router.push('/onboarding/choose-cloud/');
+            }}
+          >
+            Connect account
+          </Button>
+        </div>
       </nav>
       <main className="ml-[17rem]">{children}</main>
     </>

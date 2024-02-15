@@ -12,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
+	"github.com/uptrace/bun"
 )
 
 func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
@@ -197,7 +198,7 @@ func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 			return
 		}
 	} else {
-		err = handler.db.NewRaw(fmt.Sprintf(`%s DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
+		err = handler.db.NewRaw(`? DATE(fetched_at) BETWEEN ? AND ? GROUP BY period, ?;`, query, bun.Ident(input.Start), bun.Ident(input.End), input.Group).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

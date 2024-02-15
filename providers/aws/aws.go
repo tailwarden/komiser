@@ -3,6 +3,7 @@ package aws
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 	"strings"
 	"time"
 
@@ -100,6 +101,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		ec2.KeyPairs,
 		ec2.PlacementGroups,
 		systemsmanager.MaintenanceWindows,
+		systemsmanager.GetManagedEc2,
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
 		kinesis.Streams,
@@ -132,6 +134,18 @@ func FetchResources(ctx context.Context, client providers.ProviderClient, region
 		}
 		if err := writeCostExplorerCache(costexplorerOutputList); err != nil {
 			log.Warn("Failed to write cost explorer cache:", err)
+		}
+		resources, err := awsUtils.ExtractResources(costexplorerOutputList)
+		if err != nil {
+			log.Warn("Failed to extract resources from cost explorer output:", err)
+		}
+		for i, resource := range resources {
+			resource.ResourceId = "OLD_RESOURCE_" + strconv.Itoa(i)
+			resource.Account = client.Name
+			_, err = db.NewInsert().Model(&resource).On("CONFLICT (resource_id) DO UPDATE").Set("cost = EXCLUDED.cost, relations=EXCLUDED.relations").Exec(context.Background())
+			if err != nil {
+				log.WithError(err).Errorf("db trigger failed")
+			}
 		}
 	}
 

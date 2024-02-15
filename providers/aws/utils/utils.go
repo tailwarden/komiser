@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer"
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
+	"github.com/tailwarden/komiser/models"
 )
 
 type AWSCtxKey uint8
@@ -36,6 +38,34 @@ func GetCostAndUsage(ctx context.Context, region string, svcName string) (float6
 		}
 	}
 	return total, nil
+}
+
+func ExtractResources(costexplorerOutputList []*costexplorer.GetCostAndUsageOutput) ([]models.Resource, error) {
+	r := []models.Resource{}
+	for _, costexplorerOutput := range costexplorerOutputList {
+		for _, group := range costexplorerOutput.ResultsByTime {
+			endInterval := group.TimePeriod.End
+			createdAt, err := time.Parse("2006-01-02", *endInterval)
+			if err != nil {
+				return r, err
+			}
+			for _, v := range group.Groups {
+				amt, err := strconv.ParseFloat(*v.Metrics["UnblendedCost"].Amount, 64)
+				if err != nil {
+					return r, err
+				}
+				r = append(r, models.Resource{
+					Provider:  "AWS",
+					Service:   v.Keys[0],
+					Region:    v.Keys[1],
+					Cost:      amt,
+					CreatedAt: createdAt,
+					FetchedAt: createdAt,
+				})
+			}
+		}
+	}
+	return r, nil
 }
 
 type ProductEntry struct {
