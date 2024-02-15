@@ -16,28 +16,27 @@ func Containers(ctx context.Context, client providers.ProviderClient) ([]models.
 	resources := make([]models.Resource, 0)
 	lsClient := lightsail.NewFromConfig(*client.AWSClient)
 
-	for {
-		output, err := lsClient.GetContainerServices(ctx, &config)
-		if err != nil {
-			return resources, err
-		}
-
-		for _, instance := range output.ContainerServices {
-
-			instanceName := *instance.ContainerServiceName
-
-			resources = append(resources, models.Resource{
-				Provider:   "AWS",
-				Account:    client.Name,
-				Service:    "Lightsail Containers",
-				Region:     client.AWSClient.Region,
-				ResourceId: *instance.Arn,
-				Name:       instanceName,
-				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://lightsail.aws.amazon.com/ls/webapp/%s/containers/%s/connect", client.AWSClient.Region, *instance.ContainerServiceName),
-			})
-		}
+	output, err := lsClient.GetContainerServices(ctx, &config)
+	if err != nil {
+		return resources, err
 	}
+
+	for _, instance := range output.ContainerServices {
+
+		instanceName := *instance.ContainerServiceName
+
+		resources = append(resources, models.Resource{
+			Provider:   "AWS",
+			Account:    client.Name,
+			Service:    "Lightsail Containers",
+			Region:     client.AWSClient.Region,
+			ResourceId: *instance.Arn,
+			Name:       instanceName,
+			FetchedAt:  time.Now(),
+			Link:       fmt.Sprintf("https://lightsail.aws.amazon.com/ls/webapp/%s/containers/%s/connect", client.AWSClient.Region, *instance.ContainerServiceName),
+		})
+	}
+
 	log.WithFields(log.Fields{
 		"provider":  "AWS",
 		"account":   client.Name,
