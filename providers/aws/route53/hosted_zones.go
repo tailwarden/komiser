@@ -30,7 +30,7 @@ func HostedZones(ctx context.Context, client providers.ProviderClient) ([]models
 			ResourceId: *zone.Id,
 			Name:       *zone.Name,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/route53/v2/hostedzones#ListRecordSets/%s", client.AWSClient.Region, zone.Id),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/route53/v2/hostedzones#ListRecordSets/%s", client.AWSClient.Region, *zone.Id),
 		})
 	}
 
