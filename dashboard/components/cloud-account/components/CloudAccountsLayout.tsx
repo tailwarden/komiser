@@ -88,7 +88,7 @@ function CloudAccountsLayout({
               router.push('/onboarding/choose-cloud/');
             }}
           >
-            Add An Account
+            Connect account
           </Button>
         </div>
       </nav>
