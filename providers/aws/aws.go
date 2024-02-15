@@ -29,6 +29,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/kinesis"
 	"github.com/tailwarden/komiser/providers/aws/kms"
 	"github.com/tailwarden/komiser/providers/aws/lambda"
+	"github.com/tailwarden/komiser/providers/aws/lightsail"
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
 	"github.com/tailwarden/komiser/providers/aws/redshift"
@@ -109,6 +110,9 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		codecommit.Repositories,
 		codebuild.BuildProjects,
 		codedeploy.DeploymentGroups,
+		lightsail.Containers,
+		lightsail.Databases,
+		lightsail.VPS,
 	}
 }
 
