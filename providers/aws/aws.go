@@ -34,6 +34,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
 	"github.com/tailwarden/komiser/providers/aws/redshift"
+	"github.com/tailwarden/komiser/providers/aws/route53"
 	"github.com/tailwarden/komiser/providers/aws/s3"
 	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
@@ -115,6 +116,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		lightsail.Databases,
 		lightsail.VPS,
 		neptune.Clusters,
+		route53.HostedZones,
 	}
 }
 
