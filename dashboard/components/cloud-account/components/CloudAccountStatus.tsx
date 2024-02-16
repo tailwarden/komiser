@@ -9,9 +9,10 @@ function CloudAccountStatus({ status }: { status: CloudAccount['status'] }) {
       className={classNames(
         'relative inline-block rounded-3xl px-2 py-1 text-sm',
         {
-          'bg-green-200 text-green-600': status === 'CONNECTED',
+          'bg-green-200 text-green-600':
+            status === 'CONNECTED' || status === 'SCANNING',
           'bg-red-200 text-red-600':
-            status === 'PERMISSION_ISSUE' || status === 'INTEGRATION_ISSUE'
+            status === 'PERMISSION ISSUE' || status === 'INTEGRATION ISSUE'
         }
       )}
     >

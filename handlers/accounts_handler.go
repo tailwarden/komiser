@@ -138,6 +138,23 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 	c.JSON(http.StatusCreated, account)
 }
 
+func (handler *ApiHandler) ReScanAccount(c *gin.Context) {
+	accountId := c.Param("id")
+
+	account := new(models.Account)
+	res, err := handler.db.NewUpdate().Model(account).Set("status = ? ", "SCANNING").Where("id = ?", accountId).Where("status = ?", "CONNECTED").Returning("*").Exec(handler.ctx)
+	if err != nil {
+		log.Error("Couldn't set status", err)
+		return
+	}
+	rows, _ := res.RowsAffected()
+	if rows > 0 {
+		go fetchResourcesForAccount(handler.ctx, *account, handler.db, []string{})
+	}
+
+	c.JSON(http.StatusOK, "Rescan Triggered")
+}
+
 func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 	accountId := c.Param("id")
 
