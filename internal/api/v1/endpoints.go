@@ -64,6 +64,7 @@ func Endpoints(ctx context.Context, telemetry bool, analytics utils.Analytics, d
 	router.POST("/cloud_accounts", api.NewCloudAccountHandler)
 	router.DELETE("/cloud_accounts/:id", api.DeleteCloudAccountHandler)
 	router.PUT("/cloud_accounts/:id", api.UpdateCloudAccountHandler)
+	router.GET("/cloud_accounts/resync/:id", api.ReScanAccount)
 
 	router.POST("/databases", api.ConfigureDatabaseHandler)
 
