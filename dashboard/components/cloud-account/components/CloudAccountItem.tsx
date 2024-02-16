@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Avatar from '@components/avatar/Avatar';
 import platform from '@utils/providerHelper';
+import { RefreshIcon } from '@components/icons';
+import settingsService from '@services/settingsService';
 import { CloudAccount } from '../hooks/useCloudAccounts/useCloudAccount';
 import CloudAccountStatus from './CloudAccountStatus';
 import More2Icon from '../../icons/More2Icon';
@@ -41,6 +43,16 @@ export default function CloudAccountItem({
     };
   }, []);
 
+  const handleRescanClick = () => {
+    settingsService.rescanCloudAccount(id as number).then(res => {
+      if (res === Error) {
+        console.log('error', res);
+      } else {
+        window.location.reload();
+      }
+    });
+  };
+
   return (
     <div
       key={id}
@@ -75,6 +87,20 @@ export default function CloudAccountItem({
           >
             <EditIcon className="mr-2 h-6 w-6" />
             Edit cloud account
+          </button>
+          <button
+            className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-gray-700 hover:bg-background-ds"
+            onClick={() => {
+              handleRescanClick();
+            }}
+            disabled={status === 'SCANNING'}
+            style={{
+              opacity: status === 'SCANNING' ? 0.5 : 1,
+              pointerEvents: status === 'SCANNING' ? 'none' : 'auto'
+            }}
+          >
+            <RefreshIcon className="mr-2 h-6 w-6" />
+            Rescan
           </button>
           <button
             className="flex w-full rounded-md py-3 pl-3 pr-5 text-left text-sm text-red-500 hover:bg-background-ds"

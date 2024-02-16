@@ -12,7 +12,7 @@ export interface CloudAccount {
   name: string;
   provider: Provider;
   resources?: number;
-  status?: 'CONNECTED' | 'INTEGRATION_ISSUE' | 'PERMISSION_ISSUE';
+  status?: 'CONNECTED' | 'INTEGRATION ISSUE' | 'PERMISSION ISSUE' | 'SCANNING';
 }
 
 export interface CloudAccountPayload<T extends Credentials> {

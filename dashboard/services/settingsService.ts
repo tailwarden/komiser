@@ -450,6 +450,19 @@ const settingsService = {
     }
   },
 
+  async rescanCloudAccount(id: number) {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/cloud_accounts/resync/${id}`,
+        settings('GET')
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return Error;
+    }
+  },
+
   async saveDatabaseConfig(payload: string) {
     try {
       const res = await fetch(
