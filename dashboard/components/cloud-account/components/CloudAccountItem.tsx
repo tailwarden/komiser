@@ -47,9 +47,7 @@ export default function CloudAccountItem({
     settingsService.rescanCloudAccount(id as number).then(res => {
       if (res === Error) {
         console.log('error', res);
-        // handle error
       } else {
-        console.log(res);
         window.location.reload();
       }
     });
