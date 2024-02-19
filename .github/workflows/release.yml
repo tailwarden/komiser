@@ -67,6 +67,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Clear space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
       - uses: goreleaser/goreleaser-action@v4
         with:
           distribution: goreleaser
