@@ -9,8 +9,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func GetManagedEc2(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -18,6 +20,11 @@ func GetManagedEc2(ctx context.Context, client providers.ProviderClient) ([]mode
 
 	ssmClient := ssm.NewFromConfig(*client.AWSClient)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
+
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "SystemsManager")
+	if err != nil {
+		log.Warnln("Couldn't fetch SystemsManager cost and usage:", err)
+	}
 
 	var nexttoken *string
 
@@ -68,6 +75,9 @@ func GetManagedEc2(ctx context.Context, client providers.ProviderClient) ([]mode
 						CreatedAt:  *instance.LaunchTime,
 						FetchedAt:  time.Now(),
 						Tags:       tags,
+						Metadata: map[string]string{
+							"serviceCost": fmt.Sprint(serviceCost),
+						},
 						Link: fmt.Sprintf("https://%s.console.aws.amazon.com/ec2/home?region=%s#InstanceDetails:instanceId=%s",
 							client.AWSClient.Region, client.AWSClient.Region, *instance.InstanceId),
 					})
