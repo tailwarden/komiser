@@ -29,9 +29,12 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/kinesis"
 	"github.com/tailwarden/komiser/providers/aws/kms"
 	"github.com/tailwarden/komiser/providers/aws/lambda"
+	"github.com/tailwarden/komiser/providers/aws/lightsail"
+	"github.com/tailwarden/komiser/providers/aws/neptune"
 	"github.com/tailwarden/komiser/providers/aws/opensearch"
 	"github.com/tailwarden/komiser/providers/aws/rds"
 	"github.com/tailwarden/komiser/providers/aws/redshift"
+	"github.com/tailwarden/komiser/providers/aws/route53"
 	"github.com/tailwarden/komiser/providers/aws/s3"
 	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
@@ -109,6 +112,11 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		codecommit.Repositories,
 		codebuild.BuildProjects,
 		codedeploy.DeploymentGroups,
+		lightsail.Containers,
+		lightsail.Databases,
+		lightsail.VPS,
+		neptune.Clusters,
+		route53.HostedZones,
 	}
 }
 

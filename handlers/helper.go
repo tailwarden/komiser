@@ -100,6 +100,7 @@ func triggerFetchingWorkflow(ctx context.Context, client providers.ProviderClien
 
 func fetchResourcesForAccount(ctx context.Context, account models.Account, db *bun.DB, regions []string) {
 	numWorkers := 64
+	account.Status = ""
 	wp := providers.NewWorkerPool(numWorkers)
 	wp.Start()
 
@@ -114,9 +115,20 @@ func fetchResourcesForAccount(ctx context.Context, account models.Account, db *b
 
 	client, err := makeClientFromAccount(account)
 	if err != nil {
-		log.Error(err)
+		log.Error(err, account.Id, account.Provider)
+		_, err := db.NewUpdate().Model(&account).Set("status = ? ", "INTEGRATION ISSUE").Where("name = ?", account.Name).Exec(ctx)
+		if err != nil {
+			log.Error(err)
+			return
+		}
 		return
 	}
+	_, err = db.NewUpdate().Model(&account).Set("status = ? ", "SCANNING").Where("name = ?", account.Name).Exec(ctx)
+	if err != nil {
+		log.Error("Couldn't set status")
+		return
+	}
+	log.Info("Scanning status set")
 	if client.AWSClient != nil {
 		workflowTrigger(*client, "AWS")
 	} else if client.DigitalOceanClient != nil {
@@ -145,6 +157,12 @@ func fetchResourcesForAccount(ctx context.Context, account models.Account, db *b
 
 	wwg.Wait()
 	wp.Wait()
+	_, err = db.NewUpdate().Model(&account).Set("status = ? ", "CONNECTED").Where("name = ?", account.Name).Exec(ctx)
+	if err != nil {
+		log.Error("Couldn't set status")
+		return
+	}
+	log.Info("Scanning done")
 }
 
 func makeClientFromAccount(account models.Account) (*providers.ProviderClient, error) {

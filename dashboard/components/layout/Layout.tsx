@@ -56,7 +56,7 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
-  const betaFlagOnboardingWizard = false; // set this to true once wizard gets good support of the backend 
+  const betaFlagOnboardingWizard = true; // set this to true once wizard gets good support of the backend 
   const isOnboarding =
     betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
 
