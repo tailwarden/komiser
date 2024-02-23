@@ -114,6 +114,8 @@ github.com/aws/aws-sdk-go-v2/service/configservice v1.41.2 h1:WJt83aWld986AxwJpz
 github.com/aws/aws-sdk-go-v2/service/configservice v1.41.2/go.mod h1:wIuYBSC8G7HHXK/T6YO0t/m463ssur9aMLnycNvKXqQ=
 github.com/aws/aws-sdk-go-v2/service/costexplorer v1.32.4 h1:ojxirFFJN39ar+tHiz84PuaeKA/Z3BiopdhxOGGQD4A=
 github.com/aws/aws-sdk-go-v2/service/costexplorer v1.32.4/go.mod h1:1ujrFMokNtwDv3fwb9RBwdeXS+RonpIeV9uh19GJoH8=
+github.com/aws/aws-sdk-go-v2/service/datasync v1.36.0 h1:JwB9gD2OZX8MtDNTzZ26Z4371O2Skg/5k31t1bWZtIo=
+github.com/aws/aws-sdk-go-v2/service/datasync v1.36.0/go.mod h1:5rP7AljuZSzUKqG0a72xvxALWzqB5OwnpZNO2dY9NlM=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.25.2 h1:O6ff5PwwgQ7QkL/XA0H+0U0mWwjkYaP9tHvbr0Ptqak=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.25.2/go.mod h1:kuVxCbsxbP/h6YTT2BfOj4s/bwXYsG3C/8Qn9gO5QJY=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.136.0 h1:nZPVFkGojUUJupKJzaCKE07LaFDO3Tto1U69F8JipsI=
