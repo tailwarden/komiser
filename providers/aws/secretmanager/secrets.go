@@ -11,7 +11,7 @@ import (
 	"github.com/tailwarden/komiser/providers"
 )
 
-func Trails(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+func Secrets(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config secretsmanager.ListSecretsInput
 	resources := make([]models.Resource, 0)
 	neptuneClient := secretsmanager.NewFromConfig(*client.AWSClient)
