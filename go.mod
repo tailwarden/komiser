@@ -121,6 +121,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/neptune v1.29.0
 	github.com/aws/aws-sdk-go-v2/service/opensearch v1.25.2
 	github.com/aws/aws-sdk-go-v2/service/route53 v1.38.0
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.28.0
 	github.com/aws/aws-sdk-go-v2/service/servicecatalog v1.24.2
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.43.0
 	github.com/aws/aws-sdk-go-v2/service/sso v1.17.2 // indirect
