@@ -55,7 +55,7 @@
     "@types/cytoscape": "^3.19.11",
     "@types/cytoscape-popper": "^2.0.3",
     "@types/jest": "^29.5.6",
-    "@types/node": "20.9.0",
+    "@types/node": "20.11.20",
     "@types/react": "18.2.22",
     "@types/react-cytoscapejs": "^1.2.5",
     "@types/react-dom": "18.2.18",
