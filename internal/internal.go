@@ -300,6 +300,7 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 		} else if client.OVHClient != nil {
 			workflowTrigger(client, "OVH")
 		}
+		log.Println("Workflow triggered for client:", client.Name)
 	}
 
 	wwg.Wait()

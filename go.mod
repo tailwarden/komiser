@@ -23,6 +23,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/apigateway v1.20.2
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.35.1
 	github.com/aws/aws-sdk-go-v2/service/cloudfront v1.30.2
+	github.com/aws/aws-sdk-go-v2/service/cloudtrail v1.38.0
 	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.30.2
 	github.com/aws/aws-sdk-go-v2/service/codecommit v1.18.2
 	github.com/aws/aws-sdk-go-v2/service/codedeploy v1.20.3
@@ -86,7 +87,6 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/cloudtrail v1.38.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.20.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/google/s2a-go v0.1.4 // indirect
