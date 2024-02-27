@@ -95,7 +95,10 @@
 				"lambda:ListTags",
 				"es:ListDomainNames",
 				"es:DescribeDomains",
-				"s3:ListAllMyBuckets"
+				"s3:ListAllMyBuckets",
+				"secretsmanager:ListSecrets",
+				"datasync:ListAgents",
+				"cloudtrail:ListTrails"
 			],
 			"Resource": "*"
 		}
