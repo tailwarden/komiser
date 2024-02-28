@@ -22,9 +22,10 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 	}
 
 	for _, cluster := range output.DBClusters {
-
-		clusterName := *cluster.DatabaseName
-
+		clusterName := ""
+		if cluster.DatabaseName != nil {
+			clusterName = *cluster.DatabaseName
+		}
 		resources = append(resources, models.Resource{
 			Provider:   "AWS",
 			Account:    client.Name,
@@ -33,7 +34,7 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			ResourceId: *cluster.DBClusterArn,
 			Name:       clusterName,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/neptune/home?region=%s#database-details:id=%s;resource-type=cluster;tab=connectivity", client.AWSClient.Region, client.AWSClient.Region, *cluster.DatabaseName),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/neptune/home?region=%s#database-details:id=%s;resource-type=cluster;tab=connectivity", client.AWSClient.Region, client.AWSClient.Region, clusterName),
 		})
 	}
 
