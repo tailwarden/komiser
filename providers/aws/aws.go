@@ -13,10 +13,12 @@ import (
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
+	"github.com/tailwarden/komiser/providers/aws/cloudtrail"
 	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
 	"github.com/tailwarden/komiser/providers/aws/codebuild"
 	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codedeploy"
+	"github.com/tailwarden/komiser/providers/aws/datasync"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
 	"github.com/tailwarden/komiser/providers/aws/ecr"
@@ -36,6 +38,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/redshift"
 	"github.com/tailwarden/komiser/providers/aws/route53"
 	"github.com/tailwarden/komiser/providers/aws/s3"
+	"github.com/tailwarden/komiser/providers/aws/secretsmanager"
 	"github.com/tailwarden/komiser/providers/aws/servicecatalog"
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
@@ -117,6 +120,9 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		lightsail.VPS,
 		neptune.Clusters,
 		route53.HostedZones,
+		cloudtrail.Trails,
+		datasync.Agents,
+		secretsmanager.Secrets,
 	}
 }
 

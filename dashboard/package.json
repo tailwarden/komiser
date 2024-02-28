@@ -50,7 +50,7 @@
     "@storybook/react": "^7.4.6",
     "@storybook/testing-library": "^0.2.2",
     "@storybook/theming": "^7.5.3",
-    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.1.2",
     "@types/cytoscape": "^3.19.11",
     "@types/cytoscape-popper": "^2.0.3",
