@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -23,6 +24,10 @@ func Proxies(ctx context.Context, client providers.ProviderClient) ([]models.Res
 	client.AWSClient.Region = "us-east-1"
 	client.AWSClient.Region = oldRegion
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	if err != nil {
+		log.Warnln("Couldn't fetch S3 cost and usage:", err)
+	}
 	for {
 		output, err := rdsClient.DescribeDBProxies(ctx, &config)
 		if err != nil {
@@ -51,7 +56,10 @@ func Proxies(ctx context.Context, client providers.ProviderClient) ([]models.Res
 				Cost:       monthlyCost,
 				Name:       _ProxyName,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#proxies:id=%s", client.AWSClient.Region, client.AWSClient.Region, *proxy.DBProxyName),
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
+				Link: fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#proxies:id=%s", client.AWSClient.Region, client.AWSClient.Region, *proxy.DBProxyName),
 			})
 		}
 

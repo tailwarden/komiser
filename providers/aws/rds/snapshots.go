@@ -10,6 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -17,6 +18,10 @@ func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.R
 	resources := make([]models.Resource, 0)
 	rdsClient := rds.NewFromConfig(*client.AWSClient)
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	if err != nil {
+		log.Warnln("Couldn't fetch S3 cost and usage:", err)
+	}
 	for {
 		output, err := rdsClient.DescribeDBSnapshots(ctx, &config)
 		if err != nil {
@@ -43,7 +48,10 @@ func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.R
 				Name:       _snapshotName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/rds/home?region=%s#snapshot:id=%s", client.AWSClient.Region, client.AWSClient.Region, *snapshot.DBSnapshotIdentifier),
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
+				Link: fmt.Sprintf("https://%s.console.aws.amazon.com/rds/home?region=%s#snapshot:id=%s", client.AWSClient.Region, client.AWSClient.Region, *snapshot.DBSnapshotIdentifier),
 			})
 		}
 
