@@ -9,15 +9,19 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
-func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config rds.DescribeDBClustersInput
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 	rdsClient := rds.NewFromConfig(*client.AWSClient)
-
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	if err != nil {
+		log.Warnln("Couldn't fetch S3 cost and usage:", err)
+	}
 	for {
 		output, err := rdsClient.DescribeDBClusters(ctx, &config)
 		if err != nil {
@@ -25,9 +29,9 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 		}
 
 		for _, cluster := range output.DBClusters {
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 			for _, tag := range cluster.TagList {
-				tags = append(tags, Tag{
+				tags = append(tags, models.Tag{
 					Key:   *tag.Key,
 					Value: *tag.Value,
 				})
@@ -40,7 +44,7 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				_clusterName = *cluster.DatabaseName
 			}
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "RDS",
@@ -54,6 +58,7 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Metadata: map[string]string{
 					"Engine":        *cluster.Engine,
 					"EngineVersion": *cluster.EngineVersion,
+					"serviceCost":   fmt.Sprint(serviceCost),
 				},
 			})
 		}

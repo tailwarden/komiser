@@ -18,6 +18,7 @@ import (
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func getRate(pricingOutput *pricing.GetProductsOutput) (float64, error) {
@@ -86,6 +87,11 @@ func MetricStreams(ctx context.Context, client providers.ProviderClient) ([]mode
 		return resources, err
 	}
 
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "AmazonCloudWatch")
+	if err != nil {
+		log.Warnln("Couldn't fetch AmazonCloudWatch cost and usage:", err)
+	}
+
 	input := &cloudwatch.ListMetricStreamsInput{}
 	for {
 		output, err := cloudWatchMetricsClient.ListMetricStreams(ctx, input)
@@ -138,7 +144,10 @@ func MetricStreams(ctx context.Context, client providers.ProviderClient) ([]mode
 				Cost:       monthlyCost,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/cloudwatch/home?region=%s#metric-streams:streamsList/%s", client.AWSClient.Region, client.AWSClient.Region, aws.ToString(stream.Name)),
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
+				Link: fmt.Sprintf("https://%s.console.aws.amazon.com/cloudwatch/home?region=%s#metric-streams:streamsList/%s", client.AWSClient.Region, client.AWSClient.Region, aws.ToString(stream.Name)),
 			})
 		}
 
