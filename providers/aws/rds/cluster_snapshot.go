@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -18,7 +19,10 @@ func ClusterSnapshots(ctx context.Context, client providers.ProviderClient) ([]m
 	var config rds.DescribeDBClusterSnapshotsInput
 	resources := make([]models.Resource, 0)
 	rdsClient := rds.NewFromConfig(*client.AWSClient)
-
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	if err != nil {
+		log.Warnln("Couldn't fetch S3 cost and usage:", err)
+	}
 	for {
 		output, err := rdsClient.DescribeDBClusterSnapshots(ctx, &config)
 		if err != nil {
@@ -58,6 +62,7 @@ func ClusterSnapshots(ctx context.Context, client providers.ProviderClient) ([]m
 				Tags:       tags,
 				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/rds/home?region=%s#snapshots-list:id=%s", client.AWSClient.Region, client.AWSClient.Region, *clusterSnapshot.DBClusterSnapshotIdentifier),
 				Metadata: map[string]string{
+					"serviceCost":   fmt.Sprint(serviceCost),
 					"Engine":        *clusterSnapshot.Engine,
 					"EngineVersion": *clusterSnapshot.EngineVersion,
 				},

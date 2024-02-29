@@ -3,12 +3,14 @@ package rds
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
-	"time"
+	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 )
 
 func ProxyEndpoints(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
@@ -17,7 +19,10 @@ func ProxyEndpoints(ctx context.Context, client providers.ProviderClient) ([]mod
 	}
 	resources := make([]models.Resource, 0)
 	rdsClient := rds.NewFromConfig(*client.AWSClient)
-
+	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "RDS")
+	if err != nil {
+		log.Warnln("Couldn't fetch S3 cost and usage:", err)
+	}
 	for {
 		output, err := rdsClient.DescribeDBProxyEndpoints(ctx, &config)
 		if err != nil {
@@ -67,7 +72,10 @@ func ProxyEndpoints(ctx context.Context, client providers.ProviderClient) ([]mod
 				Name:       _endpointName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/rds/home?region=%s#db-proxy-details:id=%s", client.AWSClient.Region, client.AWSClient.Region, *endpoint.DBProxyEndpointName),
+				Metadata: map[string]string{
+					"serviceCost": fmt.Sprint(serviceCost),
+				},
+				Link: fmt.Sprintf("https://%s.console.aws.amazon.com/rds/home?region=%s#db-proxy-details:id=%s", client.AWSClient.Region, client.AWSClient.Region, *endpoint.DBProxyEndpointName),
 			})
 		}
 

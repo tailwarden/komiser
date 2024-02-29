@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
@@ -47,6 +49,8 @@ import (
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/tailwarden/komiser/utils"
 )
+
+var mu sync.Mutex
 
 func triggerFetchingWorkflow(ctx context.Context, client providers.ProviderClient, provider string, db *bun.DB, regions []string, wp *providers.WorkerPool) {
 	localHub := sentry.CurrentHub().Clone()
@@ -360,4 +364,131 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 		}, nil
 	}
 	return nil, fmt.Errorf("provider not supported")
+}
+
+func populateConfigFromAccount(account models.Account, config *models.Config) error {
+	switch account.Provider {
+	case "aws":
+		awsConfig := models.AWSConfig{
+			Name:     account.Name,
+			Profile:  account.Credentials["profile"],
+			Path:     account.Credentials["path"],
+			Source:   account.Credentials["source"],
+		}
+		config.AWS = append(config.AWS, awsConfig)
+
+	case "digitalocean":
+		digitalOceanConfig := models.DigitalOceanConfig{
+			Name:  account.Name,
+			Token: account.Credentials["token"],
+		}
+		config.DigitalOcean = append(config.DigitalOcean, digitalOceanConfig)
+
+	case "oci":
+		ociConfig := models.OciConfig{
+			Name:    account.Name,
+			Profile: account.Credentials["profile"],
+			Source:  account.Credentials["source"],
+		}
+		config.Oci = append(config.Oci, ociConfig)
+
+	case "civo":
+		civoConfig := models.CivoConfig{
+			Name:  account.Name,
+			Token: account.Credentials["token"],
+		}
+		config.Civo = append(config.Civo, civoConfig)
+
+	case "kubernetes":
+		k8sConfig := models.KubernetesConfig{
+			Name:     account.Name,
+			Path:     account.Credentials["path"],
+			Contexts: strings.Split(account.Credentials["contexts"], ";"),
+		}
+		config.Kubernetes = append(config.Kubernetes, k8sConfig)
+
+	case "linode":
+		linodeConfig := models.LinodeConfig{
+			Name:  account.Name,
+			Token: account.Credentials["token"],
+		}
+		config.Linode = append(config.Linode, linodeConfig)
+
+	case "tencent":
+		tencentConfig := models.TencentConfig{
+			Name:      account.Name,
+			SecretID:  account.Credentials["secretId"],
+			SecretKey: account.Credentials["secretKey"],
+		}
+		config.Tencent = append(config.Tencent, tencentConfig)
+
+	case "azure":
+		azureConfig := models.AzureConfig{
+			Name:           account.Name,
+			ClientId:       account.Credentials["clientId"],
+			ClientSecret:   account.Credentials["clientSecret"],
+			TenantId:       account.Credentials["tenantId"],
+			SubscriptionId: account.Credentials["subscriptionId"],
+		}
+		config.Azure = append(config.Azure, azureConfig)
+
+	case "scaleway":
+		scalewayConfig := models.ScalewayConfig{
+			Name:           account.Name,
+			AccessKey:      account.Credentials["accessKey"],
+			SecretKey:      account.Credentials["secretKey"],
+			OrganizationId: account.Credentials["organizationId"],
+		}
+		config.Scaleway = append(config.Scaleway, scalewayConfig)
+
+	case "mongodb":
+		mongoDBAtlasConfig := models.MongoDBAtlasConfig{
+			Name:          account.Name,
+			PublicApiKey:  account.Credentials["publicKey"],
+			PrivateApiKey: account.Credentials["privateKey"],
+			OrganizationID: account.Credentials["organizationId"],
+		}
+		config.MongoDBAtlas = append(config.MongoDBAtlas, mongoDBAtlasConfig)
+
+	case "gcp":
+		gcpConfig := models.GCPConfig{
+			Name:                account.Name,
+			ServiceAccountKeyPath: account.Credentials["accountKey"],
+		}
+		config.GCP = append(config.GCP, gcpConfig)
+
+	case "ovh":
+		ovhConfig := models.OVHConfig{
+			Name:             account.Name,
+			Endpoint:         account.Credentials["endpoint"],
+			ApplicationKey:   account.Credentials["applicationKey"],
+			ApplicationSecret: account.Credentials["applicationSecret"],
+			ConsumerKey:      account.Credentials["consumerKey"],
+		}
+		config.OVH = append(config.OVH, ovhConfig)
+
+	default:
+		return fmt.Errorf("Illegle provider")
+	}
+
+	return nil
+}
+
+func updateConfig(path string, cfg *models.Config) error  {
+	mu.Lock()
+	defer mu.Unlock()
+
+	f, err := os.OpenFile(path, os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if err := toml.NewEncoder(f).Encode(cfg); err != nil {
+		return err
+	}
+	if err := f.Close(); err != nil {
+		return err
+	}
+	return nil
 }
