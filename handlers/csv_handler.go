@@ -245,7 +245,7 @@ func respondWithCSVDownload(resources []models.Resource, c *gin.Context) {
 	fw := bufio.NewWriter(file)
 	csvWriter := csv.NewWriter(fw)
 
-	header := []string{"id", "provider", "account", "name", "region", "tags", "cost"}
+	header := []string{"id", "provider", "account", "name", "service", "region", "tags", "cost", "metadata"}
 	if err := csvWriter.Write(header); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not write csv"})
 		return
@@ -256,9 +256,13 @@ func respondWithCSVDownload(resources []models.Resource, c *gin.Context) {
 		if err != nil {
 			log.Fatalf("Could not marshal tags")
 		}
+		metadata, err := json.Marshal(record.Metadata)
+		if err != nil {
+			log.Fatalf("Could not marshal metadata")
+		}
 
 		row := []string{
-			record.ResourceId, record.Provider, record.Account, record.Name, record.Region, string(tags), fmt.Sprintf("%2.f", record.Cost),
+			record.ResourceId, record.Provider, record.Account, record.Name, record.Service, record.Region, string(tags), fmt.Sprintf("%2.f", record.Cost), string(metadata),
 		}
 		if err := csvWriter.Write(row); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "could not write csv"})
