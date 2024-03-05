@@ -111,14 +111,14 @@ export default function ChooseDatabase() {
               <DatabaseLeftItem
                 imageUrl="/assets/img/database/postgresql.svg"
                 label="PostgreSQL"
-                value="postgres"
+                value={allDBProviders.POSTGRES}
                 selected={database}
                 handleClick={handleClick}
               />
               <DatabaseLeftItem
                 imageUrl="/assets/img/database/sqlite.svg"
                 label="SQLite"
-                value="sqlite"
+                value={allDBProviders.SQLITE}
                 selected={database}
                 handleClick={handleClick}
               />
