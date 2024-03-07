@@ -9,12 +9,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/kinesisanalyticsv2"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func KinesisAnalytics(ctx context.Context, client ProviderClient) ([]Resource, error) {
-	resources := make([]Resource, 0)
+func KinesisAnalytics(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+	resources := make([]models.Resource, 0)
 	var config kinesisanalyticsv2.ListApplicationsInput
 	kinesisAnalyticsClient := kinesisanalyticsv2.NewFromConfig(*client.AWSClient)
 	for {
@@ -32,14 +31,14 @@ func KinesisAnalytics(ctx context.Context, client ProviderClient) ([]Resource, e
 
 			if err == nil {
 				for _, tag := range outputTags.Tags {
-					tags = append(tags, Tag{
+					tags = append(tags, models.Tag{
 						Key:   *tag.Key,
 						Value: *tag.Value,
 					})
 				}
 			}
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Kinesis Analytics Application",
@@ -49,7 +48,7 @@ func KinesisAnalytics(ctx context.Context, client ProviderClient) ([]Resource, e
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters", client.AWSClient.Region, client.AWSClient.Region),
 			})
 		}
 
