@@ -9,13 +9,13 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func NatGateways(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func NatGateways(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config ec2.DescribeNatGatewaysInput
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
 
 	for {
@@ -25,15 +25,15 @@ func NatGateways(ctx context.Context, client ProviderClient) ([]Resource, error)
 		}
 
 		for _, natGateways := range output.NatGateways {
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 			for _, tag := range natGateways.Tags {
-				tags = append(tags, Tag{
+				tags = append(tags, models.Tag{
 					Key:   *tag.Key,
 					Value: *tag.Value,
 				})
 			}
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Nat Gateway",
@@ -43,7 +43,7 @@ func NatGateways(ctx context.Context, client ProviderClient) ([]Resource, error)
 				Name:       *natGateways.NatGatewayId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/vpc/home?region=%s#InternetGateway:internetGatewayId=%s", client.AWSClient.Region, client.AWSClient.Region, *&natGateways.NatGatewayId),
+				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/vpc/home?region=%s#NatGateway:natGatewayId=%s", client.AWSClient.Region, client.AWSClient.Region, *natGateways.NatGatewayId),
 			})
 		}
 		if aws.ToString(output.NextToken) == "" {

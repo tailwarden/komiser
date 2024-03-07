@@ -9,13 +9,13 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func TransitGatewayVpcAttachments(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func TransitGatewayVpcAttachments(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config ec2.DescribeTransitGatewayVpcAttachmentsInput
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 	ec2Client := ec2.NewFromConfig(*client.AWSClient)
 
 	for {
@@ -25,15 +25,15 @@ func TransitGatewayVpcAttachments(ctx context.Context, client ProviderClient) ([
 		}
 
 		for _, tAttachment := range output.TransitGatewayVpcAttachments {
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 			for _, tag := range tAttachment.Tags {
-				tags = append(tags, Tag{
+				tags = append(tags, models.Tag{
 					Key:   *tag.Key,
 					Value: *tag.Value,
 				})
 			}
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Transit Gateway Vpc Attachments",
@@ -43,7 +43,7 @@ func TransitGatewayVpcAttachments(ctx context.Context, client ProviderClient) ([
 				Name:       *tAttachment.TransitGatewayAttachmentId,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/vpc/home?region=%s#InternetGateway:internetGatewayId=%s", client.AWSClient.Region, client.AWSClient.Region),
+				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/vpc/home?region=%s#TransitGatewayAttachment:transitGatewayAttachmentId=%s", client.AWSClient.Region, client.AWSClient.Region, *tAttachment.TransitGatewayAttachmentId),
 			})
 		}
 		if aws.ToString(output.NextToken) == "" {

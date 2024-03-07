@@ -8,12 +8,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/wafv2"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func WebAcls(ctx context.Context, client ProviderClient) ([]Resource, error) {
-	resources := make([]Resource, 0)
+func WebAcls(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+	resources := make([]models.Resource, 0)
 
 	wAclClient := wafv2.NewFromConfig(*client.AWSClient)
 
@@ -31,14 +30,14 @@ func WebAcls(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		if err == nil {
 			for _, tag := range outputTags.TagInfoForResource.TagList {
-				tags = append(tags, Tag{
+				tags = append(tags, models.Tag{
 					Key:   *tag.Key,
 					Value: *tag.Value,
 				})
 			}
 		}
 
-		resources = append(resources, Resource{
+		resources = append(resources, models.Resource{
 			Provider:   "AWS",
 			Account:    client.Name,
 			Service:    "Web Acl",
@@ -48,17 +47,17 @@ func WebAcls(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Cost:       0,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, ),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/wafv2/homev2/web-acl/%s/%s?region=%s", client.AWSClient.Region, *acl.Name, *acl.Id, client.AWSClient.Region),
 		})
 	}
 
 	log.WithFields(log.Fields{
-		"provider":  "AWS",
-		"account":   client.Name,
-		"region":    client.AWSClient.Region,
-		"service":   "Web Acl",
-		"resources": len(resources),
-		"serviceCost":fmt.Sprint(0),
+		"provider":    "AWS",
+		"account":     client.Name,
+		"region":      client.AWSClient.Region,
+		"service":     "Web Acl",
+		"resources":   len(resources),
+		"serviceCost": fmt.Sprint(0),
 	}).Info("Fetched resources")
 	return resources, nil
 }

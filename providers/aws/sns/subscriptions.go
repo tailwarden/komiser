@@ -9,12 +9,12 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func Subscriptions(ctx context.Context, client ProviderClient) ([]Resource, error) {
-	resources := make([]Resource, 0)
+func Subscriptions(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+	resources := make([]models.Resource, 0)
 	var config sns.ListSubscriptionsInput
 	snsClient := sns.NewFromConfig(*client.AWSClient)
 
@@ -29,18 +29,18 @@ func Subscriptions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				ResourceArn: subscriptions.SubscriptionArn,
 			})
 
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 
 			if err == nil {
 				for _, tag := range outputTags.Tags {
-					tags = append(tags, Tag{
+					tags = append(tags, models.Tag{
 						Key:   *tag.Key,
 						Value: *tag.Value,
 					})
 				}
 			}
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "SNS Subscription",
@@ -50,7 +50,7 @@ func Subscriptions(ctx context.Context, client ProviderClient) ([]Resource, erro
 				Cost:       0,
 				Tags:       tags,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/topic/%s", client.AWSClient.Region, client.AWSClient.Region),
+				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/subscriptions/%s", client.AWSClient.Region, client.AWSClient.Region, *subscriptions.SubscriptionArn),
 			})
 		}
 

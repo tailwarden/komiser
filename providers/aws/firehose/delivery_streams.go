@@ -8,13 +8,13 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go-v2/service/firehose"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func DeliveryStreams(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func DeliveryStreams(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	var config firehose.ListDeliveryStreamsInput
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 	deliveryStreamsClient := firehose.NewFromConfig(*client.AWSClient)
 
 	for {
@@ -24,7 +24,7 @@ func DeliveryStreams(ctx context.Context, client ProviderClient) ([]Resource, er
 		}
 
 		for _, deliveryStreamName := range output.DeliveryStreamNames {
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 
 			outputTags, err := deliveryStreamsClient.ListTagsForDeliveryStream(ctx, &firehose.ListTagsForDeliveryStreamInput{
 				DeliveryStreamName: &deliveryStreamName,
@@ -32,13 +32,13 @@ func DeliveryStreams(ctx context.Context, client ProviderClient) ([]Resource, er
 
 			if err == nil {
 				for _, tag := range outputTags.Tags {
-					tags = append(tags, Tag{
+					tags = append(tags, models.Tag{
 						Key:   *tag.Key,
 						Value: *tag.Value,
 					})
 				}
 			}
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "Kinesis Firehose delivery stream",
@@ -48,8 +48,12 @@ func DeliveryStreams(ctx context.Context, client ProviderClient) ([]Resource, er
 				Name:       deliveryStreamName,
 				FetchedAt:  time.Now(),
 				Tags:       tags,
-				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/vpc/home?region=%s#InternetGateway:internetGatewayId=%s", client.AWSClient.Region, client.AWSClient.Region),
+				Link:       fmt.Sprintf("https:/%s.console.aws.amazon.com/firehose/home?region=%s#/details/%s/monitoring", client.AWSClient.Region, client.AWSClient.Region, deliveryStreamName),
 			})
+		}
+
+		if *output.HasMoreDeliveryStreams {
+			break
 		}
 	}
 	log.WithFields(log.Fields{

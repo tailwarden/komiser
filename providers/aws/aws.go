@@ -28,8 +28,11 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/eks"
 	"github.com/tailwarden/komiser/providers/aws/elasticache"
 	"github.com/tailwarden/komiser/providers/aws/elb"
+	"github.com/tailwarden/komiser/providers/aws/firehose"
 	"github.com/tailwarden/komiser/providers/aws/iam"
+	"github.com/tailwarden/komiser/providers/aws/kafka"
 	"github.com/tailwarden/komiser/providers/aws/kinesis"
+	"github.com/tailwarden/komiser/providers/aws/kinesisanalytics"
 	"github.com/tailwarden/komiser/providers/aws/kms"
 	"github.com/tailwarden/komiser/providers/aws/lambda"
 	"github.com/tailwarden/komiser/providers/aws/lightsail"
@@ -44,9 +47,6 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/sns"
 	"github.com/tailwarden/komiser/providers/aws/sqs"
 	"github.com/tailwarden/komiser/providers/aws/systemsmanager"
-	"github.com/tailwarden/komiser/providers/aws/firehose"
-	"github.com/tailwarden/komiser/providers/aws/kafka"
-	"github.com/tailwarden/komiser/providers/aws/kinesisanalytics"
 	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/providers/aws/wafv2"
 	"github.com/tailwarden/komiser/utils"
@@ -128,7 +128,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		cloudtrail.Trails,
 		datasync.Agents,
 		secretsmanager.Secrets,
-		ec2.TransitGatewayPreeringAttachments,
+		ec2.TransitGatewayPeeringAttachments,
 		ec2.TransitGatewayVpcAttachments,
 		firehose.DeliveryStreams,
 		kinesisanalytics.KinesisAnalytics,

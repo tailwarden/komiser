@@ -8,11 +8,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/kafka"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers"
 )
 
-func Kafka(ctx context.Context, client ProviderClient) ([]Resource, error) {
+func Kafka(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
 	wAclClient := kafka.NewFromConfig(*client.AWSClient)
@@ -26,12 +25,12 @@ func Kafka(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 		tags := make([]models.Tag, 0)
 		for key, value := range cluster.Tags {
-			tags = append(tags, Tag{
-				Key: key,
+			tags = append(tags, models.Tag{
+				Key:   key,
 				Value: value,
 			})
 		}
-		resources = append(resources, Resource{
+		resources = append(resources, models.Resource{
 			Provider:   "AWS",
 			Account:    client.Name,
 			Service:    "Kafka",
@@ -41,17 +40,17 @@ func Kafka(ctx context.Context, client ProviderClient) ([]Resource, error) {
 			Cost:       0,
 			Tags:       tags,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/eks/home?region=%s#/clusters/%s", client.AWSClient.Region, client.AWSClient.Region, ),
+			Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/msk/home?region=%s#/cluster/%s/view?tabId=metrics", client.AWSClient.Region, client.AWSClient.Region, *cluster.ClusterArn),
 		})
 	}
 
 	log.WithFields(log.Fields{
-		"provider":  "AWS",
-		"account":   client.Name,
-		"region":    client.AWSClient.Region,
-		"service":   "Kafka",
-		"resources": len(resources),
-		"serviceCost":fmt.Sprint(0),
+		"provider":    "AWS",
+		"account":     client.Name,
+		"region":      client.AWSClient.Region,
+		"service":     "Kafka",
+		"resources":   len(resources),
+		"serviceCost": fmt.Sprint(0),
 	}).Info("Fetched resources")
 	return resources, nil
 }
