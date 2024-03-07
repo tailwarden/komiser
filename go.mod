@@ -37,8 +37,11 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/eks v1.33.1
 	github.com/aws/aws-sdk-go-v2/service/elasticache v1.32.2
 	github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2 v1.24.2
+	github.com/aws/aws-sdk-go-v2/service/firehose v1.28.1
 	github.com/aws/aws-sdk-go-v2/service/iam v1.27.2
+	github.com/aws/aws-sdk-go-v2/service/kafka v1.30.1
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.22.2
+	github.com/aws/aws-sdk-go-v2/service/kinesisanalyticsv2 v1.23.1
 	github.com/aws/aws-sdk-go-v2/service/kms v1.26.2
 	github.com/aws/aws-sdk-go-v2/service/lambda v1.48.0
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.23.2
@@ -48,6 +51,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sns v1.25.2
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.28.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.25.3
+	github.com/aws/aws-sdk-go-v2/service/wafv2 v1.47.0
 	github.com/civo/civogo v0.3.24
 	github.com/digitalocean/godo v1.97.0
 	github.com/elazarl/go-bindata-assetfs v1.0.1
@@ -87,11 +91,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.4.1 // indirect
 	github.com/apache/arrow/go/v11 v11.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/firehose v1.28.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/kafka v1.30.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/kinesisanalyticsv2 v1.23.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.20.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/wafv2 v1.47.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/google/s2a-go v0.1.4 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20230530153820-e85fd2cbaebc // indirect
