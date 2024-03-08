@@ -48,12 +48,11 @@ export const allProviders: { [key in ProviderKey]: Provider } = {
 };
 
 export type DBProvider = 'postgres' | 'sqlite';
-type DBProviderKey = 'POSTGRES' | 'SQLITE';
 
-export const allDBProviders: { [key in DBProviderKey]: DBProvider } = {
-  POSTGRES: 'postgres',
-  SQLITE: 'sqlite'
-};
+export enum allDBProviders {
+  POSTGRES = 'postgres',
+  SQLITE = 'sqlite'
+}
 
 export enum IntegrationProvider {
   SLACK = 'slack',
