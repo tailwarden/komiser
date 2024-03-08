@@ -13,14 +13,14 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	. "github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/providers"
 	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
 	"github.com/tailwarden/komiser/utils"
 )
 
-func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
-	resources := make([]Resource, 0)
+func Topics(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
+	resources := make([]models.Resource, 0)
 	var config sns.ListTopicsInput
 	snsClient := sns.NewFromConfig(*client.AWSClient)
 
@@ -31,7 +31,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 	if err != nil {
 		return resources, err
 	}
-	
+
 	serviceCost, err := awsUtils.GetCostAndUsage(ctx, client.AWSClient.Region, "Amazon Simple Notification Service")
 	if err != nil {
 		log.Warnln("Couldn't fetch Amazon Simple Notification Service cost and usage:", err)
@@ -50,11 +50,11 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				ResourceArn: topic.TopicArn,
 			})
 
-			tags := make([]Tag, 0)
+			tags := make([]models.Tag, 0)
 
 			if err == nil {
 				for _, tag := range outputTags.Tags {
-					tags = append(tags, Tag{
+					tags = append(tags, models.Tag{
 						Key:   *tag.Key,
 						Value: *tag.Value,
 					})
@@ -70,7 +70,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				MetricName: aws.String("NumberOfMessagesPublished"),
 				Namespace:  aws.String("AWS/SNS"),
 				Dimensions: []types.Dimension{
-					types.Dimension{
+					{
 						Name:  aws.String("TopicName"),
 						Value: &topicName,
 					},
@@ -92,7 +92,7 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 
 			monthlyCost := (requests / 1000000) * 0.0000005
 
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
 				Service:    "SNS",
@@ -103,9 +103,9 @@ func Topics(ctx context.Context, client ProviderClient) ([]Resource, error) {
 				Metadata: map[string]string{
 					"serviceCost": fmt.Sprint(serviceCost),
 				},
-				Tags:       tags,
-				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/topic/%s", client.AWSClient.Region, client.AWSClient.Region, *topic.TopicArn),
+				Tags:      tags,
+				FetchedAt: time.Now(),
+				Link:      fmt.Sprintf("https://%s.console.aws.amazon.com/sns/v3/home?region=%s#/topic/%s", client.AWSClient.Region, client.AWSClient.Region, *topic.TopicArn),
 			})
 		}
 
