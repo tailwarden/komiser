@@ -52,7 +52,7 @@ func VirtualMachines(ctx context.Context, client providers.ProviderClient) ([]mo
 				Timeframe: to.Ptr(armcostmanagement.TimeframeTypeMonthToDate),
 			}, nil)
 			if err != nil {
-				return resources, err
+				log.Warnf("failed to query usage: %v\n", err)
 			}
 
 			cost := queryResult.Properties.Rows[0][0].(float64)
