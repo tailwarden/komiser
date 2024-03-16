@@ -11,6 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
+
 	"github.com/tailwarden/komiser/providers/aws/apigateway"
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/cloudtrail"
@@ -27,8 +28,11 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/eks"
 	"github.com/tailwarden/komiser/providers/aws/elasticache"
 	"github.com/tailwarden/komiser/providers/aws/elb"
+	"github.com/tailwarden/komiser/providers/aws/firehose"
 	"github.com/tailwarden/komiser/providers/aws/iam"
+	"github.com/tailwarden/komiser/providers/aws/kafka"
 	"github.com/tailwarden/komiser/providers/aws/kinesis"
+	"github.com/tailwarden/komiser/providers/aws/kinesisanalytics"
 	"github.com/tailwarden/komiser/providers/aws/kms"
 	"github.com/tailwarden/komiser/providers/aws/lambda"
 	"github.com/tailwarden/komiser/providers/aws/lightsail"
@@ -44,6 +48,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/sqs"
 	"github.com/tailwarden/komiser/providers/aws/systemsmanager"
 	awsUtils "github.com/tailwarden/komiser/providers/aws/utils"
+	"github.com/tailwarden/komiser/providers/aws/wafv2"
 	"github.com/tailwarden/komiser/utils"
 
 	"github.com/uptrace/bun"
@@ -123,6 +128,14 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		cloudtrail.Trails,
 		datasync.Agents,
 		secretsmanager.Secrets,
+		ec2.TransitGatewayPeeringAttachments,
+		ec2.TransitGatewayVpcAttachments,
+		firehose.DeliveryStreams,
+		kinesisanalytics.KinesisAnalytics,
+		kafka.Kafka,
+		ec2.NatGateways,
+		sns.Subscriptions,
+		wafv2.WebAcls,
 	}
 }
 
