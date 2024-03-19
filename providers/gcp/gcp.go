@@ -2,6 +2,7 @@ package gcp
 
 import (
 	"context"
+	"github.com/tailwarden/komiser/providers/gcp/alloydb"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers"
@@ -36,6 +37,8 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		gateway.ApiGateways,
 		function.Functions,
+		alloydb.Instances,
+		alloydb.Clusters,
 	}
 }
 
