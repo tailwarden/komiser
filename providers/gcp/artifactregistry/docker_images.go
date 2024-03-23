@@ -17,7 +17,7 @@ import (
 func ArtifactregistryDockerImages(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	arClient, err := ar.NewRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
+	arClient, err := ar.NewClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to create artifacts registry client")
 		return resources, err
@@ -29,10 +29,13 @@ func ArtifactregistryDockerImages(ctx context.Context, client providers.Provider
 	for {
 		image, err := imageItr.Next()
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to images")
-			return resources, err
+			logrus.WithError(err).Errorf("failed to get nex image")
+			break
 		}
-		
+		if image == nil {
+			break
+		}
+
 		resources = append(resources, models.Resource{
 			Provider:   "GCP",
 			Account:    client.Name,
@@ -42,10 +45,9 @@ func ArtifactregistryDockerImages(ctx context.Context, client providers.Provider
 			CreatedAt:  image.UploadTime.AsTime(),
 			Cost:       0,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://console.cloud.google.com/security/ccm/certificates/details/global/name/%s?project=%s", client.GCPClient.Credentials.ProjectID),
-		})		
+			Link:       fmt.Sprintf("https://console.cloud.google.com/artifacts/docker/%s?project=%s", client.GCPClient.Credentials.ProjectID, client.GCPClient.Credentials.ProjectID),
+		})
 	}
-	
 
 	logrus.WithFields(logrus.Fields{
 		"provider":  "GCP",

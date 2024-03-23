@@ -29,10 +29,13 @@ func ArtifactregistryPackages(ctx context.Context, client providers.ProviderClie
 	for {
 		pkg, err := pkgItr.Next()
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list packages")
-			return resources, err
+			logrus.WithError(err).Errorf("failed to get next package")
+			break
 		}
-		
+		if pkg == nil {
+			break
+		}
+
 		resources = append(resources, models.Resource{
 			Provider:   "GCP",
 			Account:    client.Name,
@@ -42,10 +45,9 @@ func ArtifactregistryPackages(ctx context.Context, client providers.ProviderClie
 			CreatedAt:  pkg.CreateTime.AsTime(),
 			Cost:       0,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://console.cloud.google.com/security/ccm/certificates/details/global/name/%s?project=%s", client.GCPClient.Credentials.ProjectID),
-		})		
+			Link:       fmt.Sprintf("https://console.cloud.google.com/artifacts/browse/%s?project=%s", client.GCPClient.Credentials.ProjectID, client.GCPClient.Credentials.ProjectID),
+		})
 	}
-	
 
 	logrus.WithFields(logrus.Fields{
 		"provider":  "GCP",

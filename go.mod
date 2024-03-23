@@ -13,7 +13,7 @@ require (
 	cloud.google.com/go/monitoring v1.18.0
 	cloud.google.com/go/redis v1.14.2
 	cloud.google.com/go/storage v1.38.0
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.3.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.10.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v4 v4.1.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/databox/armdatabox v1.0.0
@@ -71,7 +71,7 @@ require (
 	github.com/rs/xid v1.4.0
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.13
 	github.com/segmentio/analytics-go v3.1.0+incompatible
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/siruspen/logrus v1.7.1
 	github.com/slack-go/slack v0.12.1
 	github.com/spf13/cobra v1.6.1
@@ -114,7 +114,7 @@ require (
 	cloud.google.com/go/certificatemanager v1.7.5
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v1.1.6 // indirect
-	github.com/Azure/azure-sdk-for-go/sdk/internal v1.1.2 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.8.1 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.5.1 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.16.2 // indirect

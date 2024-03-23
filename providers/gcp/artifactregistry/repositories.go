@@ -17,7 +17,7 @@ import (
 func ArtifactregistryRepositories(ctx context.Context, client providers.ProviderClient) ([]models.Resource, error) {
 	resources := make([]models.Resource, 0)
 
-	arClient, err := ar.NewRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
+	arClient, err := ar.NewClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
 		logrus.WithError(err).Errorf("failed to create artifacts registry client")
 		return resources, err
@@ -29,10 +29,13 @@ func ArtifactregistryRepositories(ctx context.Context, client providers.Provider
 	for {
 		repo, err := repoItr.Next()
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to repos")
-			return resources, err
+			logrus.WithError(err).Errorf("failed to get next repo")
+			break
 		}
-		
+		if repo == nil {
+			break
+		}
+
 		resources = append(resources, models.Resource{
 			Provider:   "GCP",
 			Account:    client.Name,
@@ -42,10 +45,9 @@ func ArtifactregistryRepositories(ctx context.Context, client providers.Provider
 			CreatedAt:  repo.CreateTime.AsTime(),
 			Cost:       0,
 			FetchedAt:  time.Now(),
-			Link:       fmt.Sprintf("https://console.cloud.google.com/security/ccm/certificates/details/global/name/%s?project=%s", client.GCPClient.Credentials.ProjectID),
-		})		
+			Link:       fmt.Sprintf("https://console.cloud.google.com/artifacts/browse/%s?project=%s", client.GCPClient.Credentials.ProjectID, client.GCPClient.Credentials.ProjectID),
+		})
 	}
-	
 
 	logrus.WithFields(logrus.Fields{
 		"provider":  "GCP",
