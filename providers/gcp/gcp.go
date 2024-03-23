@@ -39,7 +39,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		gateway.ApiGateways,
 		function.Functions,
-		appengine.Appengine,
+		appengine.Services,
 		artifactregistry.ArtifactregistryDockerImages,
 		artifactregistry.ArtifactregistryPackages,
 		artifactregistry.ArtifactregistryRepositories,
