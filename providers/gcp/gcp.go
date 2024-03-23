@@ -5,10 +5,13 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/providers"
+	"github.com/tailwarden/komiser/providers/gcp/appengine"
+	"github.com/tailwarden/komiser/providers/gcp/artifactregistry"
 	"github.com/tailwarden/komiser/providers/gcp/bigquery"
 	certficate "github.com/tailwarden/komiser/providers/gcp/certificate"
 	"github.com/tailwarden/komiser/providers/gcp/compute"
 	"github.com/tailwarden/komiser/providers/gcp/container"
+	"github.com/tailwarden/komiser/providers/gcp/firestore"
 	"github.com/tailwarden/komiser/providers/gcp/function"
 	"github.com/tailwarden/komiser/providers/gcp/gateway"
 	"github.com/tailwarden/komiser/providers/gcp/iam"
@@ -36,6 +39,11 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kms.Keys,
 		gateway.ApiGateways,
 		function.Functions,
+		appengine.Services,
+		artifactregistry.ArtifactregistryDockerImages,
+		artifactregistry.ArtifactregistryPackages,
+		artifactregistry.ArtifactregistryRepositories,
+		firestore.Documents,
 	}
 }
 
