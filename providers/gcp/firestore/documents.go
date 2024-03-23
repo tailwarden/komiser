@@ -25,11 +25,16 @@ func Documents(ctx context.Context, client providers.ProviderClient) ([]models.R
 	itr := firestoreClient.Collections(ctx)
 
 	list, err := itr.GetAll()
+	if err != nil {
+		logrus.WithError(err).Errorf("failed to list all firestore collections")
+		return resources, err
+	}
 
 	for _, collection := range list {
 		docItr := collection.Documents(ctx)
 		documents, err := docItr.GetAll()
 		if err != nil {
+			logrus.WithError(err).Errorf("failed to list all firestore documents from %s collection", collection.ID)
 			continue
 		}
 		for _, document := range documents {
@@ -41,7 +46,7 @@ func Documents(ctx context.Context, client providers.ProviderClient) ([]models.R
 				Name:       document.Ref.ID,
 				Cost:       0,
 				FetchedAt:  time.Now(),
-				Link:       fmt.Sprintf("https://console.cloud.google.com/compute/disksDetail/zones/%s/disks/%s?project=%s", client.GCPClient.Credentials.ProjectID),
+				Link:       fmt.Sprintf("https://console.cloud.google.com/firestore/databases?project=%s", client.GCPClient.Credentials.ProjectID),
 			})
 		}
 	}
