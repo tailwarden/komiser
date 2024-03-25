@@ -35,7 +35,7 @@ func SetupSchema(db *bun.DB, c *models.Config, accounts []models.Account) error 
 		account.Status = "CONNECTED"
 		_, err = db.NewInsert().Model(&account).Exec(context.Background())
 		if err != nil {
-			log.Warnf("%s account cannot be inserted to database", account.Provider)
+			log.Warnf("%s account cannot be inserted to database\n%v", account.Provider, err)
 		}
 	}
 
