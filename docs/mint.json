@@ -79,7 +79,7 @@
     },
     {
       "group": "Community & Support",
-      "pages": ["community-support/contributing", "community-support/events", "community-support/telemetry", "community-support/faqs"]
+      "pages": ["community-support/contributing", "community-support/events", "community-support/hall-of-fame", "community-support/telemetry", "community-support/faqs"]
     }
   ],
   "footerSocials": {
