@@ -370,10 +370,14 @@ func populateConfigFromAccount(account models.Account, config *models.Config) er
 	switch account.Provider {
 	case "aws":
 		awsConfig := models.AWSConfig{
-			Name:     account.Name,
-			Profile:  account.Credentials["profile"],
-			Path:     account.Credentials["path"],
-			Source:   account.Credentials["source"],
+			Name:    account.Name,
+			Source:  account.Credentials["source"],
+		}
+		if account.Credentials["source"] == "credentials-file" {
+			awsConfig.Profile = account.Credentials["profile"]
+			if path, ok := account.Credentials["path"]; ok && len(path) > 0 {
+				awsConfig.Path = account.Credentials["path"]
+			}
 		}
 		config.AWS = append(config.AWS, awsConfig)
 
@@ -443,38 +447,38 @@ func populateConfigFromAccount(account models.Account, config *models.Config) er
 
 	case "mongodb":
 		mongoDBAtlasConfig := models.MongoDBAtlasConfig{
-			Name:          account.Name,
-			PublicApiKey:  account.Credentials["publicKey"],
-			PrivateApiKey: account.Credentials["privateKey"],
+			Name:           account.Name,
+			PublicApiKey:   account.Credentials["publicKey"],
+			PrivateApiKey:  account.Credentials["privateKey"],
 			OrganizationID: account.Credentials["organizationId"],
 		}
 		config.MongoDBAtlas = append(config.MongoDBAtlas, mongoDBAtlasConfig)
 
 	case "gcp":
 		gcpConfig := models.GCPConfig{
-			Name:                account.Name,
+			Name:                  account.Name,
 			ServiceAccountKeyPath: account.Credentials["accountKey"],
 		}
 		config.GCP = append(config.GCP, gcpConfig)
 
 	case "ovh":
 		ovhConfig := models.OVHConfig{
-			Name:             account.Name,
-			Endpoint:         account.Credentials["endpoint"],
-			ApplicationKey:   account.Credentials["applicationKey"],
+			Name:              account.Name,
+			Endpoint:          account.Credentials["endpoint"],
+			ApplicationKey:    account.Credentials["applicationKey"],
 			ApplicationSecret: account.Credentials["applicationSecret"],
-			ConsumerKey:      account.Credentials["consumerKey"],
+			ConsumerKey:       account.Credentials["consumerKey"],
 		}
 		config.OVH = append(config.OVH, ovhConfig)
 
 	default:
-		return fmt.Errorf("Illegle provider")
+		return fmt.Errorf("illegle provider")
 	}
 
 	return nil
 }
 
-func updateConfig(path string, cfg *models.Config) error  {
+func updateConfig(path string, cfg *models.Config) error {
 	mu.Lock()
 	defer mu.Unlock()
 
