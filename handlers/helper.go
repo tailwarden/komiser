@@ -189,7 +189,7 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 					Name:      account.Name,
 				}, err
 			}
-		} else if account.Credentials["source"] == "environment-variables" {
+		} else {
 			cfg, err := awsConfig.LoadDefaultConfig(context.Background())
 			if err != nil {
 				return nil, err
@@ -370,8 +370,8 @@ func populateConfigFromAccount(account models.Account, config *models.Config) er
 	switch account.Provider {
 	case "aws":
 		awsConfig := models.AWSConfig{
-			Name:    account.Name,
-			Source:  account.Credentials["source"],
+			Name:   account.Name,
+			Source: account.Credentials["source"],
 		}
 		if account.Credentials["source"] == "credentials-file" {
 			awsConfig.Profile = account.Credentials["profile"]
