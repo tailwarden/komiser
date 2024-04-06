@@ -10,6 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/tailwarden/komiser/internal"
+	"github.com/tailwarden/komiser/internal/config"
 	"github.com/tailwarden/komiser/utils"
 )
 
@@ -38,8 +39,8 @@ var startCmd = &cobra.Command{
 
 		if _, err := os.Stat(filename); errors.Is(err, os.ErrNotExist) {
 			log.Info("unable to use given config file:", err)
-			log.Info("Creating default config.toml")
-			err = os.WriteFile("config.toml", []byte{}, 0644)
+			log.Info("Creating default config file:", config.DefaultFileName)
+			err = config.Create(nil)
 			if err != nil {
 				return err
 			}
