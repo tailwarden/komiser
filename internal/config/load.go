@@ -21,7 +21,6 @@ import (
 	"github.com/ovh/go-ovh/ovh"
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
 	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
@@ -36,7 +35,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func loadConfigFromFile(path string) (*Config, error) {
+func loadConfigFromFile(path string) (*models.Config, error) {
 	filename, err := filepath.Abs(path)
 	if err != nil {
 		return nil, err
@@ -54,8 +53,8 @@ func loadConfigFromFile(path string) (*Config, error) {
 	return loadConfigFromBytes(yamlFile)
 }
 
-func loadConfigFromBytes(b []byte) (*Config, error) {
-	var config Config
+func loadConfigFromBytes(b []byte) (*models.Config, error) {
+	var config models.Config
 
 	err := toml.Unmarshal([]byte(b), &config)
 	if err != nil {
@@ -65,7 +64,7 @@ func loadConfigFromBytes(b []byte) (*Config, error) {
 	return &config, nil
 }
 
-func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.DB) (*Config, []providers.ProviderClient, []models.Account, error) {
+func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.DB) (*models.Config, []providers.ProviderClient, []models.Account, error) {
 	config, err := loadConfigFromFile(configPath)
 	if err != nil {
 		return nil, nil, nil, err
