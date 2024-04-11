@@ -18,24 +18,26 @@ import (
 )
 
 type ApiHandler struct {
-	db        *bun.DB
-	ctx       context.Context
-	telemetry bool
-	cfg       models.Config
+	db         *bun.DB
+	dbHandler  DbHandler
+	ctx        context.Context
+	telemetry  bool
+	cfg        models.Config
 	configPath string
-	analytics utils.Analytics
-	accounts  []models.Account
+	analytics  utils.Analytics
+	accounts   []models.Account
 }
 
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
 	handler := ApiHandler{
-		db:        db,
-		ctx:       ctx,
-		telemetry: telemetry,
-		cfg:       cfg,
+		db:         db,
+		dbHandler:  NewDbHandler(db),
+		ctx:        ctx,
+		telemetry:  telemetry,
+		cfg:        cfg,
 		configPath: configPath,
-		analytics: analytics,
-		accounts:  accounts,
+		analytics:  analytics,
+		accounts:   accounts,
 	}
 	return &handler
 }
@@ -428,7 +430,7 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 			Provider:   ele.Provider,
 		})
 	}
-	
+
 	c.JSON(http.StatusOK, out)
 
 }

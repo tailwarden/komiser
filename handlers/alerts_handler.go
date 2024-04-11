@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -33,7 +32,7 @@ func (handler *ApiHandler) NewAlertHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := handler.db.NewInsert().Model(&alert).Exec(context.Background())
+	result, err := models.HandleQuery(handler.db, handler.ctx, "INSERT", &alert, nil)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -62,7 +61,7 @@ func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = handler.db.NewUpdate().Model(&alert).Column("name", "type", "budget", "usage", "endpoint", "secret").Where("id = ?", alertId).Exec(handler.ctx)
+	_, err = models.HandleQuery(handler.db, handler.ctx, "UPDATE_ALERT",&alert, map[string]string{"id": alertId})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -75,7 +74,7 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	alertId := c.Param("id")
 
 	alert := new(models.Alert)
-	_, err := handler.db.NewDelete().Model(alert).Where("id = ?", alertId).Exec(handler.ctx)
+	_, err := models.HandleQuery(handler.db,handler.ctx, "DELETE", alert, map[string]string{"id": alertId})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
