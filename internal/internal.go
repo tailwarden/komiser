@@ -10,7 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-co-op/gocron"
 	"github.com/hashicorp/go-version"
 	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun/dialect"
@@ -53,44 +52,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 			return err
 		}
 
-		cron := gocron.NewScheduler(time.UTC)
-
-		_, err = cron.Every(1).Hours().Do(func() {
-			log.Info("Fetching resources workflow has started")
-
-			fetchResources(ctx, clients, regions, telemetry)
-		})
-
-		if err != nil {
-			log.WithError(err).Error("setting up cron job failed")
-		}
-
-		_, err = cron.Every(1).Hours().Do(func() {
-			alerts, err := listAlerts(ctx)
-			if err != nil {
-				log.WithError(err).Error("failed to list alerts")
-			}
-			if len(alerts) > 0 {
-				log.Info("Checking Alerts")
-				checkingAlerts(ctx, *cfg, telemetry, port, alerts)
-			}
-		})
-		if err != nil {
-			log.WithError(err).Error("failed to setup alert checking cron job")
-		}
-
-		_, err = cron.Every(1).Friday().At("09:00").Do(func() {
-			if len(cfg.Slack.Webhook) > 0 && cfg.Slack.Reporting {
-				log.Info("Sending weekly reporting")
-				sendTagsCoverageReport(ctx, *cfg)
-				sendCostBreakdownReport(ctx, *cfg)
-			}
-		})
-		if err != nil {
-			log.WithError(err).Error("failed to setup cron job")
-		}
-
-		cron.StartAsync()
+		scheduleJobs(ctx, cfg, clients, regions, port, telemetry)
 	}
 
 	go checkUpgrade()
