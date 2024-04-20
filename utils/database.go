@@ -2,13 +2,48 @@ package utils
 
 import (
 	"context"
+	"database/sql"
+	"fmt"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/migrations"
 	"github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/dialect/sqlitedialect"
+	"github.com/uptrace/bun/driver/pgdriver"
+	"github.com/uptrace/bun/driver/sqliteshim"
 	"github.com/uptrace/bun/migrate"
 )
+
+func SetupDBConnection(c *models.Config, db *bun.DB) error {
+	var sqldb *sql.DB
+	var err error
+
+	if len(c.SQLite.File) == 0 && len(c.Postgres.URI) == 0 {
+		log.Println("Database wasn't configured yet")
+		return nil
+	}
+
+	if len(c.SQLite.File) > 0 {
+		sqldb, err = sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", c.SQLite.File))
+		if err != nil {
+			return err
+		}
+		sqldb.SetMaxIdleConns(1000)
+		sqldb.SetConnMaxLifetime(0)
+
+		*db = *bun.NewDB(sqldb, sqlitedialect.New())
+
+		log.Println("Data will be stored in SQLite")
+	} else {
+		sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
+		*db = *bun.NewDB(sqldb, pgdialect.New())
+		log.Println("Data will be stored in PostgreSQL")
+	}
+
+	return nil
+}
 
 func SetupSchema(db *bun.DB, c *models.Config, accounts []models.Account) error {
 	_, err := db.NewCreateTable().Model((*models.Resource)(nil)).IfNotExists().Exec(context.Background())

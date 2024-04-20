@@ -27,7 +27,6 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
-	"github.com/uptrace/bun"
 	"go.mongodb.org/atlas/mongodbatlas"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -64,7 +63,7 @@ func loadConfigFromBytes(b []byte) (*models.Config, error) {
 	return &config, nil
 }
 
-func Load(configPath string, telemetry bool, analytics utils.Analytics, db *bun.DB) (*models.Config, []providers.ProviderClient, []models.Account, error) {
+func Load(configPath string, telemetry bool, analytics utils.Analytics) (*models.Config, []providers.ProviderClient, []models.Account, error) {
 	config, err := loadConfigFromFile(configPath)
 	if err != nil {
 		return nil, nil, nil, err
