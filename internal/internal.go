@@ -3,7 +3,6 @@ package internal
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"runtime"
@@ -177,7 +176,7 @@ func getViewStats(ctx context.Context, filters []models.Filter) (models.ViewStat
 			case "IS_NOT_EMPTY":
 				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
 			default:
-				return models.ViewStat{}, errors.New("Operation is invalid or not supported")
+				return models.ViewStat{}, errInvalidOperation
 			}
 		} else if strings.HasPrefix(filter.Field, "tag:") {
 			filterWithTags = true
@@ -216,7 +215,7 @@ func getViewStats(ctx context.Context, filters []models.Filter) (models.ViewStat
 					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
 				}
 			default:
-				return models.ViewStat{}, errors.New("operation is invalid or not supported")
+				return models.ViewStat{}, errInvalidOperation
 			}
 		} else if filter.Field == "tags" {
 			switch filter.Operator {
@@ -233,44 +232,44 @@ func getViewStats(ctx context.Context, filters []models.Filter) (models.ViewStat
 					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
 				}
 			default:
-				return models.ViewStat{}, errors.New("operation is invalid or not supported")
+				return models.ViewStat{}, errInvalidOperation
 			}
 		} else if filter.Field == "cost" {
 			switch filter.Operator {
 			case "EQUAL":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					return models.ViewStat{}, errors.New("The value should be a number")
+					return models.ViewStat{}, errNumberValue
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
 			case "BETWEEN":
 				min, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					return models.ViewStat{}, errors.New("The value should be a number")
+					return models.ViewStat{}, errNumberValue
 				}
 				max, err := strconv.ParseFloat(filter.Values[1], 64)
 				if err != nil {
-					return models.ViewStat{}, errors.New("The value should be a number")
+					return models.ViewStat{}, errNumberValue
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
 			case "GREATER_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					return models.ViewStat{}, errors.New("The value should be a number")
+					return models.ViewStat{}, errNumberValue
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
 			case "LESS_THAN":
 				cost, err := strconv.ParseFloat(filter.Values[0], 64)
 				if err != nil {
-					return models.ViewStat{}, errors.New("The value should be a number")
+					return models.ViewStat{}, errNumberValue
 				}
 				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
 			default:
-				return models.ViewStat{}, errors.New("Operation is invalid or not supported")
+				return models.ViewStat{}, errInvalidOperation
 
 			}
 		} else {
-			return models.ViewStat{}, errors.New("Field is invalid or not supported")
+			return models.ViewStat{}, errInvalidField
 		}
 	}
 
