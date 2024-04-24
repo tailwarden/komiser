@@ -30,7 +30,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 		Status:    "COMPLETE",
 	}
 
-	if handler.dbHandler.Db == nil {
+	if handler.db == nil {
 		output.Status = "PENDING_DATABASE"
 		c.JSON(http.StatusOK, output)
 		return
@@ -177,7 +177,6 @@ func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	
 
 	c.JSON(http.StatusOK, gin.H{"message": "account has been deleted"})
 }

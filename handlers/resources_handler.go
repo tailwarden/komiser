@@ -19,7 +19,6 @@ import (
 
 type ApiHandler struct {
 	db         *bun.DB
-	dbHandler  DbHandler
 	ctx        context.Context
 	telemetry  bool
 	cfg        models.Config
@@ -31,7 +30,6 @@ type ApiHandler struct {
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
 	handler := ApiHandler{
 		db:         db,
-		dbHandler:  NewDbHandler(db),
 		ctx:        ctx,
 		telemetry:  telemetry,
 		cfg:        cfg,
