@@ -2,10 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"strconv"
+
+	//"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tailwarden/komiser/models"
 	. "github.com/tailwarden/komiser/models"
 )
 
@@ -21,7 +24,7 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 	resource := Resource{Tags: input.Tags}
 
 	for _, resourceId := range input.Resources {
-		_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", resourceId).Exec(handler.ctx)
+		_, err = models.HandleQuery(handler.db, handler.ctx, "UPDATE_TAGS", &resource, map[string]string{"id": fmt.Sprintf("%d", resourceId)})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 			return
@@ -40,13 +43,7 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 
 	resourceId := c.Param("id")
 
-	id, err := strconv.Atoi(resourceId)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "resource id should be an integer"})
-		return
-	}
-
-	err = json.NewDecoder(c.Request.Body).Decode(&tags)
+	err := json.NewDecoder(c.Request.Body).Decode(&tags)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -54,7 +51,7 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 
 	resource := Resource{Tags: tags}
 
-	_, err = handler.db.NewUpdate().Model(&resource).Column("tags").Where("id = ?", id).Exec(handler.ctx)
+	_, err = models.HandleQuery(handler.db, handler.ctx, "UPDATE_TAGS", &resource, map[string]string{"id": string(resourceId)})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 		return
