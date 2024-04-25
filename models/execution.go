@@ -18,46 +18,37 @@ const (
 	UPDATE QueryType = "UPDATE"
 )
 
-func HandleQuery(ctx context.Context, db *bun.DB, queryTitle string, schema interface{}, additionals map[string]string) (sql.Result, error) {
+func HandleQuery(ctx context.Context, db *bun.DB, queryTitle string, schema interface{}, conditions [][3]string) (sql.Result, error) {
 	var resp sql.Result
 	var err error
-	switch Queries[queryTitle].Type {
+	query := Queries[queryTitle]
+	switch query.Type {
 	case RAW:
-		err = executeRaw(ctx, db, Queries[queryTitle].Query, schema, additionals)
-		if err != nil {
-			return resp, err
-		}
+		err = executeRaw(ctx, db, query.Query, schema, conditions)
+
 	case SELECT:
-		err = executeSelect(ctx, db, Queries[queryTitle].Query, schema, additionals)
-		if err != nil {
-			return resp, err
-		}
+		err = executeSelect(ctx, db, query.Query, schema, conditions)
+
 	case INSERT:
-		resp, err = executeInsert(ctx, db, schema, additionals)
-		if err != nil {
-			return resp, err
-		}
+		resp, err = executeInsert(ctx, db, schema, conditions)
+
 	case DELETE:
-		resp, err = executeDelete(ctx, db, schema, Queries[queryTitle].Query, additionals)
-		if err != nil {
-			return resp, err
-		}
+		resp, err = executeDelete(ctx, db, schema, query.Query, conditions)
+
 	case UPDATE:
-		resp, err = executeUpdate(ctx, db, schema, Queries[queryTitle].Query, Queries[queryTitle].Params, additionals)
-		if err != nil {
-			return resp, err
-		}
+		resp, err = executeUpdate(ctx, db, schema, query.Params, conditions)
 	}
-	return resp, nil
+	return resp, err
 }
 
-func executeRaw(ctx context.Context, db *bun.DB, query string, schema interface{}, additionals map[string]string) error {
+func executeRaw(ctx context.Context, db *bun.DB, query string, schema interface{}, additionals [][3]string) error {
 	if len(additionals) > 0 {
 		query = fmt.Sprintf("%s where", query)
 	}
 
-	for key, value := range additionals {
-		query = fmt.Sprintf("%s %s = '%s' and", query, key, value)
+	for _, triplet := range additionals {
+		key, op, value := triplet[0], triplet[1], triplet[2]
+		query = fmt.Sprintf("%s %s %s '%s' and", query, key, op, value)
 	}
 
 	if len(additionals) > 0 {
@@ -71,20 +62,15 @@ func executeRaw(ctx context.Context, db *bun.DB, query string, schema interface{
 	return nil
 }
 
-func executeSelect(ctx context.Context, db *bun.DB, query string, schema interface{}, additionals map[string]string) error {
-	updatedQuery := db.NewSelect().Model(schema)
-	for key, value := range additionals {
-		updatedQuery = updatedQuery.Where(fmt.Sprintf("%s = ?", key), value)
-	}
+func executeSelect(ctx context.Context, db *bun.DB, query string, schema interface{}, conditions [][3]string) error {
+	q := db.NewSelect().Model(schema)
 
-	err := updatedQuery.Scan(ctx, schema)
-	if err != nil {
-		return err
-	}
-	return nil
+	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.SelectQuery)
+
+	return q.Scan(ctx, schema)
 }
 
-func executeInsert(ctx context.Context, db *bun.DB, schema interface{}, additionals map[string]string) (sql.Result, error) {
+func executeInsert(ctx context.Context, db *bun.DB, schema interface{}, conditions [][3]string) (sql.Result, error) {
 	resp, err := db.NewInsert().Model(schema).Exec(ctx)
 	if err != nil {
 		return resp, err
@@ -92,25 +78,36 @@ func executeInsert(ctx context.Context, db *bun.DB, schema interface{}, addition
 	return resp, nil
 }
 
-func executeDelete(ctx context.Context, db *bun.DB, schema interface{}, query string, additionals map[string]string) (sql.Result, error) {
-	resp, err := db.NewDelete().Model(schema).Where("id = ?", additionals["id"]).Exec(ctx)
+func executeDelete(ctx context.Context, db *bun.DB, schema interface{}, query string, conditions [][3]string) (sql.Result, error) {
+	q := db.NewDelete().Model(schema)
+
+	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.DeleteQuery)
+
+	resp, err := q.Exec(ctx)
 	if err != nil {
 		return resp, err
 	}
 	return resp, nil
 }
 
-func executeUpdate(ctx context.Context, db *bun.DB, schema interface{}, query string, columns []string, additionals map[string]string) (sql.Result, error) {
-	updatedQuery := db.NewUpdate().Model(schema).Column(columns...)
+func executeUpdate(ctx context.Context, db *bun.DB, schema interface{}, columns []string, conditions [][3]string) (sql.Result, error) {
+	q := db.NewUpdate().Model(schema).Column(columns...)
 
-	for key, value := range additionals {
-		updatedQuery = updatedQuery.Where(fmt.Sprintf("%s = ?", key), value)
-	}
+	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.UpdateQuery)
 
-	updatedQuery = updatedQuery.Returning("*")
-	resp, err := updatedQuery.Exec(ctx)
+	q = q.Returning("*")
+
+	resp, err := q.Exec(ctx)
 	if err != nil {
 		return resp, err
 	}
 	return resp, nil
+}
+
+func addWhereClause(query bun.QueryBuilder, conditions [][3]string) bun.QueryBuilder {
+	for _, triplet := range conditions {
+		key, op, value := triplet[0], triplet[1], triplet[2]
+		query = query.Where(fmt.Sprintf("%s %s ?", key, op), value)
+	}
+	return query
 }

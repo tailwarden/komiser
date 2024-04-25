@@ -74,7 +74,7 @@ func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 			Total int `bun:"total" json:"total"`
 		}{}
 
-		_, err := models.HandleQuery(handler.ctx, handler.db, "RESOURCE_COUNT", &output, map[string]string{"provider": account.Provider, "account": account.Name})
+		_, err := models.HandleQuery(handler.ctx, handler.db, "RESOURCE_COUNT", &output, [][3]string{{"provider", "=", account.Provider}, {"account", "=", account.Name}})
 		if err != nil {
 			fmt.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
@@ -155,7 +155,7 @@ func (handler *ApiHandler) ReScanAccount(c *gin.Context) {
 
 	account := new(models.Account)
 	account.Status = "SCANNING"
-	res, err := models.HandleQuery(handler.ctx, handler.db, "RE_SCAN_ACCOUNT", account, map[string]string{"id": accountId, "status": "CONNECTED"})
+	res, err := models.HandleQuery(handler.ctx, handler.db, "RE_SCAN_ACCOUNT", account, [][3]string{{"id", "=", accountId}, {"status", "=", "CONNECTED"}})
 	if err != nil {
 		log.Error("Couldn't set status", err)
 		return
@@ -172,7 +172,7 @@ func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 	accountId := c.Param("id")
 
 	account := new(models.Account)
-	_, err := models.HandleQuery(handler.ctx, handler.db, "DELETE", account, map[string]string{"id": accountId})
+	_, err := models.HandleQuery(handler.ctx, handler.db, "DELETE", account, [][3]string{{"id", "=", accountId}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -191,7 +191,7 @@ func (handler *ApiHandler) UpdateCloudAccountHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_ACCOUNT", &account, map[string]string{"id": accountId})
+	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_ACCOUNT", &account, [][3]string{{"id", "=", accountId}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

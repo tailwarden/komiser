@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -61,7 +62,7 @@ func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_ALERT", &alert, map[string]string{"id": alertId})
+	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_ALERT", &alert, [][3]string{{"id", "=", fmt.Sprint(alertId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -74,7 +75,7 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	alertId := c.Param("id")
 
 	alert := new(models.Alert)
-	_, err := models.HandleQuery(handler.ctx, handler.db, "DELETE", alert, map[string]string{"id": alertId})
+	_, err := models.HandleQuery(handler.ctx, handler.db, "DELETE", alert, [][3]string{{"id", "=", fmt.Sprint(alertId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

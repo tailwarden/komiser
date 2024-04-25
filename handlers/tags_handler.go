@@ -21,7 +21,7 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 	resource := models.Resource{Tags: input.Tags}
 
 	for _, resourceId := range input.Resources {
-		_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_TAGS", &resource, map[string]string{"id": fmt.Sprintf("%d", resourceId)})
+		_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_TAGS", &resource, [][3]string{{"id", "=", fmt.Sprint(resourceId)}})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 			return
@@ -48,7 +48,7 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 
 	resource := models.Resource{Tags: tags}
 
-	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_TAGS", &resource, map[string]string{"id": string(resourceId)})
+	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_TAGS", &resource, [][3]string{{"id", "=", fmt.Sprint(resourceId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 		return
