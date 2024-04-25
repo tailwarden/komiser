@@ -32,7 +32,7 @@ func (handler *ApiHandler) NewAlertHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := models.HandleQuery(handler.db, handler.ctx, "INSERT", &alert, nil)
+	result, err := models.HandleQuery(handler.ctx, handler.db, "INSERT", &alert, nil)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -61,7 +61,7 @@ func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = models.HandleQuery(handler.db, handler.ctx, "UPDATE_ALERT",&alert, map[string]string{"id": alertId})
+	_, err = models.HandleQuery(handler.ctx, handler.db, "UPDATE_ALERT", &alert, map[string]string{"id": alertId})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -74,7 +74,7 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	alertId := c.Param("id")
 
 	alert := new(models.Alert)
-	_, err := models.HandleQuery(handler.db,handler.ctx, "DELETE", alert, map[string]string{"id": alertId})
+	_, err := models.HandleQuery(handler.ctx, handler.db, "DELETE", alert, map[string]string{"id": alertId})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
