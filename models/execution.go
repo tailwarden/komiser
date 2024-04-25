@@ -18,24 +18,6 @@ const (
 	UPDATE QueryType = "UPDATE"
 )
 
-type DbHandler struct {
-	Db *bun.DB
-}
-
-func NewDbHandler(db *bun.DB) DbHandler {
-	return DbHandler{
-		Db: db,
-	}
-}
-
-type Object struct {
-	Query  string    `json:"query"`
-	Type   QueryType `json:"type"`
-	Params []string  `json:"params"`
-}
-
-type Data map[string]Object
-
 func HandleQuery(db *bun.DB, ctx context.Context, queryTitle string, schema interface{}, additionals map[string]string) (sql.Result, error) {
 	var resp sql.Result
 	var err error
