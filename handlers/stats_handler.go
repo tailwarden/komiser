@@ -9,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun/dialect"
 )
 
@@ -63,7 +63,7 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
-	var filters []Filter
+	var filters []models.Filter
 
 	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {

@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
@@ -41,14 +40,14 @@ func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytic
 }
 
 func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
-	var filters []Filter
+	var filters []models.Filter
 
 	limitRaw := c.Query("limit")
 	skipRaw := c.Query("skip")
 	query := c.Query("query")
 	viewId := c.Query("view")
 
-	view := new(View)
+	view := new(models.View)
 	if viewId != "" {
 		err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 		if err != nil {
@@ -240,7 +239,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 
 	whereClause := strings.Join(whereQueries, " AND ")
 
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 
 	if len(filters) == 0 {
 		if len(query) > 0 {
@@ -305,7 +304,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
-	var filters []Filter
+	var filters []models.Filter
 
 	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
@@ -436,7 +435,7 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 	resourceId := c.Query("resourceId")
 
-	var resource Resource
+	var resource models.Resource
 
 	err := handler.db.NewSelect().Model(&resource).Where("resource_id = ?", resourceId).Scan(handler.ctx)
 	if err != nil {
