@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
@@ -31,17 +32,17 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
-
-	err := handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	
+	_, err := repository.HandleQuery(handler.ctx, handler.db, "REGION_RESOURCE_COUNT", &regions, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
 	resources := struct {
-		Count int `bun:"count" json:"total"`
+		Count int `bun:"total" json:"total"`
 	}{}
-
-	err = handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
+	
+	_, err = repository.HandleQuery(handler.ctx, handler.db, "RESOURCE_COUNT", &resources, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -50,7 +51,7 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		Sum float64 `bun:"sum" json:"total"`
 	}{}
 
-	err = handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
+	_, err = repository.HandleQuery(handler.ctx, handler.db, "RESOURCE_COST_SUM", &cost, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -59,7 +60,7 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	err = handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT account FROM resources) AS temp").Scan(handler.ctx, &accounts)
+	_, err = repository.HandleQuery(handler.ctx, handler.db, "REGION_RESOURCE_COUNT", &regions, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -143,8 +144,7 @@ func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, []models.OutputLocations{})
 		return
 	}
-
-	err := handler.db.NewRaw("SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;").Scan(handler.ctx, &groups)
+	_, err := repository.HandleQuery(handler.ctx, handler.db, "LOCATION_BREAKDOWN_STAT", &groups, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}

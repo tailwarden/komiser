@@ -60,6 +60,26 @@ var Queries = Data{
 		Query: "SELECT COUNT(*) as total FROM resources",
 		Type:  RAW,
 	},
+	"RESOURCE_COST_SUM": Object{
+		Query: "SELECT SUM(cost) as sum FROM resources",
+		Type:  RAW,
+	},
+	"ACCOUNTS_RESOURCE_COUNT": Object{
+		Query: "SELECT COUNT(*) as count FROM (SELECT DISTINCT account FROM resources) AS temp",
+		Type:  RAW,
+	},
+	"REGION_RESOURCE_COUNT": Object{
+		Query: "SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp",
+		Type:  RAW,
+	},
+	"FILTER_RESOURCE_COUNT": Object{
+		Query: "SELECT filters as label, COUNT(*) as total FROM resources",
+		Type:  RAW,
+	},
+	"LOCATION_BREAKDOWN_STAT": Object{
+		Query: "SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;",
+		Type:  RAW,
+	},
 	"UPDATE_TAGS": Object{
 		Type:   UPDATE,
 		Params: []string{"tags"},
