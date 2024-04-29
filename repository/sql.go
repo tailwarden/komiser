@@ -40,6 +40,10 @@ const (
 	FilterResourceCountKey   = "FILTER_RESOURCE_COUNT"
 	LocationBreakdownStatKey = "LOCATION_BREAKDOWN_STAT"
 	UpdateTagsKey            = "UPDATE_TAGS"
+	ListRegionsKey           = "LISST_REGIONS"
+	ListProvidersKey         = "LIST_PROVIDERS"
+	ListServicesKey          = "LIST_SERVICES"
+	ListAccountsKey          = "LIST_ACCOUNTS"
 )
 
 var Queries = map[string]Object{
@@ -99,6 +103,22 @@ var Queries = map[string]Object{
 	UpdateTagsKey: {
 		Type:   UPDATE,
 		Params: []string{"tags"},
+	},
+	ListRegionsKey: {
+		Type:  RAW,
+		Query: "SELECT DISTINCT(region) FROM resources",
+	},
+	ListProvidersKey: {
+		Type:  RAW,
+		Query: "SELECT DISTINCT(provider) FROM resources",
+	},
+	ListServicesKey: {
+		Type:  RAW,
+		Query: "SELECT DISTINCT(service) FROM resources",
+	},
+	ListAccountsKey: {
+		Type:  RAW,
+		Query: "SELECT DISTINCT(account) FROM resources",
 	},
 }
 
