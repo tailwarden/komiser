@@ -95,13 +95,13 @@ func HandleQuery(ctx context.Context, db *bun.DB, queryTitle string, schema inte
 		err = executeRaw(ctx, db, query.Query, schema, conditions)
 
 	case SELECT:
-		err = executeSelect(ctx, db, query.Query, schema, conditions)
+		err = executeSelect(ctx, db, schema, conditions)
 
 	case INSERT:
-		resp, err = executeInsert(ctx, db, schema, conditions)
+		resp, err = executeInsert(ctx, db, schema)
 
 	case DELETE:
-		resp, err = executeDelete(ctx, db, schema, query.Query, conditions)
+		resp, err = executeDelete(ctx, db, schema, conditions)
 
 	case UPDATE:
 		resp, err = executeUpdate(ctx, db, schema, query.Params, conditions)
@@ -130,7 +130,7 @@ func executeRaw(ctx context.Context, db *bun.DB, query string, schema interface{
 	return nil
 }
 
-func executeSelect(ctx context.Context, db *bun.DB, query string, schema interface{}, conditions [][3]string) error {
+func executeSelect(ctx context.Context, db *bun.DB, schema interface{}, conditions [][3]string) error {
 	q := db.NewSelect().Model(schema)
 
 	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.SelectQuery)
@@ -138,7 +138,7 @@ func executeSelect(ctx context.Context, db *bun.DB, query string, schema interfa
 	return q.Scan(ctx, schema)
 }
 
-func executeInsert(ctx context.Context, db *bun.DB, schema interface{}, conditions [][3]string) (sql.Result, error) {
+func executeInsert(ctx context.Context, db *bun.DB, schema interface{}) (sql.Result, error) {
 	resp, err := db.NewInsert().Model(schema).Exec(ctx)
 	if err != nil {
 		return resp, err
@@ -146,7 +146,7 @@ func executeInsert(ctx context.Context, db *bun.DB, schema interface{}, conditio
 	return resp, nil
 }
 
-func executeDelete(ctx context.Context, db *bun.DB, schema interface{}, query string, conditions [][3]string) (sql.Result, error) {
+func executeDelete(ctx context.Context, db *bun.DB, schema interface{}, conditions [][3]string) (sql.Result, error) {
 	q := db.NewDelete().Model(schema)
 
 	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.DeleteQuery)
