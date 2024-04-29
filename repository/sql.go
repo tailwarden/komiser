@@ -24,63 +24,79 @@ type Object struct {
 	Params []string  `json:"params"`
 }
 
-type Data map[string]Object
+const (
+	ListKey                  = "LIST"
+	InsertKey                = "INSERT"
+	DeleteKey                = "DELETE"
+	UpdateAccountKey         = "UPDATE_ACCOUNT"
+	UpdateAlertKey           = "UPDATE_ALERT"
+	UpdateViewKey            = "UPDATE_VIEW"
+	UpdateViewExcludeKey     = "UPDATE_VIEW_EXCLUDE"
+	ReScanAccountKey         = "RE_SCAN_ACCOUNT"
+	ResourceCountKey         = "RESOURCE_COUNT"
+	ResourceCostSumKey       = "RESOURCE_COST_SUM"
+	AccountsResourceCountKey = "ACCOUNTS_RESOURCE_COUNT"
+	RegionResourceCountKey   = "REGION_RESOURCE_COUNT"
+	FilterResourceCountKey   = "FILTER_RESOURCE_COUNT"
+	LocationBreakdownStatKey = "LOCATION_BREAKDOWN_STAT"
+	UpdateTagsKey            = "UPDATE_TAGS"
+)
 
-var Queries = Data{
-	"LIST": Object{
+var Queries = map[string]Object{
+	ListKey: {
 		Type: SELECT,
 	},
-	"INSERT": Object{
+	InsertKey: {
 		Type: INSERT,
 	},
-	"DELETE": Object{
+	DeleteKey: {
 		Type: DELETE,
 	},
-	"UPDATE_ACCOUNT": Object{
+	UpdateAccountKey: {
 		Type:   UPDATE,
 		Params: []string{"name", "provider", "credentials"},
 	},
-	"UPDATE_ALERT": Object{
+	UpdateAlertKey: {
 		Type:   UPDATE,
 		Params: []string{"name", "type", "budget", "usage", "endpoint", "secret"},
 	},
-	"UPDATE_VIEW": Object{
+	UpdateViewKey: {
 		Type:   UPDATE,
 		Params: []string{"name", "filters", "exclude"},
 	},
-	"UPDATE_VIEW_EXCLUDE": Object{
+	UpdateViewExcludeKey: {
 		Type:   UPDATE,
 		Params: []string{"exclude"},
 	},
-	"RE_SCAN_ACCOUNT": Object{
+	ReScanAccountKey: {
 		Type:   UPDATE,
 		Params: []string{"status"},
 	},
-	"RESOURCE_COUNT": Object{
+	ResourceCountKey: {
 		Query: "SELECT COUNT(*) as total FROM resources",
 		Type:  RAW,
 	},
-	"RESOURCE_COST_SUM": Object{
+	ResourceCostSumKey: {
 		Query: "SELECT SUM(cost) as sum FROM resources",
 		Type:  RAW,
 	},
-	"ACCOUNTS_RESOURCE_COUNT": Object{
+	AccountsResourceCountKey: {
 		Query: "SELECT COUNT(*) as count FROM (SELECT DISTINCT account FROM resources) AS temp",
 		Type:  RAW,
 	},
-	"REGION_RESOURCE_COUNT": Object{
+	RegionResourceCountKey: {
 		Query: "SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp",
 		Type:  RAW,
 	},
-	"FILTER_RESOURCE_COUNT": Object{
+	FilterResourceCountKey: {
 		Query: "SELECT filters as label, COUNT(*) as total FROM resources",
 		Type:  RAW,
 	},
-	"LOCATION_BREAKDOWN_STAT": Object{
+	LocationBreakdownStatKey: {
 		Query: "SELECT region as label, COUNT(*) as total FROM resources GROUP BY region ORDER by total desc;",
 		Type:  RAW,
 	},
-	"UPDATE_TAGS": Object{
+	UpdateTagsKey: {
 		Type:   UPDATE,
 		Params: []string{"tags"},
 	},
