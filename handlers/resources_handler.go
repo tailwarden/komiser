@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
@@ -437,7 +438,7 @@ func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 
 	var resource models.Resource
 
-	err := handler.db.NewSelect().Model(&resource).Where("resource_id = ?", resourceId).Scan(handler.ctx)
+	_, err := repository.HandleQuery(handler.ctx, handler.db, "SELECT", &resource, [][3]string{{"resource_id", "=", resourceId}})
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
 	}
