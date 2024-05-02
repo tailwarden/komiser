@@ -444,7 +444,7 @@ func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 
 	var resource models.Resource
 
-	_, err := handler.repo.HandleQuery(c, repository.SELECT, &resource, [][3]string{{"resource_id", "=", resourceId}})
+	_, err := handler.repo.HandleQuery(c, repository.ListKey, &resource, [][3]string{{"resource_id", "=", resourceId}})
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
 	}

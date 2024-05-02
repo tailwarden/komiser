@@ -14,12 +14,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository"
 	"github.com/uptrace/bun/dialect"
 )
 
 func (handler *ApiHandler) DownloadInventoryCSV(c *gin.Context) {
 	resources := make([]models.Resource, 0)
-	_, err := handler.repo.HandleQuery(c, "LIST", &resources, [][3]string{})
+	_, err := handler.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("Could not read from DB")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "cloud not read from DB"})
@@ -37,7 +38,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(c *gin.Context) {
 	viewId := c.Param("viewId")
 
 	view := new(models.View)
-	_, err := handler.repo.HandleQuery(c, "LIST", view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
+	_, err := handler.repo.HandleQuery(c, repository.ListKey, view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
