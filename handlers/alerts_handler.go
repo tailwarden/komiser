@@ -2,13 +2,14 @@ package handlers
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository"
 )
 
 func (handler *ApiHandler) IsSlackEnabledHandler(c *gin.Context) {
@@ -33,7 +34,7 @@ func (handler *ApiHandler) NewAlertHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := handler.db.NewInsert().Model(&alert).Exec(context.Background())
+	result, err := handler.repo.HandleQuery(c, repository.InsertKey, &alert, nil)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -62,7 +63,7 @@ func (handler *ApiHandler) UpdateAlertHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = handler.db.NewUpdate().Model(&alert).Column("name", "type", "budget", "usage", "endpoint", "secret").Where("id = ?", alertId).Exec(handler.ctx)
+	_, err = handler.repo.HandleQuery(c, repository.UpdateAlertKey, &alert, [][3]string{{"id", "=", fmt.Sprint(alertId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -75,7 +76,7 @@ func (handler *ApiHandler) DeleteAlertHandler(c *gin.Context) {
 	alertId := c.Param("id")
 
 	alert := new(models.Alert)
-	_, err := handler.db.NewDelete().Model(alert).Where("id = ?", alertId).Exec(handler.ctx)
+	_, err := handler.repo.HandleQuery(c, repository.DeleteKey, alert, [][3]string{{"id", "=", fmt.Sprint(alertId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
