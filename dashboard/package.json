@@ -18,7 +18,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@formbricks/js": "^1.6.2",
+    "@formbricks/js": "^1.6.5",
     "@sentry/react": "^7.41.0",
     "@sentry/tracing": "^7.41.0",
     "@tippyjs/react": "^4.2.6",
