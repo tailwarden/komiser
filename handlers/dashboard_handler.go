@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
@@ -32,8 +31,8 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
-	
-	_, err := repository.HandleQuery(handler.ctx, handler.db, "REGION_RESOURCE_COUNT", &regions, [][3]string{})
+
+	_, err := handler.repo.HandleQuery(c, "REGION_RESOURCE_COUNT", &regions, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -41,8 +40,8 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 	resources := struct {
 		Count int `bun:"total" json:"total"`
 	}{}
-	
-	_, err = repository.HandleQuery(handler.ctx, handler.db, "RESOURCE_COUNT", &resources, [][3]string{})
+
+	_, err = handler.repo.HandleQuery(c, "RESOURCE_COUNT", &resources, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -51,7 +50,7 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		Sum float64 `bun:"sum" json:"total"`
 	}{}
 
-	_, err = repository.HandleQuery(handler.ctx, handler.db, "RESOURCE_COST_SUM", &cost, [][3]string{})
+	_, err = handler.repo.HandleQuery(c, "RESOURCE_COST_SUM", &cost, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -60,7 +59,7 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		Count int `bun:"count" json:"total"`
 	}{}
 
-	_, err = repository.HandleQuery(handler.ctx, handler.db, "REGION_RESOURCE_COUNT", &regions, [][3]string{})
+	_, err = handler.repo.HandleQuery(c, "REGION_RESOURCE_COUNT", &regions, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -144,7 +143,7 @@ func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, []models.OutputLocations{})
 		return
 	}
-	_, err := repository.HandleQuery(handler.ctx, handler.db, "LOCATION_BREAKDOWN_STAT", &groups, [][3]string{})
+	_, err := handler.repo.HandleQuery(c, "LOCATION_BREAKDOWN_STAT", &groups, [][3]string{})
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}

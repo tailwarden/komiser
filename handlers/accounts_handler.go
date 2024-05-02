@@ -11,7 +11,6 @@ import (
 	"github.com/go-co-op/gocron"
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
@@ -39,7 +38,7 @@ func (handler *ApiHandler) IsOnboardedHandler(c *gin.Context) {
 
 	accounts := make([]models.Account, 0)
 
-	_, err := repository.HandleQuery(handler.ctx, handler.db, "LIST", &accounts, nil)
+	_, err := handler.repo.HandleQuery(c, "LIST", &accounts, nil)
 	if err != nil {
 		log.WithError(err).Error("scan failed")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
@@ -63,7 +62,7 @@ func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 		return
 	}
 
-	_, err := repository.HandleQuery(handler.ctx, handler.db, "LIST", &accounts, nil)
+	_, err := handler.repo.HandleQuery(c, "LIST", &accounts, nil)
 	if err != nil {
 		log.WithError(err).Error("scan failed")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
@@ -75,7 +74,7 @@ func (handler *ApiHandler) ListCloudAccountsHandler(c *gin.Context) {
 			Total int `bun:"total" json:"total"`
 		}{}
 
-		_, err := repository.HandleQuery(handler.ctx, handler.db, "RESOURCE_COUNT", &output, [][3]string{{"provider", "=", account.Provider}, {"account", "=", account.Name}})
+		_, err := handler.repo.HandleQuery(c, "RESOURCE_COUNT", &output, [][3]string{{"provider", "=", account.Provider}, {"account", "=", account.Name}})
 		if err != nil {
 			fmt.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
@@ -108,7 +107,7 @@ func (handler *ApiHandler) NewCloudAccountHandler(c *gin.Context) {
 		unsavedAccounts = append(unsavedAccounts, account)
 	} else {
 
-		result, err := repository.HandleQuery(handler.ctx, handler.db, "INSERT", &account, nil)
+		result, err := handler.repo.HandleQuery(c, "INSERT", &account, nil)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -156,7 +155,7 @@ func (handler *ApiHandler) ReScanAccount(c *gin.Context) {
 
 	account := new(models.Account)
 	account.Status = "SCANNING"
-	res, err := repository.HandleQuery(handler.ctx, handler.db, "RE_SCAN_ACCOUNT", account, [][3]string{{"id", "=", accountId}, {"status", "=", "CONNECTED"}})
+	res, err := handler.repo.HandleQuery(c, "RE_SCAN_ACCOUNT", account, [][3]string{{"id", "=", accountId}, {"status", "=", "CONNECTED"}})
 	if err != nil {
 		log.Error("Couldn't set status", err)
 		return
@@ -173,7 +172,7 @@ func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 	accountId := c.Param("id")
 
 	account := new(models.Account)
-	_, err := repository.HandleQuery(handler.ctx, handler.db, "DELETE", account, [][3]string{{"id", "=", accountId}})
+	_, err := handler.repo.HandleQuery(c, "DELETE", account, [][3]string{{"id", "=", accountId}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -192,7 +191,7 @@ func (handler *ApiHandler) UpdateCloudAccountHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = repository.HandleQuery(handler.ctx, handler.db, "UPDATE_ACCOUNT", &account, [][3]string{{"id", "=", accountId}})
+	_, err = handler.repo.HandleQuery(c, "UPDATE_ACCOUNT", &account, [][3]string{{"id", "=", accountId}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

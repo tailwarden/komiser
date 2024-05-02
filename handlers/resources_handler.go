@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -19,12 +20,17 @@ import (
 
 type ApiHandler struct {
 	db         *bun.DB
+	repo       Repository
 	ctx        context.Context
 	telemetry  bool
 	cfg        models.Config
 	configPath string
 	analytics  utils.Analytics
 	accounts   []models.Account
+}
+
+type Repository interface {
+	HandleQuery(context.Context, repository.QueryType, interface{}, [][3]string) (sql.Result, error)
 }
 
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
@@ -438,7 +444,7 @@ func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 
 	var resource models.Resource
 
-	_, err := repository.HandleQuery(handler.ctx, handler.db, "SELECT", &resource, [][3]string{{"resource_id", "=", resourceId}})
+	_, err := handler.repo.HandleQuery(c, repository.SELECT, &resource, [][3]string{{"resource_id", "=", resourceId}})
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
 	}

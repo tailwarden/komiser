@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 )
 
 func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
@@ -22,7 +21,7 @@ func (handler *ApiHandler) BulkUpdateTagsHandler(c *gin.Context) {
 	resource := models.Resource{Tags: input.Tags}
 
 	for _, resourceId := range input.Resources {
-		_, err = repository.HandleQuery(handler.ctx, handler.db, "UPDATE_TAGS", &resource, [][3]string{{"id", "=", fmt.Sprint(resourceId)}})
+		_, err = handler.repo.HandleQuery(c, "UPDATE_TAGS", &resource, [][3]string{{"id", "=", fmt.Sprint(resourceId)}})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 			return
@@ -49,7 +48,7 @@ func (handler *ApiHandler) UpdateTagsHandler(c *gin.Context) {
 
 	resource := models.Resource{Tags: tags}
 
-	_, err = repository.HandleQuery(handler.ctx, handler.db, "UPDATE_TAGS", &resource, [][3]string{{"id", "=", fmt.Sprint(resourceId)}})
+	_, err = handler.repo.HandleQuery(c, "UPDATE_TAGS", &resource, [][3]string{{"id", "=", fmt.Sprint(resourceId)}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while updating tags"})
 		return

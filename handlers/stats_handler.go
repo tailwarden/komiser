@@ -18,7 +18,7 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
-	_, err := repository.HandleQuery(c, handler.db, repository.RegionResourceCountKey, &regions, nil)
+	_, err := handler.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -26,7 +26,7 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 	resources := struct {
 		Count int `bun:"total" json:"total"`
 	}{}
-	_, err = repository.HandleQuery(c, handler.db, repository.ResourceCountKey, &resources, nil)
+	_, err = handler.repo.HandleQuery(c, repository.ResourceCountKey, &resources, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -34,7 +34,7 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 	cost := struct {
 		Sum float64 `bun:"sum" json:"total"`
 	}{}
-	_, err = repository.HandleQuery(c, handler.db, repository.ResourceCostSumKey, &cost, nil)
+	_, err = handler.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -319,7 +319,7 @@ func (handler *ApiHandler) ListRegionsHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-	_, err := repository.HandleQuery(c, handler.db, repository.ListRegionsKey, &outputs, nil)
+	_, err := handler.repo.HandleQuery(c, repository.ListRegionsKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -344,7 +344,7 @@ func (handler *ApiHandler) ListProvidersHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-	_, err := repository.HandleQuery(c, handler.db, repository.ListProvidersKey, &outputs, nil)
+	_, err := handler.repo.HandleQuery(c, repository.ListProvidersKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -364,7 +364,7 @@ func (handler *ApiHandler) ListServicesHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-	_, err := repository.HandleQuery(c, handler.db, repository.ListServicesKey, &outputs, nil)
+	_, err := handler.repo.HandleQuery(c, repository.ListServicesKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -389,7 +389,7 @@ func (handler *ApiHandler) ListAccountsHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-	_, err := repository.HandleQuery(c, handler.db, repository.ListAccountsKey, &outputs, nil)
+	_, err := handler.repo.HandleQuery(c, repository.ListAccountsKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
