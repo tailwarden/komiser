@@ -9,7 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository"
 	"github.com/uptrace/bun/dialect"
 )
 
@@ -17,17 +18,15 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 	regions := struct {
 		Count int `bun:"count" json:"total"`
 	}{}
-
-	err := handler.db.NewRaw("SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp").Scan(handler.ctx, &regions)
+	_, err := handler.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
 	resources := struct {
-		Count int `bun:"count" json:"total"`
+		Count int `bun:"total" json:"total"`
 	}{}
-
-	err = handler.db.NewRaw("SELECT COUNT(*) as count FROM resources").Scan(handler.ctx, &resources)
+	_, err = handler.repo.HandleQuery(c, repository.ResourceCountKey, &resources, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -35,8 +34,7 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 	cost := struct {
 		Sum float64 `bun:"sum" json:"total"`
 	}{}
-
-	err = handler.db.NewRaw("SELECT SUM(cost) as sum FROM resources").Scan(handler.ctx, &cost)
+	_, err = handler.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -63,7 +61,7 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
-	var filters []Filter
+	var filters []models.Filter
 
 	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
@@ -321,8 +319,7 @@ func (handler *ApiHandler) ListRegionsHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-
-	err := handler.db.NewRaw("SELECT DISTINCT(region) FROM resources").Scan(handler.ctx, &outputs)
+	_, err := handler.repo.HandleQuery(c, repository.ListRegionsKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -347,8 +344,7 @@ func (handler *ApiHandler) ListProvidersHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-
-	err := handler.db.NewRaw("SELECT DISTINCT(provider) FROM resources").Scan(handler.ctx, &outputs)
+	_, err := handler.repo.HandleQuery(c, repository.ListProvidersKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -368,8 +364,7 @@ func (handler *ApiHandler) ListServicesHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-
-	err := handler.db.NewRaw("SELECT DISTINCT(service) FROM resources").Scan(handler.ctx, &outputs)
+	_, err := handler.repo.HandleQuery(c, repository.ListServicesKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -394,8 +389,7 @@ func (handler *ApiHandler) ListAccountsHandler(c *gin.Context) {
 	}
 
 	outputs := make([]Output, 0)
-
-	err := handler.db.NewRaw("SELECT DISTINCT(account) FROM resources").Scan(handler.ctx, &outputs)
+	_, err := handler.repo.HandleQuery(c, repository.ListAccountsKey, &outputs, nil)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
