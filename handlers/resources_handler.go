@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/tailwarden/komiser/controller"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
@@ -20,17 +20,13 @@ import (
 
 type ApiHandler struct {
 	db         *bun.DB
-	repo       Repository
+	ctrl       *controller.Controller
 	ctx        context.Context
 	telemetry  bool
 	cfg        models.Config
 	configPath string
 	analytics  utils.Analytics
 	accounts   []models.Account
-}
-
-type Repository interface {
-	HandleQuery(context.Context, repository.QueryType, interface{}, [][3]string) (sql.Result, error)
 }
 
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
