@@ -12,7 +12,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/controller"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
@@ -438,11 +437,10 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 	resourceId := c.Query("resourceId")
 
-	var resource models.Resource
-
-	_, err := handler.repo.HandleQuery(c, repository.ListKey, &resource, [][3]string{{"resource_id", "=", resourceId}})
+	resource, err := handler.ctrl.GetResource(c, resourceId)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
+		return
 	}
 
 	c.JSON(http.StatusOK, resource)
