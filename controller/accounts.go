@@ -7,17 +7,20 @@ import (
 	"github.com/tailwarden/komiser/repository"
 )
 
-type totalOutput struct {
-	Total int `bun:"total" json:"total"`
-}
-
 func (ctrl *Controller) ListAccounts(c context.Context) (accounts []models.Account, err error) {
 	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &accounts, nil)
 	return
 }
 
 func (ctrl *Controller) CountResources(c context.Context, provider, name string) (output totalOutput, err error) {
-	_, err = ctrl.repo.HandleQuery(c, repository.ResourceCountKey, &output, [][3]string{{"provider", "=", provider}, {"account", "=", name}})
+	conditions := [][3]string{}
+	if provider != "" {
+		conditions = append(conditions, [3]string{"provider", "=", provider})
+	}
+	if name != "" {
+		conditions = append(conditions, [3]string{"account", "=", name})
+	}
+	_, err = ctrl.repo.HandleQuery(c, repository.ResourceCountKey, &output, conditions)
 	return
 }
 

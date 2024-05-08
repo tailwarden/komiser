@@ -16,3 +16,18 @@ func (ctrl *Controller) ListResources(c context.Context) (resources []models.Res
 	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{})
 	return
 }
+
+func (ctrl *Controller) CountRegionsFromResources(c context.Context) (regions totalOutput, err error) {
+	_, err = ctrl.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, [][3]string{})
+	return
+}
+
+func (ctrl *Controller) CountRegionsFromAccounts(c context.Context) (accounts totalOutput, err error) {
+	_, err = ctrl.repo.HandleQuery(c, repository.AccountsResourceCountKey, &accounts, [][3]string{})
+	return
+}
+
+func (ctrl *Controller) SumResourceCost(c context.Context) (cost costOutput, err error) {
+	_, err = ctrl.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, [][3]string{})
+	return
+}

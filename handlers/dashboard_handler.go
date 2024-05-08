@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 )
@@ -29,38 +28,22 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		return
 	}
 
-	regions := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-
-	_, err := handler.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, [][3]string{})
+	regions, err := handler.ctrl.CountRegionsFromResources(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
-	resources := struct {
-		Count int `bun:"total" json:"total"`
-	}{}
-
-	_, err = handler.repo.HandleQuery(c, repository.ResourceCountKey, &resources, [][3]string{})
+	resources, err := handler.ctrl.CountResources(c, "", "")
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
-	cost := struct {
-		Sum float64 `bun:"sum" json:"total"`
-	}{}
-
-	_, err = handler.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, [][3]string{})
+	cost, err := handler.ctrl.SumResourceCost(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
-	accounts := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-
-	_, err = handler.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, [][3]string{})
+	accounts, err := handler.ctrl.CountRegionsFromAccounts(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -71,18 +54,18 @@ func (handler *ApiHandler) DashboardStatsHandler(c *gin.Context) {
 		Costs     float64 `json:"costs"`
 		Accounts  int     `json:"accounts"`
 	}{
-		Resources: resources.Count,
-		Regions:   regions.Count,
-		Costs:     cost.Sum,
-		Accounts:  accounts.Count,
+		Resources: resources.Total,
+		Regions:   regions.Total,
+		Costs:     cost.Total,
+		Accounts:  accounts.Total,
 	}
 
 	if handler.telemetry {
 		handler.analytics.TrackEvent("global_stats", map[string]interface{}{
-			"regions":   regions.Count,
-			"resources": resources.Count,
-			"accounts":  accounts.Count,
-			"cost":      cost.Sum,
+			"regions":   regions.Total,
+			"resources": resources.Total,
+			"accounts":  accounts.Total,
+			"cost":      cost.Total,
 		})
 	}
 
@@ -138,13 +121,12 @@ func (handler *ApiHandler) ResourcesBreakdownStatsHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
-	groups := make([]models.OutputResources, 0)
-
 	if handler.db == nil {
 		c.JSON(http.StatusInternalServerError, []models.OutputLocations{})
 		return
 	}
-	_, err := handler.repo.HandleQuery(c, repository.LocationBreakdownStatKey, &groups, [][3]string{})
+
+	groups, err := handler.ctrl.LocationStatsBreakdown(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -152,7 +134,6 @@ func (handler *ApiHandler) LocationBreakdownStatsHandler(c *gin.Context) {
 	locations := make([]models.OutputLocations, 0)
 
 	for _, group := range groups {
-
 		location := utils.GetLocationFromRegion(group.Label)
 
 		if location.Label != "" {
