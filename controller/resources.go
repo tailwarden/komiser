@@ -11,3 +11,8 @@ func (ctrl *Controller) GetResource(c context.Context, resourceId string) (resou
 	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resource, [][3]string{{"resource_id", "=", resourceId}})
 	return
 }
+
+func (ctrl *Controller) ListResources(c context.Context) (resources []models.Resource, err error) {
+	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{})
+	return
+}
