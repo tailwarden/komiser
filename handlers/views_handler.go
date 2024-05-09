@@ -2,14 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 )
 
 func (handler *ApiHandler) NewViewHandler(c *gin.Context) {
@@ -20,13 +17,12 @@ func (handler *ApiHandler) NewViewHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	result, err := handler.repo.HandleQuery(c, repository.InsertKey, &view, [][3]string{})
+	viewId, err := handler.ctrl.InsertView(c, view)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	viewId, _ := result.LastInsertId()
 	view.Id = viewId
 
 	if handler.telemetry {
@@ -37,9 +33,7 @@ func (handler *ApiHandler) NewViewHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) ListViewsHandler(c *gin.Context) {
-	views := make([]models.View, 0)
-
-	_, err := handler.repo.HandleQuery(c, repository.ListKey, &views, [][3]string{})
+	views, err := handler.ctrl.ListViews(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "scan failed"})
@@ -59,7 +53,7 @@ func (handler *ApiHandler) UpdateViewHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = handler.repo.HandleQuery(c, repository.UpdateViewKey, &view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
+	err = handler.ctrl.UpdateView(c, view, viewId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -71,8 +65,7 @@ func (handler *ApiHandler) UpdateViewHandler(c *gin.Context) {
 func (handler *ApiHandler) DeleteViewHandler(c *gin.Context) {
 	viewId := c.Param("id")
 
-	view := new(models.View)
-	_, err := handler.repo.HandleQuery(c, repository.DeleteKey, view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
+	err := handler.ctrl.DeleteView(c, viewId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -90,7 +83,8 @@ func (handler *ApiHandler) HideResourcesFromViewHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	_, err = handler.repo.HandleQuery(c, repository.UpdateViewExcludeKey, &view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
+
+	err = handler.ctrl.UpdateViewExclude(c, view, viewId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -108,7 +102,7 @@ func (handler *ApiHandler) UnhideResourcesFromViewHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	_, err = handler.repo.HandleQuery(c, repository.UpdateViewExcludeKey, &view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
+	err = handler.ctrl.UpdateViewExclude(c, view, viewId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -120,19 +114,17 @@ func (handler *ApiHandler) UnhideResourcesFromViewHandler(c *gin.Context) {
 func (handler *ApiHandler) ListHiddenResourcesHandler(c *gin.Context) {
 	viewId := c.Param("id")
 
-	view := new(models.View)
-	_, err := handler.repo.HandleQuery(c, repository.ListKey, &view, [][3]string{{"id", "=", fmt.Sprint(viewId)}})
+	view, err := handler.ctrl.GetView(c, viewId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	resources := make([]models.Resource, len(view.Exclude))
-
+	var resources []models.Resource
 	if len(view.Exclude) > 0 {
 		s, _ := json.Marshal(view.Exclude)
 
-		_, err = handler.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{{"id", "IN", strings.Trim(string(s), "[]")}})
+		resources, err = handler.ctrl.GetResources(c, string(s))
 		if err != nil {
 			logrus.WithError(err).Error("scan failed")
 		}
@@ -145,9 +137,7 @@ func (handler *ApiHandler) ListHiddenResourcesHandler(c *gin.Context) {
 func (handler *ApiHandler) ListViewAlertsHandler(c *gin.Context) {
 	viewId := c.Param("id")
 
-	alerts := make([]models.Alert, 0)
-
-	_, err := handler.repo.HandleQuery(c, repository.ListKey, &alerts, [][3]string{{"view_id", "=", fmt.Sprint(viewId)}})
+	alerts, err := handler.ctrl.ListViewAlerts(c, viewId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

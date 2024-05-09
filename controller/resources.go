@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"strings"
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/repository"
@@ -9,6 +10,11 @@ import (
 
 func (ctrl *Controller) GetResource(c context.Context, resourceId string) (resource models.Resource, err error) {
 	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resource, [][3]string{{"resource_id", "=", resourceId}})
+	return
+}
+
+func (ctrl *Controller) GetResources(c context.Context, idList string) (resources []models.Resource, err error) {
+	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{{"id", "IN", "(" + strings.Trim(idList, "[]") + ")"}})
 	return
 }
 
