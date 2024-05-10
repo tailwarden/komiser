@@ -17,11 +17,11 @@ func BenchmarkFetchResources(b *testing.B) {
 	ctx := context.TODO()
 	log.SetOutput(io.Discard)
 	analytics.Init()
-	cfg, clients, accounts, err := config.Load("/workspaces/komiser/config.toml", false, analytics, db)
+	cfg, clients, accounts, err := config.Load("/workspaces/komiser/config.toml", false, analytics)
 	if err != nil {
 		b.Fatalf("Error during config setup: %v", err)
 	}
-	err = setupDBConnection(cfg)
+	err = utils.SetupDBConnection(cfg, db)
 	if err != nil {
 		b.Fatalf("Error during DB setup: %v", err)
 	}
