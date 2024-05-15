@@ -12,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/controller"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository/sqlite"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
@@ -29,8 +30,10 @@ type ApiHandler struct {
 }
 
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
+	repo := sqlite.NewRepository(db)
 	handler := ApiHandler{
 		db:         db,
+		ctrl:       controller.New(repo),
 		ctx:        ctx,
 		telemetry:  telemetry,
 		cfg:        cfg,

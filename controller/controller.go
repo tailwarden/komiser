@@ -3,8 +3,6 @@ package controller
 import (
 	"context"
 	"database/sql"
-
-	"github.com/tailwarden/komiser/repository"
 )
 
 type totalOutput struct {
@@ -32,7 +30,7 @@ type accountOutput struct {
 }
 
 type Repository interface {
-	HandleQuery(context.Context, repository.QueryType, interface{}, [][3]string) (sql.Result, error)
+	HandleQuery(context.Context, string, interface{}, [][3]string) (sql.Result, error)
 }
 
 type Controller struct {
