@@ -16,33 +16,34 @@ import (
 	"github.com/uptrace/bun/migrate"
 )
 
-func SetupDBConnection(c *models.Config, db *bun.DB) error {
+func SetupDBConnection(c *models.Config) (*bun.DB, error) {
 	var sqldb *sql.DB
 	var err error
+	var db *bun.DB
 
 	if len(c.SQLite.File) == 0 && len(c.Postgres.URI) == 0 {
 		log.Println("Database wasn't configured yet")
-		return nil
+		return nil, nil
 	}
 
 	if len(c.SQLite.File) > 0 {
 		sqldb, err = sql.Open(sqliteshim.ShimName, fmt.Sprintf("file:%s?cache=shared", c.SQLite.File))
 		if err != nil {
-			return err
+			return nil, err
 		}
 		sqldb.SetMaxIdleConns(1000)
 		sqldb.SetConnMaxLifetime(0)
 
-		*db = *bun.NewDB(sqldb, sqlitedialect.New())
+		db = bun.NewDB(sqldb, sqlitedialect.New())
 
 		log.Println("Data will be stored in SQLite")
 	} else {
 		sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(c.Postgres.URI)))
-		*db = *bun.NewDB(sqldb, pgdialect.New())
+		db = bun.NewDB(sqldb, pgdialect.New())
 		log.Println("Data will be stored in PostgreSQL")
 	}
 
-	return nil
+	return db, nil
 }
 
 func SetupSchema(db *bun.DB, c *models.Config, accounts []models.Account) error {
