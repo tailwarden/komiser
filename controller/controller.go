@@ -33,7 +33,7 @@ type accountOutput struct {
 }
 
 type Repository interface {
-	HandleQuery(context.Context, repository.QueryType, interface{}, [][3]string) (sql.Result, error)
+	HandleQuery(context.Context, string, interface{}, [][3]string) (sql.Result, error)
 	GenerateFilterQuery(view models.View, queryTitle string, arguments []int64, queryParameter string) ([]string, error)
 }
 

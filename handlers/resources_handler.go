@@ -12,6 +12,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/controller"
 	"github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository/postgres"
+	"github.com/tailwarden/komiser/repository/sqlite"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
@@ -29,8 +31,16 @@ type ApiHandler struct {
 }
 
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
+	var repo controller.Repository
+	if db.Dialect().Name() == dialect.SQLite {
+		repo = sqlite.NewRepository(db)
+	} else {
+		repo = postgres.NewRepository(db)
+	}
+
 	handler := ApiHandler{
 		db:         db,
+		ctrl:       controller.New(repo),
 		ctx:        ctx,
 		telemetry:  telemetry,
 		cfg:        cfg,
