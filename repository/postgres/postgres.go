@@ -1,4 +1,4 @@
-package sql
+package postgres
 
 import (
 	"context"
@@ -9,11 +9,12 @@ import (
 )
 
 type Repository struct {
-	db *bun.DB
+	db      *bun.DB
+	queries map[string]repository.Object
 }
 
 func NewRepository(db *bun.DB) *Repository {
-	return &Repository{db: db}
+	return &Repository{db: db, queries: Queries}
 }
 
 var Queries = map[string]repository.Object{
