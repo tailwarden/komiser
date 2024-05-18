@@ -160,7 +160,7 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 	filterWithTags := false
 	for _, filter := range view.Filters {
 		switch filter.Field {
-		case "account", "resource", "provider", "name", "region":
+		case "account", "resource", "service", "provider", "name", "region":
 			query, err := generateStandardFilterQuery(filter, false)
 			if err != nil {
 				return nil, err
@@ -178,13 +178,6 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 				return nil, err
 			}
 			whereQueries = append(whereQueries, query)
-		case "tags:":
-			filterWithTags = true
-			query, err := generateStandardFilterQuery(filter, true)
-			if err != nil {
-				return nil, err
-			}
-			whereQueries = append(whereQueries, query)
 		case "tags":
 			query, err := generateEmptyFilterQuery(filter)
 			if err != nil {
@@ -192,13 +185,33 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 			}
 			whereQueries = append(whereQueries, query)
 		default:
-			return nil, fmt.Errorf("unsupported field: %s", filter.Field)
+			if strings.HasPrefix(filter.Field, "tag:") {
+				filterWithTags = true
+				query, err := generateStandardFilterQuery(filter, true)
+				if err != nil {
+					return nil, err
+				}
+				whereQueries = append(whereQueries, query)
+			} else {
+				return nil, fmt.Errorf("unsupported field: %s", filter.Field)
+			}
 		}
 	}
 
 	whereClause := strings.Join(whereQueries, " AND ")
 	return queryBuilderWithFilter(view, queryTitle, arguments, queryParameter, filterWithTags, whereClause), nil
 }
+
+func (repo *Repository) UpdateQuery(query, queryTitle string) error {
+	obj, exists := repo.queries[queryTitle]
+    if !exists {
+        return fmt.Errorf("queryTitle %s not found in repository", queryTitle)
+    }
+    obj.Query = query
+    repo.queries[queryTitle] = obj
+
+    return nil
+} 
 
 func queryBuilderWithFilter(view models.View,  queryTitle string, arguments []int64, query string, withTags bool, whereClause string) []string {
 	searchQuery := []string{}
@@ -267,18 +280,21 @@ func generateEmptyFilterQuery(filter models.Filter) (string, error) {
 }
 
 func generateStandardFilterQuery(filter models.Filter, withTag bool) (string, error) {
-	for i := 0; i < len(filter.Values); i++ {
-		filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
-	}
 	key := strings.ReplaceAll(filter.Field, "tag:", "")
 	switch filter.Operator {
 	case "IS":
+		for i := 0; i < len(filter.Values); i++ {
+			filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+		}
 		if withTag {
 			query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' IN (%s)))", key, strings.Join(filter.Values, ","))
 			return query, nil
 		}
 		return fmt.Sprintf("(%s IN (%s))", filter.Field, strings.Join(filter.Values, ",")), nil
 	case "IS_NOT":
+		for i := 0; i < len(filter.Values); i++ {
+			filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
+		}
 		if withTag {
 			query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' NOT IN (%s)))", key, strings.Join(filter.Values, ","))
 			return query, nil

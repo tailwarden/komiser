@@ -5,7 +5,6 @@ import (
 	"database/sql"
 
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 )
 
 type totalOutput struct {
@@ -35,6 +34,7 @@ type accountOutput struct {
 type Repository interface {
 	HandleQuery(context.Context, string, interface{}, [][3]string) (sql.Result, error)
 	GenerateFilterQuery(view models.View, queryTitle string, arguments []int64, queryParameter string) ([]string, error)
+	UpdateQuery(query, queryTitle string) error
 }
 
 type Controller struct {

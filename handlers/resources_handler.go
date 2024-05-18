@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/controller"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/repository/postgres"
@@ -53,11 +52,13 @@ func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytic
 
 func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	var filters []models.Filter
+	resources := make([]models.Resource, 0)
 
 	limitRaw := c.Query("limit")
 	skipRaw := c.Query("skip")
 	query := c.Query("query")
 	viewId := c.Query("view")
+	queryParameter := query
 
 	view := new(models.View)
 	if viewId != "" {
@@ -89,229 +90,12 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	filterWithTags := false
-	whereQueries := make([]string, 0)
-	for _, filter := range filters {
-		if filter.Field == "name" || filter.Field == "region" || filter.Field == "service" || filter.Field == "provider" || filter.Field == "account" {
-			switch filter.Operator {
-			case "IS":
-				for i := 0; i < len(filter.Values); i++ {
-					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
-				}
-				query := fmt.Sprintf("(%s IN (%s))", filter.Field, strings.Join(filter.Values, ","))
-				whereQueries = append(whereQueries, query)
-			case "IS_NOT":
-				for i := 0; i < len(filter.Values); i++ {
-					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
-				}
-				query := fmt.Sprintf("(%s NOT IN (%s))", filter.Field, strings.Join(filter.Values, ","))
-				whereQueries = append(whereQueries, query)
-			case "CONTAINS":
-				queries := make([]string, 0)
-				specialChar := "%"
-				for i := 0; i < len(filter.Values); i++ {
-					queries = append(queries, fmt.Sprintf("(%s LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
-				}
-				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " OR ")))
-			case "NOT_CONTAINS":
-				queries := make([]string, 0)
-				specialChar := "%"
-				for i := 0; i < len(filter.Values); i++ {
-					queries = append(queries, fmt.Sprintf("(%s NOT LIKE '%s%s%s')", filter.Field, specialChar, filter.Values[i], specialChar))
-				}
-				whereQueries = append(whereQueries, fmt.Sprintf("(%s)", strings.Join(queries, " AND ")))
-			case "IS_EMPTY":
-				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') = ''))", filter.Field))
-			case "IS_NOT_EMPTY":
-				whereQueries = append(whereQueries, fmt.Sprintf("((coalesce(%s, '') != ''))", filter.Field))
-			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
-			}
-		} else if strings.HasPrefix(filter.Field, "tag:") {
-			filterWithTags = true
-			key := strings.ReplaceAll(filter.Field, "tag:", "")
-			switch filter.Operator {
-			case "CONTAINS":
-			case "IS":
-				for i := 0; i < len(filter.Values); i++ {
-					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
-				}
-				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' IN (%s)))", key, strings.Join(filter.Values, ","))
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') IN (%s)))", key, strings.Join(filter.Values, ","))
-				}
-				whereQueries = append(whereQueries, query)
-			case "NOT_CONTAINS":
-			case "IS_NOT":
-				for i := 0; i < len(filter.Values); i++ {
-					filter.Values[i] = fmt.Sprintf("'%s'", filter.Values[i])
-				}
-				query := fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' NOT IN (%s)))", key, strings.Join(filter.Values, ","))
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					query = fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') NOT IN (%s)))", key, strings.Join(filter.Values, ","))
-				}
-				whereQueries = append(whereQueries, query)
-			case "IS_EMPTY":
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') = ''))", key))
-				} else {
-					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' = ''))", key))
-				}
-			case "IS_NOT_EMPTY":
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s') AND (json_extract(value, '$.value') != ''))", key))
-				} else {
-					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s') AND (res->>'value' != ''))", key))
-				}
-			case "EXISTS":
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					whereQueries = append(whereQueries, fmt.Sprintf("((json_extract(value, '$.key') = '%s'))", key))
-				} else {
-					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' = '%s'))", key))
-				}
-			case "NOT_EXISTS":
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					whereQueries = append(whereQueries, fmt.Sprintf(`(NOT EXISTS (SELECT 1 FROM json_each(resources.tags) WHERE (json_extract(value, '$.key') = '%s')))`, key))
-				} else {
-					whereQueries = append(whereQueries, fmt.Sprintf("((res->>'key' != '%s'))", key))
-				}
-			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
-			}
-		} else if filter.Field == "tags" {
-			switch filter.Operator {
-			case "IS_EMPTY":
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					whereQueries = append(whereQueries, "json_array_length(tags) = 0")
-				} else {
-					whereQueries = append(whereQueries, "jsonb_array_length(tags) = 0")
-				}
-			case "IS_NOT_EMPTY":
-				if handler.db.Dialect().Name() == dialect.SQLite {
-					whereQueries = append(whereQueries, "json_array_length(tags) != 0")
-				} else {
-					whereQueries = append(whereQueries, "jsonb_array_length(tags) != 0")
-				}
-			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "operation is invalid or not supported"})
-				return
-			}
-		} else if filter.Field == "cost" {
-			switch filter.Operator {
-			case "EQUAL":
-				cost, err := strconv.ParseFloat(filter.Values[0], 64)
-				if err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
-					return
-				}
-				whereQueries = append(whereQueries, fmt.Sprintf("(cost = %f)", cost))
-			case "BETWEEN":
-				min, err := strconv.ParseFloat(filter.Values[0], 64)
-				if err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
-					return
-				}
-				max, err := strconv.ParseFloat(filter.Values[1], 64)
-				if err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
-					return
-				}
-				whereQueries = append(whereQueries, fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max))
-			case "GREATER_THAN":
-				cost, err := strconv.ParseFloat(filter.Values[0], 64)
-				if err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
-					return
-				}
-				whereQueries = append(whereQueries, fmt.Sprintf("(cost > %f)", cost))
-			case "LESS_THAN":
-				cost, err := strconv.ParseFloat(filter.Values[0], 64)
-				if err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
-					return
-				}
-				whereQueries = append(whereQueries, fmt.Sprintf("(cost < %f)", cost))
-			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "value should be a number"})
-				return
-			}
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "field is invalid or not supported"})
-			return
-		}
-	}
-
-	if len(query) > 0 {
-		clause := fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (tags LIKE '%%%s%%'))", query, query, query, query, query, query)
-		whereQueries = append(whereQueries, clause)
-	}
-
-	whereClause := strings.Join(whereQueries, " AND ")
-
-	resources := make([]models.Resource, 0)
-
-	if len(filters) == 0 {
-		if len(query) > 0 {
-			whereClause := fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (tags LIKE '%%%s%%'))", query, query, query, query, query, query)
-			searchQuery := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
-
-			if handler.db.Dialect().Name() == dialect.PG {
-				whereClause = fmt.Sprintf("(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (value->>'key' LIKE '%%%s%%') OR (value->>'value' LIKE '%%%s%%'))", query, query, query, query, query, query, query)
-				searchQuery = fmt.Sprintf("SELECT * FROM resources CROSS JOIN jsonb_array_elements(tags) WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
-			}
-
-			err = handler.db.NewRaw(searchQuery).Scan(handler.ctx, &resources)
-			if err != nil {
-				logrus.WithError(err).Error("scan failed")
-			}
-		} else {
-			err = handler.db.NewRaw(fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)).Scan(handler.ctx, &resources)
-			if err != nil {
-				logrus.WithError(err).Error("scan failed")
-			}
-		}
-		c.JSON(http.StatusOK, resources)
+	view.Filters = filters
+	resources, err = handler.ctrl.ResourceWithFilter(c, *view, []int64{limit, skip}, queryParameter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
-	}
-
-	if filterWithTags {
-		query := fmt.Sprintf("SELECT DISTINCT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
-		if len(view.Exclude) > 0 {
-			s, _ := json.Marshal(view.Exclude)
-			query = fmt.Sprintf("SELECT DISTINCT id, resource_id, provider, account, service, region, name, created_at, fetched_at,cost, metadata, tags,link FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
-		}
-		if handler.db.Dialect().Name() == dialect.SQLite {
-			query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", whereClause, limit, skip)
-			if len(view.Exclude) > 0 {
-				s, _ := json.Marshal(view.Exclude)
-				query = fmt.Sprintf("SELECT DISTINCT resources.id, resources.resource_id, resources.provider, resources.account, resources.service, resources.region, resources.name, resources.created_at, resources.fetched_at, resources.cost, resources.metadata, resources.tags, resources.link FROM resources CROSS JOIN json_each(tags) WHERE resources.id NOT IN (%s) AND type='object' AND %s ORDER BY resources.id LIMIT %d OFFSET %d", strings.Trim(string(s), "[]"), whereClause, limit, skip)
-			}
-		}
-		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
-		if err != nil {
-			logrus.WithError(err).Error("scan failed")
-		}
-	} else {
-		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id LIMIT %d OFFSET %d", whereClause, limit, skip)
-
-		if whereClause == "" {
-			query = fmt.Sprintf("SELECT * FROM resources ORDER BY id LIMIT %d OFFSET %d", limit, skip)
-		}
-
-		if len(view.Exclude) > 0 {
-			s, _ := json.Marshal(view.Exclude)
-			query = fmt.Sprintf("SELECT * FROM resources WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d", whereClause, strings.Trim(string(s), "[]"), limit, skip)
-		}
-
-		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-	}
+	}		 
 	c.JSON(http.StatusOK, resources)
 }
 
