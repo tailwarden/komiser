@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/repository"
@@ -14,6 +15,7 @@ import (
 )
 
 type Repository struct {
+	mu    sync.RWMutex
 	db      *bun.DB
 	queries map[string]repository.Object
 }
@@ -132,11 +134,13 @@ var Queries = map[string]repository.Object{
 func (repo *Repository) HandleQuery(ctx context.Context, queryTitle string, schema interface{}, conditions [][3]string) (sql.Result, error) {
 	var resp sql.Result
 	var err error
+	repo.mu.RLock()
 	query, ok := Queries[queryTitle]
+	repo.mu.RUnlock()
 	if !ok {
 		return nil, repository.ErrQueryNotFound
 	}
-	switch query.Type {
+ 	switch query.Type {
 	case repository.RAW:
 		err = repository.ExecuteRaw(ctx, repo.db, query.Query, schema, conditions)
 
@@ -203,20 +207,27 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 }
 
 func (repo *Repository) UpdateQuery(query, queryTitle string) error {
+	
+	repo.mu.RLock()
 	obj, exists := repo.queries[queryTitle]
-    if !exists {
+	repo.mu.RUnlock()
+    if !exists {	
         return fmt.Errorf("queryTitle %s not found in repository", queryTitle)
     }
-
-    obj.Query = query
+	repo.mu.Lock()
+	obj.Query = query
     repo.queries[queryTitle] = obj
+	repo.mu.Unlock()
 
     return nil
 } 
 
 func queryBuilderWithFilter(view models.View,  queryTitle string, arguments []int64, query string, withTags bool, whereClause string) []string {
 	searchQuery := []string{}
-	limit, skip := arguments[0], arguments[1]
+	var limit, skip int64
+	if len(arguments) >= 2 {
+		limit, skip = arguments[0], arguments[1]
+	} 
 	if len(view.Filters) == 0  {
 		switch queryTitle {
 		case repository.ListRelationWithFilter:

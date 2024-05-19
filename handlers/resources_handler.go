@@ -108,6 +108,9 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 		return
 	}
 
+	view := new(models.View)
+	view.Filters = filters
+
 	whereQueries := make([]string, 0)
 	for _, filter := range filters {
 		if filter.Field == "region" || filter.Field == "service" || filter.Field == "provider" {
@@ -213,6 +216,13 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	output, err = handler.ctrl.RelationWithFilter(c, *view, []int64{}, "")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	out := make([]models.OutputRelationResponse, 0)
 	for _, ele := range output {
 		out = append(out, models.OutputRelationResponse{
