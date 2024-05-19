@@ -57,3 +57,21 @@ func (ctrl *Controller) ResourceWithFilter(c context.Context, view models.View, 
 	}
 	return
 }
+
+func (ctrl *Controller) RelationWithFilter(c context.Context, view models.View, arguments []int64, queryParameter string) (resources []models.Resource, err error) {
+	resources = make([]models.Resource, 0)
+	queries, err := ctrl.repo.GenerateFilterQuery(view, repository.ListResourceWithFilter, arguments, queryParameter)
+	if err != nil {
+		return
+	}
+	for _, query := range queries {
+		if err = ctrl.repo.UpdateQuery(query, repository.ListResourceWithFilter); err != nil {
+			return
+		}
+		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{})
+		if err != nil {
+			return
+		}
+	}
+	return
+}
