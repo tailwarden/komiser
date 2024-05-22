@@ -68,8 +68,8 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 		Regions   int     `json:"regions"`
 		Costs     float64 `json:"costs"`
 	}{
-		Resources: resourceCount.Count,
-		Regions:   regionCount.Count,
+		Resources: resourceCount.Total,
+		Regions:   regionCount.Total,
 		Costs:     costCount.Total,
 	}
 

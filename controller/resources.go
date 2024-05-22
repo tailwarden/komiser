@@ -9,34 +9,34 @@ import (
 )
 
 func (ctrl *Controller) GetResource(c context.Context, resourceId string) (resource models.Resource, err error) {
-	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resource, [][3]string{{"resource_id", "=", resourceId}})
+	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resource, [][3]string{{"resource_id", "=", resourceId}}, "")
 	return
 }
 
 func (ctrl *Controller) GetResources(c context.Context, idList string) (resources []models.Resource, err error) {
 	resources = make([]models.Resource, 0)
-	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{{"id", "IN", "(" + strings.Trim(idList, "[]") + ")"}})
+	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{{"id", "IN", "(" + strings.Trim(idList, "[]") + ")"}}, "")
 	return
 }
 
 func (ctrl *Controller) ListResources(c context.Context) (resources []models.Resource, err error) {
 	resources = make([]models.Resource, 0)
-	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{})
+	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &resources, [][3]string{}, "")
 	return
 }
 
 func (ctrl *Controller) CountRegionsFromResources(c context.Context) (regions totalOutput, err error) {
-	_, err = ctrl.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, [][3]string{})
+	_, err = ctrl.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, [][3]string{}, "")
 	return
 }
 
 func (ctrl *Controller) CountRegionsFromAccounts(c context.Context) (accounts totalOutput, err error) {
-	_, err = ctrl.repo.HandleQuery(c, repository.AccountsResourceCountKey, &accounts, [][3]string{})
+	_, err = ctrl.repo.HandleQuery(c, repository.AccountsResourceCountKey, &accounts, [][3]string{}, "")
 	return
 }
 
 func (ctrl *Controller) SumResourceCost(c context.Context) (cost costOutput, err error) {
-	_, err = ctrl.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, [][3]string{})
+	_, err = ctrl.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, [][3]string{}, "")
 	return
 }
 
@@ -50,7 +50,7 @@ func (ctrl *Controller) ResourceWithFilter(c context.Context, view models.View, 
 		if err = ctrl.repo.UpdateQuery(query, repository.ListResourceWithFilter); err != nil {
 			return
 		}
-		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{})
+		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{}, "")
 		if err != nil {
 			return
 		}
@@ -65,10 +65,7 @@ func (ctrl *Controller) RelationWithFilter(c context.Context, view models.View, 
 		return
 	}
 	for _, query := range queries {
-		if err = ctrl.repo.UpdateQuery(query, repository.ListResourceWithFilter); err != nil {
-			return
-		}
-		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{})
+		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{}, query)
 		if err != nil {
 			return
 		}

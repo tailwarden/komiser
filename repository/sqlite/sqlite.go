@@ -63,11 +63,11 @@ var Queries = map[string]repository.Object{
 		Type:  repository.RAW,
 	},
 	repository.AccountsResourceCountKey: {
-		Query: "SELECT COUNT(*) as count FROM (SELECT DISTINCT account FROM resources) AS temp",
+		Query: "SELECT COUNT(*) as total FROM (SELECT DISTINCT account FROM resources)",
 		Type:  repository.RAW,
 	},
 	repository.RegionResourceCountKey: {
-		Query: "SELECT COUNT(*) as total FROM (SELECT DISTINCT region FROM resources) AS temp",
+		Query: "SELECT COUNT(*) as total FROM (SELECT DISTINCT region FROM resources)",
 		Type:  repository.RAW,
 	},
 	repository.FilterResourceCountKey: {
@@ -121,17 +121,17 @@ var Queries = map[string]repository.Object{
 		Type: repository.RAW,
 		Query: "",
 		Params: []string{
-			"SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s) AS temp",
-			"SELECT COUNT(*) as count FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s",
+			"SELECT COUNT(*) as total FROM (SELECT DISTINCT region FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s) AS temp",
+			"SELECT COUNT(*) as total FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s",
 			"SELECT SUM(cost) as sum FROM resources CROSS JOIN json_each(tags) WHERE type='object' AND %s",
-			"SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources WHERE %s) AS temp",
-			"SELECT COUNT(*) as count FROM resources WHERE %s",
+			"SELECT COUNT(*) as total FROM (SELECT DISTINCT region FROM resources WHERE %s) AS temp",
+			"SELECT COUNT(*) as total FROM resources WHERE %s",
 			"SELECT SUM(cost) as sum FROM resources WHERE %s",
 		},
 	},
 }
 
-func (repo *Repository) HandleQuery(ctx context.Context, queryTitle string, schema interface{}, conditions [][3]string) (sql.Result, error) {
+func (repo *Repository) HandleQuery(ctx context.Context, queryTitle string, schema interface{}, conditions [][3]string, rawQuery string) (sql.Result, error) {
 	var resp sql.Result
 	var err error
 	repo.mu.RLock()
@@ -142,7 +142,11 @@ func (repo *Repository) HandleQuery(ctx context.Context, queryTitle string, sche
 	}
  	switch query.Type {
 	case repository.RAW:
-		err = repository.ExecuteRaw(ctx, repo.db, query.Query, schema, conditions)
+		if rawQuery != "" && query.Query == "" {
+			err = repository.ExecuteRaw(ctx, repo.db, rawQuery, schema, conditions)	
+		} else {
+			err = repository.ExecuteRaw(ctx, repo.db, query.Query, schema, conditions)
+		}
 
 	case repository.SELECT:
 		err = repository.ExecuteSelect(ctx, repo.db, schema, conditions)
