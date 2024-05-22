@@ -210,22 +210,6 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 	return queryBuilderWithFilter(view, queryTitle, arguments, queryParameter, filterWithTags, whereClause), nil
 }
 
-func (repo *Repository) UpdateQuery(query, queryTitle string) error {
-	
-	repo.mu.RLock()
-	obj, exists := repo.queries[queryTitle]
-	repo.mu.RUnlock()
-    if !exists {	
-        return fmt.Errorf("queryTitle %s not found in repository", queryTitle)
-    }
-	repo.mu.Lock()
-	obj.Query = query
-    repo.queries[queryTitle] = obj
-	repo.mu.Unlock()
-
-    return nil
-} 
-
 func queryBuilderWithFilter(view models.View,  queryTitle string, arguments []int64, query string, withTags bool, whereClause string) []string {
 	searchQuery := []string{}
 	limit, skip := arguments[0], arguments[1]

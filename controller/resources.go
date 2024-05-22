@@ -47,10 +47,7 @@ func (ctrl *Controller) ResourceWithFilter(c context.Context, view models.View, 
 		return
 	}
 	for _, query := range queries {
-		if err = ctrl.repo.UpdateQuery(query, repository.ListResourceWithFilter); err != nil {
-			return
-		}
-		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{}, "")
+		_, err = ctrl.repo.HandleQuery(c, repository.ListResourceWithFilter, &resources, [][3]string{}, query)
 		if err != nil {
 			return
 		}

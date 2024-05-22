@@ -34,7 +34,6 @@ type accountOutput struct {
 type Repository interface {
 	HandleQuery(context.Context, string, interface{}, [][3]string, string) (sql.Result, error)
 	GenerateFilterQuery(view models.View, queryTitle string, arguments []int64, queryParameter string) ([]string, error)
-	UpdateQuery(query, queryTitle string) error
 }
 
 type Controller struct {
