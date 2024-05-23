@@ -50,7 +50,6 @@ func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytic
 
 func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 	var filters []models.Filter
-	resources := make([]models.Resource, 0)
 
 	limitRaw := c.Query("limit")
 	skipRaw := c.Query("skip")
@@ -89,7 +88,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 		return
 	}
 	view.Filters = filters
-	resources, err = handler.ctrl.ResourceWithFilter(c, *view, []int64{limit, skip}, queryParameter)
+	resources, err := handler.ctrl.ResourceWithFilter(c, *view, []int64{limit, skip}, queryParameter)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
