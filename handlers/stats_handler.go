@@ -10,31 +10,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
-	"github.com/tailwarden/komiser/repository"
 	"github.com/uptrace/bun/dialect"
 )
 
 func (handler *ApiHandler) StatsHandler(c *gin.Context) {
-	regions := struct {
-		Count int `bun:"count" json:"total"`
-	}{}
-	_, err := handler.repo.HandleQuery(c, repository.RegionResourceCountKey, &regions, nil)
+	regions, err := handler.ctrl.CountRegionsFromResources(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
-	resources := struct {
-		Count int `bun:"total" json:"total"`
-	}{}
-	_, err = handler.repo.HandleQuery(c, repository.ResourceCountKey, &resources, nil)
+	resources, err := handler.ctrl.CountResources(c, "", "")
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
-	cost := struct {
-		Sum float64 `bun:"sum" json:"total"`
-	}{}
-	_, err = handler.repo.HandleQuery(c, repository.ResourceCostSumKey, &cost, nil)
+	cost, err := handler.ctrl.SumResourceCost(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
@@ -44,16 +34,16 @@ func (handler *ApiHandler) StatsHandler(c *gin.Context) {
 		Regions   int     `json:"regions"`
 		Costs     float64 `json:"costs"`
 	}{
-		Resources: resources.Count,
-		Regions:   regions.Count,
-		Costs:     cost.Sum,
+		Resources: resources.Total,
+		Regions:   regions.Total,
+		Costs:     cost.Total,
 	}
 
 	if handler.telemetry {
 		handler.analytics.TrackEvent("global_stats", map[string]interface{}{
-			"costs":     cost.Sum,
-			"regions":   regions.Count,
-			"resources": resources.Count,
+			"costs":     cost.Total,
+			"regions":   regions.Total,
+			"resources": resources.Total,
 		})
 	}
 
@@ -314,18 +304,12 @@ func (handler *ApiHandler) FilterStatsHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) ListRegionsHandler(c *gin.Context) {
-	type Output struct {
-		Region string `bun:"region" json:"region"`
-	}
-
-	outputs := make([]Output, 0)
-	_, err := handler.repo.HandleQuery(c, repository.ListRegionsKey, &outputs, nil)
+	outputs, err := handler.ctrl.ListRegions(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
 	regions := make([]string, 0)
-
 	for _, o := range outputs {
 		regions = append(regions, o.Region)
 	}
@@ -334,23 +318,17 @@ func (handler *ApiHandler) ListRegionsHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) ListProvidersHandler(c *gin.Context) {
-	type Output struct {
-		Provider string `bun:"provider" json:"provider"`
-	}
-
 	if handler.db == nil {
 		c.JSON(http.StatusInternalServerError, []string{})
 		return
 	}
 
-	outputs := make([]Output, 0)
-	_, err := handler.repo.HandleQuery(c, repository.ListProvidersKey, &outputs, nil)
+	outputs, err := handler.ctrl.ListProviders(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
 	providers := make([]string, 0)
-
 	for _, o := range outputs {
 		providers = append(providers, o.Provider)
 	}
@@ -359,18 +337,12 @@ func (handler *ApiHandler) ListProvidersHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) ListServicesHandler(c *gin.Context) {
-	type Output struct {
-		Service string `bun:"service" json:"service"`
-	}
-
-	outputs := make([]Output, 0)
-	_, err := handler.repo.HandleQuery(c, repository.ListServicesKey, &outputs, nil)
+	outputs, err := handler.ctrl.ListServices(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}
 
 	services := make([]string, 0)
-
 	for _, o := range outputs {
 		services = append(services, o.Service)
 	}
@@ -379,17 +351,12 @@ func (handler *ApiHandler) ListServicesHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) ListAccountsHandler(c *gin.Context) {
-	type Output struct {
-		Account string `bun:"account" json:"account"`
-	}
-
 	if handler.db == nil {
 		c.JSON(http.StatusInternalServerError, []string{})
 		return
 	}
 
-	outputs := make([]Output, 0)
-	_, err := handler.repo.HandleQuery(c, repository.ListAccountsKey, &outputs, nil)
+	outputs, err := handler.ctrl.ListAccountNames(c)
 	if err != nil {
 		logrus.WithError(err).Error("scan failed")
 	}

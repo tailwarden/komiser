@@ -1,4 +1,4 @@
-package sql
+package postgres
 
 import (
 	"context"
@@ -9,11 +9,12 @@ import (
 )
 
 type Repository struct {
-	db *bun.DB
+	db      *bun.DB
+	queries map[string]repository.Object
 }
 
 func NewRepository(db *bun.DB) *Repository {
-	return &Repository{db: db}
+	return &Repository{db: db, queries: Queries}
 }
 
 var Queries = map[string]repository.Object{
@@ -59,7 +60,7 @@ var Queries = map[string]repository.Object{
 		Type:  repository.RAW,
 	},
 	repository.RegionResourceCountKey: {
-		Query: "SELECT COUNT(*) as count FROM (SELECT DISTINCT region FROM resources) AS temp",
+		Query: "SELECT COUNT(*) as total FROM (SELECT DISTINCT region FROM resources) AS temp",
 		Type:  repository.RAW,
 	},
 	repository.FilterResourceCountKey: {
