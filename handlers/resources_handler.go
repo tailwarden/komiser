@@ -10,45 +10,56 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/tailwarden/komiser/controller"
 	"github.com/tailwarden/komiser/models"
-	. "github.com/tailwarden/komiser/models"
+	"github.com/tailwarden/komiser/repository/postgres"
+	"github.com/tailwarden/komiser/repository/sqlite"
 	"github.com/tailwarden/komiser/utils"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect"
 )
 
 type ApiHandler struct {
-	db        *bun.DB
-	ctx       context.Context
-	telemetry bool
-	cfg       models.Config
+	db         *bun.DB
+	ctrl       *controller.Controller
+	ctx        context.Context
+	telemetry  bool
+	cfg        models.Config
 	configPath string
-	analytics utils.Analytics
-	accounts  []models.Account
+	analytics  utils.Analytics
+	accounts   []models.Account
 }
 
 func NewApiHandler(ctx context.Context, telemetry bool, analytics utils.Analytics, db *bun.DB, cfg models.Config, configPath string, accounts []models.Account) *ApiHandler {
+	var repo controller.Repository
+	if db.Dialect().Name() == dialect.SQLite {
+		repo = sqlite.NewRepository(db)
+	} else {
+		repo = postgres.NewRepository(db)
+	}
+
 	handler := ApiHandler{
-		db:        db,
-		ctx:       ctx,
-		telemetry: telemetry,
-		cfg:       cfg,
+		db:         db,
+		ctrl:       controller.New(repo),
+		ctx:        ctx,
+		telemetry:  telemetry,
+		cfg:        cfg,
 		configPath: configPath,
-		analytics: analytics,
-		accounts:  accounts,
+		analytics:  analytics,
+		accounts:   accounts,
 	}
 	return &handler
 }
 
 func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
-	var filters []Filter
+	var filters []models.Filter
 
 	limitRaw := c.Query("limit")
 	skipRaw := c.Query("skip")
 	query := c.Query("query")
 	viewId := c.Query("view")
 
-	view := new(View)
+	view := new(models.View)
 	if viewId != "" {
 		err := handler.db.NewSelect().Model(view).Where("id = ?", viewId).Scan(handler.ctx)
 		if err != nil {
@@ -240,7 +251,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 
 	whereClause := strings.Join(whereQueries, " AND ")
 
-	resources := make([]Resource, 0)
+	resources := make([]models.Resource, 0)
 
 	if len(filters) == 0 {
 		if len(query) > 0 {
@@ -305,7 +316,7 @@ func (handler *ApiHandler) FilterResourcesHandler(c *gin.Context) {
 }
 
 func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
-	var filters []Filter
+	var filters []models.Filter
 
 	err := json.NewDecoder(c.Request.Body).Decode(&filters)
 	if err != nil {
@@ -428,7 +439,7 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 			Provider:   ele.Provider,
 		})
 	}
-	
+
 	c.JSON(http.StatusOK, out)
 
 }
@@ -436,11 +447,10 @@ func (handler *ApiHandler) RelationStatsHandler(c *gin.Context) {
 func (handler *ApiHandler) GetResourceByIdHandler(c *gin.Context) {
 	resourceId := c.Query("resourceId")
 
-	var resource Resource
-
-	err := handler.db.NewSelect().Model(&resource).Where("resource_id = ?", resourceId).Scan(handler.ctx)
+	resource, err := handler.ctrl.GetResource(c, resourceId)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
+		return
 	}
 
 	c.JSON(http.StatusOK, resource)
