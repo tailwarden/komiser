@@ -21,7 +21,7 @@ func BenchmarkFetchResources(b *testing.B) {
 	if err != nil {
 		b.Fatalf("Error during config setup: %v", err)
 	}
-	err = utils.SetupDBConnection(cfg, db)
+	db, err = utils.SetupDBConnection(cfg)
 	if err != nil {
 		b.Fatalf("Error during DB setup: %v", err)
 	}

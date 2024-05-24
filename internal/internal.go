@@ -41,7 +41,7 @@ func Exec(address string, port int, configPath string, telemetry bool, a utils.A
 		return err
 	}
 
-	err = utils.SetupDBConnection(cfg, db)
+	db, err = utils.SetupDBConnection(cfg)
 	if err != nil {
 		return err
 	}
