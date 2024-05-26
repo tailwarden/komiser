@@ -43,7 +43,7 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 	}
 
 	for _, instance := range instances.Response.InstanceSet {
-		tags := make([]models.Tag, len(instance.Tags))
+		tags := make([]models.Tag, 0, len(instance.Tags))
 		for _, tag := range instance.Tags {
 			tags = append(tags, models.Tag{
 				Key:   *tag.Key,
