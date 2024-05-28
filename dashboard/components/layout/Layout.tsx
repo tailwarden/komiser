@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
-import { BrowserTracing } from '@sentry/tracing';
+import { BrowserTracing } from '@sentry/browser';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import settingsService from '@services/settingsService';
