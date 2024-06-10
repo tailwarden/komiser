@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import formbricks from '@formbricks/js';
+import formbricks from '@formbricks/js/website';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
