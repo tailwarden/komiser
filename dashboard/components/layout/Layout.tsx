@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
-import { BrowserTracing } from '@sentry/tracing';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import settingsService from '@services/settingsService';
@@ -47,7 +46,7 @@ function Layout({ children }: LayoutProps) {
     if (telemetry?.telemetry_enabled && environment.production) {
       Sentry.init({
         dsn: environment.SENTRY_URL,
-        integrations: [new BrowserTracing()],
+        integrations: [Sentry.browserTracingIntegration()],
 
         // We recommend adjusting this value in production, or using tracesSampler
         // for finer control
