@@ -44,6 +44,9 @@ const (
 	ListProvidersKey         = "LIST_PROVIDERS"
 	ListServicesKey          = "LIST_SERVICES"
 	ListAccountsKey          = "LIST_ACCOUNTS"
+	ListResourceWithFilter   = "LIST_RESOURCE_WITH_FILTER"
+	ListRelationWithFilter   = "LIST_RELATION_WITH_FILTER"
+	ListStatsWithFilter      = "LIST_STATS_WITH_FILTER"
 )
 
 func ExecuteRaw(ctx context.Context, db *bun.DB, query string, schema interface{}, additionals [][3]string) error {
