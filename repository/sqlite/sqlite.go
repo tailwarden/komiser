@@ -63,7 +63,7 @@ var Queries = map[string]repository.Object{
 		Type:  repository.RAW,
 	},
 	repository.AccountsResourceCountKey: {
-		Query: "SELECT COUNT(*) as total FROM (SELECT DISTINCT account FROM resources)",
+		Query: "SELECT COUNT(*) as total FROM (SELECT DISTINCT account FROM resources) AS temp",
 		Type:  repository.RAW,
 	},
 	repository.RegionResourceCountKey: {
