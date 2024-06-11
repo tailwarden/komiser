@@ -78,6 +78,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "storybook": "^7.4.5",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.4"
   }
 }
