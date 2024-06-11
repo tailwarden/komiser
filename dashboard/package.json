@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^17.2.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@jest/globals": "^29.5.0",
     "@storybook/addon-essentials": "^8.0.5",
     "@storybook/addon-interactions": "^8.0.9",
@@ -49,10 +49,10 @@
     "@storybook/addons": "^7.4.6",
     "@storybook/blocks": "^7.6.4",
     "@storybook/nextjs": "^8.0.10",
-    "@storybook/preview-api": "^7.6.17",
+    "@storybook/preview-api": "^8.1.6",
     "@storybook/react": "^7.4.6",
     "@storybook/testing-library": "^0.2.2",
-    "@storybook/theming": "^7.5.3",
+    "@storybook/theming": "^8.1.6",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.1.2",
     "@types/cytoscape": "^3.19.16",
@@ -66,7 +66,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-next": "14.0.4",
+    "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-prettier": "^5.1.3",
@@ -78,6 +78,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "storybook": "^7.4.5",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.4"
   }
 }
