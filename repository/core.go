@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/uptrace/bun"
@@ -78,27 +77,35 @@ func ExecuteSelect(ctx context.Context, db *bun.DB, schema interface{}, conditio
 	return q.Scan(ctx, schema)
 }
 
-func ExecuteInsert(ctx context.Context, db *bun.DB, schema interface{}) (sql.Result, error) {
-	resp, err := db.NewInsert().Model(schema).Exec(ctx)
+func ExecuteInsert(ctx context.Context, db *bun.DB, schema interface{}) (id int64, err error) {
+	res, err := db.NewInsert().Model(schema).Returning("id").Exec(ctx, &id)
 	if err != nil {
-		return resp, err
+		_id, err := res.LastInsertId()
+		if err != nil {
+			id = _id
+		}
 	}
-	return resp, nil
+	return
 }
 
-func ExecuteDelete(ctx context.Context, db *bun.DB, schema interface{}, conditions [][3]string) (sql.Result, error) {
+func ExecuteDelete(ctx context.Context, db *bun.DB, schema interface{}, conditions [][3]string) (int64, error) {
 	q := db.NewDelete().Model(schema)
 
 	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.DeleteQuery)
 
 	resp, err := q.Exec(ctx)
 	if err != nil {
-		return resp, err
+		return 0, err
 	}
-	return resp, nil
+
+	rowsAffected, err := resp.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+	return rowsAffected, nil
 }
 
-func ExecuteUpdate(ctx context.Context, db *bun.DB, schema interface{}, columns []string, conditions [][3]string) (sql.Result, error) {
+func ExecuteUpdate(ctx context.Context, db *bun.DB, schema interface{}, columns []string, conditions [][3]string) (int64, error) {
 	q := db.NewUpdate().Model(schema).Column(columns...)
 
 	q = addWhereClause(q.QueryBuilder(), conditions).Unwrap().(*bun.UpdateQuery)
@@ -107,9 +114,15 @@ func ExecuteUpdate(ctx context.Context, db *bun.DB, schema interface{}, columns 
 
 	resp, err := q.Exec(ctx)
 	if err != nil {
-		return resp, err
+		return 0, err
 	}
-	return resp, nil
+
+	rowsAffected, err := resp.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return rowsAffected, nil
 }
 
 func addWhereClause(query bun.QueryBuilder, conditions [][3]string) bun.QueryBuilder {

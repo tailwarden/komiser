@@ -18,11 +18,8 @@ func (ctrl *Controller) ListViews(c context.Context) (views []models.View, err e
 }
 
 func (ctrl *Controller) InsertView(c context.Context, view models.View) (viewId int64, err error) {
-	result, err := ctrl.repo.HandleQuery(c, repository.InsertKey, &view, nil, "")
-	if err != nil {
-		return
-	}
-	return result.LastInsertId()
+	viewId, err = ctrl.repo.HandleQuery(c, repository.InsertKey, &view, nil, "")
+	return
 }
 
 func (ctrl *Controller) UpdateView(c context.Context, view models.View, viewId string) (err error) {
