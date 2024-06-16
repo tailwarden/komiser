@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -15,7 +14,7 @@ import (
 )
 
 type Repository struct {
-	mu    sync.RWMutex
+	mu      sync.RWMutex
 	db      *bun.DB
 	queries map[string]repository.Object
 }
@@ -98,8 +97,8 @@ var Queries = map[string]repository.Object{
 		Type:  repository.RAW,
 		Query: "SELECT DISTINCT(account) FROM resources",
 	},
-	repository.ListResourceWithFilter : {
-		Type: repository.RAW,
+	repository.ListResourceWithFilter: {
+		Type:  repository.RAW,
 		Query: "",
 		Params: []string{
 			"(name LIKE '%%%s%%' OR region LIKE '%%%s%%' OR service LIKE '%%%s%%' OR provider LIKE '%%%s%%' OR account LIKE '%%%s%%' OR (value->>'key' LIKE '%%%s%%') OR (value->>'value' LIKE '%%%s%%'))",
@@ -110,15 +109,15 @@ var Queries = map[string]repository.Object{
 			"SELECT * FROM resources WHERE %s AND id NOT IN (%s) ORDER BY id LIMIT %d OFFSET %d",
 		},
 	},
-	repository.ListRelationWithFilter : {
-		Type: repository.RAW,
+	repository.ListRelationWithFilter: {
+		Type:  repository.RAW,
 		Query: "",
 		Params: []string{
 			"SELECT DISTINCT resources.resource_id, resources.provider, resources.name, resources.service, resources.relations FROM resources WHERE (jsonb_array_length(relations) > 0)",
 		},
 	},
-	repository.ListStatsWithFilter : {
-		Type: repository.RAW,
+	repository.ListStatsWithFilter: {
+		Type:  repository.RAW,
 		Query: "",
 		Params: []string{
 			"SELECT COUNT(*) as total FROM (SELECT DISTINCT region FROM resources CROSS JOIN jsonb_array_elements(tags) AS res WHERE %s) AS temp",
@@ -131,23 +130,21 @@ var Queries = map[string]repository.Object{
 	},
 }
 
-func (repo *Repository) HandleQuery(ctx context.Context, queryTitle string, schema interface{}, conditions [][3]string, rawQuery string) (sql.Result, error) {
-	var resp sql.Result
-	var err error
+func (repo *Repository) HandleQuery(ctx context.Context, queryTitle string, schema interface{}, conditions [][3]string, rawQuery string) (resp int64, err error) {
 	repo.mu.RLock()
 	query, ok := Queries[queryTitle]
 	repo.mu.RUnlock()
 	if !ok {
-		return nil, repository.ErrQueryNotFound
+		return 0, repository.ErrQueryNotFound
 	}
 	switch query.Type {
 	case repository.RAW:
 		if rawQuery != "" && query.Query == "" {
-			err = repository.ExecuteRaw(ctx, repo.db, rawQuery, schema, conditions)	
+			err = repository.ExecuteRaw(ctx, repo.db, rawQuery, schema, conditions)
 		} else {
 			err = repository.ExecuteRaw(ctx, repo.db, query.Query, schema, conditions)
 		}
-		
+
 	case repository.SELECT:
 		err = repository.ExecuteSelect(ctx, repo.db, schema, conditions)
 
@@ -173,13 +170,13 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 			if err != nil {
 				return nil, err
 			}
-			whereQueries = append(whereQueries, query) 
+			whereQueries = append(whereQueries, query)
 		case "cost":
 			query, err := generateCostFilterQuery(filter)
 			if err != nil {
 				return nil, err
 			}
-			whereQueries = append(whereQueries, query) 
+			whereQueries = append(whereQueries, query)
 		case "relation":
 			query, err := generateRelationFilterQuery(filter)
 			if err != nil {
@@ -210,10 +207,10 @@ func (repo *Repository) GenerateFilterQuery(view models.View, queryTitle string,
 	return queryBuilderWithFilter(view, queryTitle, arguments, queryParameter, filterWithTags, whereClause), nil
 }
 
-func queryBuilderWithFilter(view models.View,  queryTitle string, arguments []int64, query string, withTags bool, whereClause string) []string {
+func queryBuilderWithFilter(view models.View, queryTitle string, arguments []int64, query string, withTags bool, whereClause string) []string {
 	searchQuery := []string{}
 	limit, skip := arguments[0], arguments[1]
-	if len(view.Filters) == 0  {
+	if len(view.Filters) == 0 {
 		switch queryTitle {
 		case repository.ListRelationWithFilter:
 			return append(searchQuery, Queries[queryTitle].Params[0])
@@ -228,12 +225,12 @@ func queryBuilderWithFilter(view models.View,  queryTitle string, arguments []in
 			return append(searchQuery, tempQuery)
 		}
 	} else if queryTitle == repository.ListRelationWithFilter {
-		return append(searchQuery, Queries[queryTitle].Params[0] + " AND " + whereClause)
+		return append(searchQuery, Queries[queryTitle].Params[0]+" AND "+whereClause)
 	}
 
 	if withTags {
 		if queryTitle == repository.ListStatsWithFilter {
-			for i := 0; i<3; i++ {
+			for i := 0; i < 3; i++ {
 				searchQuery = append(searchQuery, fmt.Sprintf(Queries[queryTitle].Params[i], whereClause))
 			}
 			return searchQuery
@@ -246,7 +243,7 @@ func queryBuilderWithFilter(view models.View,  queryTitle string, arguments []in
 		return append(searchQuery, tempQuery)
 	} else {
 		if queryTitle == repository.ListStatsWithFilter {
-			for i := 3; i<6; i++ {
+			for i := 3; i < 6; i++ {
 				searchQuery = append(searchQuery, fmt.Sprintf(Queries[queryTitle].Params[i], whereClause))
 			}
 			return searchQuery
@@ -347,18 +344,18 @@ func generateCostFilterQuery(filter models.Filter) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max), nil		
+		return fmt.Sprintf("(cost >= %f AND cost <= %f)", min, max), nil
 	case "GREATER_THAN":
 		cost, err := strconv.ParseFloat(filter.Values[0], 64)
 		if err != nil {
 			return "", err
-		}		
+		}
 		return fmt.Sprintf("(cost > %f)", cost), err
 	case "LESS_THAN":
 		cost, err := strconv.ParseFloat(filter.Values[0], 64)
 		if err != nil {
 			return "", err
-		}		
+		}
 		return fmt.Sprintf("(cost < %f)", cost), nil
 	default:
 		return "", fmt.Errorf("unsupported operator for cost field: %s", filter.Operator)

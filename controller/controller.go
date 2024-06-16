@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/tailwarden/komiser/models"
 )
@@ -32,7 +31,7 @@ type accountOutput struct {
 }
 
 type Repository interface {
-	HandleQuery(context.Context, string, interface{}, [][3]string, string) (sql.Result, error)
+	HandleQuery(context.Context, string, interface{}, [][3]string, string) (int64, error)
 	GenerateFilterQuery(view models.View, queryTitle string, arguments []int64, queryParameter string) ([]string, error)
 }
 
