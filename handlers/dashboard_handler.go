@@ -179,9 +179,13 @@ func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 		}
 		excludeList := strings.Trim(string(s), "[]")
 		excludeList = strings.ReplaceAll(excludeList, `"`, "'")
+		excludeItems := strings.Split(excludeList, ",")
+		for i := range excludeItems {
+			excludeItems[i] = strings.TrimSpace(excludeItems[i])
+		}
 
-		query := fmt.Sprintf(`%s ? NOT IN (%s) AND DATE(fetched_at) BETWEEN ? AND ? GROUP BY ?`, query, excludeList)
-		err = handler.db.NewRaw(query, bun.Ident(input.Group), input.Start, input.End, bun.Ident(input.Group)).Scan(handler.ctx, &groups)
+		query = query + ` ? NOT IN ? AND DATE(fetched_at) BETWEEN ? AND ? GROUP BY ?`
+		err = handler.db.NewRaw(query, bun.Ident(input.Group), bun.In(excludeItems), input.Start, input.End, bun.Ident(input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
