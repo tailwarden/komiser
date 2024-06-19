@@ -46,6 +46,7 @@ func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.R
 				ResourceId: *snapshot.ID,
 				Cost:       0,
 				Name:       *snapshot.Name,
+				Relations:  getSnapshotRelation(snapshot),
 				FetchedAt:  time.Now(),
 				Tags:       tags,
 				CreatedAt:  *snapshot.Properties.TimeCreated,
@@ -61,4 +62,30 @@ func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getSnapshotRelation(snp *armcompute.Snapshot) []models.Link {
+	var rel []models.Link
+
+	if snp.Properties.CreationData != nil {
+		if snp.Properties.CreationData.ImageReference != nil && snp.Properties.CreationData.ImageReference.ID != nil {
+			rel = append(rel, models.Link{
+				ResourceID: *snp.Properties.CreationData.ImageReference.ID,
+				Type:       "Image",
+				Name:       *snp.Properties.CreationData.ImageReference.ID,
+				Relation:   "USES",
+			})
+		}
+
+		if snp.Properties.CreationData.SourceResourceID != nil {
+			rel = append(rel, models.Link{
+				ResourceID: *snp.Properties.CreationData.SourceResourceID,
+				Type:       "Disk",
+				Name:       *snp.Properties.CreationData.SourceResourceID,
+				Relation:   "USES",
+			})
+		}
+
+	}
+	return rel
 }
