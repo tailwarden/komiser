@@ -73,6 +73,7 @@ func VirtualMachines(ctx context.Context, client providers.ProviderClient) ([]mo
 				Cost:       cost,
 				Name:       *vm.Name,
 				FetchedAt:  time.Now(),
+				Relations:  getVmRelation(vm),
 				Tags:       tags,
 				Link:       fmt.Sprintf("https://portal.azure.com/#resource%s", *vm.ID),
 			})
@@ -86,4 +87,30 @@ func VirtualMachines(ctx context.Context, client providers.ProviderClient) ([]mo
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
+}
+
+func getVmRelation(vm *armcompute.VirtualMachine) []models.Link {
+
+	var rel []models.Link
+
+	if vm.Properties.StorageProfile != nil && vm.Properties.StorageProfile.DataDisks != nil {
+		for _, disk := range vm.Properties.StorageProfile.DataDisks {
+			rel = append(rel, models.Link{
+				ResourceID: *disk.ManagedDisk.ID,
+				Type:       "Disk",
+				Name:       *disk.Name,
+				Relation:   "USES",
+			})
+		}
+
+		if vm.Properties.StorageProfile.ImageReference != nil {
+			rel = append(rel, models.Link{
+				ResourceID: *vm.Properties.StorageProfile.ImageReference.ID,
+				Type:       "Image",
+				Name:       *vm.Properties.StorageProfile.ImageReference.ID,
+				Relation:   "USES",
+			})
+		}
+	}
+	return rel
 }
