@@ -25,19 +25,13 @@ func (ctrl *Controller) CountResources(c context.Context, provider, name string)
 }
 
 func (ctrl *Controller) InsertAccount(c context.Context, account models.Account) (lastId int64, err error) {
-	result, err := ctrl.repo.HandleQuery(c, repository.InsertKey, &account, nil, "")
-	if err != nil {
-		return
-	}
-	return result.LastInsertId()
+	lastId, err = ctrl.repo.HandleQuery(c, repository.InsertKey, &account, nil, "")
+	return
 }
 
 func (ctrl *Controller) RescanAccount(c context.Context, account *models.Account, accountId string) (rows int64, err error) {
-	res, err := ctrl.repo.HandleQuery(c, repository.ReScanAccountKey, account, [][3]string{{"id", "=", accountId}, {"status", "=", "CONNECTED"}}, "")
-	if err != nil {
-		return 0, err
-	}
-	return res.RowsAffected()
+	rows, err = ctrl.repo.HandleQuery(c, repository.ReScanAccountKey, account, [][3]string{{"id", "=", accountId}, {"status", "=", "CONNECTED"}}, "")
+	return
 }
 
 func (ctrl *Controller) DeleteAccount(c context.Context, accountId string) (err error) {

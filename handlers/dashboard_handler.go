@@ -172,14 +172,27 @@ func (handler *ApiHandler) CostBreakdownHandler(c *gin.Context) {
 	}
 
 	if len(input.Exclude) > 0 {
-		s, _ := json.Marshal(input.Exclude)
-		err = handler.db.NewRaw(fmt.Sprintf(`%s %s NOT IN (%s) AND DATE(fetched_at) BETWEEN '%s' AND '%s' GROUP BY %s;`, query, input.Group, strings.Trim(string(s), "[]"), input.Start, input.End, input.Group)).Scan(handler.ctx, &groups)
+		s, err := json.Marshal(input.Exclude)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process exclude list"})
+			return
+		}
+		excludeList := strings.Trim(string(s), "[]")
+		excludeList = strings.ReplaceAll(excludeList, `"`, "'")
+		excludeItems := strings.Split(excludeList, ",")
+		for i := range excludeItems {
+			excludeItems[i] = strings.TrimSpace(excludeItems[i])
+		}
+
+		query = query + ` ? NOT IN ? AND DATE(fetched_at) BETWEEN ? AND ? GROUP BY ?`
+		err = handler.db.NewRaw(query, bun.Ident(input.Group), bun.In(excludeItems), input.Start, input.End, bun.Ident(input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	} else {
-		err = handler.db.NewRaw(`? DATE(fetched_at) BETWEEN ? AND ? GROUP BY period, ?;`, query, bun.Ident(input.Start), bun.Ident(input.End), input.Group).Scan(handler.ctx, &groups)
+		query := fmt.Sprintf(`%s DATE(fetched_at) BETWEEN ? AND ? GROUP BY period, ?`, query)
+		err := handler.db.NewRaw(query, input.Start, input.End, bun.Ident(input.Group)).Scan(handler.ctx, &groups)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
