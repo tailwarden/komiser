@@ -87,7 +87,8 @@ export const allProvidersServices: { [key in Providers]: string[] } = {
     'firewall',
     'load balancer',
     'databox',
-    'queue'
+    'queue',
+    'Local Network Gateway'
   ],
   civo: [
     'compute',
