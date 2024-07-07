@@ -34,9 +34,9 @@ func LocalNetworkGateways(ctx context.Context, client providers.ProviderClient) 
 	}
 
 	// check resources on each resource group
-	for _, name := range resourceGroups {
+	for _, rg := range resourceGroups {
 		pager := localNetworkGatewayClient.NewListPager(
-			name, nil)
+			rg.Name, nil)
 		for pager.More() {
 			page, err := pager.NextPage(ctx)
 			if err != nil {
@@ -63,7 +63,7 @@ func LocalNetworkGateways(ctx context.Context, client providers.ProviderClient) 
 					Name:       *lng.Name,
 					FetchedAt:  time.Now(),
 					Tags:       tags,
-					Link:       fmt.Sprint("https://portal.azure.com/#resource%s", *lng.ID),
+					Link:       fmt.Sprintf("https://portal.azure.com/#resource%s", *lng.ID),
 				})
 			}
 		}
