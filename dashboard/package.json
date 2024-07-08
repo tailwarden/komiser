@@ -34,7 +34,7 @@
     "react": "18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-cytoscapejs": "^2.0.0",
-    "react-dom": "18.2.0",
+    "react-dom": "18.3.1",
     "react-drag-drop-files": "^2.3.10",
     "react-simple-maps": "3.0.0",
     "typescript": "5.2.2"
@@ -61,7 +61,7 @@
     "@types/node": "20.11.21",
     "@types/react": "18.3.3",
     "@types/react-cytoscapejs": "^1.2.5",
-    "@types/react-dom": "18.2.18",
+    "@types/react-dom": "18.3.0",
     "@types/react-simple-maps": "^3.0.2",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
