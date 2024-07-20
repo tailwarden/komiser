@@ -35,7 +35,7 @@ function useGithubStarBanner() {
   useEffect(() => {
     const shouldDisplayBanner = checkLocalStorageForBannerStatus();
 
-    if (true) {
+    if (shouldDisplayBanner !== 'false' && router.query.view) {
       getKomiserGithubStars().then(res => {
         if (!res.stargazers_count) {
           setGithubStars(undefined);
