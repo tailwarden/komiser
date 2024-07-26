@@ -18,7 +18,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@formbricks/js": "^2.0.0",
+    "@formbricks/js": "^2.1.1",
     "@sentry/react": "^8.13.0",
     "@sentry/tracing": "^7.41.0",
     "@tippyjs/react": "^4.2.6",
@@ -45,7 +45,7 @@
     "@jest/globals": "^29.5.0",
     "@storybook/addon-essentials": "^8.0.5",
     "@storybook/addon-interactions": "^8.0.9",
-    "@storybook/addon-links": "^8.1.11",
+    "@storybook/addon-links": "^8.2.4",
     "@storybook/addons": "^7.4.6",
     "@storybook/blocks": "^7.6.4",
     "@storybook/nextjs": "^8.0.10",
