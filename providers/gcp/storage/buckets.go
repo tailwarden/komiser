@@ -37,9 +37,11 @@ func GetBucketSize(ctx context.Context, client providers.ProviderClient, bucketN
 			EndTime:   &timestamp.Timestamp{Seconds: time.Now().Unix()},
 		},
 		Aggregation: &monitoringpb.Aggregation{
-			AlignmentPeriod:  &duration.Duration{Seconds: 60},
-			PerSeriesAligner: monitoringpb.Aggregation_ALIGN_SUM,
+			AlignmentPeriod:  &duration.Duration{Seconds: 86400},
+			PerSeriesAligner: monitoringpb.Aggregation_ALIGN_MEAN,
+			GroupByFields:    []string{"resource.label.bucket_name"},
 		},
+		View: monitoringpb.ListTimeSeriesRequest_FULL,
 	}
 
 	res := monitoringClient.ListTimeSeries(ctx, req)
