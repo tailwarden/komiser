@@ -88,8 +88,13 @@ func Buckets(ctx context.Context, client providers.ProviderClient) ([]models.Res
 			break
 		}
 		if err != nil {
-			log.WithError(err).Errorf("failed to list buckets")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				log.Warn(err.Error())
+				return resources, nil
+			} else {
+				log.WithError(err).Errorf("failed to list buckets")
+				return resources, err
+			}
 		}
 
 		tags := make([]models.Tag, 0)

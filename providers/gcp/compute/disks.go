@@ -3,6 +3,7 @@ package compute
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -43,8 +44,13 @@ func Disks(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list disks")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to list disks")
+				return resources, err
+			}
 		}
 		if len(disksListPair.Value.Disks) == 0 {
 			continue
