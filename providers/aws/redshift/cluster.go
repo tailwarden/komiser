@@ -57,7 +57,7 @@ func Resources(ctx context.Context, client providers.ProviderClient) ([]models.R
 			resources = append(resources, models.Resource{
 				Provider:   "AWS",
 				Account:    client.Name,
-				Service:    "Redshift EventSubscription",
+				Service:    "Redshift Cluster",
 				ResourceId: resourceArn,
 				Region:     client.AWSClient.Region,
 				Name:       *cluster.ClusterIdentifier,
@@ -82,7 +82,7 @@ func Resources(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"provider":  "AWS",
 		"account":   client.Name,
 		"region":    client.AWSClient.Region,
-		"service":   "Redshift EventSubscription",
+		"service":   "Redshift Cluster",
 		"resources": len(resources),
 	}).Info("Fetched resources")
 	return resources, nil
