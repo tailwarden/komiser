@@ -3,6 +3,7 @@ package artifactregistry
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -29,8 +30,13 @@ func ArtifactregistryRepositories(ctx context.Context, client providers.Provider
 	for {
 		repo, err := repoItr.Next()
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to get next repo")
-			break
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to get next repo")
+				break
+			}
 		}
 		if repo == nil {
 			break

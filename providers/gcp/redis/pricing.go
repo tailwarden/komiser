@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/redis/apiv1/redispb"
@@ -66,17 +67,18 @@ func calculateRedisCost(redis *redispb.Instance, pricing *GcpDatabasePricing) fl
 
 	if redis.Tier == redispb.Instance_BASIC {
 		priceMap = pricing.Gcp.Databases.CloudMemorystore.Redis.Basic
-		priceKey = fmt.Sprintf("Rediscapacitybasicm%ddefault", capacityTier)
+		priceKey = fmt.Sprintf("rediscapacitybasicm%ddefault", capacityTier)
 	} else if redis.Tier == redispb.Instance_STANDARD_HA {
 		priceMap = pricing.Gcp.Databases.CloudMemorystore.Redis.Standard
 		if redis.ReadReplicasMode == redispb.Instance_READ_REPLICAS_DISABLED {
-			priceKey = fmt.Sprintf("Rediscapacitystandardm%ddefault", capacityTier)
+			priceKey = fmt.Sprintf("rediscapacitystandardm%ddefault", capacityTier)
 		} else {
-			priceKey = fmt.Sprintf("Rediscapacitystandardnodem%d", capacityTier)
+			priceKey = fmt.Sprintf("rediscapacitystandardnodem%d", capacityTier)
 		}
 	}
 
-	pricePerHrPerGbInNanos := priceMap[priceKey].Regions[redis.LocationId].Price[0].Nanos
+	location := strings.Join(strings.Split(redis.LocationId, "-")[:2], "-")
+	pricePerHrPerGbInNanos := priceMap[priceKey].Regions[location].Price[0].Nanos
 	pricePerHrPerGbInDollars := pricePerHrPerGbInNanos / math.Pow(10, 9)
 
 	now := time.Now().UTC()

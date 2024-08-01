@@ -3,6 +3,7 @@ package compute
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	compute "cloud.google.com/go/compute/apiv1"
@@ -42,8 +43,13 @@ func Snapshots(ctx context.Context, client providers.ProviderClient) ([]models.R
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list snapshots")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to list snapshots")
+				return resources, err
+			}
 		}
 
 		tags := make([]models.Tag, 0)

@@ -3,6 +3,7 @@ package appengine
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -29,8 +30,13 @@ func Services(ctx context.Context, client providers.ProviderClient) ([]models.Re
 	for {
 		svc, err := svcs.Next()
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to get app engine")
-			break
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to get app engine")
+				break
+			}
 		}
 		if svc == nil {
 			break
