@@ -19,4 +19,4 @@ jobs:
           cache-invalidation-interval: 15
           args: --timeout=10m
           version: v1.59
-          skip-pkg-cache: true
+          skip-cache: true
