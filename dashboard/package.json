@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@formbricks/js": "^2.1.1",
-    "@sentry/react": "^8.13.0",
+    "@sentry/react": "^8.22.0",
     "@sentry/tracing": "^7.41.0",
     "@tippyjs/react": "^4.2.6",
     "chart.js": "^4.2.1",
