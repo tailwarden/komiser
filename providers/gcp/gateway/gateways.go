@@ -3,6 +3,7 @@ package gateway
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -34,12 +35,12 @@ RegionsLoop:
 			"projects/" + client.GCPClient.Credentials.ProjectID + "/locations/" + regionName,
 		).Do()
 		if err != nil {
-			if err.Error() == "googleapi: Error 403: Location "+regionName+" is not found or access is unauthorized., forbidden" {
+			if err.Error() == "googleapi: Error 403: Location "+regionName+" is not found or access is unauthorized., forbidden" || strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
 				continue RegionsLoop
 			} else {
 				logrus.WithError(err).Errorf("failed to list API Gateways")
 				return resources, err
-
 			}
 		}
 

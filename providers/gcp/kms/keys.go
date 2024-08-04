@@ -37,8 +37,13 @@ func Keys(ctx context.Context, client providers.ProviderClient) ([]models.Resour
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list key rings")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to list key rings")
+				return resources, err
+			}
 		}
 		if keyRing == nil {
 			continue

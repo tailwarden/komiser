@@ -3,6 +3,7 @@ package alloydb
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -29,8 +30,13 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to get clusters")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to get clusters")
+				return resources, err
+			}
 		}
 		resources = append(resources, models.Resource{
 			Provider:   "GCP",

@@ -3,6 +3,7 @@ package iam
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -25,8 +26,13 @@ func ServiceAccounts(ctx context.Context, client providers.ProviderClient) ([]mo
 		"projects/" + client.GCPClient.Credentials.ProjectID,
 	).Do()
 	if err != nil {
-		logrus.WithError(err).Errorf("failed to list IAM Service Accounts")
-		return resources, err
+		if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+			logrus.Warn(err.Error())
+			return resources, nil
+		} else {
+			logrus.WithError(err).Errorf("failed to list IAM Service Accounts")
+			return resources, err
+		}
 	}
 
 	for _, account := range serviceAccounts.Accounts {

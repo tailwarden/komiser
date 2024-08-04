@@ -5,6 +5,7 @@ import (
 
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	redis "cloud.google.com/go/redis/apiv1"
@@ -31,8 +32,13 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 	regions, err := utils.FetchGCPRegionsInRealtime(client.GCPClient.Credentials.ProjectID, option.WithCredentials(client.GCPClient.Credentials))
 	if err != nil {
-		logrus.WithError(err).Errorf("failed to list zones to fetch redis")
-		return resources, err
+		if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+			logrus.Warn(err.Error())
+			return resources, nil
+		} else {
+			logrus.WithError(err).Errorf("failed to list zones to fetch redis")
+			return resources, err
+		}
 	}
 
 	redisClient, err := redis.NewCloudRedisRESTClient(ctx, option.WithCredentials(client.GCPClient.Credentials))
