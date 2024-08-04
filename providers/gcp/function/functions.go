@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -26,8 +27,13 @@ func Functions(ctx context.Context, client providers.ProviderClient) ([]models.R
 		"projects/" + client.GCPClient.Credentials.ProjectID + "/locations/-",
 	).Do()
 	if err != nil {
-		log.WithError(err).Errorf("failed to list Cloud Functions")
-		return resources, err
+		if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+			log.Warn(err.Error())
+			return resources, nil
+		} else {
+			log.WithError(err).Errorf("failed to list Cloud Functions")
+			return resources, err
+		}
 	}
 
 	for _, function := range functions.Functions {

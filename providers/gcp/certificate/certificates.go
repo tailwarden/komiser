@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -36,8 +37,13 @@ func Certificates(ctx context.Context, client providers.ProviderClient) ([]model
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list certificates")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to list certificates")
+				return resources, err
+			}
 		}
 
 		certificateNameWithoutProjectAndLocation := extractCertificateName(certificate.Name)

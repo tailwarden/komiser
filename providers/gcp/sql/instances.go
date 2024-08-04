@@ -3,6 +3,7 @@ package sql
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -23,8 +24,13 @@ func Instances(ctx context.Context, client providers.ProviderClient) ([]models.R
 
 	instances, err := instancesClient.Instances.List(client.GCPClient.Credentials.ProjectID).Do()
 	if err != nil {
-		logrus.WithError(err).Errorf("failed to lisrt sql servers")
-		return resources, err
+		if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+			logrus.Warn(err.Error())
+			return resources, nil
+		} else {
+			logrus.WithError(err).Errorf("failed to list sql servers")
+			return resources, err
+		}
 	}
 
 	for _, sqlInstance := range instances.Items {

@@ -26,8 +26,13 @@ func Roles(ctx context.Context, client providers.ProviderClient) ([]models.Resou
 		"projects/" + client.GCPClient.Credentials.ProjectID,
 	).Do()
 	if err != nil {
-		logrus.WithError(err).Errorf("failed to list IAM roles")
-		return resources, err
+		if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+			logrus.Warn(err.Error())
+			return resources, nil
+		} else {
+			logrus.WithError(err).Errorf("failed to list IAM roles")
+			return resources, err
+		}
 	}
 
 	for _, role := range roles.Roles {

@@ -3,6 +3,7 @@ package bigquery
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/bigquery"
@@ -50,8 +51,13 @@ func Tables(ctx context.Context, client providers.ProviderClient) ([]models.Reso
 			break
 		}
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to list dataset")
-			return resources, err
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to list dataset")
+				return resources, err
+			}
 		}
 
 		tablesIterator := dataset.Tables(ctx)
