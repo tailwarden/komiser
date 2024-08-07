@@ -19,7 +19,9 @@ import (
 	"github.com/mongodb-forks/digest"
 	"github.com/oracle/oci-go-sdk/common"
 	"github.com/ovh/go-ovh/ovh"
+	"github.com/patrickmn/go-cache"
 	"github.com/scaleway/scaleway-sdk-go/scw"
+	"github.com/tailwarden/komiser/handlers"
 	"github.com/tailwarden/komiser/models"
 	"github.com/tailwarden/komiser/providers"
 	"github.com/tailwarden/komiser/utils"
@@ -241,8 +243,10 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics) (*models
 				OpencostBaseUrl: account.OpencostBaseUrl,
 			}
 
+			cache := cache.New(handlers.CACHE_DURATION, handlers.CACHE_DURATION)
 			clients = append(clients, providers.ProviderClient{
 				K8sClient: &client,
+				Cache:     cache,
 				Name:      account.Name,
 			})
 		}
