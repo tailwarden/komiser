@@ -23,6 +23,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		networking.ApplicationGateways,
 		networking.LoadBalancers,
 		networking.Firewalls,
+		networking.LocalNetworkGateways,
 		storage.Queues,
 		storage.Tables,
 		storage.Databoxes,

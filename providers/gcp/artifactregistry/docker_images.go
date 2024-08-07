@@ -3,6 +3,7 @@ package artifactregistry
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -29,8 +30,13 @@ func ArtifactregistryDockerImages(ctx context.Context, client providers.Provider
 	for {
 		image, err := imageItr.Next()
 		if err != nil {
-			logrus.WithError(err).Errorf("failed to get nex image")
-			break
+			if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+				logrus.Warn(err.Error())
+				return resources, nil
+			} else {
+				logrus.WithError(err).Errorf("failed to get nex image")
+				break
+			}
 		}
 		if image == nil {
 			break

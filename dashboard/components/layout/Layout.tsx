@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import settingsService from '@services/settingsService';
 import { ToastProvider } from '@components/toast/ToastProvider';
+import GithubBanner from './components/github-banner/GithubBanner';
 import environment from '../../environments/environment';
-import Banner from '../banner/Banner';
-import useGithubStarBanner from '../banner/hooks/useGithubStarBanner';
+import useGithubStarBanner from './hooks/useGithubStarBanner';
 import Button from '../button/Button';
 import EmptyState from '../empty-state/EmptyState';
 import ErrorState from '../error-state/ErrorState';
@@ -55,7 +55,7 @@ function Layout({ children }: LayoutProps) {
     }
   }, [telemetry]);
 
-  const betaFlagOnboardingWizard = true; // set this to true once wizard gets good support of the backend 
+  const betaFlagOnboardingWizard = true; // set this to true once wizard gets good support of the backend
   const isOnboarding =
     betaFlagOnboardingWizard && router.pathname.startsWith('/onboarding');
 
@@ -77,7 +77,7 @@ function Layout({ children }: LayoutProps) {
 
         {!isOnboarding && (
           <>
-            <Banner githubStars={githubStars} />
+            <GithubBanner githubStars={githubStars} />
             <Navbar />
             <main
               className={classNames(

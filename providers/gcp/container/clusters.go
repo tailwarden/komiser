@@ -3,6 +3,7 @@ package container
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -36,8 +37,13 @@ func Clusters(ctx context.Context, client providers.ProviderClient) ([]models.Re
 		ProjectId: client.GCPClient.Credentials.ProjectID,
 	})
 	if err != nil {
-		logrus.WithError(err).Errorf("failed to collect clusters")
-		return resources, err
+		if strings.Contains(err.Error(), "SERVICE_DISABLED") {
+			logrus.Warn(err.Error())
+			return resources, nil
+		} else {
+			logrus.WithError(err).Errorf("failed to collect clusters")
+			return resources, err
+		}
 	}
 
 	for _, cluster := range clusters.Clusters {
