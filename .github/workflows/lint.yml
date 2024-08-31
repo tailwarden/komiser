@@ -14,8 +14,9 @@ jobs:
           go-version-file: go.mod
       
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v6
         with:
+          cache-invalidation-interval: 15
           args: --timeout=10m
-          version: v1.54.2
-          skip-pkg-cache: true
+          version: v1.59
+          skip-cache: true
