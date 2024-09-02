@@ -11,6 +11,7 @@ import (
 	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
 	"github.com/ovh/go-ovh/ovh"
+	"github.com/patrickmn/go-cache"
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	"github.com/tailwarden/komiser/models"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -34,6 +35,7 @@ type ProviderClient struct {
 	MongoDBAtlasClient *mongodbatlas.Client
 	GCPClient          *GCPClient
 	OVHClient          *ovh.Client
+	Cache              *cache.Cache
 	Name               string
 }
 

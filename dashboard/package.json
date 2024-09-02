@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@formbricks/js": "^2.1.1",
-    "@sentry/react": "^8.25.0",
+    "@sentry/react": "^8.26.0",
     "@sentry/tracing": "^7.41.0",
     "@tippyjs/react": "^4.2.6",
     "chart.js": "^4.2.1",
@@ -44,8 +44,8 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@jest/globals": "^29.5.0",
     "@storybook/addon-essentials": "^8.0.5",
-    "@storybook/addon-interactions": "^8.0.9",
-    "@storybook/addon-links": "^8.2.4",
+    "@storybook/addon-interactions": "^8.2.9",
+    "@storybook/addon-links": "^8.2.9",
     "@storybook/addons": "^7.6.17",
     "@storybook/blocks": "^8.2.7",
     "@storybook/nextjs": "^8.2.5",
@@ -58,7 +58,7 @@
     "@types/cytoscape": "^3.19.16",
     "@types/cytoscape-popper": "^2.0.3",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.14.11",
+    "@types/node": "22.4.1",
     "@types/react": "18.3.3",
     "@types/react-cytoscapejs": "^1.2.5",
     "@types/react-dom": "18.3.0",
@@ -68,7 +68,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jest": "^27.6.0",
+    "eslint-plugin-jest": "^28.8.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-storybook": "^0.8.0",
     "husky": "^9.0.11",
@@ -78,6 +78,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "storybook": "^8.1.10",
-    "tailwindcss": "^3.4.4"
+    "tailwindcss": "^3.4.10"
   }
 }

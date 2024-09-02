@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/patrickmn/go-cache"
 	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	tccvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
@@ -48,6 +49,11 @@ import (
 	"github.com/tailwarden/komiser/providers/scaleway"
 	"github.com/tailwarden/komiser/providers/tencent"
 	"github.com/tailwarden/komiser/utils"
+)
+
+const (
+	CACHE_DURATION   = 3
+	CLEANUP_DURATION = 4
 )
 
 var mu sync.Mutex
@@ -247,8 +253,10 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 			OpencostBaseUrl: account.Credentials["opencostBaseUrl"],
 		}
 
+		cache := cache.New(CACHE_DURATION, CLEANUP_DURATION)
 		return &providers.ProviderClient{
 			K8sClient: &client,
+			Cache:     cache, // Alpha feature for dependency
 			Name:      account.Name,
 		}, nil
 	}
