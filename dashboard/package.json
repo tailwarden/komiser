@@ -54,7 +54,7 @@
     "@storybook/testing-library": "^0.2.2",
     "@storybook/theming": "^8.1.6",
     "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^16.0.0",
+    "@testing-library/react": "^16.0.1",
     "@types/cytoscape": "^3.19.16",
     "@types/cytoscape-popper": "^2.0.3",
     "@types/jest": "^29.5.12",
