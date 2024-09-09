@@ -37,7 +37,7 @@
     "react-dom": "18.3.1",
     "react-drag-drop-files": "^2.3.10",
     "react-simple-maps": "3.0.0",
-    "typescript": "5.2.2"
+    "typescript": "5.6.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.4.0",
