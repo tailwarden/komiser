@@ -43,7 +43,7 @@
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@jest/globals": "^29.5.0",
-    "@storybook/addon-essentials": "^8.0.5",
+    "@storybook/addon-essentials": "^8.2.9",
     "@storybook/addon-interactions": "^8.2.9",
     "@storybook/addon-links": "^8.2.9",
     "@storybook/addons": "^7.6.17",
