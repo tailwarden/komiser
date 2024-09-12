@@ -5,14 +5,13 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/models"
 	"github.com/uptrace/bun/dialect"
 )
@@ -20,7 +19,7 @@ import (
 func (handler *ApiHandler) DownloadInventoryCSV(c *gin.Context) {
 	resources, err := handler.ctrl.ListResources(c)
 	if err != nil {
-		logrus.WithError(err).Error("Could not read from DB")
+		log.WithError(err).Error("Could not read from DB")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "cloud not read from DB"})
 		return
 	}
@@ -46,7 +45,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(c *gin.Context) {
 	if len(view.Filters) == 0 {
 		err := handler.db.NewRaw("SELECT * FROM resources").Scan(handler.ctx, &resources)
 		if err != nil {
-			logrus.WithError(err).Errorf("select failed")
+			log.WithError(err).Errorf("select failed")
 		}
 		respondWithCSVDownload(resources, c)
 	}
@@ -211,7 +210,7 @@ func (handler *ApiHandler) DownloadInventoryCSVForView(c *gin.Context) {
 
 		err = handler.db.NewRaw(query).Scan(handler.ctx, &resources)
 		if err != nil {
-			logrus.WithError(err).Errorf("scan failed")
+			log.WithError(err).Errorf("scan failed")
 		}
 	} else {
 		query := fmt.Sprintf("SELECT * FROM resources WHERE %s ORDER BY id", whereClause)
@@ -252,11 +251,15 @@ func respondWithCSVDownload(resources []models.Resource, c *gin.Context) {
 	for _, record := range resources {
 		tags, err := json.Marshal(record.Tags)
 		if err != nil {
-			log.Fatalf("Could not marshal tags")
+			log.Error("Could not marshal tags")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
 		}
 		metadata, err := json.Marshal(record.Metadata)
 		if err != nil {
-			log.Fatalf("Could not marshal metadata")
+			log.Error("Could not marshal metadata")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
 		}
 
 		row := []string{

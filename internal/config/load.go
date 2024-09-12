@@ -59,7 +59,7 @@ func loadConfigFromBytes(b []byte) (*models.Config, error) {
 
 	err := toml.Unmarshal([]byte(b), &config)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("invalid config file")
 	}
 
 	return &config, nil
