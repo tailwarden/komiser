@@ -29,7 +29,7 @@
     "cytoscape-node-html-label": "^1.2.2",
     "cytoscape-popper": "^2.0.0",
     "html-to-image": "^1.11.11",
-    "next": "^14.2.5",
+    "next": "^14.2.13",
     "next-transpile-modules": "^10.0.1",
     "react": "18.3.1",
     "react-chartjs-2": "^5.2.0",
