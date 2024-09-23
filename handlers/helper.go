@@ -486,11 +486,129 @@ func populateConfigFromAccount(account models.Account, config *models.Config) er
 	return nil
 }
 
+func deleteConfigAccounts(account models.Account, config *models.Config) error {
+	switch account.Provider {
+	case "Aws":
+
+		updatedConfig := make([]models.AWSConfig, 0)
+		for _, acc := range config.AWS {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.AWS = updatedConfig
+
+	case "Digitalocean":
+		updatedConfig := make([]models.DigitalOceanConfig, 0)
+		for _, acc := range config.DigitalOcean {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.DigitalOcean = updatedConfig
+
+	case "Oci":
+		updatedConfig := make([]models.OciConfig, 0)
+		for _, acc := range config.Oci {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Oci = updatedConfig
+
+	case "Civo":
+		updatedConfig := make([]models.CivoConfig, 0)
+		for _, acc := range config.Civo {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Civo = updatedConfig
+
+	case "Kubernetes":
+		updatedConfig := make([]models.KubernetesConfig, 0)
+		for _, acc := range config.Kubernetes {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Kubernetes = updatedConfig
+
+	case "Linode":
+		updatedConfig := make([]models.LinodeConfig, 0)
+		for _, acc := range config.Linode {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Linode = updatedConfig
+
+	case "Tencent":
+		updatedConfig := make([]models.TencentConfig, 0)
+		for _, acc := range config.Tencent {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Tencent = updatedConfig
+
+	case "Azure":
+		updatedConfig := make([]models.AzureConfig, 0)
+		for _, acc := range config.Azure {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Azure = updatedConfig
+
+	case "Scaleway":
+		updatedConfig := make([]models.ScalewayConfig, 0)
+		for _, acc := range config.Scaleway {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.Scaleway = updatedConfig
+
+	case "Mongodb":
+		updatedConfig := make([]models.MongoDBAtlasConfig, 0)
+		for _, acc := range config.MongoDBAtlas {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.MongoDBAtlas = updatedConfig
+
+	case "Gcp":
+		updatedConfig := make([]models.GCPConfig, 0)
+		for _, acc := range config.GCP {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.GCP = updatedConfig
+
+	case "Ovh":
+		updatedConfig := make([]models.OVHConfig, 0)
+		for _, acc := range config.OVH {
+			if acc.Name != account.Name {
+				updatedConfig = append(updatedConfig, acc)
+			}
+		}
+		config.OVH = updatedConfig
+
+	default:
+		return fmt.Errorf("illegle provider")
+	}
+
+	return nil
+}
+
 func updateConfig(path string, cfg *models.Config) error {
 	mu.Lock()
 	defer mu.Unlock()
 
-	f, err := os.OpenFile(path, os.O_WRONLY, 0644)
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}

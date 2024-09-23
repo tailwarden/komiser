@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -160,12 +161,39 @@ func (handler *ApiHandler) ReScanAccount(c *gin.Context) {
 func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 	accountId := c.Param("id")
 
-	err := handler.ctrl.DeleteAccount(c, accountId)
+	res, err := handler.ctrl.GetAccountById(c, accountId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
+	err = handler.ctrl.DeleteAccount(c, accountId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	updatedAccounts := make([]models.Account, 0)
+	for _, acc := range handler.accounts {
+		if strconv.FormatInt(res.Id, 10) != accountId {
+			updatedAccounts = append(updatedAccounts, acc)
+		} else {
+			err = deleteConfigAccounts(res, &handler.cfg)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+		}
+	}
+
+	handler.accounts = updatedAccounts
+
+	err = updateConfig(handler.configPath, &handler.cfg)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "account has been deleted"})
 }
 
