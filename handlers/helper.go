@@ -487,8 +487,8 @@ func populateConfigFromAccount(account models.Account, config *models.Config) er
 }
 
 func deleteConfigAccounts(account models.Account, config *models.Config) error {
-	switch account.Provider {
-	case "Aws":
+	switch strings.ToLower(account.Provider) {
+	case "aws":
 
 		updatedConfig := make([]models.AWSConfig, 0)
 		for _, acc := range config.AWS {
@@ -498,7 +498,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.AWS = updatedConfig
 
-	case "Digitalocean":
+	case "digitalocean":
 		updatedConfig := make([]models.DigitalOceanConfig, 0)
 		for _, acc := range config.DigitalOcean {
 			if acc.Name != account.Name {
@@ -507,7 +507,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.DigitalOcean = updatedConfig
 
-	case "Oci":
+	case "oci":
 		updatedConfig := make([]models.OciConfig, 0)
 		for _, acc := range config.Oci {
 			if acc.Name != account.Name {
@@ -516,7 +516,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Oci = updatedConfig
 
-	case "Civo":
+	case "civo":
 		updatedConfig := make([]models.CivoConfig, 0)
 		for _, acc := range config.Civo {
 			if acc.Name != account.Name {
@@ -525,7 +525,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Civo = updatedConfig
 
-	case "Kubernetes":
+	case "kubernetes":
 		updatedConfig := make([]models.KubernetesConfig, 0)
 		for _, acc := range config.Kubernetes {
 			if acc.Name != account.Name {
@@ -534,7 +534,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Kubernetes = updatedConfig
 
-	case "Linode":
+	case "linode":
 		updatedConfig := make([]models.LinodeConfig, 0)
 		for _, acc := range config.Linode {
 			if acc.Name != account.Name {
@@ -543,7 +543,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Linode = updatedConfig
 
-	case "Tencent":
+	case "tencent":
 		updatedConfig := make([]models.TencentConfig, 0)
 		for _, acc := range config.Tencent {
 			if acc.Name != account.Name {
@@ -552,7 +552,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Tencent = updatedConfig
 
-	case "Azure":
+	case "azure":
 		updatedConfig := make([]models.AzureConfig, 0)
 		for _, acc := range config.Azure {
 			if acc.Name != account.Name {
@@ -561,7 +561,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Azure = updatedConfig
 
-	case "Scaleway":
+	case "scaleway":
 		updatedConfig := make([]models.ScalewayConfig, 0)
 		for _, acc := range config.Scaleway {
 			if acc.Name != account.Name {
@@ -570,7 +570,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.Scaleway = updatedConfig
 
-	case "Mongodb":
+	case "mongodb":
 		updatedConfig := make([]models.MongoDBAtlasConfig, 0)
 		for _, acc := range config.MongoDBAtlas {
 			if acc.Name != account.Name {
@@ -579,7 +579,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.MongoDBAtlas = updatedConfig
 
-	case "Gcp":
+	case "gcp":
 		updatedConfig := make([]models.GCPConfig, 0)
 		for _, acc := range config.GCP {
 			if acc.Name != account.Name {
@@ -588,7 +588,7 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 		}
 		config.GCP = updatedConfig
 
-	case "Ovh":
+	case "ovh":
 		updatedConfig := make([]models.OVHConfig, 0)
 		for _, acc := range config.OVH {
 			if acc.Name != account.Name {
