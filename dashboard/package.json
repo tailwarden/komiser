@@ -22,7 +22,7 @@
     "@sentry/react": "^8.26.0",
     "@sentry/tracing": "^7.41.0",
     "@tippyjs/react": "^4.2.6",
-    "chart.js": "^4.2.1",
+    "chart.js": "^4.4.4",
     "classnames": "^2.5.1",
     "cytoscape": "^3.28.1",
     "cytoscape-cose-bilkent": "^4.1.0",
