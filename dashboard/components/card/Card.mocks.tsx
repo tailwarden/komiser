@@ -1,4 +1,5 @@
 import { CardProps } from './Card';
+import { CtaProps } from '../cta/Cta';
 
 const base: CardProps = {
   label: 'Blop',

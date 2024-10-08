@@ -75,3 +75,10 @@
   padding-right: 16px;
   padding-left: 16px;
 }
+
+.gradient-border:hover {
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(to top right, #a107ea, #5000b5) border-box;
+  border-color: transparent;
+}
