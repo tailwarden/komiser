@@ -28,7 +28,7 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 				}
 				if alert.IsSlack {
 					log.Info("Sending Slack budget alert for view:", view.Name)
-					hitSlackWebhook(view.Name, port, int(view.Id), 0, stats.Costs, cfg.Slack.Webhook, alert.Type)
+					hitSlackWebhook(view.Name, port, int(view.Id), 0, stats.Costs, cfg.Slack.Webhook, cfg.Slack.Host, alert.Type)
 				} else {
 					log.Info("Sending Custom Webhook budget alert for view:", view.Name)
 					hitCustomWebhook(alert.Endpoint, alert.Secret, view.Name, 0, stats.Costs, alert.Type)
@@ -42,7 +42,7 @@ func checkingAlerts(ctx context.Context, cfg models.Config, telemetry bool, port
 				}
 				if alert.IsSlack {
 					log.Info("Sending Slack usage alert for view:", view.Name)
-					hitSlackWebhook(view.Name, port, int(view.Id), stats.Resources, 0, cfg.Slack.Webhook, alert.Type)
+					hitSlackWebhook(view.Name, port, int(view.Id), stats.Resources, 0, cfg.Slack.Webhook, cfg.Slack.Host, alert.Type)
 				} else {
 					log.Info("Sending Custom Webhook usage alert for view:", view.Name)
 					hitCustomWebhook(alert.Endpoint, alert.Secret, view.Name, stats.Resources, 0, alert.Type)
