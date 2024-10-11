@@ -64,7 +64,15 @@ func hitCustomWebhook(endpoint string, secret string, viewName string, resources
 	}
 }
 
-func hitSlackWebhook(viewName string, port int, viewId int, resources int, cost float64, webhookUrl string, alertType string) {
+// createSlackAttachment creates a `slack.Attachment`.
+// This attachment can then be added to the WebhookMessage for the alert.
+func createSlackAttachment(viewName string, port int, viewId int, resources int, cost float64, hostname string, alertType string) slack.Attachment {
+	// if the hostname is empty i.e. not defined in config.toml
+	// default to localhost and the runtime port value
+	if hostname == "" {
+		hostname = fmt.Sprintf("http://localhost:%d", port)
+	}
+
 	attachment := slack.Attachment{
 		Color:         "danger",
 		AuthorName:    "Komiser",
@@ -77,7 +85,7 @@ func hitSlackWebhook(viewName string, port int, viewId int, resources int, cost 
 				Name: "open",
 				Text: "Open view",
 				Type: "button",
-				URL:  fmt.Sprintf("http://localhost:%d/inventory?view=%d", port, viewId),
+				URL:  fmt.Sprintf("%s/inventory?view=%d", hostname, viewId),
 			},
 		},
 		Fields: []slack.AttachmentField{
@@ -103,6 +111,12 @@ func hitSlackWebhook(viewName string, port int, viewId int, resources int, cost 
 			Value: fmt.Sprintf("%d", resources),
 		})
 	}
+	return attachment
+}
+
+func hitSlackWebhook(viewName string, port int, viewId int, resources int, cost float64, webhookUrl string, hostname string, alertType string) {
+
+	attachment := createSlackAttachment(viewName, port, viewId, resources, cost, hostname, alertType)
 
 	msg := slack.WebhookMessage{
 		Attachments: []slack.Attachment{attachment},
