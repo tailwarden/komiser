@@ -46,6 +46,12 @@ https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
 [slack]
 webhook="https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
 ```
+7. By default the "Open view" action in the Slack alert will attempt to open `http://localhost:{port}/inventory?view={viewId}`. However, you can configure this URL via the `host` field. For example, if komiser is hosted on `https://komiser.local` then set the field accordingly:
+```
+[slack]
+webhook="https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
+host="https://komiser.local"
+```
 
 ## Custom Webhook integration
 To integrate a custom webhook, you need a URL that listens to the data posted to it when it is triggered. You don't need to edit the `config.toml` file for this integration.

@@ -106,4 +106,5 @@ type OVHConfig struct {
 type SlackConfig struct {
 	Webhook   string `toml:"webhook"`
 	Reporting bool   `toml:"reporting"`
+	Host      string `toml:"host"`
 }
