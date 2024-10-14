@@ -34,6 +34,11 @@ func (ctrl *Controller) RescanAccount(c context.Context, account *models.Account
 	return
 }
 
+func (ctrl *Controller) GetAccountById(c context.Context, accountId string) (account models.Account, err error) {
+	_, err = ctrl.repo.HandleQuery(c, repository.ListKey, &account, [][3]string{{"id", "=", accountId}}, "")
+	return
+}
+
 func (ctrl *Controller) DeleteAccount(c context.Context, accountId string) (err error) {
 	_, err = ctrl.repo.HandleQuery(c, repository.DeleteKey, new(models.Account), [][3]string{{"id", "=", accountId}}, "")
 	return

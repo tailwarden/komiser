@@ -160,12 +160,30 @@ func (handler *ApiHandler) ReScanAccount(c *gin.Context) {
 func (handler *ApiHandler) DeleteCloudAccountHandler(c *gin.Context) {
 	accountId := c.Param("id")
 
-	err := handler.ctrl.DeleteAccount(c, accountId)
+	res, err := handler.ctrl.GetAccountById(c, accountId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
+	err = handler.ctrl.DeleteAccount(c, accountId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = deleteConfigAccounts(res, &handler.cfg)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = updateConfig(handler.configPath, &handler.cfg)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "account has been deleted"})
 }
 
