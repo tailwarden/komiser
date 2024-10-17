@@ -26,7 +26,7 @@ const meta: Meta<typeof Modal> = {
       control: 'boolean'
     },
     children: {
-      control: 'string'
+      control: 'text'
     }
   }
 };
