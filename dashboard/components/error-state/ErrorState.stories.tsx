@@ -8,9 +8,7 @@ const meta: Meta<typeof ErrorState> = {
   component: ErrorState,
   tags: ['autodocs'],
   argTypes: {
-    action: {
-      control: 'hide'
-    }
+    action: {}
   }
 };
 

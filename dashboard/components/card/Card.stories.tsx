@@ -8,9 +8,7 @@ const meta: Meta<typeof Card> = {
   component: Card,
   tags: ['autodocs'],
   argTypes: {
-    icon: {
-      control: 'hidden'
-    }
+    icon: {}
   }
 };
 

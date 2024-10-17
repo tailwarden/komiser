@@ -8,9 +8,7 @@ const meta: Meta<typeof EmptyState> = {
   component: EmptyState,
   tags: ['autodocs'],
   argTypes: {
-    action: {
-      control: 'hide'
-    }
+    action: {}
   }
 };
 
