@@ -8,12 +8,8 @@ const meta: Meta<typeof SelectCheckbox> = {
   component: SelectCheckbox,
   tags: ['autodocs'],
   argTypes: {
-    exclude: {
-      control: 'hidden'
-    },
-    setExclude: {
-      control: 'hidden'
-    }
+    exclude: {},
+    setExclude: {}
   }
 };
 

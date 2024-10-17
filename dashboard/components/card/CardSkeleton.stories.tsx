@@ -7,9 +7,7 @@ const meta: Meta<typeof CardSkeleton> = {
   component: CardSkeleton,
   tags: ['autodocs'],
   argTypes: {
-    icon: {
-      control: 'hidden'
-    }
+    icon: {}
   }
 };
 

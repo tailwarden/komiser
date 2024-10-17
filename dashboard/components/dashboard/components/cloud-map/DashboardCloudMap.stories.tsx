@@ -7,9 +7,7 @@ const meta: Meta<typeof DashboardCloudMap> = {
   component: DashboardCloudMap,
   tags: ['autodocs'],
   argTypes: {
-    data: {
-      control: 'hidden'
-    }
+    data: {}
   }
 };
 
