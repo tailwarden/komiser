@@ -51,6 +51,7 @@
     "@storybook/nextjs": "^8.2.5",
     "@storybook/preview-api": "^8.3.5",
     "@storybook/react": "^8.3.5",
+    "@storybook/test": "^8.3.5",
     "@storybook/testing-library": "^0.2.2",
     "@storybook/theming": "^8.3.5",
     "@testing-library/jest-dom": "^6.4.2",
