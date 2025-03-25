@@ -141,7 +141,7 @@ function InventoryStatsCards({
                 <p className="text-xl font-medium">
                   ${formatNumber(inventoryStats.costs)}
                 </p>
-                <p className="text-sm text-gray-500">Discoverd Cost</p>
+                <p className="text-sm text-gray-500">Discovered Cost</p>
               </div>
               {isSomeServiceUnavailable && (
                 <div
