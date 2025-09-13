@@ -96,14 +96,14 @@ func Clusters(ctx context.Context, client ProviderClient) ([]Resource, error) {
 					pricingResult := models.PricingResult{}
 					err := json.Unmarshal([]byte(pricingOutput.PriceList[0]), &pricingResult)
 					if err != nil {
-						log.Fatalf("Failed to unmarshal JSON: %v", err)
+						log.Errorf("Failed to unmarshal JSON: %v", err)
 					}
 
 					for _, onDemand := range pricingResult.Terms.OnDemand {
 						for _, priceDimension := range onDemand.PriceDimensions {
 							hourlyCost, err = strconv.ParseFloat(priceDimension.PricePerUnit.USD, 64)
 							if err != nil {
-								log.Fatalf("Failed to parse hourly cost: %v", err)
+								log.Errorf("Failed to parse hourly cost: %v", err)
 							}
 							break
 						}
