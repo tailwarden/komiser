@@ -27,7 +27,7 @@
     "cytoscape": "^3.28.1",
     "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-node-html-label": "^1.2.2",
-    "cytoscape-popper": "^2.0.0",
+    "cytoscape-popper": "^4.0.1",
     "html-to-image": "^1.11.11",
     "next": "^14.2.13",
     "next-transpile-modules": "^10.0.1",
