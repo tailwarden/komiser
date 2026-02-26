@@ -78,7 +78,7 @@
     "postcss": "^8.4.47",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.8",
-    "storybook": "^8.3.5",
+    "storybook": "^8.6.17",
     "tailwindcss": "^3.4.10"
   }
 }
