@@ -3,7 +3,7 @@ on: pull_request
 
 jobs:
   build_test_dashboard:
-    runs-on: avrea-ubuntu-latest-2-vcpu
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -26,7 +26,7 @@ jobs:
         working-directory: dashboard
 
   build_test_cli:
-    runs-on: avrea-ubuntu-latest-2-vcpu
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
