@@ -115,6 +115,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		systemsmanager.GetManagedEc2,
 		ec2.VpcEndpoints,
 		ec2.VpcPeeringConnections,
+		ec2.NetworkInsightsAnalyses,
 		kinesis.Streams,
 		redshift.EventSubscriptions,
 		codecommit.Repositories,
