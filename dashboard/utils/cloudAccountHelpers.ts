@@ -26,6 +26,13 @@ export type CivoCredentials = Credentials & {
   token?: string;
 };
 
+export type OVHCredentials = Credentials & {
+  endpoint?: string;
+  consumerKey?: string;
+  applicationKey?: string;
+  applicationSecret?: string;
+};
+
 export type DigitalOceanCredentials = Credentials & {
   source?: string;
   token?: string;
@@ -171,6 +178,19 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
           path: data.path
         }
       };
+    case allProviders.OVH:
+      return {
+        name: data.name,
+        provider,
+        credentials: {
+          endpoint: data.endpoint,
+          consumerKey: data.consumerKey,
+          applicationKey: data.applicationKey,
+          applicationSecret: data.applicationSecret
+        }
+      };
+    default:
+      return {};
   }
 };
 
