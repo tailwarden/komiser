@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
+	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/linode/linodego"
 	"github.com/oracle/oci-go-sdk/common"
 	"github.com/ovh/go-ovh/ovh"
@@ -25,6 +26,7 @@ type FetchDataFunction func(ctx context.Context, client ProviderClient) ([]model
 type ProviderClient struct {
 	AWSClient          *aws.Config
 	DigitalOceanClient *godo.Client
+	HetznerClient      *hcloud.Client
 	OciClient          common.ConfigurationProvider
 	CivoClient         *civogo.Client
 	K8sClient          *K8sClient

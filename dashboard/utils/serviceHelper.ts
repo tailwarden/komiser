@@ -3,6 +3,7 @@ export type Providers =
   | 'aws'
   | 'gcp'
   | 'digitalocean'
+  | 'hetzner'
   | 'azure'
   | 'civo'
   | 'kubernetes'
@@ -112,6 +113,14 @@ export const allProvidersServices: { [key in Providers]: string[] } = {
     'load balancer',
     'vpc',
     'volume'
+  ],
+  hetzner: [
+    'server',
+    'volume',
+    'load balancer',
+    'firewall',
+    'floating ip',
+    'network'
   ],
   gcp: [
     'bigquery table',

@@ -18,6 +18,7 @@ import (
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
+	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/linode/linodego"
 	"github.com/mongodb-forks/digest"
 	"github.com/oracle/oci-go-sdk/common"
@@ -41,6 +42,7 @@ import (
 	"github.com/tailwarden/komiser/providers/civo"
 	do "github.com/tailwarden/komiser/providers/digitalocean"
 	"github.com/tailwarden/komiser/providers/gcp"
+	"github.com/tailwarden/komiser/providers/hetzner"
 	"github.com/tailwarden/komiser/providers/k8s"
 	"github.com/tailwarden/komiser/providers/linode"
 	"github.com/tailwarden/komiser/providers/mongodbatlas"
@@ -81,6 +83,8 @@ func triggerFetchingWorkflow(ctx context.Context, client providers.ProviderClien
 		aws.FetchResources(ctx, client, regions, db, telemetry, analytics, wp)
 	case "DigitalOcean":
 		do.FetchResources(ctx, client, db, telemetry, analytics, wp)
+	case "Hetzner":
+		hetzner.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "OCI":
 		oci.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Civo":
@@ -139,6 +143,8 @@ func fetchResourcesForAccount(ctx context.Context, account models.Account, db *b
 		workflowTrigger(*client, "AWS")
 	} else if client.DigitalOceanClient != nil {
 		workflowTrigger(*client, "DigitalOcean")
+	} else if client.HetznerClient != nil {
+		workflowTrigger(*client, "Hetzner")
 	} else if client.OciClient != nil {
 		workflowTrigger(*client, "OCI")
 	} else if client.CivoClient != nil {
@@ -212,6 +218,14 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 		return &providers.ProviderClient{
 			DigitalOceanClient: client,
 			Name:               account.Name,
+		}, nil
+	}
+
+	if account.Provider == "hetzner" {
+		client := hcloud.NewClient(hcloud.WithToken(account.Credentials["token"]))
+		return &providers.ProviderClient{
+			HetznerClient: client,
+			Name:          account.Name,
 		}, nil
 	}
 
@@ -396,6 +410,13 @@ func populateConfigFromAccount(account models.Account, config *models.Config) er
 		}
 		config.DigitalOcean = append(config.DigitalOcean, digitalOceanConfig)
 
+	case "hetzner":
+		hetznerConfig := models.HetznerConfig{
+			Name:  account.Name,
+			Token: account.Credentials["token"],
+		}
+		config.Hetzner = append(config.Hetzner, hetznerConfig)
+
 	case "oci":
 		ociConfig := models.OciConfig{
 			Name:    account.Name,
@@ -506,6 +527,15 @@ func deleteConfigAccounts(account models.Account, config *models.Config) error {
 			}
 		}
 		config.DigitalOcean = updatedConfig
+
+	case "hetzner":
+		updatedHetznerConfig := make([]models.HetznerConfig, 0)
+		for _, acc := range config.Hetzner {
+			if acc.Name != account.Name {
+				updatedHetznerConfig = append(updatedHetznerConfig, acc)
+			}
+		}
+		config.Hetzner = updatedHetznerConfig
 
 	case "oci":
 		updatedConfig := make([]models.OciConfig, 0)

@@ -4,6 +4,7 @@ type Config struct {
 	AWS          []AWSConfig          `toml:"aws"`
 	Azure        []AzureConfig        `toml:"azure"`
 	DigitalOcean []DigitalOceanConfig `toml:"digitalocean"`
+	Hetzner      []HetznerConfig      `toml:"hetzner"`
 	Oci          []OciConfig          `toml:"oci"`
 	Civo         []CivoConfig         `toml:"civo"`
 	Kubernetes   []KubernetesConfig   `toml:"k8s"`
@@ -34,6 +35,11 @@ type AzureConfig struct {
 }
 
 type DigitalOceanConfig struct {
+	Name  string `toml:"name"`
+	Token string `toml:"token"`
+}
+
+type HetznerConfig struct {
 	Name  string `toml:"name"`
 	Token string `toml:"token"`
 }

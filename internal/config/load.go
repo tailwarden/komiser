@@ -16,6 +16,7 @@ import (
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/civo/civogo"
 	"github.com/digitalocean/godo"
+	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/linode/linodego"
 	"github.com/mongodb-forks/digest"
 	"github.com/oracle/oci-go-sdk/common"
@@ -157,6 +158,31 @@ func Load(configPath string, telemetry bool, analytics utils.Analytics) (*models
 			analytics.TrackEvent("connected_account", map[string]interface{}{
 				"type":     len(config.DigitalOcean),
 				"provider": "DigitalOcean",
+			})
+		}
+	}
+
+	if len(config.Hetzner) > 0 {
+		for _, account := range config.Hetzner {
+			cloudAccount := models.Account{
+				Provider: "Hetzner",
+				Name:     account.Name,
+				Credentials: map[string]string{
+					"token": account.Token,
+				},
+			}
+			accounts = append(accounts, cloudAccount)
+
+			client := hcloud.NewClient(hcloud.WithToken(account.Token))
+			clients = append(clients, providers.ProviderClient{
+				HetznerClient: client,
+				Name:          account.Name,
+			})
+		}
+		if telemetry {
+			analytics.TrackEvent("connected_account", map[string]interface{}{
+				"type":     len(config.Hetzner),
+				"provider": "Hetzner",
 			})
 		}
 	}

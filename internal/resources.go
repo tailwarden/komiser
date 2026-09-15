@@ -14,6 +14,7 @@ import (
 	"github.com/tailwarden/komiser/providers/civo"
 	"github.com/tailwarden/komiser/providers/digitalocean"
 	"github.com/tailwarden/komiser/providers/gcp"
+	"github.com/tailwarden/komiser/providers/hetzner"
 	"github.com/tailwarden/komiser/providers/k8s"
 	"github.com/tailwarden/komiser/providers/linode"
 	"github.com/tailwarden/komiser/providers/mongodbatlas"
@@ -42,6 +43,8 @@ func fetchResources(ctx context.Context, clients []providers.ProviderClient, reg
 			workflowTrigger(client, "AWS")
 		} else if client.DigitalOceanClient != nil {
 			workflowTrigger(client, "DigitalOcean")
+		} else if client.HetznerClient != nil {
+			workflowTrigger(client, "Hetzner")
 		} else if client.OciClient != nil {
 			workflowTrigger(client, "OCI")
 		} else if client.CivoClient != nil {
@@ -97,6 +100,8 @@ func triggerFetchingWorkflow(ctx context.Context, client providers.ProviderClien
 		aws.FetchResources(ctx, client, regions, db, telemetry, analytics, wp)
 	case "DigitalOcean":
 		digitalocean.FetchResources(ctx, client, db, telemetry, analytics, wp)
+	case "Hetzner":
+		hetzner.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "OCI":
 		oci.FetchResources(ctx, client, db, telemetry, analytics, wp)
 	case "Civo":

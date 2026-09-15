@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import AzureAccountDetails from '@components/account-details/AzureAccountDetails';
 import GcpAccountDetails from '@components/account-details/GcpAccountDetails';
 import DigitalOceanAccountDetails from '@components/account-details/DigitalOceanAccountDetails';
+import HetznerAccountDetails from '@components/account-details/HetznerAccountDetails';
 import CivoAccountDetails from '@components/account-details/CivoAccountDetails';
 import LinodeAccountDetails from '@components/account-details/LinodeAccountDetails';
 import KubernetesAccountDetails from '@components/account-details/KubernetesAccountDetails';
@@ -49,6 +50,8 @@ function AccountDetails({
       return <GcpAccountDetails cloudAccountData={cloudAccountData} />;
     case allProviders.DIGITAL_OCEAN:
       return <DigitalOceanAccountDetails cloudAccountData={cloudAccountData} />;
+    case allProviders.HETZNER:
+      return <HetznerAccountDetails cloudAccountData={cloudAccountData} />;
     case allProviders.AZURE:
       return <AzureAccountDetails cloudAccountData={cloudAccountData} />;
     case allProviders.CIVO:

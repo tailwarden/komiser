@@ -31,6 +31,11 @@ export type DigitalOceanCredentials = Credentials & {
   token?: string;
 };
 
+export type HetznerCredentials = Credentials & {
+  source?: string;
+  token?: string;
+};
+
 export type KubernetesCredentials = Credentials & {
   source?: string;
   file?: string;
@@ -102,6 +107,15 @@ export const getPayloadFromForm = (formData: FormData, provider: Provider) => {
         }
       };
     case allProviders.DIGITAL_OCEAN:
+      return {
+        name: data.name,
+        provider,
+        credentials: {
+          source: data.source,
+          token: data.token
+        }
+      };
+    case allProviders.HETZNER:
       return {
         name: data.name,
         provider,

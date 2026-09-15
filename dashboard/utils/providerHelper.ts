@@ -2,6 +2,7 @@ export type Provider =
   | 'aws'
   | 'gcp'
   | 'digitalocean'
+  | 'hetzner'
   | 'azure'
   | 'civo'
   | 'kubernetes'
@@ -18,6 +19,7 @@ type ProviderKey =
   | 'AWS'
   | 'GCP'
   | 'DIGITAL_OCEAN'
+  | 'HETZNER'
   | 'AZURE'
   | 'CIVO'
   | 'KUBERNETES'
@@ -34,6 +36,7 @@ export const allProviders: { [key in ProviderKey]: Provider } = {
   AWS: 'aws',
   GCP: 'gcp',
   DIGITAL_OCEAN: 'digitalocean',
+  HETZNER: 'hetzner',
   AZURE: 'azure',
   CIVO: 'civo',
   KUBERNETES: 'kubernetes',
@@ -84,6 +87,10 @@ const platform: Platform = {
     digitalocean: {
       label: 'DigitalOcean',
       imgSrc: '/assets/img/providers/digitalocean.png'
+    },
+    hetzner: {
+      label: 'Hetzner',
+      imgSrc: '/assets/img/providers/hetzner.png'
     },
     azure: {
       label: 'Azure',
