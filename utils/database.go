@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tailwarden/komiser/migrations"
@@ -71,7 +72,10 @@ func SetupSchema(db *bun.DB, c *models.Config, accounts []models.Account) error 
 		account.Status = "CONNECTED"
 		_, err = db.NewInsert().Model(&account).Exec(context.Background())
 		if err != nil {
-			log.Warnf("%s account cannot be inserted to database\n%v", account.Provider, err)
+			if strings.Contains(err.Error(), "failed: accounts.credentials (2067)") {
+				continue
+			}
+			log.Warnf("%s account cannot be inserted to database\n", account.Provider)
 		}
 	}
 

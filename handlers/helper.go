@@ -240,12 +240,12 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 			&clientcmd.ClientConfigLoadingRules{ExplicitPath: account.Credentials["path"]},
 			&clientcmd.ConfigOverrides{}).ClientConfig()
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		k8sClient, err := kubernetes.NewForConfig(kubeConfig)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		client := providers.K8sClient{
@@ -293,7 +293,7 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 	if account.Provider == "azure" {
 		creds, err := azidentity.NewClientSecretCredential(account.Credentials["tenantId"], account.Credentials["clientId"], account.Credentials["clientSecret"], &azidentity.ClientSecretCredentialOptions{})
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		client := providers.AzureClient{
@@ -326,7 +326,7 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 		t := digest.NewTransport(account.Credentials["publicApiKey"], account.Credentials["privateApiKey"])
 		tc, err := t.Client()
 		if err != nil {
-			log.Fatal(err.Error())
+			return nil, err
 		}
 
 		client := mdb.NewClient(tc)
@@ -339,12 +339,12 @@ func makeClientFromAccount(account models.Account) (*providers.ProviderClient, e
 	if account.Provider == "gcp" {
 		data, err := os.ReadFile(account.Credentials["accountKey"])
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		creds, err := google.CredentialsFromJSON(context.Background(), data, "https://www.googleapis.com/auth/cloud-platform")
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		return &providers.ProviderClient{
