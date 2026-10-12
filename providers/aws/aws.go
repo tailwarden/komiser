@@ -19,6 +19,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/codebuild"
 	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codedeploy"
+	"github.com/tailwarden/komiser/providers/aws/codeguru"
 	"github.com/tailwarden/komiser/providers/aws/datasync"
 	"github.com/tailwarden/komiser/providers/aws/dynamodb"
 	"github.com/tailwarden/komiser/providers/aws/ec2"
@@ -118,6 +119,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kinesis.Streams,
 		redshift.EventSubscriptions,
 		codecommit.Repositories,
+		codeguru.ReviewerRepositoryAssociations,
 		codebuild.BuildProjects,
 		codedeploy.DeploymentGroups,
 		lightsail.Containers,
