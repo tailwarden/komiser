@@ -16,6 +16,7 @@ import (
 	"github.com/tailwarden/komiser/providers/aws/cloudfront"
 	"github.com/tailwarden/komiser/providers/aws/cloudtrail"
 	"github.com/tailwarden/komiser/providers/aws/cloudwatch"
+	"github.com/tailwarden/komiser/providers/aws/codeartifact"
 	"github.com/tailwarden/komiser/providers/aws/codebuild"
 	"github.com/tailwarden/komiser/providers/aws/codecommit"
 	"github.com/tailwarden/komiser/providers/aws/codedeploy"
@@ -118,6 +119,7 @@ func listOfSupportedServices() []providers.FetchDataFunction {
 		kinesis.Streams,
 		redshift.EventSubscriptions,
 		codecommit.Repositories,
+		codeartifact.Domains,
 		codebuild.BuildProjects,
 		codedeploy.DeploymentGroups,
 		lightsail.Containers,
